@@ -189,8 +189,6 @@ extern bool     bExecuteDrag;
 
 static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
 
-DBG_NAME(edithdl)
-
 class SwAnchorMarker
 {
     SdrHdl* pHdl;
@@ -576,8 +574,6 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
  */
 IMPL_LINK_NOARG(SwEditWin, TimerHandler)
 {
-    DBG_PROFSTART(edithdl);
-
     SwWrtShell &rSh = m_rView.GetWrtShell();
     Point aModPt( m_aMovePos );
     const SwRect aOldVis( rSh.VisArea() );
@@ -625,7 +621,6 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler)
 
     m_aMovePos += rSh.VisArea().Pos() - aOldVis.Pos();
     JustifyAreaTimer();
-    DBG_PROFSTOP(edithdl);
     return 0;
 }
 

@@ -135,8 +135,6 @@ SvxSearchDialog*    SwView::m_pSrchDlg    = 0;
 SearchAttrItemList* SwView::m_pSrchList   = 0;
 SearchAttrItemList* SwView::m_pReplList   = 0;
 
-DBG_NAME(viewhdl)
-
 inline SfxDispatcher &SwView::GetDispatcher()
 {
     return *GetViewFrame()->GetDispatcher();
@@ -517,12 +515,9 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
 
 IMPL_LINK_NOARG(SwView, TimeoutHdl)
 {
-    DBG_PROFSTART(viewhdl);
-
     if( m_pWrtShell->BasicActionPend() || bNoInterrupt )
     {
         m_aTimer.Start();
-        DBG_PROFSTOP(viewhdl);
         return 0;
     }
 
@@ -542,7 +537,6 @@ IMPL_LINK_NOARG(SwView, TimeoutHdl)
     m_bAttrChgNotified = sal_False;
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 
-    DBG_PROFSTOP(viewhdl);
     return 0;
 }
 

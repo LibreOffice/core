@@ -384,8 +384,6 @@ static sal_uInt16 aPageRg[] = {
     0
 };
 
-DBG_NAME(columnhdl)
-
 void SwColumnPage::ResetColWidth()
 {
     if( nCols )
@@ -1133,7 +1131,6 @@ IMPL_LINK_NOARG(SwColumnPage, Down)
 ------------------------------------------------------------------------*/
 void SwColumnPage::Timeout()
 {
-    DBG_PROFSTART(columnhdl) ;
     if(pModifiedField)
     {
             // find the changed column
@@ -1171,7 +1168,6 @@ void SwColumnPage::Timeout()
         pModifiedField = 0;
     }
     Update();
-    DBG_PROFSTOP(columnhdl) ;
 }
 
 /*------------------------------------------------------------------------

@@ -80,8 +80,6 @@ BitmapEx* SwViewShell::mpReplaceBmp = NULL;
 
 bool bInSizeNotify = false;
 
-DBG_NAME(LayoutIdle)
-
 TYPEINIT0(SwViewShell);
 
 using namespace ::com::sun::star;
@@ -654,8 +652,6 @@ void SwViewShell::LayoutIdle()
 #endif
 
     {
-        DBG_PROFSTART( LayoutIdle );
-
         //Prepare and recover cache, so that it will not get fouled.
         SwSaveSetLRUOfst aSave( *SwTxtFrm::GetTxtCache(),
                              SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
@@ -666,7 +662,6 @@ void SwViewShell::LayoutIdle()
         if(!Imp())
             return;
         SwLayIdle aIdle( GetLayout(), Imp() );
-        DBG_PROFSTOP( LayoutIdle );
     }
 }
 
