@@ -25,7 +25,6 @@
 // Methoden, die von VCL gerufen werden muessen
 TOOLS_DLLPUBLIC void InitTools();
 TOOLS_DLLPUBLIC void DeInitTools();
-TOOLS_DLLPUBLIC void GlobalDeInitTools();
 
 #endif
 

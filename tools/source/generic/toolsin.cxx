@@ -31,9 +31,4 @@ void DeInitTools()
     DBG_DEBUGEND();
 }
 
-void GlobalDeInitTools()
-{
-    DBG_GLOBALDEBUGEND();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

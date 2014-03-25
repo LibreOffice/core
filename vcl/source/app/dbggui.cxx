@@ -80,13 +80,6 @@ static const sal_Char* pDbgHelpText[] =
 "\nOther tests and macros\n",
 "------------------------------------------\n",
 "\n",
-"Profiling\n",
-"DBG_PROFSTART() / DBG_PROFSTOP() / DBG_PROFCONTINUE() / DBG_PROFPAUSE() "
-"are evaluated and at the end of the program the number of run throughs "
-"and the time this took (including calls to children) in milliseconds is "
-"output. These macros can be used to check the same function runs over the "
-"entire development period, for example the startup speed. The registered name "
-"\n",
 "Resources\n",
 "In case of resource errors an error dialog is produced before the "
 "exception handler is called.\n",
@@ -370,7 +363,6 @@ private:
     CheckBox        maXtorTrace;
     GroupBox        maBox1;
 
-    CheckBox        maProf;
     CheckBox        maRes;
     CheckBox        maDialog;
     CheckBox        maBoldAppFont;
@@ -554,7 +546,6 @@ DbgDialog::DbgDialog() :
     maXtorReport( this ),
     maXtorTrace( this ),
     maBox1( this ),
-    maProf( this ),
     maRes( this ),
     maDialog( this ),
     maBoldAppFont( this ),
@@ -633,15 +624,6 @@ DbgDialog::DbgDialog() :
     maBox1.SetText("Object Tests");
     maBox1.SetPosSizePixel( LogicToPixel( Point( 5, 5 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
-    }
-
-    {
-    maProf.Show();
-    maProf.SetText("~Profiling");
-    if ( pData->nTestFlags & DBG_TEST_PROFILING )
-        maProf.Check( true );
-    maProf.SetPosSizePixel( LogicToPixel( Point( 10, 95 ), aAppMap ),
-                            aButtonSize );
     }
 
     {
@@ -884,9 +866,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 
         if ( maXtorTrace.IsChecked() )
             aData.nTestFlags |= DBG_TEST_XTOR_TRACE;
-
-        if ( maProf.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_PROFILING;
 
         if ( maRes.IsChecked() )
             aData.nTestFlags |= DBG_TEST_RESOURCE;

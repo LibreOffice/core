@@ -205,7 +205,6 @@ Application::~Application()
     DeInitSalData();
     ImplGetSVData()->mpApp = NULL;
     ImplDestroySVData();
-    GlobalDeInitTools();
 }
 
 bool Application::QueryExit()

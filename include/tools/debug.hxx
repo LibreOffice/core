@@ -54,7 +54,6 @@ typedef void (*DbgTestSolarMutexProc)();
 #define DBG_TEST_XTOR_REPORT        (0x00000008)
 #define DBG_TEST_XTOR_TRACE         (0x00000010)
 
-#define DBG_TEST_PROFILING          (0x01000000)
 #define DBG_TEST_RESOURCE           (0x02000000)
 #define DBG_TEST_DIALOG             (0x04000000)
 #define DBG_TEST_BOLDAPPFONT        (0x08000000)
@@ -96,7 +95,6 @@ struct DbgDataType
 // Dbg prototypes
 #define DBG_FUNC_DEBUGSTART         1
 #define DBG_FUNC_DEBUGEND           2
-#define DBG_FUNC_GLOBALDEBUGEND     3
 #define DBG_FUNC_GETDATA            4
 #define DBG_FUNC_SAVEDATA           5
 #define DBG_FUNC_SETPRINTMSGBOX     6
@@ -119,11 +117,6 @@ inline void DbgDebugStart()
 inline void DbgDebugEnd()
 {
     DbgFunc( DBG_FUNC_DEBUGEND );
-}
-
-inline void DbgGlobalDebugEnd()
-{
-    DbgFunc( DBG_FUNC_GLOBALDEBUGEND );
 }
 
 inline void DbgSetPrintMsgBox( DbgPrintLine pProc )
@@ -246,13 +239,6 @@ TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ..
 
 // Dbg test functions
 
-#define DBG_PROF_START              1
-#define DBG_PROF_STOP               2
-#define DBG_PROF_CONTINUE           3
-#define DBG_PROF_PAUSE              4
-
-TOOLS_DLLPUBLIC void DbgProf( sal_uInt16 nAction, DbgDataType* );
-
 #define DBG_XTOR_CTOR               1
 #define DBG_XTOR_DTOR               2
 #define DBG_XTOR_CHKTHIS            3
@@ -300,19 +286,6 @@ public:
 
 #define DBG_DEBUGSTART()                    DbgDebugStart()
 #define DBG_DEBUGEND()                      DbgDebugEnd()
-#define DBG_GLOBALDEBUGEND()                DbgGlobalDebugEnd()
-
-#define DBG_PROFSTART( aName )                      \
-    DbgProf( DBG_PROF_START, DBG_FUNC( aName ) )
-
-#define DBG_PROFSTOP( aName )                       \
-    DbgProf( DBG_PROF_STOP, DBG_FUNC( aName ) )
-
-#define DBG_PROFCONTINUE( aName )                   \
-    DbgProf( DBG_PROF_CONTINUE, DBG_FUNC( aName ) )
-
-#define DBG_PROFPAUSE( aName )                      \
-    DbgProf( DBG_PROF_PAUSE, DBG_FUNC( aName ) )
 
 #define DBG_CTOR( aName, fTest )                    \
     DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
@@ -385,16 +358,10 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 
 #define DBG_DEBUGSTART() ((void)0)
 #define DBG_DEBUGEND() ((void)0)
-#define DBG_GLOBALDEBUGEND() ((void)0)
 
 #define DBG_NAME( aName )
 #define DBG_NAMEEX( aName )
 #define DBG_NAMEEX_VISIBILITY( aName, vis )
-
-#define DBG_PROFSTART( aName ) ((void)0)
-#define DBG_PROFSTOP( aName ) ((void)0)
-#define DBG_PROFCONTINUE( aName ) ((void)0)
-#define DBG_PROFPAUSE( aName ) ((void)0)
 
 #define DBG_CTOR( aName, fTest ) ((void)0)
 #define DBG_DTOR( aName, fTest ) ((void)0)

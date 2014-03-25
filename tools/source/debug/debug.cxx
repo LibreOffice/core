@@ -84,18 +84,6 @@ public:
 
 #define DBG_MAXNAME     28
 
-struct ProfType
-{
-    sal_uIntPtr             nCount;
-    sal_uIntPtr             nTime;
-    sal_uIntPtr             nMinTime;
-    sal_uIntPtr             nMaxTime;
-    sal_uIntPtr             nStart;
-    sal_uIntPtr             nContinueTime;
-    sal_uIntPtr             nContinueStart;
-    sal_Char                aName[DBG_MAXNAME+1];
-};
-
 struct XtorType
 {
     sal_uIntPtr             nCtorCalls;
@@ -116,7 +104,6 @@ struct DebugData
     DbgPrintLine            pDbgAbort;
     ::std::vector< DbgPrintLine >
                             aDbgPrintUserChannels;
-    PointerList*            pProfList;
     PointerList*            pXtorList;
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
 
@@ -125,7 +112,6 @@ struct DebugData
         ,pDbgPrintMsgBox( NULL )
         ,pDbgPrintWindow( NULL )
         ,pDbgAbort( NULL )
-        ,pProfList( NULL )
         ,pXtorList( NULL )
         ,pDbgTestSolarMutex( NULL )
     {
@@ -223,28 +209,6 @@ static bool ImplCoreDump()
     *pTemp = 0xCCCC;
 #endif
     return true;
-}
-
-static sal_uIntPtr ImplGetPerfTime()
-{
-#if defined( WNT )
-    return (sal_uIntPtr)GetTickCount();
-#else
-    static sal_uIntPtr    nImplTicksPerSecond = 0;
-    static double   dImplTicksPerSecond;
-    sal_uIntPtr           nTicks = (sal_uIntPtr)clock();
-
-    if ( !nImplTicksPerSecond )
-    {
-        nImplTicksPerSecond = CLOCKS_PER_SEC;
-        dImplTicksPerSecond = nImplTicksPerSecond;
-    }
-
-    double fTicks = nTicks;
-    fTicks *= 1000;
-    fTicks /= dImplTicksPerSecond;
-    return (sal_uIntPtr)fTicks;
-#endif
 }
 
 typedef FILE*       FILETYPE;
@@ -648,7 +612,6 @@ static DebugData* GetDebugData()
                 // elements of the [test] section
                 if ( eCurrentSection == eTest )
                 {
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "profiling", &aDebugData.aDbgData.nTestFlags, DBG_TEST_PROFILING );
                     lcl_tryReadConfigFlag( pLine, nLineLength, "resources", &aDebugData.aDbgData.nTestFlags, DBG_TEST_RESOURCE );
                     lcl_tryReadConfigFlag( pLine, nLineLength, "dialog", &aDebugData.aDbgData.nTestFlags, DBG_TEST_DIALOG );
                     lcl_tryReadConfigFlag( pLine, nLineLength, "bold_app_font", &aDebugData.aDbgData.nTestFlags, DBG_TEST_BOLDAPPFONT );
@@ -675,8 +638,6 @@ static DebugData* GetDebugData()
         // initialize debug data
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
             aDebugData.pXtorList = new PointerList;
-        if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_PROFILING )
-            aDebugData.pProfList = new PointerList;
     }
 
     return &aDebugData;
@@ -868,59 +829,10 @@ static void DebugDeInit()
     // for global variables will crash,
     // as pointer alignment won't work then.
     pData->aDbgData.nTraceOut   = nOldOut;
-    pData->aDbgData.nTestFlags &= DBG_TEST_PROFILING;
+    pData->aDbgData.nTestFlags = 0;
     pData->aDbgPrintUserChannels.clear();
     pData->pDbgPrintWindow      = NULL;
     ImplDbgDeInitLock();
-}
-
-static void DebugGlobalDeInit()
-{
-    DebugData*  pData = GetDebugData();
-    sal_uIntPtr       i;
-    sal_uIntPtr       nCount;
-    sal_uIntPtr       nOldOut;
-
-    // Output statistics trace data to file
-    nOldOut = pData->aDbgData.nTraceOut;
-    pData->aDbgData.nTraceOut = DBG_OUT_FILE;
-
-    // output profile liste
-    if ( pData->pProfList && pData->pProfList->Count() )
-    {
-        DbgOutf( "------------------------------------------------------------------------------" );
-        DbgOutf( "Profiling Report" );
-        DbgOutf( "------------------------------------------------------------------------------" );
-        DbgOutf( "%-25s : %-9s : %-6s : %-6s : %-6s : %-9s :",
-                 "Prof-List (ms)", "Time", "Min", "Max", "Ave", "Count" );
-        DbgOutf( "--------------------------:-----------:--------:--------:--------:-----------:" );
-        for( i = 0, nCount = pData->pProfList->Count(); i < nCount; i++ )
-        {
-            ProfType* pProfData = (ProfType*)pData->pProfList->Get( i );
-            sal_uIntPtr nAve = pProfData->nTime / pProfData->nCount;
-            DbgOutf( "%-25s : %9lu : %6lu : %6lu : %6lu : %9lu :",
-                     pProfData->aName, pProfData->nTime,
-                     pProfData->nMinTime, pProfData->nMaxTime, nAve,
-                     pProfData->nCount );
-        }
-        DbgOutf( "==============================================================================" );
-    }
-
-    // free profile list
-    if ( pData->pProfList )
-    {
-        for( i = 0, nCount = pData->pProfList->Count(); i < nCount; i++ )
-        {
-            ProfType* pProfData = (ProfType*)pData->pProfList->Get( i );
-            delete pProfData;
-        }
-        delete pData->pProfList;
-        pData->pProfList = NULL;
-    }
-
-    // disable profiling flags
-    pData->aDbgData.nTraceOut   = nOldOut;
-    pData->aDbgData.nTestFlags &= ~DBG_TEST_PROFILING;
 }
 
 void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... )
@@ -996,10 +908,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 DebugDeInit();
                 break;
 
-            case DBG_FUNC_GLOBALDEBUGEND:
-                DebugGlobalDeInit();
-                break;
-
             case DBG_FUNC_SETPRINTMSGBOX:
                 pDebugData->pDbgPrintMsgBox = (DbgPrintLine)(long)pParam;
                 break;
@@ -1046,7 +954,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 
                 lcl_lineFeed( pIniFile );
                 lcl_startSection( pIniFile, eTest );
-                lcl_writeConfigFlag( pIniFile, "profiling", pData->nTestFlags, DBG_TEST_PROFILING );
                 lcl_writeConfigFlag( pIniFile, "resources", pData->nTestFlags, DBG_TEST_RESOURCE );
                 lcl_writeConfigFlag( pIniFile, "dialog", pData->nTestFlags, DBG_TEST_DIALOG );
                 lcl_writeConfigFlag( pIniFile, "bold_app_font", pData->nTestFlags, DBG_TEST_BOLDAPPFONT );
@@ -1092,96 +999,6 @@ DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc )
     DebugData* pData = ImplGetDebugData();
     pData->aDbgPrintUserChannels.push_back( pProc );
     return (DbgChannelId)( pData->aDbgPrintUserChannels.size() - 1 + DBG_OUT_USER_CHANNEL_0 );
-}
-
-void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
-{
-    DebugData* pData = ImplGetDebugData();
-
-    if ( !(pData->aDbgData.nTestFlags & DBG_TEST_PROFILING) )
-        return;
-
-    ProfType*   pProfData = (ProfType*)pDbgData->pData;
-    sal_uIntPtr       nTime;
-    if ( (nAction != DBG_PROF_START) && !pProfData )
-    {
-        SAL_WARN(
-            "tools.debug",
-            "DBG_PROF...() without DBG_PROFSTART(): " << pDbgData->pName);
-        return;
-    }
-
-    switch ( nAction )
-    {
-        case DBG_PROF_START:
-            if ( !pDbgData->pData )
-            {
-                pDbgData->pData = (void*)new ProfType;
-                pProfData = (ProfType*)pDbgData->pData;
-                strncpy( pProfData->aName, pDbgData->pName, DBG_MAXNAME );
-                pProfData->aName[DBG_MAXNAME] = '\0';
-                pProfData->nCount           = 0;
-                pProfData->nTime            = 0;
-                pProfData->nMinTime         = 0xFFFFFFFF;
-                pProfData->nMaxTime         = 0;
-                pProfData->nStart           = 0xFFFFFFFF;
-                pProfData->nContinueTime    = 0;
-                pProfData->nContinueStart   = 0xFFFFFFFF;
-                pData->pProfList->Add( (void*)pProfData );
-            }
-
-            if ( pProfData->nStart == 0xFFFFFFFF )
-            {
-                pProfData->nStart = ImplGetPerfTime();
-                pProfData->nCount++;
-            }
-            break;
-
-        case DBG_PROF_STOP:
-            nTime = ImplGetPerfTime();
-
-            if ( pProfData->nStart == 0xFFFFFFFF )
-            {
-                SAL_WARN(
-                    "tools.debug", "DBG_PROF...() without DBG_PROFSTART()");
-                return;
-            }
-
-            if ( pProfData->nContinueStart != 0xFFFFFFFF )
-            {
-                pProfData->nContinueTime += ImplGetPerfTime() - pProfData->nContinueStart;
-                pProfData->nContinueStart = 0xFFFFFFFF;
-            }
-
-            nTime -= pProfData->nStart;
-            nTime -= pProfData->nContinueTime;
-
-            if ( nTime < pProfData->nMinTime )
-                pProfData->nMinTime = nTime;
-
-            if ( nTime > pProfData->nMaxTime )
-                pProfData->nMaxTime = nTime;
-
-            pProfData->nTime += nTime;
-
-            pProfData->nStart         = 0xFFFFFFFF;
-            pProfData->nContinueTime  = 0;
-            pProfData->nContinueStart = 0xFFFFFFFF;
-            break;
-
-        case DBG_PROF_CONTINUE:
-            if ( pProfData->nContinueStart != 0xFFFFFFFF )
-            {
-                pProfData->nContinueTime += ImplGetPerfTime() - pProfData->nContinueStart;
-                pProfData->nContinueStart = 0xFFFFFFFF;
-            }
-            break;
-
-        case DBG_PROF_PAUSE:
-            if ( pProfData->nContinueStart == 0xFFFFFFFF )
-                pProfData->nContinueStart = ImplGetPerfTime();
-            break;
-    }
 }
 
 void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
@@ -1486,7 +1303,6 @@ void DbgOutf( const sal_Char* pFStr, ... )
 
 void* DbgFunc( sal_uInt16, void* ) { return NULL; }
 
-void DbgProf( sal_uInt16, DbgDataType* ) {}
 void DbgXtor( DbgDataType*, sal_uInt16, const void*, DbgUsr ) {}
 
 void DbgOutTypef( sal_uInt16, const sal_Char*, ... ) {}
