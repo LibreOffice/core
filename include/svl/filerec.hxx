@@ -585,7 +585,7 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nT
     _nPreTag( nTag )
 {
     DBG_ASSERT( _nPreTag != 0xFF, "invalid Tag" );
-    DBG( DbgOutf( "SfxFileRec: writing record to %ul", pStream->Tell() ) );
+    SAL_INFO("svl", "SfxFileRec: writing record to " << pStream->Tell());
 
     pStream->SeekRel( + SFX_REC_HEADERSIZE_MINI );
 }

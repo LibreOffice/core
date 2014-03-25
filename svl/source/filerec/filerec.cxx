@@ -199,7 +199,7 @@ SfxMiniRecordReader::SfxMiniRecordReader
     while(true)
     {
         // Header lesen
-        DBG( DbgOutf( "SfxFileRec: searching record at %ul", pStream->Tell() ) );
+        SAL_INFO("svl", "SfxFileRec: searching record at " << pStream->Tell());
         sal_uInt32 nHeader;
         pStream->ReadUInt32( nHeader );
 
@@ -307,7 +307,7 @@ bool SfxSingleRecordReader::FindHeader_Impl
     {
         // Header lesen
         sal_uInt32 nHeader;
-        DBG( DbgOutf( "SfxFileRec: searching record at %ul", _pStream->Tell() ) );
+        SAL_INFO("svl", "SfxFileRec: searching record at " << _pStream->Tell());
         _pStream->ReadUInt32( nHeader );
         if ( !SetHeader_Impl( nHeader ) )
             // EOR => Such-Schleife abbreichen
