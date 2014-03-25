@@ -3166,7 +3166,7 @@ gb_ExternalProject__use_commons-logging :=
 else # !SYSTEM_APACHE_COMMONS
 
 $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
-	commons-logging-1.1.1 \
+	commons-logging-1.1.3 \
 ))
 $(eval $(call gb_Helper_register_jars,OXT,\
 	commons-codec-1.6 \
@@ -3200,7 +3200,7 @@ endef
 
 define gb_Jar__use_commons-logging
 $(call gb_Jar_use_external_project,$(1),apache_commons_logging)
-$(call gb_Jar_use_jar,$(1),commons-logging-1.1.1)
+$(call gb_Jar_use_jar,$(1),commons-logging-1.1.3)
 endef
 define gb_ExternalProject__use_commons-logging
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_logging)

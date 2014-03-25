@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_httpclient,build) :
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-		-Dcommons-logging.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-1.1.1-SNAPSHOT.jar" \
+		-Dcommons-logging.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-1.1.3.jar" \
 		-Dcommons-codec.jar="$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.6-SNAPSHOT.jar" \
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
