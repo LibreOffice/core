@@ -186,11 +186,7 @@ bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrC
     if (bFound)
         aFormatArea = aNewRange;    // extend
     else
-    {
-        bFormatValid = false;       // outdside of range -> break
-        if ( bAttrChanged )         // if value entered with numberformat?
-            StartFormatArea();      // then start again
-    }
+        bFormatValid = false;       // outside of range -> break
 
     return bFound;
 }
