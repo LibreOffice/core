@@ -1058,8 +1058,6 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                                 case PROPERTY_CONTEXTACTIVE:
                                     rWinStateInfo.bContextActive = bValue;
                                     break;
-                                default:
-                                    DBG_ASSERT( false, "Unknown boolean property in WindowState found!" );
                             }
                         }
                     }
