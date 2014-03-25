@@ -10591,8 +10591,8 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
         AC_MSG_RESULT([external])
         if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
             if test -z $COMMONS_CODEC_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-codec-1.6.jar,
-                    [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.6.jar ],
+                AC_CHECK_FILE(/usr/share/java/commons-codec-1.9.jar,
+                    [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.9.jar ],
                     [
                         AC_CHECK_FILE(/usr/share/java/commons-codec.jar,
                             [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],

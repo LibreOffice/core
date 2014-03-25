@@ -22,7 +22,7 @@ $(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_co
 $(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_httpclient))
 $(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_lang))
 
-$(eval $(call gb_Extension_add_file,wiki-publisher,commons-codec-1.6.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.6-SNAPSHOT.jar))
+$(eval $(call gb_Extension_add_file,wiki-publisher,commons-codec-1.9.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.9.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-httpclient-3.1.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_httpclient)/dist/commons-httpclient.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-lang-2.4.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_lang)/dist/commons-lang-2.4.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-logging-1.1.3.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-1.1.3.jar))

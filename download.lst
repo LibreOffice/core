@@ -37,7 +37,7 @@ export LIBEOT_TARBALL := libeot-0.01.tar.bz2
 SERF_MD5SUM := 4f8e76c9c6567aee1d66aba49f76a58b
 export SERF_TARBALL := serf-1.2.1.tar.bz2
 
-export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
+export APACHE_COMMONS_CODEC_TARBALL := 048751f3271906db5126ab76870444c4-commons-codec-1.9-src.zip
 export APACHE_COMMONS_HTTPCLIENT_TARBALL := 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
 export APACHE_COMMONS_LANG_TARBALL := 625ff5f2f968dd908bca43c9469d6e6b-commons-lang-2.4-src.tar.gz
 export APACHE_COMMONS_LOGGING_TARBALL := e8e197d628436490886d17cffa108fe3-commons-logging-1.1.3-src.tar.gz
