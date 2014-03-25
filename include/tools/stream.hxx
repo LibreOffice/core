@@ -727,6 +727,7 @@ protected:
 
 public:
                     SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);
+                    SvMemoryStream( const void* pBuf, sal_Size nSize, StreamMode eMode);
                     SvMemoryStream( sal_Size nInitSize=512, sal_Size nResize=64 );
                     ~SvMemoryStream();
 

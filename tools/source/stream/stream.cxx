@@ -1697,6 +1697,22 @@ SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
     SetBufferSize( 0 );
 }
 
+SvMemoryStream::SvMemoryStream( const void* pBuffer, sal_Size bufSize,
+                                StreamMode eMode )
+{
+    if( eMode & STREAM_WRITE )
+        bIsWritable = true;
+    else
+        bIsWritable = false;
+    nEndOfData  = bufSize;
+    bOwnsData   = false;
+    pBuf        = (sal_uInt8 *) pBuffer;
+    nResize     = 0L;
+    nSize       = bufSize;
+    nPos        = 0L;
+    SetBufferSize( 0 );
+}
+
 SvMemoryStream::SvMemoryStream( sal_Size nInitSize, sal_Size nResizeOffset )
 {
     bIsWritable = true;

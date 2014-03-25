@@ -37,6 +37,10 @@
 
 #include <string.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sax/tools/converter.hxx>
+#include <rtl/uri.hxx>
+
 namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
     // unnamed namespaces don't work well yet...
 
@@ -581,6 +585,34 @@ void INetURLObject::setInvalid()
     m_aPath.clear();
     m_aQuery.clear();
     m_aFragment.clear();
+}
+
+SvMemoryStream* INetURLObject::getData()
+{
+    OUString sURLPath = HasURLPath() ? GetURLPath() : OUString();
+    sal_Int32 base64Index =  sURLPath.indexOf(";base64,");
+    SvMemoryStream* aStream=NULL;
+
+    if( base64Index < 0 )
+    {
+        // URL decoding
+        sal_Int32 aCommaIndex =  sURLPath.lastIndexOf(",");
+        OUString sURLEncodedData = sURLPath.replaceAt(0, aCommaIndex+1, "");
+        OUString aDecodedData = rtl::Uri::decode(sURLEncodedData, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
+        aStream = new SvMemoryStream( OUStringToOString(aDecodedData, RTL_TEXTENCODING_UTF8).getStr(), aDecodedData.getLength(), STREAM_READ);
+    }
+    else
+    {
+        // base64 decoding
+        OUString sBase64Data = sURLPath.replaceAt(0, base64Index, "");
+        star::uno::Sequence< sal_Int8 > aDecodedData;
+        ::sax::Converter::decodeBase64(aDecodedData, sBase64Data);
+        if( aDecodedData.hasElements() )
+        {
+            aStream = new SvMemoryStream(aDecodedData.getArray(), aDecodedData.getLength(), STREAM_READ);
+        }
+    }
+    return aStream;
 }
 
 namespace unnamed_tools_urlobj {
