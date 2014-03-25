@@ -166,8 +166,23 @@ void KDEXLib::Init()
 
     KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
 
+    // LO does its own session management, so prevent KDE/Qt from interfering
+    // (QApplication::disableSessionManagement(false) wouldn't quite do,
+    // since that still actually connects to the session manager, it just
+    // won't save the application data on session shutdown).
+    char* session_manager = NULL;
+    if( getenv( "SESSION_MANAGER" ) != NULL )
+    {
+        session_manager = strdup( getenv( "SESSION_MANAGER" ));
+        unsetenv( "SESSION_MANAGER" );
+    }
     m_pApplication = new VCLKDEApplication();
-    kapp->disableSessionManagement();
+    if( session_manager != NULL )
+    {
+        setenv( "SESSION_MANAGER", session_manager, 1 );
+        free( session_manager );
+    }
+
     KApplication::setQuitOnLastWindowClosed(false);
 
 #if KDE_HAVE_GLIB
