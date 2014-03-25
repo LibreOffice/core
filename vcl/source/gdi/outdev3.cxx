@@ -451,16 +451,22 @@ void ImplFontSubstitute( OUString& rFontName )
 Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                                    sal_uLong nFlags, const OutputDevice* pOutDev )
 {
+    if (!pOutDev) // default is NULL
+        pOutDev = Application::GetDefaultDevice();
+
     LanguageTag aLanguageTag(
             ( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW ) ?
             Application::GetSettings().GetUILanguageTag() :
             LanguageTag( eLang ));
 
     utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-    OUString aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // ensure a fallback
     OUString aDefault = rDefaults.getDefaultFont( aLanguageTag, nType );
+    OUString aSearch;
+
     if( !aDefault.isEmpty() )
         aSearch = aDefault;
+    else
+        aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // use the UI font as a fallback
 
     Font aFont;
     aFont.SetPitch( PITCH_VARIABLE );
@@ -552,11 +558,9 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         {
             if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
             {
-
-                if( !pOutDev )
-                    pOutDev = (const OutputDevice *)ImplGetSVData()->mpDefaultWin;
                 if( !pOutDev )
                 {
+                    SAL_WARN ("vcl.gdi", "No default window has been set for the application - we really shouldn't be able to get here");
                     sal_Int32 nIndex = 0;
                     aFont.SetName( aSearch.getToken( 0, ';', nIndex ) );
                 }
@@ -1186,25 +1190,27 @@ bool OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
 
 void OutputDevice::ImplInitFontList() const
 {
-    if( ! mpFontCollection->Count() )
+    if( !mpFontCollection->Count() )
     {
         if( mpGraphics || ImplGetGraphics() )
         {
             SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
             mpGraphics->GetDevFontList( mpFontCollection );
+
+            // There is absolutely no way there should be no fonts available on the device
+            if( !mpFontCollection->Count() )
+            {
+                OUString aError( "Application error: no fonts and no vcl resource found on your system" );
+                ResMgr* pMgr = ImplGetResMgr();
+                if( pMgr )
+                {
+                    OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
+                    if( !aResStr.isEmpty() )
+                        aError = aResStr;
+                }
+                Application::Abort( aError );
+            }
         }
-    }
-    if( meOutDevType == OUTDEV_WINDOW && ! mpFontCollection->Count() )
-    {
-        OUString aError( "Application error: no fonts and no vcl resource found on your system" );
-        ResMgr* pMgr = ImplGetResMgr();
-        if( pMgr )
-        {
-            OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
-            if( !aResStr.isEmpty() )
-                aError = aResStr;
-        }
-        Application::Abort( aError );
     }
 }
 
