@@ -3400,50 +3400,6 @@
    <text:p text:style-name="Standard">Alternatively, the contents of this file may be used under the terms of the GNU Lesser General Public License (the &quot;LGPL&quot;), in which case the provisions of LGPL are applicable instead of those above. If you wish to allow use of your version of this file only under the terms of the LGPL and not to allow others to use your version of this file under the SPL, indicate your decision by deleting the provisions above and replace them with the notice and other provisions required by the LGPL. If you do not delete the provisions above, a recipient may use your version of this file under either the SPL or the LGPL.</text:p>
    <text:p text:style-name="Standard">Patrick Niemeyer (pat@pat.net) Author of Learning Java, O&apos;Reilly &amp; Associates <text:a xlink:type="simple" xlink:href="http://www.pat.net/~pat/">http://www.pat.net/~pat/</text:a></text:p>
    <text:p text:style-name="Standard"><text:a xlink:type="simple" xlink:href="#1.GNU Lesser General Public License Version 3|outline">Jump to LGPL Version 3</text:a></text:p>
-   <text:h text:style-name="Heading_20_2" text:outline-level="2"><text:soft-page-break/>BerkeleyDB</text:h>
-   <text:p text:style-name="Standard">The following software may be included in this product: BerkeleyDB. Use of any of this software is governed by the terms of the license below:</text:p>
-   <text:p text:style-name="Standard">Copyright (c) 1990-2004 Sleepycat Software. All rights reserved.</text:p>
-   <text:p text:style-name="Standard">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</text:p>
-   <text:list xml:id="list514908698508208726" text:style-name="L1">
-    <text:list-item>
-     <text:p text:style-name="P98">Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</text:p>
-    </text:list-item>
-    <text:list-item>
-     <text:p text:style-name="P98">Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</text:p>
-    </text:list-item>
-    <text:list-item>
-     <text:p text:style-name="P98">Redistributions in any form must be accompanied by information on how to obtain complete source code for the DB software and any accompanying software that uses the DB software. The source code must either be included in the distribution or be available for no more than the cost of distribution plus a nominal fee, and must be freely redistributable under reasonable conditions. For an executable file, complete source code means the source code for all modules it contains. It does not include source code for modules or files that typically accompany the major components of the operating system on which the executable file runs.</text:p>
-    </text:list-item>
-   </text:list>
-   <text:p text:style-name="Standard">THIS SOFTWARE IS PROVIDED BY SLEEPYCAT SOFTWARE ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT, ARE DISCLAIMED. IN NO EVENT SHALL SLEEPYCAT SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</text:p>
-   <text:p text:style-name="Standard">Copyright (c) 1990, 1993, 1994, 1995 The Regents of the University of California. All rights reserved.</text:p>
-   <text:p text:style-name="Standard">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</text:p>
-   <text:list xml:id="list140436640025479537" text:style-name="L2">
-    <text:list-item>
-     <text:p text:style-name="P99">Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</text:p>
-    </text:list-item>
-    <text:list-item>
-     <text:p text:style-name="P99"><text:soft-page-break/>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</text:p>
-    </text:list-item>
-    <text:list-item>
-     <text:p text:style-name="P99">Neither the name of the University nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</text:p>
-    </text:list-item>
-   </text:list>
-   <text:p text:style-name="Standard">THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</text:p>
-   <text:p text:style-name="Standard">Copyright (c) 1995, 1996 The President and Fellows of Harvard University. All rights reserved.</text:p>
-   <text:p text:style-name="Standard">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</text:p>
-   <text:list xml:id="list2325450656311329023" text:style-name="L3">
-    <text:list-item>
-     <text:p text:style-name="P100">Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</text:p>
-    </text:list-item>
-    <text:list-item>
-     <text:p text:style-name="P100">Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</text:p>
-    </text:list-item>
-    <text:list-item>
-     <text:p text:style-name="P100">Neither the name of the University nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</text:p>
-    </text:list-item>
-   </text:list>
-   <text:p text:style-name="Standard">THIS SOFTWARE IS PROVIDED BY HARVARD AND ITS CONTRIBUTORS ``AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL HARVARD OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF <text:soft-page-break/>THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2">C++ Boost Library</text:h>
    <text:p text:style-name="Standard">The following software may be included in this product: C++ Boost Library. Use of any of this software is governed by the terms of the license below:</text:p>
    <text:p text:style-name="Standard">Boost Software License - Version 1.0 - August 17th, 2003</text:p>
