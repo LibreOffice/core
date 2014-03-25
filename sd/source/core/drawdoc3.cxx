@@ -486,8 +486,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor, ( rBookmarkList.empty() && pBookmarkDoc != this ) );
 
     // Copy the style that we actually need.
-    SdStyleSheetPool* pBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool*>(pBookmarkDoc->GetStyleSheetPool());
-    SdStyleSheetPool* pStyleSheetPool = dynamic_cast<SdStyleSheetPool*>(GetStyleSheetPool());
+    SdStyleSheetPool& rBookmarkStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*pBookmarkDoc->GetStyleSheetPool());
+    SdStyleSheetPool& rStyleSheetPool = dynamic_cast<SdStyleSheetPool&>(*GetStyleSheetPool());
 
     // When copying styles, also copy the master pages!
     if( !aLayoutsToTransfer.empty() )
@@ -499,7 +499,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         SdStyleSheetVector aCreatedStyles;
         OUString layoutName = *pIter;
 
-        pStyleSheetPool->CopyLayoutSheets(layoutName, *pBookmarkStyleSheetPool,aCreatedStyles);
+        rStyleSheetPool.CopyLayoutSheets(layoutName, rBookmarkStyleSheetPool,aCreatedStyles);
 
         if(!aCreatedStyles.empty())
         {
@@ -519,12 +519,12 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     OUString aRenameStr;
     if(!bReplace && !bNoDialogs)
         aRenameStr = OUString("_");
-    pStyleSheetPool->RenameAndCopyGraphicSheets(*pBookmarkStyleSheetPool, aNewGraphicStyles, aRenameStr);
+    rStyleSheetPool.RenameAndCopyGraphicSheets(rBookmarkStyleSheetPool, aNewGraphicStyles, aRenameStr);
     SdStyleSheetVector aNewCellStyles;
-    pStyleSheetPool->CopyCellSheets(*pBookmarkStyleSheetPool, aNewCellStyles);
+    rStyleSheetPool.CopyCellSheets(rBookmarkStyleSheetPool, aNewCellStyles);
 
     // TODO handle undo of table styles too
-    pStyleSheetPool->CopyTableStyles(*pBookmarkStyleSheetPool);
+    rStyleSheetPool.CopyTableStyles(rBookmarkStyleSheetPool);
 
     // Insert document
 
