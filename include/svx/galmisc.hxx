@@ -41,10 +41,12 @@ struct ExchangeData
     Date            aThemeChangeDate;
     Time            aThemeChangeTime;
 
-    ExchangeData() :
-        aThemeChangeDate( Date::EMPTY ),
-        aThemeChangeTime( Time::EMPTY )
-        {}
+    ExchangeData()
+        : pTheme(NULL)
+        , aThemeChangeDate( Date::EMPTY )
+        , aThemeChangeTime( Time::EMPTY )
+        {
+        }
 };
 
 enum SgaObjKind
