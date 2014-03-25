@@ -277,7 +277,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
         delete pSVMenu;
     }
 
-    DBG_OUTF( ("SfxVirtualMenu %lx destroyed", this) );
+    SAL_INFO("sfx", "SfxVirtualMenu " << this << " destroyed");
     DBG_ASSERT( !nLocks, "destroying active menu" );
 }
 
@@ -660,7 +660,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
                 pSubMenu = new SfxVirtualMenu( nSID, this,
                         *pMenu, sal_False, *pBindings, bOLE, bRes, bIsAddonPopupMenu );
 
-                DBG_OUTF( ("New VirtualMenu %lx created", pSubMenu) );
+                SAL_INFO("sfx", "New VirtualMenu " << pSubMenu << " created");
 
                 rCtrl.Bind( this, nSID, *pSubMenu, pSVMenu->GetItemText(nSID), *pBindings );
 
@@ -782,7 +782,10 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 
 IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 {
-    DBG_OUTF( ("SfxVirtualMenu %lx activated %lx, own %lx", this, pMenu, pSVMenu));
+    SAL_INFO(
+        "sfx",
+        "SfxVirtualMenu " << this << " activated " << pMenu << ", own "
+            << pSVMenu);
 
     // MI: for what was it still good for?
     // MBA: seemes to be an old QAP-Hack( checked-in in rev.1.41  ! )
@@ -915,7 +918,10 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
 IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
 {
-    DBG_OUTF( ("SfxVirtualMenu %lx deactivated %lx, own %lx", this, pMenu, pSVMenu) );
+    SAL_INFO(
+        "sfx",
+        "SfxVirtualMenu " << this << " deactivated " << pMenu << ", own "
+            << pSVMenu);
     if ( bIsActive && ( 0 == pMenu || pMenu == pSVMenu ) )
     {
         // All controllers can be unbinded all the way up to the Menubar,
@@ -933,7 +939,10 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
 IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 {
     sal_uInt16 nSlotId = (sal_uInt16) pMenu->GetCurItemId();
-    DBG_OUTF( ("SfxVirtualMenu %lx selected %u from %lx", this, nSlotId, pMenu) );
+    SAL_INFO(
+        "sfx",
+        "SfxVirtualMenu " << this << " selected " << nSlotId << " from "
+            << pMenu);
 
     if ( nSlotId >= START_ITEMID_WINDOWLIST && nSlotId <= END_ITEMID_WINDOWLIST )
     {
@@ -1055,7 +1064,7 @@ void SfxVirtualMenu::InitPopup( sal_uInt16 nPos, sal_Bool /*bOLE*/ )
         SfxVirtualMenu *pSubMenu =
             new SfxVirtualMenu(nSID, this, *pMenu, sal_False, *pBindings, bOLE, bRes);
 
-        DBG_OUTF( ("New VirtualMenu %lx created", pSubMenu) );
+        SAL_INFO("sfx", "New VirtualMenu " << pSubMenu << " created");
 
         rCtrl.Bind( this, nSID, *pSubMenu, pSVMenu->GetItemText(nSID), *pBindings );
     }

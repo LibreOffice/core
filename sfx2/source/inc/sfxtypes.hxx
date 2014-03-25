@@ -72,16 +72,12 @@ struct _Capper
 
 #endif
 
+#ifndef DBG
 #ifdef DBG_UTIL
-#ifndef DBG
 #define DBG(statement) statement
-#endif
-#define DBG_OUTF(x) DbgOutf x
 #else
-#ifndef DBG
 #define DBG(statement)
 #endif
-#define DBG_OUTF(x)
 #endif
 
 
