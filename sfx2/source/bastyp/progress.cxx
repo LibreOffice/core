@@ -158,8 +158,10 @@ SfxProgress::SfxProgress
     pImp->bWaitMode = bWait;
     pImp->nCreate = Get10ThSec();
     pImp->nNextReschedule = pImp->nCreate;
-    DBG( DbgOutf( "SfxProgress: created for '%s' at %luds",
-                  rText.getStr(), pImp->nCreate ) );
+    SAL_INFO(
+        "sfx.bastyp",
+        "SfxProgress: created for '" << rText << "' at " << pImp->nCreate
+            << "ds");
     pImp->bAllDocs = bAll;
     pImp->pWorkWin = 0;
     pImp->pView = 0;
@@ -209,7 +211,8 @@ void SfxProgress::Stop()
     if ( !pImp->bRunning )
         return;
     pImp->bRunning = false;
-    DBG( DbgOutf( "SfxProgress: destroyed at %luds", Get10ThSec() ) );
+    SAL_INFO(
+        "sfx.bastyp", "SfxProgress: destroyed at " << Get10ThSec() << "ds");
 
     Suspend();
     if ( pImp->xObjSh.Is() )
@@ -298,8 +301,10 @@ bool SfxProgress::SetState
     // new Range?
     if ( nNewRange && nNewRange != pImp->nMax )
     {
-        DBG( DbgOutf( "SfxProgress: range changed from %lu to %lu",
-                      pImp->nMax, nNewRange ) );
+        SAL_INFO(
+            "sfx.bastyp",
+            "SfxProgress: range changed from " << pImp->nMax << " to "
+                << nNewRange);
         pImp->nMax = nNewRange;
     }
 
@@ -371,7 +376,7 @@ void SfxProgress::Resume()
     if( pImp->pActiveProgress ) return;
     if ( bSuspended )
     {
-        DBG( DbgOutf( "SfxProgress: resumed" ) );
+        SAL_INFO("sfx.bastyp", "SfxProgress: resumed");
         if ( pImp->xStatusInd.is() )
         {
             pImp->xStatusInd->start( pImp->aText, pImp->nMax );
@@ -417,7 +422,7 @@ void SfxProgress::Suspend()
     if( pImp->pActiveProgress ) return;
     if ( !bSuspended )
     {
-        DBG( DbgOutf( "SfxProgress: suspended" ) );
+        SAL_INFO("sfx.bastyp", "SfxProgress: suspended");
         bSuspended = true;
 
         if ( pImp->xStatusInd.is() )
@@ -450,7 +455,7 @@ void SfxProgress::UnLock()
     if ( !pImp->bLocked )
         return;
 
-    DBG( DbgOutf( "SfxProgress: unlocked" ) );
+    SAL_INFO("sfx.bastyp", "SfxProgress: unlocked");
     pImp->bLocked = false;
     pImp->Enable_Impl(true);
 }
