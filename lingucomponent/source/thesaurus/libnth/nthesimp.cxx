@@ -404,7 +404,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                 {
                     OUString sTerm(pe->psyns[i],strlen(pe->psyns[i]),eEnc );
                     sal_Int32 catpos = sTerm.indexOf('(');
-                    sal_Int32 catpos2 = 0;
                     OUString catst;
                     OUString catst2;
                     if (catpos > 2)
@@ -427,8 +426,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                                 sTerm = seq[0];
                         }
                     }
-                    if (catpos2)
-                        sTerm = catst2 + sTerm;
 
                     sal_uInt16 ct1 = capitalType(sTerm, pCC);
                     if (CAPTYPE_MIXED == ct1)
