@@ -1442,6 +1442,34 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="StringConversion" oor:type="xs:int">
+          <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
+          <info>
+            <desc>How to treat text when encountered as operand in an arithmetic operation or as argument to a function that expects a number instead.</desc>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>Generate #VALUE! error</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>Treat as zero</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>Convert only unambiguous</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="3">
+              <info>
+                <desc>Convert also locale dependent</desc>
+              </info>
+            </enumeration>
+          </constraints>
+        </prop>
       </group>
       <group oor:name="Load">
         <info>
