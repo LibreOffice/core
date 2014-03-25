@@ -1403,7 +1403,7 @@ void lcl_CopyHint(
             SwCharFmt* pFmt =
                 static_cast<SwCharFmt*>(pHt->GetCharFmt().GetCharFmt());
 
-            if( pFmt && pOtherDoc )
+            if (pOtherDoc)
             {
                 pFmt = pOtherDoc->CopyCharFmt( *pFmt );
             }
