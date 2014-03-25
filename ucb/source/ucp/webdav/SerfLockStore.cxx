@@ -91,8 +91,7 @@ SerfLockStore::~SerfLockStore()
     const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
     while ( it != end )
     {
-        const OUString& rLock = (*it).first;
-        (*it).second.m_xSession->UNLOCK( rLock );
+        (*it).second.m_xSession->UNLOCK( (*it).first );
         ++it;
     }
 }

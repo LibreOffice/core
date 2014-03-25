@@ -34,8 +34,6 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const uno::Reference< uno::XComponentContext > & rxContext )
     throw( DAVException )
 {
-    m_xMSF = rxContext;
-
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_xProxyDecider.get() )

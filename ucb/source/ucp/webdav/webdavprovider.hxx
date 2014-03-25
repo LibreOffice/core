@@ -68,7 +68,6 @@ namespace http_dav_ucp {
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
-    rtl::Reference< DAVSessionFactory > m_xDAVSessionFactory;
     PropertyMap * m_pProps;
 
 public:
@@ -120,9 +119,6 @@ public:
 
     // Non-interface methods.
 
-
-    rtl::Reference< DAVSessionFactory > getDAVSessionFactory()
-    { return m_xDAVSessionFactory; }
 
     bool getProperty( const OUString & rPropName,
                       ::com::sun::star::beans::Property & rProp,

@@ -56,15 +56,12 @@ public:
                                 rxContext )
             throw( DAVException );
 
-    ::uno::Reference< ::uno::XComponentContext > getServiceFactory() {  return m_xMSF; }
 private:
     typedef std::map< OUString, DAVSession * > Map;
 
     Map m_aMap;
     osl::Mutex m_aMutex;
     std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
-
-    ::uno::Reference< ::uno::XComponentContext > m_xMSF;
 
     void releaseElement( DAVSession * pElement ) SAL_THROW(());
 

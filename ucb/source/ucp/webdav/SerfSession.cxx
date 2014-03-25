@@ -36,6 +36,7 @@
 #include "SerfInputStream.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
@@ -354,7 +355,6 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
     // Create some crypto objects to decode and handle the base64
     // encoded certificate chain.
-    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
     uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext;
     uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv;
@@ -365,10 +365,8 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         // Create a certificate container.
         xCertificateContainer = security::CertificateContainer::create( xContext );
 
-        xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.xml.crypto.SEInitializer" ), xContext ),
-            uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::xml::crypto::XSEInitializer > xSEInitializer =
+            css::xml::crypto::SEInitializer::create( xContext );
 
         xSecurityContext = xSEInitializer->createSecurityContext( OUString() );
         if (xSecurityContext.is())
