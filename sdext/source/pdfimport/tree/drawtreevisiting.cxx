@@ -707,7 +707,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
             }
             bool bPara = strspn("ParagraphElement", typeid(rParent).name());
             ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(&rParent);
-            if (bPara && isComplex)
+            if (bPara && pPara && isComplex)
                 pPara->bRtl = true;
             if( pNext )
             {
@@ -737,7 +737,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                         if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
                             isComplex = true;
                     }
-                    if (bPara && isComplex)
+                    if (bPara && pPara && isComplex)
                         pPara->bRtl = true;
                     // append eventual children to current element
                     // and clear children (else the children just
