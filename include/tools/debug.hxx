@@ -102,15 +102,12 @@ struct DbgDataType
 #define DBG_FUNC_SAVEDATA           5
 #define DBG_FUNC_SETPRINTMSGBOX     6
 #define DBG_FUNC_SETPRINTWINDOW     7
-#define DBG_FUNC_SETPRINTTESTTOOL   8
 #define DBG_FUNC_XTORINFO           10
 #define DBG_FUNC_COREDUMP           12
 #define DBG_FUNC_ALLERROROUT        13
 #define DBG_FUNC_SETTESTSOLARMUTEX  14
 #define DBG_FUNC_TESTSOLARMUTEX     15
 #define DBG_FUNC_PRINTFILE          16
-#define DBG_FUNC_GETPRINTMSGBOX     17
-#define DBG_FUNC_FILTERMESSAGE      18          // new for #i38967
 #define DBG_FUNC_UPDATEOSLHOOK      19
 #define DBG_FUNC_SET_ABORT          20
 

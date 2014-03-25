@@ -111,7 +111,6 @@ struct DebugData
     bool                    bInit;
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
-    DbgPrintLine            pDbgPrintTestTool;
     DbgPrintLine            pDbgAbort;
     ::std::vector< DbgPrintLine >
                             aDbgPrintUserChannels;
@@ -126,7 +125,6 @@ struct DebugData
         :bInit( false )
         ,pDbgPrintMsgBox( NULL )
         ,pDbgPrintWindow( NULL )
-        ,pDbgPrintTestTool( NULL )
         ,pDbgAbort( NULL )
         ,pProfList( NULL )
         ,pXtorList( NULL )
@@ -896,7 +894,6 @@ static void DebugDeInit()
     pData->aDbgData.nTraceOut   = nOldOut;
     pData->aDbgData.nTestFlags &= DBG_TEST_PROFILING;
     pData->aDbgPrintUserChannels.clear();
-    pData->pDbgPrintTestTool    = NULL;
     pData->pDbgPrintWindow      = NULL;
     pData->pOldDebugMessageFunc = NULL;
     ImplDbgDeInitLock();
@@ -1012,15 +1009,7 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 
     if ( nAction == DBG_FUNC_GETDATA )
         return (void*)&(pDebugData->aDbgData);
-    else if ( nAction == DBG_FUNC_GETPRINTMSGBOX )
-        return (void*)(long)(pDebugData->pDbgPrintMsgBox);
-    else if ( nAction == DBG_FUNC_FILTERMESSAGE )
-        if ( ImplDbgFilterMessage( (const sal_Char*) pParam ) )
-            return (void*) -1;
-        else
-            return (void*) 0;   // aka NULL
     else
-
     {
         switch ( nAction )
         {
@@ -1042,10 +1031,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 
             case DBG_FUNC_SETPRINTWINDOW:
                 pDebugData->pDbgPrintWindow = (DbgPrintLine)(long)pParam;
-                break;
-
-            case DBG_FUNC_SETPRINTTESTTOOL:
-                pDebugData->pDbgPrintTestTool = (DbgPrintLine)(long)pParam;
                 break;
 
             case DBG_FUNC_SET_ABORT:
@@ -1500,10 +1485,7 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
 
     if ( nOut == DBG_OUT_TESTTOOL )
     {
-        if ( pData->pDbgPrintTestTool )
-            pData->pDbgPrintTestTool( aBufOut );
-        else
-            nOut = DBG_OUT_MSGBOX;
+        nOut = DBG_OUT_MSGBOX;
     }
 
     if ( nOut == DBG_OUT_MSGBOX )
