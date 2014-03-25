@@ -29,19 +29,15 @@ class SwMailMergeWizard;
 
 class SwMailMergeMergePage : public svt::OWizardPage
 {
-    SwBoldFixedInfo m_aHeaderFI;
+    FixedText*      m_pEditFI;
+    PushButton*     m_pEditPB;
 
-    FixedInfo       m_aEditFI;
-    PushButton      m_aEditPB;
+    ReturnActionEdit* m_pFindED;
+    PushButton*     m_pFindPB;
 
-    FixedLine       m_aFindFL;
-    FixedText       m_aFineFT;
-    ReturnActionEdit    m_aFindED;
-    PushButton      m_aFindPB;
-
-    CheckBox        m_aWholeWordsCB;
-    CheckBox        m_aBackwardsCB;
-    CheckBox        m_aMatchCaseCB;
+    CheckBox*       m_pWholeWordsCB;
+    CheckBox*       m_pBackwardsCB;
+    CheckBox*       m_pMatchCaseCB;
 
     SwMailMergeWizard*  m_pWizard;
 
@@ -50,8 +46,7 @@ class SwMailMergeMergePage : public svt::OWizardPage
     DECL_LINK(EnteredFindStringHdl_Impl, void*);
 
 public:
-        SwMailMergeMergePage( SwMailMergeWizard* _pParent);
-        ~SwMailMergeMergePage();
+    SwMailMergeMergePage( SwMailMergeWizard* _pParent);
 
 };
 

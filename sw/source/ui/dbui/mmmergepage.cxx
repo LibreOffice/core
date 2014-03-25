@@ -23,39 +23,31 @@
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <dbui.hrc>
-#include <mmmergepage.hrc>
 #include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <swabstdlg.hxx>
 
-SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
-    svt::OWizardPage(_pParent, SW_RES(DLG_MM_MERGE_PAGE)),
-    m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
-    m_aEditFI(this, SW_RES(           FI_EDIT )),
-    m_aEditPB(this, SW_RES(           PB_EDIT )),
-    m_aFindFL(this, SW_RES(           FL_FIND )),
-    m_aFineFT(this, SW_RES(           FT_FIND )),
-    m_aFindED(this, SW_RES(           ED_FIND )),
-    m_aFindPB(this, SW_RES(           PB_FIND )),
-    m_aWholeWordsCB(this, SW_RES(     CB_WHOLEWORDS)),
-    m_aBackwardsCB(this, SW_RES(      CB_BACKWARDS )),
-    m_aMatchCaseCB(this, SW_RES(      CB_MATCHCASE )),
-    m_pWizard(_pParent)
+SwMailMergeMergePage::SwMailMergeMergePage(SwMailMergeWizard* _pParent)
+    : svt::OWizardPage(_pParent, "MMMergePage",
+        "modules/swriter/ui/mmmergepage.ui")
+    , m_pWizard(_pParent)
 {
-    FreeResource();
-    OUString sTemp(m_aEditFI.GetText());
-    sTemp = sTemp.replaceFirst("%1", m_aEditPB.GetText());
-    m_aEditFI.SetText(sTemp);
-    m_aEditPB.SetClickHdl( LINK( this, SwMailMergeMergePage, EditDocumentHdl_Impl));
-    m_aFindPB.SetClickHdl( LINK( this, SwMailMergeMergePage, FindHdl_Impl ));
+    get(m_pEditFI, "helplabel");
+    get(m_pEditPB, "edit");
+    get(m_pFindPB, "find");
+    get(m_pWholeWordsCB, "wholewords");
+    get(m_pBackwardsCB, "backwards");
+    get(m_pMatchCaseCB, "matchcase");
+    get(m_pFindED, "entry");
+    OUString sTemp(m_pEditFI->GetText());
+    sTemp = sTemp.replaceFirst("%1", m_pEditPB->GetText());
+    m_pEditFI->SetText(sTemp);
+    m_pEditPB->SetClickHdl( LINK( this, SwMailMergeMergePage, EditDocumentHdl_Impl));
+    m_pFindPB->SetClickHdl( LINK( this, SwMailMergeMergePage, FindHdl_Impl ));
 
-    m_aFindED.SetReturnActionLink( LINK(this, SwMailMergeMergePage, EnteredFindStringHdl_Impl ));
+    m_pFindED->SetReturnActionLink( LINK(this, SwMailMergeMergePage, EnteredFindStringHdl_Impl ));
 
-}
-
-SwMailMergeMergePage::~SwMailMergeMergePage()
-{
 }
 
 IMPL_LINK_NOARG(SwMailMergeMergePage, EditDocumentHdl_Impl)
@@ -70,11 +62,11 @@ IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
 
     SfxBoolItem aQuiet( SID_SEARCH_QUIET, false );
-    aSearchItem.SetSearchString(m_aFindED.GetText());
+    aSearchItem.SetSearchString(m_pFindED->GetText());
 
-    aSearchItem.SetWordOnly(m_aWholeWordsCB.IsChecked());
-    aSearchItem.SetExact(m_aMatchCaseCB.IsChecked());
-    aSearchItem.SetBackward(m_aBackwardsCB.IsChecked());
+    aSearchItem.SetWordOnly(m_pWholeWordsCB->IsChecked());
+    aSearchItem.SetExact(m_pMatchCaseCB->IsChecked());
+    aSearchItem.SetBackward(m_pBackwardsCB->IsChecked());
 
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
     OSL_ENSURE(pTargetView, "no target view exists");
@@ -89,7 +81,7 @@ IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
 
 IMPL_LINK_NOARG(SwMailMergeMergePage, EnteredFindStringHdl_Impl)
 {
-    m_aFindPB.GetClickHdl().Call( &m_aFindPB );
+    m_pFindPB->GetClickHdl().Call(m_pFindPB);
     return 0;
 }
 
