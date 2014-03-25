@@ -434,6 +434,33 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
         }
     }
 
+    // Ranges may even be distributed over different protection records, for
+    // example if they are assigned different names, and can have different
+    // passwords. Combine the ones that can be edited.
+    /* TODO: once we handle passwords, remember a successful unlock at
+     * ScEnhancedProtection so we can use that here. */
+    ScRangeList aRangeList;
+    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
+            itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
+    {
+        if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
+        {
+            // Ranges are editable if no password is assigned.
+            if (!(*it).mnPasswordVerifier)
+            {
+                const ScRangeList& rRanges = *(*it).maRangeList;
+                size_t nRanges = rRanges.size();
+                for (size_t i=0; i < nRanges; ++i)
+                {
+                    aRangeList.Append( *rRanges[i]);
+                }
+            }
+        }
+    }
+    ScRangeList aResultList( aRangeList.GetIntersectedRange( rRange));
+    if (aResultList.size() == 1 && *aResultList[0] == rRange)
+        return true;
+
     return false;
 }
 
