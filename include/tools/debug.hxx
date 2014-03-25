@@ -79,7 +79,6 @@ struct DbgData
     bool              bOverwrite;
     sal_uIntPtr       nTraceOut;
     sal_uIntPtr       nErrorOut;
-    bool              bHookOSLAssert;
     sal_Char    aDebugName[260];
     sal_Char    aInclFilter[512];
     sal_Char    aExclFilter[512];
@@ -108,15 +107,9 @@ struct DbgDataType
 #define DBG_FUNC_SETTESTSOLARMUTEX  14
 #define DBG_FUNC_TESTSOLARMUTEX     15
 #define DBG_FUNC_PRINTFILE          16
-#define DBG_FUNC_UPDATEOSLHOOK      19
 #define DBG_FUNC_SET_ABORT          20
 
 TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
-
-inline void DbgUpdateOslHook( DbgData* pData )
-{
-    DbgFunc( DBG_FUNC_UPDATEOSLHOOK, pData );
-}
 
 inline void DbgDebugStart()
 {

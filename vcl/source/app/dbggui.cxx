@@ -390,7 +390,6 @@ private:
     ListBox         maTraceBox;
     FixedText       maErrorText;
     ListBox         maErrorBox;
-    CheckBox        maHookOSLBox;
     GroupBox        maBox4;
 
     OKButton        maOKButton;
@@ -574,7 +573,6 @@ DbgDialog::DbgDialog() :
     maTraceBox( this, WB_DROPDOWN ),
     maErrorText( this ),
     maErrorBox( this, WB_DROPDOWN ),
-    maHookOSLBox( this ),
     maBox4( this ),
     maOKButton( this, WB_DEFBUTTON ),
     maCancelButton( this ),
@@ -696,15 +694,6 @@ DbgDialog::DbgDialog() :
         maOverwrite.Check( true );
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
                                  aButtonSize );
-    }
-
-    {
-    maHookOSLBox.Show();
-    maHookOSLBox.SetText("Reroute osl debug ~messages");
-    if ( pData->bHookOSLAssert )
-        maHookOSLBox.Check( true );
-    maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
-                                  LogicToPixel( Size( 100, 12 ), aAppMap ) );
     }
 
     {
@@ -880,7 +869,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aData.aExclFilter[sizeof( aData.aExclFilter )-1] = '\0';
 
         aData.bOverwrite = maOverwrite.IsChecked() ? true : false;
-        aData.bHookOSLAssert = maHookOSLBox.IsChecked() ? true : false;
 
         if ( maXtorThis.IsChecked() )
             aData.nTestFlags |= DBG_TEST_XTOR_THIS;
@@ -915,7 +903,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         // Umschalten der Laufzeitwerte
         DBG_INSTOUTTRACE( aData.nTraceOut );
         DBG_INSTOUTERROR( aData.nErrorOut );
-        DbgUpdateOslHook( &aData );
 
         DbgData* pData = DbgGetData();
         #define IMMEDIATE_FLAGS (DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)

@@ -117,9 +117,6 @@ struct DebugData
     PointerList*            pProfList;
     PointerList*            pXtorList;
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
-    pfunc_osl_printDetailedDebugMessage
-                            pOldDebugMessageFunc;
-    bool                    bOslIsHooked;
 
     DebugData()
         :bInit( false )
@@ -129,8 +126,6 @@ struct DebugData
         ,pProfList( NULL )
         ,pXtorList( NULL )
         ,pDbgTestSolarMutex( NULL )
-        ,pOldDebugMessageFunc( NULL )
-        ,bOslIsHooked( false )
     {
         aDbgData.nTestFlags = DBG_TEST_RESOURCE;
         aDbgData.bOverwrite = true;
@@ -140,7 +135,6 @@ struct DebugData
 #else
         aDbgData.nErrorOut = DBG_OUT_MSGBOX;
 #endif
-        aDbgData.bHookOSLAssert = true;
         aDbgData.aDebugName[0] = 0;
         aDbgData.aInclFilter[0] = 0;
         aDbgData.aExclFilter[0] = 0;
@@ -631,7 +625,6 @@ static DebugData* GetDebugData()
                     lcl_tryReadConfigString( pLine, nLineLength, "exclude_class", aDebugData.aDbgData.aExclClassFilter, sizeof( aDebugData.aDbgData.aExclClassFilter ) );
                     lcl_tryReadOutputChannel( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTraceOut );
                     lcl_tryReadOutputChannel( pLine, nLineLength, "error", &aDebugData.aDbgData.nErrorOut );
-                    lcl_tryReadConfigBoolean( pLine, nLineLength, "oslhook", &aDebugData.aDbgData.bHookOSLAssert );
                 }
 
                 // elements of the [gui] section
@@ -809,23 +802,10 @@ static bool ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
         return false;
 }
 
-extern "C"
-void SAL_CALL dbg_printOslDebugMessage( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char * pszMessage )
-{
-    DbgOut( pszMessage ? pszMessage : "assertion failed!", DBG_OUT_ERROR, pszFileName, (sal_uInt16)nLine );
-}
-
 static void DebugInit()
 {
     bDbgImplInMain = true;
     ImplDbgInitLock();
-
-    DebugData* pData = GetDebugData();
-    if( pData->aDbgData.bHookOSLAssert && ! pData->bOslIsHooked )
-    {
-        pData->pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &dbg_printOslDebugMessage );
-        pData->bOslIsHooked = true;
-    }
 }
 
 static void DebugDeInit()
@@ -834,12 +814,6 @@ static void DebugDeInit()
     sal_uIntPtr       i;
     sal_uIntPtr       nCount;
     sal_uIntPtr       nOldOut;
-
-    if( pData->bOslIsHooked )
-    {
-        osl_setDetailedDebugMessageFunc( pData->pOldDebugMessageFunc );
-        pData->bOslIsHooked = false;
-    }
 
     // Output statistics trace data to file
     nOldOut = pData->aDbgData.nTraceOut;
@@ -895,7 +869,6 @@ static void DebugDeInit()
     pData->aDbgData.nTestFlags &= DBG_TEST_PROFILING;
     pData->aDbgPrintUserChannels.clear();
     pData->pDbgPrintWindow      = NULL;
-    pData->pOldDebugMessageFunc = NULL;
     ImplDbgDeInitLock();
 }
 
@@ -1056,7 +1029,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 lcl_writeConfigString( pIniFile, "exclude_class", pData->aExclClassFilter );
                 lcl_writeConfigOutChannel( pIniFile, "trace", pData->nTraceOut );
                 lcl_writeConfigOutChannel( pIniFile, "error", pData->nErrorOut );
-                lcl_writeConfigBoolean( pIniFile, "oslhook", pData->bHookOSLAssert );
 
                 lcl_lineFeed( pIniFile );
                 lcl_startSection( pIniFile, eGUI );
@@ -1107,22 +1079,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
             case DBG_FUNC_PRINTFILE:
                 ImplDbgPrintFile( (const sal_Char*)pParam );
                 break;
-            case DBG_FUNC_UPDATEOSLHOOK:
-            {
-                const DbgData* pData = static_cast< const DbgData* >( pParam );
-                pDebugData->aDbgData.bHookOSLAssert = pData->bHookOSLAssert;
-                if( pDebugData->bOslIsHooked && ! pData->bHookOSLAssert )
-                {
-                    osl_setDetailedDebugMessageFunc( pDebugData->pOldDebugMessageFunc );
-                    pDebugData->bOslIsHooked = false;
-                }
-                else if( ! pDebugData->bOslIsHooked && pData->bHookOSLAssert )
-                {
-                    pDebugData->pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &dbg_printOslDebugMessage );
-                    pDebugData->bOslIsHooked = true;
-                }
-            }
-            break;
        }
 
         return NULL;

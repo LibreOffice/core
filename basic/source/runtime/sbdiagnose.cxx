@@ -112,11 +112,6 @@ RTLFUNC(CaptureAssertions)
 
         // set the new channel
         DBG_INSTOUTERROR( nAssertionChannelId );
-
-        // ensure OSL assertions are captured, too
-        DbgData aData( *DbgGetData() );
-        aData.bHookOSLAssert = true;
-        DbgUpdateOslHook( &aData );
     }
 
     xAssertionChannelBasic = pBasic;
