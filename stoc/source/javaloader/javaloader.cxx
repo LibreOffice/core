@@ -398,8 +398,9 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(cons
         }
     }
     catch(const RuntimeException & runtimeException) {
-        OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
-        osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
+        SAL_INFO(
+            "stoc",
+            "could not init javaloader due to " << runtimeException.Message);
         throw;
     }
 
