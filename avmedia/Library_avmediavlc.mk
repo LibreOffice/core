@@ -16,8 +16,6 @@ $(eval $(call gb_Library_set_include,avmediavlc,\
     -I$(SRCDIR)/avmedia/source/inc \
 ))
 
-$(eval $(call gb_Library_use_external,avmediavlc,boost_headers))
-
 $(eval $(call gb_Library_use_sdk_api,avmediavlc))
 
 $(eval $(call gb_Library_use_externals,avmediavlc,\
