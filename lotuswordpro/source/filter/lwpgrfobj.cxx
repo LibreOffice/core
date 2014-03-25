@@ -278,7 +278,7 @@ void LwpGraphicObject::RegisterStyle()
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
     {
         LwpVirtualLayout* pMyLayout = GetLayout(NULL);
-        if(pMyLayout->IsFrame())
+        if (pMyLayout && pMyLayout->IsFrame())
         {
             XFFrameStyle* pXFFrameStyle = new XFFrameStyle();
             pXFFrameStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
