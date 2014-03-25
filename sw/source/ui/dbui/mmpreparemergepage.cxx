@@ -67,7 +67,6 @@ IMPL_LINK_NOARG(SwMailMergePrepareMergePage, EditDocumentHdl_Impl)
 
 IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
 {
-    fprintf(stderr, "move\n");
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     sal_Int32 nPos = rConfigItem.GetResultSetPosition();
     if (pCtrl == m_pFirstPB)
