@@ -93,6 +93,42 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                                     const OUString & rId,
                                     OUString & rDocumentTarget)
 {
+    static OUString sId("Id");
+    static OUString sTarget("Target");
+    static OUString sTargetMode("TargetMode");
+    static OUString sExternal("External");
+    if (maIdCache.empty())
+    {
+        // Cache is empty? Then let's build it!
+        uno::Sequence< uno::Sequence<beans::StringPair> >aSeqs = xRelationshipAccess->getAllRelationships();
+        for (sal_Int32 i = 0; i < aSeqs.getLength(); ++i)
+        {
+            const uno::Sequence<beans::StringPair>& rSeq = aSeqs[i];
+            OUString aId;
+            OUString aTarget;
+            bool bExternal = false;
+            for (sal_Int32 j = 0; j < rSeq.getLength(); ++j)
+            {
+                const beans::StringPair& rPair = rSeq[j];
+                if (rPair.First == sId)
+                    aId = rPair.Second;
+                else if (rPair.First == sTarget)
+                    aTarget = rPair.Second;
+                else if (rPair.First == sTargetMode && rPair.Second == sExternal)
+                    bExternal = true;
+            }
+            // Only cache external targets, internal ones are more complex (see below)
+            if (bExternal)
+                maIdCache[aId] = aTarget;
+        }
+    }
+
+    if (maIdCache.find(rId) != maIdCache.end())
+    {
+        rDocumentTarget = maIdCache[rId];
+        return true;
+    }
+
     bool bFound = false;
     static uno::Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  ::com::sun::star::uri::UriReferenceFactory::create( mxContext );
     // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
@@ -101,7 +137,6 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( OUString( "file:///"  ) + msPath );
 
     static OUString sType("Type");
-    static OUString sId("Id");
     static OUString sDocumentType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
     static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
     static OUString sNumberingType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering");
@@ -142,9 +177,6 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sFootersTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/footer");
     static OUString sHeaderTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/header");
     static OUString sOleObjectTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject");
-    static OUString sTarget("Target");
-    static OUString sTargetMode("TargetMode");
-    static OUString sExternal("External");
     static OUString sVBAProjectType("http://schemas.microsoft.com/office/2006/relationships/vbaProject");
 
     OUString sStreamType;
@@ -348,6 +380,9 @@ void OOXMLStreamImpl::init()
                           openStreamElementByHierarchicalName
                           (msTarget, embed::ElementModes::SEEKABLEREAD));
             aAny >>= mxDocumentStream;
+            // Non-cached ID lookup works by accessing mxDocumentStream as an embed::XRelationshipAccess.
+            // So when it changes, we should empty the cache.
+            maIdCache.clear();
         }
     }
 }

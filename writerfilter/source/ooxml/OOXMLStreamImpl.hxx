@@ -19,6 +19,8 @@
 #ifndef INCLUDED_OOXML_STREAM_IMPL_HXX
 #define INCLUDED_OOXML_STREAM_IMPL_HXX
 
+#include <map>
+
 #include <ooxml/OOXMLDocument.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
@@ -50,6 +52,9 @@ class OOXMLStreamImpl : public OOXMLStream
     OUString msId;
     OUString msPath;
     OUString msTarget;
+
+    /// Cache holding an Id <-> Target map of external relations.
+    std::map<OUString, OUString> maIdCache;
 
     bool lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                        xRelationshipAccess,
