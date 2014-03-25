@@ -1308,7 +1308,7 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
             m_pHistory->Add( pOld, pNew, m_nNodeIndex );
         }
-        else if ( RES_ATTRSET_CHG == pNew->Which() )
+        else if (pOld && RES_ATTRSET_CHG == pNew->Which())
         {
             SwHistoryHint* pNewHstr;
             const SfxItemSet& rSet =
