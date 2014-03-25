@@ -216,6 +216,7 @@ private:
     void calcLayout()
     {
         SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTxtDoc);
         SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
         pDoc->GetCurrentViewShell()->CalcLayout();
     }
