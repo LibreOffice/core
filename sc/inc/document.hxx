@@ -514,6 +514,19 @@ public:
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
     void SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void SetRangeName( ScRangeName* pNewRangeName );
+
+    /**
+     * Insert a new named expression to the global scope.
+     *
+     * @param rName name for the expression.
+     * @param rPos base position.
+     * @param rExpr formula expression to be associated with the name.  The
+     *              current grammer is used to compile this expression.
+     *
+     * @return true if inserted successfully, false otherwise.
+     */
+    bool InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr );
+
     SCTAB           GetMaxTableNumber() { return static_cast<SCTAB>(maTabs.size()) - 1; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 

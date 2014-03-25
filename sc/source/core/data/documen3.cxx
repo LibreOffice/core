@@ -207,6 +207,16 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
     pRangeName = pNewRangeName;
 }
 
+bool ScDocument::InsertNewRangeName( const OUString& rName, const ScAddress& rPos, const OUString& rExpr )
+{
+    ScRangeName* pGlobalNames = GetRangeName();
+    if (!pGlobalNames)
+        return false;
+
+    ScRangeData* pName = new ScRangeData(this, rName, rExpr, rPos, RT_NAME, GetGrammar());
+    return pGlobalNames->insert(pName);
+}
+
 const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const
 {
     const ScRangeData* pData = NULL;

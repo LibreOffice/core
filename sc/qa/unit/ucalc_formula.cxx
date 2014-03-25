@@ -1818,6 +1818,68 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNamedExpressionExpandRef()
+{
+    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->SetExpandRefs(true); // turn on automatic range expansion.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$A$1:$A$3");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set values to A1:A3.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 3.0);
+
+    m_pDoc->SetString(ScAddress(0,5,0), "=SUM(MyRange)");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Insert a new row at row 4, which should expand the named range to A1:A4.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS, false, true, false);
+    ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    OUString aSymbol;
+    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$A$1:$A$4"), aSymbol);
+
+    // Make sure the listening area has been expanded as well.  Note the
+    // formula cell has been pushed downward by one cell.
+    m_pDoc->SetValue(ScAddress(0,3,0), 4.0);
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+
+    // Clear the document and start over.
+    m_pDoc->GetRangeName()->clear();
+    clearSheet(m_pDoc, 0);
+
+    // Set values to B4:B6.
+    m_pDoc->SetValue(ScAddress(1,3,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,4,0), 2.0);
+    m_pDoc->SetValue(ScAddress(1,5,0), 3.0);
+
+    bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$B$4:$B$6");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set formula to A1.
+    m_pDoc->SetString(ScAddress(0,0,0), "=SUM(MyRange)");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,0,0));
+
+    // Insert rows over 3:5 which should expand the range by 3 rows.
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,4,0), &aMark, INS_INSROWS, false, true, false);
+
+    pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+
+    pName->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$4:$B$9"), aSymbol);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMultipleOperations()
 {
     m_pDoc->InsertTab(0, "MultiOp");
