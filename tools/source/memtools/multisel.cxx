@@ -17,45 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef MI_DEBUG
-#define private public
-#include <stdio.h>
-#endif
-
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 
 #include "rtl/ustrbuf.hxx"
-
-#ifdef MI_DEBUG
-#define DBG(x) x
-#else
-#define DBG(x)
-#endif
-
-
-#ifdef MI_DEBUG
-static void Print( const MultiSelection* pSel )
-{
-    DbgOutf( "TotRange:     %4ld-%4ld\n",
-             pSel->aTotRange.Min(), pSel->aTotRange.Max() );
-    if ( pSel->bCurValid )
-    {
-        DbgOutf( "CurSubSel:    %4ld\n", pSel->nCurSubSel );
-        DbgOutf( "CurIndex:     %4ld\n", pSel->nCurIndex );
-    }
-    DbgOutf( "SelCount:     %4ld\n", pSel->nSelCount );
-    DbgOutf( "SubCount:     %4ld\n", pSel->aSels.Count() );
-    for ( sal_uIntPtr nPos = 0; nPos < pSel->aSels.Count(); ++nPos )
-    {
-        DbgOutf( "SubSel #%2ld:   %4ld-%4ld\n", nPos,
-                 pSel->aSels.GetObject(nPos)->Min(),
-                 pSel->aSels.GetObject(nPos)->Max() );
-    }
-    DbgOutf( "\n" );
-    fclose( pFile );
-}
-#endif
 
 void MultiSelection::ImplClear()
 {
@@ -186,16 +151,12 @@ bool MultiSelection::operator== ( MultiSelection& rWith )
 
 void MultiSelection::SelectAll( bool bSelect )
 {
-    DBG(DbgOutf( "::SelectAll(%s)\n", bSelect ? "sal_True" : "sal_False" ));
-
     ImplClear();
     if ( bSelect )
     {
         aSels.push_back( new Range(aTotRange) );
         nSelCount = aTotRange.Len();
     }
-
-    DBG(Print( this ));
 }
 
 bool MultiSelection::Select( long nIndex, bool bSelect )
@@ -256,7 +217,6 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
            || !aSels[ nSubSelPos ]->IsInside( nIndex )
         ) {
             // not selected, nothing to do
-            DBG(Print( this ));
             return false;
         }
 
@@ -271,7 +231,6 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
             ::std::advance( it, nSubSelPos );
             delete *it;
             aSels.erase( it );
-            DBG(Print( this ));
             return true;
         }
 
@@ -295,8 +254,6 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
             aSels[ nSubSelPos+1 ]->Min() = nIndex + 1;
         }
     }
-
-    DBG(Print( this ));
 
     return true;
 }
@@ -389,8 +346,6 @@ bool MultiSelection::IsSelected( long nIndex ) const
 
 void MultiSelection::Insert( long nIndex, long nCount )
 {
-    DBG(DbgOutf( "::Insert(%ld, %ld)\n", nIndex, nCount ));
-
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
@@ -439,14 +394,10 @@ void MultiSelection::Insert( long nIndex, long nCount )
     aTotRange.Max() += nCount;
     if ( bSelectNew )
         nSelCount += nCount;
-
-    DBG(Print( this ));
 }
 
 void MultiSelection::Remove( long nIndex )
 {
-    DBG(DbgOutf( "::Remove(%ld)\n", nIndex ));
-
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
@@ -479,8 +430,6 @@ void MultiSelection::Remove( long nIndex )
 
     bCurValid = false;
     aTotRange.Max() -= 1;
-
-    DBG(Print( this ));
 }
 
 long MultiSelection::ImplFwdUnselected()
