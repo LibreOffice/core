@@ -814,8 +814,8 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
                         FLY_AT_PARA/*int eAnchorId*/,
                         true, false );
             pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+            pPage->RemovePageView();
         }
-        pPage->RemovePageView();
     }
 }
 
