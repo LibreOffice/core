@@ -355,8 +355,7 @@ private:
     // NOTE: to remove many dependencies of other modules
     //       to this central file, all members are now hidden
     //       in the WindowImpl class and all inline functions
-    //       were removed.
-    //       (WindowImpl is a pImpl pattern)
+    //       were removed
 
     //       Please do *not* add new members or inline functions to class Window,
     //       but use class WindowImpl instead
@@ -595,7 +594,6 @@ public:
     OutputDevice const* GetOutDev() const { return mpOutputDevice; };
     OutputDevice*       GetOutDev()       { return mpOutputDevice; };
 
-    virtual void        EnableRTL ( bool bEnable = true );
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
