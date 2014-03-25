@@ -2939,6 +2939,19 @@ bool adjustDoubleRefInName(
     ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
 {
     bool bRefChanged = false;
+    if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
+    {
+        // Check and see if we should expand the range at the top.
+        ScRange aSelectedRange = getSelectedRange(rCxt);
+        ScRange aAbs = rRef.toAbs(rPos);
+        if (aSelectedRange.Intersects(aAbs))
+        {
+            // Selection intersects the referenced range. Only expand the
+            // bottom position.
+            rRef.Ref2.IncRow(rCxt.mnRowDelta);
+            return true;
+        }
+    }
 
     if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
         bRefChanged = true;
@@ -2993,6 +3006,19 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         if (adjustDoubleRefInName(rRef, rCxt, rPos))
                             aRes.mbReferenceModified = true;
                     }
+                }
+                else if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs())
+                {
+                    // Check if we could expand range reference by the bottom
+                    // edge. For named expressions, we only expand absolute
+                    // references.
+                    if (!rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel() && aAbs.aEnd.Row()+1 == rCxt.maRange.aStart.Row())
+                    {
+                        // Expand by the bottom edge.
+                        rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                        aRes.mbReferenceModified = true;
+                    }
+
                 }
             }
             break;
