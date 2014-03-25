@@ -198,13 +198,13 @@ class LetterWizardDialogResources(object):
         self.reslblTitle6_value = \
             oWizardResource.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 58)
-                
+
         #Create a Dictionary for the constants values.
         self.dictConstants = {
         "#subjectconst#" : oWizardResource.getResText(
             LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 59)}
 
-        #Create a dictionary for localising the bussiness templates
+        #Create a dictionary for localising the business templates
         self.dictBusinessTemplate = {
         "Elegant" : oWizardResource.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 60),
@@ -212,7 +212,7 @@ class LetterWizardDialogResources(object):
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 61),
         "Office" : oWizardResource.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 62)}
-                
+
         #Create a dictionary for localising the official templates
         self.dictOfficialTemplate = {
         "Elegant" : oWizardResource.getResText(
@@ -223,7 +223,7 @@ class LetterWizardDialogResources(object):
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 62)}
 
         #Create a dictionary for localising the private templates
-        self.dictPrivateTemplate = {                
+        self.dictPrivateTemplate = {
         "Bottle" : oWizardResource.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 63),
         "Mail" : oWizardResource.getResText(
@@ -240,7 +240,7 @@ class LetterWizardDialogResources(object):
         self.resTemplateDescription = \
             oWizardResource.getResText(
                 LetterWizardDialogResources.RID_RID_COMMON_START + 20)
-        
+
         self.RoadmapLabels = oWizardResource.getResArray(
             LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 1, 6)
         self.SalutationLabels = oWizardResource.getResArray(
