@@ -444,16 +444,10 @@ void SbxVariable::SetParent( SbxObject* p )
                 bFound = ( this == pChildren->Get(nIdx) );
             }
         }
-        if ( !bFound )
-        {
-            OUString aMsg = "dangling: [";
-            aMsg += GetName();
-            aMsg += "].SetParent([";
-            aMsg += p->GetName();
-            aMsg += "])";
-            OString aBStr(OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US));
-            DbgOut( aBStr.getStr(), DBG_OUT_WARNING, __FILE__, __LINE__);
-        }
+        SAL_WARN_IF(
+            !bFound, "basic.sbx",
+            "dangling: [" << GetName() << "].SetParent([" << p->GetName()
+                << "])");
     }
 #endif
 
