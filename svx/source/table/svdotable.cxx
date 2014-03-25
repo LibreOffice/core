@@ -242,9 +242,19 @@ public:
     void connectTableStyle();
     void disconnectTableStyle();
     virtual bool isInUse();
+private:
+    static SdrTableObjImpl* lastLayoutTable;
+    static Rectangle lastLayoutRectangle;
+    static bool lastLayoutFitWidth;
+    static bool lastLayoutFitHeight;
+    static WritingMode lastLayoutMode;
 };
 
-
+SdrTableObjImpl* SdrTableObjImpl::lastLayoutTable = NULL;
+Rectangle SdrTableObjImpl::lastLayoutRectangle;
+bool SdrTableObjImpl::lastLayoutFitWidth;
+bool SdrTableObjImpl::lastLayoutFitHeight;
+WritingMode SdrTableObjImpl::lastLayoutMode;
 
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( 0 )
@@ -257,6 +267,8 @@ SdrTableObjImpl::SdrTableObjImpl()
 
 SdrTableObjImpl::~SdrTableObjImpl()
 {
+    if( lastLayoutTable == this )
+        lastLayoutTable = NULL;
 }
 
 
@@ -677,8 +689,21 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
 {
     if( mpLayouter && mpTableObj->GetModel() )
     {
-        TableModelNotifyGuard aGuard( mxTable.get() );
-        mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
+        // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
+        // with the same settings, noticeably increasing load time. Skip if already done.
+        WritingMode writingMode = mpTableObj->GetWritingMode();
+        if( lastLayoutTable != this || lastLayoutRectangle != rArea
+            || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
+            || lastLayoutMode != writingMode )
+        {
+            lastLayoutTable = this;
+            lastLayoutRectangle = rArea;
+            lastLayoutFitWidth = bFitWidth;
+            lastLayoutFitHeight = bFitHeight;
+            lastLayoutMode = writingMode;
+            TableModelNotifyGuard aGuard( mxTable.get() );
+            mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
+        }
     }
 }
 
