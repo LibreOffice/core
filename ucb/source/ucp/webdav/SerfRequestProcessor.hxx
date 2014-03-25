@@ -126,7 +126,7 @@ public:
                       apr_status_t& outSerfStatus );
 
     //LOCK
-    bool processLock( const css::ucb::Lock & rLock );
+    bool processLock( const css::ucb::Lock & rLock, sal_Int32 *plastChanceToSendRefreshRequest = 0 );
 
     //UNLOCK
     bool processUnlock();

@@ -1023,32 +1023,25 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
 
 // -------------------------------------------------------------------
 // LOCK (refresh existing lock)
-bool SerfSession::LOCK( const OUString& /*rLock*/,
-                        sal_Int32 & /*rlastChanceToSendRefreshRequest*/ )
+bool SerfSession::LOCK( const OUString& rLock,
+                        sal_Int32 *plastChanceToSendRefreshRequest )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    return true;
-    /*
-    // refresh existing lock.
+    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( rLock ) );
+    aReqProc->processLock( ucb::Lock(), plastChanceToSendRefreshRequest );
 
-    TimeValue startCall;
-    osl_getSystemTime( &startCall );
-
-    if ( ne_lock_refresh( m_pHttpSession, pLock ) == NE_OK )
+    try
     {
-        rlastChanceToSendRefreshRequest
-            = lastChanceToSendRefreshRequest( startCall, pLock->timeout );
-
-        OSL_TRACE( "Lock successfully refreshed." );
+        HandleError( aReqProc );
+        SAL_INFO("ucb.ucp.webdav",  "Refreshing LOCK of " << rLock << " succeeded." );
         return true;
     }
-    else
+    catch(...)
     {
-        OSL_TRACE( "Lock not refreshed!" );
+        SAL_INFO("ucb.ucp.webdav",  "Refreshing LOCK of " << rLock << " failed!" );
         return false;
     }
-    */
 }
 
 // -------------------------------------------------------------------

@@ -267,8 +267,7 @@ private:
                                  const DAVRequestEnvironment & rEnv );
 
     // refresh lock, called by SerfLockStore::refreshLocks
-    bool LOCK( const OUString& rLock,
-               sal_Int32 & rlastChanceToSendRefreshRequest );
+    bool LOCK( const OUString& rLock, sal_Int32 *plastChanceToSendRefreshRequest );
 
     // unlock, called by SerfLockStore::~SerfLockStore
     void UNLOCK( const OUString& rLock );
