@@ -2851,35 +2851,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             aEscherObjListHd.SeekToEndOfRecord( rStCtrl );
                         }
 
-                        /* There are a lot of Shapes which are dependent to
-                           the current background color */
-                        if ( rSlidePersist.ePageKind == PPT_SLIDEPAGE )
-                        {
-                            if ( !aProcessData.aBackgroundColoredObjects.empty() )
-                            {
-                                if ( rSlidePersist.pBObj )
-                                {
-                                    const SfxPoolItem* pPoolItem = NULL;
-                                    const SfxItemSet& rObjectItemSet = rSlidePersist.pBObj->GetMergedItemSet();
-
-                                    //SfxItemState eState = rObjectItemSet.GetItemState( XATTR_FILLCOLOR, sal_False, &pPoolItem );
-                                    if ( pPoolItem )
-                                    {
-                                        SfxItemSet aNewSet(*rObjectItemSet.GetPool());
-                                        aNewSet.Put(*pPoolItem);
-                                        aNewSet.Put(XFillStyleItem( XFILL_SOLID ));
-
-                                        for (
-                                            size_t i = 0, n = aProcessData.aBackgroundColoredObjects.size();
-                                            i < n;
-                                            ++i
-                                        ) {
-                                            aProcessData.aBackgroundColoredObjects[ i ]->SetMergedItemSet(aNewSet);
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         if ( rSlidePersist.pBObj )
                         {
                             // #i99386# transfer the attributes from the temporary BackgroundObject
