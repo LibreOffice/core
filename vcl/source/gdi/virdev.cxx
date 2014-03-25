@@ -422,6 +422,12 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, c
     return false;
 }
 
+void Window::EnableRTL ( bool bEnable )
+{
+    StateChanged( STATE_CHANGE_MIRRORING );
+    OutputDevice::EnableRTL(bEnable);
+}
+
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
 {
     return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray() );
