@@ -113,7 +113,7 @@ public:
 
     virtual             ~VirtualDevice();
 
-    void                EnableRTL( bool bEnable = true );
+    virtual void        EnableRTL( bool bEnable = true );
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
     bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
