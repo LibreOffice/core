@@ -87,8 +87,6 @@ using namespace ::sfx2;
 static const sal_Unicode aDeliStart = '['; // for the form
 static const sal_Unicode aDeliEnd    = ']'; // for the form
 
-#define IDX_FILE_EXTENSION OUString("*.sdi")
-
 static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
                                 const OUString& rFileString, bool bOpen )
 {
@@ -99,8 +97,7 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-    OUString sCurFltr( IDX_FILE_EXTENSION );
-    xFltMgr->appendFilter( rFileString, sCurFltr );
+    xFltMgr->appendFilter( rFileString, "*.sdi" );
     xFltMgr->setCurrentFilter( rFileString ) ;
 
     OUString& rLastSaveDir = (OUString&)SFX_APP()->GetLastSaveDirectory();
@@ -291,7 +288,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                 }
                 else
                 {
-                    pDescArr[nArrayIndex]->SetAuthBrackets(OUString("[]"));
+                    pDescArr[nArrayIndex]->SetAuthBrackets("[]");
                 }
             }
         }
@@ -426,14 +423,13 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
                                             rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr);
             if(pFType)
             {
-                OUString sBrackets(pFType->GetPrefix());
-                sBrackets += OUString(pFType->GetSuffix());
-                pDescArr[nIndex]->SetAuthBrackets(sBrackets);
+                pDescArr[nIndex]->SetAuthBrackets(OUString(pFType->GetPrefix()) +
+                                                  OUString(pFType->GetSuffix()));
                 pDescArr[nIndex]->SetAuthSequence(pFType->IsSequence());
             }
             else
             {
-                pDescArr[nIndex]->SetAuthBrackets(OUString("[]"));
+                pDescArr[nIndex]->SetAuthBrackets("[]");
             }
         }
         else if(TOX_INDEX == eType.eType)
@@ -685,10 +681,9 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     HeaderBar& rHB = m_pHeaderTree->GetTheHeaderBar();
     rHB.SetEndDragHdl(LINK(this, SwAddStylesDlg_Impl, HeaderDragHdl));
 
-    OUStringBuffer sHeader(sHBFirst);
     for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
-        sHeader.append("\t").append(OUString::number(i));
-    m_pHeaderTree->InsertHeaderEntry(sHeader.makeStringAndClear());
+        sHBFirst += "\t" + OUString::number(i);
+    m_pHeaderTree->InsertHeaderEntry(sHBFirst);
     m_pHeaderTree->setColSizes();
 
     m_pHeaderTree->SetStyle(m_pHeaderTree->GetStyle()|WB_CLIPCHILDREN|WB_SORT);
@@ -700,7 +695,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
             nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER);
             ++nToken)
         {
-            OUString sTmp(sStyles.getToken(nToken, TOX_STYLE_DELIMITER));
+            const OUString sTmp(sStyles.getToken(nToken, TOX_STYLE_DELIMITER));
             SvTreeListEntry* pEntry = m_pHeaderTree->InsertEntry(sTmp);
             pEntry->SetUserData(reinterpret_cast<void*>(i));
         }
@@ -749,10 +744,9 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(nLevel != USHRT_MAX)
         {
-            OUString sName(m_pHeaderTree->GetEntryText(pEntry, 0));
             if(!pStyleArr[nLevel].isEmpty())
                 pStyleArr[nLevel] += OUString(TOX_STYLE_DELIMITER);
-            pStyleArr[nLevel] += sName;
+            pStyleArr[nLevel] += m_pHeaderTree->GetEntryText(pEntry, 0);
         }
         pEntry = m_pHeaderTree->Next(pEntry);
     }
@@ -1081,7 +1075,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
     {
-        OUString sBrackets(rDesc.GetAuthBrackets());
+        const OUString sBrackets(rDesc.GetAuthBrackets());
         if(sBrackets.isEmpty() || sBrackets == "  ")
             m_pBracketLB->SelectEntryPos(0);
         else
@@ -1418,11 +1412,11 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
             delete (OUString*)pDel;
     m_pSortAlgorithmLB->Clear();
 
-    OUString sAlg, sUINm;
     nEnd = aSeq.getLength();
     for( sal_Int32 nCnt = 0; nCnt < nEnd; ++nCnt )
     {
-        sUINm = pIndexRes->GetTranslation( sAlg = aSeq[ nCnt ] );
+        const OUString sAlg(aSeq[ nCnt ]);
+        const OUString sUINm = pIndexRes->GetTranslation( sAlg );
         sal_Int32 nInsPos = m_pSortAlgorithmLB->InsertEntry( sUINm );
         m_pSortAlgorithmLB->SetEntryData( nInsPos, new OUString( sAlg ));
         if( sAlg == sOldString )
@@ -1880,8 +1874,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     //fill the types in
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
-        OUString sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
+        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SW_RESSTR(STR_AUTH_FIELD_START + i));
         m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(i)));
     }
     sal_Int32 nPos = m_pFirstKeyLB->InsertEntry(sNoCharSortKey);
@@ -1893,7 +1886,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
 
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
-        OUString sTmp(m_pAuthFieldsLB->GetEntry(i));
+        const OUString sTmp(m_pAuthFieldsLB->GetEntry(i));
         void* pEntryData = m_pAuthFieldsLB->GetEntryData(i);
         nPos = m_pFirstKeyLB->InsertEntry(sTmp);
         m_pFirstKeyLB->SetEntryData(nPos, pEntryData);
@@ -1941,7 +1934,7 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
     if(TOX_INDEX == aCurType.eType)
     {
         SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-        OUString sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
+        const OUString sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
         if(!sMainEntryCharStyle.isEmpty())
         {
             if( LISTBOX_ENTRY_NOTFOUND ==
@@ -2072,7 +2065,7 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aLastTOXType);
     if(TOX_INDEX == aLastTOXType.eType)
     {
-        OUString sTemp(m_pMainEntryStyleLB->GetSelectEntry());
+        const OUString sTemp(m_pMainEntryStyleLB->GetSelectEntry());
         rDesc.SetMainEntryCharStyle(sNoCharStyle == sTemp ? aEmptyOUStr : sTemp);
         sal_uInt16 nIdxOptions = rDesc.GetIndexOptions() & ~nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
         if(m_pAlphaDelimCB->IsChecked())
@@ -2138,7 +2131,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     if(bInsert)
     {
         sal_Int32 nSelPos = m_pAuthFieldsLB->GetSelectEntryPos();
-        OUString sToInsert(m_pAuthFieldsLB->GetSelectEntry());
+        const OUString sToInsert(m_pAuthFieldsLB->GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
         aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)m_pAuthFieldsLB->GetEntryData(nSelPos);
         m_pTokenWIN->InsertAtSelection(SwForm::GetFormAuth(), aInsert);
@@ -2165,8 +2158,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 {
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
-    OUString sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
-    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(sTemp);
+    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SW_RESSTR(STR_AUTH_FIELD_START + nData));
     m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
 
@@ -2257,7 +2249,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
     //write it into all levels
     if(m_pTokenWIN->IsValid())
     {
-        OUString sNewToken = m_pTokenWIN->GetPattern();
+        const OUString sNewToken = m_pTokenWIN->GetPattern();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
             m_pCurrentForm->SetPattern(i, sNewToken);
 
@@ -2270,7 +2262,7 @@ void SwTOXEntryTabPage::WriteBackLevel()
 {
     if(m_pTokenWIN->IsValid())
     {
-        OUString sNewToken = m_pTokenWIN->GetPattern();
+        const OUString sNewToken = m_pTokenWIN->GetPattern();
         const sal_uInt16 nLastLevel = m_pTokenWIN->GetLastLevel();
         if(nLastLevel != USHRT_MAX)
             m_pCurrentForm->SetPattern(nLastLevel + 1, sNewToken);
@@ -2293,8 +2285,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
         m_pAuthFieldsLB->Clear();
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
-            OUString sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
+            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SW_RESSTR(STR_AUTH_FIELD_START + i));
             m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
         }
 
@@ -2336,7 +2327,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     else
         m_pCharStyleLB->SelectEntry(sNoCharStyle);
 
-    OUString sEntry = m_pCharStyleLB->GetSelectEntry();
+    const OUString sEntry = m_pCharStyleLB->GetSelectEntry();
     m_pEditStylePB->Enable(sEntry != sNoCharStyle);
 
     if(pToken->eTokenType == TOKEN_CHAPTER_INFO)
@@ -2571,7 +2562,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
     const OUString sDefault(SW_RES(STR_POOLCOLL_STANDARD));
     for(sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
-        OUString sEntry = m_pCharStyleLB->GetEntry(i);
+        const OUString sEntry = m_pCharStyleLB->GetEntry(i);
         if(sDefault != sEntry)
         {
             m_pMainEntryStyleLB->InsertEntry( sEntry );
@@ -2798,29 +2789,17 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
 
         pEdit->SetText(rText);
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
-        OUString s1 = " (";
-        OUString s2 = ")";
-        OUString s3 = ", ";
-        OUString strName(accessibleName);
-        strName += OUString::number(nIndex);
+        OUString strName(accessibleName + OUString::number(nIndex));
         if ( nIndex == 1 )
         {
             /*Press left or right arrow to choose the structure controls*/
-            strName += s1;
-            strName += sAdditionalAccnameString2;
-            strName += s3;
+            strName += " (" + sAdditionalAccnameString2 + ", "
             /*Press Ctrl+Alt+A to move focus for more operations*/
-            strName += sAdditionalAccnameString1;
-            strName += s3;
+                     + sAdditionalAccnameString1 + ", "
             /*Press Ctrl+Alt+B to move focus back to the current structure control*/
-            strName += sAdditionalAccnameString3;
-            strName += s2;
-            pEdit->SetAccessibleName(strName);
+                     + sAdditionalAccnameString3 + ")";
         }
-        else
-        {
-            pEdit->SetAccessibleName(strName);
-        }
+        pEdit->SetAccessibleName(strName);
         Size aEditSize(aControlSize);
         aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
         pEdit->SetSizePixel(aEditSize);
@@ -2853,13 +2832,11 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
             pButton->SetText(sTmp.copy(0, 2));
         }
 
-        OUString sSpace = " ";
         sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType );
         OUString sAccName = aButtonHelpTexts[rToken.eTokenType];
         if ( nIndex )
         {
-            sAccName += sSpace;
-            sAccName += OUString::number(nIndex);
+            sAccName += " " + OUString::number(nIndex);
         }
         pButton->SetAccessibleName( sAccName );
 
@@ -3004,9 +2981,9 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
         aSel.Justify();
 
-        OUString sEditText = ((SwTOXEdit*)pActiveCtrl)->GetText();
-        OUString sLeft = sEditText.copy( 0, aSel.A() );
-        OUString sRight = sEditText.copy( aSel.B(), sEditText.getLength() - aSel.B());
+        const OUString sEditText = ((SwTOXEdit*)pActiveCtrl)->GetText();
+        const OUString sLeft = sEditText.copy( 0, aSel.A() );
+        const OUString sRight = sEditText.copy( aSel.B() );
 
         ((SwTOXEdit*)pActiveCtrl)->SetText(sLeft);
         ((SwTOXEdit*)pActiveCtrl)->AdjustSize();
@@ -3018,29 +2995,17 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
         pEdit->SetText(sRight);
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
-        OUString s1 = " (";
-        OUString s2 = ")";
-        OUString s3 = ", ";
-        OUString strName(accessibleName);
-        strName += OUString::number(nIndex);
+        OUString strName(accessibleName + OUString::number(nIndex));
         if ( nIndex == 1)
         {
             /*Press left or right arrow to choose the structure controls*/
-            strName += s1;
-            strName += sAdditionalAccnameString2;
-            strName += s3;
+            strName += " (" + sAdditionalAccnameString2 + ", "
             /*Press Ctrl+Alt+A to move focus for more operations*/
-            strName += sAdditionalAccnameString1;
-            strName += s3;
+                     + sAdditionalAccnameString1 + ", "
             /*Press Ctrl+Alt+B to move focus back to the current structure control*/
-            strName += sAdditionalAccnameString3;
-            strName += s2;
-            pEdit->SetAccessibleName(strName);
+                     + sAdditionalAccnameString3 + ")";
         }
-        else
-        {
-            pEdit->SetAccessibleName(strName);
-        }
+        pEdit->SetAccessibleName(strName);
         pEdit->SetSizePixel(aControlSize);
         pEdit->AdjustSize();
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
@@ -3108,9 +3073,8 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
     Control *pLeftEdit = *itLeft;
     Control *pRightEdit = *itRight;
 
-    OUString sTemp(((SwTOXEdit*)pLeftEdit)->GetText());
-    sTemp += ((SwTOXEdit*)pRightEdit)->GetText();
-    ((SwTOXEdit*)pLeftEdit)->SetText(sTemp);
+    ((SwTOXEdit*)pLeftEdit)->SetText(((SwTOXEdit*)pLeftEdit)->GetText() +
+                                     ((SwTOXEdit*)pRightEdit)->GetText());
     ((SwTOXEdit*)pLeftEdit)->AdjustSize();
 
     aControlList.erase(itRight);
@@ -3216,9 +3180,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
-    OUString sMessage("Space: ");
-    sMessage += OUString::number(nSpace);
-    sMessage += " | ";
+    OUString sMessage("Space: " + OUString::number(nSpace) + " | ");
 
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
@@ -3227,10 +3189,8 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         long nDebugXPos = pDebugCtrl->GetPosPixel().X();
         long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
 
-        sMessage += OUString::number( nDebugXPos );
-        sMessage += " ";
-        sMessage += OUString::number(nDebugXPos + nDebugWidth);
-        sMessage += " | ";
+        sMessage += OUString::number(nDebugXPos) + " "
+                  + OUString::number(nDebugXPos + nDebugWidth) + " | ";
     }
 
 #endif
@@ -3383,8 +3343,7 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
                     sEntry += "\n";
                 else
                     sEntry += " ";
-                sEntry += sCharStyle;
-                  sEntry += rToken.sCharStyleName;
+                sEntry += sCharStyle + rToken.sCharStyleName;
             }
         }
         if(bBalloon)
@@ -3611,10 +3570,9 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     OUString aStr( SW_RES( STR_TITLE ));
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
-        aStr += " ";
-        aStr += OUString(aDeliStart);
-        aStr += m_pCurrentForm->GetTemplate( 0 );
-        aStr += OUString(aDeliEnd);
+        aStr += " " + OUString(aDeliStart)
+              + m_pCurrentForm->GetTemplate( 0 )
+              + OUString(aDeliEnd);
     }
     m_pLevelLB->InsertEntry(aStr);
 
@@ -3622,23 +3580,21 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     {
         if( TOX_INDEX == m_pCurrentForm->GetTOXType() &&
             FORM_ALPHA_DELIMITTER == i )
+        {
             aStr = SW_RESSTR(STR_ALPHA);
+        }
         else
         {
-            aStr  = SW_RESSTR(STR_LEVEL);
-            aStr += OUString::number(
+            aStr = SW_RESSTR(STR_LEVEL) + OUString::number(
                     TOX_INDEX == m_pCurrentForm->GetTOXType() ? i - 1 : i );
         }
-        OUString aCpy( aStr );
-
         if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )
         {
-            aCpy += " ";
-            aCpy += OUString(aDeliStart);
-            aCpy += m_pCurrentForm->GetTemplate( i );
-            aCpy += OUString(aDeliEnd);
+            aStr += " " + OUString(aDeliStart)
+                  + m_pCurrentForm->GetTemplate( i )
+                  + OUString(aDeliEnd);
         }
-        m_pLevelLB->InsertEntry( aCpy );
+        m_pLevelLB->InsertEntry( aStr );
     }
 
     // initialise templates
@@ -3703,13 +3659,11 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
         sal_Int32 nDelPos = aStr.indexOf(aDeliStart);
         if(nDelPos != -1)
             aStr = aStr.copy(0, nDelPos-1);
-        aStr += " ";
-        aStr += OUString(aDeliStart);
-        aStr += m_pParaLayLB->GetSelectEntry();
+        aStr += " " + OUString(aDeliStart)
+              + m_pParaLayLB->GetSelectEntry()
+              + OUString(aDeliEnd);
 
         m_pCurrentForm->SetTemplate(nLevPos, m_pParaLayLB->GetSelectEntry());
-
-        aStr += OUString(aDeliEnd);
 
         m_pLevelLB->RemoveEntry(nLevPos);
         m_pLevelLB->InsertEntry(aStr, nLevPos);
@@ -3739,7 +3693,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
 {
-    OUString aTmpName( m_pParaLayLB->GetSelectEntry() );
+    const OUString aTmpName( m_pParaLayLB->GetSelectEntry() );
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
 
     if(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
@@ -3755,7 +3709,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
     m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
-    OUString aTmpName(m_pParaLayLB->GetSelectEntry());
+    const OUString aTmpName(m_pParaLayLB->GetSelectEntry());
     m_pAssignBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
                      LISTBOX_ENTRY_NOTFOUND != m_pLevelLB->GetSelectEntryPos() &&
        (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
@@ -3866,16 +3820,16 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
     nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(sNo));
     for (sal_uInt16 i = 1; i < 6; i++)
     {
-        OUString sTitle = GetColumnTitle(i);
-        long nColWidth = std::max(nStandardColMinWidth, GetTextWidth(sTitle));
+        long nColWidth = std::max(nStandardColMinWidth,
+                                  GetTextWidth(GetColumnTitle(i)));
         nColWidth += 12;
         aWidths.push_back(nColWidth);
     }
 
     for (sal_uInt16 i = 6; i < 8; i++)
     {
-        OUString sTitle = GetColumnTitle(i);
-        long nColWidth = std::max(nYesNoWidth, GetTextWidth(sTitle));
+        long nColWidth = std::max(nYesNoWidth,
+                                  GetTextWidth(GetColumnTitle(i)));
         nColWidth += 12;
         aWidths.push_back(nColWidth);
     }
@@ -3925,9 +3879,8 @@ OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    OUString sPaint = GetCellText( nCurrentRow, nColumnId );
-    sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
-    rDev.DrawText( rRect, sPaint, nStyle );
+    const sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
+    rDev.DrawText( rRect, GetCellText( nCurrentRow, nColumnId ), nStyle );
 }
 
 ::svt::CellController* SwEntryBrowseBox::GetController(long /*nRow*/, sal_uInt16 nCol)
@@ -3982,7 +3935,7 @@ bool SwEntryBrowseBox::SaveModified()
 void SwEntryBrowseBox::InitController(
                 ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
-    OUString rTxt = GetCellText( nRow, nCol );
+    const OUString rTxt = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)
     {
         rController = xController;
@@ -4067,22 +4020,15 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         AutoMarkEntry* pEntry = &aEntryArr[i];
         if(!pEntry->sComment.isEmpty())
         {
-            OUString sWrite('#');
-            sWrite += pEntry->sComment;
-            rOutStr.WriteByteStringLine( sWrite, eTEnc );
+            rOutStr.WriteByteStringLine( "#" + pEntry->sComment, eTEnc );
         }
 
-        OUString sWrite( pEntry->sSearch );
-        sWrite += ";";
-        sWrite += pEntry->sAlternative;
-        sWrite += ";";
-        sWrite += pEntry->sPrimKey;
-        sWrite += ";";
-        sWrite += pEntry->sSecKey;
-        sWrite += ";";
-        sWrite += pEntry->bCase ? OUString("1") : OUString("0");
-        sWrite += ";";
-        sWrite += pEntry->bWord ? OUString("1") : OUString("0");
+        OUString sWrite( pEntry->sSearch + ";" +
+                         pEntry->sAlternative + ";" +
+                         pEntry->sPrimKey  + ";" +
+                         pEntry->sSecKey + ";" +
+                         (pEntry->bCase ? OUString("1") : OUString("0")) + ";" +
+                         (pEntry->bWord ? OUString("1") : OUString("0")) );
 
         if( sWrite.getLength() > 5 )
             rOutStr.WriteByteStringLine( sWrite, eTEnc );
@@ -4118,10 +4064,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const OUString& rAutoMar
     m_pEntriesBB->Show();
     m_pOKPB->SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
 
-    OUString sTitle = GetText();
-    sTitle += ": ";
-    sTitle += sAutoMarkURL;
-    SetText(sTitle);
+    SetText(GetText() + ": " + sAutoMarkURL);
     bool bError = false;
     if( bCreateMode )
         m_pEntriesBB->RowInserted(0, 1, true);
