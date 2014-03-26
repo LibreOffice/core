@@ -31,9 +31,9 @@ public:
     ~CppuOptions() {}
 
     bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
-            throw( IllegalArgument );
+            throw( IllegalArgument ) SAL_OVERRIDE;
 
-    OString  prepareHelp();
+    OString  prepareHelp() SAL_OVERRIDE;
 
     OString  prepareVersion();
 

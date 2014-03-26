@@ -123,20 +123,20 @@ namespace xmloff
 
     protected:
         /// start the XML element
-        virtual void implStartElement(const sal_Char* _pName);
+        virtual void implStartElement(const sal_Char* _pName) SAL_OVERRIDE;
 
         /// ends the XML element
-        virtual void implEndElement();
+        virtual void implEndElement() SAL_OVERRIDE;
 
         /// get the name of the outer XML element
         virtual const sal_Char* getOuterXMLElementName() const;
 
         // get the name of the XML element
-        virtual const sal_Char* getXMLElementName() const;
+        virtual const sal_Char* getXMLElementName() const SAL_OVERRIDE;
 
         /** examine the control. Some kind of CtorImpl.
         */
-        virtual void examine();
+        virtual void examine() SAL_OVERRIDE;
 
         /// exports the attributes for the outer element
         void exportOuterAttributes();
@@ -145,11 +145,11 @@ namespace xmloff
         void exportInnerAttributes();
 
         /// export the attributes
-        virtual void exportAttributes();
+        virtual void exportAttributes() SAL_OVERRIDE;
 
         /** writes everything which needs to be represented as sub tag
         */
-        void exportSubTags() throw (::com::sun::star::uno::Exception);
+        void exportSubTags() throw (::com::sun::star::uno::Exception) SAL_OVERRIDE;
 
         /** adds the attributes which are handled via generic IPropertyHandlers
 
@@ -275,12 +275,12 @@ namespace xmloff
 
     protected:
         // OControlExport overridables
-        virtual const sal_Char* getOuterXMLElementName() const;
-        virtual void exportServiceNameAttribute();
-        virtual void exportAttributes();
+        virtual const sal_Char* getOuterXMLElementName() const SAL_OVERRIDE;
+        virtual void exportServiceNameAttribute() SAL_OVERRIDE;
+        virtual void exportAttributes() SAL_OVERRIDE;
 
         // OElementExport overridables
-        virtual void examine();
+        virtual void examine() SAL_OVERRIDE;
     };
 
     //= OFormExport
@@ -303,9 +303,9 @@ namespace xmloff
             );
 
     protected:
-        virtual const sal_Char* getXMLElementName() const;
-        virtual void exportSubTags();
-        virtual void exportAttributes();
+        virtual const sal_Char* getXMLElementName() const SAL_OVERRIDE;
+        virtual void exportSubTags() SAL_OVERRIDE;
+        virtual void exportAttributes() SAL_OVERRIDE;
     };
 }   // namespace xmloff
 

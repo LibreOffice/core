@@ -115,32 +115,32 @@ public:
         const grutils::GrFeatureParser * features = NULL) throw();
 
     // used by upper layers
-    virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
+    virtual bool  LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;    // first step of layout
     // split into two stages to allow dc to be restored on the segment
     gr_segment * CreateSegment(ImplLayoutArgs& rArgs);
     bool LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment);
 
-    virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting positions
+    virtual void  AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;  // adjusting positions
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
-    virtual long  FillDXArray( sal_Int32* pDXArray ) const;
+    virtual long  FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
     virtual void  ApplyDXArray(ImplLayoutArgs &rArgs, std::vector<int> & rDeltaWidth);
 
-    virtual void  GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
+    virtual void  GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
             sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-            const PhysicalFontFace** pFallbackFonts = NULL ) const;
+            const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
     // used by glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
+    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
     // Dummy implementation so layout can be shared between Linux/Windows
-    virtual void    DrawText(SalGraphics&) const {};
+    virtual void    DrawText(SalGraphics&) const SAL_OVERRIDE {};
 
     virtual ~GraphiteLayout() throw();
     void SetFont(gr_font * pFont) { mpFont = pFont; }

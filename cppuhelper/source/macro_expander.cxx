@@ -123,7 +123,7 @@ struct mutex_holder
 class Bootstrap_MacroExpander : public mutex_holder, public t_uno_impl
 {
 protected:
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
     inline Bootstrap_MacroExpander() SAL_THROW(())
@@ -134,14 +134,14 @@ public:
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
-        throw (lang::IllegalArgumentException, std::exception);
+        throw (lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

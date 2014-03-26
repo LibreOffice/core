@@ -76,7 +76,7 @@ class SvMetaSlot : public SvMetaAttribute
                                SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void    Write( SvIdlDataBase & rBase,
                             SvStream & rOutStm, sal_uInt16 nTab,
-                             WriteType, WriteAttribute = 0 );
+                             WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
@@ -175,9 +175,9 @@ public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
-    virtual sal_Bool    IsVariable() const;
-    virtual sal_Bool    IsMethod() const;
-    virtual OString GetMangleName( sal_Bool bVariable ) const;
+    virtual sal_Bool    IsVariable() const SAL_OVERRIDE;
+    virtual sal_Bool    IsMethod() const SAL_OVERRIDE;
+    virtual OString GetMangleName( sal_Bool bVariable ) const SAL_OVERRIDE;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
@@ -227,16 +227,16 @@ public:
 
     SvMetaEnumValue*    GetEnumValue() const
                         { return pEnumValue; }
-    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                             SvTokenStream & rInStm );
+                                             SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                              SvStream & rOutStm, sal_uInt16 nTab );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+                                              SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab );
+                                    SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
-                                SvIdlDataBase& );
+                                SvIdlDataBase& ) SAL_OVERRIDE;
     void                WriteSlotStubs( const OString& rShellName,
                                     ByteStringList & rList,
                                     SvStream & rOutStm );
@@ -250,8 +250,8 @@ public:
     sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  HelpIdTable& rIdTable );
-    virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
+                                  HelpIdTable& rIdTable ) SAL_OVERRIDE;
+    virtual void        WriteCSV( SvIdlDataBase&, SvStream& ) SAL_OVERRIDE;
 };
 SV_DECL_IMPL_REF(SvMetaSlot)
 

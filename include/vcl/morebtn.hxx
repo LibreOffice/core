@@ -52,7 +52,7 @@ public:
     explicit            MoreButton( Window* pParent, WinBits nStyle = 0 );
     virtual             ~MoreButton();
 
-    void                Click();
+    void                Click() SAL_OVERRIDE;
 
     void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
     sal_uLong           GetDelta() const { return mnDelta; }
@@ -64,8 +64,8 @@ public:
     void                SetState( bool bNewState = true );
     bool            GetState() const { return mbState; }
 
-    void                SetText( const OUString& rNewText );
-    OUString            GetText() const;
+    void                SetText( const OUString& rNewText ) SAL_OVERRIDE;
+    OUString            GetText() const SAL_OVERRIDE;
 };
 
 inline void MoreButton::SetState( bool bNewState )

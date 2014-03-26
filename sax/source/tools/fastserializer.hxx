@@ -189,16 +189,16 @@ private:
             mnCurrentElement( 0 ),
             maOrder( aOrder ) {}
 
-        void setCurrentElement( ::sal_Int32 nToken );
+        void setCurrentElement( ::sal_Int32 nToken ) SAL_OVERRIDE;
 
-        virtual Int8Sequence& getData();
+        virtual Int8Sequence& getData() SAL_OVERRIDE;
 
 #if OSL_DEBUG_LEVEL > 0
-        virtual void print();
+        virtual void print() SAL_OVERRIDE;
 #endif
 
-        virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const Int8Sequence &rWhat );
+        virtual void prepend( const Int8Sequence &rWhat ) SAL_OVERRIDE;
+        virtual void append( const Int8Sequence &rWhat ) SAL_OVERRIDE;
     private:
         void sort();
     };

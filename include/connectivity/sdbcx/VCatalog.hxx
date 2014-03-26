@@ -103,18 +103,18 @@ namespace connectivity
             // the other refresh methods come from base classes IRefreshableGroups and IRefreshableUsers
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
             // XInterface
-            void SAL_CALL acquire() throw();
-            void SAL_CALL release() throw();
+            void SAL_CALL acquire() throw() SAL_OVERRIDE;
+            void SAL_CALL release() throw() SAL_OVERRIDE;
             // XTablesSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XViewsSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getViews(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getViews(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XUsersSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getUsers(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getUsers(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XGroupsSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getGroups(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getGroups(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         };
     }

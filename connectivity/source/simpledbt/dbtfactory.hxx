@@ -46,23 +46,23 @@ namespace connectivity
         virtual ::rtl::Reference< simple::ISQLParser >  createSQLParser(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const IParseContext* _pContext
-        ) const;
+        ) const SAL_OVERRIDE;
 
-        virtual ::rtl::Reference< simple::IDataAccessCharSet > createCharsetHelper( ) const;
+        virtual ::rtl::Reference< simple::IDataAccessCharSet > createCharsetHelper( ) const SAL_OVERRIDE;
 
-        virtual ::rtl::Reference< simple::IDataAccessTypeConversion > getTypeConversionHelper();
+        virtual ::rtl::Reference< simple::IDataAccessTypeConversion > getTypeConversionHelper() SAL_OVERRIDE;
 
-        virtual ::rtl::Reference< simple::IDataAccessTools > getDataAccessTools();
+        virtual ::rtl::Reference< simple::IDataAccessTools > getDataAccessTools() SAL_OVERRIDE;
 
         virtual ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
-        );
+        ) SAL_OVERRIDE;
 
         // IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

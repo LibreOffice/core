@@ -63,7 +63,7 @@ public:
     void        Commit();
 
     //SfxListener:
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     void        SetVCLSettings();
 };
 

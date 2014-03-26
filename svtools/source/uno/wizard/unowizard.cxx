@@ -100,44 +100,44 @@ namespace {
         Wizard( const uno::Reference< uno::XComponentContext >& i_rContext );
 
         // lang::XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception);
-        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // beans::XPropertySet
-        virtual uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(uno::RuntimeException, std::exception);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         // ui::dialogs::XWizard
-        virtual OUString SAL_CALL getHelpURL() throw (uno::RuntimeException, std::exception);
-        virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (uno::RuntimeException, std::exception);
-        virtual uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (uno::RuntimeException, std::exception);
-        virtual uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (uno::RuntimeException, std::exception);
-        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (uno::RuntimeException, std::exception);
-        virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (uno::RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL travelNext(  ) throw (uno::RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL travelPrevious(  ) throw (uno::RuntimeException, std::exception);
-        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, ::sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception);
-        virtual void SAL_CALL updateTravelUI(  ) throw (uno::RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception);
-        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getHelpURL() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL travelNext(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL travelPrevious(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, ::sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL updateTravelUI(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ui::dialogs::XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (uno::RuntimeException, std::exception);
-        virtual ::sal_Int16 SAL_CALL execute(  ) throw (uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Int16 SAL_CALL execute(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // lang::XInitialization
-        virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception);
+        virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
    protected:
         ~Wizard();
 
     protected:
-        virtual Dialog* createDialog( Window* _pParent );
-        virtual void destroyDialog();
+        virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;
+        virtual void destroyDialog() SAL_OVERRIDE;
 
     private:
         uno::Sequence< uno::Sequence< sal_Int16 > >         m_aWizardSteps;

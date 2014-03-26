@@ -127,19 +127,19 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         void componentLiveRemoval(ComponentBackendDb::Data const & data);
 
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
         const Reference<registry::XSimpleRegistry> getRDB() const;
 
@@ -161,13 +161,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
     public:
         ComponentsPackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -183,19 +183,19 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         const bool m_jarFile;
 
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
     public:
         TypelibraryPackageImpl(
@@ -230,13 +230,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
     private:
         OUString const m_aPlatform;
@@ -273,9 +273,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
-        Reference<XCommandEnvironment> const & xCmdEnv );
+        Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     const Reference<deployment::XPackageTypeInfo> m_xDynComponentTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xJavaComponentTypeInfo;
@@ -323,11 +323,11 @@ public:
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (RuntimeException, std::exception);
+    getSupportedPackageTypes() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
         throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception);
+               uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     using PackageRegistryBackend::disposing;
 

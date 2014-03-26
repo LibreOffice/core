@@ -45,10 +45,10 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     // This method is called for every default style
-    virtual void SetDefaults();
+    virtual void SetDefaults() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX

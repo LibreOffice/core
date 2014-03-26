@@ -62,26 +62,26 @@ namespace chelp {
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL acquire()
-            throw();
+            throw() SAL_OVERRIDE;
         virtual void SAL_CALL release()
-            throw();
+            throw() SAL_OVERRIDE;
 
         // XTypeProvider
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
 
         static OUString getImplementationName_Static();
 
@@ -94,7 +94,7 @@ namespace chelp {
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
                 const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
             throw( css::ucb::IllegalIdentifierException,
-                   css::uno::RuntimeException, std::exception );
+                   css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Additional interfaces
 
@@ -102,18 +102,18 @@ namespace chelp {
 
         virtual void SAL_CALL
         dispose(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)xListener;
         }
 
         virtual void SAL_CALL
         removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)aListener;
         }
@@ -122,7 +122,7 @@ namespace chelp {
 
         virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)Source;
             m_xContainer = com::sun::star::uno::Reference<com::sun::star::container::XContainer>(0);
@@ -130,21 +130,21 @@ namespace chelp {
 
         virtual void SAL_CALL
         elementInserted( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
         elementRemoved( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
         elementReplaced( const ::com::sun::star::container::ContainerEvent& Event )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // Non-interface methods.
 

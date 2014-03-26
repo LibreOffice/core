@@ -40,11 +40,11 @@ public:
     explicit InteractionRequest(com::sun::star::uno::Any const & rRequest);
 
     virtual com::sun::star::uno::Any SAL_CALL getRequest()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         com::sun::star::task::XInteractionContinuation > > SAL_CALL
-    getContinuations() throw (com::sun::star::uno::RuntimeException, std::exception);
+    getContinuations() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     bool retry() const;
 

@@ -64,7 +64,7 @@ namespace psp
                                     m_aQueues;
         OUString                    m_aCommand;
 
-        virtual void run();
+        virtual void run() SAL_OVERRIDE;
 
         public:
         SystemQueueInfo();

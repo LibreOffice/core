@@ -43,10 +43,10 @@ public:
     WindowAlign     GetAlign() const;
     bool            IsHorizontal() const;
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void    StateChanged( StateChangedType nType );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
 };
 

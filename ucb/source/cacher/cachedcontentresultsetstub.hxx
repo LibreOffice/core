@@ -98,37 +98,37 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw();
+        throw() SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw();
+        throw() SAL_OVERRIDE;
 
     // own inherited
 
     virtual void SAL_CALL
     impl_propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
-        throw( com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     impl_vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
         throw( com::sun::star::beans::PropertyVetoException,
-               com::sun::star::uno::RuntimeException );
+               com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     // XTypeProvider
 
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
@@ -139,7 +139,7 @@ public:
     virtual com::sun::star::ucb::FetchResult SAL_CALL
     fetch( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XFetchProviderForContentAccess
@@ -147,17 +147,17 @@ public:
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual com::sun::star::ucb::FetchResult SAL_CALL
          fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 
@@ -183,26 +183,26 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw();
+        throw() SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw();
+        throw() SAL_OVERRIDE;
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
@@ -218,7 +218,7 @@ public:
     createCachedContentResultSetStub(
                 const com::sun::star::uno::Reference<
                     com::sun::star::sdbc::XResultSet > & xSource )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif

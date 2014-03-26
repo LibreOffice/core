@@ -30,7 +30,7 @@ class PlacesListBox_Impl : public SvHeaderTabListBox
         PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
         ~PlacesListBox_Impl( );
 
-        virtual void MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 };
 
 /** ListBox to handle Places.
@@ -61,7 +61,7 @@ class PlacesListBox : public Control
         void SetAddHdl( const Link& rHdl );
         void SetDelHdl( const Link& rHdl );
         void SetDelEnabled( bool enabled );
-        void SetSizePixel( const Size& rNewSize );
+        void SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         void updateView( );
 
     private:

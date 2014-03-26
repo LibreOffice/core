@@ -388,10 +388,10 @@ public:
         AnimImpImpl* pImpl);
     virtual ~XMLAnimationsEffectContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< XAttributeList >& xAttrList );
+        const Reference< XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
 
 class XMLAnimationsSoundContext : public SvXMLImportContext

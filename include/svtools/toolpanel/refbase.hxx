@@ -44,16 +44,16 @@ namespace svt
         {
         }
 
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     private:
         oslInterlockedCount m_refCount;
     };
 
 #define DECLARE_IREFERENCE()    \
-    virtual oslInterlockedCount SAL_CALL acquire(); \
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE; \
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 
 #define IMPLEMENT_IREFERENCE( classname )   \

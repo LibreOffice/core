@@ -166,7 +166,7 @@ public:
                     ColorListBox( Window* pParent, const ResId& rResId );
     virtual         ~ColorListBox();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     using ListBox::InsertEntry;
     virtual sal_Int32   InsertEntry( const OUString& rStr,
@@ -304,7 +304,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     bool            UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            UpdateEntries( long nOldWidth );
     sal_Int32       GetStylePos( sal_Int32  nListPos, long nWidth );
@@ -423,7 +423,7 @@ public:
                                  WinBits nWinStyle = WB_SORT );
     virtual         ~FontNameBox();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     void            Fill( const FontList* pList );
 
@@ -455,12 +455,12 @@ public:
                     FontStyleBox( Window* pParent, WinBits nBits );
     virtual         ~FontStyleBox();
 
-    virtual void    Select();
-    virtual void    LoseFocus();
-    virtual void    Modify();
-    virtual Size    GetOptimalSize() const;
+    virtual void    Select() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    Modify() SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetText( const OUString& rText );
+    void            SetText( const OUString& rText ) SAL_OVERRIDE;
     void            Fill( const OUString& rName, const FontList* pList );
 
 private:
@@ -498,14 +498,14 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
     SVT_DLLPRIVATE void         ImplInit();
 
 protected:
-    virtual OUString CreateFieldText( sal_Int64 nValue ) const;
+    virtual OUString CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
 
 public:
                     FontSizeBox( Window* pParent, WinBits nWinStyle = 0 );
     virtual         ~FontSizeBox();
 
-    void            Reformat();
-    void            Modify();
+    void            Reformat() SAL_OVERRIDE;
+    void            Modify() SAL_OVERRIDE;
 
     void            Fill( const FontInfo* pInfo, const FontList* pList );
 
@@ -520,10 +520,10 @@ public:
                         { bPtRelative = bPtRel; SetRelative( true ); }
     bool            IsPtRelative() const { return bPtRelative; }
 
-    virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
-    virtual void    SetValue( sal_Int64 nNewValue  );
-    virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const;
-    virtual sal_Int64   GetValue() const;
+    virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit ) SAL_OVERRIDE;
+    virtual void    SetValue( sal_Int64 nNewValue  ) SAL_OVERRIDE;
+    virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const SAL_OVERRIDE;
+    virtual sal_Int64   GetValue() const SAL_OVERRIDE;
 
 private:
     // declared as private because some compilers would generate the default functions

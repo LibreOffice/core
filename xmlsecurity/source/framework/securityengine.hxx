@@ -141,15 +141,15 @@ protected:
 public:
     /* XReferenceResolvedListener */
     virtual void SAL_CALL referenceResolved( sal_Int32 referenceId )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /* XKeyCollector */
     virtual void SAL_CALL setKeyId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /* XMissionTaker */
         virtual sal_Bool SAL_CALL endMission(  )
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

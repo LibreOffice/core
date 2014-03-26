@@ -42,24 +42,24 @@ public:
     GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException);
 
      // XGraphicObject
-    virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException, std::exception);
-    OUString SAL_CALL getUniqueID() throw (uno::RuntimeException, std::exception);
+    virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    OUString SAL_CALL getUniqueID() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return OUString("com.sun.star.graphic.GraphicObject");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         uno::Sequence< OUString > aRet(1);
         OUString* pArray = aRet.getArray();

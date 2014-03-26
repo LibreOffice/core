@@ -32,11 +32,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
     static bool convert( const OUString& rStrImpValue,
                  ::com::sun::star::text::TextContentAnchorType& rType );
 };

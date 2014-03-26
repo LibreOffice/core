@@ -79,8 +79,8 @@ public:
 
     /** IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire (void);
-    virtual oslInterlockedCount SAL_CALL release (void);
+    virtual oslInterlockedCount SAL_CALL acquire (void) SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release (void) SAL_OVERRIDE;
 
 protected:
     /** Destruction.

@@ -79,7 +79,7 @@ private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
         : m_exc(), m_func(func), m_result() {}
 
-    virtual long doIt()
+    virtual long doIt() SAL_OVERRIDE
     {
         try {
             m_result.reset( m_func() );
@@ -115,7 +115,7 @@ private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
         : m_exc(), m_func(func) {}
 
-    virtual long doIt()
+    virtual long doIt() SAL_OVERRIDE
     {
         try {
             m_func();

@@ -52,12 +52,12 @@ public:
 protected:
 
     /// Collect element contents
-    virtual void Characters(const OUString& sString);
+    virtual void Characters(const OUString& sString) SAL_OVERRIDE;
 
     /// add Text PropertyValue
     virtual void FillPropertyValues(
         ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues);
+            ::com::sun::star::beans::PropertyValue> & rValues) SAL_OVERRIDE;
 };
 
 #endif

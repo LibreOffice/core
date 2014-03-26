@@ -92,7 +92,7 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw(css::lang::IllegalArgumentException,
                   css::uno::Exception                ,
-                  css::uno::RuntimeException, std::exception         );
+                  css::uno::RuntimeException, std::exception         ) SAL_OVERRIDE;
 
 
     // helper

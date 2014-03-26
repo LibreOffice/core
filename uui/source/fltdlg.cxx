@@ -181,7 +181,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
         {
         }
 
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         {
             return (sal_Int32)(m_pDevice->GetTextWidth(sString));
         }

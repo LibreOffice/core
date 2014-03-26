@@ -237,15 +237,15 @@ public:
     UpdateCheckThread( osl::Condition& rCondition,
         const uno::Reference<uno::XComponentContext>& xContext );
 
-    virtual void SAL_CALL join();
-    virtual void SAL_CALL terminate();
-    virtual void cancel();
+    virtual void SAL_CALL join() SAL_OVERRIDE;
+    virtual void SAL_CALL terminate() SAL_OVERRIDE;
+    virtual void cancel() SAL_OVERRIDE;
 
 protected:
     virtual ~UpdateCheckThread();
 
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
     /* Wrapper around checkForUpdates */
     bool runCheck( bool & rbExtensionsChecked );
@@ -296,7 +296,7 @@ public:
     ManualUpdateCheckThread( osl::Condition& rCondition, const uno::Reference<uno::XComponentContext>& xContext ) :
         UpdateCheckThread(rCondition, xContext) {};
 
-    virtual void SAL_CALL run();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 };
 
 
@@ -307,7 +307,7 @@ public:
 
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
-        throw (lang::IllegalArgumentException, uno::Exception, std::exception);
+        throw (lang::IllegalArgumentException, uno::Exception, std::exception) SAL_OVERRIDE;
 
 private:
     rtl::Reference< UpdateCheck > m_aUpdateCheck;
@@ -322,10 +322,10 @@ public:
         const rtl::Reference< DownloadInteractionHandler >& rHandler,
         const OUString& rURL );
 
-    virtual void SAL_CALL run();
-    virtual void cancel();
-    virtual void SAL_CALL suspend();
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void cancel() SAL_OVERRIDE;
+    virtual void SAL_CALL suspend() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 protected:
     ~DownloadThread();
@@ -343,8 +343,8 @@ class ShutdownThread :  public osl::Thread
 public:
     ShutdownThread( const uno::Reference<uno::XComponentContext>& xContext );
 
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 protected:
     ~ShutdownThread();

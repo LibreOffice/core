@@ -45,16 +45,16 @@ private:
     void                    CheckSpellTo();
 
 protected:
-    virtual void            SpellStart( SvxSpellArea eArea );
-    virtual bool            SpellContinue();    // Check area
-    virtual void            ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage );
-    virtual void            SpellEnd();
-    virtual bool            SpellMore();
-    virtual bool            HasOtherCnt();
-    virtual void            ScrollArea();
-    virtual void            ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang );
-    virtual void            ChangeThesWord( const OUString& rNewWord );
-    virtual void            AutoCorrect( const OUString& rOldWord, const OUString& rNewWord );
+    virtual void            SpellStart( SvxSpellArea eArea ) SAL_OVERRIDE;
+    virtual bool            SpellContinue() SAL_OVERRIDE;    // Check area
+    virtual void            ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ) SAL_OVERRIDE;
+    virtual void            SpellEnd() SAL_OVERRIDE;
+    virtual bool            SpellMore() SAL_OVERRIDE;
+    virtual bool            HasOtherCnt() SAL_OVERRIDE;
+    virtual void            ScrollArea() SAL_OVERRIDE;
+    virtual void            ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang ) SAL_OVERRIDE;
+    virtual void            ChangeThesWord( const OUString& rNewWord ) SAL_OVERRIDE;
+    virtual void            AutoCorrect( const OUString& rOldWord, const OUString& rNewWord ) SAL_OVERRIDE;
 
 public:
     EditSpellWrapper( Window* pWin,
@@ -139,20 +139,20 @@ public:
     EdtAutoCorrDoc(EditEngine* pE, ContentNode* pCurNode, sal_uInt16 nCrsr, sal_Unicode cIns);
     ~EdtAutoCorrDoc();
 
-    virtual bool    Delete( sal_Int32 nStt, sal_Int32 nEnd );
-    virtual bool    Insert( sal_Int32 nPos, const OUString& rTxt );
-    virtual bool    Replace( sal_Int32 nPos, const OUString& rTxt );
-    virtual bool    ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt );
+    virtual bool    Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
+    virtual bool    Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;
+    virtual bool    Replace( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;
+    virtual bool    ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) SAL_OVERRIDE;
 
-    virtual bool    SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
-    virtual bool    SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL );
+    virtual bool    SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId, SfxPoolItem& ) SAL_OVERRIDE;
+    virtual bool    SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) SAL_OVERRIDE;
 
     virtual OUString const* GetPrevPara(bool bAtNormalPos) SAL_OVERRIDE;
 
     virtual bool        ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
-                                  SvxAutoCorrect& rACorrect, OUString* pPara );
+                                  SvxAutoCorrect& rACorrect, OUString* pPara ) SAL_OVERRIDE;
 
-    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara = false ) const;
+    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara = false ) const SAL_OVERRIDE;
 
     sal_uInt16          GetCursor() const { return nCursor; }
 

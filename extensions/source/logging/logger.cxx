@@ -76,19 +76,19 @@ namespace logging
         EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XLogger
-        virtual OUString SAL_CALL getName() throw (RuntimeException, std::exception);
-        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL addLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL removeLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL log( ::sal_Int32 Level, const OUString& Message ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL getName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL log( ::sal_Int32 Level, const OUString& Message ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         ~EventLogger();
@@ -123,9 +123,9 @@ namespace logging
         LoggerPool( const Reference< XComponentContext >& _rxContext );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // helper for factories
         static Sequence< OUString > getSupportedServiceNames_static();
@@ -134,8 +134,8 @@ namespace logging
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
         // XLoggerPool
-        virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) throw (RuntimeException, std::exception);
-        virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) throw (RuntimeException, std::exception);
+        virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName )

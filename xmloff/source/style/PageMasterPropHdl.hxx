@@ -33,17 +33,17 @@ public:
     virtual bool            equals(
                                 const ::com::sun::star::uno::Any& rAny1,
                                 const ::com::sun::star::uno::Any& rAny2
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 // property handler for style:num-format (style::NumberingType)
@@ -56,12 +56,12 @@ public:
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 // property handler for style:num-letter-sync (style::NumberingType)
@@ -74,12 +74,12 @@ public:
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 // property handler for style:paper-tray-number
@@ -92,12 +92,12 @@ public:
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 // property handler for style:print
@@ -115,12 +115,12 @@ public:
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 // property handler for style:table-centering
@@ -133,12 +133,12 @@ public:
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 class XMLPMPropHdl_CenterVertical : public XMLPropertyHandler
@@ -149,12 +149,12 @@ public:
                                 const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
     virtual bool            exportXML(
                                 OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
-                                ) const;
+                                ) const SAL_OVERRIDE;
 };
 
 #endif

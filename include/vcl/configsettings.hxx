@@ -42,7 +42,7 @@ namespace vcl
 
         boost::unordered_map< OUString, SmallOUStrMap, OUStringHash > m_aSettings;
 
-        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
+        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
 
         void getValues();
         SettingsConfigItem();
@@ -54,7 +54,7 @@ namespace vcl
         const OUString& getValue( const OUString& rGroup, const OUString& rKey ) const;
         void setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue );
 
-        virtual void Commit();
+        virtual void Commit() SAL_OVERRIDE;
     };
 
 

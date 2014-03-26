@@ -58,13 +58,13 @@ namespace io_acceptor
             throw( AlreadyAcceptingException,
                    ConnectionSetupException,
                    IllegalArgumentException,
-                   RuntimeException, std::exception);
-        virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException, std::exception);
+                   RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
 
     public: // XServiceInfo
-                virtual OUString              SAL_CALL getImplementationName() throw(std::exception);
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception);
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception);
+                virtual OUString              SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(std::exception) SAL_OVERRIDE;
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) SAL_OVERRIDE;
 
     private:
         PipeAcceptor *m_pPipe;

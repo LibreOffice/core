@@ -89,10 +89,10 @@ public:
 
     sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 
-    virtual void    RequestingChildren( SvTreeListEntry* pParent );
+    virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) SAL_OVERRIDE;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
     DECL_LINK(OnSelectionChangeHdl, void *);
     DECL_LINK(OnExpandingHdl, void *);
@@ -110,15 +110,15 @@ public:
                     UnoTreeListItem( SvTreeListEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
     Image           GetImage() const;
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
     void            SetGraphicURL( const OUString& rGraphicURL );
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    SvLBoxItem*     Create() const SAL_OVERRIDE;
+    void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
 
 private:
     OUString        maGraphicURL;
@@ -612,8 +612,8 @@ class TreeSelectionEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
 public:
     TreeSelectionEnumeration( std::list< Any >& rSelection );
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception);
-    virtual Any SAL_CALL nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Any SAL_CALL nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     std::list< Any > maSelection;
     std::list< Any >::iterator maIter;

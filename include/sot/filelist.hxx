@@ -34,9 +34,9 @@ class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 protected:
 
     // SvData-Methoden
-    virtual void    Load( SvStream& );
-    virtual void    Save( SvStream& );
-    virtual void    Assign( const SvDataCopyStream& );
+    virtual void    Load( SvStream& ) SAL_OVERRIDE;
+    virtual void    Save( SvStream& ) SAL_OVERRIDE;
+    virtual void    Assign( const SvDataCopyStream& ) SAL_OVERRIDE;
 
     // Liste loeschen;
     void            ClearAll( void );

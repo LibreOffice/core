@@ -137,15 +137,15 @@ public:
 
     void StartElement(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+        ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
-    void EndElement();
+    void EndElement() SAL_OVERRIDE;
 
     SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
 
 protected:
 
@@ -333,11 +333,11 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const OUString& rValue);
+        const OUString& rValue) SAL_OVERRIDE;
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+            ::com::sun::star::beans::XPropertySet> & rPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -443,11 +443,11 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const OUString& rValue);
+        const OUString& rValue) SAL_OVERRIDE;
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+            ::com::sun::star::beans::XPropertySet> & rPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -541,11 +541,11 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const OUString& rValue);
+        const OUString& rValue) SAL_OVERRIDE;
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+            ::com::sun::star::beans::XPropertySet> & rPropertySet) SAL_OVERRIDE;
 };
 
 TYPEINIT1(XMLImageMapCircleContext, XMLImageMapObjectContext);

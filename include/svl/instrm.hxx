@@ -43,15 +43,15 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
 
     SVL_DLLPRIVATE bool open();
 
-    SVL_DLLPRIVATE virtual sal_uLong GetData(void * pData, sal_uLong nSize);
+    SVL_DLLPRIVATE virtual sal_uLong GetData(void * pData, sal_uLong nSize) SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual sal_uLong PutData(void const *, sal_uLong);
+    SVL_DLLPRIVATE virtual sal_uLong PutData(void const *, sal_uLong) SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual sal_uLong SeekPos(sal_uLong nPos);
+    SVL_DLLPRIVATE virtual sal_uLong SeekPos(sal_uLong nPos) SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual void FlushData();
+    SVL_DLLPRIVATE virtual void FlushData() SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual void SetSize(sal_uLong);
+    SVL_DLLPRIVATE virtual void SetSize(sal_uLong) SAL_OVERRIDE;
 
 public:
     SvInputStream(
@@ -61,7 +61,7 @@ public:
 
     virtual ~SvInputStream();
 
-    virtual sal_uInt16 IsA() const;
+    virtual sal_uInt16 IsA() const SAL_OVERRIDE;
 
     virtual void AddMark(sal_uLong nPos);
 

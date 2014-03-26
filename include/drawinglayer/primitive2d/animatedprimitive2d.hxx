@@ -83,7 +83,7 @@ namespace drawinglayer
             bool isGraphicAnimation() const { return !isTextAnimation(); }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -91,7 +91,7 @@ namespace drawinglayer
             /** The getDecomposition is overloaded here since the decompose is dependent of the point in time,
                 so the default implementation is nut useful here, it needs to be handled locally
              */
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -119,7 +119,7 @@ namespace drawinglayer
                 bool bIsTextAnimation);
 
             /// create local decomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
@@ -156,7 +156,7 @@ namespace drawinglayer
                 bool bIsTextAnimation);
 
             /// create local decomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

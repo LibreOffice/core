@@ -19,8 +19,8 @@ private:
     uno::Reference<i18n::XOrdinalSuffix> m_xOrdinal;
 
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void testFrench();
     void testEnglish();

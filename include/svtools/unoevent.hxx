@@ -95,7 +95,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception);
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAccess (via XNameReplace)
     /// calls getByName(sal_uInt16)
@@ -104,39 +104,39 @@ public:
             throw(
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception);
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAxcess (via XNameReplace)
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                                         getElementNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& rName )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess (via XNameReplace)
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasElements()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     /// must be implemented in subclass
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE = 0;
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(void)
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
 
@@ -220,7 +220,7 @@ protected:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     using SvBaseEventDescriptor::getByName;
     virtual void getByName(
@@ -229,7 +229,7 @@ protected:
             throw(
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 
     /// Get the SvxMacroItem from the parent.
@@ -264,7 +264,7 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
 
@@ -278,7 +278,7 @@ protected:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     using SvBaseEventDescriptor::getByName;
     virtual void getByName(
@@ -287,7 +287,7 @@ protected:
             throw(
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// do we have an event?
     /// return sal_True: we have a macro for the event

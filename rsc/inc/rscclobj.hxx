@@ -37,7 +37,7 @@ public:
 
                 ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey );
     ObjNode *   DelObjNode( RscTop * pClass, sal_uLong lFileKey );
-    sal_uInt32  GetId() const;
+    sal_uInt32  GetId() const SAL_OVERRIDE;
     RscId       GetRscId(){ return( aRscId ); }
     sal_uLong   GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const //< search the index in the b-tree
@@ -69,7 +69,7 @@ public:
 
     ObjNode*    pObjBiTree; // Zeiger auf Objektbaum
                 RefNode( Atom nTyp );
-    sal_uInt32  GetId() const;
+    sal_uInt32  GetId() const SAL_OVERRIDE;
     RefNode*    Search( Atom typ ) const //< search the index in the b-tree
                     {
                         return( (RefNode *)IdNode::Search( typ ) );

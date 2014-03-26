@@ -39,8 +39,8 @@ class Test : public test::BootstrapFixture
 public:
     Test();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void testConstruction();
 
@@ -234,47 +234,47 @@ public:
 private:
     OUString & m_rText;
     LanguageType m_eLang;
-    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd )
+    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
         m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
         return true;
     }
-    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt )
+    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
         m_rText = m_rText.replaceAt(nPos, 0, rTxt);
         return true;
     }
-    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt )
+    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
         return ReplaceRange( nPos, rTxt.getLength(), rTxt );
     }
-    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt )
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
         m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
         return true;
     }
-    virtual bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& )
+    virtual bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
         return true;
     }
-    virtual bool SetINetAttr( sal_Int32, sal_Int32, const OUString& )
+    virtual bool SetINetAttr( sal_Int32, sal_Int32, const OUString& ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
         return true;
     }
-    virtual OUString const* GetPrevPara(bool)
+    virtual OUString const* GetPrevPara(bool) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
         return 0;
     }
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos,
                 sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
-                OUString* pPara )
+                OUString* pPara ) SAL_OVERRIDE
     {
         //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
 

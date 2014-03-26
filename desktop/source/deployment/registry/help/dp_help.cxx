@@ -64,13 +64,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
-            Reference<XCommandEnvironment> const & xCmdEnv );
+            Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
 
     public:
@@ -84,7 +84,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         //XPackage
         virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()
-            throw (deployment::ExtensionRemovedException, css::uno::RuntimeException, std::exception);
+            throw (deployment::ExtensionRemovedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
     friend class PackageImpl;
 
@@ -92,7 +92,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
-        Reference<XCommandEnvironment> const & xCmdEnv );
+        Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
     void implProcessHelp( PackageImpl * package, bool doRegisterPackage,
                           Reference<ucb::XCommandEnvironment> const & xCmdEnv);
@@ -118,10 +118,10 @@ public:
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-        getSupportedPackageTypes() throw (RuntimeException, std::exception);
+        getSupportedPackageTypes() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
         throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception);
+               uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

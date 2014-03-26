@@ -42,20 +42,20 @@ private:
 public:
     UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit );
 
-    virtual void        Destroy();
+    virtual void        Destroy() SAL_OVERRIDE;
 
     // Toolkit
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit() SAL_OVERRIDE;
 
     // Graphics
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev );
-    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) SAL_OVERRIDE;
+    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) SAL_OVERRIDE;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, sal_Bool bCreate );
-    virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, sal_Bool bCreate ) SAL_OVERRIDE;
+    virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) SAL_OVERRIDE;
 
-    void                WindowDestroyed( Window* pWindow );
+    void                WindowDestroyed( Window* pWindow ) SAL_OVERRIDE;
     void                WindowEvent_Move( Window* pWindow );
     void                WindowEvent_Resize( Window* pWindow );
     void                WindowEvent_Show( Window* pWindow, bool bShow );
@@ -75,7 +75,7 @@ public:
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar );
+                        CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar ) SAL_OVERRIDE;
 
 private:
     virtual ~UnoWrapper();

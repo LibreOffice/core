@@ -85,7 +85,7 @@ private:
     UNOTOOLS_DLLPRIVATE void operator =(Options &); // not defined
 
 protected:
-    virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 );
+    virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) SAL_OVERRIDE;
 };
 
 } }

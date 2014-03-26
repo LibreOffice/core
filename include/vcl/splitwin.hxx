@@ -135,16 +135,16 @@ public:
     virtual void        FadeIn();
     virtual void        FadeOut();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Move();
-    virtual void        Resize();
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        StateChanged( StateChangedType nType );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Move() SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void                InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,

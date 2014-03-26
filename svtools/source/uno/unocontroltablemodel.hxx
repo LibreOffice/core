@@ -58,43 +58,43 @@ namespace svt { namespace table
 
     public:
         // ITableModel overridables
-        virtual TableSize                       getColumnCount() const;
-        virtual TableSize                       getRowCount() const;
-        virtual bool                            hasColumnHeaders() const;
-        virtual bool                            hasRowHeaders() const;
-        virtual bool                            isCellEditable( ColPos col, RowPos row ) const;
-        virtual PColumnModel                    getColumnModel( ColPos column );
-        virtual PTableRenderer                  getRenderer() const;
-        virtual PTableInputHandler              getInputHandler() const;
-        virtual TableMetrics                    getRowHeight() const;
-        virtual TableMetrics                    getColumnHeaderHeight() const;
-        virtual TableMetrics                    getRowHeaderWidth() const;
-        virtual ScrollbarVisibility             getVerticalScrollbarVisibility() const;
-        virtual ScrollbarVisibility             getHorizontalScrollbarVisibility() const;
-        virtual void                            addTableModelListener( const PTableModelListener& i_listener );
-        virtual void                            removeTableModelListener( const PTableModelListener& i_listener );
-        virtual void                            getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent );
-        virtual void                            getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip );
-        virtual ::com::sun::star::uno::Any      getRowHeading( RowPos const i_rowPos ) const;
-        virtual ::boost::optional< ::Color >    getLineColor() const;
-        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const;
-        virtual ::boost::optional< ::Color >    getHeaderTextColor() const;
-        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const;
-        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const;
-        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const;
-        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const;
-        virtual ::boost::optional< ::Color >    getTextColor() const;
-        virtual ::boost::optional< ::Color >    getTextLineColor() const;
+        virtual TableSize                       getColumnCount() const SAL_OVERRIDE;
+        virtual TableSize                       getRowCount() const SAL_OVERRIDE;
+        virtual bool                            hasColumnHeaders() const SAL_OVERRIDE;
+        virtual bool                            hasRowHeaders() const SAL_OVERRIDE;
+        virtual bool                            isCellEditable( ColPos col, RowPos row ) const SAL_OVERRIDE;
+        virtual PColumnModel                    getColumnModel( ColPos column ) SAL_OVERRIDE;
+        virtual PTableRenderer                  getRenderer() const SAL_OVERRIDE;
+        virtual PTableInputHandler              getInputHandler() const SAL_OVERRIDE;
+        virtual TableMetrics                    getRowHeight() const SAL_OVERRIDE;
+        virtual TableMetrics                    getColumnHeaderHeight() const SAL_OVERRIDE;
+        virtual TableMetrics                    getRowHeaderWidth() const SAL_OVERRIDE;
+        virtual ScrollbarVisibility             getVerticalScrollbarVisibility() const SAL_OVERRIDE;
+        virtual ScrollbarVisibility             getHorizontalScrollbarVisibility() const SAL_OVERRIDE;
+        virtual void                            addTableModelListener( const PTableModelListener& i_listener ) SAL_OVERRIDE;
+        virtual void                            removeTableModelListener( const PTableModelListener& i_listener ) SAL_OVERRIDE;
+        virtual void                            getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) SAL_OVERRIDE;
+        virtual void                            getCellToolTip( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any & o_cellToolTip ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Any      getRowHeading( RowPos const i_rowPos ) const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getLineColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getHeaderBackgroundColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getHeaderTextColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getTextColor() const SAL_OVERRIDE;
+        virtual ::boost::optional< ::Color >    getTextLineColor() const SAL_OVERRIDE;
         virtual ::boost::optional< ::std::vector< ::Color > >
-                                                getRowBackgroundColors() const;
+                                                getRowBackgroundColors() const SAL_OVERRIDE;
         virtual ::com::sun::star::style::VerticalAlignment
-                                                getVerticalAlign() const;
-        virtual ITableDataSort*                 getSortAdapter();
-        virtual bool                            isEnabled() const;
+                                                getVerticalAlign() const SAL_OVERRIDE;
+        virtual ITableDataSort*                 getSortAdapter() SAL_OVERRIDE;
+        virtual bool                            isEnabled() const SAL_OVERRIDE;
 
         // ITableDataSort overridables
-        virtual void        sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection );
-        virtual ColumnSort  getCurrentSortOrder() const;
+        virtual void        sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection ) SAL_OVERRIDE;
+        virtual ColumnSort  getCurrentSortOrder() const SAL_OVERRIDE;
 
         // column write access
         void    appendColumn( ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > const & i_column );

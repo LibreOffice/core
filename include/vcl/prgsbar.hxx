@@ -75,11 +75,11 @@ public:
                         ProgressBar( Window* pParent, const ResId& rResId );
                         ~ProgressBar();
 
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual Size        GetOptimalSize() const;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     void                SetValue( sal_uInt16 nNewPercent );
     sal_uInt16          GetValue() const { return mnPercent; }

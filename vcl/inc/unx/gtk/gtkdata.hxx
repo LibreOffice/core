@@ -87,8 +87,8 @@ class GtkSalTimer : public SalTimer
 public:
     GtkSalTimer();
     ~GtkSalTimer();
-    virtual void Start( sal_uLong nMS );
-    virtual void Stop();
+    virtual void Start( sal_uLong nMS ) SAL_OVERRIDE;
+    virtual void Stop() SAL_OVERRIDE;
     bool         Expired();
 
     sal_uLong    m_nTimeoutMS;
@@ -105,7 +105,7 @@ public:
     virtual ~GtkData();
 
     virtual void Init();
-    virtual void Dispose();
+    virtual void Dispose() SAL_OVERRIDE;
 
     virtual void initNWF();
     virtual void deInitNWF();
@@ -116,8 +116,8 @@ public:
     void Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
 
-    virtual void ErrorTrapPush();
-    virtual bool ErrorTrapPop( bool bIgnoreError );
+    virtual void ErrorTrapPush() SAL_OVERRIDE;
+    virtual bool ErrorTrapPop( bool bIgnoreError ) SAL_OVERRIDE;
 };
 
 class GtkSalFrame;
@@ -145,9 +145,13 @@ public:
 
     GtkSalSystem* getSystem() const { return m_pSys; }
 
-    virtual void deregisterFrame( SalFrame* pFrame );
+    virtual void deregisterFrame( SalFrame* pFrame ) SAL_OVERRIDE;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
+#if GTK_CHECK_VERSION(3,0,0)
     virtual int CaptureMouse( SalFrame* pFrame );
+#else
+    virtual int CaptureMouse( SalFrame* pFrame ) SAL_OVERRIDE;
+#endif
 
     int          GetDefaultScreen() { return m_pSys->GetDisplayBuiltInScreen(); }
     SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
@@ -156,7 +160,7 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
 //    int          GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
 #else
-    virtual ScreenData *initScreen( SalX11Screen nXScreen ) const;
+    virtual ScreenData *initScreen( SalX11Screen nXScreen ) const SAL_OVERRIDE;
 #endif
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
@@ -166,12 +170,12 @@ public:
     void screenSizeChanged( GdkScreen* );
     void monitorsChanged( GdkScreen* );
 
-    virtual void PostUserEvent();
+    virtual void PostUserEvent() SAL_OVERRIDE;
 
 #if GTK_CHECK_VERSION(3,0,0)
     guint32 GetLastUserEventTime( bool /* b */ ) { return GDK_CURRENT_TIME; } // horrible hack
 #else
-    virtual bool Dispatch( XEvent *pEvent );
+    virtual bool Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
 #endif
 };
 

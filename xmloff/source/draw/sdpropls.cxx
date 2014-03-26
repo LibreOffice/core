@@ -734,11 +734,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
 };
 
 bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -774,11 +774,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
 private:
     const sal_Int32 mnType;
 };
@@ -812,8 +812,8 @@ class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 public:
     virtual ~XMLSdHeaderFooterVisibilityTypeHdl();
 
-    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
+    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
 };
 
 XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()

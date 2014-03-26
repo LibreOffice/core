@@ -75,9 +75,9 @@ protected:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
-    virtual void                FillLayoutData() const;
-    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const;
-    virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+    virtual void                FillLayoutData() const SAL_OVERRIDE;
+    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+    virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
 
 public:
@@ -86,23 +86,23 @@ public:
                         TabControl( Window* pParent, const ResId& rResId );
                         ~TabControl();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual bool        Notify( NotifyEvent& rNEvt );
-    virtual void        StateChanged( StateChangedType nType );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     virtual void        ActivatePage();
     virtual bool        DeactivatePage();
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void                SetTabPageSizePixel( const Size& rSize );
     Size                GetTabPageSizePixel() const;
@@ -181,9 +181,9 @@ public:
     // returns the rectangle of the tab for page nPageId
     Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
 
-    virtual void SetPosPixel(const Point& rPos);
-    virtual void SetSizePixel(const Size& rNewSize);
-    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void SetPosPixel(const Point& rPos) SAL_OVERRIDE;
+    virtual void SetSizePixel(const Size& rNewSize) SAL_OVERRIDE;
+    virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) SAL_OVERRIDE;
 
     Size calculateRequisition() const;
     void setAllocation(const Size &rAllocation);
@@ -193,7 +193,7 @@ public:
         mbLayoutDirty = true;
     }
 
-    virtual void queue_resize();
+    virtual void queue_resize() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

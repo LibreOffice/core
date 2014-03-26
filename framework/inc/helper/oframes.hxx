@@ -88,7 +88,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @onerror    We do nothing in release or throw an assert in debug version.
         *//*-*****************************************************************************************************/
-        virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      remove frame from container
@@ -102,7 +102,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @onerror    We do nothing in release or throw an assert in debug version.
         *//*-*****************************************************************************************************/
-        virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      return list of all applicable frames for given flags
@@ -115,7 +115,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @onerror    An empty list is returned.
         *//*-*****************************************************************************************************/
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         //  XIndexAccess
 
@@ -132,7 +132,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @onerror    If a lock is set, we return 0 for prevent further access!
         *//*-*****************************************************************************************************/
-        virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      get specified container item by index
@@ -150,7 +150,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
         *//*-*****************************************************************************************************/
         virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw(    css::lang::IndexOutOfBoundsException    ,
                                                                                 css::lang::WrappedTargetException       ,
-                                                                                css::uno::RuntimeException, std::exception              );
+                                                                                css::uno::RuntimeException, std::exception              ) SAL_OVERRIDE;
 
         //  XElementAccess
 
@@ -166,7 +166,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      get fill state of current container
@@ -181,7 +181,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
 
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
-        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
 

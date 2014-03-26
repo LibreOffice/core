@@ -37,16 +37,16 @@ public:
     virtual ~SvpSalObject();
 
     // overload all pure virtual methods
-     virtual void                   ResetClipRegion();
-    virtual sal_uInt16              GetClipRegionType();
-    virtual void                    BeginSetClipRegion( sal_uLong nRects );
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    EndSetClipRegion();
+     virtual void                   ResetClipRegion() SAL_OVERRIDE;
+    virtual sal_uInt16              GetClipRegionType() SAL_OVERRIDE;
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( bool bVisible );
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
 
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
 };
 
 class SvpImeStatus : public SalI18NImeStatus
@@ -55,8 +55,8 @@ class SvpImeStatus : public SalI18NImeStatus
         SvpImeStatus() {}
         virtual ~SvpImeStatus();
 
-        virtual bool canToggle();
-        virtual void toggle();
+        virtual bool canToggle() SAL_OVERRIDE;
+        virtual void toggle() SAL_OVERRIDE;
 };
 
 class SvpSalSystem : public SalGenericSystem
@@ -65,14 +65,14 @@ public:
     SvpSalSystem() {}
     virtual ~SvpSalSystem();
     // get info about the display
-    virtual unsigned int GetDisplayScreenCount();
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual OUString GetDisplayScreenName( unsigned int nScreen );
+    virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) SAL_OVERRIDE;
+    virtual OUString GetDisplayScreenName( unsigned int nScreen ) SAL_OVERRIDE;
 
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
                                   const std::list< OUString >& rButtons,
-                                  int nDefButton );
+                                  int nDefButton ) SAL_OVERRIDE;
 };
 
 

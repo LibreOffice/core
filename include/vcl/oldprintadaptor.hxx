@@ -35,9 +35,9 @@ namespace vcl
         void StartPage();
         void EndPage();
 
-        virtual int  getPageCount() const;
-        virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const;
-        virtual void printPage( int i_nPage ) const;
+        virtual int  getPageCount() const SAL_OVERRIDE;
+        virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const SAL_OVERRIDE;
+        virtual void printPage( int i_nPage ) const SAL_OVERRIDE;
     };
 }
 

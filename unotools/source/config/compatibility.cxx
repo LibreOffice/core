@@ -247,7 +247,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& lPropertyNames );
+        virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      write changes to configuration
@@ -262,7 +262,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Commit();
+        virtual void Commit() SAL_OVERRIDE;
 
 
         //  public interface

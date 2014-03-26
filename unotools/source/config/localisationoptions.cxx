@@ -65,7 +65,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames );
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      write changes to configuration
@@ -80,7 +80,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Commit();
+        virtual void Commit() SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      access method to get internal values

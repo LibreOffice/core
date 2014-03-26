@@ -78,8 +78,8 @@ public:
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    virtual void                    Commit();
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames);
+    virtual void                    Commit() SAL_OVERRIDE;
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue)
                                                             {return m_aConfigValues[eValue];}

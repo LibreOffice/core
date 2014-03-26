@@ -117,7 +117,7 @@ class ImageOrientationListener : public svt::FrameStatusListener
                                   const Reference< XFrame > rFrame );
         virtual ~ImageOrientationListener();
 
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         Reference< XStatusListener > m_xReceiver;

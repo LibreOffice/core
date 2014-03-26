@@ -132,22 +132,22 @@ public:
     */
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         const ::com::sun::star::uno::Type & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()
-        throw ();
+        throw () SAL_OVERRIDE;
     /** decreasing m_refCount
     */
     virtual void SAL_CALL release()
-        throw ();
+        throw () SAL_OVERRIDE;
 
     /** XWeak::queryAdapter() implementation
 
         @return a \::com::sun::star::uno::XAdapter reference
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 

@@ -75,7 +75,7 @@ namespace drawinglayer
 
         protected:
             /// create local decomposition
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             /// constructor
@@ -96,13 +96,13 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
 
             /// Overload standard getDecomposition call to be view-dependent here
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

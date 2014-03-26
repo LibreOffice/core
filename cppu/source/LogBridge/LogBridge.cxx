@@ -42,13 +42,13 @@ class LogBridge : public cppu::Enterable
 public:
     explicit LogBridge(void);
 
-    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
-    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
+    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
+    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) SAL_OVERRIDE;
 
-    virtual void v_enter(void);
-    virtual void v_leave(void);
+    virtual void v_enter(void) SAL_OVERRIDE;
+    virtual void v_leave(void) SAL_OVERRIDE;
 
-    virtual bool v_isValid(rtl::OUString * pReason);
+    virtual bool v_isValid(rtl::OUString * pReason) SAL_OVERRIDE;
 };
 
 LogBridge::LogBridge(void)

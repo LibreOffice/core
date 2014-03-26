@@ -56,10 +56,10 @@ namespace drawinglayer
             const basegfx::B3DHomMatrix& getTransformation() const { return maTransformation; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
 
             /// get range
-            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

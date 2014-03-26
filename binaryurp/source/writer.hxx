@@ -83,7 +83,7 @@ public:
 private:
     virtual ~Writer();
 
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
 
     void sendRequest(
         rtl::ByteSequence const & tid, OUString const & oid,

@@ -54,30 +54,30 @@ namespace ftp
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL acquire()
-            throw();
+            throw() SAL_OVERRIDE;
         virtual void SAL_CALL release()
-            throw();
+            throw() SAL_OVERRIDE;
 
         // XTypeProvider
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw( css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
 
         static OUString getImplementationName_Static();
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
@@ -91,23 +91,23 @@ namespace ftp
         queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
             throw( css::ucb::IllegalIdentifierException,
                    css::uno::RuntimeException,
-                   std::exception );
+                   std::exception ) SAL_OVERRIDE;
 
         // FTPHandleProvider.
 
-        virtual CURL* handle();
+        virtual CURL* handle() SAL_OVERRIDE;
 
         virtual bool forHost(const OUString& host,
                              const OUString& port,
                              const OUString& username,
                              OUString& password,
-                             OUString& account);
+                             OUString& account) SAL_OVERRIDE;
 
         virtual bool setHost(const OUString& host,
                              const OUString& port,
                              const OUString& username,
                              const OUString& password,
-                             const OUString& account);
+                             const OUString& account) SAL_OVERRIDE;
 
         struct ServerInfo
         {

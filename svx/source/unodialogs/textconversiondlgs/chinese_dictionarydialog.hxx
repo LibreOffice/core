@@ -97,7 +97,7 @@ private:
 
     void setColSizes();
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
 public:
     css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
@@ -121,7 +121,7 @@ public:
     //this method should be called once before calling execute
     void setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
 private:
     DECL_LINK( DirectionHdl, void* );

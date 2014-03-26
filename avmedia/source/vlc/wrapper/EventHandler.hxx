@@ -27,7 +27,7 @@ namespace wrapper
         void stop();
 
     protected:
-        virtual void SAL_CALL run();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
 
     public:
         typedef boost::function< void() > TCallback;

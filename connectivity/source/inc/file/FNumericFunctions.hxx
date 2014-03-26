@@ -39,7 +39,7 @@ namespace connectivity
         class OOp_Abs : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** SIGN(X)
@@ -56,7 +56,7 @@ namespace connectivity
         class OOp_Sign : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** MOD(N,M)
@@ -75,7 +75,7 @@ namespace connectivity
         class OOp_Mod : public OBinaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const SAL_OVERRIDE;
         };
 
         /** FLOOR(X)
@@ -90,7 +90,7 @@ namespace connectivity
         class OOp_Floor : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** CEILING(X)
@@ -105,7 +105,7 @@ namespace connectivity
         class OOp_Ceiling : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** ROUND(X)
@@ -128,7 +128,7 @@ namespace connectivity
         class OOp_Round : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
         };
 
         /** EXP(X)
@@ -142,7 +142,7 @@ namespace connectivity
         class OOp_Exp : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** LN(X)
@@ -157,7 +157,7 @@ namespace connectivity
         class OOp_Ln : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** LOG(X)
@@ -179,7 +179,7 @@ namespace connectivity
         class OOp_Log : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
         };
 
         /** LOG10(X)
@@ -195,7 +195,7 @@ namespace connectivity
         class OOp_Log10 : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** POWER(X,Y)
@@ -209,7 +209,7 @@ namespace connectivity
         class OOp_Pow : public OBinaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const SAL_OVERRIDE;
         };
 
         /** SQRT(X)
@@ -223,7 +223,7 @@ namespace connectivity
         class OOp_Sqrt : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs) const SAL_OVERRIDE;
         };
 
         /** PI()
@@ -238,7 +238,7 @@ namespace connectivity
         class OOp_Pi : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
+            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const SAL_OVERRIDE;
         };
 
         /** COS(X)
@@ -250,7 +250,7 @@ namespace connectivity
         class OOp_Cos : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
 
         /** SIN(X)
@@ -263,7 +263,7 @@ namespace connectivity
         class OOp_Sin : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
         /** TAN(X)
             Returns the tangent of X, where X is given in radians:
@@ -274,7 +274,7 @@ namespace connectivity
         class OOp_Tan : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
 
         /** ACOS(X)
@@ -290,7 +290,7 @@ namespace connectivity
         class OOp_ACos : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
 
         /** ASIN(X)
@@ -304,7 +304,7 @@ namespace connectivity
         class OOp_ASin : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
 
         /** ATAN(X)
@@ -318,7 +318,7 @@ namespace connectivity
         class OOp_ATan : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
 
         /** ATAN2(Y,X)
@@ -333,7 +333,7 @@ namespace connectivity
         class OOp_ATan2 : public OBinaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const SAL_OVERRIDE;
         };
 
         /** DEGREES(X)
@@ -345,7 +345,7 @@ namespace connectivity
         class OOp_Degrees : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
 
         /** RADIANS(X)
@@ -358,7 +358,7 @@ namespace connectivity
         class OOp_Radians : public OUnaryOperator
         {
         protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
+            virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const SAL_OVERRIDE;
         };
     }
 }

@@ -1192,10 +1192,10 @@ private:
 
 protected:
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex );

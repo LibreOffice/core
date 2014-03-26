@@ -74,10 +74,10 @@ public:
 
     // dtrans implementation
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
+        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments ) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource() SAL_OVERRIDE;
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget() SAL_OVERRIDE;
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALINST_H

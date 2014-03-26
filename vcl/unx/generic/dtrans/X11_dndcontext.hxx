@@ -49,9 +49,9 @@ namespace x11 {
         virtual ~DropTargetDropContext();
 
         // XDropTargetDropContext
-        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception);
-        virtual void SAL_CALL rejectDrop() throw(std::exception);
-        virtual void SAL_CALL dropComplete( sal_Bool success ) throw(std::exception);
+        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL rejectDrop() throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dropComplete( sal_Bool success ) throw(std::exception) SAL_OVERRIDE;
     };
 
     class DropTargetDragContext :
@@ -68,8 +68,8 @@ namespace x11 {
         virtual ~DropTargetDragContext();
 
         // XDropTargetDragContext
-        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception);
-        virtual void SAL_CALL rejectDrag() throw(std::exception);
+        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL rejectDrag() throw(std::exception) SAL_OVERRIDE;
     };
 
     class DragSourceContext :
@@ -86,10 +86,10 @@ namespace x11 {
         virtual ~DragSourceContext();
 
         // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception);
-        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw(std::exception);
-        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception);
-        virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception);
+        virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception) SAL_OVERRIDE;
     };
 } // namespace
 

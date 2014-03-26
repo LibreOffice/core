@@ -80,16 +80,16 @@ class EmptyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 public:
     virtual sal_Int32 SAL_CALL readBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead )
-        throw (IOException, RuntimeException, std::exception);
+        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL readSomeBytes(
         Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead )
-        throw (IOException, RuntimeException, std::exception);
+        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw (IOException, RuntimeException, std::exception);
+        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL available()
-        throw (IOException, RuntimeException, std::exception);
+        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL closeInput()
-        throw (IOException, RuntimeException, std::exception);
+        throw (IOException, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 sal_Int32 EmptyInputStream::readBytes(
@@ -144,19 +144,19 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw();
+        throw() SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw();
+        throw() SAL_OVERRIDE;
 
     // XContentEventListener
     virtual void SAL_CALL contentEvent( const ContentEvent& evt )
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XEventListener ( base of XContentEventListener )
     virtual void SAL_CALL disposing( const EventObject& Source )
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 

@@ -40,11 +40,11 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rxShape );
     virtual ~SdXMLDescriptionContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_DESCRIPTIONIMP_HXX

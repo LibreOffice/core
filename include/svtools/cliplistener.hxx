@@ -43,10 +43,10 @@ public:
 
             // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-                                            throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XClipboardListener
     virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& event )
-                                            throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

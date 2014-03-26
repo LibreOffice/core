@@ -61,12 +61,12 @@ private:
 protected:
     explicit        SpinField( WindowType nTyp );
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     void            EndDropDown();
 
-    virtual void    FillLayoutData() const;
+    virtual void    FillLayoutData() const SAL_OVERRIDE;
     Rectangle *     ImplFindPartRect( const Point& rPt );
 
 public:
@@ -81,15 +81,15 @@ public:
     virtual void    First();
     virtual void    Last();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void    Resize();
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
     const Link&     GetUpHdl() const { return maUpHdlLink; }
@@ -100,10 +100,10 @@ public:
     void            SetLastHdl( const Link& rLink ) { maLastHdlLink = rLink; }
     const Link&     GetLastHdl() const { return maLastHdlLink; }
 
-    virtual Size    CalcMinimumSize() const;
-    virtual Size    CalcMinimumSizeForText(const OUString &rString) const;
-    virtual Size    GetOptimalSize() const;
-    virtual Size    CalcSize(sal_Int32 nChars) const;
+    virtual Size    CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size    CalcMinimumSizeForText(const OUString &rString) const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    CalcSize(sal_Int32 nChars) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_SPINFLD_HXX

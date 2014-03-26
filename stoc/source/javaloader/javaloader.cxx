@@ -105,21 +105,21 @@ public:
 
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImplementationLoader
     virtual css::uno::Reference<XInterface> SAL_CALL activate(
         const OUString& implementationName, const OUString& implementationLoaderUrl,
         const OUString& locationUrl, const css::uno::Reference<XRegistryKey>& xKey)
-        throw(CannotActivateFactoryException, RuntimeException, std::exception);
+        throw(CannotActivateFactoryException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL writeRegistryInfo(
         const css::uno::Reference<XRegistryKey>& xKey,
         const OUString& implementationLoaderUrl, const OUString& locationUrl)
-        throw(CannotRegisterImplementationException, RuntimeException, std::exception);
+        throw(CannotRegisterImplementationException, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader()

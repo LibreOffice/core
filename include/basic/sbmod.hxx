@@ -85,21 +85,21 @@ protected:
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
                                     sal_Bool bFollowJumps, const SbiImage* pImg=NULL ) const;
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
-    virtual sal_Bool LoadCompleted();
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual sal_Bool LoadCompleted() SAL_OVERRIDE;
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType );
+                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
     void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO_OVERRIDE();
                     SbModule( const OUString&, sal_Bool bCompat = sal_False );
-    virtual void    SetParent( SbxObject* );
-    virtual void    Clear();
+    virtual void    SetParent( SbxObject* ) SAL_OVERRIDE;
+    virtual void    Clear() SAL_OVERRIDE;
 
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     virtual const OUString& GetSource() const;
     const OUString&  GetSource32() const;
@@ -153,9 +153,9 @@ public:
     ~SbClassModuleObject();
 
     // Overridden to support NameAccess etc.
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
-    virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+    virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 
     SbModule* getClassModule( void )
         { return mpClassModule; }

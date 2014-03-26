@@ -96,7 +96,7 @@ class INetMessageIStream : public INetIStream
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
 
-    virtual int GetData (sal_Char *pData, sal_uIntPtr nSize);
+    virtual int GetData (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
     // Not implemented.
     INetMessageIStream (const INetMessageIStream& rStrm);
@@ -126,7 +126,7 @@ class INetMessageOStream : public INetOStream
 
     SvMemoryStream         *pMsgBuffer;
 
-    virtual int PutData (const sal_Char *pData, sal_uIntPtr nSize);
+    virtual int PutData (const sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
     // Not implemented.
     INetMessageOStream (const INetMessageOStream& rStrm);
@@ -189,8 +189,8 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm);
 
 protected:
-    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
-    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
+    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
+    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
     INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);

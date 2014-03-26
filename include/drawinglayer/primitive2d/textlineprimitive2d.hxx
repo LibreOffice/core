@@ -48,7 +48,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             /// constructor
@@ -69,7 +69,7 @@ namespace drawinglayer
             const basegfx::BColor& getLineColor() const { return maLineColor; }
 
             /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

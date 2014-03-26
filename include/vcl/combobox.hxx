@@ -88,29 +88,29 @@ protected:
     explicit            ComboBox( WindowType nType );
     bool            IsDropDownBox() const { return mpFloatWin ? true : false; }
 
-    virtual void  FillLayoutData() const;
+    virtual void  FillLayoutData() const SAL_OVERRIDE;
 public:
     explicit        ComboBox( Window* pParent, WinBits nStyle = 0 );
     explicit        ComboBox( Window* pParent, const ResId& );
     virtual         ~ComboBox();
 
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void    Resize();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    Select();
     virtual void    DoubleClick();
 
-    virtual void    Modify();
+    virtual void    Modify() SAL_OVERRIDE;
 
-    virtual const Wallpaper& GetDisplayBackground() const;
+    virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
 
-    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
-    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
+    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
+    void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
                         { Edit::SetPosSizePixel( rNewPos, rNewSize ); }
     void            SetDropDownSizePixel( const Size& rNewSize )
     { if( IsDropDownBox() ) setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
@@ -126,8 +126,8 @@ public:
 
     void            EnableDDAutoWidth( bool b );
 
-    virtual void    SetText( const OUString& rStr );
-    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection );
+    virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
 
     virtual sal_Int32  InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
     void            InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
@@ -169,8 +169,8 @@ public:
     void            SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
     const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
-    Size            CalcMinimumSize() const;
-    virtual Size    GetOptimalSize() const;
+    Size            CalcMinimumSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
@@ -219,7 +219,7 @@ public:
     sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
     void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
 #endif  // _COMBOBOX_HXX

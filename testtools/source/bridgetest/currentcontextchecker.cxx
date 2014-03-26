@@ -51,7 +51,7 @@ public:
     virtual ~CurrentContext();
 
     virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     CurrentContext(CurrentContext &); // not defined

@@ -45,7 +45,7 @@ public:
 
     virtual ~ODocumentInfoPreview();
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
     void clear();
 

@@ -79,12 +79,12 @@ class TimingListener
     , private boost::noncopyable
 {
 public:
-    void startTest( CppUnit::Test *)
+    void startTest( CppUnit::Test *) SAL_OVERRIDE
     {
         m_nStartTime = osl_getGlobalTimer();
     }
 
-    void endTest( CppUnit::Test *test )
+    void endTest( CppUnit::Test *test ) SAL_OVERRIDE
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         std::cout << test->getName() << ": " << nEndTime-m_nStartTime
@@ -155,7 +155,7 @@ public:
         CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
         return collector.wasSuccessful();
     }
-    virtual bool operator()() const
+    virtual bool operator()() const SAL_OVERRIDE
     {
         return run();
     }

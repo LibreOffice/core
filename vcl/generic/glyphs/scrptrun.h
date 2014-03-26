@@ -37,6 +37,9 @@
 #ifndef __SCRPTRUN_H
 #define __SCRPTRUN_H
 
+#include <sal/config.h>
+
+#include <sal/types.h>
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/uscript.h"
@@ -81,7 +84,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const SAL_OVERRIDE { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

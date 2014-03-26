@@ -61,8 +61,8 @@ public:
     SvtCTLOptions_Impl();
     ~SvtCTLOptions_Impl();
 
-    virtual void    Notify( const Sequence< OUString >& _aPropertyNames );
-    virtual void    Commit();
+    virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Commit() SAL_OVERRIDE;
     void            Load();
 
     bool            IsLoaded() { return m_bIsLoaded; }

@@ -50,9 +50,9 @@ namespace connectivity
             virtual void FileClose();
             virtual ~OFileTable( );
         public:
-            virtual void refreshColumns();
-            virtual void refreshKeys();
-            virtual void refreshIndexes();
+            virtual void refreshColumns() SAL_OVERRIDE;
+            virtual void refreshKeys() SAL_OVERRIDE;
+            virtual void refreshIndexes() SAL_OVERRIDE;
         public:
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection);
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
@@ -64,11 +64,11 @@ namespace connectivity
                 );
 
             //XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+            virtual void SAL_CALL release() throw() SAL_OVERRIDE;
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
 
             OConnection* getConnection() const { return m_pConnection;}
             virtual sal_Int32 getCurrentLastPos() const {return -1;}
@@ -85,13 +85,13 @@ namespace connectivity
             // refresh the header of file based tables to see changes done by someone
             virtual void refreshHeader();
 
-            OUString SAL_CALL getName() throw(std::exception) { return m_Name; }
+            OUString SAL_CALL getName() throw(std::exception) SAL_OVERRIDE { return m_Name; }
 
             OUString getSchema() { return m_SchemaName; }
             sal_Bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
 

@@ -97,16 +97,16 @@ namespace tdoc_ucp {
                     const ::com::sun::star::lang::EventObject& Source,
                     ::sal_Bool GetsOwnership )
                 throw (::com::sun::star::util::CloseVetoException,
-                       ::com::sun::star::uno::RuntimeException, std::exception);
+                       ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             virtual void SAL_CALL notifyClosing(
                     const ::com::sun::star::lang::EventObject& Source )
-                throw (::com::sun::star::uno::RuntimeException, std::exception);
+                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // lang::XEventListener (base of util::XCloseListener)
             virtual void SAL_CALL disposing(
                     const com::sun::star::lang::EventObject & Source )
-                throw ( com::sun::star::uno::RuntimeException, std::exception );
+                throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         private:
             OfficeDocumentsManager * m_pManager;
         };
@@ -123,12 +123,12 @@ namespace tdoc_ucp {
         // document::XEventListener
         virtual void SAL_CALL notifyEvent(
                 const com::sun::star::document::EventObject & Event )
-            throw ( com::sun::star::uno::RuntimeException, std::exception );
+            throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // lang::XEventListener (base of document::XEventListener)
         virtual void SAL_CALL disposing(
                 const com::sun::star::lang::EventObject & Source )
-            throw ( com::sun::star::uno::RuntimeException, std::exception );
+            throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Non-interface
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >

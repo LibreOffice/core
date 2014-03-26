@@ -96,43 +96,43 @@ namespace svt { namespace table
         }
 
         // ITableModel overridables
-        virtual TableSize           getColumnCount() const
+        virtual TableSize           getColumnCount() const SAL_OVERRIDE
         {
             return 0;
         }
-        virtual TableSize           getRowCount() const
+        virtual TableSize           getRowCount() const SAL_OVERRIDE
         {
             return 0;
         }
-        virtual bool                hasColumnHeaders() const
+        virtual bool                hasColumnHeaders() const SAL_OVERRIDE
         {
             return false;
         }
-        virtual bool                hasRowHeaders() const
+        virtual bool                hasRowHeaders() const SAL_OVERRIDE
         {
             return false;
         }
-        virtual bool                isCellEditable( ColPos col, RowPos row ) const
+        virtual bool                isCellEditable( ColPos col, RowPos row ) const SAL_OVERRIDE
         {
             (void)col;
             (void)row;
             return false;
         }
-        virtual PColumnModel        getColumnModel( ColPos column )
+        virtual PColumnModel        getColumnModel( ColPos column ) SAL_OVERRIDE
         {
             OSL_FAIL( "EmptyTableModel::getColumnModel: invalid call!" );
             (void)column;
             return PColumnModel();
         }
-        virtual PTableRenderer      getRenderer() const
+        virtual PTableRenderer      getRenderer() const SAL_OVERRIDE
         {
             return PTableRenderer();
         }
-        virtual PTableInputHandler  getInputHandler() const
+        virtual PTableInputHandler  getInputHandler() const SAL_OVERRIDE
         {
             return PTableInputHandler();
         }
-        virtual TableMetrics        getRowHeight() const
+        virtual TableMetrics        getRowHeight() const SAL_OVERRIDE
         {
             return 5 * 100;
         }
@@ -140,92 +140,92 @@ namespace svt { namespace table
         {
             (void)_nRowHeight;
         }
-        virtual TableMetrics        getColumnHeaderHeight() const
+        virtual TableMetrics        getColumnHeaderHeight() const SAL_OVERRIDE
         {
             return 0;
         }
-        virtual TableMetrics        getRowHeaderWidth() const
+        virtual TableMetrics        getRowHeaderWidth() const SAL_OVERRIDE
         {
             return 0;
         }
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const
+        virtual ScrollbarVisibility getVerticalScrollbarVisibility() const SAL_OVERRIDE
         {
             return ScrollbarShowNever;
         }
-        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const
+        virtual ScrollbarVisibility getHorizontalScrollbarVisibility() const SAL_OVERRIDE
         {
             return ScrollbarShowNever;
         }
-        virtual void addTableModelListener( const PTableModelListener& i_listener )
+        virtual void addTableModelListener( const PTableModelListener& i_listener ) SAL_OVERRIDE
         {
             (void)i_listener;
         }
-        virtual void removeTableModelListener( const PTableModelListener& i_listener )
+        virtual void removeTableModelListener( const PTableModelListener& i_listener ) SAL_OVERRIDE
         {
             (void)i_listener;
         }
-        virtual ::boost::optional< ::Color > getLineColor() const
+        virtual ::boost::optional< ::Color > getLineColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color > getHeaderBackgroundColor() const
+        virtual ::boost::optional< ::Color > getHeaderBackgroundColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color > getHeaderTextColor() const
+        virtual ::boost::optional< ::Color > getHeaderTextColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const
+        virtual ::boost::optional< ::Color >    getActiveSelectionBackColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const
+        virtual ::boost::optional< ::Color >    getInactiveSelectionBackColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const
+        virtual ::boost::optional< ::Color >    getActiveSelectionTextColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const
+        virtual ::boost::optional< ::Color >    getInactiveSelectionTextColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color > getTextColor() const
+        virtual ::boost::optional< ::Color > getTextColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::Color > getTextLineColor() const
+        virtual ::boost::optional< ::Color > getTextLineColor() const SAL_OVERRIDE
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::std::vector< ::Color > > getRowBackgroundColors() const
+        virtual ::boost::optional< ::std::vector< ::Color > > getRowBackgroundColors() const SAL_OVERRIDE
         {
             return ::boost::optional< ::std::vector< ::Color > >();
         }
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const SAL_OVERRIDE
         {
             return com::sun::star::style::VerticalAlignment(0);
         }
-        virtual ITableDataSort* getSortAdapter()
+        virtual ITableDataSort* getSortAdapter() SAL_OVERRIDE
         {
             return NULL;
         }
-        virtual bool isEnabled() const
+        virtual bool isEnabled() const SAL_OVERRIDE
         {
             return true;
         }
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent )
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) SAL_OVERRIDE
         {
             (void)i_row;
             (void)i_col;
             o_cellContent.clear();
         }
-        virtual void getCellToolTip( ColPos const, RowPos const, ::com::sun::star::uno::Any& )
+        virtual void getCellToolTip( ColPos const, RowPos const, ::com::sun::star::uno::Any& ) SAL_OVERRIDE
         {
         }
-        virtual Any getRowHeading( RowPos const i_rowPos ) const
+        virtual Any getRowHeading( RowPos const i_rowPos ) const SAL_OVERRIDE
         {
             (void)i_rowPos;
             return Any();

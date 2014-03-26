@@ -81,18 +81,18 @@ namespace connectivity
             void disposeResultSet();
 
             // OPropertyArrayUsageHelper
-            ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+            ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
             // OPropertySetHelper
-            ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
             sal_Bool SAL_CALL convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue,
                                                                sal_Int32 nHandle, const Any& rValue)
-                                                throw (::com::sun::star::lang::IllegalArgumentException);
+                                                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
             void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
-                                                throw(::com::sun::star::uno::Exception, std::exception);
+                                                throw(::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
-            void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const;
+            void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
             virtual ~OCommonStatement();
 
         protected:
@@ -103,56 +103,56 @@ namespace connectivity
             using OCommonStatement_IBase::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            void SAL_CALL disposing(void);
+            void SAL_CALL disposing(void) SAL_OVERRIDE;
 
             // XInterface
-            void SAL_CALL release()             throw();
+            void SAL_CALL release()             throw() SAL_OVERRIDE;
 
-            void SAL_CALL acquire()             throw();
+            void SAL_CALL acquire()             throw() SAL_OVERRIDE;
 
             // XInterface
             Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
-                                                throw(RuntimeException, std::exception);
+                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             //XTypeProvider
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                                throw(RuntimeException, std::exception);
+                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XPropertySet
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-                                                throw(RuntimeException, std::exception);
+                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XStatement
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(const OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Int32 SAL_CALL executeUpdate(const OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Bool SAL_CALL execute( const OUString& sql )
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection()
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XWarningsSupplier
-            Any SAL_CALL getWarnings()      throw(SQLException, RuntimeException, std::exception);
+            Any SAL_CALL getWarnings()      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            void SAL_CALL clearWarnings()       throw(SQLException, RuntimeException, std::exception);
+            void SAL_CALL clearWarnings()       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XCancellable
-            void SAL_CALL cancel()              throw(RuntimeException, std::exception);
+            void SAL_CALL cancel()              throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XCloseable
-            void SAL_CALL close()               throw(SQLException, RuntimeException, std::exception);
+            void SAL_CALL close()               throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XMultipleResults
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet()
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL getUpdateCount() throw(SQLException, RuntimeException, std::exception);
+            sal_Int32 SAL_CALL getUpdateCount() throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL getMoreResults()  throw(SQLException, RuntimeException, std::exception);
+            sal_Bool SAL_CALL getMoreResults()  throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
@@ -186,19 +186,19 @@ namespace connectivity
                 SAL_OVERRIDE;
 
             Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-                                                throw(RuntimeException, std::exception);
+                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
-            void SAL_CALL acquire()             throw();
-            void SAL_CALL release()             throw();
+            void SAL_CALL acquire()             throw() SAL_OVERRIDE;
+            void SAL_CALL release()             throw() SAL_OVERRIDE;
 
             // XBatchExecution
             void SAL_CALL addBatch(const OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            void SAL_CALL clearBatch()          throw(SQLException, RuntimeException, std::exception);
+            void SAL_CALL clearBatch()          throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch()
-                                                throw(SQLException, RuntimeException, std::exception);
+                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         };
     }

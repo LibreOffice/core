@@ -69,11 +69,11 @@ class PackageInformationProvider :
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL isUpdateAvailable( const OUString& extensionId )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
 

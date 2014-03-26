@@ -69,12 +69,12 @@ public:
 
     /** IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(())
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(()) SAL_OVERRIDE
     {
         return osl_atomic_increment (&m_nReferenceCount);
     }
 
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(())
+    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(()) SAL_OVERRIDE
     {
         oslInterlockedCount result;
         result = ::osl_atomic_decrement (&m_nReferenceCount);

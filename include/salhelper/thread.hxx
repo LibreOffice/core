@@ -79,9 +79,9 @@ protected:
     virtual void execute() = 0;
 
 private:
-    virtual void SAL_CALL run();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
     char const * name_;
 };

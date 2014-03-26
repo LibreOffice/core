@@ -56,7 +56,7 @@ protected:
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
-                 bool bAutoStyles );
+                 bool bAutoStyles ) SAL_OVERRIDE;
 
 public:
     XMLTextMasterPageExport( SvXMLExport& rExp );

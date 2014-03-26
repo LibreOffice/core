@@ -53,18 +53,18 @@ public:
     SvxLineSpacingItem( sal_uInt16 nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
     // Methods to query and edit. InterlineSpace is added to the height.
     inline short GetInterLineSpace() const { return nInterLineSpace; }
@@ -96,10 +96,10 @@ public:
     inline SvxInterLineSpace &GetInterLineSpaceRule() { return eInterLineSpace; }
     inline SvxInterLineSpace GetInterLineSpaceRule() const { return eInterLineSpace; }
 
-    virtual sal_uInt16      GetValueCount() const;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16      GetEnumValue() const;
-    virtual void            SetEnumValue( sal_uInt16 nNewVal );
+    virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
+    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
+    virtual sal_uInt16      GetEnumValue() const SAL_OVERRIDE;
+    virtual void            SetEnumValue( sal_uInt16 nNewVal ) SAL_OVERRIDE;
 };
 
 #endif

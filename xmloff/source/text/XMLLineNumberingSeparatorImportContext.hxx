@@ -54,11 +54,11 @@ protected:
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 #endif

@@ -52,17 +52,17 @@ namespace svt { namespace uno
         virtual ~WizardShell();
 
         // Dialog overridables
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
         // OWizardMachine overridables
-        virtual TabPage*    createPage( WizardState i_nState );
-        virtual void        enterState( WizardState i_nState );
-        virtual bool        leaveState( WizardState i_nState );
-        virtual OUString    getStateDisplayName( WizardState i_nState ) const;
-        virtual bool        canAdvance() const;
-        virtual bool        onFinish();
+        virtual TabPage*    createPage( WizardState i_nState ) SAL_OVERRIDE;
+        virtual void        enterState( WizardState i_nState ) SAL_OVERRIDE;
+        virtual bool        leaveState( WizardState i_nState ) SAL_OVERRIDE;
+        virtual OUString    getStateDisplayName( WizardState i_nState ) const SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
+        virtual bool        onFinish() SAL_OVERRIDE;
         virtual IWizardPageController*
-                            getPageController( TabPage* _pCurrentPage ) const;
+                            getPageController( TabPage* _pCurrentPage ) const SAL_OVERRIDE;
 
         // attribute access
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizard >&

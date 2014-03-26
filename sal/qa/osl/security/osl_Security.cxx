@@ -336,7 +336,7 @@ class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
     public:
     MyTestPlugInImpl() {};
     void initialize( CPPUNIT_NS::TestFactoryRegistry *registry,
-                   const CPPUNIT_NS::PlugInParameters &parameters );
+                   const CPPUNIT_NS::PlugInParameters &parameters ) SAL_OVERRIDE;
 };
 
 

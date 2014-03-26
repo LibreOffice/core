@@ -79,9 +79,9 @@ public:
     ChangeListener (Impl& rParent): m_rParent(rParent) { }
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException, std::exception);
+    virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XEventListener
-    virtual void SAL_CALL disposing (lang::EventObject const& Source) throw(uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing (lang::EventObject const& Source) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     Impl& m_rParent;

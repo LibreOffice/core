@@ -62,16 +62,16 @@ public:
     virtual void    Up();
     virtual void    Down();
 
-    virtual void    Resize();
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
     void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }
@@ -83,7 +83,7 @@ public:
     long            GetValue() const { return mnValue; }
     void            SetValueStep( long nNewStep ) { mnValueStep = nNewStep; }
     long            GetValueStep() const { return mnValueStep; }
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
     const Link&     GetUpHdl() const   { return maUpHdlLink;   }

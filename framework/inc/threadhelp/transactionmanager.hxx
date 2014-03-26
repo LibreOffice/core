@@ -57,11 +57,11 @@ class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
 
                                    TransactionManager           (                                              );
         virtual                    ~TransactionManager          (                                              );
-        virtual void               setWorkingMode               ( EWorkingMode eMode                           );
-        virtual EWorkingMode       getWorkingMode               (                                              ) const;
-        virtual sal_Bool           isCallRejected               ( ERejectReason& eReason                       ) const;
-        virtual void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
-        virtual void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        virtual void               setWorkingMode               ( EWorkingMode eMode                           ) SAL_OVERRIDE;
+        virtual EWorkingMode       getWorkingMode               (                                              ) const SAL_OVERRIDE;
+        virtual sal_Bool           isCallRejected               ( ERejectReason& eReason                       ) const SAL_OVERRIDE;
+        virtual void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) SAL_OVERRIDE;
+        virtual void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException ) SAL_OVERRIDE;
 
 
     //  private methods

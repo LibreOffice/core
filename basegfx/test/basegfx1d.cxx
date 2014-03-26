@@ -31,11 +31,11 @@ class b1drange : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 

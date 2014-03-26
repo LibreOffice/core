@@ -43,7 +43,7 @@ public:
 private:
     virtual ~LateInitThread();
 
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
 };
 
 } }

@@ -105,19 +105,19 @@ public:
         SAL_THROW((css::uno::Exception));
 
     virtual void SAL_CALL disposing (void)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
         SAL_CALL createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>& rxPane)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

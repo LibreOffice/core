@@ -64,28 +64,28 @@ namespace
         {
         }
 
-        virtual void reserve(size_t nLength)
+        virtual void reserve(size_t nLength) SAL_OVERRIDE
         {
             m_aElements.reserve(nLength);
         }
 
-        virtual bool exists(const OUString& _sName )
+        virtual bool exists(const OUString& _sName ) SAL_OVERRIDE
         {
             return m_aNameMap.find(_sName) != m_aNameMap.end();
         }
 
-        virtual bool empty()
+        virtual bool empty() SAL_OVERRIDE
         {
             return m_aNameMap.empty();
         }
 
-        virtual void swapAll()
+        virtual void swapAll() SAL_OVERRIDE
         {
             ::std::vector< ObjectIter >(m_aElements).swap(m_aElements);
             ObjectMap(m_aNameMap).swap(m_aNameMap);
         }
 
-        virtual void swap()
+        virtual void swap() SAL_OVERRIDE
         {
             ::std::vector< ObjectIter >().swap(m_aElements);
 
@@ -98,18 +98,18 @@ namespace
                 // it's case-sensitive flag would have an unpredictable value.
         }
 
-        virtual void clear()
+        virtual void clear() SAL_OVERRIDE
         {
             m_aElements.clear();
             m_aNameMap.clear();
         }
 
-        virtual void insert(const OUString& _sName,const ObjectType& _xObject)
+        virtual void insert(const OUString& _sName,const ObjectType& _xObject) SAL_OVERRIDE
         {
             m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sName,_xObject)));
         }
 
-        virtual void reFill(const TStringVector &_rVector)
+        virtual void reFill(const TStringVector &_rVector) SAL_OVERRIDE
         {
             OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
             m_aElements.reserve(_rVector.size());
@@ -118,7 +118,7 @@ namespace
                 m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
         }
 
-        virtual bool rename(const OUString& _sOldName, const OUString& _sNewName)
+        virtual bool rename(const OUString& _sOldName, const OUString& _sNewName) SAL_OVERRIDE
         {
             bool bRet = false;
             ObjectIter aIter = m_aNameMap.find(_sOldName);
@@ -136,12 +136,12 @@ namespace
             return bRet;
         }
 
-        virtual sal_Int32 size()
+        virtual sal_Int32 size() SAL_OVERRIDE
         {
             return static_cast<sal_Int32>(m_aNameMap.size());
         }
 
-        virtual Sequence< OUString > getElementNames()
+        virtual Sequence< OUString > getElementNames() SAL_OVERRIDE
         {
             Sequence< OUString > aNameList(m_aElements.size());
 
@@ -153,12 +153,12 @@ namespace
             return aNameList;
         }
 
-        virtual OUString getName(sal_Int32 _nIndex)
+        virtual OUString getName(sal_Int32 _nIndex) SAL_OVERRIDE
         {
             return m_aElements[_nIndex]->first;
         }
 
-        virtual void disposeAndErase(sal_Int32 _nIndex)
+        virtual void disposeAndErase(sal_Int32 _nIndex) SAL_OVERRIDE
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             Reference<XComponent> xComp(m_aElements[_nIndex]->second.get(),UNO_QUERY);
@@ -170,7 +170,7 @@ namespace
             m_aNameMap.erase(sName);
         }
 
-        virtual void disposeElements()
+        virtual void disposeElements() SAL_OVERRIDE
         {
             for( ObjectIter aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
             {
@@ -185,37 +185,37 @@ namespace
             m_aNameMap.clear();
         }
 
-        virtual sal_Int32 findColumn( const OUString& columnName )
+        virtual sal_Int32 findColumn( const OUString& columnName ) SAL_OVERRIDE
         {
             ObjectIter aIter = m_aNameMap.find(columnName);
             OSL_ENSURE(aIter != m_aNameMap.end(),"findColumn:: Illegal name!");
             return m_aElements.size() - (m_aElements.end() - ::std::find(m_aElements.begin(),m_aElements.end(),aIter));
         }
 
-        virtual OUString findColumnAtIndex(  sal_Int32 _nIndex)
+        virtual OUString findColumnAtIndex(  sal_Int32 _nIndex) SAL_OVERRIDE
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             return m_aElements[_nIndex]->first;
         }
 
-        virtual ObjectType getObject(sal_Int32 _nIndex)
+        virtual ObjectType getObject(sal_Int32 _nIndex) SAL_OVERRIDE
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             return m_aElements[_nIndex]->second;
         }
 
-        virtual ObjectType getObject(const OUString& columnName)
+        virtual ObjectType getObject(const OUString& columnName) SAL_OVERRIDE
         {
             return m_aNameMap.find(columnName)->second;
         }
 
-        virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject)
+        virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject) SAL_OVERRIDE
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             m_aElements[_nIndex]->second = _xObject;
         }
 
-        sal_Bool isCaseSensitive() const
+        sal_Bool isCaseSensitive() const SAL_OVERRIDE
         {
             return m_aNameMap.key_comp().isCaseSensitive();
         }

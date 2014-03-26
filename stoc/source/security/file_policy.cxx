@@ -68,7 +68,7 @@ class FilePolicy
     bool m_init;
 
 protected:
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
     FilePolicy( Reference< XComponentContext > const & xComponentContext )
@@ -79,19 +79,19 @@ public:
     // XPolicy impl
     virtual Sequence< Any > SAL_CALL getPermissions(
         OUString const & userId )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< Any > SAL_CALL getDefaultPermissions()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL refresh()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext )

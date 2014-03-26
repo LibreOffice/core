@@ -45,17 +45,17 @@ namespace cppcanvas
 
             virtual ~ImplSpriteCanvas();
 
-            virtual void                    setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
+            virtual void                    setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) SAL_OVERRIDE;
 
-            virtual bool                    updateScreen( bool bUpdateAll ) const;
+            virtual bool                    updateScreen( bool bUpdateAll ) const SAL_OVERRIDE;
 
-            virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const;
-            virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const;
+            virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const SAL_OVERRIDE;
+            virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const SAL_OVERRIDE;
 
-            virtual CanvasSharedPtr         clone() const;
+            virtual CanvasSharedPtr         clone() const SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const;
+                ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const SAL_OVERRIDE;
 
             /** This class passes the view transformation
                 to child sprites

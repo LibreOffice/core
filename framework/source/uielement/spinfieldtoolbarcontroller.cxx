@@ -63,17 +63,17 @@ class SpinfieldControl : public SpinField
         SpinfieldControl( Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener );
         virtual ~SpinfieldControl();
 
-        virtual void Up();
-        virtual void Down();
-        virtual void First();
-        virtual void Last();
-        virtual void KeyInput( const ::KeyEvent& rKEvt );
-        virtual void Modify();
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual void StateChanged( StateChangedType nType );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
-        virtual bool PreNotify( NotifyEvent& rNEvt );
+        virtual void Up() SAL_OVERRIDE;
+        virtual void Down() SAL_OVERRIDE;
+        virtual void First() SAL_OVERRIDE;
+        virtual void Last() SAL_OVERRIDE;
+        virtual void KeyInput( const ::KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void Modify() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
         ISpinfieldListener* m_pSpinFieldListener;

@@ -33,11 +33,11 @@ class DocumentHandler: public OdfDocumentHandler
 {
 public:
     DocumentHandler(Reference < XDocumentHandler > &xHandler);
-    void startDocument();
-    void endDocument();
-    void startElement(const char *psName, const WPXPropertyList &xPropList);
-    void endElement(const char *psName);
-    void characters(const WPXString &sCharacters);
+    void startDocument() SAL_OVERRIDE;
+    void endDocument() SAL_OVERRIDE;
+    void startElement(const char *psName, const WPXPropertyList &xPropList) SAL_OVERRIDE;
+    void endElement(const char *psName) SAL_OVERRIDE;
+    void characters(const WPXString &sCharacters) SAL_OVERRIDE;
 
 private:
     Reference < XDocumentHandler > mxHandler;

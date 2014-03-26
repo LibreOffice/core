@@ -29,7 +29,7 @@ public:
 private:
     virtual ~Cursor() throw () {}
 
-    virtual rtl::Reference< Entity > getNext(OUString * name);
+    virtual rtl::Reference< Entity > getNext(OUString * name) SAL_OVERRIDE;
 
     std::map< OUString, rtl::Reference<Entity> > const & map_; //TODO: extent
     std::map< OUString, rtl::Reference<Entity> >::const_iterator iterator_;
@@ -55,9 +55,9 @@ public:
 private:
     virtual ~Module() throw () {}
 
-    virtual std::vector<rtl::OUString> getMemberNames() const;
+    virtual std::vector<rtl::OUString> getMemberNames() const SAL_OVERRIDE;
 
-    virtual rtl::Reference<MapCursor> createCursor() const
+    virtual rtl::Reference<MapCursor> createCursor() const SAL_OVERRIDE
     { return new Cursor(map); }
 };
 

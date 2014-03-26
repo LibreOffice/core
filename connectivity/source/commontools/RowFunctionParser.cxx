@@ -62,18 +62,18 @@ public:
         maValue( rValue )
     {
     }
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
     {
         return maValue;
     }
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
     {
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return FUNC_CONST;
     }
-    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ )
+    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
     {
         ODatabaseMetaDataResultSet::ORow aRet;
         return aRet;
@@ -98,7 +98,7 @@ public:
         mpSecondArg( rSecondArg )
     {
     }
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const SAL_OVERRIDE
     {
         ORowSetValueDecoratorRef aRet;
         switch(meFunct)
@@ -117,7 +117,7 @@ public:
         }
         return aRet;
     }
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const SAL_OVERRIDE
     {
         switch(meFunct)
         {
@@ -128,11 +128,11 @@ public:
                 break;
         }
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return meFunct;
     }
-    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ )
+    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) SAL_OVERRIDE
     {
         ODatabaseMetaDataResultSet::ORow aRet;
         return aRet;
@@ -252,18 +252,18 @@ public:
         mpArg( rArg )
     {
     }
-    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const SAL_OVERRIDE
     {
         return _aRow[mpArg->evaluate(_aRow )->getValue().getInt32()];
     }
-    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
     {
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return meFunct;
     }
-    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ )
+    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
     {
         ODatabaseMetaDataResultSet::ORow aRet;
         return aRet;

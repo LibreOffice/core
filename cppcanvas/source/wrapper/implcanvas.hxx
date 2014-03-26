@@ -54,25 +54,25 @@ namespace cppcanvas
                             ::com::sun::star::rendering::XCanvas >& rCanvas );
             virtual ~ImplCanvas();
 
-            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
-            virtual ::basegfx::B2DHomMatrix          getTransformation() const;
+            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) SAL_OVERRIDE;
+            virtual ::basegfx::B2DHomMatrix          getTransformation() const SAL_OVERRIDE;
 
-            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
-            virtual void                             setClip();
-            virtual ::basegfx::B2DPolyPolygon const* getClip() const;
+            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) SAL_OVERRIDE;
+            virtual void                             setClip() SAL_OVERRIDE;
+            virtual ::basegfx::B2DPolyPolygon const* getClip() const SAL_OVERRIDE;
 
-            virtual FontSharedPtr                    createFont( const OUString& rFontName, const double& rCellSize ) const;
+            virtual FontSharedPtr                    createFont( const OUString& rFontName, const double& rCellSize ) const SAL_OVERRIDE;
 
-            virtual ColorSharedPtr                   createColor() const;
+            virtual ColorSharedPtr                   createColor() const SAL_OVERRIDE;
 
-            virtual CanvasSharedPtr                  clone() const;
+            virtual CanvasSharedPtr                  clone() const SAL_OVERRIDE;
 
-            virtual void                             clear() const;
+            virtual void                             clear() const SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvas >      getUNOCanvas() const;
+                ::com::sun::star::rendering::XCanvas >      getUNOCanvas() const SAL_OVERRIDE;
 
-            virtual ::com::sun::star::rendering::ViewState  getViewState() const;
+            virtual ::com::sun::star::rendering::ViewState  getViewState() const SAL_OVERRIDE;
 
             // take compiler-provided default copy constructor
             //ImplCanvas(const ImplCanvas&);

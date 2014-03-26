@@ -72,7 +72,7 @@ namespace filter {
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& userData)
-                throw (IllegalArgumentException, RuntimeException, std::exception);
+                throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XExportFilter
             virtual sal_Bool SAL_CALL
@@ -80,7 +80,7 @@ namespace filter {
                      const Sequence< PropertyValue >& sourceData,
                      const Sequence< OUString >& userData)
                 throw (IllegalArgumentException,
-                       RuntimeException, std::exception);
+                       RuntimeException, std::exception) SAL_OVERRIDE;
 
             // UNO component helper methods
 

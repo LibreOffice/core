@@ -70,8 +70,8 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgGradientNode();
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
 
             /// collect gradient stop entries
             void collectGradientEntries(drawinglayer::primitive2d::SvgGradientEntryVector& aVector) const;

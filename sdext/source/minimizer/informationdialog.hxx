@@ -79,8 +79,8 @@ class OKActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XA
 public:
     OKActionListener( InformationDialog& rInformationDialog ) : mrInformationDialog( rInformationDialog ){};
 
-    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
     InformationDialog& mrInformationDialog;

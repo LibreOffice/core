@@ -244,7 +244,7 @@ public:
 
     // XCurrentContext
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_prevContext;
 };

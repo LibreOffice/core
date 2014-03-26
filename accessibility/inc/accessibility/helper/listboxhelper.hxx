@@ -46,12 +46,12 @@ public:
         m_aComboListBox( _pListBox ){}
 
 
-    virtual OUString        GetEntry( sal_Int32  nPos ) const
+    virtual OUString        GetEntry( sal_Int32  nPos ) const SAL_OVERRIDE
     {
         return m_aComboListBox.GetEntry( nPos );
     }
 
-    virtual Rectangle       GetDropDownPosSizePixel() const
+    virtual Rectangle       GetDropDownPosSizePixel() const SAL_OVERRIDE
     {
         Rectangle aTemp = m_aComboListBox.GetWindowExtentsRelative(NULL);
         Rectangle aRet = m_aComboListBox.GetDropDownPosSizePixel();
@@ -59,7 +59,7 @@ public:
         return aRet;
     }
 
-    virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const
+    virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const SAL_OVERRIDE
     {
         Rectangle aRect;
         if ( m_aComboListBox.IsInDropDown() && IsEntryVisible( nItem ) )
@@ -76,94 +76,94 @@ public:
         return aRect;
     }
 
-    virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow )
+    virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow ) SAL_OVERRIDE
     {
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }
 
-    virtual bool            IsActive() const
+    virtual bool            IsActive() const SAL_OVERRIDE
     {
         return m_aComboListBox.IsActive();
     }
 
-    virtual bool            IsEnabled() const
+    virtual bool            IsEnabled() const SAL_OVERRIDE
     {
         return m_aComboListBox.IsEnabled();
     }
 
-    virtual bool            IsEntryVisible( sal_Int32  nPos ) const
+    virtual bool            IsEntryVisible( sal_Int32  nPos ) const SAL_OVERRIDE
     {
         sal_Int32  nTopEntry = m_aComboListBox.GetTopEntry();
         sal_uInt16 nLines = m_aComboListBox.GetDisplayLineCount();
         return ( nPos >= nTopEntry && nPos < ( nTopEntry + nLines ) );
     }
 
-    virtual sal_uInt16      GetDisplayLineCount() const
+    virtual sal_uInt16      GetDisplayLineCount() const SAL_OVERRIDE
     {
         return m_aComboListBox.GetDisplayLineCount();
     }
 
-    virtual void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
+    virtual void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const SAL_OVERRIDE
     {
         m_aComboListBox.GetMaxVisColumnsAndLines(rnCols,rnLines);
     }
 
-    virtual WinBits         GetStyle() const
+    virtual WinBits         GetStyle() const SAL_OVERRIDE
     {
         return m_aComboListBox.GetStyle();
     }
 
-    virtual bool            IsMultiSelectionEnabled() const
+    virtual bool            IsMultiSelectionEnabled() const SAL_OVERRIDE
     {
         return m_aComboListBox.IsMultiSelectionEnabled();
     }
 
-    virtual sal_Int32       GetTopEntry() const
+    virtual sal_Int32       GetTopEntry() const SAL_OVERRIDE
     {
         return m_aComboListBox.GetTopEntry();
     }
 
-    virtual bool            IsEntryPosSelected( sal_Int32  nPos ) const
+    virtual bool            IsEntryPosSelected( sal_Int32  nPos ) const SAL_OVERRIDE
     {
         return m_aComboListBox.IsEntryPosSelected(nPos);
     }
 
-    virtual sal_Int32       GetEntryCount() const
+    virtual sal_Int32       GetEntryCount() const SAL_OVERRIDE
     {
         return m_aComboListBox.GetEntryCount();
     }
 
-    virtual void            Select()
+    virtual void            Select() SAL_OVERRIDE
     {
         m_aComboListBox.Select();
     }
 
-    virtual void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true )
+    virtual void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true ) SAL_OVERRIDE
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
 
-    virtual sal_Int32       GetSelectEntryCount() const
+    virtual sal_Int32       GetSelectEntryCount() const SAL_OVERRIDE
     {
         return m_aComboListBox.GetSelectEntryCount();
     }
 
-    virtual void    SetNoSelection()
+    virtual void    SetNoSelection() SAL_OVERRIDE
     {
         m_aComboListBox.SetNoSelection();
     }
 
-    virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const
+    virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const SAL_OVERRIDE
     {
         return m_aComboListBox.GetSelectEntryPos(nSelIndex);
     }
 
-    virtual bool            IsInDropDown() const
+    virtual bool            IsInDropDown() const SAL_OVERRIDE
     {
         return m_aComboListBox.IsInDropDown();
     }
 
-    virtual Rectangle GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const
+    virtual Rectangle GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const SAL_OVERRIDE
     {
         Rectangle aRect;
 
@@ -176,13 +176,13 @@ public:
         return aRect;
     }
 
-    long GetIndexForPoint( const Point& rPoint, sal_Int32& nPos ) const
+    long GetIndexForPoint( const Point& rPoint, sal_Int32& nPos ) const SAL_OVERRIDE
     {
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >
-        GetClipboard()
+        GetClipboard() SAL_OVERRIDE
     {
         return m_aComboListBox.GetClipboard();
     }

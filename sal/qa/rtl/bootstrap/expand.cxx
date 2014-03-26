@@ -20,7 +20,7 @@ namespace {
 
 class Test: public CppUnit::TestFixture {
 public:
-    virtual void setUp();
+    virtual void setUp() SAL_OVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE(Test);

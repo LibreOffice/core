@@ -47,7 +47,7 @@ public:
 
     // XInputStreamProvider
     virtual Reference< io::XInputStream > SAL_CALL createInputStream()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 Reference< io::XInputStream > InputStreamProvider::createInputStream()
     throw (RuntimeException, std::exception)

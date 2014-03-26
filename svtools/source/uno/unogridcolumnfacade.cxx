@@ -103,10 +103,10 @@ namespace svt { namespace table
         ~ColumnChangeMultiplexer();
 
         // XGridColumnListener
-        virtual void SAL_CALL columnChanged( const GridColumnEvent& i_event ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL columnChanged( const GridColumnEvent& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& i_event ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& i_event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         UnoGridColumnFacade* m_pColumnImplementation;

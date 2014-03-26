@@ -36,7 +36,7 @@ protected:
                             bool bEnableFoFontFamily,
                             ::std::vector< XMLPropertyState >& rProperties,
                             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet
-                            ) const;
+                            ) const SAL_OVERRIDE;
 
 public:
                         XMLPageMasterExportPropMapper(
@@ -51,7 +51,7 @@ public:
                             sal_uInt16 nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
-                            ) const;
+                            ) const SAL_OVERRIDE;
     virtual void        handleSpecialItem(
                             SvXMLAttributeList& rAttrList,
                             const XMLPropertyState& rProperty,
@@ -59,7 +59,7 @@ public:
                             const SvXMLNamespaceMap& rNamespaceMap,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
-                            ) const;
+                            ) const SAL_OVERRIDE;
 
     inline XMLBackgroundImageExport& GetBackgroundImageExport()
                                 { return aBackgroundImageExport; }

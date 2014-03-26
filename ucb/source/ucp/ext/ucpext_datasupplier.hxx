@@ -51,22 +51,22 @@ namespace ucb { namespace ucp { namespace ext
     protected:
         virtual ~DataSupplier();
 
-        virtual OUString queryContentIdentifierString( sal_uInt32 nIndex );
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > queryContentIdentifier( sal_uInt32 nIndex );
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > queryContent( sal_uInt32 nIndex );
+        virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) SAL_OVERRIDE;
+        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > queryContentIdentifier( sal_uInt32 nIndex ) SAL_OVERRIDE;
+        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > queryContent( sal_uInt32 nIndex ) SAL_OVERRIDE;
 
-        virtual bool getResult( sal_uInt32 nIndex );
+        virtual bool getResult( sal_uInt32 nIndex ) SAL_OVERRIDE;
 
-        virtual sal_uInt32 totalCount();
-        virtual sal_uInt32 currentCount();
-        virtual bool isCountFinal();
+        virtual sal_uInt32 totalCount() SAL_OVERRIDE;
+        virtual sal_uInt32 currentCount() SAL_OVERRIDE;
+        virtual bool isCountFinal() SAL_OVERRIDE;
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > queryPropertyValues( sal_uInt32 nIndex  );
-        virtual void releasePropertyValues( sal_uInt32 nIndex );
+        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > queryPropertyValues( sal_uInt32 nIndex  ) SAL_OVERRIDE;
+        virtual void releasePropertyValues( sal_uInt32 nIndex ) SAL_OVERRIDE;
 
-        virtual void close();
+        virtual void close() SAL_OVERRIDE;
 
-        virtual void validate() throw( com::sun::star::ucb::ResultSetException );
+        virtual void validate() throw( com::sun::star::ucb::ResultSetException ) SAL_OVERRIDE;
 
     private:
         ::boost::scoped_ptr< DataSupplier_Impl >    m_pImpl;

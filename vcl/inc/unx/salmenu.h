@@ -29,19 +29,19 @@ public:
     X11SalMenu() {}
     virtual ~X11SalMenu();
 
-    virtual bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
+    virtual bool VisibleMenuBar() SAL_OVERRIDE;  // must return TRUE to actually DISPLAY native menu bars
                             // otherwise only menu messages are processed (eg, OLE on Windows)
 
-    virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
-    virtual void RemoveItem( unsigned nPos );
-    virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
-    virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, bool bCheck );
-    virtual void EnableItem( unsigned nPos, bool bEnable );
-    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
-    virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );
-    virtual void GetSystemMenuData( SystemMenuData* pData );
+    virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) SAL_OVERRIDE;
+    virtual void RemoveItem( unsigned nPos ) SAL_OVERRIDE;
+    virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) SAL_OVERRIDE;
+    virtual void SetFrame( const SalFrame* pFrame ) SAL_OVERRIDE;
+    virtual void CheckItem( unsigned nPos, bool bCheck ) SAL_OVERRIDE;
+    virtual void EnableItem( unsigned nPos, bool bEnable ) SAL_OVERRIDE;
+    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText ) SAL_OVERRIDE;
+    virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) SAL_OVERRIDE;
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
+    virtual void GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
 };
 
 class X11SalMenuItem : public SalMenuItem

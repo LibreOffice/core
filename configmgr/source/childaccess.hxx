@@ -67,36 +67,36 @@ public:
         Components & components, rtl::Reference< RootAccess > const & root,
         rtl::Reference< Node > const & node);
 
-    virtual Path getAbsolutePath();
-    virtual Path getRelativePath();
+    virtual Path getAbsolutePath() SAL_OVERRIDE;
+    virtual Path getRelativePath() SAL_OVERRIDE;
 
-    virtual OUString getRelativePathRepresentation();
-    virtual rtl::Reference< Node > getNode();
+    virtual OUString getRelativePathRepresentation() SAL_OVERRIDE;
+    virtual rtl::Reference< Node > getNode() SAL_OVERRIDE;
 
-    virtual bool isFinalized();
+    virtual bool isFinalized() SAL_OVERRIDE;
 
-    virtual OUString getNameInternal();
+    virtual OUString getNameInternal() SAL_OVERRIDE;
 
-    virtual rtl::Reference< RootAccess > getRootAccess();
-    virtual rtl::Reference< Access > getParentAccess();
+    virtual rtl::Reference< RootAccess > getRootAccess() SAL_OVERRIDE;
+    virtual rtl::Reference< Access > getParentAccess() SAL_OVERRIDE;
 
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL getParent()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setParent(
         com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
             const &)
         throw (
             com::sun::star::lang::NoSupportException,
-            com::sun::star::uno::RuntimeException, std::exception);
+            com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int64 SAL_CALL getSomething(
         com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void bind(
         rtl::Reference< RootAccess > const & root,
@@ -121,14 +121,14 @@ private:
     virtual ~ChildAccess();
 
     virtual void addTypes(
-        std::vector< com::sun::star::uno::Type > * types) const;
+        std::vector< com::sun::star::uno::Type > * types) const SAL_OVERRIDE;
 
     virtual void addSupportedServiceNames(
-        std::vector< OUString > * services);
+        std::vector< OUString > * services) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null if free node

@@ -94,21 +94,21 @@ namespace x11 {
         void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( ::com::sun::star::uno::Exception, std::exception );
+        virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XDropTarget
-        virtual void        SAL_CALL addDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception);
-        virtual void        SAL_CALL removeDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception);
-        virtual sal_Bool    SAL_CALL isActive() throw(std::exception);
-        virtual void        SAL_CALL setActive( sal_Bool active ) throw(std::exception);
-        virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception);
-        virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception);
+        virtual void        SAL_CALL addDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL removeDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Bool    SAL_CALL isActive() throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL setActive( sal_Bool active ) throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) SAL_OVERRIDE;
+        virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(std::exception);
-        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw(std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw(std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString >
-                            SAL_CALL getSupportedServiceNames() throw(std::exception);
+                            SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
     };
 
     class SelectionManagerHolder :
@@ -126,23 +126,23 @@ namespace x11 {
         virtual ~SelectionManagerHolder();
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(std::exception);
-        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw(std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw(std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString >
-                            SAL_CALL getSupportedServiceNames() throw(std::exception);
+                            SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception );
+        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XDragSource
-        virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception);
-        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception);
+        virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception) SAL_OVERRIDE;
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-            ) throw(std::exception);
+            ) throw(std::exception) SAL_OVERRIDE;
 
     };
 
@@ -476,35 +476,35 @@ namespace x11 {
         void shutdown() throw();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception );
+        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         // XEventHandler
-        virtual sal_Bool    SAL_CALL handleEvent( const Any& event ) throw(std::exception);
+        virtual sal_Bool    SAL_CALL handleEvent( const Any& event ) throw(std::exception) SAL_OVERRIDE;
 
         // XDragSource
-        virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception);
-        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception);
+        virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) SAL_OVERRIDE;
+        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception) SAL_OVERRIDE;
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-            ) throw(std::exception);
+            ) throw(std::exception) SAL_OVERRIDE;
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
-        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw();
-        virtual void clearTransferable() throw();
-        virtual void fireContentsChanged() throw();
-        virtual com::sun::star::uno::Reference< XInterface > getReference() throw();
+        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw() SAL_OVERRIDE;
+        virtual void clearTransferable() throw() SAL_OVERRIDE;
+        virtual void fireContentsChanged() throw() SAL_OVERRIDE;
+        virtual com::sun::star::uno::Reference< XInterface > getReference() throw() SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-                throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception );
+                throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-                throw( ::com::sun::star::uno::RuntimeException, std::exception );
+                throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     };
 
 

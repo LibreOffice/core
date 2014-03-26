@@ -59,13 +59,13 @@ class ComboBoxControl : public ComboBox
         ComboBoxControl( Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener );
         virtual ~ComboBoxControl();
 
-        virtual void Select();
-        virtual void DoubleClick();
-        virtual void Modify();
-        virtual void KeyInput( const ::KeyEvent& rKEvt );
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual bool PreNotify( NotifyEvent& rNEvt );
+        virtual void Select() SAL_OVERRIDE;
+        virtual void DoubleClick() SAL_OVERRIDE;
+        virtual void Modify() SAL_OVERRIDE;
+        virtual void KeyInput( const ::KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
         IComboBoxListener* m_pComboBoxListener;

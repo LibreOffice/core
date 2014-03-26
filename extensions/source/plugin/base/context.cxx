@@ -77,9 +77,9 @@ public:
     virtual ~FileSink();
 
     // ::com::sun::star::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception);
-    virtual void SAL_CALL flush() throw(std::exception);
-    virtual void SAL_CALL closeOutput() throw(std::exception);
+    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw(std::exception) SAL_OVERRIDE;
 };
 
 }
@@ -95,14 +95,14 @@ public:
     virtual ~XPluginContext_Impl();
 
 
-    virtual OUString SAL_CALL getValue(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, ::com::sun::star::plugin::PluginVariable variable) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual void SAL_CALL getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual void SAL_CALL getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual void SAL_CALL postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual void SAL_CALL postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual void SAL_CALL newStream(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual void SAL_CALL displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& message) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
-    virtual OUString SAL_CALL getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception );
+    virtual OUString SAL_CALL getValue(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, ::com::sun::star::plugin::PluginVariable variable) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL newStream(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& message) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin) throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw(std::exception)

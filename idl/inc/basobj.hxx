@@ -135,10 +135,10 @@ public:
     virtual const SvString&     GetDescription() const{ return aDescription; }
 
     virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                       WriteType, WriteAttribute = 0);
+                                       WriteType, WriteAttribute = 0) SAL_OVERRIDE;
     void                WriteDescription( SvStream& rOutStm );
 };
 SV_DECL_IMPL_REF(SvMetaName)
@@ -155,7 +155,7 @@ public:
             SV_DECL_META_FACTORY1( SvMetaReference, SvMetaName, 17 )
             SvMetaReference();
 
-    const SvString &    GetName() const
+    const SvString &    GetName() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
                                     || !SvMetaName::GetName().getString().isEmpty() )
@@ -163,7 +163,7 @@ public:
                                 : aRef->GetName();
                         }
 
-    const SvString &    GetHelpText() const
+    const SvString &    GetHelpText() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
                                     || !SvMetaName::GetHelpText().getString().isEmpty() )
@@ -171,7 +171,7 @@ public:
                                 : aRef->GetHelpText();
                         }
 
-    const SvString &    GetConfigName() const
+    const SvString &    GetConfigName() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
                                     || !SvMetaName::GetConfigName().getString().isEmpty() )
@@ -179,7 +179,7 @@ public:
                                 : aRef->GetConfigName();
                         }
 
-    const SvString &    GetDescription() const
+    const SvString &    GetDescription() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
                                     || !SvMetaName::GetDescription().getString().isEmpty() )
@@ -213,17 +213,17 @@ public:
     const SvGlobalName &GetUUId() const;
     const SvVersion &   GetVersion() const { return aVersion; }
     void                SetModule( SvIdlDataBase & rBase );
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0);
+                                  WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 protected:
-    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                              SvStream & rOutStm, sal_uInt16 nTab );
+                                              SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                          WriteType, WriteAttribute = 0);
+                                          WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 };
 SV_DECL_IMPL_REF(SvMetaExtern)
 

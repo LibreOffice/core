@@ -109,7 +109,7 @@ protected:
 
         @see ThreadSafeValue
     */
-    void SAL_CALL run()
+    void SAL_CALL run() SAL_OVERRIDE
         {
             while(schedule())
             {
@@ -128,7 +128,7 @@ protected:
 
 public:
 
-    virtual void SAL_CALL suspend()
+    virtual void SAL_CALL suspend() SAL_OVERRIDE
         {
             ::osl::Thread::suspend();
         }
@@ -154,11 +154,11 @@ namespace rtl_DoubleLocking
     public:
 
         // initialise your test code values here.
-        void setUp()
+        void setUp() SAL_OVERRIDE
             {
             }
 
-        void tearDown()
+        void tearDown() SAL_OVERRIDE
             {
             }
 

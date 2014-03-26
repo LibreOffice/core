@@ -255,18 +255,18 @@ class PageCache_Impl :
     // PageCache Implementation
     virtual storeError lookupPageAt_Impl (
         PageHolder & rxPage,
-        sal_uInt32   nOffset);
+        sal_uInt32   nOffset) SAL_OVERRIDE;
 
     virtual storeError insertPageAt_Impl (
         PageHolder const & rxPage,
-        sal_uInt32         nOffset);
+        sal_uInt32         nOffset) SAL_OVERRIDE;
 
     virtual storeError updatePageAt_Impl (
         PageHolder const & rxPage,
-        sal_uInt32         nOffset);
+        sal_uInt32         nOffset) SAL_OVERRIDE;
 
     virtual storeError removePageAt_Impl (
-        sal_uInt32 nOffset);
+        sal_uInt32 nOffset) SAL_OVERRIDE;
 
     // Not implemented
     PageCache_Impl (PageCache_Impl const &);
@@ -277,8 +277,8 @@ public:
     explicit PageCache_Impl (sal_uInt16 nPageSize);
 
     // Delegate multiple inherited IReference
-    virtual oslInterlockedCount SAL_CALL acquire();
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 protected:
     // Destruction

@@ -97,7 +97,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -113,7 +113,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
@@ -129,7 +129,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() throw();
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
 
     //  XConnectionPointContainer
@@ -149,7 +149,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getConnectionPointTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -166,7 +166,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
         const ::com::sun::star::uno::Type& aType
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -184,7 +184,7 @@ public:
     virtual void SAL_CALL advise(
         const   ::com::sun::star::uno::Type&                              aType ,
         const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -202,7 +202,7 @@ public:
     virtual void SAL_CALL unadvise(
         const   ::com::sun::star::uno::Type&                              aType       ,
         const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short

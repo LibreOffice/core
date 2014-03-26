@@ -295,10 +295,10 @@ public:
     virtual void    PopupModeEnd();
     virtual void    Resizing( Size& rSize );
     virtual bool    Close();
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            SetPin( bool bPin );
     bool            IsPinned() const;
@@ -333,13 +333,13 @@ public:
 
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
     void            SetPosSizePixel( const Point& rNewPos,
-                                     const Size& rNewSize )
+                                     const Size& rNewSize ) SAL_OVERRIDE
                         { Window::SetPosSizePixel( rNewPos, rNewSize ); }
-    Point           GetPosPixel() const;
-    Size            GetSizePixel() const;
-    void            SetOutputSizePixel( const Size& rNewSize );
+    Point           GetPosPixel() const SAL_OVERRIDE;
+    Size            GetSizePixel() const SAL_OVERRIDE;
+    void            SetOutputSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
     Size            GetOutputSizePixel() const;
 };
 

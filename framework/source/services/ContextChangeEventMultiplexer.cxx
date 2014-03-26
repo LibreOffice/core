@@ -55,38 +55,38 @@ public:
     ContextChangeEventMultiplexer();
     virtual ~ContextChangeEventMultiplexer (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     // XContextChangeEventMultiplexer
     virtual void SAL_CALL addContextChangeEventListener (
         const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
         const cssu::Reference<cssu::XInterface>& rxEventFocus)
-        throw(cssu::RuntimeException, cssl::IllegalArgumentException, std::exception);
+        throw(cssu::RuntimeException, cssl::IllegalArgumentException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeContextChangeEventListener (
         const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
         const cssu::Reference<cssu::XInterface>& rxEventFocus)
-        throw(cssu::RuntimeException, cssl::IllegalArgumentException, std::exception);
+        throw(cssu::RuntimeException, cssl::IllegalArgumentException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeAllContextChangeEventListeners (
         const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener)
-        throw(cssu::RuntimeException, cssl::IllegalArgumentException, std::exception);
+        throw(cssu::RuntimeException, cssl::IllegalArgumentException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL broadcastContextChangeEvent (
         const css::ui::ContextChangeEventObject& rContextChangeEventObject,
         const cssu::Reference<cssu::XInterface>& rxEventFocus)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService  (
         const ::rtl::OUString& rsServiceName)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual cssu::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     typedef ::std::vector<cssu::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;

@@ -111,10 +111,10 @@ class ClassName : public ListenerMultiplexerBase, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception); \
-    void                        SAL_CALL acquire() throw()  { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
-    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+    void                        SAL_CALL acquire() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::acquire(); } \
+    void                        SAL_CALL release() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::release(); } \
+    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 
@@ -123,10 +123,10 @@ class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public Inter
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception); \
-    void                        SAL_CALL acquire() throw()  { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw()  { ListenerMultiplexerBase::release(); } \
-    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+    void                        SAL_CALL acquire() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::acquire(); } \
+    void                        SAL_CALL release() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::release(); } \
+    void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 
@@ -250,7 +250,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 
 
 #define DECLIMPL_SUPPORTS_SERVICE( ) \
-    sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
+    sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
     { \
         ::com::sun::star::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() ); \
         const OUString* pSupported = aServiceNames.getConstArray(); \
@@ -264,8 +264,8 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) { return OUString("stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)   \
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE   \
                             { \
                                 ::com::sun::star::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
@@ -276,8 +276,8 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 
 
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
-    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) { return OUString("stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)   \
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE   \
                             { \
                                 ::com::sun::star::uno::Sequence< OUString > aNames( 1 ); \
                                 aNames[ 0 ] = OUString::createFromAscii( ServiceName ); \

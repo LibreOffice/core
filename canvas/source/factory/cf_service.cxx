@@ -98,31 +98,31 @@ public:
     CanvasFactory( Reference<XComponentContext> const & xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMultiComponentFactory
     virtual Sequence<OUString> SAL_CALL getAvailableServiceNames()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference<XInterface> SAL_CALL createInstanceWithContext(
         OUString const & name,
-        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception);
+        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception) SAL_OVERRIDE;
     virtual Reference<XInterface> SAL_CALL
     createInstanceWithArgumentsAndContext(
         OUString const & name,
         Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception);
+        Reference<XComponentContext> const & xContext ) throw (Exception, std::exception) SAL_OVERRIDE;
 
     // XMultiServiceFactory
     virtual Reference<XInterface> SAL_CALL createInstance(
         OUString const & name )
-        throw (Exception, std::exception);
+        throw (Exception, std::exception) SAL_OVERRIDE;
     virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(
         OUString const & name, Sequence<Any> const & args )
-        throw (Exception, std::exception);
+        throw (Exception, std::exception) SAL_OVERRIDE;
 };
 
 CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :

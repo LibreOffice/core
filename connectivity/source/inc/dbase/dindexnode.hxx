@@ -56,9 +56,9 @@ namespace connectivity
             inline ONDXKey(const ONDXKey& rKey);
 
             inline ONDXKey& operator= (const ONDXKey& rKey);
-            virtual void setValue(const ORowSetValue& _rVal);
+            virtual void setValue(const ORowSetValue& _rVal) SAL_OVERRIDE;
 
-            virtual const ORowSetValue& getValue() const;
+            virtual const ORowSetValue& getValue() const SAL_OVERRIDE;
 
             sal_uInt32 GetRecord() const        { return nRecord;   }
             void setRecord(sal_uInt32 _nRec)    { nRecord = _nRec;  }
@@ -175,7 +175,7 @@ namespace connectivity
             ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage* = NULL);
             ~ONDXPage();
 
-            virtual void QueryDelete();
+            virtual void QueryDelete() SAL_OVERRIDE;
 
             void SetModified(sal_Bool bMod) {bModified = bMod;}
             void SetPagePos(sal_uInt32 nPage) {nPagePos = nPage;}

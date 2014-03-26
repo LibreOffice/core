@@ -140,8 +140,8 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
 
         /** is called from the ConfigManager before application ends or from the
             PropertyChangeListener if the sub tree broadcasts changes. */
-        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-        virtual void Commit();
+        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+        virtual void Commit() SAL_OVERRIDE;
 
         private:
             // Wrapper methods for low-level functions
@@ -248,19 +248,19 @@ public:
     virtual ~SubstitutePathVariables();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return OUString("com.sun.star.comp.framework.PathSubstitution");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.util.PathSubstitution");
@@ -269,11 +269,11 @@ public:
 
     // XStringSubstitution
     virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     DECL_LINK(implts_ConfigurationNotify, void *);

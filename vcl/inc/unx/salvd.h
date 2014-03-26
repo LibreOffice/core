@@ -76,12 +76,12 @@ public:
     int                     GetHeight() const { return nDY_; }
     SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
 
-    virtual SalGraphics*    AcquireGraphics();
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics );
+    virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
 
                             // Set new size, without saving the old contents
-    virtual bool        SetSize( long nNewDX, long nNewDY );
-    virtual void            GetSize( long& rWidth, long& rHeight );
+    virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 };
 
 

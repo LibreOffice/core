@@ -161,9 +161,9 @@ public:
     void AddAttribute( sal_uInt16 nPrefix, XMLTokenEnum eToken,
                        const OUString &sValue );
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
 
-    virtual void Export();
+    virtual void Export() SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTypedPropertiesOOoTContext_Impl, XMLPersElemContentTContext );
@@ -249,17 +249,17 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const OUString& rQName,
-            const Reference< XAttributeList >& rAttrList );
+            const Reference< XAttributeList >& rAttrList ) SAL_OVERRIDE;
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual void Export();
+    virtual void Export() SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const;
+    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLPropertiesOOoTContext_Impl, XMLTransformerContext );

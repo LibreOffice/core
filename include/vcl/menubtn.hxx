@@ -62,10 +62,10 @@ public:
     explicit        MenuButton( Window* pParent, const ResId& );
     virtual         ~MenuButton();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-    virtual void    Activate();
+    virtual void    Activate() SAL_OVERRIDE;
     virtual void    Select();
 
     void            SetMenuMode( sal_uInt16 nMode );

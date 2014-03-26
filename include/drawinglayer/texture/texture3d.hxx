@@ -50,9 +50,9 @@ namespace drawinglayer
                 double fOpacity);
 
             // compare operator
-            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
+            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const SAL_OVERRIDE;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const SAL_OVERRIDE;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -89,8 +89,8 @@ namespace drawinglayer
                 const basegfx::B2DRange& rRange);
             virtual ~GeoTexSvxBitmapEx();
 
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const SAL_OVERRIDE;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -121,8 +121,8 @@ namespace drawinglayer
                 double fOffsetX = 0.0,
                 double fOffsetY = 0.0);
 
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const SAL_OVERRIDE;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -151,8 +151,8 @@ namespace drawinglayer
         public:
             GeoTexSvxMultiHatch(const primitive3d::HatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize);
             virtual ~GeoTexSvxMultiHatch();
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
+            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
+            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const SAL_OVERRIDE;
 
             // dada access
             bool getFillBackground() const { return mbFillBackground; }

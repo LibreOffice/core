@@ -123,9 +123,9 @@ public:
     ActiveDataSink() {};
 
     virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream()
-        throw (uno::RuntimeException, std::exception) { return m_xStream; };
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_xStream; };
     virtual void SAL_CALL setInputStream( uno::Reference< io::XInputStream > const & rStream )
-        throw (uno::RuntimeException, std::exception) { m_xStream = rStream; };
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { m_xStream = rStream; };
 };
 
 
@@ -150,40 +150,40 @@ public:
     getUpdateInformation(
         uno::Sequence< OUString > const & repositories,
         OUString const & extensionId
-    ) throw (uno::Exception, uno::RuntimeException, std::exception);
+    ) throw (uno::Exception, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL cancel()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setInteractionHandler(
         uno::Reference< task::XInteractionHandler > const & handler )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual uno::Reference< container::XEnumeration > SAL_CALL
     getUpdateInformationEnumeration(
         uno::Sequence< OUString > const & repositories,
         OUString const & extensionId
-    ) throw (uno::Exception, uno::RuntimeException, std::exception);
+    ) throw (uno::Exception, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCommandEnvironment
     virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual uno::Reference< ucb::XProgressHandler > SAL_CALL getProgressHandler()
-        throw ( uno::RuntimeException, std::exception ) { return  uno::Reference< ucb::XProgressHandler >(); };
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE { return  uno::Reference< ucb::XProgressHandler >(); };
 
     // XWebDAVCommandEnvironment
     virtual uno::Sequence< beans::StringPair > SAL_CALL getUserRequestHeaders(
         const OUString&,  ucb::WebDAVHTTPMethod )
-        throw ( uno::RuntimeException, std::exception ) { return m_aRequestHeaderList; };
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE { return m_aRequestHeaderList; };
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
 
@@ -236,8 +236,8 @@ public:
     virtual ~UpdateInformationEnumeration() {};
 
     // XEnumeration
-    sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) { return m_nCount < m_nNodes; };
-    uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_nCount < m_nNodes; };
+    uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         OSL_ASSERT( m_xNodeList.is() );
         OSL_ASSERT( m_xUpdateInformationProvider.is() );
@@ -296,8 +296,8 @@ public:
     virtual ~SingleUpdateInformationEnumeration() {};
 
     // XEnumeration
-    sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) { return 0 == m_nCount; };
-    uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return 0 == m_nCount; };
+    uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if( m_nCount > 0 )
             throw container::NoSuchElementException(OUString::number(m_nCount), *this);

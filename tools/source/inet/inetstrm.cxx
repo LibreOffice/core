@@ -48,7 +48,7 @@ class INetMessageEncodeQPStream_Impl : public INetMessageIStream
     INetMessageStreamState  eState;
     bool                    bDone;
 
-    virtual int GetMsgLine(sal_Char* pData, sal_uIntPtr nSize);
+    virtual int GetMsgLine(sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
     INetMessageEncodeQPStream_Impl(sal_uIntPtr nMsgBufferSize = 1024);
@@ -64,7 +64,7 @@ class INetMessageDecodeQPStream_Impl : public INetMessageOStream
     sal_uIntPtr             nTokBufLen;
     sal_Char                pTokBuffer[4];
 
-    virtual int PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize);
+    virtual int PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
     INetMessageDecodeQPStream_Impl(void);
@@ -88,7 +88,7 @@ class INetMessageEncode64Stream_Impl : public INetMessageIStream
 
     bool         bDone;
 
-    virtual int GetMsgLine(sal_Char* pData, sal_uIntPtr nSize);
+    virtual int GetMsgLine(sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
     INetMessageEncode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 2048);
@@ -105,7 +105,7 @@ class INetMessageDecode64Stream_Impl : public INetMessageOStream
     sal_Char*               pMsgRead;
     sal_Char*               pMsgWrite;
 
-    virtual int PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize);
+    virtual int PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
     INetMessageDecode64Stream_Impl(sal_uIntPtr nMsgBufferSize = 128);

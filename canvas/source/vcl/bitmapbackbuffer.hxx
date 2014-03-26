@@ -47,8 +47,8 @@ namespace vclcanvas
 
         ~BitmapBackBuffer();
 
-        virtual OutputDevice&       getOutDev();
-        virtual const OutputDevice& getOutDev() const;
+        virtual OutputDevice&       getOutDev() SAL_OVERRIDE;
+        virtual const OutputDevice& getOutDev() const SAL_OVERRIDE;
 
         /// Clear the underlying bitmap to white, all transparent
         void clear();

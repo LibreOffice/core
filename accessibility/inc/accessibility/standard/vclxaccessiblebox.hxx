@@ -64,7 +64,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
-            getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+            getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleContext
 
@@ -73,70 +73,70 @@ public:
         boxes.
     */
     sal_Int32 SAL_CALL getAccessibleChildCount (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** For drop down list boxes the text field is a not editable
         <type>VCLXAccessibleTextField</type>, for combo boxes it is an
         editable <type>VLCAccessibleEdit</type>.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The role is always <const
         scope="com::sun::star::accessibility">AccessibleRole::COMBO_BOX</const>.
     */
     sal_Int16 SAL_CALL getAccessibleRole (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Int32 SAL_CALL getAccessibleIndexInParent (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
     */
     virtual sal_Int32 SAL_CALL getAccessibleActionCount (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
     virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception);
+            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The returned string is assoicated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
     virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception);
+            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** No keybinding returned so far.
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL
             getAccessibleActionKeyBinding( sal_Int32 nIndex )
                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                       ::com::sun::star::uno::RuntimeException, std::exception);
+                       ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
 
     /** This method is called from the implementation helper during an
         XComponent::dispose() call.
     */
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     //=====  XAccessibleValue  ================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL setCurrentValue(
         const ::com::sun::star::uno::Any& aNumber )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     bool IsDropDownBox() {return m_bIsDropDownBox;};
     BoxType GetBoxType() { return m_aBoxType;};
 protected:
@@ -176,10 +176,10 @@ protected:
     */
     virtual bool IsValid (void) const = 0;
 
-    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent);
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent);
+    virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
+    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) SAL_OVERRIDE;
 
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) SAL_OVERRIDE;
 
 private:
     /// Index in parent.  This is settable from the outside.

@@ -47,15 +47,15 @@ public:
 private:
     virtual ~XcsParser();
 
-    virtual xmlreader::XmlReader::Text getTextMode();
+    virtual xmlreader::XmlReader::Text getTextMode() SAL_OVERRIDE;
 
     virtual bool startElement(
         xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
-        std::set< OUString > const * existingDependencies);
+        std::set< OUString > const * existingDependencies) SAL_OVERRIDE;
 
-    virtual void endElement(xmlreader::XmlReader const & reader);
+    virtual void endElement(xmlreader::XmlReader const & reader) SAL_OVERRIDE;
 
-    virtual void characters(xmlreader::Span const & text);
+    virtual void characters(xmlreader::Span const & text) SAL_OVERRIDE;
 
     void handleComponentSchema(xmlreader::XmlReader & reader);
 

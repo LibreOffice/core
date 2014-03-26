@@ -31,7 +31,7 @@ namespace drawinglayer
 
         protected:
             virtual basegfx::B2DPolyPolygon getClipPolygon(
-                    const geometry::ViewInformation2D& rViewInformation) const;
+                    const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             /// constructor
@@ -50,7 +50,7 @@ namespace drawinglayer
                 double fPatternScale = 1.0 );
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

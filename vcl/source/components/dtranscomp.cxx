@@ -78,9 +78,9 @@ public:
      * XServiceInfo
      */
 
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception );
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static OUString getImplementationName_static();
     static Sequence< OUString > getSupportedServiceNames_static();
@@ -90,33 +90,33 @@ public:
      */
 
     virtual Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setContents(
         const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getName()
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     /*
      * XClipboardEx
      */
 
     virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     /*
      * XClipboardNotifier
      */
     virtual void SAL_CALL addClipboardListener(
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeClipboardListener(
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 GenericClipboard::~GenericClipboard()
@@ -221,8 +221,8 @@ public:
     /*
      *  XSingleServiceFactory
      */
-    virtual Reference< XInterface > SAL_CALL createInstance() throw(std::exception);
-    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw(std::exception);
+    virtual Reference< XInterface > SAL_CALL createInstance() throw(std::exception) SAL_OVERRIDE;
+    virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw(std::exception) SAL_OVERRIDE;
 };
 
 
@@ -290,17 +290,17 @@ public:
     virtual ~GenericDragSource();
 
     // XDragSource
-    virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception);
-    virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception);
+    virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw(std::exception) SAL_OVERRIDE;
     virtual void        SAL_CALL startDrag(
                                      const datatransfer::dnd::DragGestureEvent& trigger,
                                      sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
                                      const Reference< datatransfer::XTransferable >& transferable,
                                      const Reference< datatransfer::dnd::XDragSourceListener >& listener
-                                     ) throw(std::exception);
+                                     ) throw(std::exception) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception );
+    virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
@@ -403,15 +403,15 @@ public:
     virtual ~GenericDropTarget();
 
     // XInitialization
-    virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception, std::exception );
+    virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception, std::exception ) SAL_OVERRIDE;
 
     // XDropTarget
-    virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception);
-    virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception);
-    virtual sal_Bool    SAL_CALL isActive() throw(std::exception);
-    virtual void        SAL_CALL setActive( sal_Bool active ) throw(std::exception);
-    virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception);
-    virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception);
+    virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw(std::exception) SAL_OVERRIDE;
+    virtual sal_Bool    SAL_CALL isActive() throw(std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL setActive( sal_Bool active ) throw(std::exception) SAL_OVERRIDE;
+    virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception) SAL_OVERRIDE;
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {

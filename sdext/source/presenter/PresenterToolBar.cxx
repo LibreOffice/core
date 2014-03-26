@@ -135,7 +135,7 @@ namespace {
         Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~Element (void);
 
-        virtual void SAL_CALL disposing (void);
+        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
         virtual void SetModes (
             const SharedElementMode& rpNormalMode,
@@ -160,17 +160,17 @@ namespace {
         // lang::XEventListener
 
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // document::XEventListener
 
         virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // frame::XStatusListener
 
         virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         ::rtl::Reference<PresenterToolBar> mpToolBar;
@@ -211,20 +211,20 @@ namespace {
             const ::rtl::Reference<PresenterToolBar>& rpToolBar);
 
         virtual ~Button (void);
-        virtual void SAL_CALL disposing (void);
+        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
-            const rendering::ViewState& rViewState);
+            const rendering::ViewState& rViewState) SAL_OVERRIDE;
 
         // lang::XEventListener
 
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual awt::Size CreateBoundingSize (
-            const Reference<rendering::XCanvas>& rxCanvas);
+            const Reference<rendering::XCanvas>& rxCanvas) SAL_OVERRIDE;
 
     private:
         bool mbIsListenerRegistered;
@@ -248,12 +248,12 @@ namespace {
         void SetText (const OUString& rsText);
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
-            const rendering::ViewState& rViewState);
-        virtual bool SetState (const bool bIsOver, const bool bIsPressed);
+            const rendering::ViewState& rViewState) SAL_OVERRIDE;
+        virtual bool SetState (const bool bIsOver, const bool bIsPressed) SAL_OVERRIDE;
 
     protected:
         virtual awt::Size CreateBoundingSize (
-            const Reference<rendering::XCanvas>& rxCanvas);
+            const Reference<rendering::XCanvas>& rxCanvas) SAL_OVERRIDE;
     };
 
 // Some specialized controls.
@@ -277,7 +277,7 @@ namespace {
     protected:
         TimeLabel(const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         using Element::disposing;
-        virtual void SAL_CALL disposing (void);
+        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
     private:
         class Listener : public PresenterClockTimer::Listener
         {
@@ -285,7 +285,7 @@ namespace {
             Listener (const ::rtl::Reference<TimeLabel>& rxLabel)
                 : mxLabel(rxLabel) {}
             virtual ~Listener (void) {}
-            virtual void TimeHasChanged (const oslDateTime& rCurrentTime)
+            virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE
             { if (mxLabel.is()) mxLabel->TimeHasChanged(rCurrentTime); }
         private:
             ::rtl::Reference<TimeLabel> mxLabel;
@@ -302,12 +302,12 @@ namespace {
             const SharedElementMode& rpNormalMode,
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
-            const SharedElementMode& rpDisabledMode);
+            const SharedElementMode& rpDisabledMode) SAL_OVERRIDE;
     private:
         TimeFormatter maTimeFormatter;
         CurrentTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~CurrentTimeLabel (void);
-        virtual void TimeHasChanged (const oslDateTime& rCurrentTime);
+        virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE;
     };
 
     class PresentationTimeLabel : public TimeLabel
@@ -319,13 +319,13 @@ namespace {
             const SharedElementMode& rpNormalMode,
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
-            const SharedElementMode& rpDisabledMode);
+            const SharedElementMode& rpDisabledMode) SAL_OVERRIDE;
     private:
         TimeFormatter maTimeFormatter;
         TimeValue maStartTimeValue;
         PresentationTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~PresentationTimeLabel (void);
-        virtual void TimeHasChanged (const oslDateTime& rCurrentTime);
+        virtual void TimeHasChanged (const oslDateTime& rCurrentTime) SAL_OVERRIDE;
     };
 
     class VerticalSeparator : public Element
@@ -334,12 +334,12 @@ namespace {
         explicit VerticalSeparator (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
-            const rendering::ViewState& rViewState);
-        virtual bool IsFilling (void) const;
+            const rendering::ViewState& rViewState) SAL_OVERRIDE;
+        virtual bool IsFilling (void) const SAL_OVERRIDE;
 
     protected:
         virtual awt::Size CreateBoundingSize (
-            const Reference<rendering::XCanvas>& rxCanvas);
+            const Reference<rendering::XCanvas>& rxCanvas) SAL_OVERRIDE;
     };
 
     class HorizontalSeparator : public Element
@@ -348,12 +348,12 @@ namespace {
         explicit HorizontalSeparator (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
-            const rendering::ViewState& rViewState);
-        virtual bool IsFilling (void) const;
+            const rendering::ViewState& rViewState) SAL_OVERRIDE;
+        virtual bool IsFilling (void) const SAL_OVERRIDE;
 
     protected:
         virtual awt::Size CreateBoundingSize (
-            const Reference<rendering::XCanvas>& rxCanvas);
+            const Reference<rendering::XCanvas>& rxCanvas) SAL_OVERRIDE;
     };
 } // end of anonymous namespace
 

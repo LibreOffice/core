@@ -60,7 +60,7 @@ namespace
             ,m_nIndexInParent(_nIndexInParent)
         {
         }
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 
@@ -112,10 +112,10 @@ namespace
         // OAccessibleWrapper
         virtual OAccessibleContextWrapper* createAccessibleContext(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxInnerContext
-            );
+            ) SAL_OVERRIDE;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException, std::exception);
+        virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         static Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 

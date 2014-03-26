@@ -34,17 +34,17 @@ public:
     SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
     SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource );
 
-    virtual UnoControlModel* Clone() const;
+    virtual UnoControlModel* Clone() const SAL_OVERRIDE;
 
     // XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception);
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception);
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception);
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception);
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     ~SpinningProgressControlModel();

@@ -87,11 +87,11 @@ namespace xmloff
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void Characters(const OUString& _rChars);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+        virtual void Characters(const OUString& _rChars) SAL_OVERRIDE;
 
     protected:
         /** handle one single attribute.
@@ -162,12 +162,12 @@ namespace xmloff
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
 
 #if OSL_DEBUG_LEVEL > 0
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void Characters(const OUString& _rChars);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
+        virtual void Characters(const OUString& _rChars) SAL_OVERRIDE;
 #endif
     };
 
@@ -184,10 +184,10 @@ namespace xmloff
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
     };
 
     //= OListPropertyContext
@@ -203,13 +203,13 @@ namespace xmloff
                 const OPropertyImportRef& _rPropertyImporter );
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) SAL_OVERRIDE;
 
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
     };
 
     //= OListValueContext
@@ -222,7 +222,7 @@ namespace xmloff
             OUString& _rListValueHolder );
 
         virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) SAL_OVERRIDE;
     };
 
 }   // namespace xmloff

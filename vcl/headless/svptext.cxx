@@ -52,8 +52,8 @@ public:
                                        basebmp::Format nBmpFormat, B2IPoint& rTargetPos );
 
 protected:
-    virtual void    RemovingFont( ServerFont& );
-    virtual void    RemovingGlyph( GlyphData& );
+    virtual void    RemovingFont( ServerFont& ) SAL_OVERRIDE;
+    virtual void    RemovingGlyph( GlyphData& ) SAL_OVERRIDE;
 
     class SvpGcpHelper
     {

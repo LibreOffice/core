@@ -74,7 +74,7 @@ namespace connectivity
                 return pConnection;
             }
         public:
-            virtual void refreshColumns();
+            virtual void refreshColumns() SAL_OVERRIDE;
 
         public:
             //  DECLARE_CTY_DEFAULTS( OFlatTable_BASE);
@@ -86,19 +86,19 @@ namespace connectivity
                     const OUString& _CatalogName = OUString()
                 );
 
-            void construct(); // can throw any exception
+            void construct() SAL_OVERRIDE; // can throw any exception
 
-            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
-            virtual sal_Bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData);
-            virtual void refreshHeader();
+            virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) SAL_OVERRIDE;
+            virtual sal_Bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData) SAL_OVERRIDE;
+            virtual void refreshHeader() SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-            virtual void SAL_CALL disposing(void);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
 
             // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             OUString getEntry();

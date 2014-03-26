@@ -514,8 +514,8 @@ private:
                     DECL_LINK(AutoScroll, void *);
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
-    void            StateChanged( StateChangedType nType );
-    void            DataChanged( const DataChangedEvent& rDCEvt );
+    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 protected:
     Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
     void            ImplInitClipRegion();
@@ -534,14 +534,14 @@ public:
 
             void    doShutdown();
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvent );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    Resize();
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 
     void            SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
     sal_uLong           GetFocusId() const      { return nSaveFocusId; }
@@ -565,7 +565,7 @@ public:
     void            SetPosInParent( sal_uInt16 nPos ) { nPosInParent = nPos; }
     sal_uInt16          GetPosInParent() const { return nPosInParent; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
 // To get the transparent mouse-over look, the closer is actually a toolbox
@@ -580,7 +580,7 @@ public:
             DecoToolBox( Window* pParent, WinBits nStyle = 0 );
     void    ImplInit();
 
-    void    DataChanged( const DataChangedEvent& rDCEvt );
+    void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void    SetImages( long nMaxHeight = 0, bool bForce = false );
 
@@ -730,10 +730,10 @@ private:
                     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
-    void            StateChanged( StateChangedType nType );
-    void            DataChanged( const DataChangedEvent& rDCEvt );
-    void            LoseFocus();
-    void            GetFocus();
+    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    void            LoseFocus() SAL_OVERRIDE;
+    void            GetFocus() SAL_OVERRIDE;
 
 public:
                     MenuBarWindow( Window* pParent );
@@ -741,13 +741,13 @@ public:
 
     void            ShowButtons( bool bClose, bool bFloat, bool bHide );
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvent );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     void            SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
     sal_uLong           GetFocusId() const { return nSaveFocusId; }
@@ -757,7 +757,7 @@ public:
     PopupMenu*      GetActivePopup() const  { return pActivePopup; }
     void            PopupClosed( Menu* pMenu );
     sal_uInt16          GetHighlightedItem() const { return nHighlightedItem; }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void SetAutoPopup( bool bAuto ) { mbAutoPopup = bAuto; }
     void            ImplLayoutChanged();

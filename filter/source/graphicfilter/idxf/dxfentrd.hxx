@@ -114,7 +114,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Point-----------------------------------------------
@@ -129,7 +129,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Circle----------------------------------------------
@@ -145,7 +145,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Arc-------------------------------------------------
@@ -163,7 +163,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Trace-----------------------------------------------
@@ -181,7 +181,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Solid-----------------------------------------------
@@ -199,7 +199,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Text------------------------------------------------
@@ -224,7 +224,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Shape-----------------------------------------------
@@ -244,7 +244,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Insert----------------------------------------------
@@ -269,7 +269,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------AttDef----------------------------------------------
@@ -298,7 +298,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Attrib----------------------------------------------
@@ -326,7 +326,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------PolyLine--------------------------------------------
@@ -349,7 +349,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 class DXFLWPolyLineEntity : public DXFBasicEntity
@@ -371,7 +371,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
 
     protected :
 
-        virtual void EvaluateGroup( DXFGroupReader & rDGR );
+        virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 
 };
 
@@ -394,7 +394,7 @@ struct DXFEdgeTypeLine : public DXFEdgeType
     DXFVector aEndPoint;                // 11,21
     DXFEdgeTypeLine();
     virtual ~DXFEdgeTypeLine();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 struct DXFEdgeTypeCircularArc : public DXFEdgeType
 {
@@ -405,7 +405,7 @@ struct DXFEdgeTypeCircularArc : public DXFEdgeType
     sal_Int32 nIsCounterClockwiseFlag;  // 73
     DXFEdgeTypeCircularArc();
     virtual ~DXFEdgeTypeCircularArc();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
 {
@@ -418,7 +418,7 @@ struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
 
     DXFEdgeTypeEllipticalArc();
     virtual ~DXFEdgeTypeEllipticalArc();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 struct DXFEdgeTypeSpline : public DXFEdgeType
 {
@@ -430,7 +430,7 @@ struct DXFEdgeTypeSpline : public DXFEdgeType
 
     DXFEdgeTypeSpline();
     virtual ~DXFEdgeTypeSpline();
-    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR );
+    virtual sal_Bool EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 
 typedef std::deque< DXFEdgeType* > DXFEdgeTypeArray;
@@ -484,7 +484,7 @@ class DXFHatchEntity : public DXFBasicEntity
 
     protected :
 
-        virtual void EvaluateGroup( DXFGroupReader & rDGR );
+        virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };
 
 
@@ -505,7 +505,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------SeqEnd----------------------------------------------
@@ -533,7 +533,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 //--------------------------Dimension-------------------------------------------
@@ -548,7 +548,7 @@ public:
 
 protected:
 
-    virtual void EvaluateGroup(DXFGroupReader & rDGR);
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) SAL_OVERRIDE;
 };
 
 

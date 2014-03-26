@@ -34,9 +34,9 @@ class LocalizedValueNode: public Node {
 public:
     LocalizedValueNode(int layer, com::sun::star::uno::Any const & value);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
-    virtual OUString getTemplateName() const;
+    virtual OUString getTemplateName() const SAL_OVERRIDE;
 
     com::sun::star::uno::Any getValue() const;
 
@@ -47,7 +47,7 @@ private:
 
     virtual ~LocalizedValueNode();
 
-    virtual Kind kind() const;
+    virtual Kind kind() const SAL_OVERRIDE;
 
     com::sun::star::uno::Any value_;
 };

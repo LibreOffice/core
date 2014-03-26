@@ -94,7 +94,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
         //  XEnumeration
@@ -115,7 +115,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
                         (List is emtpy and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      give the next element, if some exist
@@ -131,7 +131,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
         virtual css::uno::Any SAL_CALL nextElement() throw( css::container::NoSuchElementException  ,
                                                              css::lang::WrappedTargetException      ,
-                                                            css::uno::RuntimeException, std::exception              );
+                                                            css::uno::RuntimeException, std::exception              ) SAL_OVERRIDE;
 
 
     //  protected methods

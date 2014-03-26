@@ -46,11 +46,11 @@ namespace accessibility
 
     protected:
         // AccessibleBrowseBoxBase overridables
-        virtual Rectangle implGetBoundingBox();
-        virtual Rectangle implGetBoundingBoxOnScreen();
+        virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
+        virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
 
         // XAccessibleComponent
-        virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
         AccessibleBrowseBoxCell(

@@ -121,7 +121,7 @@ protected:
 public:
     virtual                 ~PatternFormatter();
 
-    virtual void            Reformat();
+    virtual void            Reformat() SAL_OVERRIDE;
 
     void SetMask(const OString& rEditMask, const OUString& rLiteralMask );
     const OString& GetEditMask() const { return m_aEditMask; }
@@ -177,7 +177,7 @@ protected:
 public:
     virtual                 ~NumericFormatter();
 
-    virtual void            Reformat();
+    virtual void            Reformat() SAL_OVERRIDE;
 
     void                    SetMin( sal_Int64 nNewMin );
     sal_Int64               GetMin() const { return mnMin; }
@@ -238,7 +238,7 @@ public:
     virtual                 ~MetricFormatter();
 
     virtual void            CustomConvert() = 0;
-    virtual void            Reformat();
+    virtual void            Reformat() SAL_OVERRIDE;
 
     virtual void            SetUnit( FieldUnit meUnit );
     FieldUnit               GetUnit() const { return meUnit; }
@@ -258,12 +258,12 @@ public:
     sal_Int64               GetBaseValue( FieldUnit eOutUnit = FUNIT_NONE ) const;
 
     virtual void            SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
-    virtual void            SetValue( sal_Int64 nValue );
+    virtual void            SetValue( sal_Int64 nValue ) SAL_OVERRIDE;
     using NumericFormatter::SetUserValue;
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
-    virtual sal_Int64       GetValue() const;
-    virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
+    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
     using NumericFormatter::GetCorrectedValue;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
@@ -288,13 +288,13 @@ protected:
 public:
     virtual                 ~CurrencyFormatter();
 
-    virtual void            Reformat();
+    virtual void            Reformat() SAL_OVERRIDE;
 
     OUString                GetCurrencySymbol() const;
 
-    virtual void            SetValue( sal_Int64 nNewValue );
-    virtual sal_Int64       GetValue() const;
-    virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
+    virtual void            SetValue( sal_Int64 nNewValue ) SAL_OVERRIDE;
+    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
+    virtual OUString        CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
 };
 
 
@@ -338,10 +338,10 @@ protected:
 public:
     virtual                 ~DateFormatter();
 
-    virtual void            Reformat();
-    virtual void            ReformatAll();
+    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            ReformatAll() SAL_OVERRIDE;
 
-    virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale );
+    virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale ) SAL_OVERRIDE;
 
 
     void                    SetExtDateFormat( ExtDateFieldFormat eFormat );
@@ -433,8 +433,8 @@ public:
 
     virtual                 ~TimeFormatter();
 
-    virtual void            Reformat();
-    virtual void            ReformatAll();
+    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            ReformatAll() SAL_OVERRIDE;
 
     void                    SetMin( const Time& rNewMin );
     const Time&             GetMin() const { return maMin; }
@@ -486,9 +486,9 @@ public:
     explicit                PatternField( Window* pParent, WinBits nWinStyle );
     virtual                 ~PatternField();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            Modify();
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            Modify() SAL_OVERRIDE;
 };
 
 
@@ -506,19 +506,19 @@ public:
     explicit                NumericField( Window* pParent, const ResId& );
     virtual                 ~NumericField();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual Size            CalcMinimumSize() const;
+    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            Up();
-    virtual void            Down();
-    virtual void            First();
-    virtual void            Last();
-    virtual bool            set_property(const OString &rKey, const OString &rValue);
+    virtual void            Up() SAL_OVERRIDE;
+    virtual void            Down() SAL_OVERRIDE;
+    virtual void            First() SAL_OVERRIDE;
+    virtual void            Last() SAL_OVERRIDE;
+    virtual bool            set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
 
@@ -536,21 +536,21 @@ public:
     explicit                MetricField( Window* pParent, const ResId& );
     virtual                 ~MetricField();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual Size            CalcMinimumSize() const;
+    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            Up();
-    virtual void            Down();
-    virtual void            First();
-    virtual void            Last();
-    virtual void            CustomConvert();
+    virtual void            Up() SAL_OVERRIDE;
+    virtual void            Down() SAL_OVERRIDE;
+    virtual void            First() SAL_OVERRIDE;
+    virtual void            Last() SAL_OVERRIDE;
+    virtual void            CustomConvert() SAL_OVERRIDE;
 
-    virtual void            SetUnit( FieldUnit meUnit );
+    virtual void            SetUnit( FieldUnit meUnit ) SAL_OVERRIDE;
 
     void                    SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit );
     inline void             SetFirst(sal_Int64 first) { SetFirst(first, FUNIT_NONE); }
@@ -589,7 +589,7 @@ public:
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 
-    virtual bool            set_property(const OString &rKey, const OString &rValue);
+    virtual bool            set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
 
@@ -603,16 +603,16 @@ public:
     CurrencyField( Window* pParent, WinBits nWinStyle );
     ~CurrencyField();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            Up();
-    virtual void            Down();
-    virtual void            First();
-    virtual void            Last();
+    virtual void            Up() SAL_OVERRIDE;
+    virtual void            Down() SAL_OVERRIDE;
+    virtual void            First() SAL_OVERRIDE;
+    virtual void            Last() SAL_OVERRIDE;
 };
 
 
@@ -635,16 +635,16 @@ public:
     explicit                DateField( Window* pParent, const ResId& );
     virtual                 ~DateField();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            Up();
-    virtual void            Down();
-    virtual void            First();
-    virtual void            Last();
+    virtual void            Up() SAL_OVERRIDE;
+    virtual void            Down() SAL_OVERRIDE;
+    virtual void            First() SAL_OVERRIDE;
+    virtual void            Last() SAL_OVERRIDE;
 
     void                    SetFirst( const Date& rNewFirst )   { maFirst = rNewFirst; }
     Date                    GetFirst() const                    { return maFirst; }
@@ -671,16 +671,16 @@ public:
     explicit                TimeField( Window* pParent, const ResId& );
     virtual                 ~TimeField();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            Up();
-    virtual void            Down();
-    virtual void            First();
-    virtual void            Last();
+    virtual void            Up() SAL_OVERRIDE;
+    virtual void            Down() SAL_OVERRIDE;
+    virtual void            First() SAL_OVERRIDE;
+    virtual void            Last() SAL_OVERRIDE;
 
     void                    SetFirst( const Time& rNewFirst )   { maFirst = rNewFirst; }
     Time                    GetFirst() const                    { return maFirst; }
@@ -701,12 +701,12 @@ public:
                             PatternBox( Window* pParent, WinBits nWinStyle );
                             ~PatternBox();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            ReformatAll();
+    virtual void            ReformatAll() SAL_OVERRIDE;
 };
 
 
@@ -721,15 +721,15 @@ public:
     explicit                NumericBox( Window* pParent, const ResId& );
     virtual                 ~NumericBox();
 
-    virtual Size            CalcMinimumSize() const;
+    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            ReformatAll();
+    virtual void            ReformatAll() SAL_OVERRIDE;
 
     void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
 };
@@ -745,16 +745,16 @@ public:
     explicit                MetricBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~MetricBox();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual Size            CalcMinimumSize() const;
+    virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            CustomConvert();
-    virtual void            ReformatAll();
+    virtual void            CustomConvert() SAL_OVERRIDE;
+    virtual void            ReformatAll() SAL_OVERRIDE;
 
     void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FUNIT_NONE,
                                          sal_Int32  nPos = COMBOBOX_APPEND );
@@ -763,8 +763,8 @@ public:
                                          FieldUnit eInUnit = FUNIT_NONE ) const;
 
     // Needed, because GetValue() with nPos hide these functions
-    virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
-    virtual sal_Int64       GetValue() const;
+    virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const SAL_OVERRIDE;
+    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
 };
 
 
@@ -778,15 +778,15 @@ public:
     explicit                CurrencyBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~CurrencyBox();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            ReformatAll();
+    virtual void            ReformatAll() SAL_OVERRIDE;
 
-    virtual sal_Int64       GetValue() const;
+    virtual sal_Int64       GetValue() const SAL_OVERRIDE;
 };
 
 
@@ -799,13 +799,13 @@ public:
     explicit                DateBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~DateBox();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            ReformatAll();
+    virtual void            ReformatAll() SAL_OVERRIDE;
 };
 
 
@@ -819,13 +819,13 @@ public:
     explicit                TimeBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~TimeBox();
 
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual bool            Notify( NotifyEvent& rNEvt );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void            Modify();
+    virtual void            Modify() SAL_OVERRIDE;
 
-    virtual void            ReformatAll();
+    virtual void            ReformatAll() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_FIELD_HXX

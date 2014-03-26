@@ -28,19 +28,19 @@ namespace pdfi
     {
         WriterTreeVisitorFactory() {}
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlOptimizer(rProc));
         }
 
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
             StyleContainer& rStyles,
-            PDFIProcessor&  rProc ) const
+            PDFIProcessor&  rProc ) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor&) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor&) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new WriterXmlEmitter(rEmitContext));
         }
@@ -50,19 +50,19 @@ namespace pdfi
     {
         ImpressTreeVisitorFactory() {}
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlOptimizer(rProc));
         }
 
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
             StyleContainer& rStyles,
-            PDFIProcessor&  rProc ) const
+            PDFIProcessor&  rProc ) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlEmitter(rEmitContext,
                                                                             DrawXmlEmitter::IMPRESS_DOC,
@@ -75,19 +75,19 @@ namespace pdfi
     {
         DrawTreeVisitorFactory() {}
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor& rProc) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlOptimizer(rProc));
         }
 
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
             StyleContainer& rStyles,
-            PDFIProcessor&  rProc ) const
+            PDFIProcessor&  rProc ) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlFinalizer(rStyles,rProc));
         }
 
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext& rEmitContext, PDFIProcessor& rProc) const SAL_OVERRIDE
         {
             return boost::shared_ptr<ElementTreeVisitor>(new DrawXmlEmitter(rEmitContext,
                                                                             DrawXmlEmitter::DRAW_DOC,

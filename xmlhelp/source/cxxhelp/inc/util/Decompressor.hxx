@@ -70,7 +70,7 @@ namespace xmlsearch {
             ~StreamDecompressor() { }
 
 
-            virtual sal_Int32 getNextByte();
+            virtual sal_Int32 getNextByte() SAL_OVERRIDE;
 
         private:
 
@@ -99,7 +99,7 @@ namespace xmlsearch {
             }
 
 
-            sal_Int32 getNextByte() throw( xmlsearch::excep::XmlSearchException )
+            sal_Int32 getNextByte() throw( xmlsearch::excep::XmlSearchException ) SAL_OVERRIDE
             {
                 if( arrayL_ <= index_ )
                     throw  xmlsearch::excep::XmlSearchException(

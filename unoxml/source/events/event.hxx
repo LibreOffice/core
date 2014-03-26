@@ -59,19 +59,19 @@ public:
     explicit CEvent();
 
     virtual ~CEvent();
-    virtual OUString SAL_CALL getType() throw (RuntimeException, std::exception);
-    virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException, std::exception);
-    virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException, std::exception);
-    virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException, std::exception);
-    virtual com::sun::star::util::Time SAL_CALL getTimeStamp() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL stopPropagation() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL preventDefault() throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual com::sun::star::util::Time SAL_CALL getTimeStamp() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL stopPropagation() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL preventDefault() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initEvent(
         const OUString& eventTypeArg,
         sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)  throw (RuntimeException, std::exception);
+        sal_Bool cancelableArg)  throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 }}
 #endif

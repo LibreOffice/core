@@ -65,10 +65,10 @@ public:
 
     virtual ~EmptyNodeList();
 
-    virtual ::sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-    item(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception);
+    item(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     EmptyNodeList(EmptyNodeList &); // not defined
@@ -156,14 +156,14 @@ public:
     bool exist();
     // XCommandEnvironment
     virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (css::uno::RuntimeException, std::exception);
+    getInteractionHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception);
+    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 ExtensionDescription::ExtensionDescription(

@@ -39,17 +39,17 @@ public:
                         SvxDrawOutlinerViewForwarder( OutlinerView& rOutl, const Point& rShapePosTopLeft );
     virtual             ~SvxDrawOutlinerViewForwarder();
 
-    virtual bool        IsValid() const;
+    virtual bool        IsValid() const SAL_OVERRIDE;
 
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
 
-    virtual bool        GetSelection( ESelection& rSelection ) const;
-    virtual bool        SetSelection( const ESelection& rSelection );
-    virtual bool        Copy();
-    virtual bool        Cut();
-    virtual bool        Paste();
+    virtual bool        GetSelection( ESelection& rSelection ) const SAL_OVERRIDE;
+    virtual bool        SetSelection( const ESelection& rSelection ) SAL_OVERRIDE;
+    virtual bool        Copy() SAL_OVERRIDE;
+    virtual bool        Cut() SAL_OVERRIDE;
+    virtual bool        Paste() SAL_OVERRIDE;
 };
 
 #endif

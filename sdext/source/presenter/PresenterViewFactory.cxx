@@ -77,7 +77,7 @@ public:
     virtual ~NextSlidePreview (void) {}
     virtual void SAL_CALL setCurrentPage (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         Reference<presentation::XSlideShowController> xSlideShowController (
             mpPresenterController->GetSlideShowController());

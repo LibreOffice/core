@@ -48,7 +48,7 @@ protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue );
+                               const OUString& rValue ) SAL_OVERRIDE;
     SvXMLStylesContext *GetStyles() { return (SvXMLStylesContext *)&mxStyles; }
     ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
@@ -72,7 +72,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
@@ -88,10 +88,10 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle >& xStl) { mxStyle = xStl; }
 
-    virtual void SetDefaults();
+    virtual void SetDefaults() SAL_OVERRIDE;
 
-    virtual void CreateAndInsert( sal_Bool bOverwrite );
-    virtual void Finish( bool bOverwrite );
+    virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
+    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 };
 
 #endif

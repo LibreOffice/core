@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <connectivity/CommonTools.hxx>
 
 // OSubComponent - a component which holds a hard ref to it's parent
 //                 and is been hold itself (by the parent) with a weak ref
@@ -145,12 +146,6 @@ public:
     {   \
         return static_cast< XServiceInfo* >(new classname(_rxORB)); \
     }   \
-
-// declare service info methods
-#define DECLARE_SERVICE_INFO()  \
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception); \
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
 
 #define DECLARE_SERVICE_INFO_STATIC()   \
     DECLARE_SERVICE_INFO(); \

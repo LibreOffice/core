@@ -90,10 +90,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& rLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XThesaurus
     virtual ::com::sun::star::uno::Sequence<
@@ -103,7 +103,7 @@ public:
                 const ::com::sun::star::lang::Locale& rLocale,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -216,23 +216,23 @@ public:
     // XSupportedLanguages (for XSpellChecker1)
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getLanguages()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         hasLanguage( sal_Int16 nLanguage )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
     virtual sal_Bool SAL_CALL
         isValid( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL
         spell( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -314,10 +314,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& rLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XHyphenator
     virtual ::com::sun::star::uno::Reference<
@@ -327,7 +327,7 @@ public:
                 sal_Int16 nMaxLeading,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& rWord,
@@ -335,7 +335,7 @@ public:
                 sal_Int16 nIndex,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
@@ -343,7 +343,7 @@ public:
                 const ::com::sun::star::lang::Locale& rLocale,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -447,7 +447,7 @@ public:
 
     // lang::XEventListener
     virtual void    SAL_CALL disposing(const EventObject& rSource)
-            throw( RuntimeException, std::exception );
+            throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
@@ -485,7 +485,7 @@ void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
 class LinguMgrExitLstnr : public LinguMgrAppExitLstnr
 {
 public:
-    virtual void    AtExit();
+    virtual void    AtExit() SAL_OVERRIDE;
 };
 
 void LinguMgrExitLstnr::AtExit()

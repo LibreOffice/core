@@ -35,8 +35,8 @@ class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 protected:
 
     // Binaer-Im-/Export
-    virtual void        WriteIMapObject( SvStream& rOStm ) const;
-    virtual void        ReadIMapObject(  SvStream& rIStm );
+    virtual void        WriteIMapObject( SvStream& rOStm ) const SAL_OVERRIDE;
+    virtual void        ReadIMapObject(  SvStream& rIStm ) SAL_OVERRIDE;
 
 public:
 
@@ -51,14 +51,14 @@ public:
                                           bool bPixelCoords = true );
     virtual             ~IMapCircleObject() {};
 
-    virtual sal_uInt16  GetType() const;
-    virtual bool        IsHit( const Point& rPoint ) const;
+    virtual sal_uInt16  GetType() const SAL_OVERRIDE;
+    virtual bool        IsHit( const Point& rPoint ) const SAL_OVERRIDE;
 
     Point               GetCenter( bool bPixelCoords = true ) const;
     sal_uLong           GetRadius( bool bPixelCoords = true ) const;
 
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
-    virtual Rectangle   GetBoundRect() const;
+    virtual Rectangle   GetBoundRect() const SAL_OVERRIDE;
 
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 

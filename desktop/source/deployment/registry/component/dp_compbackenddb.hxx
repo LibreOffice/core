@@ -65,10 +65,10 @@ namespace component {
 class ComponentBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
-    virtual OUString getDbNSName();
-    virtual OUString getNSPrefix();
-    virtual OUString getRootElementName();
-    virtual OUString getKeyElementName();
+    virtual OUString getDbNSName() SAL_OVERRIDE;
+    virtual OUString getNSPrefix() SAL_OVERRIDE;
+    virtual OUString getRootElementName() SAL_OVERRIDE;
+    virtual OUString getKeyElementName() SAL_OVERRIDE;
 
 public:
     struct Data

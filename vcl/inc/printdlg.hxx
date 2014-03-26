@@ -65,10 +65,10 @@ namespace vcl
             PrintPreviewWindow( Window* pParent );
             virtual ~PrintPreviewWindow();
 
-            virtual void Paint( const Rectangle& rRect );
-            virtual void Command( const CommandEvent& );
-            virtual void Resize();
-            virtual void DataChanged( const DataChangedEvent& );
+            virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+            virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
+            virtual void Resize() SAL_OVERRIDE;
+            virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
 
             void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
                              const OUString& i_rPaperName,
@@ -88,9 +88,9 @@ namespace vcl
             ShowNupOrderWindow( Window* pParent );
             virtual ~ShowNupOrderWindow();
 
-            virtual Size GetOptimalSize() const;
+            virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-            virtual void Paint( const Rectangle& );
+            virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
 
             void setValues( int i_nOrderMode, int i_nColumns, int i_nRows )
             {
@@ -243,9 +243,9 @@ namespace vcl
         void storeToSettings();
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 
-        virtual void Resize();
-        virtual void Command( const CommandEvent& );
-        virtual void DataChanged( const DataChangedEvent& );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
 
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );

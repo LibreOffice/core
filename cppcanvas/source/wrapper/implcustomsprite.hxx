@@ -45,7 +45,7 @@ namespace cppcanvas
                               const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
             virtual ~ImplCustomSprite();
 
-            virtual CanvasSharedPtr getContentCanvas() const;
+            virtual CanvasSharedPtr getContentCanvas() const SAL_OVERRIDE;
 
         private:
             // default: disabled copy/assignment

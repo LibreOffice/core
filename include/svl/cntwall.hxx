@@ -43,17 +43,17 @@ public:
                             CntWallpaperItem( const CntWallpaperItem& rCpy );
                             ~CntWallpaperItem();
 
-    virtual sal_uInt16 GetVersion(sal_uInt16) const;
+    virtual sal_uInt16 GetVersion(sal_uInt16) const SAL_OVERRIDE;
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nItemVersion ) const;
-    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                         sal_uInt8 nMemberId = 0 ) const;
+                                         sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                         sal_uInt8 nMemberId = 0 );
+                                         sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     void                    SetBitmapURL( const OUString& rURL ) { _aURL = rURL; }
     void                    SetColor( Color nColor ) { _nColor = nColor; }

@@ -63,7 +63,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPaneContainer (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     typedef ::boost::function1<void, const css::uno::Reference<css::drawing::framework::XView>&>
         ViewInitializationFunction;
@@ -173,7 +173,7 @@ public:
 
     virtual void SAL_CALL disposing (
         const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;

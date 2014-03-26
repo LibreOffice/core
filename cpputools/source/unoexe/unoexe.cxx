@@ -297,7 +297,7 @@ public:
 
     // XInstanceProvider
     virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName )
-        throw (NoSuchElementException, RuntimeException, std::exception);
+        throw (NoSuchElementException, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 inline Reference< XInterface > OInstanceProvider::createInstance()
@@ -367,7 +367,7 @@ struct ODisposingListener : public WeakImplHelper1< XEventListener >
 
     // XEventListener
     virtual void SAL_CALL disposing( const EventObject & rEvt )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     static void waitFor( const Reference< XComponent > & xComp );
 };

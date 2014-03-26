@@ -51,11 +51,11 @@ namespace cppcanvas
 
             virtual ~ImplFont();
 
-            virtual OUString getName() const;
-            virtual double          getCellSize() const;
+            virtual OUString getName() const SAL_OVERRIDE;
+            virtual double          getCellSize() const SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont > getUNOFont() const;
+                ::com::sun::star::rendering::XCanvasFont > getUNOFont() const SAL_OVERRIDE;
 
         private:
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >        mxCanvas;

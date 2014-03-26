@@ -34,14 +34,14 @@ public:
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
                             ~SfxGlobalNameItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     SvGlobalName            GetValue() const { return m_aName; }
 
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
 };
 
 #endif

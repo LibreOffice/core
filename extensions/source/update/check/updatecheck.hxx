@@ -91,13 +91,13 @@ public:
     bool hasOfficeUpdate() const { return (m_aUpdateInfo.BuildId.getLength() > 0); }
 
     // DownloadInteractionHandler
-    virtual bool downloadTargetExists(const OUString& rFileName);
-    virtual void downloadStalled(const OUString& rErrorMessage);
-    virtual void downloadProgressAt(sal_Int8 nProcent);
-    virtual void downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize);
-    virtual void downloadFinished(const OUString& rLocalFileName);
+    virtual bool downloadTargetExists(const OUString& rFileName) SAL_OVERRIDE;
+    virtual void downloadStalled(const OUString& rErrorMessage) SAL_OVERRIDE;
+    virtual void downloadProgressAt(sal_Int8 nProcent) SAL_OVERRIDE;
+    virtual void downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize) SAL_OVERRIDE;
+    virtual void downloadFinished(const OUString& rLocalFileName) SAL_OVERRIDE;
     // checks if the download target already exists and asks user what to do next
-    virtual bool checkDownloadDestination( const OUString& rFile );
+    virtual bool checkDownloadDestination( const OUString& rFile ) SAL_OVERRIDE;
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();
@@ -106,20 +106,20 @@ public:
     SAL_DLLPUBLIC_EXPORT com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
 
     // UpdateCheckConfigListener
-    virtual void autoCheckStatusChanged(bool enabled);
-    virtual void autoCheckIntervalChanged();
+    virtual void autoCheckStatusChanged(bool enabled) SAL_OVERRIDE;
+    virtual void autoCheckIntervalChanged() SAL_OVERRIDE;
 
     // IActionListener
-    void cancel();
-    void download();
-    void install();
-    void pause();
-    void resume();
-    void closeAfterFailure();
+    void cancel() SAL_OVERRIDE;
+    void download() SAL_OVERRIDE;
+    void install() SAL_OVERRIDE;
+    void pause() SAL_OVERRIDE;
+    void resume() SAL_OVERRIDE;
+    void closeAfterFailure() SAL_OVERRIDE;
 
     // rtl::IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(()) SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(()) SAL_OVERRIDE;
 
 private:
 

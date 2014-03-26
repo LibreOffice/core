@@ -852,7 +852,7 @@ protected:
                         virtual ~EditEngineItemPool();
 public:
 
-    virtual SvStream&   Store( SvStream& rStream ) const;
+    virtual SvStream&   Store( SvStream& rStream ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX

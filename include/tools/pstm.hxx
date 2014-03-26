@@ -59,9 +59,9 @@ SV_DECL_IMPL_REF(SvRttiBase)
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
                                           Class *& rpObj);          \
-    virtual sal_Int32  GetClassId() const;                             \
-    virtual void    Load( SvPersistStream & );                      \
-    virtual void    Save( SvPersistStream & );
+    virtual sal_Int32  GetClassId() const SAL_OVERRIDE;                             \
+    virtual void    Load( SvPersistStream & ) SAL_OVERRIDE;                      \
+    virtual void    Save( SvPersistStream & ) SAL_OVERRIDE;
 
 #define SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                 \
     SV_DECL_PERSIST( Class, CLASS_ID )
@@ -127,9 +127,9 @@ class SvDeclPersistList : public SvRefMemberList<T>,
 {
 public:
    // implement the reader/writer adapter methods
-    size_t size() const { return SvRefMemberList<T>::size(); }
-    SvPersistBase* GetPersistBase(size_t idx) const { return SvRefMemberList<T>::operator[](idx); }
-    void push_back(SvPersistBase* p) { SvRefMemberList<T>::push_back(static_cast<T>(p)); }
+    size_t size() const SAL_OVERRIDE { return SvRefMemberList<T>::size(); }
+    SvPersistBase* GetPersistBase(size_t idx) const SAL_OVERRIDE { return SvRefMemberList<T>::operator[](idx); }
+    void push_back(SvPersistBase* p) SAL_OVERRIDE { SvRefMemberList<T>::push_back(static_cast<T>(p)); }
     void WriteObjects(SvPersistStream & rStm, bool bOnlyStreamed ) const { WritePersistListObjects(*this, rStm, bOnlyStreamed); }
 };
 
@@ -195,10 +195,10 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     const SvPersistStream * pRefStm;
     sal_uInt32          nFlags;
 
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void        FlushData();
+    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos ) SAL_OVERRIDE;
+    virtual void        FlushData() SAL_OVERRIDE;
 
 protected:
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
@@ -207,7 +207,7 @@ protected:
 public:
     bool                IsStreamed( SvPersistBase * pObj ) const
                             { return 0 != GetIndex( pObj ); }
-    virtual void        ResetError();
+    virtual void        ResetError() SAL_OVERRIDE;
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
                                          sal_uInt32 nStartIdx = 1 );
@@ -215,7 +215,7 @@ public:
 
     void                SetStream( SvStream * pStream );
     SvStream *          GetStream() const { return pStm; }
-    virtual sal_uInt16  IsA() const;
+    virtual sal_uInt16  IsA() const SAL_OVERRIDE;
 
     SvPersistBase *     GetObject( sal_uIntPtr nIdx ) const;
     sal_uIntPtr         GetIndex( SvPersistBase * ) const;

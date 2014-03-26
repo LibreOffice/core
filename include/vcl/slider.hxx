@@ -74,15 +74,15 @@ private:
 public:
                     Slider( Window* pParent, WinBits nStyle = WB_HORZ );
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    Slide();
     virtual void    EndSlide();

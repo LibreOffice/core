@@ -73,17 +73,17 @@ public:
     virtual ~X11SalObject();
 
     // overload all pure virtual methods
-     virtual void                   ResetClipRegion();
-    virtual sal_uInt16                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    EndSetClipRegion();
+     virtual void                   ResetClipRegion() SAL_OVERRIDE;
+    virtual sal_uInt16                  GetClipRegionType() SAL_OVERRIDE;
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) SAL_OVERRIDE;
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( bool bVisible );
-    virtual void                    GrabFocus();
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
+    virtual void                    GrabFocus() SAL_OVERRIDE;
 
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALOBJ_H

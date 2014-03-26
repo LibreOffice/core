@@ -40,8 +40,8 @@ namespace connectivity
         ORefBase() : m_refCount(0) { }
         virtual ~ORefBase();
 
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

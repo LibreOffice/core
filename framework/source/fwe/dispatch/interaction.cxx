@@ -53,8 +53,8 @@ class ContinuationFilterSelect : public comphelper::OInteraction< ::com::sun::st
 
     // uno interface
     public:
-        virtual void            SAL_CALL setFilter( const OUString& sFilter ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual OUString SAL_CALL getFilter(                                ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void            SAL_CALL setFilter( const OUString& sFilter ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getFilter(                                ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // member
     private:
@@ -95,8 +95,8 @@ public:
     OUString getFilter() const;
 
 public:
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Any                                                                                                 m_aRequest      ;
@@ -213,9 +213,9 @@ public:
         m_lContinuations = lContinuations;
     }
 
-    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
+    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
-            throw( uno::RuntimeException, std::exception );
+            throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 uno::Any SAL_CALL InteractionRequest_Impl::getRequest() throw( uno::RuntimeException, std::exception )

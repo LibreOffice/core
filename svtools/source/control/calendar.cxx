@@ -2215,7 +2215,7 @@ public:
     PushButton*     EnableNoneBtn( bool bEnable );
     void            ArrangeButtons();
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 

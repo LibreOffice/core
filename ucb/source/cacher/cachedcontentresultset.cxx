@@ -412,30 +412,30 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw();
+        throw() SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw();
+        throw() SAL_OVERRIDE;
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XPropertySetInfo
     virtual Sequence< com::sun::star::beans::Property > SAL_CALL
     getProperties()
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual com::sun::star::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName )
-        throw( com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception );
+        throw( com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const OUString& Name )
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( "RowCount" );

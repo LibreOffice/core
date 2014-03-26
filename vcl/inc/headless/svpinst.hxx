@@ -48,8 +48,8 @@ public:
     virtual ~SvpSalTimer();
 
     // overload all pure virtual methods
-    virtual void Start( sal_uLong nMS );
-    virtual void Stop();
+    virtual void Start( sal_uLong nMS ) SAL_OVERRIDE;
+    virtual void Stop() SAL_OVERRIDE;
 };
 
 class SvpSalFrame;

@@ -78,19 +78,19 @@ public:
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (RuntimeException, std::exception);
+    getInteractionHandler() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
         Reference< task::XInteractionRequest > const & xRequest )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL pop() throw (RuntimeException, std::exception);
+    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL pop() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

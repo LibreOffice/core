@@ -60,31 +60,31 @@ public:
     void refetch();
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XRename
     virtual void SAL_CALL rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XNamed
-    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
@@ -98,7 +98,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }

@@ -85,14 +85,14 @@ public:
     void    SetHatchBorderPixel( const Size & rSize );
 
     void    SelectMouse( const Point & rPos );
-    virtual void    MouseButtonUp( const MouseEvent & rEvt );
-    virtual void    MouseMove( const MouseEvent & rEvt );
-    virtual void    MouseButtonDown( const MouseEvent & rEvt );
-    virtual void    KeyInput( const KeyEvent & rEvt );
-    virtual void    Resize();
-    virtual void    Paint( const Rectangle & );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    MouseButtonUp( const MouseEvent & rEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent & rEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent & rEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent & rEvt ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle & ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void    QueryObjAreaPixel( Rectangle & );
     void    RequestObjAreaPixel( const Rectangle & );

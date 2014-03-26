@@ -114,13 +114,13 @@ public:
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
                         ~StatusBar();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Move();
-    virtual void        Resize();
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        StateChanged( StateChangedType nType );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Move() SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void        Click();
     virtual void        DoubleClick();
@@ -180,7 +180,7 @@ public:
     void                EndProgressMode();
     bool                IsProgressMode() const { return mbProgressMode; }
 
-    void                SetText( const OUString& rText );
+    void                SetText( const OUString& rText ) SAL_OVERRIDE;
 
     void                SetHelpText( const OUString& rText )
                             { Window::SetHelpText( rText ); }

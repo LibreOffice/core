@@ -30,7 +30,7 @@ namespace connectivity
         class OCalcStatement : public file::OStatement
         {
         protected:
-            virtual file::OResultSet* createResultSet();
+            virtual file::OResultSet* createResultSet() SAL_OVERRIDE;
         public:
             OCalcStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
             DECLARE_SERVICE_INFO();

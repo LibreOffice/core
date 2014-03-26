@@ -38,15 +38,15 @@ public:
         int layer, OUString const & defaultTemplateName,
         OUString const & templateName);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
-    virtual NodeMap & getMembers();
+    virtual NodeMap & getMembers() SAL_OVERRIDE;
 
-    virtual OUString getTemplateName() const;
+    virtual OUString getTemplateName() const SAL_OVERRIDE;
 
-    virtual void setMandatory(int layer);
+    virtual void setMandatory(int layer) SAL_OVERRIDE;
 
-    virtual int getMandatory() const;
+    virtual int getMandatory() const SAL_OVERRIDE;
 
     OUString const & getDefaultTemplateName() const;
 
@@ -59,9 +59,9 @@ private:
 
     virtual ~SetNode();
 
-    virtual Kind kind() const;
+    virtual Kind kind() const SAL_OVERRIDE;
 
-    virtual void clear();
+    virtual void clear() SAL_OVERRIDE;
 
     OUString defaultTemplateName_;
     std::vector< OUString > additionalTemplateNames_;

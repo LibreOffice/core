@@ -119,51 +119,51 @@ namespace pdfi
 
         // ContentSink interface implementation
 
-        virtual void setPageNum( sal_Int32 nNumPages );
-        virtual void startPage( const ::com::sun::star::geometry::RealSize2D& rSize );
-        virtual void endPage();
+        virtual void setPageNum( sal_Int32 nNumPages ) SAL_OVERRIDE;
+        virtual void startPage( const ::com::sun::star::geometry::RealSize2D& rSize ) SAL_OVERRIDE;
+        virtual void endPage() SAL_OVERRIDE;
 
         virtual void hyperLink( const ::com::sun::star::geometry::RealRectangle2D& rBounds,
-                                const OUString&                             rURI );
-        virtual void pushState();
-        virtual void popState();
-        virtual void setFlatness( double );
-        virtual void setTransformation( const ::com::sun::star::geometry::AffineMatrix2D& rMatrix );
+                                const OUString&                             rURI ) SAL_OVERRIDE;
+        virtual void pushState() SAL_OVERRIDE;
+        virtual void popState() SAL_OVERRIDE;
+        virtual void setFlatness( double ) SAL_OVERRIDE;
+        virtual void setTransformation( const ::com::sun::star::geometry::AffineMatrix2D& rMatrix ) SAL_OVERRIDE;
         virtual void setLineDash( const ::com::sun::star::uno::Sequence<double>& dashes,
-                                  double                                         start );
-        virtual void setLineJoin(sal_Int8);
-        virtual void setLineCap(sal_Int8);
-        virtual void setMiterLimit(double);
-        virtual void setLineWidth(double);
-        virtual void setFillColor( const ::com::sun::star::rendering::ARGBColor& rColor );
-        virtual void setStrokeColor( const ::com::sun::star::rendering::ARGBColor& rColor );
-        virtual void setBlendMode(sal_Int8);
-        virtual void setFont( const FontAttributes& rFont );
-        virtual void setTextRenderMode( sal_Int32 );
+                                  double                                         start ) SAL_OVERRIDE;
+        virtual void setLineJoin(sal_Int8) SAL_OVERRIDE;
+        virtual void setLineCap(sal_Int8) SAL_OVERRIDE;
+        virtual void setMiterLimit(double) SAL_OVERRIDE;
+        virtual void setLineWidth(double) SAL_OVERRIDE;
+        virtual void setFillColor( const ::com::sun::star::rendering::ARGBColor& rColor ) SAL_OVERRIDE;
+        virtual void setStrokeColor( const ::com::sun::star::rendering::ARGBColor& rColor ) SAL_OVERRIDE;
+        virtual void setBlendMode(sal_Int8) SAL_OVERRIDE;
+        virtual void setFont( const FontAttributes& rFont ) SAL_OVERRIDE;
+        virtual void setTextRenderMode( sal_Int32 ) SAL_OVERRIDE;
 
         virtual void strokePath( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::rendering::XPolyPolygon2D >& rPath );
+                                       ::com::sun::star::rendering::XPolyPolygon2D >& rPath ) SAL_OVERRIDE;
         virtual void fillPath( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::rendering::XPolyPolygon2D >& rPath );
+                                     ::com::sun::star::rendering::XPolyPolygon2D >& rPath ) SAL_OVERRIDE;
         virtual void eoFillPath( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::rendering::XPolyPolygon2D >& rPath );
+                                       ::com::sun::star::rendering::XPolyPolygon2D >& rPath ) SAL_OVERRIDE;
 
         virtual void intersectClip(const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XPolyPolygon2D >& rPath);
+                                         ::com::sun::star::rendering::XPolyPolygon2D >& rPath) SAL_OVERRIDE;
         virtual void intersectEoClip(const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::rendering::XPolyPolygon2D >& rPath);
+                                           ::com::sun::star::rendering::XPolyPolygon2D >& rPath) SAL_OVERRIDE;
 
         virtual void drawGlyphs( const OUString&                               rGlyphs,
                                  const ::com::sun::star::geometry::RealRectangle2D& rRect,
-                                 const ::com::sun::star::geometry::Matrix2D&        rFontMatrix );
-        virtual void endText();
+                                 const ::com::sun::star::geometry::Matrix2D&        rFontMatrix ) SAL_OVERRIDE;
+        virtual void endText() SAL_OVERRIDE;
 
         virtual void drawMask(const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue>& xBitmap,
-                              bool                                           bInvert );
+                              bool                                           bInvert ) SAL_OVERRIDE;
         /// Given image must already be color-mapped and normalized to sRGB.
         virtual void drawImage(const ::com::sun::star::uno::Sequence<
-                                     ::com::sun::star::beans::PropertyValue>& xBitmap );
+                                     ::com::sun::star::beans::PropertyValue>& xBitmap ) SAL_OVERRIDE;
         /** Given image must already be color-mapped and normalized to sRGB.
 
             maskColors must contain two sequences of color components
@@ -171,16 +171,16 @@ namespace pdfi
         virtual void drawColorMaskedImage(const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue>& xBitmap,
                                           const ::com::sun::star::uno::Sequence<
-                                                ::com::sun::star::uno::Any>&             xMaskColors );
+                                                ::com::sun::star::uno::Any>&             xMaskColors ) SAL_OVERRIDE;
         virtual void drawMaskedImage(const ::com::sun::star::uno::Sequence<
                                            ::com::sun::star::beans::PropertyValue>& xBitmap,
                                      const ::com::sun::star::uno::Sequence<
                                            ::com::sun::star::beans::PropertyValue>& xMask,
-                                     bool                                             bInvertMask);
+                                     bool                                             bInvertMask) SAL_OVERRIDE;
         virtual void drawAlphaMaskedImage(const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue>& xImage,
                                           const ::com::sun::star::uno::Sequence<
-                                                ::com::sun::star::beans::PropertyValue>& xMask);
+                                                ::com::sun::star::beans::PropertyValue>& xMask) SAL_OVERRIDE;
 
         /// nElements == -1 means fill in number of pages
         void startIndicator( const OUString& rText, sal_Int32 nElements = -1 );

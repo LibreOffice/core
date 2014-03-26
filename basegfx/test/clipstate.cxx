@@ -46,7 +46,7 @@ private:
     tools::B2DClipState aSubtract;
 
 public:
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
         B2DRange aCenter(100, 100, -100, -100);
         B2DRange aNorth(-10, -110, 10, -90);
@@ -87,7 +87,7 @@ public:
         aSubtract.subtractRange(aEast);
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {}
 
     void verifyPoly(const char* sName, const char* sSvg, const tools::B2DClipState& toTest)

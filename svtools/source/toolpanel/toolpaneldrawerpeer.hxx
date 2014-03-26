@@ -39,7 +39,7 @@ namespace svt
         ~ToolPanelDrawerPeer();
 
         // VCLXWindow overridables
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;
     };
 
 

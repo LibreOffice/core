@@ -92,46 +92,46 @@ namespace DOM
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL endDocument()
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL startElement( const OUString& aName,
              const Reference< XAttributeList >& xAttribs )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL endElement( const OUString& aName )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL characters( const OUString& aChars )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL processingInstruction( const OUString& aTarget,
              const OUString& aData )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator )
-            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException, std::exception ) SAL_OVERRIDE;
 
 
         // XSAXDocumentBuilder
         virtual SAXDocumentBuilderState SAL_CALL getState()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL reset()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Reference< XDocument > SAL_CALL getDocument()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Reference< XDocumentFragment > SAL_CALL getDocumentFragment()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL startDocumentFragment(const Reference< XDocument >& ownerDoc)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL endDocumentFragment()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     };

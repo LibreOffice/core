@@ -40,7 +40,7 @@ protected:
 protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue );
+                               const OUString& rValue ) SAL_OVERRIDE;
 public:
     TYPEINFO_OVERRIDE();
 
@@ -56,13 +56,13 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void Finish( bool bOverwrite );
+    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet );
+                ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX

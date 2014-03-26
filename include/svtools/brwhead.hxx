@@ -32,9 +32,9 @@ class SVT_DLLPUBLIC BrowserHeader: public HeaderBar
     BrowseBox*          _pBrowseBox;
 
 protected:
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        Select();
-    virtual void        EndDrag();
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        Select() SAL_OVERRIDE;
+    virtual void        EndDrag() SAL_OVERRIDE;
 
 public:
                         BrowserHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );

@@ -37,7 +37,7 @@ namespace connectivity
                  const ::rtl::OUString& rName);
 
             // IRefreshableGroups::
-            virtual void refreshGroups();
+            virtual void refreshGroups() SAL_OVERRIDE;
         };
 
     } // namespace firebird

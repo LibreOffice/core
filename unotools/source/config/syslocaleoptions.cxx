@@ -72,8 +72,8 @@ public:
                                 SvtSysLocaleOptions_Impl();
     virtual                     ~SvtSysLocaleOptions_Impl();
 
-    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void                Commit();
+    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void                Commit() SAL_OVERRIDE;
 
             const OUString&     GetLocaleString() const
                                     { return m_aLocaleString; }

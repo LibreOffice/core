@@ -124,16 +124,16 @@ public:
                                               sal_uInt16 nTypeStyle = 0 );
                             ~ImplBorderWindow();
 
-    virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void            Tracking( const TrackingEvent& rTEvt );
-    virtual void            Paint( const Rectangle& rRect );
-    virtual void            Activate();
-    virtual void            Deactivate();
-    virtual void            Resize();
-    virtual void            RequestHelp( const HelpEvent& rHEvt );
-    virtual void            StateChanged( StateChangedType nType );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void            Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void            Activate() SAL_OVERRIDE;
+    virtual void            Deactivate() SAL_OVERRIDE;
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual void            RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void                    InitView();
     void                    UpdateView( bool bNewView, const Size& rNewOutSize );
@@ -169,7 +169,7 @@ public:
 
     Rectangle               GetMenuRect() const;
 
-    virtual Size            GetOptimalSize() const;
+    virtual Size            GetOptimalSize() const SAL_OVERRIDE;
 };
 
 struct ImplBorderFrameData
@@ -244,11 +244,11 @@ class ImplNoBorderWindowView : public ImplBorderWindowView
 public:
                             ImplNoBorderWindowView( ImplBorderWindow* pBorderWindow );
 
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight );
+    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
-                                       sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
-    virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
+                                       sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const SAL_OVERRIDE;
+    virtual long            CalcTitleWidth() const SAL_OVERRIDE;
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset ) SAL_OVERRIDE;
 };
 
 class ImplSmallBorderWindowView : public ImplBorderWindowView
@@ -266,11 +266,11 @@ class ImplSmallBorderWindowView : public ImplBorderWindowView
 public:
                             ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow );
 
-    virtual void            Init( OutputDevice* pOutDev, long nWidth, long nHeight );
+    virtual void            Init( OutputDevice* pOutDev, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
-                                       sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
-    virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
+                                       sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const SAL_OVERRIDE;
+    virtual long            CalcTitleWidth() const SAL_OVERRIDE;
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset ) SAL_OVERRIDE;
 };
 
 class ImplStdBorderWindowView : public ImplBorderWindowView
@@ -283,17 +283,17 @@ public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
                             ~ImplStdBorderWindowView();
 
-    virtual bool        MouseMove( const MouseEvent& rMEvt );
-    virtual bool        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual bool        Tracking( const TrackingEvent& rTEvt );
-    virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
-    virtual Rectangle       GetMenuRect() const;
+    virtual bool        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect ) SAL_OVERRIDE;
+    virtual Rectangle       GetMenuRect() const SAL_OVERRIDE;
 
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight );
+    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
-                                       sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
-    virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
+                                       sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const SAL_OVERRIDE;
+    virtual long            CalcTitleWidth() const SAL_OVERRIDE;
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_BRDWIN_HXX

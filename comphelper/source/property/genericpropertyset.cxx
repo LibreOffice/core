@@ -61,31 +61,31 @@ namespace comphelper
         ::cppu::OMultiTypeInterfaceContainerHelperVar<OUString, OUStringHash> m_aListener;
 
     protected:
-        virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException );
-        virtual void _getPropertyValues( const PropertyMapEntry** ppEntries,  Any* pValue ) throw( UnknownPropertyException,  WrappedTargetException );
+        virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException ) SAL_OVERRIDE;
+        virtual void _getPropertyValues( const PropertyMapEntry** ppEntries,  Any* pValue ) throw( UnknownPropertyException,  WrappedTargetException ) SAL_OVERRIDE;
 
     public:
         GenericPropertySet( PropertySetInfo* pInfo ) throw();
         virtual ~GenericPropertySet() throw();
 
         // XInterface
-        virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException, std::exception);
-        virtual  Any SAL_CALL queryInterface( const  Type & rType ) throw( RuntimeException, std::exception);
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
+        virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual  Any SAL_CALL queryInterface( const  Type & rType ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
         // XTypeProvider
-        virtual  Sequence<  Type > SAL_CALL getTypes(  ) throw( RuntimeException, std::exception);
-        virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw( RuntimeException, std::exception);
+        virtual  Sequence<  Type > SAL_CALL getTypes(  ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw( RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(  RuntimeException, std::exception );
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(  RuntimeException, std::exception );
-        virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException, std::exception );
+        virtual OUString SAL_CALL getImplementationName() throw(  RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(  RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 }

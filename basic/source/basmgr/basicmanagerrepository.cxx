@@ -194,10 +194,10 @@ namespace basic
                 );
 
         // OEventListenerAdapter overridables
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
         // SfxListener overridables
-        virtual void Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint );
+        virtual void Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint ) SAL_OVERRIDE;
 
         /** removes the Model/BasicManager pair given by iterator from our store
         */

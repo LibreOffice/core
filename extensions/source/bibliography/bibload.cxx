@@ -98,9 +98,9 @@ public:
                             ~BibliographyLoader();
 
     // XServiceInfo
-    OUString               SAL_CALL getImplementationName() throw(std::exception  );
-    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
-    Sequence< OUString >   SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
+    OUString               SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
+    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >   SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
     static OUString                getImplementationName_Static() throw(  )
 
                             {
@@ -110,22 +110,22 @@ public:
                             }
 
     //XNameAccess
-    virtual Any SAL_CALL getByName(const OUString& aName) throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
-    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw ( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw ( RuntimeException, std::exception );
+    virtual Any SAL_CALL getByName(const OUString& aName) throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //XElementAccess
-    virtual Type  SAL_CALL getElementType(void) throw ( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasElements(void) throw ( RuntimeException, std::exception );
+    virtual Type  SAL_CALL getElementType(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //XPropertySet
-    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo(void) throw ( RuntimeException, std::exception );
-    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception );
-    virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw ( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw ( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static(void) throw(  );
 
@@ -134,8 +134,8 @@ public:
     // XLoader
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void            SAL_CALL cancel(void) throw (::com::sun::star::uno::RuntimeException, std::exception);
+                                const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void            SAL_CALL cancel(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 BibliographyLoader::BibliographyLoader() :

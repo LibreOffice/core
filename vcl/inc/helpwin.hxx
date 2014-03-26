@@ -46,9 +46,9 @@ private:
 
 protected:
                         DECL_LINK( TimerHdl, Timer* );
-    virtual void        Paint( const Rectangle& );
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual OUString    GetText() const;
+    virtual void        Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual OUString    GetText() const SAL_OVERRIDE;
     void                ImplShow();
 
 public:
@@ -69,7 +69,7 @@ public:
     Size                CalcOutSize() const;
     const Rectangle&    GetHelpArea() const { return maHelpArea; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,

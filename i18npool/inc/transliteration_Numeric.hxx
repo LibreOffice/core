@@ -27,27 +27,27 @@ class transliteration_Numeric : public transliteration_commonclass {
 public:
         virtual OUString SAL_CALL
         transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, ::com::sun::star::uno::Sequence< sal_Int32 >& offset )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar)
         throw(com::sun::star::i18n::MultipleCharsOutputException,
-                com::sun::star::uno::RuntimeException, std::exception);
+                com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // Methods which are shared.
-        virtual sal_Int16 SAL_CALL getType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Int16 SAL_CALL getType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual OUString SAL_CALL
         folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, ::com::sun::star::uno::Sequence< sal_Int32 >& offset )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL
         equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         transliterateRange( const OUString& str1, const OUString& str2 )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 protected:
         sal_Int16 nNativeNumberMode;
         sal_Int16 tableSize;

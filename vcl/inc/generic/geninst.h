@@ -58,9 +58,9 @@ public:
                         SalYieldMutex();
                         ~SalYieldMutex();
 
-    virtual void        acquire();
-    virtual void        release();
-    virtual bool        tryToAcquire();
+    virtual void        acquire() SAL_OVERRIDE;
+    virtual void        release() SAL_OVERRIDE;
+    virtual bool        tryToAcquire() SAL_OVERRIDE;
 
     sal_uIntPtr GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }

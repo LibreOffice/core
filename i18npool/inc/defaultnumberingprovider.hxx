@@ -52,12 +52,12 @@ public:
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         com::sun::star::container::XIndexAccess > > SAL_CALL
         getDefaultOutlineNumberings( const com::sun::star::lang::Locale& aLocale )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Sequence<
         com::sun::star::beans::PropertyValue > > SAL_CALL
         getDefaultContinuousNumberingLevels( const com::sun::star::lang::Locale& aLocale )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XNumberingFormatter
     virtual OUString SAL_CALL makeNumberingString(
@@ -65,25 +65,25 @@ public:
         com::sun::star::beans::PropertyValue >& aProperties,
         const com::sun::star::lang::Locale& aLocale )
         throw(com::sun::star::lang::IllegalArgumentException,
-        com::sun::star::uno::RuntimeException, std::exception);
+        com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XNumberingTypeInfo
     virtual com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL getNumberingType( const OUString& NumberingIdentifier )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-                throw( com::sun::star::uno::RuntimeException, std::exception );
+                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( com::sun::star::uno::RuntimeException, std::exception );
+                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-                throw( com::sun::star::uno::RuntimeException, std::exception );
+                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 private:
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     com::sun::star::uno::Reference < com::sun::star::container::XHierarchicalNameAccess > xHierarchicalNameAccess;

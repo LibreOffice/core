@@ -50,7 +50,7 @@ public:
     bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
 
     // scope management
-    virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
+    virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl) SAL_OVERRIDE;
 private:
     AstType*    m_pReturnType;
     DeclList    m_exceptions;

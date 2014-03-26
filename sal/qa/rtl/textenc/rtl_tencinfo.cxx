@@ -32,7 +32,7 @@ namespace
     class testBestMime : public CppUnit::TestFixture
     {
     public:
-        void setUp()
+        void setUp() SAL_OVERRIDE
         {
         }
 
@@ -472,7 +472,7 @@ namespace
     class testBestUnix : public CppUnit::TestFixture
     {
     public:
-        void setUp()
+        void setUp() SAL_OVERRIDE
         {
         }
 
@@ -972,7 +972,7 @@ namespace
     class testBestWindows : public CppUnit::TestFixture
     {
     public:
-        void setUp()
+        void setUp() SAL_OVERRIDE
             {
             }
 
@@ -1526,11 +1526,11 @@ namespace
     {
     public:
         // initialise your test code values here.
-        void setUp()
+        void setUp() SAL_OVERRIDE
             {
             }
 
-        void tearDown()
+        void tearDown() SAL_OVERRIDE
             {
             }
 

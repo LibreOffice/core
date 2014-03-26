@@ -44,7 +44,7 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgStyleNode();
 
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
             void addCssStyleSheet(const OUString& aContent);
 
             /// textCss access

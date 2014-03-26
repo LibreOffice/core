@@ -70,9 +70,9 @@ public:
 
     virtual ~FwkTabPage();
 
-    virtual void    ActivatePage();
-    virtual void    DeactivatePage();
-    virtual void    Resize();
+    virtual void    ActivatePage() SAL_OVERRIDE;
+    virtual void    DeactivatePage() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 };
 
 struct TabEntry
@@ -117,7 +117,7 @@ public:
     FwkTabPage*     AddTabPage( sal_Int32 nIndex, const css::uno::Sequence< css::beans::NamedValue >& rProperties );
     void            ActivatePage( sal_Int32 nIndex );
     void            RemovePage( sal_Int32 nIndex );
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 };
 
 } // namespace framework

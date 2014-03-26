@@ -35,10 +35,10 @@ public:
                     TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
                     ~TextUndoDelPara();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment () const;
+    virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
 
@@ -53,10 +53,10 @@ public:
                     TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoConnectParas();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment () const;
+    virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
 
@@ -71,10 +71,10 @@ public:
                     TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoSplitPara();
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment () const;
+    virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
 
@@ -88,12 +88,12 @@ public:
                     TYPEINFO_OVERRIDE();
                     TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
 
-    virtual bool    Merge( SfxUndoAction *pNextAction );
+    virtual bool    Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
 
-    virtual OUString GetComment () const;
+    virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
 
@@ -107,10 +107,10 @@ public:
                     TYPEINFO_OVERRIDE();
                     TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
 
-    virtual void    Undo();
-    virtual void    Redo();
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment () const;
+    virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
 
@@ -124,10 +124,10 @@ public:
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
                         ~TextUndoSetAttribs();
 
-    virtual void        Undo();
-    virtual void        Redo();
+    virtual void        Undo() SAL_OVERRIDE;
+    virtual void        Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment () const;
+    virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_SOURCE_EDIT_TEXTUND2_HXX

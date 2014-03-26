@@ -31,8 +31,8 @@ public:
     virtual ~X11SalTimer();
 
     // overload all pure virtual methods
-    void  Start( sal_uIntPtr nMS );
-    void  Stop();
+    void  Start( sal_uIntPtr nMS ) SAL_OVERRIDE;
+    void  Stop() SAL_OVERRIDE;
 };
 
 #endif

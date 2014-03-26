@@ -37,7 +37,7 @@ class BibWindowContainer : public BibWindow     //Window
         BibShortCutHandler*     pChild;
 
     protected:
-        virtual void            Resize();
+        virtual void            Resize() SAL_OVERRIDE;
 
     public:
         BibWindowContainer( Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
@@ -45,9 +45,9 @@ class BibWindowContainer : public BibWindow     //Window
 
         inline Window*          GetChild();
 
-        virtual void            GetFocus();
+        virtual void            GetFocus() SAL_OVERRIDE;
 
-        virtual sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+        virtual sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
 
         using Window::GetChild;
 };
@@ -77,9 +77,9 @@ class BibBookContainer: public BibSplitWindow
 
     protected:
 
-        virtual void            Split();
+        virtual void            Split() SAL_OVERRIDE;
 
-        virtual bool            PreNotify( NotifyEvent& rNEvt );
+        virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     public:
 
@@ -94,9 +94,9 @@ class BibBookContainer: public BibSplitWindow
 
         void                    createBottomFrame( BibShortCutHandler* pWin );
 
-        virtual void            GetFocus();
+        virtual void            GetFocus() SAL_OVERRIDE;
 
-        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
 };
 
 #endif

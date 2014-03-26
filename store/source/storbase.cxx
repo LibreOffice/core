@@ -84,11 +84,11 @@ public:
 
     /** Delegate multiple inherited rtl::IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire()
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
     {
         return OStoreObject::acquire();
     }
-    virtual oslInterlockedCount SAL_CALL release()
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
     {
         return OStoreObject::release();
     }
@@ -106,8 +106,8 @@ private:
 
     /** PageData::Allocator implementation.
      */
-    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize);
-    virtual void deallocate_Impl (void * pPage);
+    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) SAL_OVERRIDE;
+    virtual void deallocate_Impl (void * pPage) SAL_OVERRIDE;
 
     /** Not implemented.
      */

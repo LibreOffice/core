@@ -265,9 +265,9 @@ class Iris : public SceneObject
 public:
     Iris ();
 
-    virtual void prepare();
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const;
-    virtual void finish();
+    virtual void prepare() SAL_OVERRIDE;
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) const SAL_OVERRIDE;
+    virtual void finish() SAL_OVERRIDE;
 
 private:
     GLuint maTexture;
@@ -389,7 +389,7 @@ protected:
 class SRotate: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
     /** Constructor
 
@@ -436,7 +436,7 @@ makeSRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,doub
 class SScale: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
     /** Constructor
 
@@ -471,7 +471,7 @@ makeSScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,boo
 class STranslate: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
     /** Constructor
 
@@ -504,7 +504,7 @@ makeSTranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T
 class SEllipseTranslate: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
     /** Constructor
 
@@ -542,7 +542,7 @@ makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, doub
 class RotateAndScaleDepthByWidth: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
     RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByWidth(){}
@@ -560,7 +560,7 @@ makeRotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3D
 class RotateAndScaleDepthByHeight: public Operation
 {
 public:
-    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const;
+    virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
     RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByHeight(){}

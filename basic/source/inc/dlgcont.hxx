@@ -36,37 +36,37 @@ namespace basic
 class SfxDialogLibraryContainer : public SfxLibraryContainer
 {
     // Methods to distinguish between different library types
-    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName );
+    virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) SAL_OVERRIDE;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
-          const OUString& StorageURL, sal_Bool ReadOnly );
-    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void );
-    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
+          const OUString& StorageURL, sal_Bool ReadOnly ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) SAL_OVERRIDE;
+    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const SAL_OVERRIDE;
     virtual void SAL_CALL writeLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
     )
-        throw(::com::sun::star::uno::Exception);
+        throw(::com::sun::star::uno::Exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL importFromOldStorage( const OUString& aFile );
+    virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) SAL_OVERRIDE;
 
-    virtual SfxLibraryContainer* createInstanceImpl( void );
+    virtual SfxLibraryContainer* createInstanceImpl( void ) SAL_OVERRIDE;
 
-    virtual void onNewRootStorage();
+    virtual void onNewRootStorage() SAL_OVERRIDE;
 
-    virtual const sal_Char* SAL_CALL    getInfoFileName() const;
-    virtual const sal_Char* SAL_CALL    getOldInfoFileName() const;
-    virtual const sal_Char* SAL_CALL    getLibElementFileExtension() const;
-    virtual const sal_Char* SAL_CALL    getLibrariesDir() const;
+    virtual const sal_Char* SAL_CALL    getInfoFileName() const SAL_OVERRIDE;
+    virtual const sal_Char* SAL_CALL    getOldInfoFileName() const SAL_OVERRIDE;
+    virtual const sal_Char* SAL_CALL    getLibElementFileExtension() const SAL_OVERRIDE;
+    virtual const sal_Char* SAL_CALL    getLibrariesDir() const SAL_OVERRIDE;
 
 public:
     SfxDialogLibraryContainer( void );
@@ -75,7 +75,7 @@ public:
     // Methods XStorageBasedLibraryContainer
     virtual void SAL_CALL storeLibrariesToStorage(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Resource handling
     ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
@@ -83,12 +83,12 @@ public:
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XLibraryQueryExecutable
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // Service
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static();
     static OUString getImplementationName_static();
@@ -111,13 +111,13 @@ class SfxDialogLibrary  :public SfxLibrary
     OUString                                                 m_aName;
 
     // Provide modify state including resources
-    virtual sal_Bool isModified( void );
-    virtual void storeResources( void );
-    virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName );
+    virtual sal_Bool isModified( void ) SAL_OVERRIDE;
+    virtual void storeResources( void ) SAL_OVERRIDE;
+    virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
     virtual void storeResourcesToURL( const OUString& URL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler  );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler  ) SAL_OVERRIDE;
     virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
-        < ::com::sun::star::embed::XStorage >& xStorage );
+        < ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
 
 public:
     SfxDialogLibrary
@@ -144,7 +144,7 @@ public:
 
     // XStringResourceSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
-        SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OUString getName( void )
         { return m_aName; }
@@ -158,7 +158,7 @@ public:
     static bool containsValidDialog( const ::com::sun::star::uno::Any& aElement );
 
 protected:
-    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
+    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const SAL_OVERRIDE;
 };
 
 }   // namespace basic

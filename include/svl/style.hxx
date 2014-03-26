@@ -290,11 +290,11 @@ public:
                         SfxStyleSheet( const OUString&, const SfxStyleSheetBasePool&, SfxStyleFamily, sal_uInt16 );
                         SfxStyleSheet( const SfxStyleSheet& );
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual bool        isUsedByModel() const;
+    virtual bool        isUsedByModel() const SAL_OVERRIDE;
 
-    virtual bool        SetParent( const OUString& );
+    virtual bool        SetParent( const OUString& ) SAL_OVERRIDE;
 
 protected:
     SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
@@ -311,7 +311,7 @@ class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
 protected:
     using SfxStyleSheetBasePool::Create;
-    virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, sal_uInt16 mask);
+    virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, sal_uInt16 mask) SAL_OVERRIDE;
     virtual SfxStyleSheetBase* Create(const SfxStyleSheet &);
 
 public:
@@ -382,7 +382,7 @@ public:
     static SfxUnoStyleSheet* getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle );
 
     // XUnoTunnel
-    virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     SfxUnoStyleSheet(); // not implemented

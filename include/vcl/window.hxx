@@ -375,8 +375,8 @@ private:
     friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
-    bool                               ImplInitGraphics() const;
-    void                               ImplReleaseGraphics( bool bRelease = true );
+    bool                               ImplInitGraphics() const SAL_OVERRIDE;
+    void                               ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
@@ -579,11 +579,11 @@ protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const;
     virtual OUString getDefaultAccessibleName() const;
 
-    virtual void               CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
-    virtual void               ClipToPaintRegion( Rectangle& rDstRect );
+    virtual void               CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags) SAL_OVERRIDE;
+    virtual void               ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
 
 public:
-    bool HasMirroredGraphics() const;
+    bool HasMirroredGraphics() const SAL_OVERRIDE;
 
 public:
     // Single argument ctors shall be explicit.
@@ -595,7 +595,7 @@ public:
     OutputDevice const* GetOutDev() const { return mpOutputDevice; };
     OutputDevice*       GetOutDev()       { return mpOutputDevice; };
 
-    virtual void        EnableRTL ( bool bEnable = true );
+    virtual void        EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
@@ -697,7 +697,7 @@ public:
     void                SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical = false );
 
     using               OutputDevice::SetSettings;
-    virtual void        SetSettings( const AllSettings& rSettings );
+    virtual void        SetSettings( const AllSettings& rSettings ) SAL_OVERRIDE;
     virtual void        SetSettings( const AllSettings& rSettings, sal_Bool bChild );
     void                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                NotifyAllChildren( DataChangedEvent& rDCEvt );

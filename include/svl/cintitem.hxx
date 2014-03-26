@@ -43,28 +43,28 @@ public:
 
     virtual ~CntByteItem() { DBG_DTOR(CntByteItem, 0); }
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
     using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const;
+    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const;
+        const SAL_OVERRIDE;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            sal_uInt8 nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0);
+                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
     virtual sal_uInt8 GetMin() const;
 
@@ -105,28 +105,28 @@ public:
 
     virtual ~CntUInt16Item() { DBG_DTOR(CntUInt16Item, 0); }
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
     using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const;
+    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const;
+        const SAL_OVERRIDE;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            sal_uInt8 nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0);
+                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
     virtual sal_uInt16 GetMin() const;
 
@@ -167,28 +167,28 @@ public:
 
     virtual ~CntInt32Item() { DBG_DTOR(CntInt32Item, 0); }
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
     using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const;
+    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const;
+        const SAL_OVERRIDE;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            sal_uInt8 nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0);
+                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream &, sal_uInt16) const;
+    virtual SvStream & Store(SvStream &, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
     virtual sal_Int32 GetMin() const;
 
@@ -229,28 +229,28 @@ public:
 
     virtual ~CntUInt32Item() { DBG_DTOR(CntUInt32Item, 0); }
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
     using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const;
+    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const;
+        const SAL_OVERRIDE;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            sal_uInt8 nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          sal_uInt8 nMemberId = 0);
+                          sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
     virtual sal_uInt32 GetMin() const;
 

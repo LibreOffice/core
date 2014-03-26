@@ -49,7 +49,7 @@ public:
                               const uno::Sequence< beans::NamedValue > &xParameters,
                               bool bShowDialog );
 
-    virtual void SAL_CALL run();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
     void    setTerminating();
 
@@ -83,25 +83,25 @@ public:
 
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
-        throw (lang::IllegalArgumentException, uno::Exception, std::exception);
+        throw (lang::IllegalArgumentException, uno::Exception, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTerminateListener
     virtual void SAL_CALL queryTermination( lang::EventObject const & evt )
-        throw ( frame::TerminationVetoException, uno::RuntimeException, std::exception );
+        throw ( frame::TerminationVetoException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL notifyTermination( lang::EventObject const & evt )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     uno::Reference<uno::XComponentContext>  m_xContext;

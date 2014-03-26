@@ -35,7 +35,7 @@ protected:
         const SvXMLExportPropertyMapper& rPropExp
         , const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap
-        ) const;
+        ) const SAL_OVERRIDE;
 
 public:
     SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport );

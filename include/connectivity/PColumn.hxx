@@ -52,8 +52,8 @@ namespace connectivity
             sal_Bool        m_bIsSearchable;
 
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
             virtual ~OParseColumn();
         public:
@@ -73,7 +73,7 @@ namespace connectivity
                     const OUString& _SchemaName,
                     const OUString& _TableName);
 
-            virtual void construct();
+            virtual void construct() SAL_OVERRIDE;
 
             void setRealName(const OUString& _rName)  { m_aRealName  = _rName; }
             void setLabel(const OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
@@ -126,8 +126,8 @@ namespace connectivity
             const   sal_Bool        m_bAscending;
 
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
             virtual ~OOrderColumn();
         public:
@@ -144,9 +144,9 @@ namespace connectivity
                 sal_Bool _bAscending
             );
 
-            virtual void construct();
+            virtual void construct() SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };

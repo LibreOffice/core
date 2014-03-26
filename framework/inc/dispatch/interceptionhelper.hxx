@@ -215,7 +215,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(const css::util::URL&  aURL            ,
                                                                                     const OUString& sTargetFrameName,
                                                                                           sal_Int32        nSearchFlags    )
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XDispatchProvider
@@ -232,7 +232,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
             @return A list of dispatch objects.
          */
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XDispatchProviderInterception
@@ -251,7 +251,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
             @throw      A RuntimeException if the given reference is NULL!
          */
         virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XDispatchProviderInterception
@@ -266,7 +266,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
 
             @throw      A RuntimeException if the given reference is NULL!
          */
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
         // XEventListener
@@ -277,7 +277,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
                         Normaly we will die by ref count too ...
          */
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 }; // class InterceptionHelper
 

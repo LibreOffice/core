@@ -25,11 +25,11 @@ namespace
     public:
         LotusWordProTest() : BootstrapFixture(true, false) {}
 
-        virtual void setUp();
+        virtual void setUp() SAL_OVERRIDE;
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
-            unsigned int, unsigned int, unsigned int);
+            unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
 
         void test();
 

@@ -288,18 +288,18 @@ class FileLockBytes :
 
     /** ILockBytes implementation.
      */
-    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
+    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) SAL_OVERRIDE;
 
-    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset);
-    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset);
+    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
+    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
 
-    virtual storeError readAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes);
-    virtual storeError writeAt_Impl (sal_uInt32 nOffset, void const * pBuffer, sal_uInt32 nBytes);
+    virtual storeError readAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
+    virtual storeError writeAt_Impl (sal_uInt32 nOffset, void const * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
 
-    virtual storeError getSize_Impl (sal_uInt32 & rnSize);
-    virtual storeError setSize_Impl (sal_uInt32 nSize);
+    virtual storeError getSize_Impl (sal_uInt32 & rnSize) SAL_OVERRIDE;
+    virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
 
-    virtual storeError flush_Impl();
+    virtual storeError flush_Impl() SAL_OVERRIDE;
 
     /** Not implemented.
      */
@@ -313,8 +313,8 @@ public:
 
     /** Delegate multiple inherited IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire();
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 protected:
     /** Destruction.
@@ -527,23 +527,23 @@ class MappedLockBytes :
 
     /** PageData::Allocator implementation.
      */
-    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize);
-    virtual void deallocate_Impl (void * pPage);
+    virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) SAL_OVERRIDE;
+    virtual void deallocate_Impl (void * pPage) SAL_OVERRIDE;
 
     /** ILockBytes implementation.
      */
-    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
+    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) SAL_OVERRIDE;
 
-    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset);
-    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset);
+    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
+    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
 
-    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes);
-    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes);
+    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
+    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
 
-    virtual storeError getSize_Impl (sal_uInt32 & rnSize);
-    virtual storeError setSize_Impl (sal_uInt32 nSize);
+    virtual storeError getSize_Impl (sal_uInt32 & rnSize) SAL_OVERRIDE;
+    virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
 
-    virtual storeError flush_Impl();
+    virtual storeError flush_Impl() SAL_OVERRIDE;
 
     /** Not implemented.
      */
@@ -557,8 +557,8 @@ public:
 
     /** Delegate multiple inherited IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire();
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 protected:
     /* Destruction.
@@ -684,18 +684,18 @@ class MemoryLockBytes :
 
     /** ILockBytes implementation.
      */
-    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
+    virtual storeError initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize) SAL_OVERRIDE;
 
-    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset);
-    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset);
+    virtual storeError readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
+    virtual storeError writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset) SAL_OVERRIDE;
 
-    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes);
-    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes);
+    virtual storeError readAt_Impl  (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
+    virtual storeError writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes) SAL_OVERRIDE;
 
-    virtual storeError getSize_Impl (sal_uInt32 & rnSize);
-    virtual storeError setSize_Impl (sal_uInt32 nSize);
+    virtual storeError getSize_Impl (sal_uInt32 & rnSize) SAL_OVERRIDE;
+    virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
 
-    virtual storeError flush_Impl();
+    virtual storeError flush_Impl() SAL_OVERRIDE;
 
     /** Not implemented.
      */
@@ -709,8 +709,8 @@ public:
 
     /** Delegate multiple inherited IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire();
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 protected:
     /** Destruction.

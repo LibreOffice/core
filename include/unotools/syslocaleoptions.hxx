@@ -47,7 +47,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSysLocaleOptions : public utl::detai
     static  sal_Int32                   nRefCount;
 
     UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint );
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint ) SAL_OVERRIDE;
 
 public:
 
@@ -91,7 +91,7 @@ public:
         BlockBroadcasts(false) or otherwise pending hints would never be
         broadcasted again.
      */
-       virtual void             BlockBroadcasts( bool bBlock );
+       virtual void             BlockBroadcasts( bool bBlock ) SAL_OVERRIDE;
 
     // config value access methods
 

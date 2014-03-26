@@ -58,8 +58,8 @@ public:
     virtual ~SvtSearchOptions_Impl();
 
     // ConfigItem
-    virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     bool            GetFlag( sal_uInt16 nOffset ) const;
     void            SetFlag( sal_uInt16 nOffset, bool bVal );

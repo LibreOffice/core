@@ -100,14 +100,14 @@ class SvStringHashTable : public SvHashTable
 {
     SvStringHashEntry*      pEntries;
 protected:
-    virtual sal_uInt32          HashFunc( const OString& rElement ) const;
-    virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const;
+    virtual sal_uInt32          HashFunc( const OString& rElement ) const SAL_OVERRIDE;
+    virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const SAL_OVERRIDE;
 public:
             SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
             virtual ~SvStringHashTable();
 
     OString GetNearString( const OString& rName ) const;
-    virtual sal_Bool    IsEntry( sal_uInt32 nIndex ) const;
+    virtual sal_Bool    IsEntry( sal_uInt32 nIndex ) const SAL_OVERRIDE;
 
     sal_Bool    Insert( const OString& rStr, sal_uInt32 * pHash ); // insert string
     sal_Bool    Test( const OString& rStr, sal_uInt32 * pHash ) const; // test of insert string

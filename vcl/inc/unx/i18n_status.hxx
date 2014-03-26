@@ -43,8 +43,8 @@ public:
     X11ImeStatus() {}
     virtual ~X11ImeStatus();
 
-    virtual bool canToggle();
-    virtual void toggle();
+    virtual bool canToggle() SAL_OVERRIDE;
+    virtual void toggle() SAL_OVERRIDE;
 };
 
 class I18NStatus

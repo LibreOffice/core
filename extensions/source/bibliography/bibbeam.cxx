@@ -81,7 +81,7 @@ namespace bib
 
     protected:
 
-            virtual void        Resize();
+            virtual void        Resize() SAL_OVERRIDE;
 
     public:
 
@@ -95,7 +95,7 @@ namespace bib
             // #100312#
             const Reference< frame::XDispatchProviderInterception>& getDispatchProviderInterception() const { return m_xDispatchProviderInterception; }
 
-            virtual void GetFocus();
+            virtual void GetFocus() SAL_OVERRIDE;
     };
 
     BibGridwin::BibGridwin( Window* _pParent, WinBits _nStyle ) : Window( _pParent, _nStyle )

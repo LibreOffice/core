@@ -59,49 +59,49 @@ public:
                                  RscTop * pSuper = NULL,
                                  bool bNoId = true );
                     ~RscBaseCont();
-    virtual RSCCLASS_TYPE   GetClassType() const;
+    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     void            SetTypeClass( RscTop * pClass, RscTop * pClass1 = NULL )
                         {
                             pTypeClass = pClass;
                             pTypeClass1 = pClass1;
                         }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool );
-    void            Destroy( const RSCINST & rInst );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
+    void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;
     ERRTYPE         GetElement( const RSCINST & rInst, const RscId & rEleName,
                                 RscTop * pCreateClass, const RSCINST & rCreateInst,
-                                RSCINST * pGetInst );
+                                RSCINST * pGetInst ) SAL_OVERRIDE;
     RSCINST         SearchEle( const RSCINST & rInst, const RscId & rEleName,
-                               RscTop * pClass );
-    sal_uInt32          GetCount( const RSCINST & rInst );
-    RSCINST         GetPosEle( const RSCINST & rInst, sal_uInt32 nPos );
+                               RscTop * pClass ) SAL_OVERRIDE;
+    sal_uInt32          GetCount( const RSCINST & rInst ) SAL_OVERRIDE;
+    RSCINST         GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ) SAL_OVERRIDE;
     ERRTYPE         MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
-                                sal_uInt32 nSourcePos );
+                                sal_uInt32 nSourcePos ) SAL_OVERRIDE;
     virtual ERRTYPE SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
-                                 const RscId & rRscId);
-    SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos );
-    ERRTYPE         SetString( const RSCINST &, const char * pStr );
-    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 lValue );
-    ERRTYPE         SetBool( const RSCINST & rInst, bool bValue );
+                                 const RscId & rRscId) SAL_OVERRIDE;
+    SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ) SAL_OVERRIDE;
+    ERRTYPE         SetString( const RSCINST &, const char * pStr ) SAL_OVERRIDE;
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 lValue ) SAL_OVERRIDE;
+    ERRTYPE         SetBool( const RSCINST & rInst, bool bValue ) SAL_OVERRIDE;
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
-                              sal_Int32 nValue );
-    ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
+                              sal_Int32 nValue ) SAL_OVERRIDE;
+    ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId ) SAL_OVERRIDE;
 
                     // Gibt die Groesse der Klasse in Bytes
-    sal_uInt32      Size(){ return nSize; }
+    sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
 
-    bool            IsConsistent( const RSCINST & rInst );
-    void            SetToDefault( const RSCINST & rInst );
-    bool            IsDefault( const RSCINST & rInst );
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    bool            IsConsistent( const RSCINST & rInst ) SAL_OVERRIDE;
+    void            SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE;
+    bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE;
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
 
     void            Delete( const RSCINST & rInst, RscTop * pClass,
-                            const RscId & rId );
-    void            DeletePos( const RSCINST & rInst, sal_uInt32 nPos );
+                            const RscId & rId ) SAL_OVERRIDE;
+    void            DeletePos( const RSCINST & rInst, sal_uInt32 nPos ) SAL_OVERRIDE;
 
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32 , bool bExtra);
+                             RscTypCont * pTC, sal_uInt32 , bool bExtra) SAL_OVERRIDE;
 };
 
 class RscContWriteSrc : public RscBaseCont
@@ -111,7 +111,7 @@ public:
                                      RscTop * pSuper = NULL,
                                      bool bNoId = true );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
 };
 
 class RscCont : public RscContWriteSrc
@@ -121,7 +121,7 @@ public:
                              RscTop * pSuper = NULL,
                              bool bNoId = true );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
 };
 
 class RscContExtraData : public RscContWriteSrc
@@ -131,7 +131,7 @@ public:
                                       RscTop * pSuper = NULL,
                                       bool bNoId = true );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
 };
 
 #endif //_RSCCONT_HXX

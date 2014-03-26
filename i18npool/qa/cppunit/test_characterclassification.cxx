@@ -23,8 +23,8 @@ using namespace ::com::sun::star;
 class TestCharacterClassification : public test::BootstrapFixtureBase
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void testTitleCase();
     void testStringType();

@@ -25,7 +25,7 @@ namespace
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
-            unsigned int, unsigned int, unsigned int);
+            unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
 
         void test();
 

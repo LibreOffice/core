@@ -109,28 +109,28 @@ namespace XSLT
         // XActiveDataSink
         virtual void SAL_CALL
         setInputStream(const com::sun::star::uno::Reference<XInputStream>& inputStream)
-                throw (RuntimeException, std::exception);
+                throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual com::sun::star::uno::Reference<XInputStream> SAL_CALL
-        getInputStream() throw (RuntimeException, std::exception);
+        getInputStream() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         // XActiveDataSource
         virtual void SAL_CALL
         setOutputStream(const com::sun::star::uno::Reference<XOutputStream>& outputStream)
-                throw (RuntimeException, std::exception);
+                throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual com::sun::star::uno::Reference<XOutputStream> SAL_CALL
-        getOutputStream() throw (RuntimeException, std::exception);
+        getOutputStream() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         // XActiveDataControl
         virtual void SAL_CALL
         addListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
-                throw (RuntimeException, std::exception);
+                throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
         removeListener(const com::sun::star::uno::Reference<XStreamListener>& listener)
-                throw (RuntimeException, std::exception);
+                throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
-        start() throw (RuntimeException, std::exception);
+        start() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
-        terminate() throw (RuntimeException, std::exception);
+        terminate() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
-        initialize(const Sequence<Any>& params) throw (RuntimeException, std::exception);
+        initialize(const Sequence<Any>& params) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         void SAL_CALL
         done();
@@ -180,7 +180,7 @@ namespace XSLT
         Sequence<sal_Int8> m_writeBuf;
 
         virtual void
-        execute();
+        execute() SAL_OVERRIDE;
         void SAL_CALL
         registerExtensionModule();
     };

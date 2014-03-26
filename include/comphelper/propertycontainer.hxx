@@ -57,24 +57,24 @@ protected:
                             ::com::sun::star::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException);
+                                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
     virtual void SAL_CALL   setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const ::com::sun::star::uno::Any& rValue
                             )
                             throw (::com::sun::star::uno::Exception,
-                                   std::exception);
+                                   std::exception) SAL_OVERRIDE;
 
     using OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
                                 ::com::sun::star::uno::Any& rValue,
                                 sal_Int32 nHandle
-                                     ) const;
+                                     ) const SAL_OVERRIDE;
 
     // disambiguate a base class method (XFastPropertySet)
     virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

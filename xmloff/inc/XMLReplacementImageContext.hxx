@@ -51,12 +51,12 @@ public:
                 ::com::sun::star::beans::XPropertySet >& rPropSet );
     virtual ~XMLReplacementImageContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
 };
 

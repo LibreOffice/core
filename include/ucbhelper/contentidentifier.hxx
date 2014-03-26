@@ -51,27 +51,27 @@ public:
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL
-    acquire() throw();
+    acquire() throw() SAL_OVERRIDE;
     virtual void SAL_CALL
-    release() throw();
+    release() throw() SAL_OVERRIDE;
 
     // XTypeProvider
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XContentIdentifier
     virtual OUString SAL_CALL
     getContentIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual OUString SAL_CALL
     getContentProviderScheme()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     ContentIdentifier_Impl* m_pImpl;

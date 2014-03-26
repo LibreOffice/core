@@ -240,23 +240,23 @@ protected:
 class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 {
 public:
-    virtual void    DrawText( SalGraphics& ) const;
+    virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual long    FillDXArray( sal_Int32* pDXArray ) const;
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
+    virtual long    FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
                                    int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
-                                   const PhysicalFontFace** pFallbackFonts ) const;
-    virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
+                                   const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
+    virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const SAL_OVERRIDE;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
                                     const PhysicalFontFace* pBaseFont = NULL );
     virtual bool    AddFallback( SalLayout& rFallbackLayout,
                                  ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    InitFont() const;
+    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    InitFont() const SAL_OVERRIDE;
 
     void SetInComplete(bool bInComplete = true);
 
@@ -265,9 +265,9 @@ protected:
 
 private:
     // dummy implementations
-    virtual void    MoveGlyph( int, long ) {}
-    virtual void    DropGlyph( int ) {}
-    virtual void    Simplify( bool ) {}
+    virtual void    MoveGlyph( int, long ) SAL_OVERRIDE {}
+    virtual void    DropGlyph( int ) SAL_OVERRIDE {}
+    virtual void    Simplify( bool ) SAL_OVERRIDE {}
 
     // enforce proper copy semantic
     SAL_DLLPRIVATE  MultiSalLayout( const MultiSalLayout& );
@@ -327,7 +327,7 @@ public:
     // used by layout engines
     void            AppendGlyph( const GlyphItem& );
     void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
-    virtual void    AdjustLayout( ImplLayoutArgs& );
+    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    ApplyDXArray( ImplLayoutArgs& );
     virtual void    Justify( long nNewWidth );
     void            KashidaJustify( long nIndex, int nWidth );
@@ -335,24 +335,24 @@ public:
     void            SortGlyphItems();
 
     // used by upper layers
-    virtual long    GetTextWidth() const;
-    virtual long    FillDXArray( sal_Int32* pDXArray ) const;
+    virtual long    GetTextWidth() const SAL_OVERRIDE;
+    virtual long    FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const SAL_OVERRIDE;
 
     // used by display layers
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
                         sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const;
+                        const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;
 
 protected:
                     GenericSalLayout();
     virtual         ~GenericSalLayout();
 
     // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
+    virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE;
+    virtual void    DropGlyph( int nStart ) SAL_OVERRIDE;
+    virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
     bool            GetCharWidths( sal_Int32* pCharWidths ) const;
 

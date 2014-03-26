@@ -44,8 +44,8 @@ namespace vclcanvas
         BackBuffer( const OutputDevice& rRefDevice,
                     bool                bMonochromeBuffer=false );
 
-        virtual OutputDevice&       getOutDev();
-        virtual const OutputDevice& getOutDev() const;
+        virtual OutputDevice&       getOutDev() SAL_OVERRIDE;
+        virtual const OutputDevice& getOutDev() const SAL_OVERRIDE;
 
         void setSize( const ::Size& rNewSize );
 

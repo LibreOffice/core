@@ -52,10 +52,10 @@ friend class SvtURLBox_Impl;
     SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
 
 protected:
-    virtual bool                    Notify( NotifyEvent& rNEvt );
-    virtual void                    Select();
-    virtual void                    Modify();
-    virtual bool                    PreNotify( NotifyEvent& rNEvt );
+    virtual bool                    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void                    Select() SAL_OVERRIDE;
+    virtual void                    Modify() SAL_OVERRIDE;
+    virtual bool                    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
                                     SvtURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );

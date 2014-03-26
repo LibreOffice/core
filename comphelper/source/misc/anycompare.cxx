@@ -63,7 +63,7 @@ namespace comphelper
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
         {
             Date lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -94,7 +94,7 @@ namespace comphelper
     class TimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
         {
             Time lhs, rhs;
             if  (   !( _lhs >>= lhs )
@@ -130,7 +130,7 @@ namespace comphelper
     class DateTimePredicateLess : public IKeyPredicateLess
     {
     public:
-        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
+        virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const SAL_OVERRIDE
         {
             DateTime lhs, rhs;
             if  (   !( _lhs >>= lhs )

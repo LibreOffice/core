@@ -75,7 +75,7 @@ public:
     MacroWarning( Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
     ~MacroWarning();
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
     void    SetDocumentURL( const OUString& rDocURL );
 

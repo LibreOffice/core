@@ -45,7 +45,7 @@ public:
 private:
     virtual ~Reader();
 
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
 
     void readMessage(Unmarshal & unmarshal);
 

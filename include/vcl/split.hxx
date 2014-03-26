@@ -71,17 +71,17 @@ public:
     virtual void        Split();
     virtual void        Splitting( Point& rSplitPos );
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        Tracking( const TrackingEvent& rTEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
-    virtual bool        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        Paint( const Rectangle& rPaintRect );
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rPaintRect ) SAL_OVERRIDE;
 
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void                StartDrag();
 

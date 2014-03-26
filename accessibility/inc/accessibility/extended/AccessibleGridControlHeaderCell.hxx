@@ -32,37 +32,37 @@ namespace accessibility
                         ::svt::table::IAccessibleTable& _rTable,
                         ::svt::table::AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** @return  The XAccessible interface of the specified child. */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
-            getAccessibleChild( sal_Int32 nChildIndex ) throw ( ::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException, std::exception );
+            getAccessibleChild( sal_Int32 nChildIndex ) throw ( ::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** @return  The index of this object among the parent's children. */
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** Grabs the focus to the GridControl. */
-        virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XInterface
 
         /** Queries for a new interface. */
         ::com::sun::star::uno::Any SAL_CALL queryInterface(
                 const ::com::sun::star::uno::Type& rType )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** Aquires the object (calls acquire() on base class). */
-        virtual void SAL_CALL acquire() throw ();
+        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
 
         /** Releases the object (calls release() on base class). */
-        virtual void SAL_CALL release() throw ();
+        virtual void SAL_CALL release() throw () SAL_OVERRIDE;
         // XAccessible
 
         /** @return  The XAccessibleContext interface of this object. */
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         inline sal_Bool isRowBarCell() const
         {
@@ -72,19 +72,19 @@ namespace accessibility
         /** @return
                 The name of this class.
         */
-        virtual OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** Creates a new AccessibleStateSetHelper and fills it with states of the
             current object.
             @return
                 A filled AccessibleStateSetHelper.
         */
-        ::utl::AccessibleStateSetHelper* implCreateStateSetHelper();
+        ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() SAL_OVERRIDE;
 
     protected:
-        virtual Rectangle implGetBoundingBox();
+        virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
 
-        virtual Rectangle implGetBoundingBoxOnScreen();
+        virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
     private:
         OUString m_sHeaderName;
     };

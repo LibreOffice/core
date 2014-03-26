@@ -61,11 +61,11 @@ public:
      // XCommandEnvironemnt
     virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler()
         throw ( css::uno::RuntimeException,
-                std::exception );
+                std::exception ) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler()
         throw ( css::uno::RuntimeException,
-                std::exception );
+                std::exception ) SAL_OVERRIDE;
 };
 
 } /* namespace ucbhelper */

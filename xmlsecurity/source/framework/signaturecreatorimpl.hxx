@@ -64,13 +64,13 @@ private:
         com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
 
     virtual void notifyResultListener() const
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-    virtual void clearUp( ) const;
-    virtual bool checkReady() const;
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void clearUp( ) const SAL_OVERRIDE;
+    virtual bool checkReady() const SAL_OVERRIDE;
     virtual void startEngine( const com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSignatureTemplate >&
         xSignatureTemplate)
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 public:
     explicit SignatureCreatorImpl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext );
@@ -78,31 +78,31 @@ public:
 
     /* XBlockerMonitor */
     virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /* XSignatureCreationResultBroadcaster */
     void SAL_CALL addSignatureCreationResultListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSignatureCreationResultListener >& listener )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void SAL_CALL removeSignatureCreationResultListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSignatureCreationResultListener >& listener )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
         const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 OUString SignatureCreatorImpl_getImplementationName()

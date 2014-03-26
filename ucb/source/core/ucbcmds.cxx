@@ -111,7 +111,7 @@ public:
     // XInteractionHandler methods.
     virtual void SAL_CALL handle(
             const uno::Reference< task::XInteractionRequest >& Request )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 
@@ -180,9 +180,9 @@ public:
     // XActiveDataSink methods.
     virtual void SAL_CALL setInputStream(
                         const uno::Reference< io::XInputStream >& aStream )
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Reference< io::XInputStream > SAL_CALL getInputStream()
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 
@@ -219,17 +219,17 @@ public:
 
     // XCommandInfo methods
     virtual uno::Sequence< ucb::CommandInfo > SAL_CALL getCommands()
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ucb::CommandInfo SAL_CALL
     getCommandInfoByName( const OUString& Name )
-        throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception );
+        throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ucb::CommandInfo SAL_CALL
     getCommandInfoByHandle( sal_Int32 Handle )
-        throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception );
+        throw( ucb::UnsupportedCommandException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasCommandByName( const OUString& Name )
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasCommandByHandle( sal_Int32 Handle )
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 

@@ -45,9 +45,9 @@ namespace svt { namespace uno
         virtual ~WizardPageController();
 
         // IWizardPageController overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >&
                             getWizardPage() const { return m_xWizardPage; }

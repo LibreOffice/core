@@ -40,18 +40,18 @@ public:
 protected:
     // export the events off all autotexts
     virtual sal_uInt32 exportDoc(
-        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID );
+        enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) SAL_OVERRIDE;
 
     // accept XDocumentProperties in addition to XModel
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // override
-    virtual void _ExportMeta();
+    virtual void _ExportMeta() SAL_OVERRIDE;
 
     // methods without content:
-    virtual void _ExportAutoStyles();
-    virtual void _ExportMasterStyles();
-    virtual void _ExportContent();
+    virtual void _ExportAutoStyles() SAL_OVERRIDE;
+    virtual void _ExportMasterStyles() SAL_OVERRIDE;
+    virtual void _ExportContent() SAL_OVERRIDE;
 };
 
 // global functions to support the component

@@ -95,7 +95,7 @@ namespace cairocanvas
 
     private:
         virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const SAL_OVERRIDE;
 
 
         SpriteCanvasRef           mpSpriteCanvas;

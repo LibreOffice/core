@@ -38,7 +38,7 @@ namespace {
     {
         DamageTracker( SvpSalFrame& rFrame ) : m_rFrame( rFrame ) {}
         virtual ~DamageTracker() {}
-        virtual void damaged( const basegfx::B2IBox& rDamageRect ) const
+        virtual void damaged( const basegfx::B2IBox& rDamageRect ) const SAL_OVERRIDE
         {
             m_rFrame.damaged( rDamageRect );
         }

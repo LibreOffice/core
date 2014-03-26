@@ -139,24 +139,24 @@ public:
                     BrowserDataWin( BrowseBox* pParent );
                     ~BrowserDataWin();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    Command( const CommandEvent& rEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rEvt );
-    virtual void    MouseMove( const MouseEvent& rEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
                     DECL_LINK( RepeatedMouseMove, void * );
 
-    virtual void    MouseButtonUp( const MouseEvent& rEvt );
-    virtual void    KeyInput( const KeyEvent& rEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
+    virtual void    MouseButtonUp( const MouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
     // DropTargetHelper overridables
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     // DragSourceHelper overridables
-    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
 
 
     BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
@@ -171,9 +171,9 @@ public:
     void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
-    void            Invalidate( sal_uInt16 nFlags = 0 );
-    void            Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    void            Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 )
+    void            Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    void            Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    void            Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE
                     { Control::Invalidate( rRegion, nFlags ); }
 
 protected:
@@ -208,8 +208,8 @@ public:
                     {}
                     //ScrollBar( Window* pParent, const ResId& rResId );
 
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void    EndScroll();
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void    EndScroll() SAL_OVERRIDE;
 };
 
 

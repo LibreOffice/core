@@ -70,15 +70,15 @@ namespace {
         virtual ~PresenterScreenListener (void);
 
         void Initialize (void);
-        virtual void SAL_CALL disposing (void);
+        virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
         // document::XEventListener
 
-        virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
 
-        virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         css::uno::Reference<css::frame::XModel2 > mxModel;

@@ -87,9 +87,9 @@ public:
 
     virtual ~XMLPropertiesTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
-    virtual void Export();
+    virtual void Export() SAL_OVERRIDE;
 
     static XMLPropType GetPropType( const OUString& rLocalName );
 

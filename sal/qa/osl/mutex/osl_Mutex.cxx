@@ -103,7 +103,7 @@ public:
 protected:
     struct resource *pResource;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         pResource->lock.acquire( );
         for( sal_Int8 i = 0; i < 3; i++ )
@@ -131,7 +131,7 @@ public:
 protected:
     struct resource *pResource;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         pResource->lock.acquire( );
         for( sal_Int8 i = 0; i < 3; i++ )
@@ -169,7 +169,7 @@ public:
 protected:
     struct chain* pChain;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         //block here if the mutex has been acquired
         pChain->lock.acquire( );
@@ -207,7 +207,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run()
+    void SAL_CALL run() SAL_OVERRIDE
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
@@ -229,7 +229,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
@@ -251,7 +251,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "#GlobalMutexThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         // block here if the mutex has been acquired
         Mutex* pGlobalMutex;
@@ -276,7 +276,7 @@ namespace osl_Mutex
         struct chain m_Data;
         struct resource m_Res;
 
-        void setUp( )
+        void setUp( ) SAL_OVERRIDE
         {
             for ( sal_Int8 i=0; i < BUFFER_SIZE; i++ )
                 m_Data.buffer[i] = 0;
@@ -286,7 +286,7 @@ namespace osl_Mutex
             m_Res.data2 = 0;
         }
 
-        void tearDown()
+        void tearDown() SAL_OVERRIDE
         {
         }
 
@@ -574,7 +574,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         // block here if the mutex has been acquired
         MutexGuard aGuard( pMyMutex );
@@ -660,7 +660,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         // acquire the mutex
         // printf("# ClearGuardThread" );
@@ -802,7 +802,7 @@ public:
 protected:
     Mutex* pMyMutex;
 
-    void SAL_CALL run( )
+    void SAL_CALL run( ) SAL_OVERRIDE
     {
         // acquire the mutex
         printf("# ResettableGuard\n" );

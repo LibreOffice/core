@@ -46,13 +46,13 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
         }
 
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_bSelected = true;
         }
 
         void SAL_CALL setName(const OUString& Name)
-            throw(::com::sun::star::uno::RuntimeException, std::exception)
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_aNewName = Name;
         }
@@ -86,7 +86,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
         }
 
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_bSelected = true;
         }
@@ -117,13 +117,13 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
             sal_Int32 CommandId);
 
         ::com::sun::star::uno::Any SAL_CALL getRequest(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return m_aSeq;
         }

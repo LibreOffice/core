@@ -94,17 +94,17 @@ public:
     explicit        ScrollBar( Window* pParent, const ResId& );
     virtual         ~ScrollBar();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void    Resize();
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
     using Window::Scroll;
     virtual void    Scroll();
@@ -140,7 +140,7 @@ public:
     void            SetEndScrollHdl( const Link& rLink ) { maEndScrollHdl = rLink; }
     const Link&     GetEndScrollHdl() const { return maEndScrollHdl; }
 
-    virtual Size    GetOptimalSize() const;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
 
@@ -157,8 +157,8 @@ private:
 public:
     explicit        ScrollBarBox( Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_SCRBAR_HXX

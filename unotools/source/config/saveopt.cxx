@@ -93,8 +93,8 @@ public:
                             SvtSaveOptions_Impl();
                             ~SvtSaveOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void            Commit() SAL_OVERRIDE;
 
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
     bool                    IsUseUserData() const               { return bUseUserData; }
@@ -761,8 +761,8 @@ public:
                             SvtLoadOptions_Impl();
                             ~SvtLoadOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void            Commit() SAL_OVERRIDE;
 
     void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
     bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}

@@ -50,10 +50,10 @@ class SvMetaModule : public SvMetaExtern
     SvGlobalName            aEndName;
     SvGlobalName            aNextName;
 protected:
-    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteContextSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
+    virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        WriteContextSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 public:
                         SV_DECL_META_FACTORY1( SvMetaModule, SvMetaExtern, 13 )
                         SvMetaModule();
@@ -61,7 +61,7 @@ public:
     const OUString &    GetIdlFileName() const { return aIdlFileName; }
     const OString& GetModulePrefix() const { return aModulePrefix.getString(); }
 
-    virtual sal_Bool    SetName( const OString& rName, SvIdlDataBase * = NULL  );
+    virtual sal_Bool    SetName( const OString& rName, SvIdlDataBase * = NULL  ) SAL_OVERRIDE;
 
     const OString& GetHelpFileName() const { return aHelpFileName.getString(); }
     const OString& GetTypeLibFileName() const { return aTypeLibFile.getString(); }
@@ -77,14 +77,14 @@ public:
     sal_Bool                IsImported() const { return bImported; }
     sal_Bool                IsModified() const { return bIsModified; }
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        WriteAttributes( SvIdlDataBase & rBase,
                                         SvStream & rOutStm, sal_uInt16 nTab,
-                                            WriteType, WriteAttribute = 0 );
+                                            WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                    WriteType, WriteAttribute = 0 );
+                                    WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                     HelpIdTable& rTable );

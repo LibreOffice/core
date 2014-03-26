@@ -51,9 +51,9 @@ class AddonsToolBarManager : public ToolBarManager
         virtual ~AddonsToolBarManager();
 
         // XComponent
-        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void RefreshImages();
+        virtual void RefreshImages() SAL_OVERRIDE;
         using ToolBarManager::FillToolbar;
         void FillToolbar( const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonToolbar );
 
@@ -67,7 +67,7 @@ class AddonsToolBarManager : public ToolBarManager
         DECL_LINK( StateChanged, StateChangedType* );
         DECL_LINK( DataChanged, DataChangedEvent* );
 
-        virtual bool MenuItemAllowed( sal_uInt16 ) const;
+        virtual bool MenuItemAllowed( sal_uInt16 ) const SAL_OVERRIDE;
 };
 
 }

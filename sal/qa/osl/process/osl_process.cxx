@@ -433,13 +433,13 @@ public:
     }
 
 
-    virtual void setUp()
+    virtual void setUp() SAL_OVERRIDE
     {
         temp_file_path_ = create_temp_file(temp_file_url_);
         parameters_[1]  = temp_file_path_.pData;
     }
 
-    virtual void tearDown()
+    virtual void tearDown() SAL_OVERRIDE
     {
         osl::File::remove(temp_file_url_);
     }

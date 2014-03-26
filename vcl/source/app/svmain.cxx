@@ -201,7 +201,7 @@ oslSignalHandler   pExceptionHandler = NULL;
 class DummyApplication : public Application
 {
 public:
-    int                Main() { return EXIT_SUCCESS; };
+    int                Main() SAL_OVERRIDE { return EXIT_SUCCESS; };
 };
 
 class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
@@ -212,7 +212,7 @@ public:
 
     // XCurrentContext
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
@@ -325,7 +325,7 @@ namespace
  */
 class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
 {
-    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 void

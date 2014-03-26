@@ -44,16 +44,16 @@ namespace svt { namespace table
         DefaultInputHandler();
         ~DefaultInputHandler();
 
-        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt );
-        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt );
-        virtual bool    GetFocus        ( ITableControl& _rControl );
-        virtual bool    LoseFocus       ( ITableControl& _rControl );
-        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt );
-        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt );
-        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt );
-        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt );
+        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual bool    GetFocus        ( ITableControl& _rControl ) SAL_OVERRIDE;
+        virtual bool    LoseFocus       ( ITableControl& _rControl ) SAL_OVERRIDE;
+        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt ) SAL_OVERRIDE;
+        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt ) SAL_OVERRIDE;
+        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
 
 

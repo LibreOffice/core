@@ -47,7 +47,7 @@ namespace svt
     public:
         IDLabel( Window* _pParent, WinBits _nWinStyle = 0 );
         ~IDLabel( );
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     };
 
 

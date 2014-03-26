@@ -34,14 +34,14 @@ namespace connectivity
 
             // OCollection
             virtual void impl_refresh()
-                throw(::com::sun::star::uno::RuntimeException);
+                throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
             virtual ::connectivity::sdbcx::ObjectType createObject(
-                                                const ::rtl::OUString& rName);
+                                                const ::rtl::OUString& rName) SAL_OVERRIDE;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    createDescriptor();
+                    createDescriptor() SAL_OVERRIDE;
             virtual ::connectivity::sdbcx::ObjectType appendObject(
                         const OUString& rName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor) SAL_OVERRIDE;
 
         public:
             Tables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& rMetaData,
@@ -53,7 +53,7 @@ namespace connectivity
             // XAppend,  etc., but all are optional.
 
             // XDrop
-            virtual void dropObject(sal_Int32 nPosition, const ::rtl::OUString& rName);
+            virtual void dropObject(sal_Int32 nPosition, const ::rtl::OUString& rName) SAL_OVERRIDE;
 
         };
 

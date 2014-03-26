@@ -1081,8 +1081,8 @@ public:
 
     virtual         ~ImplPolygonPointFilter() {}
 
-    virtual void    LastPoint();
-    virtual void    Input( const Point& rPoint );
+    virtual void    LastPoint() SAL_OVERRIDE;
+    virtual void    Input( const Point& rPoint ) SAL_OVERRIDE;
 };
 
 void ImplPolygonPointFilter::Input( const Point& rPoint )
@@ -1132,8 +1132,8 @@ public:
     bool                IsPolygon() const
                             { return maFirstPoint == maLastPoint; }
 
-    virtual void        Input( const Point& rPoint );
-    virtual void        LastPoint();
+    virtual void        Input( const Point& rPoint ) SAL_OVERRIDE;
+    virtual void        LastPoint() SAL_OVERRIDE;
 };
 
 inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const

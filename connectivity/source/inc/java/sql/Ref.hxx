@@ -37,13 +37,13 @@ namespace connectivity
         static jclass theClass;
         virtual ~java_sql_Ref();
     public:
-        virtual jclass getMyClass() const;
+        virtual jclass getMyClass() const SAL_OVERRIDE;
 
         // A ctor that is needed for returning the object
         java_sql_Ref( JNIEnv * pEnv, jobject myObj );
 
         // XRef
-        virtual OUString SAL_CALL getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_REF_HXX_

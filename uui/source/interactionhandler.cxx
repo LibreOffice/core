@@ -51,32 +51,32 @@ public:
     virtual ~UUIInteractionHandler() SAL_THROW(());
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService(OUString const &
                           rServiceName)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     initialize(
         com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
             rArguments)
-        throw (com::sun::star::uno::Exception, std::exception);
+        throw (com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     handle(com::sun::star::uno::Reference<
            com::sun::star::task::XInteractionRequest > const &
        rRequest)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::sal_Bool SAL_CALL
         handleInteractionRequest(
             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _Request
-        )   throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        )   throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 UUIInteractionHandler::UUIInteractionHandler(

@@ -69,11 +69,11 @@ public:
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) {}
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
 
     virtual void SAL_CALL dispatchFinished(
         css::frame::DispatchResultEvent const & Result)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     Result * result_;
 };
@@ -101,7 +101,7 @@ public:
 
 private:
     virtual void SAL_CALL notify(css::uno::Any const &)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { dispatch_->dispatchWithNotification(url_, arguments_, listener_); }
 
     css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
@@ -112,9 +112,9 @@ private:
 
 class Test: public CppUnit::TestFixture {
 public:
-    virtual void setUp();
+    virtual void setUp() SAL_OVERRIDE;
 
-    virtual void tearDown();
+    virtual void tearDown() SAL_OVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE(Test);

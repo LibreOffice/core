@@ -29,9 +29,9 @@ class KDEData : public X11SalData
                         : X11SalData( SAL_DATA_KDE4, pInstance ) {}
         virtual ~KDEData();
 
-        virtual void Init();
-        virtual void initNWF();
-        virtual void deInitNWF();
+        virtual void Init() SAL_OVERRIDE;
+        virtual void initNWF() SAL_OVERRIDE;
+        virtual void deInitNWF() SAL_OVERRIDE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

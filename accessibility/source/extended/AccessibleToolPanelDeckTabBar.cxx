@@ -74,7 +74,7 @@ namespace accessibility
         }
 
         // XAccessible
-        virtual Reference< XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (RuntimeException, std::exception)
+        virtual Reference< XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
         {
             return m_xContext;
         }
@@ -108,11 +108,11 @@ namespace accessibility
 
     protected:
         // IToolPanelDeckListener
-        virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
-        virtual void PanelRemoved( const size_t i_nPosition );
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
-        virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
-        virtual void Dying();
+        virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) SAL_OVERRIDE;
+        virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
+        virtual void Dying() SAL_OVERRIDE;
 
         DECL_LINK( OnWindowEvent, const VclSimpleEvent* );
 

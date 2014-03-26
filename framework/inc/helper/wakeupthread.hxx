@@ -71,9 +71,9 @@ class WakeUpThread : public ::osl::Thread
                     The listener can use this "timeout" info for it's own purpose.
                     The thread itself will wait on the condition again.
          */
-        virtual void SAL_CALL run();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
 
-        virtual void SAL_CALL onTerminated();
+        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 };
 
 } // namespace framework

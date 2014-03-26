@@ -71,7 +71,7 @@ public:
      */
 
 protected:
-    virtual void SAL_CALL       run();
+    virtual void SAL_CALL       run() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_UNX_KDE_UNXNOTIFYTHREAD_HXX

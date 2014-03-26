@@ -54,7 +54,7 @@ public:
                         MessBox( Window* pParent, const ResId& rResId );
                         ~MessBox();
 
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     void                SetMessText( const OUString& rText ) { maMessText = rText; }
     const OUString&     GetMessText() const { return maMessText; }
@@ -67,7 +67,7 @@ public:
     void                SetCheckBoxState( bool bCheck );
     bool            GetCheckBoxState() const;
 
-    virtual Size        GetOptimalSize() const;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class VCL_DLLPUBLIC InfoBox : public MessBox

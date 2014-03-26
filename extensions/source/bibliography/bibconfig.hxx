@@ -106,8 +106,8 @@ public:
     BibConfig();
     ~BibConfig();
 
-    virtual void    Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     BibDBDescriptor         GetBibliographyURL();
     void                    SetBibliographyURL(const BibDBDescriptor& rDesc);

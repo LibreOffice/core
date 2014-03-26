@@ -110,11 +110,11 @@ public:
     short     GetSize()  { return mnSize; }
 
 public:
-    virtual oslInterlockedCount SAL_CALL acquire()
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
     {
         return ++mnRefCount;
     }
-    virtual oslInterlockedCount SAL_CALL release()
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
     {
         if ( --mnRefCount == 0)
         {

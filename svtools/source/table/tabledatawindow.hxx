@@ -54,14 +54,14 @@ namespace svt { namespace table
         inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }
 
         // Window overridables
-        virtual void        Paint( const Rectangle& rRect );
-        virtual void        MouseMove( const MouseEvent& rMEvt);
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt);
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt);
-        virtual bool        Notify(NotifyEvent& rNEvt);
+        virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void        MouseMove( const MouseEvent& rMEvt) SAL_OVERRIDE;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt) SAL_OVERRIDE;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
+        virtual bool        Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
         virtual void        SetControlBackground(const Color& rColor);
         virtual void        SetControlBackground();
-        virtual void        RequestHelp( const HelpEvent& rHEvt );
+        virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
         void                SetBackground(const Wallpaper& rColor);
 

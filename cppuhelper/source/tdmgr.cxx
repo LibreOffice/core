@@ -626,7 +626,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( lang::EventObject const & rEvt )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 void EventListenerImpl::disposing( lang::EventObject const & rEvt )

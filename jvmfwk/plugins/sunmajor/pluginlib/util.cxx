@@ -299,7 +299,7 @@ class AsynchReader: public salhelper::Thread
 
     virtual ~AsynchReader() {}
 
-    void execute();
+    void execute() SAL_OVERRIDE;
 public:
 
     AsynchReader(oslFileHandle & rHandle);

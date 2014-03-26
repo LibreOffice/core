@@ -59,7 +59,7 @@ namespace DOM
     {
     public:
         virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId )
-            throw (::com::sun::star::uno::RuntimeException, std::exception)
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             InputSource is;
             is.sPublicId = sPublicId;

@@ -38,20 +38,20 @@ public:
     virtual ~PspSalInfoPrinter();
 
     // overload all pure virtual methods
-    virtual SalGraphics*            AcquireGraphics();
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
-    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData );
-    virtual bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData );
+    virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE;
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData ) SAL_OVERRIDE;
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
-                                                 long& rPageWidth, long& rPageHeight );
-    virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
-    virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
-    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
+                                                 long& rPageWidth, long& rPageHeight ) SAL_OVERRIDE;
+    virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) SAL_OVERRIDE;
+    virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin ) SAL_OVERRIDE;
+    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
 };
 
 class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
@@ -79,17 +79,17 @@ public:
                                               sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData );
+                                              ImplJobSetup* pSetupData ) SAL_OVERRIDE;
     virtual bool                    StartJob( const OUString*,
                                               const OUString&,
                                               const OUString&,
                                               ImplJobSetup*,
-                                              vcl::PrinterController& i_rController );
-    virtual bool                    EndJob();
-    virtual bool                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData );
-    virtual bool                    EndPage();
-    virtual sal_uIntPtr                 GetErrorCode();
+                                              vcl::PrinterController& i_rController ) SAL_OVERRIDE;
+    virtual bool                    EndJob() SAL_OVERRIDE;
+    virtual bool                    AbortJob() SAL_OVERRIDE;
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) SAL_OVERRIDE;
+    virtual bool                    EndPage() SAL_OVERRIDE;
+    virtual sal_uIntPtr                 GetErrorCode() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GENPRN_H

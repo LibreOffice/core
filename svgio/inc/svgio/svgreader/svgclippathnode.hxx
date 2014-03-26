@@ -45,9 +45,9 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgClipPathNode();
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
-            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
+            virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
+            virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const SAL_OVERRIDE;
 
             /// apply contained clipPath to given geometry
             void apply(drawinglayer::primitive2d::Primitive2DSequence& rTarget) const;

@@ -112,20 +112,20 @@ class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventLi
 
         // frame.XLoadEventListener
         virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // frame.XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

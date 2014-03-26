@@ -123,26 +123,26 @@ namespace cairocanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XBufferController (partial)
-        virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL switchBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL switchBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // SurfaceProvider
-        virtual SurfaceSharedPtr getSurface();
-        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
-        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap );
-        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent );
-        virtual OutputDevice* getOutputDevice();
+        virtual SurfaceSharedPtr getSurface() SAL_OVERRIDE;
+        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
+        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
+        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
+        virtual OutputDevice* getOutputDevice() SAL_OVERRIDE;
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
                               const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState );
+                              const ::com::sun::star::rendering::RenderState& renderState ) SAL_OVERRIDE;
 
         SurfaceSharedPtr getWindowSurface();
         SurfaceSharedPtr getBufferSurface();

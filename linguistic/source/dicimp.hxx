@@ -91,91 +91,91 @@ public:
     // XNamed
     virtual OUString SAL_CALL
         getName()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         setName( const OUString& aName )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDictionary
     virtual ::com::sun::star::linguistic2::DictionaryType SAL_CALL
         getDictionaryType()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         setActive( sal_Bool bActivate )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         isActive()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL
         getCount()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         setLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XDictionaryEntry > SAL_CALL
         getEntry( const OUString& aWord )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         addEntry( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XDictionaryEntry >& xDicEntry )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         add( const OUString& aWord, sal_Bool bIsNegative,
                 const OUString& aRplcText )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         remove( const OUString& aWord )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         isFull()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XDictionaryEntry > > SAL_CALL
         getEntries()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         clear()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         addDictionaryEventListener( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XDictionaryEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         removeDictionaryEventListener( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XDictionaryEventListener >& xListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStorable
     virtual sal_Bool SAL_CALL
         hasLocation()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
         getLocation()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         isReadonly()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         store()
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         storeAsURL( const OUString& aURL,
                 const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::beans::PropertyValue >& aArgs )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         storeToURL( const OUString& aURL,
                 const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::beans::PropertyValue >& aArgs )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -206,11 +206,11 @@ public:
 
     // XDictionaryEntry
     virtual OUString SAL_CALL
-        getDictionaryWord() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        getDictionaryWord() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
-        isNegative() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        isNegative() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
-        getReplacementText() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        getReplacementText() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

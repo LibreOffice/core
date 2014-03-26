@@ -213,8 +213,8 @@ class Lanczos3Kernel : public Kernel
         boost::math::policies::promote_double<false> > SincPolicy;
 public:
     Lanczos3Kernel() : Kernel () {}
-    virtual double GetWidth() const { return 3.0; }
-    virtual double Calculate (double x) const
+    virtual double GetWidth() const SAL_OVERRIDE { return 3.0; }
+    virtual double Calculate (double x) const SAL_OVERRIDE
     {
         return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
     }
@@ -234,8 +234,8 @@ class BicubicKernel : public Kernel {
 public:
     BicubicKernel() : Kernel () {}
 private:
-    virtual double GetWidth() const { return 2.0; }
-    virtual double Calculate (double x) const
+    virtual double GetWidth() const SAL_OVERRIDE { return 2.0; }
+    virtual double Calculate (double x) const SAL_OVERRIDE
     {
         if (x < 0.0)
         {
@@ -258,8 +258,8 @@ class BilinearKernel : public Kernel {
 public:
     BilinearKernel() : Kernel () {}
 private:
-    virtual double GetWidth() const { return 1.0; }
-    virtual double Calculate (double x) const
+    virtual double GetWidth() const SAL_OVERRIDE { return 1.0; }
+    virtual double Calculate (double x) const SAL_OVERRIDE
     {
         if (x < 0.0)
         {
@@ -277,8 +277,8 @@ class BoxKernel : public Kernel {
 public:
     BoxKernel() : Kernel () {}
 private:
-    virtual double GetWidth() const { return 0.5; }
-    virtual double Calculate (double x) const
+    virtual double GetWidth() const SAL_OVERRIDE { return 0.5; }
+    virtual double Calculate (double x) const SAL_OVERRIDE
     {
         if (-0.5 <= x && x < 0.5)
             return 1.0;

@@ -64,8 +64,8 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgPatternNode();
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
 
             /// global helpers
             void getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode& rUser) const;
@@ -74,7 +74,7 @@ namespace svgio
             const drawinglayer::primitive2d::Primitive2DSequence& getPatternPrimitives() const;
 
             /// InfoProvider support for % values
-            virtual const basegfx::B2DRange getCurrentViewPort() const;
+            virtual const basegfx::B2DRange getCurrentViewPort() const SAL_OVERRIDE;
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const;

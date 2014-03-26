@@ -49,46 +49,46 @@ namespace connectivity
                   m_pSqlda(0)
             {}
 
-            virtual void disposeResultSet();
+            virtual void disposeResultSet() SAL_OVERRIDE;
 
             DECLARE_SERVICE_INFO();
 
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
+            virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+            virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
             // XStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL
                 executeQuery(const ::rtl::OUString& sql)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual sal_Int32 SAL_CALL executeUpdate(const ::rtl::OUString& sqlIn)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual sal_Bool SAL_CALL
                 execute(const ::rtl::OUString& sql)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL
                 getConnection()
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XBatchExecution - UNSUPPORTED
-            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
-            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL
                 queryInterface(const ::com::sun::star::uno::Type & rType)
-                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
                 getTypes()
-                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XCloseable
             virtual void SAL_CALL close()
                 throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception);
+                      ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // OComponentHelper
-            virtual void SAL_CALL disposing();
+            virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 
         };

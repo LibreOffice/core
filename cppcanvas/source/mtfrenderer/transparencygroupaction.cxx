@@ -95,15 +95,15 @@ namespace cppcanvas
                                          const CanvasSharedPtr&         rCanvas,
                                          const OutDevState&             rState );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
-                                           const Subset&                  rSubset ) const;
+                                           const Subset&                  rSubset ) const SAL_OVERRIDE;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const SAL_OVERRIDE;
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const;
+                                                       const Subset&                    rSubset ) const SAL_OVERRIDE;
 
-                virtual sal_Int32 getActionCount() const;
+                virtual sal_Int32 getActionCount() const SAL_OVERRIDE;
 
             private:
                 MtfAutoPtr                                          mpGroupMtf;

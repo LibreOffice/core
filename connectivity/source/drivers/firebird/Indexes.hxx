@@ -30,7 +30,7 @@ namespace connectivity
         protected:
             // XDrop
             virtual void dropObject(sal_Int32 nPosition,
-                                    const ::rtl::OUString& sIndexName);
+                                    const ::rtl::OUString& sIndexName) SAL_OVERRIDE;
         public:
             Indexes(Table* pTable,
                     ::osl::Mutex& rMutex,

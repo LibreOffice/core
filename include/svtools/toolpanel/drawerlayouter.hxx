@@ -56,22 +56,22 @@ namespace svt
         DECLARE_IREFERENCE()
 
         // IDeckLayouter
-        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
-        virtual void        Destroy();
-        virtual void        SetFocusToPanelSelector();
-        virtual size_t      GetAccessibleChildCount() const;
+        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) SAL_OVERRIDE;
+        virtual void        Destroy() SAL_OVERRIDE;
+        virtual void        SetFocusToPanelSelector() SAL_OVERRIDE;
+        virtual size_t      GetAccessibleChildCount() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                             GetAccessibleChild(
                                 const size_t i_nChildIndex,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
-                            );
+                            ) SAL_OVERRIDE;
 
         // IToolPanelDeckListener
-        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
-        virtual void PanelRemoved( const size_t i_nPosition );
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
-        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter );
-        virtual void Dying();
+        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) SAL_OVERRIDE;
+        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
+        virtual void Dying() SAL_OVERRIDE;
 
     private:
         // triggers a re-arrance of the panel deck elements

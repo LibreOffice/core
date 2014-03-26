@@ -35,11 +35,11 @@ class create : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -108,11 +108,11 @@ class createBF : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -156,11 +156,11 @@ class decode : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -293,11 +293,11 @@ class decodeBF : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -317,11 +317,11 @@ class destroy : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -344,11 +344,11 @@ class destroyBF : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -373,11 +373,11 @@ class encode : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -446,11 +446,11 @@ class encodeBF : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -470,11 +470,11 @@ class init : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -583,11 +583,11 @@ class initBF : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 

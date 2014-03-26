@@ -78,26 +78,26 @@ namespace connectivity
             MysqlCDriver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
             // OComponentHelper
-            void SAL_CALL disposing(void);
+            void SAL_CALL disposing(void) SAL_OVERRIDE;
             // XInterface
             static OUString getImplementationName_Static()                  throw(RuntimeException);
             static Sequence< OUString > getSupportedServiceNames_Static()   throw(RuntimeException);
 
             // XServiceInfo
-            OUString SAL_CALL getImplementationName()                       throw(RuntimeException, std::exception);
-            sal_Bool SAL_CALL supportsService(const OUString& ServiceName)  throw(RuntimeException, std::exception);
-            Sequence< OUString > SAL_CALL getSupportedServiceNames()        throw(RuntimeException, std::exception);
+            OUString SAL_CALL getImplementationName()                       throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL supportsService(const OUString& ServiceName)  throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            Sequence< OUString > SAL_CALL getSupportedServiceNames()        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XDriver
             Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect(const OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info)
-                                                                            throw(SQLException, RuntimeException, std::exception);
+                                                                            throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL acceptsURL(const OUString& url) throw(SQLException, RuntimeException, std::exception);
+            sal_Bool SAL_CALL acceptsURL(const OUString& url) throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(const OUString& url, const Sequence< ::com::sun::star::beans::PropertyValue >& info)
-                                                                            throw(SQLException, RuntimeException, std::exception);
+                                                                            throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL getMajorVersion()                            throw(RuntimeException, std::exception);
-            sal_Int32 SAL_CALL getMinorVersion()                            throw(RuntimeException, std::exception);
+            sal_Int32 SAL_CALL getMajorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Int32 SAL_CALL getMinorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             inline Reference< ::com::sun::star::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
 

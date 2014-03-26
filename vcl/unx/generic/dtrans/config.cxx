@@ -33,8 +33,8 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
 {
     sal_Int32           m_nSelectionTimeout;
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames );
-    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
+    virtual void Commit() SAL_OVERRIDE;
 public:
     DtransX11ConfigItem();
     virtual ~DtransX11ConfigItem();

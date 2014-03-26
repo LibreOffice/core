@@ -78,14 +78,14 @@ class KDEXLib : public QObject, public SalXLib
         KDEXLib();
         virtual ~KDEXLib();
 
-        virtual void Init();
-        virtual void Yield( bool bWait, bool bHandleAllCurrentEvents );
-        virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle );
-        virtual void Remove( int fd );
-        virtual void StartTimer( sal_uLong nMS );
-        virtual void StopTimer();
-        virtual void Wakeup();
-        virtual void PostUserEvent();
+        virtual void Init() SAL_OVERRIDE;
+        virtual void Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+        virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle ) SAL_OVERRIDE;
+        virtual void Remove( int fd ) SAL_OVERRIDE;
+        virtual void StartTimer( sal_uLong nMS ) SAL_OVERRIDE;
+        virtual void StopTimer() SAL_OVERRIDE;
+        virtual void Wakeup() SAL_OVERRIDE;
+        virtual void PostUserEvent() SAL_OVERRIDE;
 
         void doStartup();
         bool haveQt4SocketExcludeFix() { return m_haveQt4SocketExcludeFix; }

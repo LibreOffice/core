@@ -34,15 +34,15 @@ class SVL_DLLPUBLIC SvOutputStream: public SvStream
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         m_xStream;
 
-    SVL_DLLPRIVATE virtual sal_uLong GetData(void *, sal_uLong);
+    SVL_DLLPRIVATE virtual sal_uLong GetData(void *, sal_uLong) SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual sal_uLong PutData(void const * pData, sal_uLong nSize);
+    SVL_DLLPRIVATE virtual sal_uLong PutData(void const * pData, sal_uLong nSize) SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual sal_uLong SeekPos(sal_uLong);
+    SVL_DLLPRIVATE virtual sal_uLong SeekPos(sal_uLong) SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual void FlushData();
+    SVL_DLLPRIVATE virtual void FlushData() SAL_OVERRIDE;
 
-    SVL_DLLPRIVATE virtual void SetSize(sal_uLong);
+    SVL_DLLPRIVATE virtual void SetSize(sal_uLong) SAL_OVERRIDE;
 
 public:
     SvOutputStream(com::sun::star::uno::Reference<
@@ -51,7 +51,7 @@ public:
 
     virtual ~SvOutputStream();
 
-    virtual sal_uInt16 IsA() const;
+    virtual sal_uInt16 IsA() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVL_OUTSTRM_HXX

@@ -98,7 +98,7 @@ class Gate : public  IGate
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline virtual void open()
+        inline virtual void open() SAL_OVERRIDE
         {
             // We must safe access to our internal member!
             ::osl::MutexGuard aLock( m_aAccessLock );
@@ -121,7 +121,7 @@ class Gate : public  IGate
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline virtual void close()
+        inline virtual void close() SAL_OVERRIDE
         {
             // We must safe access to our internal member!
             ::osl::MutexGuard aLock( m_aAccessLock );
@@ -147,7 +147,7 @@ class Gate : public  IGate
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline virtual void openGap()
+        inline virtual void openGap() SAL_OVERRIDE
         {
             // We must safe access to our internal member!
             ::osl::MutexGuard aLock( m_aAccessLock );
@@ -174,7 +174,7 @@ class Gate : public  IGate
 
             @onerror    We return false.
         *//*-*****************************************************************************************************/
-        inline virtual sal_Bool wait( const TimeValue* pTimeOut = NULL )
+        inline virtual sal_Bool wait( const TimeValue* pTimeOut = NULL ) SAL_OVERRIDE
         {
             // We must safe access to our internal member!
             ::osl::ClearableMutexGuard aLock( m_aAccessLock );

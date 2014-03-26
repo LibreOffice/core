@@ -30,30 +30,30 @@ public:
     Transliteration_body();
 
     // Methods which are shared.
-    sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException, std::exception);
+    sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OUString SAL_CALL transliterate(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException, std::exception);
+        com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         OUString SAL_CALL
         transliterateChar2String( sal_Unicode inChar)
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar)
         throw(com::sun::star::uno::RuntimeException,
-        com::sun::star::i18n::MultipleCharsOutputException, std::exception);
+        com::sun::star::i18n::MultipleCharsOutputException, std::exception) SAL_OVERRIDE;
 
     OUString SAL_CALL folding(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException, std::exception);
+        com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Bool SAL_CALL equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
-        const OUString& str2 ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        const OUString& str2 ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     sal_uInt8 nMappingType;
@@ -95,7 +95,7 @@ class Transliteration_titlecase : public Transliteration_body
 public:
     Transliteration_titlecase();
 
-    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class Transliteration_sentencecase : public Transliteration_body
@@ -103,7 +103,7 @@ class Transliteration_sentencecase : public Transliteration_body
 public:
     Transliteration_sentencecase();
 
-    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 #endif
 

@@ -86,59 +86,59 @@ namespace DOM
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Obtain an instance of a DOMImplementation object.
         */
         virtual Reference< XDOMImplementation > SAL_CALL getDOMImplementation()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Indicates whether or not this parser is configured to understand
         namespaces.
         */
         virtual sal_Bool SAL_CALL isNamespaceAware()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Indicates whether or not this parser is configured to validate XML
         documents.
         */
         virtual sal_Bool SAL_CALL isValidating()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Obtain a new instance of a DOM Document object to build a DOM tree
         with.
         */
         virtual Reference< XDocument > SAL_CALL newDocument()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Parse the content of the given InputStream as an XML document and
         return a new DOM Document object.
         */
         virtual Reference< XDocument > SAL_CALL parse(const Reference< XInputStream >& is)
-            throw (RuntimeException, SAXParseException, IOException, std::exception);
+            throw (RuntimeException, SAXParseException, IOException, std::exception) SAL_OVERRIDE;
 
         /**
         Parse the content of the given URI as an XML document and return
         a new DOM Document object.
         */
         virtual Reference< XDocument > SAL_CALL parseURI(const OUString& uri)
-            throw (RuntimeException, SAXParseException, IOException, std::exception);
+            throw (RuntimeException, SAXParseException, IOException, std::exception) SAL_OVERRIDE;
 
         /**
         Specify the EntityResolver to be used to resolve entities present
         in the XML document to be parsed.
         */
         virtual void SAL_CALL setEntityResolver(const Reference< XEntityResolver >& er)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual Reference< XEntityResolver > SAL_CALL getEntityResolver()
             throw (RuntimeException);
@@ -149,7 +149,7 @@ namespace DOM
         the XML document to be parsed.
         */
         virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler >& eh)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

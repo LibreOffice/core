@@ -79,38 +79,38 @@ public:
     ~SvFilterOptionsDialog();
 
     // XInterface
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const uno::Sequence< uno::Any > & aArguments )
-        throw ( uno::Exception, uno::RuntimeException, std::exception );
+        throw ( uno::Exception, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XPropertyAccess
     virtual uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
         throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception );
+                uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XExecuteDialog
     virtual sal_Int16 SAL_CALL execute()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setTitle( const OUString& aTitle )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception );
+        throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 };
 

@@ -41,8 +41,8 @@ namespace cppcanvas
                                ::com::sun::star::rendering::XGraphicDevice >& rDevice );
             virtual ~ImplColor();
 
-            virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const;
-            virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const;
+            virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const SAL_OVERRIDE;
+            virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const SAL_OVERRIDE;
 
         private:
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxDevice;

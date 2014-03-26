@@ -91,30 +91,30 @@ public:
     SplashScreen();
 
     // XStatusIndicator
-    virtual void SAL_CALL end() throw ( RuntimeException, std::exception );
-    virtual void SAL_CALL reset() throw ( RuntimeException, std::exception );
-    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException, std::exception );
-    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException, std::exception );
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException, std::exception );
+    virtual void SAL_CALL end() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL reset() throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInitialize
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
-        throw ( RuntimeException, std::exception );
+        throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return desktop::splash::getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return desktop::splash::getSupportedServiceNames(); }
 
     // workwindow
-    virtual void Paint( const Rectangle& );
+    virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
 
 };
 

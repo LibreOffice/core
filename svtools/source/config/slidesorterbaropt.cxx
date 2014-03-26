@@ -65,7 +65,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
             \sa baseclass ConfigItem
             \param[in,out] seqPropertyNames is the list of properties which should be updated.
         */
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames );
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
 
         /**
          loads required data from the configuration. It's called in the constructor to
@@ -80,7 +80,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
 
             \sa baseclass ConfigItem
         */
-        virtual void Commit();
+        virtual void Commit() SAL_OVERRIDE;
 
         //  public interface
         bool m_bVisibleImpressView;

@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 #define Region QtXRegion
 
 #include <kapplication.h>
@@ -29,7 +33,7 @@ class VCLKDEApplication : public KApplication
 {
     public:
         VCLKDEApplication();
-        virtual bool x11EventFilter(XEvent* event);
+        virtual bool x11EventFilter(XEvent* event) SAL_OVERRIDE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

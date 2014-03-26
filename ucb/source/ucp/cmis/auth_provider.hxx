@@ -28,7 +28,7 @@ namespace cmis
                            const OUString& sBindingUrl ):
                 m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
 
-            bool authenticationQuery( std::string& username, std::string& password );
+            bool authenticationQuery( std::string& username, std::string& password ) SAL_OVERRIDE;
     };
 }
 

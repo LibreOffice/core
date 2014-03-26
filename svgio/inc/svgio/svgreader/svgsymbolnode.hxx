@@ -44,8 +44,8 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgSymbolNode();
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }

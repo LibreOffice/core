@@ -26,13 +26,13 @@ public:
                  com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    void SAL_CALL setMetafile (const ::com::sun::star::uno::Sequence< sal_Int8 >& rMtf) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    void SAL_CALL draw (double fScaleX, double fScaleY) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    void SAL_CALL setMetafile (const ::com::sun::star::uno::Sequence< sal_Int8 >& rMtf) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL draw (double fScaleX, double fScaleY) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XFastPropertySet
     // setFastPropertyValue (0, GDIMetaFile*) is used to speedup the rendering
-    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/)  throw (::com::sun::star::uno::RuntimeException, std::exception) { return ::com::sun::star::uno::Any(); }
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 /*nHandle*/)  throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return ::com::sun::star::uno::Any(); }
+    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     GDIMetaFile* mpMetafile;

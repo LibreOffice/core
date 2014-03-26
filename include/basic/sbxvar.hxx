@@ -99,8 +99,8 @@ protected:
 
     virtual void Broadcast( sal_uIntPtr );      // Broadcast-Call
     virtual ~SbxValue();
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VALUE,1);
     TYPEINFO_OVERRIDE();
@@ -108,8 +108,8 @@ public:
     SbxValue( SbxDataType, void* = NULL );
     SbxValue( const SbxValue& );
     SbxValue& operator=( const SbxValue& );
-    virtual void Clear();
-    virtual sal_Bool IsFixed() const;
+    virtual void Clear() SAL_OVERRIDE;
+    virtual sal_Bool IsFixed() const SAL_OVERRIDE;
 
     sal_Bool IsInteger() const { return sal_Bool( GetType() == SbxINTEGER  ); }
     sal_Bool IsLong()    const { return sal_Bool( GetType() == SbxLONG     ); }
@@ -135,8 +135,8 @@ public:
     sal_Bool IsNumericRTL() const;  // #41692 Interface for Basic
     sal_Bool ImpIsNumeric( bool bOnlyIntntl ) const;    // Implementation
 
-    virtual SbxClassType GetClass() const;
-    virtual SbxDataType GetType() const;
+    virtual SbxClassType GetClass() const SAL_OVERRIDE;
+    virtual SbxDataType GetType() const SAL_OVERRIDE;
     SbxDataType GetFullType() const;
     sal_Bool SetType( SbxDataType );
 
@@ -300,8 +300,8 @@ protected:
     sal_uIntPtr nUserData;          // User data for Call()
     SbxObject* pParent;             // Currently attached object
     virtual ~SbxVariable();
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VARIABLE,2);
     TYPEINFO_OVERRIDE();
@@ -316,13 +316,13 @@ public:
     virtual const OUString& GetName( SbxNameType = SbxNAME_NONE ) const;
     sal_uInt16 GetHashCode() const          { return nHash; }
 
-    virtual void SetModified( sal_Bool );
+    virtual void SetModified( sal_Bool ) SAL_OVERRIDE;
 
     sal_uIntPtr GetUserData() const        { return nUserData; }
     void SetUserData( sal_uIntPtr n ) { nUserData = n;    }
 
-    virtual SbxDataType  GetType()  const;
-    virtual SbxClassType GetClass() const;
+    virtual SbxDataType  GetType()  const SAL_OVERRIDE;
+    virtual SbxClassType GetClass() const SAL_OVERRIDE;
 
     // Parameter-Interface
     virtual SbxInfo* GetInfo();
@@ -334,7 +334,7 @@ public:
     // Due to data reduction and better DLL-hierarchie currently via casting
     SfxBroadcaster& GetBroadcaster();
     sal_Bool IsBroadcaster() const { return sal_Bool( pCst != NULL ); }
-    virtual void Broadcast( sal_uIntPtr nHintId );
+    virtual void Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;
 
     inline const SbxObject* GetParent() const { return pParent; }
     SbxObject* GetParent();

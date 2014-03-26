@@ -64,8 +64,8 @@ public:
                         ButtonDialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
                         ~ButtonDialog();
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     virtual void        Click();
 

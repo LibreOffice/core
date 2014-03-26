@@ -42,7 +42,7 @@ namespace ftp {
 
         virtual void SAL_CALL select()
             throw (css::uno::RuntimeException,
-                   std::exception);
+                   std::exception) SAL_OVERRIDE;
 
         bool isSelected() const;
 
@@ -62,7 +62,7 @@ namespace ftp {
         XInteractionDisapproveImpl();
 
         virtual void SAL_CALL select()
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
 
@@ -80,12 +80,12 @@ namespace ftp {
 
         com::sun::star::uno::Any SAL_CALL getRequest(  )
             throw (css::uno::RuntimeException,
-                   std::exception);
+                   std::exception) SAL_OVERRIDE;
 
         css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
             throw (css::uno::RuntimeException,
-                   std::exception);
+                   std::exception) SAL_OVERRIDE;
 
         bool approved() const;
 

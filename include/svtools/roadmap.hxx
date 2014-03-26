@@ -52,7 +52,7 @@ namespace svt
     protected:
         RoadmapImpl*    m_pImpl;
         // Window overridables
-        void            Paint( const Rectangle& _rRect );
+        void            Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
         void            implInit();
 
     public:
@@ -84,12 +84,12 @@ namespace svt
 
         void            SetItemSelectHdl( const Link& _rHdl );
         Link            GetItemSelectHdl( ) const;
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-        virtual void    GetFocus();
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void    GetFocus() SAL_OVERRIDE;
 
 
     protected:
-        bool            PreNotify( NotifyEvent& rNEvt );
+        bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     protected:
         /// called when an item has been selected by any means

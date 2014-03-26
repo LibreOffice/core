@@ -46,39 +46,39 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         acquire(
             void )
-            throw();
+            throw() SAL_OVERRIDE;
 
         virtual void SAL_CALL
         release(
             void )
-            throw();
+            throw() SAL_OVERRIDE;
 
         // XTypeProvider
         virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
         getTypes(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XContentIdentifier
         virtual OUString SAL_CALL
         getContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual OUString SAL_CALL
         getContentProviderScheme(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         shell* m_pMyShell;

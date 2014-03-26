@@ -494,7 +494,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
 {
 public:
-    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception);
+    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception)

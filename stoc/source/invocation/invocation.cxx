@@ -104,98 +104,98 @@ public:
     virtual ~Invocation_Impl();
 
     // XInterface
-    virtual Any         SAL_CALL queryInterface( const Type & aType) throw( RuntimeException, std::exception );
-    virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
+    virtual Any         SAL_CALL queryInterface( const Type & aType) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void        SAL_CALL acquire() throw() SAL_OVERRIDE { OWeakObject::acquire(); }
+    virtual void        SAL_CALL release() throw() SAL_OVERRIDE { OWeakObject::release(); }
 
 
     // XTypeProvider
     virtual Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-       throw(RuntimeException, std::exception);
+       throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
-       throw( RuntimeException, std::exception);
+       throw( RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methoden von XMaterialHolder
-    virtual Any         SAL_CALL getMaterial(void) throw(RuntimeException, std::exception);
+    virtual Any         SAL_CALL getMaterial(void) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInvocation
-    virtual Reference<XIntrospectionAccess> SAL_CALL getIntrospection(void) throw( RuntimeException, std::exception );
+    virtual Reference<XIntrospectionAccess> SAL_CALL getIntrospection(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
-        throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value)
-        throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getValue(const OUString& PropertyName)
-        throw( UnknownPropertyException, RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException, std::exception );
+        throw( UnknownPropertyException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInvocation2
     virtual Sequence< OUString > SAL_CALL getMemberNames(  )
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Sequence< InvocationInfo > SAL_CALL getInfo(  )
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual InvocationInfo SAL_CALL getInfoForName( const OUString& aName, sal_Bool bExact )
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // All Access and Container methods are not thread save
     // XElementAccess
-    virtual Type SAL_CALL getElementType(void) throw( RuntimeException, std::exception )
+    virtual Type SAL_CALL getElementType(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xElementAccess->getElementType(); }
 
-    virtual sal_Bool SAL_CALL hasElements(void) throw( RuntimeException, std::exception )
+    virtual sal_Bool SAL_CALL hasElements(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xElementAccess->hasElements(); }
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& Name, const Any& Element )
-        throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception )
+        throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xNameContainer->insertByName( Name, Element ); }
 
     virtual void SAL_CALL replaceByName( const OUString& Name, const Any& Element )
-        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
+        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xNameContainer->replaceByName( Name, Element ); }
 
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
+        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xNameContainer->removeByName( Name ); }
 
     // XNameAccess
     virtual Any SAL_CALL getByName( const OUString& Name )
-        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
+        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xNameAccess->getByName( Name ); }
 
-    virtual Sequence<OUString> SAL_CALL getElementNames(void) throw( RuntimeException, std::exception )
+    virtual Sequence<OUString> SAL_CALL getElementNames(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xNameAccess->getElementNames(); }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& Name ) throw( RuntimeException, std::exception )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& Name ) throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xNameAccess->hasByName( Name ); }
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element )
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xIndexContainer->insertByIndex( Index, Element ); }
 
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element )
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xIndexContainer->replaceByIndex( Index, Element ); }
 
     virtual void SAL_CALL removeByIndex( sal_Int32 Index )
-        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
+        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { _xIndexContainer->removeByIndex( Index ); }
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(void) throw( RuntimeException, std::exception )
+    virtual sal_Int32 SAL_CALL getCount(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xIndexAccess->getCount(); }
 
     virtual Any SAL_CALL getByIndex( sal_Int32 Index )
-        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
+        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xIndexAccess->getByIndex( Index ); }
 
     // XEnumerationAccess
-    virtual Reference<XEnumeration> SAL_CALL createEnumeration(void) throw( RuntimeException, std::exception )
+    virtual Reference<XEnumeration> SAL_CALL createEnumeration(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xEnumerationAccess->createEnumeration(); }
 
     // XExactName
-    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -1063,14 +1063,14 @@ public:
     virtual ~InvocationService();
 
     // XServiceInfo
-    OUString                    SAL_CALL getImplementationName() throw( RuntimeException, std::exception );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException, std::exception );
-    Sequence< OUString >        SAL_CALL getSupportedServiceNames(void) throw( RuntimeException, std::exception );
+    OUString                    SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    Sequence< OUString >        SAL_CALL getSupportedServiceNames(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XSingleServiceFactory
-    Reference<XInterface>       SAL_CALL createInstance(void) throw( Exception, RuntimeException, std::exception );
+    Reference<XInterface>       SAL_CALL createInstance(void) throw( Exception, RuntimeException, std::exception ) SAL_OVERRIDE;
     Reference<XInterface>       SAL_CALL createInstanceWithArguments(
-        const Sequence<Any>& rArguments ) throw( Exception, RuntimeException, std::exception );
+        const Sequence<Any>& rArguments ) throw( Exception, RuntimeException, std::exception ) SAL_OVERRIDE;
 private:
     Reference<XComponentContext> mxCtx;
     Reference<XMultiComponentFactory> mxSMgr;

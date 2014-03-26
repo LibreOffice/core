@@ -115,12 +115,12 @@ public:
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException, std::exception);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMain
-    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -314,7 +314,7 @@ public:
     void SAL_CALL callRecursivly(
         const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall,
         sal_Int32 nToCall )
-        throw(::com::sun::star::uno::RuntimeException, std::exception)
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             MutexGuard guard( m_mutex );
             if( nToCall )
@@ -340,8 +340,8 @@ class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
 public:
     MyClass();
     virtual ~MyClass();
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 };
 
 

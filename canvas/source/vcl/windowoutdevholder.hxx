@@ -38,8 +38,8 @@ namespace vclcanvas
                                            ::com::sun::star::awt::XWindow>& xWin );
 
     private:
-        virtual OutputDevice&       getOutDev() { return mrOutputWindow; }
-        virtual const OutputDevice& getOutDev() const { return mrOutputWindow; }
+        virtual OutputDevice&       getOutDev() SAL_OVERRIDE { return mrOutputWindow; }
+        virtual const OutputDevice& getOutDev() const SAL_OVERRIDE { return mrOutputWindow; }
 
         // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
         // now listenes to the window component, I still consider

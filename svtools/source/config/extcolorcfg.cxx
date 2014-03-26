@@ -85,8 +85,8 @@ public:
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
     sal_Bool                        ExistsScheme(const OUString& _sSchemeName);
-    virtual void                    Commit();
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames);
+    virtual void                    Commit() SAL_OVERRIDE;
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     sal_Int32                       GetComponentCount() const;
     OUString                 GetComponentName(sal_uInt32 _nPos) const;

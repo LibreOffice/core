@@ -32,8 +32,8 @@ namespace connectivity
         protected:
             OEvoabTable*    m_pTable;
 
-            virtual sdbcx::ObjectType createObject(const OUString& _rName);
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         public:
             OEvoabColumns(  OEvoabTable* _pTable,

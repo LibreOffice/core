@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_XLIB_CAIRO_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_XLIB_CAIRO_HXX
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 #include "cairo_cairo.hxx"
 
 struct SystemEnvData;
@@ -78,15 +82,15 @@ namespace cairo {
         X11Surface( const X11SysData& rSysData, const BitmapSystemData& rBmpData );
 
         // Surface interface
-        virtual CairoSharedPtr getCairo() const;
-        virtual CairoSurfaceSharedPtr getCairoSurface() const { return mpSurface; }
-        virtual SurfaceSharedPtr getSimilar( Content aContent, int width, int height ) const;
+        virtual CairoSharedPtr getCairo() const SAL_OVERRIDE;
+        virtual CairoSurfaceSharedPtr getCairoSurface() const SAL_OVERRIDE { return mpSurface; }
+        virtual SurfaceSharedPtr getSimilar( Content aContent, int width, int height ) const SAL_OVERRIDE;
 
-        virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const;
+        virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const SAL_OVERRIDE;
 
-        virtual void Resize( int width, int height );
+        virtual void Resize( int width, int height ) SAL_OVERRIDE;
 
-        virtual void flush() const;
+        virtual void flush() const SAL_OVERRIDE;
 
         int getDepth() const;
         X11PixmapSharedPtr getPixmap() const { return mpPixmap; }

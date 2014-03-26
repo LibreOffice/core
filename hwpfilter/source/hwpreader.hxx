@@ -85,8 +85,8 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) {}
+    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) SAL_OVERRIDE {}
     virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > xHandler)
     {
         m_rxDocumentHandler = xHandler;
@@ -167,20 +167,20 @@ public:
 public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException, std::exception );
-    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception);
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception);
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     Reference< XFilter > rFilter;

@@ -30,8 +30,8 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
             //  OCatalog*                                           m_pParent;
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName);
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
         public:
             OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
@@ -39,7 +39,7 @@ namespace connectivity
             {}
 
             // only the name is identical to ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
         };
     }
 }

@@ -251,7 +251,7 @@ protected:
     void CalcNewViewportValues();
     bool CalcFocalLength();
 
-    virtual void DeviceRectangleChange();
+    virtual void DeviceRectangleChange() SAL_OVERRIDE;
 };
 
 #endif

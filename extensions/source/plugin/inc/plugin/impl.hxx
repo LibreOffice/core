@@ -237,32 +237,32 @@ public:
 //  static const Reference< com::sun::star::reflection::XIdlClass > &   staticGetIdlClass();
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& ) throw( com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()  throw()
+    virtual Any SAL_CALL queryInterface( const Type& ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire()  throw() SAL_OVERRIDE
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release()  throw()
+    virtual void SAL_CALL release()  throw() SAL_OVERRIDE
     { OWeakAggObject::release(); }
 
     // OWeakAggObject
     virtual Any SAL_CALL queryAggregation( const Type& )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // PluginContol_Impl
-    virtual void SAL_CALL dispose() throw(std::exception);
-    virtual void SAL_CALL createPeer( const Reference< com::sun::star::awt::XToolkit > & xToolkit, const Reference< com::sun::star::awt::XWindowPeer > & Parent) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL dispose() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL createPeer( const Reference< com::sun::star::awt::XToolkit > & xToolkit, const Reference< com::sun::star::awt::XWindowPeer > & Parent) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL setModel( const Reference< com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException, std::exception );
-    virtual Reference< com::sun::star::awt::XControlModel > SAL_CALL getModel()throw( RuntimeException, std::exception )
+    virtual sal_Bool SAL_CALL setModel( const Reference< com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< com::sun::star::awt::XControlModel > SAL_CALL getModel()throw( RuntimeException, std::exception ) SAL_OVERRIDE
     { return m_xModel; }
 
-    virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // com::sun::star::plugin::XPlugin
-    virtual sal_Bool SAL_CALL provideNewStream(const OUString& mimetype, const Reference< com::sun::star::io::XActiveDataSource > & stream, const OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw(std::exception);
+    virtual sal_Bool SAL_CALL provideNewStream(const OUString& mimetype, const Reference< com::sun::star::io::XActiveDataSource > & stream, const OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw(std::exception) SAL_OVERRIDE;
 
     // com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& rSource ) throw(std::exception);
-    virtual void SAL_CALL propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw(std::exception);
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& rSource ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw(std::exception) SAL_OVERRIDE;
 };
 
 class PluginManager
@@ -299,22 +299,22 @@ public:
     static XPlugin_Impl* getXPluginFromNPP( NPP );
     static XPlugin_Impl* getPluginImplementation( const Reference< com::sun::star::plugin::XPlugin >& plugin );
 
-    virtual Reference< com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw(std::exception);
+    virtual Reference< com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw(std::exception) SAL_OVERRIDE;
 
     // has to be implemented per system
     virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL impl_getPluginDescriptions(void) throw();
     // calls system specific impl_getPluginDescriptions
     // checks whether plugins are disabled
-    virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw(std::exception);
+    virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw(std::exception) SAL_OVERRIDE;
 
-    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException, std::exception );
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException, std::exception ) SAL_OVERRIDE;
 
-    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw(std::exception);
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw(std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw();
-    virtual OUString SAL_CALL getImplementationName() throw();
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw() SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw() SAL_OVERRIDE;
 
-    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
+    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  ) SAL_OVERRIDE;
     static Sequence< OUString > getSupportedServiceNames_Static(void) throw(  );
     static OUString                getImplementationName_Static() throw(  )
     {
@@ -372,7 +372,7 @@ public:
 
     virtual ~PluginInputStream();
 
-    virtual PluginStreamType getStreamType();
+    virtual PluginStreamType getStreamType() SAL_OVERRIDE;
 
     void setMode( sal_Int32 nMode );
     sal_uInt32 read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size );
@@ -385,19 +385,19 @@ public:
     { bool bRet = m_xSelf.is(); m_xSelf.clear();  return bRet; }
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception);
-    virtual void SAL_CALL flush() throw(std::exception);
-    virtual void SAL_CALL closeOutput() throw(std::exception);
+    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw(std::exception) SAL_OVERRIDE;
 
     // XConnectable
-    virtual void SAL_CALL setPredecessor( const Reference< com::sun::star::io::XConnectable >& xPredecessor ) throw(std::exception)
+    virtual void SAL_CALL setPredecessor( const Reference< com::sun::star::io::XConnectable >& xPredecessor ) throw(std::exception) SAL_OVERRIDE
         { m_xPredecessor = xPredecessor; }
-    virtual Reference< com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception)
+    virtual Reference< com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception) SAL_OVERRIDE
         { return m_xPredecessor; }
 
-    virtual void SAL_CALL setSuccessor( const Reference< com::sun::star::io::XConnectable >& xSuccessor ) throw(std::exception)
+    virtual void SAL_CALL setSuccessor( const Reference< com::sun::star::io::XConnectable >& xSuccessor ) throw(std::exception) SAL_OVERRIDE
         { m_xSuccessor = xSuccessor; }
-    virtual Reference< com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception)
+    virtual Reference< com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception) SAL_OVERRIDE
         { return m_xSuccessor; }
 };
 
@@ -410,7 +410,7 @@ public:
                         sal_uInt32 len, sal_uInt32 lastmod );
     virtual ~PluginOutputStream();
 
-    virtual PluginStreamType getStreamType();
+    virtual PluginStreamType getStreamType() SAL_OVERRIDE;
 
     Reference< com::sun::star::io::XOutputStream > & getOutputStream() { return m_xStream; }
 };
@@ -436,7 +436,7 @@ public:
     void*       getNotifyData() { return m_pNotifyData; }
 
     // com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject&  Source ) throw(std::exception);
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject&  Source ) throw(std::exception) SAL_OVERRIDE;
 };
 
 #endif

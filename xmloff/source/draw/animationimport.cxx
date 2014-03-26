@@ -1258,15 +1258,15 @@ public:
     AnimationsImport( const Reference< XComponentContext > & rxContext );
     ~AnimationsImport() throw ();
 
-    SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
+    SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) SAL_OVERRIDE;
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
     // XAnimationNodeSupplier
-    Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException, std::exception);
+    Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     Reference< XAnimationNode > mxRootNode;

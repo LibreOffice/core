@@ -45,19 +45,19 @@
 
             Changes the pointer only over the text.
         */
-        virtual void        MouseMove( const MouseEvent& rMEvt );
+        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
         /** overwrites Window::MouseButtonUp().
 
             Calls the set link if the mouse is over the text.
         */
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
         /** overwrites Window::RequestHelp().
 
             Shows tooltip only if the mouse is over the text.
         */
-        virtual void        RequestHelp( const HelpEvent& rHEvt );
+        virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     public:
         /** ctors
@@ -76,21 +76,21 @@
 
             Changes the color of the text and shows a focus rectangle.
         */
-        virtual void        GetFocus();
+        virtual void        GetFocus() SAL_OVERRIDE;
 
         /** overwrites Window::LoseFocus().
 
             Changes the color of the text and hides the focus rectangle.
         */
-        virtual void        LoseFocus();
+        virtual void        LoseFocus() SAL_OVERRIDE;
 
         /** overwrites Window::KeyInput().
 
             KEY_RETURN and KEY_SPACE calls the link handler.
         */
-        virtual void        KeyInput( const KeyEvent& rKEvt );
+        virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-        virtual bool        set_property(const OString &rKey, const OString &rValue);
+        virtual bool        set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
 
         /** sets m_aClickHdl with rLink.
@@ -119,7 +119,7 @@
         OUString    GetURL() const;
 
         /** sets new text and recalculates the text length. */
-        virtual void SetText(const OUString& rNewDescription);
+        virtual void SetText(const OUString& rNewDescription) SAL_OVERRIDE;
     };
 
 #endif

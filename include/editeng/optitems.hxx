@@ -45,10 +45,10 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
@@ -73,15 +73,15 @@ public:
     SfxHyphenRegionItem( const sal_uInt16 nId  );
     SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem );
 
-    virtual bool             operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream& rStrm, sal_uInt16 nVer ) const;
-    virtual SvStream&        Store( SvStream& rStrm, sal_uInt16 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create( SvStream& rStrm, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SvStream&        Store( SvStream& rStrm, sal_uInt16 ) const SAL_OVERRIDE;
 
     inline sal_uInt8 &GetMinLead() { return nMinLead; }
     inline sal_uInt8 GetMinLead() const { return nMinLead; }

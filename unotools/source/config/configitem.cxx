@@ -86,10 +86,10 @@ namespace utl{
             ~ConfigChangeListener_Impl();
 
         //XChangesListener
-        virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         //XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

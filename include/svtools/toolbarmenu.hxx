@@ -56,15 +56,15 @@ public:
 
                     ~ToolbarMenu();
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvent );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
     void            appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits = 0 );
     void            appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits = 0 );
@@ -92,7 +92,7 @@ public:
     void            highlightFirstEntry();
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     // todo: move to new base class that will replace SfxPopupWindow
     void AddStatusListener( const OUString& rCommandURL );
@@ -104,8 +104,8 @@ protected:
     // the status updates):
     virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-    void            StateChanged( StateChangedType nType );
-    void            DataChanged( const DataChangedEvent& rDCEvt );
+    void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     DECL_LINK( HighlightHdl, Control * );

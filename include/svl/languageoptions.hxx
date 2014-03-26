@@ -104,8 +104,8 @@ public:
     SvtSystemLanguageOptions();
     ~SvtSystemLanguageOptions();
 
-    virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
 
     LanguageType GetWin16SystemLanguage() const;
 

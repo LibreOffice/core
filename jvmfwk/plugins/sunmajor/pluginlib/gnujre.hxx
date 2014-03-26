@@ -35,11 +35,11 @@ public:
 
     static rtl::Reference<VendorBase> createInstance();
 
-    virtual char const* const* getRuntimePaths(int * size);
+    virtual char const* const* getRuntimePaths(int * size) SAL_OVERRIDE;
 
     virtual bool initialize(
-        std::vector<std::pair<OUString, OUString> > props);
-    virtual int compareVersions(const OUString& sSecond) const;
+        std::vector<std::pair<OUString, OUString> > props) SAL_OVERRIDE;
+    virtual int compareVersions(const OUString& sSecond) const SAL_OVERRIDE;
 
 };
 

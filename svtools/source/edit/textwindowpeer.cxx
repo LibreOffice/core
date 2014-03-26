@@ -41,7 +41,7 @@ public:
 
 private:
     virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    CreateAccessibleContext();
+    CreateAccessibleContext() SAL_OVERRIDE;
 
     TextEngine & m_rEngine;
     TextView & m_rView;

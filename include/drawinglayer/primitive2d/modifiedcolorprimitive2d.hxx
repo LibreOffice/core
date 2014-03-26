@@ -66,7 +66,7 @@ namespace drawinglayer
             const basegfx::BColorModifierSharedPtr& getColorModifier() const { return maColorModifier; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

@@ -48,8 +48,8 @@ namespace ucb { namespace ucp { namespace ext
         ::rtl::Reference< Content >                                                     m_xContent;
 
     private:
-        virtual void initStatic();
-        virtual void initDynamic();
+        virtual void initStatic() SAL_OVERRIDE;
+        virtual void initDynamic() SAL_OVERRIDE;
     };
 
 

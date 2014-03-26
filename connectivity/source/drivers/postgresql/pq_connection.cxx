@@ -121,7 +121,7 @@ public:
             m_conn->release();
     }
 
-    virtual void SAL_CALL dispose() throw (std::exception)
+    virtual void SAL_CALL dispose() throw (std::exception) SAL_OVERRIDE
     {
         if( m_conn )
         {

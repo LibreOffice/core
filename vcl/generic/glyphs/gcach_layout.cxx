@@ -329,7 +329,7 @@ public:
                             HbLayoutEngine(ServerFont&);
     virtual                 ~HbLayoutEngine();
 
-    virtual bool            layout(ServerFontLayout&, ImplLayoutArgs&);
+    virtual bool            layout(ServerFontLayout&, ImplLayoutArgs&) SAL_OVERRIDE;
 };
 
 HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)

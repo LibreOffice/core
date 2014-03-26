@@ -51,12 +51,12 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException, std::exception);
+        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         /**
         Returns the indexth item in the collection.
         */
         virtual Reference< XNode > SAL_CALL item(sal_Int32 index)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

@@ -48,10 +48,10 @@ namespace drawinglayer
             // despite returning an empty decomposition since it's no visualisation data,
             // range calculation is intended to use hidden geometry, so
             // the local implementation will return the children's range
-            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
             /// The default implementation returns an empty sequence
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive3DIDBlock()

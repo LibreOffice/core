@@ -37,8 +37,8 @@ class WpftImpressFilterTest
     , public test::BootstrapFixture
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void test();
 
@@ -48,7 +48,7 @@ public:
 
 private:
     virtual bool load(const OUString &, const OUString &rURL, const OUString &,
-        unsigned int, unsigned int, unsigned int);
+        unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
 
     void doTest(const rtl::OUString &rFilter, const rtl::OUString &rPath);
 

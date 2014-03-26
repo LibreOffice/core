@@ -120,9 +120,9 @@ public:
     explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    PopupModeEnd();
 

@@ -48,7 +48,7 @@ namespace drawinglayer
 
         protected:
             /// local decomposition.
-            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             /// constructor
@@ -63,10 +63,10 @@ namespace drawinglayer
             const basegfx::B3DPolyPolygon& getPolyPolygon3D() const { return maPolyPolygon3D; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive3D& rPrimitive) const SAL_OVERRIDE;
 
             /// get range
-            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive3DIDBlock()

@@ -58,11 +58,11 @@ class ListBoxControl : public ListBox
         ListBoxControl( Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener );
         virtual ~ListBoxControl();
 
-        virtual void Select();
-        virtual void DoubleClick();
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual bool PreNotify( NotifyEvent& rNEvt );
+        virtual void Select() SAL_OVERRIDE;
+        virtual void DoubleClick() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
         IListBoxListener* m_pListBoxListener;

@@ -110,7 +110,7 @@ class SvtMiscOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames );
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
 
         /** loads required data from the configuration. It's called in the constructor to
          read all entries and form ::Notify to re-read changed settings
@@ -131,7 +131,7 @@ class SvtMiscOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Commit();
+        virtual void Commit() SAL_OVERRIDE;
 
 
         //  public interface

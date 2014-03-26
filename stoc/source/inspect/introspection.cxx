@@ -721,32 +721,32 @@ public:
 
     // Methoden von XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts(void)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getSuppliedPropertyConcepts(void)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Property SAL_CALL getProperty(const OUString& Name, sal_Int32 PropertyConcepts)
-        throw( NoSuchElementException, RuntimeException, std::exception );
+        throw( NoSuchElementException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasProperty(const OUString& Name, sal_Int32 PropertyConcepts)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Sequence< Property > SAL_CALL getProperties(sal_Int32 PropertyConcepts)
-          throw( RuntimeException, std::exception );
+          throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Reference<XIdlMethod> SAL_CALL getMethod(const OUString& Name, sal_Int32 MethodConcepts)
-          throw( NoSuchMethodException, RuntimeException, std::exception );
+          throw( NoSuchMethodException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasMethod(const OUString& Name, sal_Int32 MethodConcepts)
-          throw( RuntimeException, std::exception );
+          throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Sequence< Reference<XIdlMethod> > SAL_CALL getMethods(sal_Int32 MethodConcepts)
-          throw( RuntimeException, std::exception );
+          throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Sequence< Type > SAL_CALL getSupportedListeners(void)
-          throw( RuntimeException, std::exception );
+          throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     using OWeakObject::queryAdapter;
     virtual Reference<XInterface> SAL_CALL queryAdapter( const Type& rType )
-          throw( IllegalTypeException, RuntimeException, std::exception );
+          throw( IllegalTypeException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XMaterialHolder
-    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException, std::exception);
+    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methoden von XExactName
-    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
@@ -807,78 +807,78 @@ public:
         rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
 
     // Methoden von XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception );
-    virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void        SAL_CALL acquire() throw() SAL_OVERRIDE { OWeakObject::acquire(); }
+    virtual void        SAL_CALL release() throw() SAL_OVERRIDE { OWeakObject::release(); }
 
     // Methoden von XPropertySet
-    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( RuntimeException, std::exception );
+    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const Any& aValue)
-        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getPropertyValue(const OUString& aPropertyName)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const Reference<XPropertyChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const Reference<XVetoableChangeListener>& aListener)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XFastPropertySet
     virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const Any& aValue)
-        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception );
+        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(void) throw( RuntimeException, std::exception );
-    virtual Property SAL_CALL getPropertyByName(const OUString& Name) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name) throw( RuntimeException, std::exception );
+    virtual Sequence< Property > SAL_CALL getProperties(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Property SAL_CALL getPropertyByName(const OUString& Name) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XElementAccess
-    virtual Type SAL_CALL getElementType(void) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasElements(void) throw( RuntimeException, std::exception );
+    virtual Type SAL_CALL getElementType(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XNameAccess
     virtual Any SAL_CALL getByName(const OUString& Name)
-        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
-    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( RuntimeException, std::exception );
+        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getElementNames(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XNameContainer
     virtual void SAL_CALL insertByName(const OUString& Name, const Any& Element)
-        throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL replaceByName(const OUString& Name, const Any& Element)
-        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName(const OUString& Name)
-        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception );
+        throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(void) throw( RuntimeException, std::exception );
+    virtual sal_Int32 SAL_CALL getCount(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getByIndex(sal_Int32 Index)
-        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XIndexContainer
     virtual void SAL_CALL insertByIndex(sal_Int32 Index, const Any& Element)
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL replaceByIndex(sal_Int32 Index, const Any& Element)
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeByIndex(sal_Int32 Index)
-        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+        throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XEnumerationAccess
-    virtual Reference<XEnumeration> SAL_CALL createEnumeration(void) throw( RuntimeException, std::exception );
+    virtual Reference<XEnumeration> SAL_CALL createEnumeration(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methoden von XIdlArray
     virtual void SAL_CALL realloc(Any& array, sal_Int32 length)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
-    virtual sal_Int32 SAL_CALL getLen(const Any& array) throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getLen(const Any& array) throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL get(const Any& array, sal_Int32 index)
-        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL set(Any& array, sal_Int32 index, const Any& value)
-        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAccess_,

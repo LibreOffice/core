@@ -89,14 +89,14 @@ namespace framework
             GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~GlobalImageList();
 
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL );
-            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL );
-            virtual ::std::vector< OUString >& getImageNames();
-            virtual ::std::vector< OUString >& getImageCommandNames();
+            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
+            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) SAL_OVERRIDE;
+            virtual ::std::vector< OUString >& getImageNames() SAL_OVERRIDE;
+            virtual ::std::vector< OUString >& getImageCommandNames() SAL_OVERRIDE;
 
             // IReference
-            virtual oslInterlockedCount SAL_CALL acquire();
-            virtual oslInterlockedCount SAL_CALL release();
+            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
         private:
             oslInterlockedCount                                                              m_nRefCount;

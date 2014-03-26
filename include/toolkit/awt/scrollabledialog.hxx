@@ -59,14 +59,14 @@ namespace toolkit
     public:
         ScrollableWrapper( Window* pParent, WinBits nStyle = WB_STDDIALOG );
         virtual ~ScrollableWrapper();
-        virtual void    SetScrollWidth( long nWidth );
-        virtual long    GetScrollWidth() { return maScrollArea.Width(); }
-        virtual void    SetScrollHeight( long nHeight );
-        virtual long    GetScrollHeight() { return maScrollArea.Height(); }
-        virtual void    SetScrollLeft( long nLeft );
-        virtual long    GetScrollLeft() { return mnScrollPos.X(); }
-        virtual void    SetScrollTop( long Top );
-        virtual long    GetScrollTop() { return mnScrollPos.Y() ; }
+        virtual void    SetScrollWidth( long nWidth ) SAL_OVERRIDE;
+        virtual long    GetScrollWidth() SAL_OVERRIDE { return maScrollArea.Width(); }
+        virtual void    SetScrollHeight( long nHeight ) SAL_OVERRIDE;
+        virtual long    GetScrollHeight() SAL_OVERRIDE { return maScrollArea.Height(); }
+        virtual void    SetScrollLeft( long nLeft ) SAL_OVERRIDE;
+        virtual long    GetScrollLeft() SAL_OVERRIDE { return mnScrollPos.X(); }
+        virtual void    SetScrollTop( long Top ) SAL_OVERRIDE;
+        virtual long    GetScrollTop() SAL_OVERRIDE { return mnScrollPos.Y() ; }
 
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK( ScrollBarHdl, ScrollBar* );

@@ -160,12 +160,12 @@ public:
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
 
-    virtual bool isFunction() const
+    virtual bool isFunction() const SAL_OVERRIDE
     {
         return IsFunction();
     }
 
-    virtual sal_uInt32 getArgumentCount() const
+    virtual sal_uInt32 getArgumentCount() const SAL_OVERRIDE
     {
         return GetParamCount();
     }
@@ -213,12 +213,12 @@ public:
                                     FormulaToken( r ), nByte( r.nByte ),
                                     bHasForceArray( r.bHasForceArray ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaByteToken(*this); }
-    virtual sal_uInt8           GetByte() const;
-    virtual void                SetByte( sal_uInt8 n );
-    virtual bool                HasForceArray() const;
-    virtual void                SetForceArray( bool b );
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaByteToken(*this); }
+    virtual sal_uInt8           GetByte() const SAL_OVERRIDE;
+    virtual void                SetByte( sal_uInt8 n ) SAL_OVERRIDE;
+    virtual bool                HasForceArray() const SAL_OVERRIDE;
+    virtual void                SetForceArray( bool b ) SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 };
@@ -237,9 +237,9 @@ public:
                                 FormulaFAPToken( const FormulaFAPToken& r ) :
                                     FormulaByteToken( r ), pOrigToken( r.pOrigToken ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaFAPToken(*this); }
-    virtual FormulaToken*       GetFAPOrigToken() const;
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaFAPToken(*this); }
+    virtual FormulaToken*       GetFAPOrigToken() const SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 class FORMULA_DLLPUBLIC FormulaDoubleToken : public FormulaToken
@@ -252,10 +252,10 @@ public:
                                 FormulaDoubleToken( const FormulaDoubleToken& r ) :
                                     FormulaToken( r ), fDouble( r.fDouble ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaDoubleToken(*this); }
-    virtual double              GetDouble() const;
-    virtual double&             GetDoubleAsReference();
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaDoubleToken(*this); }
+    virtual double              GetDouble() const SAL_OVERRIDE;
+    virtual double&             GetDoubleAsReference() SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 };
@@ -268,9 +268,9 @@ public:
     FormulaStringToken( const svl::SharedString& r );
     FormulaStringToken( const FormulaStringToken& r );
 
-    virtual FormulaToken* Clone() const;
-    virtual svl::SharedString GetString() const;
-    virtual bool operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken* Clone() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual bool operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 };
@@ -285,9 +285,9 @@ public:
     FormulaStringOpToken( OpCode e, const svl::SharedString& r );
     FormulaStringOpToken( const FormulaStringOpToken& r );
 
-    virtual FormulaToken* Clone() const;
-    virtual svl::SharedString GetString() const;
-    virtual bool operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken* Clone() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual bool operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
@@ -301,12 +301,12 @@ public:
                                 FormulaIndexToken( const FormulaIndexToken& r ) :
                                     FormulaToken( r ), nIndex( r.nIndex ), mbGlobal( r.mbGlobal ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaIndexToken(*this); }
-    virtual sal_uInt16          GetIndex() const;
-    virtual void                SetIndex( sal_uInt16 n );
-    virtual bool                IsGlobal() const;
-    virtual void                SetGlobal( bool b );
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaIndexToken(*this); }
+    virtual sal_uInt16          GetIndex() const SAL_OVERRIDE;
+    virtual void                SetIndex( sal_uInt16 n ) SAL_OVERRIDE;
+    virtual bool                IsGlobal() const SAL_OVERRIDE;
+    virtual void                SetGlobal( bool b ) SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 
@@ -326,11 +326,11 @@ public:
                                     FormulaToken( r ), aExternal( r.aExternal ),
                                     nByte( r.nByte ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaExternalToken(*this); }
-    virtual const OUString&       GetExternal() const;
-    virtual sal_uInt8           GetByte() const;
-    virtual void                SetByte( sal_uInt8 n );
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaExternalToken(*this); }
+    virtual const OUString&       GetExternal() const SAL_OVERRIDE;
+    virtual sal_uInt8           GetByte() const SAL_OVERRIDE;
+    virtual void                SetByte( sal_uInt8 n ) SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 
@@ -342,10 +342,10 @@ public:
                                 FormulaMissingToken( const FormulaMissingToken& r ) :
                                     FormulaToken( r ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaMissingToken(*this); }
-    virtual double              GetDouble() const;
-    virtual svl::SharedString GetString() const;
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaMissingToken(*this); }
+    virtual double              GetDouble() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
@@ -366,9 +366,9 @@ public:
                                     memcpy( pJump, r.pJump, (r.pJump[0] + 1) * sizeof(short) );
                                 }
     virtual                     ~FormulaJumpToken();
-    virtual short*              GetJump() const;
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new FormulaJumpToken(*this); }
+    virtual short*              GetJump() const SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaJumpToken(*this); }
 };
 
 
@@ -380,8 +380,8 @@ public:
                                     FormulaToken( svSubroutine, ocCall ), mpArray( pArray) {}
                                 FormulaSubroutineToken( const FormulaSubroutineToken& r );
     virtual                     ~FormulaSubroutineToken();
-    virtual FormulaToken*       Clone() const { return new FormulaSubroutineToken(*this); }
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaSubroutineToken(*this); }
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 
 private:
     const FormulaTokenArray*    mpArray;
@@ -396,8 +396,8 @@ public:
                                 FormulaUnknownToken( const FormulaUnknownToken& r ) :
                                     FormulaToken( r ) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaUnknownToken(*this); }
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaUnknownToken(*this); }
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 
@@ -410,10 +410,10 @@ public:
                                 FormulaErrorToken( const FormulaErrorToken& r ) :
                                     FormulaToken( r ), nError( r.nError) {}
 
-    virtual FormulaToken*       Clone() const { return new FormulaErrorToken(*this); }
-    virtual sal_uInt16          GetError() const;
-    virtual void                SetError( sal_uInt16 nErr );
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaErrorToken(*this); }
+    virtual sal_uInt16          GetError() const SAL_OVERRIDE;
+    virtual void                SetError( sal_uInt16 nErr ) SAL_OVERRIDE;
+    virtual bool                operator==( const FormulaToken& rToken ) const SAL_OVERRIDE;
 };
 
 

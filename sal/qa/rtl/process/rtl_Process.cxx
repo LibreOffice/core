@@ -73,11 +73,11 @@ class getAppCommandArg : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 
@@ -201,11 +201,11 @@ class getGlobalProcessId : public CppUnit::TestFixture
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
     //gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.

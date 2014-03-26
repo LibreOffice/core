@@ -378,7 +378,7 @@ public:
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 
-    virtual void    PostUserEvent() = 0;
+    virtual void    PostUserEvent() SAL_OVERRIDE = 0;
 };
 
 inline GC SalDisplay::GetGC( sal_uInt16 nDepth, SalX11Screen nXScreen ) const
@@ -397,9 +397,9 @@ public:
              SalX11Display( Display* pDisp );
     virtual ~SalX11Display();
 
-    virtual bool        Dispatch( XEvent *pEvent );
+    virtual bool        Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
     virtual void        Yield();
-    virtual void        PostUserEvent();
+    virtual void        PostUserEvent() SAL_OVERRIDE;
 
     bool            IsEvent();
     void                SetupInput( SalI18N_InputMethod *pInputMethod );

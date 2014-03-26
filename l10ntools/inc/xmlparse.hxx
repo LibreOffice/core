@@ -166,7 +166,7 @@ public:
 
     XMLFile& operator=(const XMLFile& rObj);
 
-    virtual sal_uInt16 GetNodeType() const { return XML_NODE_TYPE_FILE; }
+    virtual sal_uInt16 GetNodeType() const SAL_OVERRIDE { return XML_NODE_TYPE_FILE; }
 
     /// returns file name
     OString GetName() const { return m_sFileName; }
@@ -224,7 +224,7 @@ public:
     XMLElement(const XMLElement&);
 
     XMLElement& operator=(const XMLElement& rObj);
-    virtual sal_uInt16 GetNodeType() const { return XML_NODE_TYPE_ELEMENT; }
+    virtual sal_uInt16 GetNodeType() const SAL_OVERRIDE { return XML_NODE_TYPE_ELEMENT; }
 
     /// returns element name
     OString GetName() const { return m_sElementName; }
@@ -278,7 +278,7 @@ public:
 
     // Default copy constructor and copy operator work well.
 
-    virtual sal_uInt16 GetNodeType() const { return XML_NODE_TYPE_DATA; }
+    virtual sal_uInt16 GetNodeType() const SAL_OVERRIDE { return XML_NODE_TYPE_DATA; }
 
     /// returns the data
     OString GetData() const { return m_sData; }
@@ -306,7 +306,7 @@ public:
 
     // Default copy constructor and copy operator work well.
 
-    virtual sal_uInt16 GetNodeType() const { return XML_NODE_TYPE_COMMENT; }
+    virtual sal_uInt16 GetNodeType() const SAL_OVERRIDE { return XML_NODE_TYPE_COMMENT; }
 
     /// returns the comment
     OString GetComment() const { return m_sComment; }
@@ -329,7 +329,7 @@ public:
 
     // Default copy constructor and copy operator work well.
 
-    virtual sal_uInt16 GetNodeType() const { return XML_NODE_TYPE_DEFAULT; }
+    virtual sal_uInt16 GetNodeType() const SAL_OVERRIDE { return XML_NODE_TYPE_DEFAULT; }
 
     /// returns the comment
     OString GetDefault() const { return m_sDefault; }

@@ -26,10 +26,10 @@ public:
         rtl::Reference<Manager> const & manager, OUString const & uri);
 
     // throws FileFormatException:
-    virtual rtl::Reference<MapCursor> createRootCursor() const;
+    virtual rtl::Reference<MapCursor> createRootCursor() const SAL_OVERRIDE;
 
     // throws FileFormatException:
-    virtual rtl::Reference<Entity> findEntity(OUString const & name) const;
+    virtual rtl::Reference<Entity> findEntity(OUString const & name) const SAL_OVERRIDE;
 
 private:
     virtual ~SourceFileProvider() throw ();

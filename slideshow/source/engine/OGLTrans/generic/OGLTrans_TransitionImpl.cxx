@@ -566,7 +566,7 @@ public:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) SAL_OVERRIDE;
 };
 
 void RochadeTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
@@ -1083,7 +1083,7 @@ public:
         {}
 
 private:
-    virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) SAL_OVERRIDE;
     // mmPrepare = &OGLTransitionImpl::prepareDiamond;
 };
 
@@ -1186,7 +1186,7 @@ public:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) SAL_OVERRIDE;
 };
 
 void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
@@ -1252,7 +1252,7 @@ public:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) SAL_OVERRIDE;
 };
 
 void FadeThroughBlackTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
@@ -1391,9 +1391,9 @@ protected:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-    virtual void prepareTransition_( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
-    virtual void finishTransition_();
+    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) SAL_OVERRIDE;
+    virtual void prepareTransition_( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex ) SAL_OVERRIDE;
+    virtual void finishTransition_() SAL_OVERRIDE;
     virtual GLuint makeShader_() = 0;
 
     void impl_preparePermShader();
@@ -1549,7 +1549,7 @@ public:
     {}
 
 private:
-    virtual GLuint makeShader_();
+    virtual GLuint makeShader_() SAL_OVERRIDE;
 };
 
 GLuint StaticNoiseTransition::makeShader_()
@@ -1600,7 +1600,7 @@ public:
     {}
 
 private:
-    virtual GLuint makeShader_();
+    virtual GLuint makeShader_() SAL_OVERRIDE;
 };
 
 GLuint DissolveTransition::makeShader_()

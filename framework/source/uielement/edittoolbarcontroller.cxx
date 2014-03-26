@@ -57,11 +57,11 @@ class EditControl : public Edit
         EditControl( Window* pParent, WinBits nStyle, IEditListener* pEditListener );
         virtual ~EditControl();
 
-        virtual void Modify();
-        virtual void KeyInput( const ::KeyEvent& rKEvt );
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual bool PreNotify( NotifyEvent& rNEvt );
+        virtual void Modify() SAL_OVERRIDE;
+        virtual void KeyInput( const ::KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
         IEditListener* m_pEditListener;

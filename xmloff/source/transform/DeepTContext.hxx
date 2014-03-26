@@ -60,7 +60,7 @@ public:
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
     void AddContent( XMLTransformerContext *pContent );
 
@@ -69,7 +69,7 @@ public:
         return static_cast<sal_Bool>( !m_aChildContexts.empty() );
     }
 
-    virtual void ExportContent();
+    virtual void ExportContent() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DEEPTCONTEXT_HXX

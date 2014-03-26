@@ -59,17 +59,17 @@ public:
                       ImplDockingWindowWrapper* pDockingWin );
     ~ImplDockFloatWin2();
 
-    virtual void    Move();
-    virtual void    Resize();
-    virtual void    TitleButtonClick( sal_uInt16 nButton );
-    virtual void    Pin();
-    virtual void    Roll();
-    virtual void    PopupModeEnd();
-    virtual void    Resizing( Size& rSize );
-    virtual bool    Close();
+    virtual void    Move() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    TitleButtonClick( sal_uInt16 nButton ) SAL_OVERRIDE;
+    virtual void    Pin() SAL_OVERRIDE;
+    virtual void    Roll() SAL_OVERRIDE;
+    virtual void    PopupModeEnd() SAL_OVERRIDE;
+    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
-                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
 
     sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
@@ -498,14 +498,14 @@ public:
     ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     ~ImplPopupFloatWin();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        Resize();
-    virtual Window*     GetPreferredKeyInputWindow();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
     Rectangle           GetDragRect() const;
     Point               GetToolboxPosition() const;

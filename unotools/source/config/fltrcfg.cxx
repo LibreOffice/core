@@ -61,8 +61,8 @@ public:
         bLoadVBA(false),
         bSaveVBA(false)  {}
     ~SvtAppFilterOptions_Impl();
-    virtual void            Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
+    virtual void            Commit() SAL_OVERRIDE;
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
     void                    Load();
 
     bool                IsLoad() const {return bLoadVBA;}
@@ -133,7 +133,7 @@ public:
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(false)
     {}
-    virtual void            Commit();
+    virtual void            Commit() SAL_OVERRIDE;
     void                    Load();
 
     bool                IsLoadExecutable() const {return bLoadExecutable;}
@@ -179,7 +179,7 @@ public:
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(false)
     {}
-    virtual void            Commit();
+    virtual void            Commit() SAL_OVERRIDE;
     void                    Load();
 
     bool                IsLoadExecutable() const {return bLoadExecutable;}

@@ -64,14 +64,14 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgMarkerNode();
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) SAL_OVERRIDE;
 
             /// get marker primitives buffered, uses decomposeSvgNode internally
             const drawinglayer::primitive2d::Primitive2DSequence& getMarkerPrimitives() const;
 
             /// InfoProvider support for % values
-            virtual const basegfx::B2DRange getCurrentViewPort() const;
+            virtual const basegfx::B2DRange getCurrentViewPort() const SAL_OVERRIDE;
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }

@@ -80,29 +80,29 @@ namespace io_stm {
         virtual ~Pump();
 
         // XActiveDataSource
-        virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw(std::exception);
-        virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw(std::exception);
+        virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw(std::exception) SAL_OVERRIDE;
+        virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw(std::exception) SAL_OVERRIDE;
 
         // XActiveDataSink
-        virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw(std::exception);
-        virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw(std::exception);
+        virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw(std::exception) SAL_OVERRIDE;
+        virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw(std::exception) SAL_OVERRIDE;
 
         // XActiveDataControl
-        virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception);
-        virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception);
-        virtual void SAL_CALL start() throw( RuntimeException, std::exception );
-        virtual void SAL_CALL terminate() throw(std::exception);
+        virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL start() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL terminate() throw(std::exception) SAL_OVERRIDE;
 
         // XConnectable
-        virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw(std::exception);
-        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception);
-        virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw(std::exception);
-        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception);
+        virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw(std::exception) SAL_OVERRIDE;
+        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw(std::exception) SAL_OVERRIDE;
+        virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw(std::exception) SAL_OVERRIDE;
 
     public: // XServiceInfo
-        virtual OUString    SAL_CALL getImplementationName() throw(std::exception  );
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
-        virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
+        virtual OUString    SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
+        virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
     };
 
 Pump::Pump() : m_aThread( 0 ),

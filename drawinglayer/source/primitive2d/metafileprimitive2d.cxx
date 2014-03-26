@@ -538,7 +538,7 @@ namespace drawinglayer
         protected:
             /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(
-                const geometry::ViewInformation2D& rViewInformation) const;
+                const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             /// constructor

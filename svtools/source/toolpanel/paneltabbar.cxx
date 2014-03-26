@@ -112,10 +112,10 @@ namespace svt
         virtual ~VCLItemRenderer() {}
 
         // ITabBarRenderer
-        virtual void        renderBackground() const;
-        virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const;
-        virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const;
+        virtual void        renderBackground() const SAL_OVERRIDE;
+        virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
         OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
@@ -187,10 +187,10 @@ namespace svt
         virtual ~NWFToolboxItemRenderer() {}
 
         // ITabBarRenderer
-        virtual void        renderBackground() const;
-        virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const;
-        virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const;
+        virtual void        renderBackground() const SAL_OVERRIDE;
+        virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
         OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
@@ -264,10 +264,10 @@ namespace svt
         virtual ~NWFTabItemRenderer() {}
 
         // ITabBarRenderer
-        virtual void        renderBackground() const;
-        virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const;
-        virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const;
-        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const;
+        virtual void        renderBackground() const SAL_OVERRIDE;
+        virtual Rectangle   calculateDecorations( const Rectangle& i_rContentArea, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
+        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const SAL_OVERRIDE;
 
     protected:
         OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
@@ -350,7 +350,7 @@ namespace svt
         }
 
         // IToolPanelDeckListener
-        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
+        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE
         {
             (void)i_pPanel;
             (void)i_nPosition;
@@ -360,7 +360,7 @@ namespace svt
             Relayout();
         }
 
-        virtual void PanelRemoved( const size_t i_nPosition )
+        virtual void PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE
         {
             m_bItemsDirty = true;
             m_rTabBar.Invalidate();
@@ -371,9 +371,9 @@ namespace svt
             Relayout();
         }
 
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
-        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter );
-        virtual void Dying();
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) SAL_OVERRIDE;
+        virtual void LayouterChanged( const PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
+        virtual void Dying() SAL_OVERRIDE;
 
         void    UpdateScrollButtons()
         {

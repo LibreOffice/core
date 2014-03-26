@@ -77,7 +77,7 @@ private:
     DECL_DLLPRIVATE_LINK(               HeaderEndDrag_Impl, HeaderBar * );
 
 protected:
-    virtual void GetFocus();
+    virtual void GetFocus() SAL_OVERRIDE;
 
 public:
     SvtFileView( Window* pParent, const ResId& rResId, bool bOnlyFolder, bool bMultiSelection );
@@ -93,8 +93,8 @@ public:
 
     void                    SetHelpId( const OString& rHelpId );
     const OString&          GetHelpId( ) const;
-    void                    SetSizePixel( const Size& rNewSize );
-    virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
+    void                    SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
+    virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
     void                    SetSortColumn( bool bValue ) { bSortColumn = bValue; }
     bool                    GetSortColumn() { return bSortColumn; }
 
@@ -195,7 +195,7 @@ public:
     void                    EndInplaceEditing( bool _bCancel );
 
 protected:
-    virtual void            StateChanged( StateChangedType nStateChange );
+    virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 };
 
 // struct SvtContentEntry ------------------------------------------------

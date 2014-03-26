@@ -258,17 +258,17 @@ public:
 
     virtual bool equals(
             const ::com::sun::star::uno::Any& r1,
-            const ::com::sun::star::uno::Any& r2 ) const;
+            const ::com::sun::star::uno::Any& r2 ) const SAL_OVERRIDE;
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 XMLDropCapPropHdl_Impl::~XMLDropCapPropHdl_Impl ()
@@ -315,11 +315,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLOpaquePropHdl_Impl::importXML(
@@ -365,11 +365,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLContourModePropHdl_Impl::importXML(
@@ -415,11 +415,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLParagraphOnlyPropHdl_Impl::importXML(
@@ -479,11 +479,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLWrapPropHdl_Impl::importXML(
@@ -533,11 +533,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLFrameProtectPropHdl_Impl::importXML(
@@ -722,11 +722,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLHoriMirrorPropHdl_Impl::importXML(
@@ -775,11 +775,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLGrfMirrorPropHdl_Impl::importXML(
@@ -869,11 +869,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLTextEmphasizePropHdl_Impl::importXML(
@@ -970,11 +970,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLTextCombineCharPropHdl_Impl::importXML(
@@ -1014,11 +1014,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
@@ -1069,11 +1069,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
@@ -1116,11 +1116,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLTextRotationAnglePropHdl_Impl::importXML(
@@ -1179,11 +1179,11 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& ) const;
+            const SvXMLUnitConverter& ) const SAL_OVERRIDE;
 };
 
 bool XMLNumber8OneBasedHdl::importXML(

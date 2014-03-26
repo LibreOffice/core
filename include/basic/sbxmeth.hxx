@@ -32,7 +32,7 @@ public:
     SbxMethod( const SbxMethod& r );
     ~SbxMethod();
     SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }
-    virtual SbxClassType GetClass() const;
+    virtual SbxClassType GetClass() const SAL_OVERRIDE;
 };
 
 #endif

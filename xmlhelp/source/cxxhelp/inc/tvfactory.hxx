@@ -47,17 +47,17 @@ class TVFactory: public cppu::WeakImplHelper2 <
         virtual OUString SAL_CALL
         getImplementationName(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL
         supportsService(
             const OUString& ServiceName )
-            throw(com::sun::star::uno::RuntimeException, std::exception );
+            throw(com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XMultiServiceFactory
 
@@ -65,18 +65,18 @@ class TVFactory: public cppu::WeakImplHelper2 <
         createInstance(
             const OUString& aServiceSpecifier )
             throw( com::sun::star::uno::Exception,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const OUString& ServiceSpecifier,
             const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& Arguments )
             throw( com::sun::star::uno::Exception,
-                   com::sun::star::uno::RuntimeException, std::exception);
+                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames( )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Other
 

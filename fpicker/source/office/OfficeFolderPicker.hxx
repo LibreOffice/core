@@ -56,35 +56,35 @@ public:
     // XFolderPicker2 functions
 
 
-    virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual OUString SAL_CALL    getDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL           setDescription( const OUString& aDescription ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL           setDescription( const OUString& aDescription ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL cancel()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XExecutableDialog functions
 
-    virtual void SAL_CALL setTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XAsynchronousExecutableDialog functions
 
-    virtual void SAL_CALL       setDialogTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL       startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL       setDialogTitle( const OUString& _rTitle ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL       startExecuteModal( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XServiceInfo functions
 
 
     /* XServiceInfo */
-    virtual OUString SAL_CALL    getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL       supportsService( const OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL    getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL       supportsService( const OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
-                                    getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+                                    getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /* Helper for XServiceInfo */
     static com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
@@ -99,8 +99,8 @@ protected:
 
     // OCommonPicker overridables
 
-    virtual SvtFileDialog*  implCreateDialog( Window* _pParent );
-    virtual sal_Int16       implExecutePicker( );
+    virtual SvtFileDialog*  implCreateDialog( Window* _pParent ) SAL_OVERRIDE;
+    virtual sal_Int16       implExecutePicker( ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVT_FOLDERPICKER_HXX

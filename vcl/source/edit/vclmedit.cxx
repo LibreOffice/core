@@ -55,18 +55,18 @@ public:
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
     ExtTextView*    GetTextView() const { return mpExtTextView; }
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvent );
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
     bool            IsAutoFocusHide() const { return mbFocusSelectionHide; }
     void            SetAutoFocusHide( bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
@@ -95,7 +95,7 @@ private:
     mutable Selection   maSelection;
 
 protected:
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     void                ImpUpdateSrollBarVis( WinBits nWinStyle );
     void                ImpInitScrollBars();
     void                ImpSetScrollBarRanges();

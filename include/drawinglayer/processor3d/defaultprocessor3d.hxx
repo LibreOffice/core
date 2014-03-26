@@ -123,7 +123,7 @@ namespace drawinglayer
             virtual void rasterconvertB3DPolyPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolyPolygon& rFill) const = 0;
 
             // the processing method for a single, known primitive
-            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive);
+            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive) SAL_OVERRIDE;
 
         public:
             DefaultProcessor3D(

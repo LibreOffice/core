@@ -55,7 +55,7 @@ public:
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
-        const XMLPropertyState& rProp);
+        const XMLPropertyState& rProp) SAL_OVERRIDE;
 };
 
 XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(

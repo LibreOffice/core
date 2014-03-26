@@ -60,14 +60,14 @@ namespace logging
         virtual ~PlainTextFormatter();
 
         // XLogFormatter
-        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException, std::exception);
-        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException, std::exception);
-        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     public:
         // XServiceInfo - static version

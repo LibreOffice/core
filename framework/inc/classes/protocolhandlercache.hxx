@@ -156,8 +156,8 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
                                          PatternHash**    ppPattern );
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
-        virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames);
-        virtual void Commit();
+        virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames) SAL_OVERRIDE;
+        virtual void Commit() SAL_OVERRIDE;
 };
 
 } // namespace framework

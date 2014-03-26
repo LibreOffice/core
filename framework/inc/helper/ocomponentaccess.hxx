@@ -102,7 +102,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
         //  XElementAccess
@@ -121,7 +121,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.
@@ -136,7 +136,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  protected methods

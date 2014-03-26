@@ -33,10 +33,10 @@ public:
     AstType const * getBaseType() const
         { return m_pBaseType; }
 
-    virtual bool isUnsigned() const
+    virtual bool isUnsigned() const SAL_OVERRIDE
     { return m_pBaseType != 0 && m_pBaseType->isUnsigned(); }
 
-    virtual bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey) SAL_OVERRIDE;
 private:
     AstType const * m_pBaseType;
 };

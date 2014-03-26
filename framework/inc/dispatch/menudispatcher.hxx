@@ -118,7 +118,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL dispatch( const   css::util::URL&                                     aURL            ,
-                                        const   css::uno::Sequence< css::beans::PropertyValue >&    seqProperties   ) throw( css::uno::RuntimeException, std::exception );
+                                        const   css::uno::Sequence< css::beans::PropertyValue >&    seqProperties   ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      add listener for state events
@@ -135,7 +135,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL addStatusListener(    const   css::uno::Reference< css::frame::XStatusListener >& xControl,
-                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception );
+                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      remove listener for state events
@@ -152,14 +152,14 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL removeStatusListener( const   css::uno::Reference< css::frame::XStatusListener >& xControl,
-                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception );
+                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
         //   XFrameActionListener
 
 
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
         //   XEventListener
@@ -177,7 +177,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception );
+        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  protected methods

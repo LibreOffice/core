@@ -108,36 +108,36 @@ public:
     void unadvise(const Type& type, const Reference< XInterface > & listener);
 
     // ::com::sun::star::lang::XEventListener
-    void SAL_CALL   disposing(const ::com::sun::star::lang::EventObject& Source) throw(std::exception);
+    void SAL_CALL   disposing(const ::com::sun::star::lang::EventObject& Source) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XFocusListener
-    void SAL_CALL   focusGained(const ::com::sun::star::awt::FocusEvent& e) throw(std::exception);
-    void SAL_CALL   focusLost(const ::com::sun::star::awt::FocusEvent& e) throw(std::exception);
+    void SAL_CALL   focusGained(const ::com::sun::star::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   focusLost(const ::com::sun::star::awt::FocusEvent& e) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XWindowListener
-    void SAL_CALL   windowResized(const ::com::sun::star::awt::WindowEvent& e) throw(std::exception);
-    void SAL_CALL   windowMoved(const ::com::sun::star::awt::WindowEvent& e) throw(std::exception);
-    void SAL_CALL   windowShown(const ::com::sun::star::lang::EventObject& e) throw(std::exception);
-    void SAL_CALL   windowHidden(const ::com::sun::star::lang::EventObject& e) throw(std::exception);
+    void SAL_CALL   windowResized(const ::com::sun::star::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowMoved(const ::com::sun::star::awt::WindowEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowShown(const ::com::sun::star::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowHidden(const ::com::sun::star::lang::EventObject& e) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XKeyListener
-    void SAL_CALL   keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw(std::exception);
-    void SAL_CALL   keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw(std::exception);
+    void SAL_CALL   keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XMouseListener
-    void SAL_CALL   mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception);
-    void SAL_CALL   mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception);
-    void SAL_CALL   mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception);
-    void SAL_CALL   mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception);
+    void SAL_CALL   mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XMouseMotionListener
-    void SAL_CALL   mouseDragged(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception);
-    void SAL_CALL   mouseMoved(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception);
+    void SAL_CALL   mouseDragged(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   mouseMoved(const ::com::sun::star::awt::MouseEvent& e) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XPaintListener
-    void SAL_CALL   windowPaint(const ::com::sun::star::awt::PaintEvent& e) throw(std::exception);
+    void SAL_CALL   windowPaint(const ::com::sun::star::awt::PaintEvent& e) throw(std::exception) SAL_OVERRIDE;
     // ::com::sun::star::awt::XTopWindowListener
-    void SAL_CALL   windowOpened( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
-    void SAL_CALL   windowClosing( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
-    void SAL_CALL   windowClosed( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
-    void SAL_CALL   windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
-    void SAL_CALL   windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
-    void SAL_CALL   windowActivated( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
-    void SAL_CALL   windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw(std::exception);
+    void SAL_CALL   windowOpened( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowClosing( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowClosed( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowActivated( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
+    void SAL_CALL   windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw(std::exception) SAL_OVERRIDE;
 protected:
     /**
      * Remove the listener with the uik rUik from the peer rPeer.

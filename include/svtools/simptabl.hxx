@@ -31,7 +31,7 @@ private:
     SvSimpleTable*     m_pTable;
 
 protected:
-    virtual bool PreNotify( NotifyEvent& rNEvt );
+    virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     SvSimpleTableContainer( Window* pParent, const ResId& rResId );
@@ -39,9 +39,9 @@ public:
 
     void SetTable(SvSimpleTable* pTable);
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
-    virtual void GetFocus();
+    virtual void GetFocus() SAL_OVERRIDE;
 };
 
 class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox
@@ -69,10 +69,10 @@ private:
 
 protected:
 
-    virtual void            NotifyScrolled();
+    virtual void            NotifyScrolled() SAL_OVERRIDE;
 
-    virtual void            SetTabs();
-    virtual void            Paint( const Rectangle& rRect );
+    virtual void            SetTabs() SAL_OVERRIDE;
+    virtual void            Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void            HBarClick();
     virtual void            HBarDblClick();
@@ -80,7 +80,7 @@ protected:
     virtual void            HBarDrag();
     virtual void            HBarEndDrag();
 
-    virtual void            Command( const CommandEvent& rCEvt );
+    virtual void            Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:

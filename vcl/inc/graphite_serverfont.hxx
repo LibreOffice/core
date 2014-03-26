@@ -37,7 +37,7 @@ public:
                        ServerFont & rServerFont) throw()
     : GraphiteLayout(pFace), mrServerFont(rServerFont) {};
     virtual ~GraphiteLayoutImpl() throw() {};
-    virtual sal_GlyphId getKashidaGlyph(int & width);
+    virtual sal_GlyphId getKashidaGlyph(int & width) SAL_OVERRIDE;
 private:
     ServerFont & mrServerFont;
 };
@@ -55,38 +55,38 @@ private:
 public:
         GraphiteServerFontLayout(ServerFont& pServerFont) throw();
 
-        virtual bool  LayoutText( ImplLayoutArgs& rArgs)
+        virtual bool  LayoutText( ImplLayoutArgs& rArgs) SAL_OVERRIDE
         {
             mpStr = rArgs.mpStr;
             SalLayout::AdjustLayout(rArgs);
             return maImpl.LayoutText(rArgs);
         };    // first step of layout
-        virtual void  AdjustLayout( ImplLayoutArgs& rArgs)
+        virtual void  AdjustLayout( ImplLayoutArgs& rArgs) SAL_OVERRIDE
         {
             SalLayout::AdjustLayout(rArgs);
             maImpl.DrawBase() = maDrawBase;
             maImpl.DrawOffset() = maDrawOffset;
             maImpl.AdjustLayout(rArgs);
         };
-        virtual long    GetTextWidth() const                           { return maImpl.GetTextWidth(); }
-        virtual long    FillDXArray( sal_Int32* dxa ) const                 { return maImpl.FillDXArray(dxa); }
+        virtual long    GetTextWidth() const SAL_OVERRIDE                           { return maImpl.GetTextWidth(); }
+        virtual long    FillDXArray( sal_Int32* dxa ) const SAL_OVERRIDE                 { return maImpl.FillDXArray(dxa); }
         virtual sal_Int32 GetTextBreak(long mw, long ce, int f) const SAL_OVERRIDE
             { return maImpl.GetTextBreak(mw, ce, f); }
-        virtual void    GetCaretPositions( int as, sal_Int32* cxa ) const   { maImpl.GetCaretPositions(as, cxa); }
+        virtual void    GetCaretPositions( int as, sal_Int32* cxa ) const SAL_OVERRIDE   { maImpl.GetCaretPositions(as, cxa); }
 
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
                         sal_Int32* gaa = NULL, int* cpa = NULL,
-                        const PhysicalFontFace** pFallbackFonts = NULL ) const
+                        const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE
         {
             maImpl.DrawBase() = maDrawBase;
             maImpl.DrawOffset() = maDrawOffset;
             return maImpl.GetNextGlyphs(l, gia, p, s, gaa, cpa, pFallbackFonts);
         }
 
-        virtual void    MoveGlyph( int nStart, long nNewXPos ) { maImpl.MoveGlyph(nStart, nNewXPos); };
-        virtual void    DropGlyph( int nStart ) { maImpl.DropGlyph(nStart); };
-        virtual void    Simplify( bool bIsBase ) { maImpl.Simplify(bIsBase); };
+        virtual void    MoveGlyph( int nStart, long nNewXPos ) SAL_OVERRIDE { maImpl.MoveGlyph(nStart, nNewXPos); };
+        virtual void    DropGlyph( int nStart ) SAL_OVERRIDE { maImpl.DropGlyph(nStart); };
+        virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE { maImpl.Simplify(bIsBase); };
 
         virtual ~GraphiteServerFontLayout() throw();
 

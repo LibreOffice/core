@@ -123,7 +123,7 @@ namespace
         CallbackTimer( ITimeoutHandler* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
 
     protected:
-        virtual void SAL_CALL onShot();
+        virtual void SAL_CALL onShot() SAL_OVERRIDE;
     };
 
 
@@ -189,16 +189,16 @@ private:
     bool            Kill( const OUString& rURL );
 
 protected:
-    virtual bool     DoubleClickHdl();
-    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
+    virtual bool     DoubleClickHdl() SAL_OVERRIDE;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const SAL_OVERRIDE;
 
 public:
     ViewTabListBox_Impl( Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
    ~ViewTabListBox_Impl();
 
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -212,8 +212,8 @@ public:
 
     DECL_LINK(ResetQuickSearch_Impl, void *);
 
-    virtual PopupMenu*  CreateContextMenu( void );
-    virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry );
+    virtual PopupMenu*  CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) SAL_OVERRIDE;
 };
 
 // class HashedEntry --------------------------------------------------
@@ -427,7 +427,7 @@ public:
                             virtual ~NameTranslator_Impl();
 
      // IContentTitleTranslation
-    virtual sal_Bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
+    virtual sal_Bool            GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const SAL_OVERRIDE;
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     const OUString*         GetTransTableFileName() const;
@@ -537,11 +537,11 @@ protected:
 
 protected:
     // IEnumerationResultHandler overridables
-    virtual void        enumerationDone( ::svt::EnumerationResult eResult );
+    virtual void        enumerationDone( ::svt::EnumerationResult eResult ) SAL_OVERRIDE;
             void        implEnumerationSuccess();
 
     // ITimeoutHandler
-    virtual void onTimeout( CallbackTimer* _pInstigator );
+    virtual void onTimeout( CallbackTimer* _pInstigator ) SAL_OVERRIDE;
 };
 
 inline void SvtFileView_Impl::EnableContextMenu( bool bEnable )

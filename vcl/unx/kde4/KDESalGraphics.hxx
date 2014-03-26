@@ -43,7 +43,7 @@ class KDESalGraphics : public X11SalGraphics
             @param part Specification of the widget's part if it consists of more than one.
             @return true if the platform supports native drawing of the widget type defined by part.
         */
-        virtual bool IsNativeControlSupported( ControlType type, ControlPart part );
+        virtual bool IsNativeControlSupported( ControlType type, ControlPart part ) SAL_OVERRIDE;
 
         /** Test whether the position is in the native widget.
             If the return value is TRUE, bIsInside contains information whether
@@ -67,7 +67,7 @@ class KDESalGraphics : public X11SalGraphics
         virtual bool drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& aValue,
-                                        const OUString& aCaption );
+                                        const OUString& aCaption ) SAL_OVERRIDE;
 
         /** Check if the bounding regions match.
 
@@ -90,7 +90,7 @@ class KDESalGraphics : public X11SalGraphics
                                             const Rectangle& rControlRegion, ControlState nControlState,
                                             const ImplControlValue& aValue,
                                             const OUString& aCaption,
-                                            Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
+                                            Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

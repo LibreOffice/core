@@ -61,12 +61,12 @@ namespace drawinglayer
                 ::sal_uInt32 DPI_X,
                 ::sal_uInt32 DPI_Y,
                 const ::com::sun::star::geometry::RealRectangle2D& Range,
-                ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException, std::exception);
+                ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception);
-            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException, std::exception);
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception);
+            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
     } // end of namespace unorenderer
 } // end of namespace drawinglayer

@@ -210,67 +210,67 @@ public:
     bool                    appendUnicodeSequence( sal_Unicode );
     bool                    endUnicodeSequence();
 
-    virtual SalGraphics*        AcquireGraphics();
-    virtual void                ReleaseGraphics( SalGraphics* pGraphics );
+    virtual SalGraphics*        AcquireGraphics() SAL_OVERRIDE;
+    virtual void                ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
 
     // call with true to clear graphics (setting None as drawable)
     // call with false to setup graphics with window (GetWindow())
     virtual void                updateGraphics( bool bClear );
 
-    virtual bool                PostEvent( void* pData );
+    virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
 
-    virtual void                SetTitle( const OUString& rTitle );
-    virtual void                SetIcon( sal_uInt16 nIcon );
-    virtual void                SetMenu( SalMenu* pMenu );
-    virtual void                                DrawMenuBar();
+    virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
+    virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;
+    virtual void                SetMenu( SalMenu* pMenu ) SAL_OVERRIDE;
+    virtual void                                DrawMenuBar() SAL_OVERRIDE;
 
-    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( bool bVisible, bool bNoActivate = false );
-    virtual void                Enable( bool bEnable );
-    virtual void                SetMinClientSize( long nWidth, long nHeight );
-    virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
-    virtual void                GetClientSize( long& rWidth, long& rHeight );
-    virtual void                GetWorkArea( Rectangle& rRect );
-    virtual SalFrame*           GetParent() const;
-    virtual void                SetWindowState( const SalFrameState* pState );
-    virtual bool                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nMonitor );
-    virtual void                StartPresentation( bool bStart );
-    virtual void                SetAlwaysOnTop( bool bOnTop );
-    virtual void                ToTop( sal_uInt16 nFlags );
-    virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( bool bMouse );
-    virtual void                SetPointerPos( long nX, long nY );
+    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) SAL_OVERRIDE;
+    virtual void                Show( bool bVisible, bool bNoActivate = false ) SAL_OVERRIDE;
+    virtual void                Enable( bool bEnable ) SAL_OVERRIDE;
+    virtual void                SetMinClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                SetMaxClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) SAL_OVERRIDE;
+    virtual void                GetClientSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
+    virtual void                GetWorkArea( Rectangle& rRect ) SAL_OVERRIDE;
+    virtual SalFrame*           GetParent() const SAL_OVERRIDE;
+    virtual void                SetWindowState( const SalFrameState* pState ) SAL_OVERRIDE;
+    virtual bool                GetWindowState( SalFrameState* pState ) SAL_OVERRIDE;
+    virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nMonitor ) SAL_OVERRIDE;
+    virtual void                StartPresentation( bool bStart ) SAL_OVERRIDE;
+    virtual void                SetAlwaysOnTop( bool bOnTop ) SAL_OVERRIDE;
+    virtual void                ToTop( sal_uInt16 nFlags ) SAL_OVERRIDE;
+    virtual void                SetPointer( PointerStyle ePointerStyle ) SAL_OVERRIDE;
+    virtual void                CaptureMouse( bool bMouse ) SAL_OVERRIDE;
+    virtual void                SetPointerPos( long nX, long nY ) SAL_OVERRIDE;
     using SalFrame::Flush;
-    virtual void                Flush();
-    virtual void                Sync();
-    virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
-    virtual LanguageType        GetInputLanguage();
-    virtual void                UpdateSettings( AllSettings& rSettings );
-    virtual void                Beep();
-    virtual const SystemEnvData*    GetSystemData() const;
-    virtual SalPointerState     GetPointerState();
-    virtual SalIndicatorState   GetIndicatorState();
-    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
-    virtual void                SetParent( SalFrame* pNewParent );
-    virtual bool                SetPluginParent( SystemParentData* pNewParent );
+    virtual void                Flush() SAL_OVERRIDE;
+    virtual void                Sync() SAL_OVERRIDE;
+    virtual void                SetInputContext( SalInputContext* pContext ) SAL_OVERRIDE;
+    virtual void                EndExtTextInput( sal_uInt16 nFlags ) SAL_OVERRIDE;
+    virtual OUString              GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) SAL_OVERRIDE;
+    virtual LanguageType        GetInputLanguage() SAL_OVERRIDE;
+    virtual void                UpdateSettings( AllSettings& rSettings ) SAL_OVERRIDE;
+    virtual void                Beep() SAL_OVERRIDE;
+    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
+    virtual SalPointerState     GetPointerState() SAL_OVERRIDE;
+    virtual SalIndicatorState   GetIndicatorState() SAL_OVERRIDE;
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
+    virtual void                SetParent( SalFrame* pNewParent ) SAL_OVERRIDE;
+    virtual bool                SetPluginParent( SystemParentData* pNewParent ) SAL_OVERRIDE;
 
-    virtual void                SetScreenNumber( unsigned int );
-    virtual void                SetApplicationID( const OUString &rWMClass );
+    virtual void                SetScreenNumber( unsigned int ) SAL_OVERRIDE;
+    virtual void                SetApplicationID( const OUString &rWMClass ) SAL_OVERRIDE;
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
-    virtual void                    ResetClipRegion();
+    virtual void                    ResetClipRegion() SAL_OVERRIDE;
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) SAL_OVERRIDE;
     // add a rectangle to the clip region
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     // done setting up the clipregion
-    virtual void                    EndSetClipRegion();
+    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
 
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 

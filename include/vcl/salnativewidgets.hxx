@@ -326,7 +326,7 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
             mnThumbState = 0; mnPage1State = 0; mnPage2State = 0;
         };
         virtual ~ScrollbarValue();
-        virtual ScrollbarValue* clone() const;
+        virtual ScrollbarValue* clone() const SAL_OVERRIDE;
 };
 
 class VCL_DLLPUBLIC SliderValue : public ImplControlValue
@@ -343,7 +343,7 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
         , mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( 0 )
         {}
         virtual ~SliderValue();
-        virtual SliderValue* clone() const;
+        virtual SliderValue* clone() const SAL_OVERRIDE;
 };
 
 /* TabitemValue:
@@ -369,7 +369,7 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
             mnAlignment = 0;
         };
         virtual ~TabitemValue();
-        virtual TabitemValue* clone() const;
+        virtual TabitemValue* clone() const SAL_OVERRIDE;
 
         bool isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
         bool isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
@@ -401,7 +401,7 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
             mnUpperState = mnLowerState = 0;
         };
         virtual ~SpinbuttonValue();
-        virtual SpinbuttonValue* clone() const;
+        virtual SpinbuttonValue* clone() const SAL_OVERRIDE;
 };
 
 /*  Toolbarvalue:
@@ -414,7 +414,7 @@ public:
     ToolbarValue() : ImplControlValue( CTRL_TOOLBAR, BUTTONVALUE_DONTKNOW, 0 )
     { mbIsTopDockingArea = false; }
     virtual ~ToolbarValue();
-    virtual ToolbarValue* clone() const;
+    virtual ToolbarValue* clone() const SAL_OVERRIDE;
     Rectangle           maGripRect;
     bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar
@@ -430,7 +430,7 @@ public:
     MenubarValue() : ImplControlValue( CTRL_MENUBAR, BUTTONVALUE_DONTKNOW, 0 )
     { maTopDockingAreaHeight=0; }
     virtual ~MenubarValue();
-    virtual MenubarValue* clone() const;
+    virtual MenubarValue* clone() const SAL_OVERRIDE;
     int             maTopDockingAreaHeight;
 };
 
@@ -449,7 +449,7 @@ public:
     , maItemRect( i_rItemRect )
     {}
     virtual ~MenupopupValue();
-    virtual MenupopupValue* clone() const;
+    virtual MenupopupValue* clone() const SAL_OVERRIDE;
     Rectangle       maItemRect;
 };
 
@@ -464,7 +464,7 @@ public:
     : ImplControlValue( CTRL_PUSHBUTTON, BUTTONVALUE_DONTKNOW, 0 )
     , mbBevelButton( false ), mbSingleLine( true ) {}
     virtual ~PushButtonValue();
-    virtual PushButtonValue* clone() const;
+    virtual PushButtonValue* clone() const SAL_OVERRIDE;
 
     bool            mbBevelButton:1;
     bool            mbSingleLine:1;

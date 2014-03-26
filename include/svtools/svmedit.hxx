@@ -35,7 +35,7 @@ public:
     MultiLineEdit( Window* pParent, const ResId& rResId );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(sal_Bool bCreate = sal_True);
+    GetComponentInterface(sal_Bool bCreate = sal_True) SAL_OVERRIDE;
 };
 
 

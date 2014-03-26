@@ -39,7 +39,7 @@ public:
         int layer, Type staticType, bool nillable,
         com::sun::star::uno::Any const & value, bool extension);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
     Type getStaticType() const;
 
@@ -58,7 +58,7 @@ private:
 
     virtual ~PropertyNode();
 
-    virtual Kind kind() const;
+    virtual Kind kind() const SAL_OVERRIDE;
 
     Type staticType_;
         // as specified in the component-schema (TYPE_ANY, ...,

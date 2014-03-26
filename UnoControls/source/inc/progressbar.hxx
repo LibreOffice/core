@@ -106,7 +106,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -122,7 +122,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
@@ -138,7 +138,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() throw();
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
 
     //  XTypeProvider
@@ -158,7 +158,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  XAggregation
@@ -178,7 +178,7 @@ public:
     */
 
     ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  XProgressBar
@@ -198,7 +198,7 @@ public:
     */
 
     virtual void SAL_CALL setForegroundColor( sal_Int32 nColor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -214,7 +214,7 @@ public:
     */
 
     virtual void SAL_CALL setBackgroundColor( sal_Int32 nColor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -229,7 +229,7 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -247,7 +247,7 @@ public:
     virtual void SAL_CALL setRange(
         sal_Int32   nMin    ,
         sal_Int32   nMax
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -262,7 +262,7 @@ public:
         @onerror
     */
 
-    virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual sal_Int32 SAL_CALL getValue() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  XWindow
@@ -287,7 +287,7 @@ public:
         sal_Int32   nWidth  ,
         sal_Int32   nHeight ,
         sal_Int16   nFlags
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  XControl
@@ -308,7 +308,7 @@ public:
 
     virtual sal_Bool SAL_CALL setModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel
-    ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short
@@ -324,7 +324,7 @@ public:
     */
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     //  BaseControl
@@ -383,7 +383,7 @@ protected:
         sal_Int32 nX ,
         sal_Int32 nY ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics
-    );
+    ) SAL_OVERRIDE;
 
     /**_________________________________________________________________________________________________________
         @short

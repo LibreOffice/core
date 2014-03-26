@@ -81,10 +81,10 @@ public:
             SvxFieldItem( const SvxFieldItem& rItem );
             ~SvxFieldItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVer ) const;
-    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
     const SvxFieldData*     GetField() const    { return pField; }
     static SvClassManager&  GetClassManager();
@@ -135,10 +135,10 @@ public:
     OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
     static OUString    GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 
-    virtual MetaAction* createBeginComment() const;
+    virtual MetaAction* createBeginComment() const SAL_OVERRIDE;
 };
 
 
@@ -173,10 +173,10 @@ public:
     SvxURLFormat            GetFormat() const { return eFormat; }
     void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 
-    virtual MetaAction* createBeginComment() const;
+    virtual MetaAction* createBeginComment() const SAL_OVERRIDE;
 };
 
 class EDITENG_DLLPUBLIC SvxPageField : public SvxFieldData
@@ -185,10 +185,10 @@ public:
     SV_DECL_PERSIST1( SvxPageField, SvxFieldData, com::sun::star::text::textfield::Type::PAGE )
     SvxPageField();
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 
-    virtual MetaAction* createBeginComment() const;
+    virtual MetaAction* createBeginComment() const SAL_OVERRIDE;
 };
 
 class EDITENG_DLLPUBLIC SvxPagesField : public SvxFieldData
@@ -197,8 +197,8 @@ public:
     SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, com::sun::star::text::textfield::Type::PAGES )
     SvxPagesField();
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 class EDITENG_DLLPUBLIC SvxTimeField : public SvxFieldData
@@ -207,10 +207,10 @@ public:
     SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, com::sun::star::text::textfield::Type::TIME )
     SvxTimeField();
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 
-    virtual MetaAction* createBeginComment() const;
+    virtual MetaAction* createBeginComment() const SAL_OVERRIDE;
 };
 
 class EDITENG_DLLPUBLIC SvxFileField : public SvxFieldData
@@ -219,8 +219,8 @@ public:
     SV_DECL_PERSIST1( SvxFileField, SvxFieldData, com::sun::star::text::textfield::Type::DOCINFO_TITLE )
     SvxFileField();
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
@@ -234,8 +234,8 @@ public:
     void SetTab(int nTab);
     int GetTab() const;
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 
@@ -282,10 +282,10 @@ public:
     OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
     static OUString    GetFormatted( Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 
-    virtual MetaAction* createBeginComment() const;
+    virtual MetaAction* createBeginComment() const SAL_OVERRIDE;
 };
 
 
@@ -323,8 +323,8 @@ public:
 
     OUString           GetFormatted() const;
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 
@@ -371,8 +371,8 @@ public:
 
     OUString           GetFormatted() const;
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
@@ -383,8 +383,8 @@ public:
     SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_HEADER )
     SvxHeaderField();
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
@@ -394,8 +394,8 @@ class EDITENG_DLLPUBLIC SvxFooterField : public SvxFieldData
 public:
     SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_FOOTER )
     SvxFooterField();
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
@@ -408,8 +408,8 @@ public:
 
     static OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
-    virtual SvxFieldData*   Clone() const;
-    virtual bool            operator==( const SvxFieldData& ) const;
+    virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
+    virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;
 };
 
 

@@ -32,17 +32,17 @@ protected:
 
     // derived from EditEngine. Allows Outliner objetcs to provide
     // bullet access to the EditEngine.
-    virtual const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const;
+    virtual const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const SAL_OVERRIDE;
 
 public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         ~OutlinerEditEng();
 
-    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
+    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev ) SAL_OVERRIDE;
 
-    virtual void        ParagraphInserted( sal_Int32 nNewParagraph );
-    virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph );
-    virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
+    virtual void        ParagraphInserted( sal_Int32 nNewParagraph ) SAL_OVERRIDE;
+    virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph ) SAL_OVERRIDE;
+    virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph ) SAL_OVERRIDE;
 
     virtual void DrawingText(
         const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart, sal_Int32 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
@@ -54,7 +54,7 @@ public:
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
         const Color& rOverlineColor,
-        const Color& rTextLineColor);
+        const Color& rTextLineColor) SAL_OVERRIDE;
 
     virtual void DrawingTab(
         const Point& rStartPos, long nWidth, const OUString& rChar,
@@ -62,23 +62,23 @@ public:
         bool bEndOfLine,
         bool bEndOfParagraph,
         const Color& rOverlineColor,
-        const Color& rTextLineColor);
+        const Color& rTextLineColor) SAL_OVERRIDE;
 
-    virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
-    virtual void        ParaAttribsChanged( sal_Int32 nPara );
-    virtual bool        SpellNextDocument();
-    virtual OUString    GetUndoComment( sal_uInt16 nUndoId ) const;
+    virtual void        StyleSheetChanged( SfxStyleSheet* pStyle ) SAL_OVERRIDE;
+    virtual void        ParaAttribsChanged( sal_Int32 nPara ) SAL_OVERRIDE;
+    virtual bool        SpellNextDocument() SAL_OVERRIDE;
+    virtual OUString    GetUndoComment( sal_uInt16 nUndoId ) const SAL_OVERRIDE;
 
     // for text conversion
-    virtual bool        ConvertNextDocument();
+    virtual bool        ConvertNextDocument() SAL_OVERRIDE;
 
-    virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
-    virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
-    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos ) SAL_OVERRIDE;
+    virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos ) SAL_OVERRIDE;
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor ) SAL_OVERRIDE;
 
-    virtual Rectangle   GetBulletArea( sal_Int32 nPara );
+    virtual Rectangle   GetBulletArea( sal_Int32 nPara ) SAL_OVERRIDE;
 
-       virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
+       virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     // belongs into class Outliner, move there before incompatible update!
     Link                aOutlinerNotifyHdl;

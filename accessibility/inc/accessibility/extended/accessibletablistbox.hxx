@@ -63,27 +63,27 @@ public:
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception );
+                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleContext
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // IAccessibleTabListBox
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getMyself()
+        getMyself() SAL_OVERRIDE
     {
         return this;
     }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getHeaderBar()
+        getHeaderBar() SAL_OVERRIDE
     {
         return AccessibleBrowseBox::getHeaderBar( svt::BBTYPE_COLUMNHEADERBAR );
     }
@@ -94,7 +94,7 @@ protected:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleBrowseBoxTable. */
-    virtual AccessibleBrowseBoxTable*   createAccessibleTable();
+    virtual AccessibleBrowseBoxTable*   createAccessibleTable() SAL_OVERRIDE;
 };
 
 

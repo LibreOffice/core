@@ -294,16 +294,16 @@ public:
     HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
     ~HeaderBar();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void        Resize();
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
     virtual void        StartDrag();
@@ -370,9 +370,9 @@ public:
 
     /** Creates and returns the accessible object of the header bar. */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  CreateAccessible();
+        ::com::sun::star::accessibility::XAccessible >  CreateAccessible() SAL_OVERRIDE;
     void SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetComponentInterface( sal_Bool bCreate );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetComponentInterface( sal_Bool bCreate ) SAL_OVERRIDE;
 
 };
 

@@ -61,53 +61,53 @@ namespace XPath
     /**
         get object type
     */
-    virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException, std::exception);
+    virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get the nodes from a nodelist type object
     */
     virtual Reference< XNodeList > SAL_CALL getNodeList()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
      /**
         get value of a boolean object
      */
-     virtual sal_Bool SAL_CALL getBoolean() throw (RuntimeException, std::exception);
+     virtual sal_Bool SAL_CALL getBoolean() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as byte
     */
-    virtual sal_Int8 SAL_CALL getByte() throw (RuntimeException, std::exception);
+    virtual sal_Int8 SAL_CALL getByte() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as short
     */
-    virtual sal_Int16 SAL_CALL getShort() throw (RuntimeException, std::exception);
+    virtual sal_Int16 SAL_CALL getShort() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as long
     */
-    virtual sal_Int32 SAL_CALL getLong() throw (RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getLong() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as hyper
     */
-    virtual sal_Int64 SAL_CALL getHyper() throw (RuntimeException, std::exception);
+    virtual sal_Int64 SAL_CALL getHyper() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as float
     */
-    virtual float SAL_CALL getFloat() throw (RuntimeException, std::exception);
+    virtual float SAL_CALL getFloat() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get number as double
     */
-    virtual double SAL_CALL getDouble() throw (RuntimeException, std::exception);
+    virtual double SAL_CALL getDouble() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**
         get string value
     */
-    virtual OUString SAL_CALL getString() throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getString() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     };
 }

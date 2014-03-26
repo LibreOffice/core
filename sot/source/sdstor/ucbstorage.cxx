@@ -91,14 +91,14 @@ public:
     FileStreamWrapper_Impl( const OUString& rName );
     virtual ~FileStreamWrapper_Impl();
 
-    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException, std::exception);
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw ( IOException, RuntimeException, std::exception);
-    virtual sal_Int64 SAL_CALL getLength(  ) throw ( IOException, RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception );
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception );
-    virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL available() throw( NotConnectedException, RuntimeException, std::exception );
-    virtual void      SAL_CALL closeInput() throw( NotConnectedException, RuntimeException, std::exception );
+    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw ( IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getLength(  ) throw ( IOException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL available() throw( NotConnectedException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void      SAL_CALL closeInput() throw( NotConnectedException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     void checkConnected();
@@ -405,12 +405,12 @@ class UCBStorageStream_Impl : public SvRefBase, public SvStream
                                 ~UCBStorageStream_Impl();
 public:
 
-    virtual sal_uLong           GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong           PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong           SeekPos( sal_uLong nPos );
-    virtual void                SetSize( sal_uLong nSize );
-    virtual void                FlushData();
-    virtual void                ResetError();
+    virtual sal_uLong           GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual sal_uLong           PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual sal_uLong           SeekPos( sal_uLong nPos ) SAL_OVERRIDE;
+    virtual void                SetSize( sal_uLong nSize ) SAL_OVERRIDE;
+    virtual void                FlushData() SAL_OVERRIDE;
+    virtual void                ResetError() SAL_OVERRIDE;
 
     UCBStorageStream*           m_pAntiImpl;    // only valid if an external reference exists
 

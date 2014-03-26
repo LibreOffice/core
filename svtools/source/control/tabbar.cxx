@@ -105,11 +105,11 @@ public:
 
     TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 };
 
 void ImplTabButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -160,9 +160,9 @@ public:
 private:
     void            ImplTrack( const Point& rScreenPos );
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     Point           maStartPos;
     long            mnStartWidth;
@@ -267,8 +267,8 @@ public:
     void            SetPostEvent() { mbPostEvt = true; }
     void            ResetPostEvent() { mbPostEvt = false; }
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual void    LoseFocus();
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 };
 
 

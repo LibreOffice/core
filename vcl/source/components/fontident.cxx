@@ -55,15 +55,15 @@ FontIdentificator() {}
 
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ) throw (RuntimeException, std::exception);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& ) throw (Exception, RuntimeException, std::exception);
+    virtual void SAL_CALL initialize( const Sequence< Any >& ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMaterialHolder
-    virtual Any SAL_CALL getMaterial() throw(RuntimeException, std::exception);
+    virtual Any SAL_CALL getMaterial() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

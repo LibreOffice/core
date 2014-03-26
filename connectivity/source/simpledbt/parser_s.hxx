@@ -48,13 +48,13 @@ namespace connectivity
             const OUString& rStatement,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
-        ) const;
+        ) const SAL_OVERRIDE;
 
-        virtual const IParseContext& getContext() const;
+        virtual const IParseContext& getContext() const SAL_OVERRIDE;
 
         // disambiguate IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

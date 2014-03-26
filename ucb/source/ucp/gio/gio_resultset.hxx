@@ -32,8 +32,8 @@ namespace gio
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
     private:
-    virtual void initStatic();
-    virtual void initDynamic();
+    virtual void initStatic() SAL_OVERRIDE;
+    virtual void initDynamic() SAL_OVERRIDE;
 
     public:
     DynamicResultSet(

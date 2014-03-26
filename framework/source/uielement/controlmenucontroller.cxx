@@ -182,19 +182,19 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return OUString("com.sun.star.comp.framework.ControlMenuController");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.frame.PopupMenuController");
@@ -203,23 +203,23 @@ public:
 
 
     // XPopupMenuController
-    virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception);
+    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception );
+    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XMenuListener
-    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception );
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    virtual void impl_setPopupMenu();
-    virtual void impl_select(const uno::Reference< frame::XDispatch >& _xDispatch,const util::URL& aURL);
+    virtual void impl_setPopupMenu() SAL_OVERRIDE;
+    virtual void impl_select(const uno::Reference< frame::XDispatch >& _xDispatch,const util::URL& aURL) SAL_OVERRIDE;
 
     class UrlToDispatchMap : public ::boost::unordered_map< OUString,
                                                      uno::Reference< frame::XDispatch >,

@@ -50,7 +50,7 @@ public:
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<
                                                com::sun::star::beans::PropertyValue >& io_rDescriptor )
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

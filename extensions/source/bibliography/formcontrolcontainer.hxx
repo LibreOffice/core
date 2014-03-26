@@ -58,11 +58,11 @@ namespace bib
 
     protected:
     // XLoadListener equivalents
-        virtual void _loaded( const ::com::sun::star::lang::EventObject& _rEvent );
-        virtual void _unloading( const ::com::sun::star::lang::EventObject& _rEvent );
-        virtual void _unloaded( const ::com::sun::star::lang::EventObject& _rEvent );
-        virtual void _reloading( const ::com::sun::star::lang::EventObject& _rEvent );
-        virtual void _reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
+        virtual void _loaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _unloading( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _unloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _reloading( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
 
     };
 

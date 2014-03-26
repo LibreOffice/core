@@ -38,7 +38,7 @@ class AbortContinuation:
 public:
     inline AbortContinuation() {}
 
-    virtual inline void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) {}
+    virtual inline void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
 
 private:
     AbortContinuation(AbortContinuation &); // not implemented
@@ -55,7 +55,7 @@ class InteractionRequest::RetryContinuation:
 public:
     inline RetryContinuation(): m_bSelected(false) {}
 
-    virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     bool isSelected() const;
 

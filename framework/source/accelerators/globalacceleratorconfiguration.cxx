@@ -57,19 +57,19 @@ public:
     virtual ~GlobalAcceleratorConfiguration() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return OUString("com.sun.star.comp.framework.GlobalAcceleratorConfiguration");
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
         aSeq[0] = OUString("com.sun.star.ui.GlobalAcceleratorConfiguration");
@@ -77,7 +77,7 @@ public:
     }
 
     // XComponent
-    virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// This has to be called after when the instance is acquire()'d.
     void fillCache();

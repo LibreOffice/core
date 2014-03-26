@@ -145,29 +145,29 @@ public:
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)
-        throw (css::uno::RuntimeException, css::uno::Exception, std::exception);
+        throw (css::uno::RuntimeException, css::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource)
         throw ( SAXException,
                 IOException,
-                css::uno::RuntimeException, std::exception);
+                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDTDHandler(const css::uno::Reference < XDTDHandler > & xHandler)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setEntityResolver(const css::uno::Reference<  XEntityResolver >& xResolver)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL setLocale( const Locale &locale )                     throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setLocale( const Locale &locale )                     throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XServiceInfo
-    OUString                     SAL_CALL getImplementationName() throw (std::exception);
-    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw (std::exception);
-    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception);
+    OUString                     SAL_CALL getImplementationName() throw (std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw (std::exception) SAL_OVERRIDE;
+    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception) SAL_OVERRIDE;
 
 private:
 
@@ -363,33 +363,33 @@ public:
     }
 
 public: //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (std::exception)
+    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (std::exception) SAL_OVERRIDE
     {
         return XML_GetCurrentColumnNumber( m_pParser->getEntity().pParser );
     }
-    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (std::exception)
+    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (std::exception) SAL_OVERRIDE
     {
         return XML_GetCurrentLineNumber( m_pParser->getEntity().pParser );
     }
-    virtual OUString SAL_CALL getPublicId(void) throw (std::exception)
+    virtual OUString SAL_CALL getPublicId(void) throw (std::exception) SAL_OVERRIDE
     {
         return m_pParser->getEntity().structSource.sPublicId;
     }
-    virtual OUString SAL_CALL getSystemId(void) throw (std::exception)
+    virtual OUString SAL_CALL getSystemId(void) throw (std::exception) SAL_OVERRIDE
     {
         return m_pParser->getEntity().structSource.sSystemId;
     }
 
     // XSeekable (only for getPosition)
 
-    virtual void SAL_CALL seek( sal_Int64 ) throw(std::exception)
+    virtual void SAL_CALL seek( sal_Int64 ) throw(std::exception) SAL_OVERRIDE
     {
     }
-    virtual sal_Int64 SAL_CALL getPosition() throw(std::exception)
+    virtual sal_Int64 SAL_CALL getPosition() throw(std::exception) SAL_OVERRIDE
     {
         return XML_GetCurrentByteIndex( m_pParser->getEntity().pParser );
     }
-    virtual ::sal_Int64 SAL_CALL getLength() throw(std::exception)
+    virtual ::sal_Int64 SAL_CALL getLength() throw(std::exception) SAL_OVERRIDE
     {
         return 0;
     }

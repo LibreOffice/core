@@ -37,13 +37,13 @@ public:
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
-    virtual void Characters( const OUString& rChars );
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual sal_Bool IsPersistent() const;
-    virtual void Export();
+    virtual sal_Bool IsPersistent() const SAL_OVERRIDE;
+    virtual void Export() SAL_OVERRIDE;
     const OUString& GetText() const { return m_aCharacters; }
 };
 

@@ -57,15 +57,15 @@ public:
     explicit PDFPasswordRequest(bool bFirstTry, const OUString& rName);
 
     // XInteractionRequest
-    virtual uno::Any SAL_CALL getRequest(  ) throw (uno::RuntimeException, std::exception);
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw (uno::RuntimeException, std::exception);
+    virtual uno::Any SAL_CALL getRequest(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionPassword
-    virtual void SAL_CALL setPassword( const OUString& rPwd ) throw (uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getPassword() throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setPassword( const OUString& rPwd ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getPassword() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL select() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     bool isSelected() const { osl::MutexGuard const guard( m_aMutex ); return m_bSelected; }
 
@@ -129,7 +129,7 @@ public:
 private:
     virtual ~UnsupportedEncryptionFormatRequest() {}
 
-    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception) {
+    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE {
         return uno::makeAny(
             task::ErrorCodeRequest(
                 OUString(), uno::Reference< uno::XInterface >(),
@@ -139,7 +139,7 @@ private:
     }
 
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-    SAL_CALL getContinuations() throw (uno::RuntimeException, std::exception) {
+    SAL_CALL getContinuations() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE {
         return
             uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
     }

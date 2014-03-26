@@ -51,8 +51,8 @@ public:
   BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );
   virtual ~BootstrapFixture();
 
-  virtual void setUp();
-  virtual void tearDown();
+  virtual void setUp() SAL_OVERRIDE;
+  virtual void tearDown() SAL_OVERRIDE;
 
   static void validate(const OUString& rURL, ValidationFormat);
 };

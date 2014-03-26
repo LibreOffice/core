@@ -38,30 +38,30 @@ public:
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 
     virtual SfxPoolItem* Create( SvStream& rStream,
-                                 sal_uInt16 nItemVersion ) const;
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+                                 sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual bool         operator==( const SfxPoolItem& rOrig ) const;
+    virtual bool         operator==( const SfxPoolItem& rOrig ) const SAL_OVERRIDE;
 
-    virtual sal_uInt16 GetVersion(sal_uInt16) const;
+    virtual sal_uInt16 GetVersion(sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const SAL_OVERRIDE;
 
     void SetValue( const OUString& rNewVal );
 
     using SfxPoolItem::Compare;
-    virtual int Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;
+    virtual int Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString & rText,
-                                                 const IntlWrapper* pIntlWrapper = 0 ) const;
+                                                 const IntlWrapper* pIntlWrapper = 0 ) const SAL_OVERRIDE;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
+                             sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue  ( const com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0);
+                             sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
 
     INetContentType GetEnumValue() const;
 

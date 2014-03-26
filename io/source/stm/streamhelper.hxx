@@ -99,14 +99,14 @@ public:
 
     virtual void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
                                                     throw(  IRingBuffer_OutOfMemoryException,
-                                                                IRingBuffer_OutOfBoundsException );
+                                                                IRingBuffer_OutOfBoundsException ) SAL_OVERRIDE;
     virtual void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
-                                                    throw( IRingBuffer_OutOfBoundsException );
-    virtual sal_Int32   getSize() const throw(  );
-    virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
-    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException);
+                                                    throw( IRingBuffer_OutOfBoundsException ) SAL_OVERRIDE;
+    virtual sal_Int32   getSize() const throw(  ) SAL_OVERRIDE;
+    virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException) SAL_OVERRIDE;
+    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException) SAL_OVERRIDE;
 
-    virtual void shrink() throw();
+    virtual void shrink() throw() SAL_OVERRIDE;
 
 private:
 
@@ -133,13 +133,13 @@ class MemFIFO :
 {
 public:
     virtual void    write( const Sequence<sal_Int8> &) throw( I_FIFO_OutOfMemoryException,
-                                                              I_FIFO_OutOfBoundsException );
+                                                              I_FIFO_OutOfBoundsException ) SAL_OVERRIDE;
     virtual void    read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
-                                                       throw( I_FIFO_OutOfBoundsException );
-    virtual void    skip( sal_Int32 nBytesToSkip ) throw( I_FIFO_OutOfBoundsException );
-    virtual sal_Int32   getSize()  const throw(  )
+                                                       throw( I_FIFO_OutOfBoundsException ) SAL_OVERRIDE;
+    virtual void    skip( sal_Int32 nBytesToSkip ) throw( I_FIFO_OutOfBoundsException ) SAL_OVERRIDE;
+    virtual sal_Int32   getSize()  const throw(  ) SAL_OVERRIDE
                         { return MemRingBuffer::getSize(); }
-    virtual void    shrink() throw()
+    virtual void    shrink() throw() SAL_OVERRIDE
                         { MemRingBuffer::shrink(); }
 
 };

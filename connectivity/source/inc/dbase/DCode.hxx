@@ -38,7 +38,7 @@ namespace connectivity
             OFILEAnalyzer(file::OConnection* _pConnection) : file::OSQLAnalyzer(_pConnection){}
             virtual file::OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL) SAL_OVERRIDE;
         };
 
         // Attributes from a result row
@@ -50,8 +50,8 @@ namespace connectivity
                              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
 
-            virtual sal_Bool isIndexed() const;
-            virtual file::OEvaluateSet* preProcess(file::OBoolOperator* pOp, file::OOperand* pRight = 0);
+            virtual sal_Bool isIndexed() const SAL_OVERRIDE;
+            virtual file::OEvaluateSet* preProcess(file::OBoolOperator* pOp, file::OOperand* pRight = 0) SAL_OVERRIDE;
             TYPEINFO_OVERRIDE();
         };
     }

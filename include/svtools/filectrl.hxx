@@ -57,9 +57,9 @@ private:
     SVT_DLLPRIVATE void     ImplBrowseFile( );
 
 protected:
-    SVT_DLLPRIVATE void     Resize();
-    SVT_DLLPRIVATE void     GetFocus();
-    SVT_DLLPRIVATE void     StateChanged( StateChangedType nType );
+    SVT_DLLPRIVATE void     Resize() SAL_OVERRIDE;
+    SVT_DLLPRIVATE void     GetFocus() SAL_OVERRIDE;
+    SVT_DLLPRIVATE void     StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     DECL_DLLPRIVATE_LINK( ButtonHdl, void* );
 
@@ -70,13 +70,13 @@ public:
     Edit&           GetEdit() { return maEdit; }
     PushButton&     GetButton() { return maButton; }
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
 
     void            SetOpenDialog( bool bOpen )     { mbOpenDlg = bOpen; }
     bool            IsOpenDialog() const            { return mbOpenDlg; }
 
-    void            SetText( const OUString& rStr );
-    OUString        GetText() const;
+    void            SetText( const OUString& rStr ) SAL_OVERRIDE;
+    OUString        GetText() const SAL_OVERRIDE;
     OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
 
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }

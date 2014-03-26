@@ -53,7 +53,7 @@ namespace svgio
         protected:
             /// allow user callback to allow changes to the new TextTransformation. Default
             /// does nothing.
-            virtual bool allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength);
+            virtual bool allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength) SAL_OVERRIDE;
 
             void freeB2DCubicBezierHelper();
             basegfx::B2DCubicBezierHelper* getB2DCubicBezierHelper();

@@ -62,14 +62,14 @@ public:
         Components & components, OUString const & pathRepresenation,
         OUString const & locale, bool update);
 
-    virtual Path getAbsolutePath();
+    virtual Path getAbsolutePath() SAL_OVERRIDE;
 
     virtual void initBroadcaster(
-        Modifications::Node const & modifications, Broadcaster * broadcaster);
+        Modifications::Node const & modifications, Broadcaster * broadcaster) SAL_OVERRIDE;
 
-    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
 
-    virtual void SAL_CALL release() throw ();
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
     OUString getAbsolutePathRepresentation();
 
@@ -82,58 +82,58 @@ public:
     virtual void SAL_CALL addChangesListener(
         com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeChangesListener(
         com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
             const & aListener)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL commitChanges()
         throw (
             com::sun::star::lang::WrappedTargetException,
             com::sun::star::uno::RuntimeException,
-            std::exception);
+            std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     virtual ~RootAccess();
 
-    virtual Path getRelativePath();
+    virtual Path getRelativePath() SAL_OVERRIDE;
 
-    virtual OUString getRelativePathRepresentation();
+    virtual OUString getRelativePathRepresentation() SAL_OVERRIDE;
 
-    virtual rtl::Reference< Node > getNode();
+    virtual rtl::Reference< Node > getNode() SAL_OVERRIDE;
 
-    virtual bool isFinalized();
+    virtual bool isFinalized() SAL_OVERRIDE;
 
-    virtual OUString getNameInternal();
+    virtual OUString getNameInternal() SAL_OVERRIDE;
 
-    virtual rtl::Reference< RootAccess > getRootAccess();
+    virtual rtl::Reference< RootAccess > getRootAccess() SAL_OVERRIDE;
 
-    virtual rtl::Reference< Access > getParentAccess();
+    virtual rtl::Reference< Access > getParentAccess() SAL_OVERRIDE;
 
     virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
-        const;
+        const SAL_OVERRIDE;
 
     virtual void addSupportedServiceNames(
-        std::vector< OUString > * services);
+        std::vector< OUString > * services) SAL_OVERRIDE;
 
-    virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
+    virtual void initDisposeBroadcaster(Broadcaster * broadcaster) SAL_OVERRIDE;
 
-    virtual void clearListeners() throw ();
+    virtual void clearListeners() throw () SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     typedef
         std::multiset<

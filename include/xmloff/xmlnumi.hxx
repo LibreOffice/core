@@ -49,7 +49,7 @@ protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue );
+                               const OUString& rValue ) SAL_OVERRIDE;
 
 public:
 
@@ -68,7 +68,7 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+                    ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
     void FillUnoNumRule(
             const ::com::sun::star::uno::Reference<
@@ -94,7 +94,7 @@ public:
         sal_Int16 nLevel,
         sal_Bool bOrdered );
 
-    virtual void CreateAndInsertLate( sal_Bool bOverwrite );
+    virtual void CreateAndInsertLate( sal_Bool bOverwrite ) SAL_OVERRIDE;
 
     void CreateAndInsertAuto() const;
 };

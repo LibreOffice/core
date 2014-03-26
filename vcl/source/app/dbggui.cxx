@@ -328,9 +328,9 @@ private:
 public:
                     DbgWindow();
 
-    virtual bool    Close();
-    virtual void    Resize();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     void            InsertLine( const OUString& rLine );
     void            Update() { WorkWindow::Update(); maLstBox.Update(); }
 
@@ -394,7 +394,7 @@ public:
                     DbgDialog();
 
                     DECL_LINK( ClickHdl, Button* );
-    void            RequestHelp( const HelpEvent& rHEvt );
+    void            RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
 static sal_Char aDbgInfoBuf[12288];
@@ -1389,7 +1389,7 @@ class DbgMessageBox : public ErrorBox
         AddButton(OUString("Copy"), COPY_BUTTON_ID, 0);
     }
 
-    virtual void Click()
+    virtual void Click() SAL_OVERRIDE
     {
         if( GetCurButtonId() == COPY_BUTTON_ID )
             vcl::unohelper::TextDataObject::CopyStringTo( m_aMessage, GetClipboard() );
@@ -1412,7 +1412,7 @@ public:
     }
 
 protected:
-    virtual long doIt();
+    virtual long doIt() SAL_OVERRIDE;
 };
 
 long SolarMessageBoxExecutor::doIt()
@@ -1515,7 +1515,7 @@ public:
     }
 
 protected:
-    virtual long doIt();
+    virtual long doIt() SAL_OVERRIDE;
 };
 
 long SolarWindowPrinter::doIt()

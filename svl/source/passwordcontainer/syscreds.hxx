@@ -37,8 +37,8 @@ class SysCredentialsConfigItem : public utl::ConfigItem
 
         virtual void Notify(
             const com::sun::star::uno::Sequence< OUString > &
-                seqPropertyNames );
-        virtual void Commit();
+                seqPropertyNames ) SAL_OVERRIDE;
+        virtual void Commit() SAL_OVERRIDE;
 
         com::sun::star::uno::Sequence< OUString >
         getSystemCredentialsURLs();

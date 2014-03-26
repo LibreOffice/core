@@ -85,8 +85,8 @@ public:
                         const Link& rNotifyEditEnd );
 
                     ~IcnViewEdit_Impl();
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     sal_Bool            EditingCanceled() const { return bCanceled; }
     void            StopEditing( sal_Bool bCancel = sal_False );
     sal_Bool            IsGrabFocus() const { return bGrabFocus; }

@@ -294,7 +294,7 @@ protected:
     virtual void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
 
     // Invalidate children on enable/disable
-    virtual void StateChanged( StateChangedType eType );
+    virtual void StateChanged( StateChangedType eType ) SAL_OVERRIDE;
 
     virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND);
     virtual sal_uLong Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND );
@@ -309,10 +309,10 @@ protected:
     bool            IsEmptyTextAllowed() const;
 
     // Return value must be derived from SvViewDataEntry!
-    virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* );
+    virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* ) SAL_OVERRIDE;
     // InitViewData is called right after CreateViewData
     // The Entry is has not yet been added to the View in InitViewData!
-    virtual void InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry );
+    virtual void InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry ) SAL_OVERRIDE;
     // Calls InitViewData for all Items
     void            RecalcViewData();
     // Callback of RecalcViewData
@@ -332,15 +332,15 @@ protected:
     void            OnCurrentEntryChanged();
 
     // IMnemonicEntryList
-    virtual const void* FirstSearchEntry( OUString& _rEntryText ) const;
-    virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, OUString& _rEntryText ) const;
-    virtual void        SelectSearchEntry( const void* _pEntry );
-    virtual void        ExecuteSearchEntry( const void* _pEntry ) const;
+    virtual const void* FirstSearchEntry( OUString& _rEntryText ) const SAL_OVERRIDE;
+    virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, OUString& _rEntryText ) const SAL_OVERRIDE;
+    virtual void        SelectSearchEntry( const void* _pEntry ) SAL_OVERRIDE;
+    virtual void        ExecuteSearchEntry( const void* _pEntry ) const SAL_OVERRIDE;
 
     // ISearchableStringList
-    virtual ::vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const;
-    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const;
-    virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry );
+    virtual ::vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const SAL_OVERRIDE;
+    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const SAL_OVERRIDE;
+    virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
 
 public:
 
@@ -350,7 +350,7 @@ public:
 
     SvTreeList* GetModel() const { return pModel; }
     using SvListView::SetModel;
-    void SetModel(SvTreeList* pNewModel);
+    void SetModel(SvTreeList* pNewModel) SAL_OVERRIDE;
 
     sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
     SvTreeListEntry*    First() const { return pModel->First(); }
@@ -456,9 +456,9 @@ public:
 
     // Drag & Drop
     // New D'n'D API
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData,
                                          SvTreeListEntry* );
     virtual void        DragFinished( sal_Int8 nDropAction );
@@ -491,7 +491,7 @@ public:
 
     /** Creates and returns the accessible object of the Box. */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     /** Fills the StateSet with all states (except DEFUNC, done by the accessible object). */
     virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const;
@@ -521,7 +521,7 @@ public:
 
     void set_min_width_in_chars(sal_Int32 nChars);
 
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
 protected:
     using SvListView::SelectAll;
@@ -578,12 +578,12 @@ protected:
     // This can be used to hide Elements which are painted from outside into the Control
     virtual void    NotifyInvalidating();
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual void    CursorMoved( SvTreeListEntry* pNewCursor );
     virtual void    PreparePaint( SvTreeListEntry* );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            InitSettings(bool bFont, bool bForeground, bool bBackground);
     bool            IsCellFocusEnabled() const;
@@ -671,25 +671,25 @@ public:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Resize();
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
     void            SetUpdateMode( bool );
 
-    virtual void    ModelHasCleared();
-    virtual void    ModelHasInserted( SvTreeListEntry* pEntry );
-    virtual void    ModelHasInsertedTree( SvTreeListEntry* pEntry );
+    virtual void    ModelHasCleared() SAL_OVERRIDE;
+    virtual void    ModelHasInserted( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+    virtual void    ModelHasInsertedTree( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
     virtual void    ModelIsMoving(SvTreeListEntry* pSource,
-                        SvTreeListEntry* pTargetParent, sal_uLong nChildPos );
-    virtual void    ModelHasMoved(SvTreeListEntry* pSource );
-    virtual void    ModelIsRemoving( SvTreeListEntry* pEntry );
-    virtual void    ModelHasRemoved( SvTreeListEntry* pEntry );
-    void ModelHasEntryInvalidated( SvTreeListEntry* pEntry );
+                        SvTreeListEntry* pTargetParent, sal_uLong nChildPos ) SAL_OVERRIDE;
+    virtual void    ModelHasMoved(SvTreeListEntry* pSource ) SAL_OVERRIDE;
+    virtual void    ModelIsRemoving( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+    virtual void    ModelHasRemoved( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+    void ModelHasEntryInvalidated( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
     void            ShowTargetEmphasis( SvTreeListEntry*, bool bShow );
     void            ScrollOutputArea( short nDeltaEntries );
@@ -736,14 +736,14 @@ public:
     bool Collapse( SvTreeListEntry* pParent );
     virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true );
     sal_uLong SelectChildren( SvTreeListEntry* pParent, bool bSelect );
-    virtual void SelectAll( bool bSelect, bool bPaint = true );
+    virtual void SelectAll( bool bSelect, bool bPaint = true ) SAL_OVERRIDE;
 
     void SetCurEntry( SvTreeListEntry* _pEntry );
     SvTreeListEntry* GetCurEntry() const;
 
     using Window::Invalidate;
-    virtual void    Invalidate( sal_uInt16 nFlags = 0);
-    virtual void    Invalidate( const Rectangle&, sal_uInt16 nFlags = 0 );
+    virtual void    Invalidate( sal_uInt16 nFlags = 0) SAL_OVERRIDE;
+    virtual void    Invalidate( const Rectangle&, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
     void            SetHighlightRange(sal_uInt16 nFirstTab=0,sal_uInt16 nLastTab=0xffff);
 
@@ -752,7 +752,7 @@ public:
 
     DECL_LINK( DefaultCompare, SvSortData* );
     virtual void    ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntry1,
-                        SvTreeListEntry* pEntry2, sal_uLong nPos );
+                        SvTreeListEntry* pEntry2, sal_uLong nPos ) SAL_OVERRIDE;
 
     void            EndSelection();
     void            RepaintScrollBars() const;
@@ -779,7 +779,7 @@ public:
 
     long getPreferredDimensions(std::vector<long> &rWidths) const;
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

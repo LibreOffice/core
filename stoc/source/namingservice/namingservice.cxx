@@ -93,20 +93,20 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception);
+    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception);
+    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception);
+    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static()
     {
         OUString aStr( SERVICENAME );
         return Sequence< OUString >( &aStr, 1 );
     }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception);
-    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException, std::exception);
-    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

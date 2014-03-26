@@ -81,17 +81,17 @@ namespace DOM { namespace events
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XEventListener
-        virtual void SAL_CALL initialize(const Sequence< Any >& args) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL initialize(const Sequence< Any >& args) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     };

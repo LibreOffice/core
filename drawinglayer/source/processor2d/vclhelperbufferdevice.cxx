@@ -51,7 +51,7 @@ namespace
         void free(VirtualDevice& rDevice);
 
         // Timer virtuals
-        virtual void Timeout();
+        virtual void Timeout() SAL_OVERRIDE;
     };
 
     VDevBuffer::VDevBuffer()

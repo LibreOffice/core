@@ -111,7 +111,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     DECL_STATIC_LINK(               SvtMatchContext_Impl, Select_Impl, void* );
 
     virtual                         ~SvtMatchContext_Impl();
-    virtual void                    execute();
+    virtual void                    execute() SAL_OVERRIDE;
     void                            doExecute();
     void                            Insert( const OUString& rCompletion, const OUString& rURL, bool bForce = false);
     void                            ReadFolder( const OUString& rURL, const OUString& rMatch, bool bSmart );

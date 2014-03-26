@@ -54,28 +54,28 @@ namespace {
         OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
         // XTypeProvider
-        virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception);
+        virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
-        virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException, std::exception);
+        virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
 
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
+        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
 
-        virtual void executedDialog(sal_Int16 _nExecutionResult);
+        virtual void executedDialog(sal_Int16 _nExecutionResult) SAL_OVERRIDE;
     };
 
 

@@ -94,7 +94,7 @@ public:
     // XCallback
 
     virtual void SAL_CALL notify (const css::uno::Any& rUserData)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     static ::rtl::Reference<PresenterClockTimer> mpInstance;

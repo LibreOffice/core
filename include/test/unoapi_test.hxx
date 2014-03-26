@@ -22,8 +22,8 @@ public:
 
     void createFileURL(const OUString& aFileBase, OUString& rFilePath);
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
 protected:
     void closeDocument( css::uno::Reference< css::lang::XComponent > xDocument );

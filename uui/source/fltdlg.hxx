@@ -54,7 +54,7 @@ class FilterDialog : public ModalDialog
 
     // helper (or hided functions!)
     private:
-        short Execute() { return RET_CANCEL; };
+        short Execute() SAL_OVERRIDE { return RET_CANCEL; };
         OUString impl_buildUIFileName( const OUString& sURL );
 
     // member

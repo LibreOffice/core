@@ -338,16 +338,16 @@ public:
                             SfxVoidItem( const SfxVoidItem& );
                             ~SfxVoidItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const;
+                                    const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     // von sich selbst eine Kopie erzeugen
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
             void            SetWhich(sal_uInt16 nWh) { m_nWhich = nWh; }
 };
 
@@ -366,18 +366,18 @@ public:
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );
                             ~SfxSetItem();
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const;
+                                    const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     // von sich selbst eine Kopie erzeugen
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const = 0;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const = 0;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE = 0;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const SAL_OVERRIDE = 0;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const SAL_OVERRIDE;
 
     const SfxItemSet&       GetItemSet() const
                             { return *pSet; }

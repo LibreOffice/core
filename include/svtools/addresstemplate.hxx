@@ -109,7 +109,7 @@ namespace svt
         void    implConstruct();
 
         // Window overridables
-        virtual bool        PreNotify( NotifyEvent& _rNEvt );
+        virtual bool        PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
         // implementations
         void    implScrollFields(sal_Int32 _nPos, bool _bAdjustFocus, bool _bAdjustScrollbar);

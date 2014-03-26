@@ -46,18 +46,18 @@ namespace io_acceptor
 
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL write( const Sequence< sal_Int8 >& aData )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL flush(  ) throw(
             ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException, std::exception);
+            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL close(  )
             throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual OUString SAL_CALL getDescription(  )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;

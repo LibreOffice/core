@@ -82,26 +82,26 @@ public:
     SvMacroTableEventDescriptor* mpEvents;
 
     // overiden helpers from PropertySetHelper
-    virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException );
-    virtual void _getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException );
+    virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException ) SAL_OVERRIDE;
+    virtual void _getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException ) SAL_OVERRIDE;
 
     // XInterface
-    virtual Any SAL_CALL queryAggregation( const Type & rType ) throw(RuntimeException, std::exception);
-    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
+    virtual Any SAL_CALL queryAggregation( const Type & rType ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes(  ) throw(RuntimeException, std::exception);
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception);
+    virtual Sequence< Type > SAL_CALL getTypes(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventsSupplier
-    virtual Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(RuntimeException, std::exception);
+    virtual Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception );
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     static PropertySetInfo* createPropertySetInfo( sal_uInt16 nType );
@@ -532,24 +532,24 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap )
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element ) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const Any& Element ) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw( RuntimeException, std::exception );
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception );
+    virtual sal_Int32 SAL_CALL getCount(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL hasElements(  ) throw( RuntimeException, std::exception );
+    virtual Type SAL_CALL getElementType(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XSerivceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception );
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException, std::exception );
+    virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     OUString maName;

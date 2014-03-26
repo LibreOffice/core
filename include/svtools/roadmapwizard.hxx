@@ -82,15 +82,15 @@ namespace svt
         void            SetRoadmapHelpId( const OString& _rId );
 
         void            SetRoadmapInteractive( bool _bInteractive );
-        virtual void    Resize();
-        virtual void    StateChanged( StateChangedType nStateChange );
+        virtual void    Resize() SAL_OVERRIDE;
+        virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
         // returns whether a given state is enabled
         bool            isStateEnabled( WizardState _nState ) const;
 
         // WizardDialog overridables
-        virtual bool    canAdvance() const;
-        virtual void    updateTravelUI();
+        virtual bool    canAdvance() const SAL_OVERRIDE;
+        virtual void    updateTravelUI() SAL_OVERRIDE;
 
 protected:
         /** declares a valid path in the wizard
@@ -165,7 +165,7 @@ protected:
 
             @see activatePath
         */
-        virtual WizardState     determineNextState( WizardState _nCurrentState ) const;
+        virtual WizardState     determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
 
         /** en- or disables a state
 
@@ -194,7 +194,7 @@ protected:
         bool    knowsState( WizardState _nState ) const;
 
         // OWizardMachine overriables
-        virtual void            enterState( WizardState _nState );
+        virtual void            enterState( WizardState _nState ) SAL_OVERRIDE;
 
         /** returns a human readable name for a given state
 
@@ -210,7 +210,7 @@ protected:
             This member is inherited from OWizardMachine, and default-implemented in this class
             for all states which have been described using describeState.
         */
-        virtual TabPage*    createPage( WizardState _nState );
+        virtual TabPage*    createPage( WizardState _nState ) SAL_OVERRIDE;
 
         /** asks for a new label of the wizard page
 

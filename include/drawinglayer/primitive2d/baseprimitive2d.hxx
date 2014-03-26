@@ -36,7 +36,7 @@
 */
 
 #define DeclPrimitive2DIDBlock() \
-    virtual sal_uInt32 getPrimitive2DID() const;
+    virtual sal_uInt32 getPrimitive2DID() const SAL_OVERRIDE;
 
 #define ImplPrimitive2DIDBlock(TheClass, TheID) \
     sal_uInt32 TheClass::getPrimitive2DID() const { return TheID; }
@@ -174,12 +174,12 @@ namespace drawinglayer
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual Primitive2DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            virtual Primitive2DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
             /** The getRange implementation for UNO API will use getRange from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual ::com::sun::star::geometry::RealRectangle2D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            virtual ::com::sun::star::geometry::RealRectangle2D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -250,7 +250,7 @@ namespace drawinglayer
                 overloaded and the ViewInformation2D for the last decomposition need to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -60,11 +60,11 @@ namespace utl
         }
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception);
-        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         bool hasOwnership() const { return m_bHasOwnership; }
 

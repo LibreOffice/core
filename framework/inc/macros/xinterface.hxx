@@ -214,9 +214,9 @@ ________________________________________________________________________________
 //  declaration of XInterface
 
 #define FWK_DECLARE_XINTERFACE                                                                                                                                      \
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType   ) throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
-    virtual void                        SAL_CALL acquire       (                                            ) throw();  \
-    virtual void                        SAL_CALL release       (                                            ) throw();
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType   ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
+    virtual void                        SAL_CALL acquire       (                                            ) throw() SAL_OVERRIDE;  \
+    virtual void                        SAL_CALL release       (                                            ) throw() SAL_OVERRIDE;
 
 
 //  public

@@ -51,7 +51,7 @@ public:
                         SvtDummyHeaderBar_Impl( Window* pParent );
                         ~SvtDummyHeaderBar_Impl();
 
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 // class SvtIconWindow_Impl ----------------------------------------------
@@ -75,7 +75,7 @@ public:
     SvtIconWindow_Impl( Window* pParent );
     ~SvtIconWindow_Impl();
 
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 
     inline long         GetMaxTextLength() const { return nMaxTextLength; }
     inline void         SetClickHdl( const Link& rLink ) { aIconCtrl.SetClickHdl( rLink ); }
@@ -131,7 +131,7 @@ public:
     SvtFileViewWindow_Impl( SvtTemplateWindow* pParent );
     ~SvtFileViewWindow_Impl();
 
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 
     inline void         SetSelectHdl( const Link& rLink ) { aFileView.SetSelectHdl( rLink ); }
     inline void         SetDoubleClickHdl( const Link& rLink ) { aFileView.SetDoubleClickHdl( rLink ); }
@@ -197,7 +197,7 @@ public:
     SvtFrameWindow_Impl( Window* pParent );
     ~SvtFrameWindow_Impl();
 
-    virtual void            Resize();
+    virtual void            Resize() SAL_OVERRIDE;
 
     void                    OpenFile( const OUString& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate );
     void                    ToggleView( sal_Bool bDocInfo );
@@ -229,7 +229,7 @@ private:
 
     OUString                    aFolderTitle;
 
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 
     DECL_LINK(IconClickHdl_Impl, void *);
     DECL_LINK(FileSelectHdl_Impl, void *);
@@ -248,8 +248,8 @@ private:
     void                UpdateIcons();
 
 protected:
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SvtTemplateWindow( Window* pParent );

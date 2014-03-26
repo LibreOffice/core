@@ -118,18 +118,18 @@ public:
                                     const Size& rSize,
                                     sal_uInt16 nBitCount,
                                     const BitmapPalette& rPal
-                                );
+                                ) SAL_OVERRIDE;
 
-    virtual bool                Create( const SalBitmap& rSalBmp );
+    virtual bool                Create( const SalBitmap& rSalBmp ) SAL_OVERRIDE;
     virtual bool                Create(
                                     const SalBitmap& rSalBmp,
                                     SalGraphics* pGraphics
-                                );
+                                ) SAL_OVERRIDE;
 
     virtual bool                Create(
                                     const SalBitmap& rSalBmp,
                                     sal_uInt16 nNewBitCount
-                                );
+                                ) SAL_OVERRIDE;
 
     virtual bool                Create(
                                     const ::com::sun::star::uno::Reference<
@@ -137,16 +137,16 @@ public:
                                     > xBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false
-                                );
+                                ) SAL_OVERRIDE;
 
-    virtual void                Destroy();
+    virtual void                Destroy() SAL_OVERRIDE;
 
-    virtual Size                GetSize() const;
-    virtual sal_uInt16          GetBitCount() const;
+    virtual Size                GetSize() const SAL_OVERRIDE;
+    virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE;
 
-    virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
-    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
-    virtual bool                GetSystemData( BitmapSystemData& rData );
+    virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly ) SAL_OVERRIDE;
+    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
+    virtual bool                GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 };
 
 

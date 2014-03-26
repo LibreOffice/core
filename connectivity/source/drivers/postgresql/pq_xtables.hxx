@@ -65,7 +65,7 @@ public: // XAppend
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XDrop
 //     virtual void SAL_CALL dropByName( const OUString& elementName )
@@ -75,17 +75,17 @@ public: // XDrop
     virtual void SAL_CALL dropByIndex( sal_Int32 index )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XRefreshable
-    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XDataDescriptorFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 };
 

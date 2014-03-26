@@ -65,10 +65,10 @@ public:
     void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
     Printer*        GetPrinter() const { return mpPrinter; }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
     void                SetOptionsHdl( const Link& rLink );
 };

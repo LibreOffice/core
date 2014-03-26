@@ -129,15 +129,15 @@ private:
     // helper
     sal_Bool SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
 
-    virtual void Paint( const Rectangle& );
-    virtual void MouseMove( const MouseEvent& rMEvt );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 public:
     SaneDlg( Window*, Sane&, bool );
     ~SaneDlg();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
     bool getDoScan();
 };
 

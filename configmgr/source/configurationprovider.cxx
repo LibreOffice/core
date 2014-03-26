@@ -112,10 +112,10 @@ public:
 private:
     virtual ~Service() {}
 
-    virtual void SAL_CALL disposing() { flushModifications(); }
+    virtual void SAL_CALL disposing() SAL_OVERRIDE { flushModifications(); }
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return default_
             ? default_provider::getImplementationName()
@@ -123,11 +123,11 @@ private:
     }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return default_
             ? default_provider::getSupportedServiceNames()
@@ -136,42 +136,42 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         OUString const & aServiceSpecifier)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
         css::uno::Sequence< css::uno::Any > const & Arguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getAvailableServiceNames() throw (css::uno::RuntimeException, std::exception);
+    getAvailableServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL refresh() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL refresh() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addRefreshListener(
         css::uno::Reference< css::util::XRefreshListener > const & l)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeRefreshListener(
         css::uno::Reference< css::util::XRefreshListener > const & l)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL flush() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL flush() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addFlushListener(
         css::uno::Reference< css::util::XFlushListener > const & l)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeFlushListener(
         css::uno::Reference< css::util::XFlushListener > const & l)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setLocale(css::lang::Locale const & eLocale)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::lang::Locale SAL_CALL getLocale()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void flushModifications() const;
 
@@ -379,24 +379,24 @@ private:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
         css::uno::Sequence< css::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return configuration_provider::getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return configuration_provider::getSupportedServiceNames(); }
 };
 

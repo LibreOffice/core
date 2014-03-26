@@ -42,16 +42,16 @@ public:
 
     virtual sal_uInt8            GetFlagCount() const;
 
-    virtual bool             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString & rText,
-                                    const IntlWrapper * = 0 ) const;
+                                    const IntlWrapper * = 0 ) const SAL_OVERRIDE;
             sal_uInt16           GetValue() const { return nVal; }
             void             SetValue( sal_uInt16 nNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );

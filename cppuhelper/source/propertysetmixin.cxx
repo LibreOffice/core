@@ -283,15 +283,15 @@ public:
     explicit Info(Data * data): m_data(data) {}
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
         rtl::OUString const & name)
         throw (
-            css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception);
+            css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & name)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     rtl::Reference< Data > m_data;

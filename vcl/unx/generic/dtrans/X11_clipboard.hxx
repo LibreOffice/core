@@ -68,54 +68,54 @@ namespace x11 {
          */
 
         virtual OUString SAL_CALL getImplementationName(  )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         /*
          * XClipboard
          */
 
         virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL setContents(
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual OUString SAL_CALL getName()
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         /*
          * XClipboardEx
          */
 
         virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         /*
          * XClipboardNotifier
          */
         virtual void SAL_CALL addClipboardListener(
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL removeClipboardListener(
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         /*
          *  SelectionAdaptor
          */
-        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
-        virtual void clearTransferable();
-        virtual void fireContentsChanged();
-        virtual com::sun::star::uno::Reference< XInterface > getReference() throw();
+        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() SAL_OVERRIDE;
+        virtual void clearTransferable() SAL_OVERRIDE;
+        virtual void fireContentsChanged() SAL_OVERRIDE;
+        virtual com::sun::star::uno::Reference< XInterface > getReference() throw() SAL_OVERRIDE;
     };
 
 

@@ -73,7 +73,7 @@ namespace drawinglayer
             const Primitive2DSequence& getTransparence() const { return maTransparence; }
 
             /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

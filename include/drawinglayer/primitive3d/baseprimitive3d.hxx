@@ -36,7 +36,7 @@
  */
 
 #define DeclPrimitive3DIDBlock() \
-    virtual sal_uInt32 getPrimitive3DID() const;
+    virtual sal_uInt32 getPrimitive3DID() const SAL_OVERRIDE;
 
 #define ImplPrimitive3DIDBlock(TheClass, TheID) \
     sal_uInt32 TheClass::getPrimitive3DID() const { return TheID; }
@@ -117,12 +117,12 @@ namespace drawinglayer
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will get the ViewInformation from the ViewParameters for that purpose
              */
-            virtual Primitive3DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            virtual Primitive3DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
             /** the getRange default implemenation will use getDecomposition to create the range information from merging
                 getRange results from the single local decomposition primitives.
              */
-            virtual ::com::sun::star::geometry::RealRectangle3D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            virtual ::com::sun::star::geometry::RealRectangle3D SAL_CALL getRange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -171,7 +171,7 @@ namespace drawinglayer
                 overloaded and the ViewInformation for the last decomposition needs to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
-            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

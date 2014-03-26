@@ -50,28 +50,28 @@ public:
 
     virtual ~SfxVisibilityItem() { DBG_DTOR(SfxVisibilityItem, 0); }
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
     using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const;
+    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
                                                 const IntlWrapper * = 0)
-        const;
+        const SAL_OVERRIDE;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
+                             sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
 
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                           sal_uInt8 nMemberId = 0 );
+                           sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
     virtual sal_uInt16 GetValueCount() const;
 

@@ -54,7 +54,7 @@ class VCLKDEApplication : public KApplication
     public:
     VCLKDEApplication() : KApplication() {}
 
-    virtual void commitData(QSessionManager &sm);
+    virtual void commitData(QSessionManager &sm) SAL_OVERRIDE;
 };
 
 void VCLKDEApplication::commitData(QSessionManager&)

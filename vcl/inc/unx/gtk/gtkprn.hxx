@@ -27,8 +27,8 @@ public:
     virtual bool StartJob(
             const OUString* i_pFileName, const OUString& i_rJobName,
             const OUString& i_rAppName, ImplJobSetup* io_pSetupData,
-            vcl::PrinterController& io_rController);
-    virtual bool EndJob();
+            vcl::PrinterController& io_rController) SAL_OVERRIDE;
+    virtual bool EndJob() SAL_OVERRIDE;
 
 private:
     bool impl_doJob(
@@ -44,7 +44,7 @@ private:
 class VCL_DLLPUBLIC GtkSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    sal_uLong GetCapabilities(const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType);
+    sal_uLong GetCapabilities(const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType) SAL_OVERRIDE;
 };
 
 

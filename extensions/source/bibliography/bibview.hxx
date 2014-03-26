@@ -48,15 +48,15 @@ namespace bib
 
     protected:
         // Window overridables
-            virtual void    Resize();
+            virtual void    Resize() SAL_OVERRIDE;
 
         // FormControlContainer
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                            getControlContainer();
+                            getControlContainer() SAL_OVERRIDE;
 
         // XLoadListener equivalents
-        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent );
-        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
+        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
 
     public:
                             BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
@@ -64,9 +64,9 @@ namespace bib
 
         void                UpdatePages();
 
-        virtual void        GetFocus();
+        virtual void        GetFocus() SAL_OVERRIDE;
 
-        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
     };
 
 

@@ -1049,8 +1049,8 @@ private:
     ::std::multimap<sal_Unicode, SymbolEntry> maMagicMap;
 public:
     StarSymbolToMSMultiFontImpl(bool bPerfectOnly);
-    OUString ConvertChar(sal_Unicode &rChar);
-    OUString ConvertString(OUString &rString, sal_Int32& rIndex);
+    OUString ConvertChar(sal_Unicode &rChar) SAL_OVERRIDE;
+    OUString ConvertString(OUString &rString, sal_Int32& rIndex) SAL_OVERRIDE;
 };
 
 struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};

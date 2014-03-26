@@ -80,29 +80,29 @@ namespace logging
         virtual ~ConsoleHandler();
 
         // XConsoleHandler
-        virtual ::sal_Int32 SAL_CALL getThreshold() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException, std::exception);
+        virtual ::sal_Int32 SAL_CALL getThreshold() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XLogHandler
-        virtual OUString SAL_CALL getEncoding() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException, std::exception);
-        virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) throw (RuntimeException, std::exception);
-        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL flush(  ) throw (RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception);
+        virtual OUString SAL_CALL getEncoding() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL flush(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     public:
         // XServiceInfo - static version

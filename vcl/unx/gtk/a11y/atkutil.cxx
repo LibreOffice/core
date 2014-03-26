@@ -181,10 +181,10 @@ public:
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
     // XEventListener
-    virtual void disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception);
+    virtual void disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleEventListener
-    virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException, std::exception );
+    virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 /*****************************************************************************/

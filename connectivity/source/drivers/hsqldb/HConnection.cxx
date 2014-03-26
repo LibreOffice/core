@@ -96,7 +96,7 @@ namespace connectivity { namespace hsqldb
         virtual bool    implTypedNotify(
                             const Reference< XFlushListener >& _rxListener,
                             const EventObject& _rEvent
-                        )   SAL_THROW( ( Exception ) );
+                        )   SAL_THROW( ( Exception ) ) SAL_OVERRIDE;
     };
 
 

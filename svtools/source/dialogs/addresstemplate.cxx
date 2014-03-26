@@ -148,17 +148,17 @@ public:
         );
 
         // IAssigmentData overridables
-        virtual OUString getDatasourceName() const;
-        virtual OUString getCommand() const;
-        virtual sal_Int32       getCommandType() const;
+        virtual OUString getDatasourceName() const SAL_OVERRIDE;
+        virtual OUString getCommand() const SAL_OVERRIDE;
+        virtual sal_Int32       getCommandType() const SAL_OVERRIDE;
 
-        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName);
-        virtual OUString getFieldAssignment(const OUString& _rLogicalName);
-        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment);
-        virtual void            clearFieldAssignment(const OUString& _rLogicalName);
+        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
+        virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
+        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
+        virtual void            clearFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
 
-        virtual void    setDatasourceName(const OUString& _rName);
-        virtual void    setCommand(const OUString& _rCommand);
+        virtual void    setDatasourceName(const OUString& _rName) SAL_OVERRIDE;
+        virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
     };
 
 
@@ -294,20 +294,20 @@ public:
         ~AssignmentPersistentData();
 
         // IAssigmentData overridables
-        virtual OUString getDatasourceName() const;
-        virtual OUString getCommand() const;
-        virtual sal_Int32       getCommandType() const;
+        virtual OUString getDatasourceName() const SAL_OVERRIDE;
+        virtual OUString getCommand() const SAL_OVERRIDE;
+        virtual sal_Int32       getCommandType() const SAL_OVERRIDE;
 
-        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName);
-        virtual OUString getFieldAssignment(const OUString& _rLogicalName);
-        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment);
-        virtual void            clearFieldAssignment(const OUString& _rLogicalName);
+        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
+        virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
+        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
+        virtual void            clearFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
 
-        virtual void    setDatasourceName(const OUString& _rName);
-        virtual void    setCommand(const OUString& _rCommand);
+        virtual void    setDatasourceName(const OUString& _rName) SAL_OVERRIDE;
+        virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
 
-        virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
-        virtual void    Commit();
+        virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+        virtual void    Commit() SAL_OVERRIDE;
     };
 
 

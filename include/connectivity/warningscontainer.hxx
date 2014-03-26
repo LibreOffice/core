@@ -84,9 +84,9 @@ namespace dbtools
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
 
         // IWarningsContainer
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning);
-        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning);
-        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext);
+        virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning) SAL_OVERRIDE;
+        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) SAL_OVERRIDE;
+        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) SAL_OVERRIDE;
 
         // XWarningsSupplier equivalents
         ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) const;

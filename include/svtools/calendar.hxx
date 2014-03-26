@@ -260,19 +260,19 @@ public:
                     Calendar( Window* pParent, WinBits nWinStyle = 0 );
                     ~Calendar();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    SelectionChanging();
     virtual void    DateRangeChanged();
@@ -420,7 +420,7 @@ public:
 
     virtual void        Select();
 
-    virtual bool        ShowDropDown( bool bShow );
+    virtual bool        ShowDropDown( bool bShow ) SAL_OVERRIDE;
     virtual Calendar*   CreateCalendar( Window* pParent );
     Calendar*           GetCalendar();
 
@@ -439,7 +439,7 @@ public:
     const Link&         GetSelectHdl() const { return maSelectHdl; }
 
 protected:
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVTOOLS_CALENDAR_HXX

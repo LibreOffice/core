@@ -65,22 +65,22 @@ public:
                     ScrollableWindow( Window* pParent, WinBits nBits = 0,
                                       ScrollableWindowFlags = SCRWIN_DEFAULT );
 
-    virtual void    Resize();
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDEvt );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDEvt ) SAL_OVERRIDE;
 
     virtual void    StartScroll();
     virtual void    EndScroll( long nDeltaX, long nDeltaY );
 
     using OutputDevice::SetMapMode;
-    virtual void    SetMapMode( const MapMode& rNewMapMode );
+    virtual void    SetMapMode( const MapMode& rNewMapMode ) SAL_OVERRIDE;
     virtual MapMode GetMapMode() const;
 
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
     using Window::Scroll;
-    virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 );
+    virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;

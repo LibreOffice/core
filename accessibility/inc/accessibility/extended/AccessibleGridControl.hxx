@@ -50,25 +50,25 @@ protected:
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 protected:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception );
+                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The role of this object (a table). */
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -78,11 +78,11 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Grabs the focus to the Grid Control. */
     virtual void SAL_CALL grabFocus()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo -----------------------------------------------------------
 
@@ -90,7 +90,7 @@ protected:
             The name of this class.
     */
     virtual OUString SAL_CALL getImplementationName()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 public:
     // helper functions
@@ -139,10 +139,10 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual Rectangle implGetBoundingBox();
+    virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual Rectangle implGetBoundingBoxOnScreen();
+    virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
 
     // internal helper methods ------------------------------------------------
 
@@ -215,21 +215,21 @@ protected:
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // IAccessibleTable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getMyself()
+        getMyself() SAL_OVERRIDE
     {
         return this;
     }
     void DisposeAccessImpl() SAL_OVERRIDE;
-    virtual bool isAlive() const
+    virtual bool isAlive() const SAL_OVERRIDE
     {
         return isContextAlive();
     }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getTableHeader( ::svt::table::AccessibleTableControlObjType _eObjType )
+        getTableHeader( ::svt::table::AccessibleTableControlObjType _eObjType ) SAL_OVERRIDE
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible;
         AccessibleGridControl* pContext( getContext() );
@@ -238,7 +238,7 @@ protected:
         return xAccessible;
     }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getTable()
+        getTable() SAL_OVERRIDE
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible;
         AccessibleGridControl* pContext( getContext() );
@@ -247,21 +247,21 @@ protected:
         return xAccessible;
     }
     virtual void commitCellEvent( sal_Int16 nEventId,
-         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue )
+         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue ) SAL_OVERRIDE
     {
          AccessibleGridControl* pContext( getContext() );
          if ( pContext )
             pContext->commitCellEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitTableEvent( sal_Int16 nEventId,
-         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue )
+         const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue ) SAL_OVERRIDE
     {
          AccessibleGridControl* pContext( getContext() );
          if ( pContext )
             pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue )
+        const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue ) SAL_OVERRIDE
     {
         AccessibleGridControl* pContext( getContext() );
         if ( pContext )

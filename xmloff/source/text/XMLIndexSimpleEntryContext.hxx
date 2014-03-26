@@ -69,10 +69,10 @@ protected:
     /** process parameters */
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
     /** call FillPropertyValues and insert into template */
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(

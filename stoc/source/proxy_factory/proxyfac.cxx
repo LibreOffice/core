@@ -79,16 +79,16 @@ struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XProxyFactory
     virtual Reference< XAggregation > SAL_CALL createProxy(
         Reference< XInterface > const & xTarget )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -170,7 +170,7 @@ struct ProxyRoot : public ::cppu::OWeakAggObject
 {
     // XAggregation
     virtual Any SAL_CALL queryAggregation( Type const & rType )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ~ProxyRoot();
     inline ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,

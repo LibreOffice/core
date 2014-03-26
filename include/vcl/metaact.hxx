@@ -118,10 +118,10 @@ struct ImplMetaWriteData
 protected:                                                                  \
     virtual             ~Meta##Name##Action();                              \
 public:                                                                     \
-    virtual void        Execute( OutputDevice* pOut );                      \
-    virtual MetaAction* Clone();                                            \
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ); \
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
+    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;                      \
+    virtual MetaAction* Clone() SAL_OVERRIDE;                                            \
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE; \
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
 #define IMPL_META_ACTION( Name, nType )                                 \
 Meta##Name##Action::Meta##Name##Action() :                              \
@@ -169,15 +169,15 @@ private:
     Point               maPt;
     Color               maColor;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Pixel, META_PIXEL_ACTION )
 
                         MetaPixelAction( const Point& rPt, const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Point&        GetPoint() const { return maPt; }
     const Color&        GetColor() const { return maColor; }
@@ -188,15 +188,15 @@ class VCL_DLLPUBLIC MetaPointAction : public MetaAction
 private:
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Point, META_POINT_ACTION )
 
     explicit            MetaPointAction( const Point& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Point&        GetPoint() const { return maPt; }
 };
@@ -209,7 +209,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Line, META_LINE_ACTION )
@@ -218,8 +218,8 @@ public:
                         MetaLineAction( const Point& rStart, const Point& rEnd,
                                         const LineInfo& rLineInfo );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
@@ -232,14 +232,14 @@ private:
 
     Rectangle           maRect;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 public:
                         DECL_META_ACTION( Rect, META_RECT_ACTION )
 
     explicit            MetaRectAction( const Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
 };
@@ -252,7 +252,7 @@ private:
     sal_uInt32          mnHorzRound;
     sal_uInt32          mnVertRound;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( RoundRect, META_ROUNDRECT_ACTION )
@@ -260,8 +260,8 @@ public:
                         MetaRoundRectAction( const Rectangle& rRect,
                                              sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     sal_uInt32          GetHorzRound() const { return mnHorzRound; }
@@ -274,15 +274,15 @@ private:
 
     Rectangle           maRect;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Ellipse, META_ELLIPSE_ACTION )
 
     explicit            MetaEllipseAction( const Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
 };
@@ -295,7 +295,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Arc, META_ARC_ACTION )
@@ -303,8 +303,8 @@ public:
                         MetaArcAction( const Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -319,7 +319,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Pie, META_PIE_ACTION )
@@ -327,8 +327,8 @@ public:
                         MetaPieAction( const Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -343,7 +343,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Chord, META_CHORD_ACTION )
@@ -351,8 +351,8 @@ public:
                         MetaChordAction( const Rectangle& rRect,
                                          const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -366,7 +366,7 @@ private:
     LineInfo            maLineInfo;
     Polygon             maPoly;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( PolyLine, META_POLYLINE_ACTION )
@@ -374,8 +374,8 @@ public:
     explicit            MetaPolyLineAction( const Polygon& );
     explicit            MetaPolyLineAction( const Polygon&, const LineInfo& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Polygon&      GetPolygon() const { return maPoly; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
@@ -387,15 +387,15 @@ private:
 
     Polygon             maPoly;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Polygon, META_POLYGON_ACTION )
 
     explicit            MetaPolygonAction( const Polygon& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Polygon&      GetPolygon() const { return maPoly; }
 };
@@ -406,15 +406,15 @@ private:
 
     PolyPolygon         maPolyPoly;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( PolyPolygon, META_POLYPOLYGON_ACTION )
 
     explicit            MetaPolyPolygonAction( const PolyPolygon& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
 };
@@ -428,7 +428,7 @@ private:
     sal_Int32       mnIndex;
     sal_Int32       mnLen;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Text, META_TEXT_ACTION )
@@ -436,8 +436,8 @@ public:
     MetaTextAction( const Point& rPt, const OUString& rStr,
                     sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void    Move( long nHorzMove, long nVertMove );
-    virtual void    Scale( double fScaleX, double fScaleY );
+    virtual void    Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void    Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Point&    GetPoint() const { return maPt; }
     const OUString& GetText() const { return maStr; }
@@ -455,7 +455,7 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 protected:
     virtual             ~MetaTextArrayAction();
@@ -467,15 +467,15 @@ public:
                          const sal_Int32* pDXAry, sal_Int32 nIndex,
                          sal_Int32 nLen );
 
-    virtual void        Execute( OutputDevice* pOut );
+    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
 
-    virtual MetaAction* Clone();
+    virtual MetaAction* Clone() SAL_OVERRIDE;
 
-    virtual void    Move( long nHorzMove, long nVertMove );
-    virtual void    Scale( double fScaleX, double fScaleY );
+    virtual void    Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void    Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    virtual void    Write( SvStream& rOStm, ImplMetaWriteData* pData );
-    virtual void    Read( SvStream& rIStm, ImplMetaReadData* pData );
+    virtual void    Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
+    virtual void    Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
     const Point&    GetPoint() const { return maStartPt; }
     const OUString& GetText() const { return maStr; }
@@ -494,7 +494,7 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
@@ -503,8 +503,8 @@ public:
                            const OUString& rStr,
                            sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void    Move( long nHorzMove, long nVertMove );
-    virtual void    Scale( double fScaleX, double fScaleY );
+    virtual void    Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void    Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Point&    GetPoint() const { return maPt; }
     const OUString& GetText() const { return maStr; }
@@ -521,7 +521,7 @@ private:
     OUString       maStr;
     sal_uInt16          mnStyle;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
@@ -529,8 +529,8 @@ public:
     MetaTextRectAction( const Rectangle& rRect,
                         const OUString& rStr, sal_uInt16 nStyle );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     const OUString& GetText() const { return maStr; }
@@ -547,7 +547,7 @@ private:
     FontUnderline       meUnderline;
     FontUnderline       meOverline;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextLine, META_TEXTLINE_ACTION )
@@ -556,8 +556,8 @@ public:
                                             FontStrikeout eStrikeout,
                                             FontUnderline eUnderline,
                                             FontUnderline eOverline );
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Point&        GetStartPoint() const { return maPos; }
     long                GetWidth() const { return mnWidth; }
@@ -573,15 +573,15 @@ private:
     Bitmap              maBmp;
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Bmp, META_BMP_ACTION )
 
                         MetaBmpAction( const Point& rPt, const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
@@ -595,7 +595,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( BmpScale, META_BMPSCALE_ACTION )
@@ -603,8 +603,8 @@ public:
                         MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                             const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
@@ -621,7 +621,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( BmpScalePart, META_BMPSCALEPART_ACTION )
@@ -630,8 +630,8 @@ public:
                                                 const Point& rSrcPt, const Size& rSrcSz,
                                                 const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetDestPoint() const { return maDstPt; }
@@ -647,15 +647,15 @@ private:
     BitmapEx            maBmpEx;
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( BmpEx, META_BMPEX_ACTION )
 
                         MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
@@ -669,7 +669,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( BmpExScale, META_BMPEXSCALE_ACTION )
@@ -677,8 +677,8 @@ public:
                         MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                               const BitmapEx& rBmpEx ) ;
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
@@ -695,7 +695,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( BmpExScalePart, META_BMPEXSCALEPART_ACTION )
@@ -704,8 +704,8 @@ public:
                                                   const Point& rSrcPt, const Size& rSrcSz,
                                                   const BitmapEx& rBmpEx );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetDestPoint() const { return maDstPt; }
@@ -722,7 +722,7 @@ private:
     Color               maColor;
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Mask, META_MASK_ACTION )
@@ -731,8 +731,8 @@ public:
                                         const Bitmap& rBmp,
                                         const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -748,7 +748,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( MaskScale, META_MASKSCALE_ACTION )
@@ -757,8 +757,8 @@ public:
                                              const Bitmap& rBmp,
                                              const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -777,7 +777,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( MaskScalePart, META_MASKSCALEPART_ACTION )
@@ -787,8 +787,8 @@ public:
                                                  const Bitmap& rBmp,
                                                  const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
@@ -805,15 +805,15 @@ private:
     Rectangle           maRect;
     Gradient            maGradient;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Gradient, META_GRADIENT_ACTION )
 
                         MetaGradientAction( const Rectangle& rRect, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
@@ -826,15 +826,15 @@ private:
     PolyPolygon         maPolyPoly;
     Gradient            maGradient;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( GradientEx, META_GRADIENTEX_ACTION )
 
                         MetaGradientExAction( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Gradient&     GetGradient() const { return maGradient; }
@@ -847,15 +847,15 @@ private:
     PolyPolygon         maPolyPoly;
     Hatch               maHatch;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Hatch, META_HATCH_ACTION )
 
                         MetaHatchAction( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
@@ -868,7 +868,7 @@ private:
     Rectangle           maRect;
     Wallpaper           maWallpaper;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Wallpaper, META_WALLPAPER_ACTION )
@@ -876,8 +876,8 @@ public:
                         MetaWallpaperAction( const Rectangle& rRect,
                                              const Wallpaper& rPaper );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
@@ -890,15 +890,15 @@ private:
     Region              maRegion;
     bool                mbClip;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
 
                         MetaClipRegionAction( const Region& rRegion, bool bClip );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Region&       GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
@@ -910,15 +910,15 @@ private:
 
     Rectangle           maRect;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( ISectRectClipRegion, META_ISECTRECTCLIPREGION_ACTION )
 
     explicit            MetaISectRectClipRegionAction( const Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
 };
@@ -929,15 +929,15 @@ private:
 
     Region              maRegion;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( ISectRegionClipRegion, META_ISECTREGIONCLIPREGION_ACTION )
 
     explicit            MetaISectRegionClipRegionAction( const Region& );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Region&       GetRegion() const { return maRegion; }
 };
@@ -949,14 +949,14 @@ private:
     long                mnHorzMove;
     long                mnVertMove;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( MoveClipRegion, META_MOVECLIPREGION_ACTION )
 
                         MetaMoveClipRegionAction( long nHorzMove, long nVertMove );
 
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     long                GetHorzMove() const { return mnHorzMove; }
     long                GetVertMove() const { return mnVertMove; }
@@ -969,7 +969,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
@@ -987,7 +987,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( FillColor, META_FILLCOLOR_ACTION )
@@ -1004,7 +1004,7 @@ private:
 
     Color               maColor;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextColor, META_TEXTCOLOR_ACTION )
@@ -1021,7 +1021,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
@@ -1039,7 +1039,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
@@ -1057,7 +1057,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
@@ -1074,7 +1074,7 @@ private:
 
     TextAlign           maAlign;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextAlign, META_TEXTALIGN_ACTION )
@@ -1090,14 +1090,14 @@ private:
 
     MapMode             maMapMode;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( MapMode, META_MAPMODE_ACTION )
 
     explicit            MetaMapModeAction( const MapMode& );
 
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const MapMode&      GetMapMode() const { return maMapMode; }
 };
@@ -1108,14 +1108,14 @@ private:
 
     Font                maFont;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Font, META_FONT_ACTION )
 
     explicit            MetaFontAction( const Font& );
 
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Font&         GetFont() const { return maFont; }
 };
@@ -1126,7 +1126,7 @@ private:
 
     sal_uInt16              mnFlags;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Push, META_PUSH_ACTION )
@@ -1149,7 +1149,7 @@ private:
 
     RasterOp            meRasterOp;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( RasterOp, META_RASTEROP_ACTION )
@@ -1166,15 +1166,15 @@ private:
     PolyPolygon         maPolyPoly;
     sal_uInt16              mnTransPercent;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
 
                         MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
@@ -1189,7 +1189,7 @@ private:
     Size                maSize;
     Gradient            maGradient;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( FloatTransparent, META_FLOATTRANSPARENT_ACTION )
@@ -1197,8 +1197,8 @@ public:
                         MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                     const Size& rSize, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return maMtf; }
     const Point&        GetPoint() const { return maPoint; }
@@ -1215,7 +1215,7 @@ private:
     Point               maPoint;
     Size                maSize;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( EPS, META_EPS_ACTION )
@@ -1223,8 +1223,8 @@ public:
                         MetaEPSAction( const Point& rPoint, const Size& rSize,
                                        const GfxLink& rGfxLink, const GDIMetaFile& rSubst );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const GfxLink&      GetLink() const { return maGfxLink; }
     const GDIMetaFile&  GetSubstitute() const { return maSubst; }
@@ -1239,7 +1239,7 @@ private:
     Point               maRefPoint;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
@@ -1260,7 +1260,7 @@ private:
     sal_uInt8*          mpData;
 
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 protected:
     virtual             ~MetaCommentAction();
@@ -1270,13 +1270,13 @@ public:
     explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
+    virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    virtual void        Execute( OutputDevice* pOut );
-    virtual MetaAction* Clone();
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
+    virtual void        Execute( OutputDevice* pOut ) SAL_OVERRIDE;
+    virtual MetaAction* Clone() SAL_OVERRIDE;
+    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
+    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
     const OString& GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
@@ -1289,7 +1289,7 @@ class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
 private:
 
     sal_uInt32          mnLayoutMode;
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
@@ -1304,7 +1304,7 @@ class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction
 private:
 
     LanguageType        meTextLanguage;
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         DECL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )

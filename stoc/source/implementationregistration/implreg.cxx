@@ -1212,29 +1212,29 @@ public:
     ~ImplementationRegistration();
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception);
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(RuntimeException, std::exception);
+    OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImplementationRegistration
     virtual void SAL_CALL registerImplementation(
         const OUString& implementationLoader,
         const OUString& location,
         const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException, std::exception );
+        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL revokeImplementation(
         const OUString& location,
         const Reference < XSimpleRegistry >& xReg)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual Sequence< OUString > SAL_CALL getImplementations(
         const OUString& implementationLoader,
         const OUString& location)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL checkInstantiation(
         const OUString& implementationName)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XImplementationRegistration2
     virtual void SAL_CALL registerImplementationWithLocation(
@@ -1242,12 +1242,12 @@ public:
         const OUString& location,
         const OUString& registeredLocation,
         const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException, std::exception );
+        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw(  ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(  ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private: // helper methods
     void prepareRegister(

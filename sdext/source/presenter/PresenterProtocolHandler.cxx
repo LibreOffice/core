@@ -59,8 +59,8 @@ namespace {
         GotoPreviousSlideCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoPreviousSlideCommand (void) {}
-        virtual void Execute (void);
-        virtual bool IsEnabled (void) const;
+        virtual void Execute (void) SAL_OVERRIDE;
+        virtual bool IsEnabled (void) const SAL_OVERRIDE;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -71,11 +71,11 @@ namespace {
         GotoNextSlideCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextSlideCommand (void) {}
-        virtual void Execute (void);
+        virtual void Execute (void) SAL_OVERRIDE;
         // The next slide command is always enabled, even when the current slide
         // is the last slide:  from the last slide it goes to the pause slide,
         // and from there it ends the slide show.
-        virtual bool IsEnabled (void) const { return true; }
+        virtual bool IsEnabled (void) const SAL_OVERRIDE { return true; }
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -86,7 +86,7 @@ namespace {
         GotoNextEffectCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextEffectCommand (void) {}
-        virtual void Execute (void);
+        virtual void Execute (void) SAL_OVERRIDE;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -97,7 +97,7 @@ namespace {
         SwitchMonitorCommand (
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SwitchMonitorCommand (void) {}
-        virtual void Execute (void);
+        virtual void Execute (void) SAL_OVERRIDE;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
     };
@@ -109,8 +109,8 @@ namespace {
             const bool bOn,
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SetNotesViewCommand (void) {}
-        virtual void Execute (void);
-        virtual Any GetState (void) const;
+        virtual void Execute (void) SAL_OVERRIDE;
+        virtual Any GetState (void) const SAL_OVERRIDE;
     private:
         bool mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
@@ -124,8 +124,8 @@ namespace {
             const bool bOn,
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SetSlideSorterCommand (void) {}
-        virtual void Execute (void);
-        virtual Any GetState (void) const;
+        virtual void Execute (void) SAL_OVERRIDE;
+        virtual Any GetState (void) const SAL_OVERRIDE;
     private:
         bool mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
@@ -138,8 +138,8 @@ namespace {
             const bool bOn,
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~SetHelpViewCommand (void) {}
-        virtual void Execute (void);
-        virtual Any GetState (void) const;
+        virtual void Execute (void) SAL_OVERRIDE;
+        virtual Any GetState (void) const SAL_OVERRIDE;
     private:
         bool mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
@@ -152,8 +152,8 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController,
             const sal_Int32 nSizeChange);
         virtual ~NotesFontSizeCommand (void) {}
-        virtual void Execute (void);
-        virtual Any GetState (void) const;
+        virtual void Execute (void) SAL_OVERRIDE;
+        virtual Any GetState (void) const SAL_OVERRIDE;
     protected:
         ::rtl::Reference<PresenterNotesView> GetNotesView (void) const;
     private:
@@ -184,7 +184,7 @@ public:
         const OUString& rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
 
-    void SAL_CALL disposing (void);
+    void SAL_CALL disposing (void) SAL_OVERRIDE;
     static Command* CreateCommand (
         const OUString& rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
@@ -193,27 +193,27 @@ public:
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addStatusListener(
         const css::uno::Reference<css::frame::XStatusListener>& rxListener,
         const css::util::URL& rURL)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeStatusListener (
         const css::uno::Reference<css::frame::XStatusListener>& rxListener,
         const css::util::URL& rURL)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // document::XEventListener
 
     virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     OUString msURLPath;

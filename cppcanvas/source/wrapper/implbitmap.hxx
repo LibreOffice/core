@@ -47,14 +47,14 @@ namespace cppcanvas
             virtual ~ImplBitmap();
 
             // CanvasGraphic implementation (that was not already implemented by CanvasGraphicHelper)
-            virtual bool draw() const;
-            virtual bool drawAlphaModulated( double nAlphaModulation ) const;
+            virtual bool draw() const SAL_OVERRIDE;
+            virtual bool drawAlphaModulated( double nAlphaModulation ) const SAL_OVERRIDE;
 
-            virtual BitmapCanvasSharedPtr                       getBitmapCanvas() const;
+            virtual BitmapCanvasSharedPtr                       getBitmapCanvas() const SAL_OVERRIDE;
 
             // Bitmap implementation
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const;
+                ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const SAL_OVERRIDE;
 
         private:
             // default: disabled copy/assignment

@@ -134,30 +134,30 @@ public:
     static  bool        bNeedPixmapPaint;
 
     // native widget methods
-    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
     virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                               const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
-                                           const OUString& rCaption );
+                                           const OUString& rCaption ) SAL_OVERRIDE;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& rCaption,
-                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
 
     //helper methods for frame's UpdateSettings
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
-    virtual bool            setClipRegion( const Region& );
-    virtual void            ResetClipRegion();
+    virtual bool            setClipRegion( const Region& ) SAL_OVERRIDE;
+    virtual void            ResetClipRegion() SAL_OVERRIDE;
 
     // some themes set the background pixmap of our window EVERY time
     // a control is painted; but presentation effects need
     // the background set to None; workaround: set the background
     // before copyBits
     virtual void            copyBits( const SalTwoRect& rPosAry,
-                                      SalGraphics* pSrcGraphics );
+                                      SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
 
 protected:
     typedef std::list< Rectangle > clipList;

@@ -256,14 +256,14 @@ public:
     WizardDialog( Window* pParent, const ResId& rResId );
     ~WizardDialog();
 
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual bool        Notify( NotifyEvent& rNEvt );
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
 
-    virtual void        queue_resize();
+    virtual void        queue_resize() SAL_OVERRIDE;
 
     bool                ShowPrevPage();
     bool                ShowNextPage();

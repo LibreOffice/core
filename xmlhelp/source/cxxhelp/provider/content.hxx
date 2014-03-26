@@ -66,31 +66,31 @@ namespace chelp
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL acquire()
-            throw();
+            throw() SAL_OVERRIDE;
         virtual void SAL_CALL release()
-            throw();
+            throw() SAL_OVERRIDE;
 
         // XTypeProvider
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XContent
         virtual OUString SAL_CALL
         getContentType()
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XCommandProcessor
         virtual com::sun::star::uno::Any SAL_CALL
@@ -100,11 +100,11 @@ namespace chelp
                  com::sun::star::ucb::XCommandEnvironment >& Environment )
             throw( com::sun::star::uno::Exception,
                    com::sun::star::ucb::CommandAbortedException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         abort( sal_Int32 CommandId )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
 
@@ -118,12 +118,12 @@ namespace chelp
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
         getProperties( const com::sun::star::uno::Reference<
-                       com::sun::star::ucb::XCommandEnvironment > & xEnv );
+                       com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
         virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
         getCommands( const com::sun::star::uno::Reference<
-                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
+                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
 
-        virtual OUString getParentURL() { return OUString(); }
+        virtual OUString getParentURL() SAL_OVERRIDE { return OUString(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
         getPropertyValues( const ::com::sun::star::uno::Sequence<

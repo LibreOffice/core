@@ -26,14 +26,14 @@ namespace connectivity
             Catalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& rConnection);
 
             // OCatalog
-            virtual void refreshTables();
-            virtual void refreshViews();
+            virtual void refreshTables() SAL_OVERRIDE;
+            virtual void refreshViews() SAL_OVERRIDE;
 
             // IRefreshableGroups
-            virtual void refreshGroups();
+            virtual void refreshGroups() SAL_OVERRIDE;
 
             // IRefreshableUsers
-            virtual void refreshUsers();
+            virtual void refreshUsers() SAL_OVERRIDE;
         };
     } // namespace firebird
 } // namespace connectivity

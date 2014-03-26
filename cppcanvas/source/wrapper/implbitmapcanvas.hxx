@@ -42,9 +42,9 @@ namespace cppcanvas
                                   ::com::sun::star::rendering::XBitmapCanvas >& rCanvas );
             virtual ~ImplBitmapCanvas();
 
-            virtual ::basegfx::B2ISize      getSize() const;
+            virtual ::basegfx::B2ISize      getSize() const SAL_OVERRIDE;
 
-            virtual CanvasSharedPtr         clone() const;
+            virtual CanvasSharedPtr         clone() const SAL_OVERRIDE;
 
             // take compiler-provided default copy constructor
             //ImplBitmapCanvas(const ImplBitmapCanvas&);

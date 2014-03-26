@@ -64,45 +64,45 @@ public:
     osl::Mutex mutex_;
 
 private:
-    virtual OUString SAL_CALL getURL() throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getURL() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL open(
         OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isValid() throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL isValid() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL close() throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL destroy() throw(
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
     getRootKey() throw(
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isReadOnly() throw(
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL mergeKey(
         OUString const & aKeyName, OUString const & aUrl)
         throw (
             css::registry::InvalidRegistryException,
-            css::registry::MergeConflictException, css::uno::RuntimeException, std::exception);
+            css::registry::MergeConflictException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.comp.stoc.SimpleRegistry"); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > names(1);
         names[0] = "com.sun.star.registry.SimpleRegistry";
@@ -121,127 +121,127 @@ public:
 
 private:
     virtual OUString SAL_CALL getKeyName()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isReadOnly() throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL isValid() throw(css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL isValid() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::registry::RegistryKeyType SAL_CALL getKeyType(
         OUString const & rKeyName)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::registry::RegistryValueType SAL_CALL getValueType() throw(
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL getLongValue() throw (
         css::registry::InvalidRegistryException,
-        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setLongValue(sal_Int32 value) throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL getLongListValue() throw(
         css::registry::InvalidRegistryException,
-        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setLongListValue(
         com::sun::star::uno::Sequence< sal_Int32 > const & seqValue)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getAsciiValue() throw (
         css::registry::InvalidRegistryException,
-        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setAsciiValue(OUString const & value) throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getAsciiListValue()
         throw (
             css::registry::InvalidRegistryException,
-            css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+            css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setAsciiListValue(
         css::uno::Sequence< OUString > const & seqValue)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getStringValue() throw(
         css::registry::InvalidRegistryException,
-        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setStringValue(OUString const & value) throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getStringListValue()
         throw (
             css::registry::InvalidRegistryException,
-            css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+            css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setStringListValue(
         css::uno::Sequence< OUString > const & seqValue)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBinaryValue() throw (
         css::registry::InvalidRegistryException,
-        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidValueException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setBinaryValue(
         css::uno::Sequence< sal_Int8 > const & value)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
         OUString const & aKeyName)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
     createKey(OUString const & aKeyName) throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL closeKey() throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL deleteKey(OUString const & rKeyName) throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual
     css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
     SAL_CALL openKeys() throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames() throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL createLink(
         OUString const & aLinkName, OUString const & aLinkTarget)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL deleteLink(OUString const & rLinkName) throw (
-        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception);
+        css::registry::InvalidRegistryException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getLinkTarget(OUString const & rLinkName)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getResolvedName(OUString const & aKeyName)
         throw (
             css::registry::InvalidRegistryException,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     rtl::Reference< SimpleRegistry > registry_;
     RegistryKey key_;

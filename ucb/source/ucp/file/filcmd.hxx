@@ -47,46 +47,46 @@ namespace fileaccess {
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
+            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         acquire(
             void )
-            throw();
+            throw() SAL_OVERRIDE;
 
         virtual void SAL_CALL
         release(
             void )
-            throw();
+            throw() SAL_OVERRIDE;
 
         // XCommandInfo
 
         virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
         getCommands(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
+            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual com::sun::star::ucb::CommandInfo SAL_CALL
         getCommandInfoByName(
             const OUString& Name )
             throw( com::sun::star::ucb::UnsupportedCommandException,
-                   com::sun::star::uno::RuntimeException, std::exception);
+                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual com::sun::star::ucb::CommandInfo SAL_CALL
         getCommandInfoByHandle(
             sal_Int32 Handle )
             throw( com::sun::star::ucb::UnsupportedCommandException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL
         hasCommandByName(
             const OUString& Name )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL
         hasCommandByHandle(
             sal_Int32 Handle )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     private:

@@ -35,8 +35,8 @@ namespace connectivity
         {
         protected:
             sal_Bool    m_IsAscending;
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
-            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         public:
             OIndexColumn(   sal_Bool _bCase);
             OIndexColumn(   sal_Bool _IsAscending,
@@ -55,7 +55,7 @@ namespace connectivity
                             const OUString& _SchemaName,
                             const OUString& _TableName);
 
-            virtual void construct();
+            virtual void construct() SAL_OVERRIDE;
             DECLARE_SERVICE_INFO();
         };
     }

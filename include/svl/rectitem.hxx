@@ -46,12 +46,12 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const;
+                                    const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    virtual bool             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
 
     const Rectangle&         GetValue() const { return aVal; }
             void             SetValue( const Rectangle& rNewVal ) {
@@ -59,9 +59,9 @@ public:
                                  aVal = rNewVal;
                              }
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
-                                          sal_uInt8 nMemberId = 0 ) const;
+                                          sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                          sal_uInt8 nMemberId = 0 );
+                                          sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
 
 #endif

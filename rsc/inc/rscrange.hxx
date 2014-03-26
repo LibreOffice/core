@@ -37,29 +37,29 @@ protected:
     sal_uInt32      nSize;
 public:
                     RscRange( Atom nId, sal_uInt32 nTypId );
-    virtual RSCCLASS_TYPE   GetClassType() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool );
+    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // Gibt die Groesse der Klasse in Bytes
-    sal_uInt32      Size(){ return nSize; }
+    sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
                     // Eine Zuweisung an eine Variable
-    virtual void    SetToDefault( const RSCINST & rInst )
+    virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
                             ((RscRangeInst*)rInst.pData)->bDflt = true;
                         }
-    bool            IsDefault( const RSCINST & rInst)
+    bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
                             return( ((RscRangeInst*)rInst.pData)->bDflt );
                         };
                     // Als Default setzen
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
-    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
+    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * ) SAL_OVERRIDE;
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
 };
 
 class RscLongRange : public RscTop
@@ -75,29 +75,29 @@ protected:
     sal_uInt32  nSize;
 public:
                     RscLongRange( Atom nId, sal_uInt32 nTypId );
-    virtual RSCCLASS_TYPE   GetClassType() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool );
+    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // Gibt die Groesse der Klasse in Bytes
-    sal_uInt32      Size(){ return nSize; }
+    sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
                     // Eine Zuweisung an eine Variable
-    virtual void    SetToDefault( const RSCINST & rInst )
+    virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
                             ((RscLongRangeInst*)rInst.pData)->bDflt = true;
                         }
-    bool            IsDefault( const RSCINST & rInst)
+    bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
                             return( ((RscLongRangeInst*)rInst.pData)->bDflt );
                         };
                     // Als Default setzen
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
-    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
+    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * ) SAL_OVERRIDE;
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
 
 };
 
@@ -107,7 +107,7 @@ public:
                     RscLongEnumRange( Atom nId, sal_uInt32 nTypId );
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
-                              sal_Int32 nValue );
+                              sal_Int32 nValue ) SAL_OVERRIDE;
 };
 
 class RscIdRange : public RscTop
@@ -118,7 +118,7 @@ protected:
     sal_Int32    nMax;   // Maximum des Bereiches
 public:
                     RscIdRange( Atom nId, sal_uInt32 nTypId );
-    virtual RSCCLASS_TYPE   GetClassType() const;
+    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
                         {
@@ -126,43 +126,43 @@ public:
                             nMax = nMaximum;
                             return ERR_OK;
                         }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool );
-    void            Destroy( const RSCINST & rInst );
-    sal_uInt32          Size(){ return nSize; }
-    virtual void    SetToDefault( const RSCINST & rInst )
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
+    void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;
+    sal_uInt32          Size() SAL_OVERRIDE { return nSize; }
+    virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
                             ((RscId*)rInst.pData)->aExp.cUnused = true;
                         }
-    bool            IsDefault( const RSCINST & rInst)
+    bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
                             //cUnused wird fuer Defaultkennung verwendet
                             return ((RscId*)rInst.pData)->aExp.cUnused;
                         }
                     // Als Default setzen
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
-    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * );
-    ERRTYPE         SetRef( const RSCINST &, const RscId & rRscId );
-    ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
+    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * ) SAL_OVERRIDE;
+    ERRTYPE         SetRef( const RSCINST &, const RscId & rRscId ) SAL_OVERRIDE;
+    ERRTYPE         GetRef( const RSCINST & rInst, RscId * ) SAL_OVERRIDE;
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra );
-    bool            IsConsistent( const RSCINST & rInst );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
+    bool            IsConsistent( const RSCINST & rInst ) SAL_OVERRIDE;
 };
 
 class RscBool : public RscRange
 {
 public:
                     RscBool( Atom nId, sal_uInt32 nTypId );
-    virtual RSCCLASS_TYPE   GetClassType() const;
+    virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
                     // Der zulaessige Bereich wird gesetzt
     ERRTYPE         SetRange( sal_Int32, sal_Int32 ){ return ERR_UNKNOWN_METHOD; }
-    ERRTYPE         SetBool( const RSCINST & rInst, bool b )
+    ERRTYPE         SetBool( const RSCINST & rInst, bool b ) SAL_OVERRIDE
                         {
                             return SetNumber( rInst, (sal_Int32)b );
                         };
-    ERRTYPE         GetBool( const RSCINST & rInst, bool * pB)
+    ERRTYPE         GetBool( const RSCINST & rInst, bool * pB) SAL_OVERRIDE
                         {
                             sal_Int32 l;
                             GetNumber( rInst, &l );
@@ -170,7 +170,7 @@ public:
                             return ERR_OK;
                         };
     void            WriteSrc( const RSCINST &, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
 };
 
 class RscBreakRange : public RscRange
@@ -179,8 +179,8 @@ class RscBreakRange : public RscRange
 public:
                     RscBreakRange( Atom nId, sal_uInt32 nTypId );
     void            SetOutRange( sal_Int32 nNumber ) { nOutRange = nNumber; }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool );
-    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool ) SAL_OVERRIDE;
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 ) SAL_OVERRIDE;
 };
 
 #endif // _RSCRANGE_HXX

@@ -1099,8 +1099,8 @@ public:
 
     virtual ~XMLDocumentTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLDocumentTransformerContext_Impl, XMLTransformerContext );
@@ -1244,8 +1244,8 @@ public:
 
     virtual ~XMLBodyTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLBodyTransformerContext_Impl, XMLTransformerContext );
@@ -1306,7 +1306,7 @@ public:
 
     virtual ~XMLTabStopOOoTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTabStopOOoTContext_Impl, XMLPersElemContentTContext );
@@ -1409,7 +1409,7 @@ public:
 
     virtual ~XMLTrackedChangesOOoTContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTrackedChangesOOoTContext_Impl, XMLTransformerContext );
@@ -1483,8 +1483,8 @@ public:
 
     virtual ~XMLTableOOoTransformerContext_Impl();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTableOOoTransformerContext_Impl, XMLTransformerContext );

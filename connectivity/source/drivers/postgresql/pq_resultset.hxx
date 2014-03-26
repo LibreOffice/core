@@ -62,11 +62,11 @@ protected:
     /** mutex should be locked before called
      */
     virtual void checkClosed()
-        throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     /** unchecked, acquire mutex before calling
      */
-    virtual ::com::sun::star::uno::Any getValue( sal_Int32 columnIndex );
+    virtual ::com::sun::star::uno::Any getValue( sal_Int32 columnIndex ) SAL_OVERRIDE;
 
 public:
     ResultSet(
@@ -80,15 +80,15 @@ public:
 
 public: // XCloseable
     virtual void SAL_CALL close(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XResultSetMetaDataSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public: // XColumnLocate
     virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     sal_Int32 guessDataType( sal_Int32 column );

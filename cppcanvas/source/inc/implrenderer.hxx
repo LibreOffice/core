@@ -192,11 +192,11 @@ static float GetSwapFloat( SvStream& rSt )
 
             virtual ~ImplRenderer();
 
-            virtual bool                draw() const;
+            virtual bool                draw() const SAL_OVERRIDE;
             virtual bool                drawSubset( sal_Int32   nStartIndex,
-                                                    sal_Int32   nEndIndex ) const;
+                                                    sal_Int32   nEndIndex ) const SAL_OVERRIDE;
             virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
-                                                       sal_Int32    nEndIndex ) const;
+                                                       sal_Int32    nEndIndex ) const SAL_OVERRIDE;
 
 
             // element of the Renderer's action vector. Need to be

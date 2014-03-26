@@ -49,7 +49,7 @@ class FcPreMatchSubstititution
 :   public ImplPreMatchFontSubstitution
 {
 public:
-    bool FindFontSubstitute( FontSelectPattern& ) const;
+    bool FindFontSubstitute( FontSelectPattern& ) const SAL_OVERRIDE;
     typedef ::std::pair<FontSelectPatternAttributes, FontSelectPatternAttributes> value_type;
 private:
     typedef ::std::list<value_type> CachedFontMapType;
@@ -61,7 +61,7 @@ class FcGlyphFallbackSubstititution
 {
     // TODO: add a cache
 public:
-    bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const;
+    bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const SAL_OVERRIDE;
 };
 
 int SalGenericInstance::FetchFontSubstitutionFlags()

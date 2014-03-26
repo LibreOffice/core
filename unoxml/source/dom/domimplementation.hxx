@@ -43,26 +43,26 @@ namespace DOM
         static CDOMImplementation* get();
 
         // there is just 1 static instance, so these must not delete it!
-        virtual void SAL_CALL acquire() throw ();
-        virtual void SAL_CALL release() throw ();
+        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
         /**
         Creates a DOM Document object of the specified type with its document element.
         */
         virtual Reference <XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const Reference< XDocumentType >& doctype)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Creates an empty DocumentType node.
         */
         virtual Reference< XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Test if the DOM implementation implements a specific feature.
         */
         virtual sal_Bool SAL_CALL hasFeature(const OUString& feature, const OUString& ver)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
         };
 }
 #endif

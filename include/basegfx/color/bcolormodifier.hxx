@@ -100,10 +100,10 @@ namespace basegfx
         virtual ~BColorModifier_gray();
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -128,10 +128,10 @@ namespace basegfx
         virtual ~BColorModifier_invert();
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -160,10 +160,10 @@ namespace basegfx
         virtual ~BColorModifier_luminance_to_alpha();
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -196,10 +196,10 @@ namespace basegfx
         const ::basegfx::BColor& getBColor() const { return maBColor; }
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -236,10 +236,10 @@ namespace basegfx
         double getValue() const { return mfValue; }
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -271,10 +271,10 @@ namespace basegfx
         double getValue() const { return mfValue; }
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -308,10 +308,10 @@ namespace basegfx
         double getValue() const { return mfValue; }
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 
@@ -358,10 +358,10 @@ namespace basegfx
         double getContrast() const { return mfContrast; }
 
         // compare operator
-        virtual bool operator==(const BColorModifier& rCompare) const;
+        virtual bool operator==(const BColorModifier& rCompare) const SAL_OVERRIDE;
 
         // compute modified color
-        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const;
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const SAL_OVERRIDE;
     };
 } // end of namespace basegfx
 

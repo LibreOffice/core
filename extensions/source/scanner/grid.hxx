@@ -112,9 +112,9 @@ class GridWindow : public ModalDialog
 
     DECL_LINK( ClickButtonHdl, Button* );
 
-    virtual void MouseMove( const MouseEvent& );
-    virtual void MouseButtonDown( const MouseEvent& );
-    virtual void MouseButtonUp( const MouseEvent& );
+    virtual void MouseMove( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& ) SAL_OVERRIDE;
 public:
     GridWindow( double* pXValues, double* pYValues, int nValues,
                 Window* pParent, sal_Bool bCutValues = sal_True );
@@ -133,7 +133,7 @@ public:
 
     void drawLine( double x1, double y1, double x2, double y2 );
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 #endif // _EXTENSIONS_SCANNER_GRID_HXX

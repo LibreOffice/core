@@ -208,19 +208,19 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
         StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return OUString("com.sun.star.comp.framework.StatusIndicatorFactory");
         }
 
         virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException, std::exception)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return cppu::supportsService(this, ServiceName);
         }
 
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             css::uno::Sequence< OUString > aSeq(1);
             aSeq[0] = OUString("com.sun.star.task.StatusIndicatorFactory");
@@ -231,17 +231,17 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception);
+                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XUpdatable
         virtual void SAL_CALL update()
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // similar (XStatusIndicator)

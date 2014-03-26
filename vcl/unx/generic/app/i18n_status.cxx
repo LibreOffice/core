@@ -104,14 +104,14 @@ public:
     XIMStatusWindow( bool bOn );
     virtual ~XIMStatusWindow();
 
-    virtual void setPosition( SalFrame* );
-    virtual void setText( const OUString & );
-    virtual OUString getText() const;
-    virtual void show( bool bShow, I18NStatus::ShowReason eReason );
-    virtual void toggle( bool bOn );
+    virtual void setPosition( SalFrame* ) SAL_OVERRIDE;
+    virtual void setText( const OUString & ) SAL_OVERRIDE;
+    virtual OUString getText() const SAL_OVERRIDE;
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
+    virtual void toggle( bool bOn ) SAL_OVERRIDE;
 
     // overload WorkWindow::DataChanged
-    virtual void DataChanged( const DataChangedEvent& rEvt );
+    virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
 };
 
 }
@@ -321,16 +321,16 @@ public:
     IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
     virtual ~IIIMPStatusWindow();
 
-    virtual void setText( const OUString & );
-    virtual OUString getText() const;
-    virtual void show( bool bShow, I18NStatus::ShowReason eReason );
-    virtual void toggle( bool bOn );
+    virtual void setText( const OUString & ) SAL_OVERRIDE;
+    virtual OUString getText() const SAL_OVERRIDE;
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
+    virtual void toggle( bool bOn ) SAL_OVERRIDE;
     void layout();
 
     // overload Window focus handler
-    virtual void        GetFocus();
+    virtual void        GetFocus() SAL_OVERRIDE;
     // overload WorkWindow::DataChanged
-    virtual void DataChanged( const DataChangedEvent& rEvt );
+    virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
 };
 
 }

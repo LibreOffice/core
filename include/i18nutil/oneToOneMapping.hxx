@@ -70,7 +70,7 @@ public:
     void makeIndex();
 
     // index search
-    virtual sal_Unicode find( const sal_Unicode nKey ) const;
+    virtual sal_Unicode find( const sal_Unicode nKey ) const SAL_OVERRIDE;
 protected:
     UnicodePairWithFlag  *mpTableWF;
     UnicodePairFlag       mnFlag;

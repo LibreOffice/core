@@ -273,27 +273,27 @@ namespace svt { namespace table
         void commitTableEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
 
         // ITableControl
-        virtual void                hideCursor();
-        virtual void                showCursor();
-        virtual bool                dispatchAction( TableControlAction _eAction );
-        virtual SelectionEngine*    getSelEngine();
-        virtual PTableModel         getModel() const;
-        virtual ColPos              getCurrentColumn() const;
-        virtual RowPos              getCurrentRow() const;
-        virtual bool                activateCell( ColPos const i_col, RowPos const i_row );
-        virtual ::Size              getTableSizePixel() const;
-        virtual void                setPointer( Pointer const & i_pointer );
-        virtual void                captureMouse();
-        virtual void                releaseMouse();
-        virtual void                invalidate( TableArea const i_what );
-        virtual long                pixelWidthToAppFont( long const i_pixels ) const;
-        virtual void                hideTracking();
-        virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags );
+        virtual void                hideCursor() SAL_OVERRIDE;
+        virtual void                showCursor() SAL_OVERRIDE;
+        virtual bool                dispatchAction( TableControlAction _eAction ) SAL_OVERRIDE;
+        virtual SelectionEngine*    getSelEngine() SAL_OVERRIDE;
+        virtual PTableModel         getModel() const SAL_OVERRIDE;
+        virtual ColPos              getCurrentColumn() const SAL_OVERRIDE;
+        virtual RowPos              getCurrentRow() const SAL_OVERRIDE;
+        virtual bool                activateCell( ColPos const i_col, RowPos const i_row ) SAL_OVERRIDE;
+        virtual ::Size              getTableSizePixel() const SAL_OVERRIDE;
+        virtual void                setPointer( Pointer const & i_pointer ) SAL_OVERRIDE;
+        virtual void                captureMouse() SAL_OVERRIDE;
+        virtual void                releaseMouse() SAL_OVERRIDE;
+        virtual void                invalidate( TableArea const i_what ) SAL_OVERRIDE;
+        virtual long                pixelWidthToAppFont( long const i_pixels ) const SAL_OVERRIDE;
+        virtual void                hideTracking() SAL_OVERRIDE;
+        virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) SAL_OVERRIDE;
         virtual RowPos              getRowAtPoint( const Point& rPoint ) const;
         virtual ColPos              getColAtPoint( const Point& rPoint ) const;
-        virtual TableCell           hitTest( const Point& rPoint ) const;
-        virtual ColumnMetrics       getColumnMetrics( ColPos const i_column ) const;
-        virtual bool                isRowSelected( RowPos i_row ) const;
+        virtual TableCell           hitTest( const Point& rPoint ) const SAL_OVERRIDE;
+        virtual ColumnMetrics       getColumnMetrics( ColPos const i_column ) const SAL_OVERRIDE;
+        virtual bool                isRowSelected( RowPos i_row ) const SAL_OVERRIDE;
 
 
         long                        appFontWidthToPixel( long const i_appFontUnits ) const;
@@ -316,14 +316,14 @@ namespace svt { namespace table
         inline bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }
 
         // ITableModelListener
-        virtual void    rowsInserted( RowPos first, RowPos last );
-        virtual void    rowsRemoved( RowPos first, RowPos last );
-        virtual void    columnInserted( ColPos const i_colIndex );
-        virtual void    columnRemoved( ColPos const i_colIndex );
-        virtual void    allColumnsRemoved();
-        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow );
-        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
-        virtual void    tableMetricsChanged();
+        virtual void    rowsInserted( RowPos first, RowPos last ) SAL_OVERRIDE;
+        virtual void    rowsRemoved( RowPos first, RowPos last ) SAL_OVERRIDE;
+        virtual void    columnInserted( ColPos const i_colIndex ) SAL_OVERRIDE;
+        virtual void    columnRemoved( ColPos const i_colIndex ) SAL_OVERRIDE;
+        virtual void    allColumnsRemoved() SAL_OVERRIDE;
+        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow ) SAL_OVERRIDE;
+        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup ) SAL_OVERRIDE;
+        virtual void    tableMetricsChanged() SAL_OVERRIDE;
 
     private:
         bool            impl_isAccessibleAlive() const;
@@ -493,13 +493,13 @@ namespace svt { namespace table
         TableFunctionSet(TableControl_Impl* _pTableControl);
         virtual ~TableFunctionSet();
 
-       virtual void BeginDrag();
-       virtual void CreateAnchor();
-       virtual void DestroyAnchor();
-       virtual bool SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor);
-       virtual bool IsSelectionAtPoint( const Point& rPoint );
-       virtual void DeselectAtPoint( const Point& rPoint );
-       virtual void DeselectAll();
+       virtual void BeginDrag() SAL_OVERRIDE;
+       virtual void CreateAnchor() SAL_OVERRIDE;
+       virtual void DestroyAnchor() SAL_OVERRIDE;
+       virtual bool SetCursorAtPoint(const Point& rPoint, bool bDontSelectAtCursor) SAL_OVERRIDE;
+       virtual bool IsSelectionAtPoint( const Point& rPoint ) SAL_OVERRIDE;
+       virtual void DeselectAtPoint( const Point& rPoint ) SAL_OVERRIDE;
+       virtual void DeselectAll() SAL_OVERRIDE;
     };
 
 

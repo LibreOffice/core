@@ -129,19 +129,19 @@ public:
     explicit        Control( Window* pParent, const ResId& );
     virtual         ~Control();
 
-    virtual void    EnableRTL ( bool bEnable = true );
+    virtual void    EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
 
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    Resize();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // invalidates layout data
-    virtual void    SetText( const OUString& rStr );
+    virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
     // gets the displayed text
-    virtual OUString GetDisplayText() const;
+    virtual OUString GetDisplayText() const SAL_OVERRIDE;
     // returns the bounding box for the character at index nIndex (in control coordinates)
     Rectangle GetCharacterBounds( long nIndex ) const;
     // returns the character index for corresponding to rPoint (in control coordinates)
@@ -175,7 +175,7 @@ public:
 
     void            SetLayoutDataParent( const Control* pParent ) const;
 
-    virtual Size    GetOptimalSize() const;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     /** sets a reference device used for rendering control text
         @see DrawControlText

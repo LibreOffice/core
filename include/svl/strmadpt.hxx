@@ -43,25 +43,25 @@ public:
                 rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
-    virtual ErrCode ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *) const;
+    virtual ErrCode ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *) const SAL_OVERRIDE;
 
     virtual ErrCode WriteAt(sal_uLong nPos, const void * pBuffer, sal_uLong nCount,
-                            sal_uLong * pWritten);
+                            sal_uLong * pWritten) SAL_OVERRIDE;
 
-    virtual ErrCode Flush() const;
+    virtual ErrCode Flush() const SAL_OVERRIDE;
 
-    virtual ErrCode SetSize(sal_uLong);
+    virtual ErrCode SetSize(sal_uLong) SAL_OVERRIDE;
 
-    virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
+    virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const SAL_OVERRIDE;
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
-                               sal_uLong * pWritten);
+                               sal_uLong * pWritten) SAL_OVERRIDE;
 
-    virtual sal_uLong Tell() const;
+    virtual sal_uLong Tell() const SAL_OVERRIDE;
 
-    virtual sal_uLong Seek(sal_uLong);
+    virtual sal_uLong Seek(sal_uLong) SAL_OVERRIDE;
 
-    virtual void Terminate();
+    virtual void Terminate() SAL_OVERRIDE;
 };
 
 
@@ -78,48 +78,48 @@ public:
 
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface(const com::sun::star::uno::Type & rType)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
 
-    virtual void SAL_CALL release() throw();
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL
     readBytes(com::sun::star::uno::Sequence< sal_Int8 > & rData,
               sal_Int32 nBytesToRead)
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL
     readSomeBytes(com::sun::star::uno::Sequence< sal_Int8 > & rData,
                   sal_Int32 nMaxBytesToRead)
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL available()
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL closeInput()
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL seek(sal_Int64 nLocation)
         throw (com::sun::star::lang::IllegalArgumentException,
                com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int64 SAL_CALL getPosition()
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int64 SAL_CALL getLength()
         throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception);
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVL_STRMADPT_HXX

@@ -73,15 +73,15 @@ namespace svt
         TabAlignment    GetTabAlignment() const;
 
         // IDeckLayouter
-        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
-        virtual void        Destroy();
-        virtual void        SetFocusToPanelSelector();
-        virtual size_t      GetAccessibleChildCount() const;
+        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) SAL_OVERRIDE;
+        virtual void        Destroy() SAL_OVERRIDE;
+        virtual void        SetFocusToPanelSelector() SAL_OVERRIDE;
+        virtual size_t      GetAccessibleChildCount() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                             GetAccessibleChild(
                                 const size_t i_nChildIndex,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
-                            );
+                            ) SAL_OVERRIDE;
 
         // IReference
         DECLARE_IREFERENCE()

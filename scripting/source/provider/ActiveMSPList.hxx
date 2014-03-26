@@ -78,7 +78,7 @@ public:
 
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-        throw ( css::uno::RuntimeException, std::exception );
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     void addActiveMSP( const css::uno::Reference< css::uno::XInterface >& xComponent,

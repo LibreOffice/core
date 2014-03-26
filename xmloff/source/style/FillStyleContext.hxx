@@ -39,9 +39,9 @@ public:
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const;
+    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:hatch context
@@ -59,9 +59,9 @@ public:
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const;
+    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:fill-image context
@@ -83,11 +83,11 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const;
+    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:transparency context
@@ -105,9 +105,9 @@ public:
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const;
+    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:marker context
@@ -125,9 +125,9 @@ public:
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const;
+    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:marker context
@@ -145,9 +145,9 @@ public:
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext();
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const;
+    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX

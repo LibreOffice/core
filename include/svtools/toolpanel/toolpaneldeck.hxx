@@ -152,24 +152,24 @@ namespace svt
         const ::Window&     GetPanelWindowAnchor() const;
 
         // IToolPanelDeck
-        virtual size_t      GetPanelCount() const;
-        virtual PToolPanel  GetPanel( const size_t i_nPos ) const;
+        virtual size_t      GetPanelCount() const SAL_OVERRIDE;
+        virtual PToolPanel  GetPanel( const size_t i_nPos ) const SAL_OVERRIDE;
         virtual ::boost::optional< size_t >
-                            GetActivePanel() const;
-        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel );
-        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
-        virtual PToolPanel  RemovePanel( const size_t i_nPosition );
-        virtual void        AddListener( IToolPanelDeckListener& i_rListener );
-        virtual void        RemoveListener( IToolPanelDeckListener& i_rListener );
+                            GetActivePanel() const SAL_OVERRIDE;
+        virtual void        ActivatePanel( const ::boost::optional< size_t >& i_rPanel ) SAL_OVERRIDE;
+        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual PToolPanel  RemovePanel( const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void        AddListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
+        virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) SAL_OVERRIDE;
 
     protected:
         // Window overridables
-        virtual void Resize();
-        virtual bool Notify( NotifyEvent& i_rNotifyEvent );
-        virtual void GetFocus();
+        virtual void Resize() SAL_OVERRIDE;
+        virtual bool Notify( NotifyEvent& i_rNotifyEvent ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( sal_Bool i_bCreate );
+                     GetComponentInterface( sal_Bool i_bCreate ) SAL_OVERRIDE;
 
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;

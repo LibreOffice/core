@@ -51,18 +51,18 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
 
         // XInterface
         virtual FWE_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual FWE_DLLPUBLIC void SAL_CALL acquire() throw ();
-        virtual FWE_DLLPUBLIC void SAL_CALL release() throw ();
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual FWE_DLLPUBLIC void SAL_CALL acquire() throw () SAL_OVERRIDE;
+        virtual FWE_DLLPUBLIC void SAL_CALL release() throw () SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual FWE_DLLPUBLIC OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual FWE_DLLPUBLIC OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XTypeProvider
-        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
 
@@ -72,19 +72,19 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
                                                             com::sun::star::uno::Any&       aOldValue,
                                                             sal_Int32                       nHandle,
                                                             const com::sun::star::uno::Any& aValue          )
-            throw( com::sun::star::lang::IllegalArgumentException );
+            throw( com::sun::star::lang::IllegalArgumentException ) SAL_OVERRIDE;
 
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& aValue )
-            throw( com::sun::star::uno::Exception, std::exception );
+            throw( com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void SAL_CALL getFastPropertyValue( com::sun::star::uno::Any& aValue, sal_Int32 nHandle ) const;
+        virtual void SAL_CALL getFastPropertyValue( com::sun::star::uno::Any& aValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 

@@ -79,12 +79,12 @@ public:
     // XEventListener
     virtual void SAL_CALL
         disposing( const EventObject& rSource )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDictionaryEventListener
     virtual void SAL_CALL
         processDictionaryEvent( const DictionaryEvent& rDicEvent )
-            throw(RuntimeException, std::exception);
+            throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // non-UNO functions
     void    DisposeAndClear( const EventObject &rEvtObj );

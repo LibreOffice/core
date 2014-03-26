@@ -103,13 +103,13 @@ namespace svt
         ~OWizardPage();
 
         // IWizardPageController overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
     protected:
         // TabPage overridables
-        virtual void    ActivatePage();
+        virtual void    ActivatePage() SAL_OVERRIDE;
 
         /** updates the travel-related UI elements of the OWizardMachine we live in (if any)
 
@@ -202,8 +202,8 @@ namespace svt
 
     protected:
         // WizardDialog overridables
-        virtual void        ActivatePage();
-        virtual long        DeactivatePage();
+        virtual void        ActivatePage() SAL_OVERRIDE;
+        virtual long        DeactivatePage() SAL_OVERRIDE;
 
         // our own overridables
 

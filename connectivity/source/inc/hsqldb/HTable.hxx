@@ -49,19 +49,19 @@ namespace connectivity
                 @param  _rNames
                     The column names.
             */
-            virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames);
+            virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames) SAL_OVERRIDE;
 
             /** creates the key collection for the table
                 @param  _rNames
                     The key names.
             */
-            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
+            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames) SAL_OVERRIDE;
 
             /** creates the index collection for the table
                 @param  _rNames
                     The index names.
             */
-            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
+            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames) SAL_OVERRIDE;
 
             /** used to implement the creation of the array helper which is shared amongst all instances of the class.
                 This method needs to be implemented in derived classes.
@@ -72,8 +72,8 @@ namespace connectivity
                 assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
                 @return                         an pointer to the newly created array helper. Must not be NULL.
             */
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         public:
             OHSQLTable( sdbcx::OCollection* _pTables,
@@ -89,19 +89,19 @@ namespace connectivity
                 );
 
             // ODescriptor
-            virtual void construct();
+            virtual void construct() SAL_OVERRIDE;
             // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception);
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception);
+            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             /**
                 returns the ALTER TABLE XXX COLUMN statement

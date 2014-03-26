@@ -60,24 +60,24 @@ namespace fileaccess {
         // XTypeProvider
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
+            throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         acquire(
             void )
-            throw();
+            throw() SAL_OVERRIDE;
 
         virtual void SAL_CALL
         release(
             void )
-            throw();
+            throw() SAL_OVERRIDE;
 
         virtual sal_Int32 SAL_CALL
         readBytes(
@@ -86,7 +86,7 @@ namespace fileaccess {
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception);
+                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual sal_Int32 SAL_CALL
         readSomeBytes(
@@ -95,7 +95,7 @@ namespace fileaccess {
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception);
+                   com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         skipBytes(
@@ -103,40 +103,40 @@ namespace fileaccess {
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::BufferSizeExceededException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Int32 SAL_CALL
         available(
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         closeInput(
             void )
             throw( com::sun::star::io::NotConnectedException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual void SAL_CALL
         seek(
             sal_Int64 location )
             throw( com::sun::star::lang::IllegalArgumentException,
                    com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Int64 SAL_CALL
         getPosition(
             void )
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual sal_Int64 SAL_CALL
         getLength(
             void )
             throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+                   com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
 

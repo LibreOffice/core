@@ -60,7 +60,7 @@ class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
 
 protected:
     inline void check() const;
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
     inline ExpandContentProviderImpl(
@@ -73,20 +73,20 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContentProvider
     virtual uno::Reference< ucb::XContent > SAL_CALL queryContent(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
-        throw (ucb::IllegalIdentifierException, uno::RuntimeException, std::exception);
+        throw (ucb::IllegalIdentifierException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL compareContentIds(
         uno::Reference< ucb::XContentIdentifier > const & xId1,
         uno::Reference< ucb::XContentIdentifier > const & xId2 )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

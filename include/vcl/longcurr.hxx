@@ -51,8 +51,8 @@ protected:
 public:
                             ~LongCurrencyFormatter();
 
-    virtual void            Reformat();
-    virtual void            ReformatAll();
+    virtual void            Reformat() SAL_OVERRIDE;
+    virtual void            ReformatAll() SAL_OVERRIDE;
 
     void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }
@@ -92,14 +92,14 @@ public:
                     LongCurrencyField( Window* pParent, WinBits nWinStyle );
                     ~LongCurrencyField();
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void            Modify();
-    void            Up();
-    void            Down();
-    void            First();
-    void            Last();
+    void            Modify() SAL_OVERRIDE;
+    void            Up() SAL_OVERRIDE;
+    void            Down() SAL_OVERRIDE;
+    void            First() SAL_OVERRIDE;
+    void            Last() SAL_OVERRIDE;
 
     void            SetFirst( BigInt nNewFirst ) { mnFirst = nNewFirst; }
     BigInt          GetFirst() const { return mnFirst; }
@@ -119,11 +119,11 @@ public:
                     LongCurrencyBox( Window* pParent, WinBits nWinStyle );
                     ~LongCurrencyBox();
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void            Modify();
-    void            ReformatAll();
+    void            Modify() SAL_OVERRIDE;
+    void            ReformatAll() SAL_OVERRIDE;
 
     BigInt          GetValue() const
                         { return LongCurrencyFormatter::GetValue(); }

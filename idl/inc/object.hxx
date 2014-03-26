@@ -99,13 +99,13 @@ class SvMetaClass : public SvMetaType
 
 protected:
     virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm );
+                                      SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void    WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab );
+                                    SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
-                                     SvTokenStream & rInStm );
+                                     SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void    WriteContextSvIdl( SvIdlDataBase & rBase,
-                                     SvStream & rOutStm, sal_uInt16 nTab );
+                                     SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     void            WriteOdlMembers( ByteStringList & rSuperList,
                                     sal_Bool bVariable, sal_Bool bWriteTab,
                                     SvIdlDataBase & rBase,
@@ -125,12 +125,12 @@ public:
                         GetClassList() const
                         { return aClassList; }
 
-    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                                  sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 );
-    virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
+                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
+    virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) SAL_OVERRIDE;
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 HelpIdTable& rTable );
 };

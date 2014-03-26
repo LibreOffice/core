@@ -196,12 +196,12 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue );
+                                   const OUString& sAttrValue ) SAL_OVERRIDE;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 
     // various accessor methods:
     inline OUString GetName()    { return sName; }
@@ -234,7 +234,7 @@ protected:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -257,7 +257,7 @@ public:
 protected:
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 /*** import text input fields (<text:text-input>) */
@@ -278,7 +278,7 @@ public:
 protected:
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -324,7 +324,7 @@ protected:
 
     /// create XTextField, attach master and insert into document;
     /// also calls PrepareTextField
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     /// find appropriate field master
     sal_Bool FindFieldMaster(
@@ -353,7 +353,7 @@ protected:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -379,7 +379,7 @@ protected:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -415,7 +415,7 @@ public:
 
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -447,12 +447,12 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue );
+                                   const OUString& sAttrValue ) SAL_OVERRIDE;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -484,7 +484,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
 };
 
 /**
@@ -557,12 +557,12 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue );
+                                   const OUString& sAttrValue ) SAL_OVERRIDE;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        ::com::sun::star::beans::XPropertySet> & xPropertySet) SAL_OVERRIDE;
 };
 
 
@@ -597,10 +597,10 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue );
+                                   const OUString& sAttrValue ) SAL_OVERRIDE;
 
     /// create, prepare and insert database field master and database field
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 #endif

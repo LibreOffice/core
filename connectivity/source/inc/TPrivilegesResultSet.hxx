@@ -32,15 +32,15 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>         m_xRow;
         sal_Bool                                                                m_bResetValues;
     protected:
-        virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
+        virtual const ORowSetValue& getValue(sal_Int32 columnIndex) SAL_OVERRIDE;
     public:
         OResultSetPrivileges(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
             ,const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
 
         // ::cppu::OComponentHelper
-        virtual void SAL_CALL disposing(void);
+        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
         // XResultSet
-        virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 #endif // CONNECTIVITY_PRIVILEGESRESULTSET_HXX

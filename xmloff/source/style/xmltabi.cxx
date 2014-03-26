@@ -71,7 +71,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
-                                   const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+                                   const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     const style::TabStop& getTabStop() const { return aTabStop; }
 };

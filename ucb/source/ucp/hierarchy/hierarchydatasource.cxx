@@ -101,19 +101,19 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw();
+        throw() SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw();
+        throw() SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
@@ -124,37 +124,37 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL
     dispose()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL
     addEventListener( const uno::Reference< lang::XEventListener > & xListener )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL
     removeEventListener( const uno::Reference<
                             lang::XEventListener > & aListener )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XSingleServiceFactory
     virtual uno::Reference< uno::XInterface > SAL_CALL
     createInstance()
-        throw ( uno::Exception, uno::RuntimeException, std::exception );
+        throw ( uno::Exception, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Reference< uno::XInterface > SAL_CALL
     createInstanceWithArguments( const uno::Sequence< uno::Any > & aArguments )
-        throw ( uno::Exception, uno::RuntimeException, std::exception );
+        throw ( uno::Exception, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
     getByHierarchicalName( const OUString & aName )
-        throw ( container::NoSuchElementException, uno::RuntimeException, std::exception );
+        throw ( container::NoSuchElementException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
     hasByHierarchicalName( const OUString & aName )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XNameContainer
     virtual void SAL_CALL
@@ -162,12 +162,12 @@ public:
         throw ( lang::IllegalArgumentException,
                 container::ElementExistException,
                 lang::WrappedTargetException,
-                uno::RuntimeException, std::exception );
+                uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL
     removeByName( const OUString & Name )
         throw ( container::NoSuchElementException,
                 lang::WrappedTargetException,
-                uno::RuntimeException, std::exception );
+                uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XNameReplace ( base of XNameContainer )
     virtual void SAL_CALL
@@ -175,49 +175,49 @@ public:
         throw ( lang::IllegalArgumentException,
                 container::NoSuchElementException,
                 lang::WrappedTargetException,
-                uno::RuntimeException, std::exception );
+                uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XNameAccess ( base of XNameReplace )
     virtual uno::Any SAL_CALL
     getByName( const OUString & aName )
         throw ( container::NoSuchElementException,
                 lang::WrappedTargetException,
-                uno::RuntimeException, std::exception );
+                uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL
     getElementNames()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
     hasByName( const OUString & aName )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XElementAccess ( base of XNameAccess )
     virtual uno::Type SAL_CALL
     getElementType()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
     hasElements()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XChangesNotifier
     virtual void SAL_CALL
     addChangesListener( const uno::Reference<
                             util::XChangesListener > & aListener )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL
     removeChangesListener( const uno::Reference<
                             util::XChangesListener > & aListener )
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XChangesBatch
     virtual void SAL_CALL
     commitChanges()
-        throw ( lang::WrappedTargetException, uno::RuntimeException, std::exception );
+        throw ( lang::WrappedTargetException, uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
     hasPendingChanges()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< util::ElementChange > SAL_CALL
     getPendingChanges()
-        throw ( uno::RuntimeException, std::exception );
+        throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 } // namespace hcp_impl

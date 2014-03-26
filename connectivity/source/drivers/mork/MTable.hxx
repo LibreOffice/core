@@ -49,9 +49,9 @@ namespace connectivity
             OUString getSchema() const { return m_SchemaName; }
 
             // OTableHelper overridables
-            virtual sdbcx::OCollection* createColumns( const TStringVector& _rNames );
-            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
-            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
+            virtual sdbcx::OCollection* createColumns( const TStringVector& _rNames ) SAL_OVERRIDE;
+            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames) SAL_OVERRIDE;
+            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames) SAL_OVERRIDE;
         private:
             using OTable_Base::getConnection;
         };

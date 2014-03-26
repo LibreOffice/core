@@ -42,10 +42,10 @@ namespace svt
         ~ToolPanelDeckPeer();
 
         // VCLXWindow overridables
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;
 
         // XComponent
-        void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         AccessibleFactoryAccess m_aAccessibleFactory;

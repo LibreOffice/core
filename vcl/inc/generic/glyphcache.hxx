@@ -316,9 +316,9 @@ private:
 
 public:
                     ServerFontLayout( ServerFont& );
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    DrawText( SalGraphics& ) const;
+    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
     void            setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nIndex,
                         bool bRightToLeft);
 

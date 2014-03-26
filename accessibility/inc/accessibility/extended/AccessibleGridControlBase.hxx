@@ -87,7 +87,7 @@ protected:
     virtual ~AccessibleGridControlBase();
 
     /** Commits DeFunc event to listeners and cleans up members. */
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
     // XAccessibleContext -----------------------------------------------------
@@ -96,23 +96,23 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleParent()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The index of this object among the parent's children. */
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The description of this object.
     */
     virtual OUString SAL_CALL getAccessibleDescription()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The name of this object.
     */
     virtual OUString SAL_CALL getAccessibleName()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The relation set (the GridControl does not have one).
@@ -120,24 +120,24 @@ public:
     virtual ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
         getAccessibleRelationSet()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The set of current states. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
         getAccessibleStateSet()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The parent's locale. */
     virtual ::com::sun::star::lang::Locale SAL_CALL getLocale()
         throw ( ::com::sun::star::accessibility::IllegalAccessibleComponentStateException,
-                ::com::sun::star::uno::RuntimeException, std::exception );
+                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The role of this object. Panel, ROWHEADER, COLUMNHEADER, TABLE, TABLE_CELL are supported.
     */
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /*  Derived classes have to implement:
         -   getAccessibleChildCount,
@@ -151,28 +151,28 @@ public:
     /** @return
         <TRUE/>, if the point lies within the bounding box of this object. */
     virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The bounding box of this object. */
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
         The upper left corner of the bounding box relative to the parent. */
     virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
         The upper left corner of the bounding box in screen coordinates. */
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The size of the bounding box. */
     virtual ::com::sun::star::awt::Size SAL_CALL getSize()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     /*  Derived classes have to implement:
@@ -185,7 +185,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleEventBroadcaster --------------------------------------------
 
@@ -193,30 +193,30 @@ public:
     virtual void SAL_CALL addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& rxListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Removes an event listener. */
     virtual void SAL_CALL removeAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& rxListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XTypeProvider ----------------------------------------------------------
 
     /** @return  An unique implementation ID. */
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo -----------------------------------------------------------
 
     /** @return  Whether the specified service is supported by this class. */
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  A list of all supported services. */
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /*  Derived classes have to implement:
         -   getImplementationName. */
@@ -349,7 +349,7 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
     getAccessibleContext()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     GridControlAccessibleElement();                                             // never implemented

@@ -146,7 +146,7 @@ namespace comphelper
 
     protected:
         using OWeakEventListenerAdapter_Base::disposing;
-        virtual void SAL_CALL disposing( );
+        virtual void SAL_CALL disposing( ) SAL_OVERRIDE;
     };
 
 

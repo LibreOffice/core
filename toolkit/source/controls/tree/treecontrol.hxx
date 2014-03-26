@@ -35,20 +35,20 @@ namespace toolkit {
 class UnoTreeModel : public UnoControlModel
 {
 protected:
-    css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+    css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
 public:
     UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
     UnoTreeModel( const UnoTreeModel& rModel );
 
-    UnoControlModel* Clone() const;
+    UnoControlModel* Clone() const SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoTreeModel, UnoControlModel, szServiceName_TreeControlModel )

@@ -74,14 +74,14 @@ public:
                       DockingWindow* pDockingWin );
     ~ImplDockFloatWin();
 
-    virtual void    Move();
-    virtual void    Resize();
-    virtual void    TitleButtonClick( sal_uInt16 nButton );
-    virtual void    Pin();
-    virtual void    Roll();
-    virtual void    PopupModeEnd();
-    virtual void    Resizing( Size& rSize );
-    virtual bool    Close();
+    virtual void    Move() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    TitleButtonClick( sal_uInt16 nButton ) SAL_OVERRIDE;
+    virtual void    Pin() SAL_OVERRIDE;
+    virtual void    Roll() SAL_OVERRIDE;
+    virtual void    PopupModeEnd() SAL_OVERRIDE;
+    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
     sal_uLong GetLastTicks() const { return mnLastTicks; }
 };

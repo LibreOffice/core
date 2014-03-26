@@ -61,8 +61,8 @@ private:
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 public:
-    bool ImplInitGraphics() const;
-    void ImplReleaseGraphics( bool bRelease = true );
+    bool ImplInitGraphics() const SAL_OVERRIDE;
+    void ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
 
 public:
     /** Create a virtual device of size 1x1
@@ -113,7 +113,7 @@ public:
 
     virtual             ~VirtualDevice();
 
-    virtual void        EnableRTL( bool bEnable = true );
+    virtual void        EnableRTL( bool bEnable = true ) SAL_OVERRIDE;
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
     bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
@@ -134,8 +134,8 @@ public:
 
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
-    sal_uInt16          GetBitCount() const;
-    sal_uInt16          GetAlphaBitCount() const;
+    sal_uInt16          GetBitCount() const SAL_OVERRIDE;
+    sal_uInt16          GetAlphaBitCount() const SAL_OVERRIDE;
 
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );

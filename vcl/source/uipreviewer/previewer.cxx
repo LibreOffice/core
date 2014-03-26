@@ -23,8 +23,8 @@
 class UIPreviewApp : public Application
 {
 public:
-    virtual void Init();
-    virtual int Main();
+    virtual void Init() SAL_OVERRIDE;
+    virtual int Main() SAL_OVERRIDE;
 };
 
 using namespace com::sun::star;

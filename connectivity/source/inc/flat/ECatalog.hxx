@@ -30,7 +30,7 @@ namespace connectivity
         class OFlatCatalog : public file::OFileCatalog
         {
     public:
-            virtual void refreshTables();
+            virtual void refreshTables() SAL_OVERRIDE;
 
         public:
             OFlatCatalog(OFlatConnection* _pCon);

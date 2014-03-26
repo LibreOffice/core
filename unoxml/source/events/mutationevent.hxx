@@ -52,11 +52,11 @@ public:
 
     virtual ~CMutationEvent();
 
-    virtual Reference< XNode > SAL_CALL getRelatedNode() throw (RuntimeException, std::exception);
-    virtual OUString SAL_CALL getPrevValue() throw (RuntimeException, std::exception);
-    virtual OUString SAL_CALL getNewValue() throw (RuntimeException, std::exception);
-    virtual OUString SAL_CALL getAttrName() throw (RuntimeException, std::exception);
-    virtual AttrChangeType SAL_CALL getAttrChange() throw (RuntimeException, std::exception);
+    virtual Reference< XNode > SAL_CALL getRelatedNode() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getPrevValue() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getNewValue() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getAttrName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual AttrChangeType SAL_CALL getAttrChange() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initMutationEvent(
                            const OUString& typeArg,
                            sal_Bool canBubbleArg,
@@ -65,23 +65,23 @@ public:
                            const OUString& prevValueArg,
                            const OUString& newValueArg,
                            const OUString& attrNameArg,
-                           AttrChangeType attrChangeArg) throw (RuntimeException, std::exception);
+                           AttrChangeType attrChangeArg) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    virtual OUString SAL_CALL getType() throw (RuntimeException, std::exception);
-    virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException, std::exception);
-    virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException, std::exception);
-    virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException, std::exception);
-    virtual com::sun::star::util::Time SAL_CALL getTimeStamp() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL stopPropagation() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL preventDefault() throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL getType() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XEventTarget > SAL_CALL getTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XEventTarget > SAL_CALL getCurrentTarget() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual PhaseType SAL_CALL getEventPhase() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual com::sun::star::util::Time SAL_CALL getTimeStamp() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL stopPropagation() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL preventDefault() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initEvent(
         const OUString& eventTypeArg,
         sal_Bool canBubbleArg,
         sal_Bool cancelableArg)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 }}
 #endif

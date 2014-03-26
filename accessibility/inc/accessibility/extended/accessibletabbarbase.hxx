@@ -49,7 +49,7 @@ protected:
     virtual void        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     // XComponent
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
     void                SetTabBarPointer( TabBar* pTabBar );

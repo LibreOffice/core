@@ -36,8 +36,8 @@ public:
                              ~SfxMetricItem() {
                                  DBG_DTOR(SfxMetricItem, 0); }
 
-    virtual bool             ScaleMetrics( long lMult, long lDiv );
-    virtual bool             HasMetrics() const;
+    virtual bool             ScaleMetrics( long lMult, long lDiv ) SAL_OVERRIDE;
+    virtual bool             HasMetrics() const SAL_OVERRIDE;
 
 };
 

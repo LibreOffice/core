@@ -896,7 +896,7 @@ class INetMIMEStringOutputSink: public INetMIMEOutputSink
     using INetMIMEOutputSink::writeSequence;
 
     virtual void writeSequence(const sal_Char * pBegin,
-                               const sal_Char * pEnd);
+                               const sal_Char * pEnd) SAL_OVERRIDE;
 
 public:
     inline INetMIMEStringOutputSink(sal_uInt32 nColumn = 0,
@@ -904,7 +904,7 @@ public:
                                         = INetMIME::SOFT_LINE_LENGTH_LIMIT):
         INetMIMEOutputSink(nColumn, nLineLengthLimit) {}
 
-    virtual ErrCode getError() const;
+    virtual ErrCode getError() const SAL_OVERRIDE;
 
     OString takeBuffer()
     {

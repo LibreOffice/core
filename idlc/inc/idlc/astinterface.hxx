@@ -86,7 +86,7 @@ public:
 
     void forwardDefined(AstInterface const & def);
 
-    virtual bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey) SAL_OVERRIDE;
 
 private:
     enum InterfaceKind {

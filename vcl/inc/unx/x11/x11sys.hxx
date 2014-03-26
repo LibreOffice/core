@@ -32,15 +32,15 @@ public:
     virtual ~X11SalSystem();
 
     // overload pure virtual methods
-    virtual unsigned int GetDisplayScreenCount();
-    virtual bool         IsUnifiedDisplay();
-    virtual unsigned int GetDisplayBuiltInScreen();
-    virtual Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual OUString GetDisplayScreenName( unsigned int nScreen );
+    virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
+    virtual bool         IsUnifiedDisplay() SAL_OVERRIDE;
+    virtual unsigned int GetDisplayBuiltInScreen() SAL_OVERRIDE;
+    virtual Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen ) SAL_OVERRIDE;
+    virtual OUString GetDisplayScreenName( unsigned int nScreen ) SAL_OVERRIDE;
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
                                   const std::list< OUString >& rButtons,
-                                  int nDefButton );
+                                  int nDefButton ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX

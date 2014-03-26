@@ -65,23 +65,23 @@ namespace svt
         PushButton&                 GetScrollButton( const bool i_bForward );
 
         // Window overridables
-        virtual Size    GetOptimalSize() const;
+        virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     protected:
         // Window overridables
-        virtual void    Paint( const Rectangle& i_rRect );
-        virtual void    Resize();
-        virtual void    MouseMove( const MouseEvent& i_rMouseEvent );
-        virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent );
-        virtual void    MouseButtonUp( const MouseEvent& i_rMouseEvent );
-        virtual void    RequestHelp( const HelpEvent& i_rHelpEvent );
-        virtual void    GetFocus();
-        virtual void    LoseFocus();
-        virtual void    KeyInput( const KeyEvent& i_rKeyEvent );
-        virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent );
+        virtual void    Paint( const Rectangle& i_rRect ) SAL_OVERRIDE;
+        virtual void    Resize() SAL_OVERRIDE;
+        virtual void    MouseMove( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
+        virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
+        virtual void    MouseButtonUp( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
+        virtual void    RequestHelp( const HelpEvent& i_rHelpEvent ) SAL_OVERRIDE;
+        virtual void    GetFocus() SAL_OVERRIDE;
+        virtual void    LoseFocus() SAL_OVERRIDE;
+        virtual void    KeyInput( const KeyEvent& i_rKeyEvent ) SAL_OVERRIDE;
+        virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                        GetComponentInterface( sal_Bool i_bCreate );
+                        GetComponentInterface( sal_Bool i_bCreate ) SAL_OVERRIDE;
 
     private:
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;

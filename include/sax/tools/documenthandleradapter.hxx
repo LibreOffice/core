@@ -29,13 +29,13 @@ namespace sax
     public:
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        startDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startDocument();
         }
 
         virtual void SAL_CALL
-        endDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        endDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endDocument();
         }
@@ -43,40 +43,40 @@ namespace sax
         virtual void SAL_CALL
         startElement(const OUString& aName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startElement(aName, xAttribs);
         }
 
         virtual void SAL_CALL
         endElement(const OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endElement(aName);
         }
 
         virtual void SAL_CALL
         characters(const OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->characters(aChars);
         }
 
         virtual void SAL_CALL
         ignorableWhitespace(const OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
         virtual void SAL_CALL
         processingInstruction(const OUString& aTarget, const OUString& aData)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->processingInstruction(aTarget, aData);
         }
         virtual void SAL_CALL
         setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->setDocumentLocator(xLocator);
         }
@@ -121,13 +121,13 @@ namespace sax
     public:
         // XDocumentHandler
         virtual void SAL_CALL
-        startDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        startDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startDocument();
         }
 
         virtual void SAL_CALL
-        endDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        endDocument(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endDocument();
         }
@@ -135,67 +135,67 @@ namespace sax
         virtual void SAL_CALL
         startElement(const OUString& aName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startElement(aName, xAttribs);
         }
 
         virtual void SAL_CALL
         endElement(const OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endElement(aName);
         }
 
         virtual void SAL_CALL
         characters(const OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->characters(aChars);
         }
 
         virtual void SAL_CALL
         ignorableWhitespace(const OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
         virtual void SAL_CALL
         processingInstruction(const OUString& aTarget, const OUString& aData)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->processingInstruction(aTarget, aData);
         }
         virtual void SAL_CALL
         setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+                throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->setDocumentLocator(xLocator);
         }
         // XExtendedDocumentHandler
         virtual void SAL_CALL
-        startCDATA(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        startCDATA(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->startCDATA();
         }
         virtual void SAL_CALL
-        endCDATA(void) throw (::com::sun::star::uno::RuntimeException, std::exception)
+        endCDATA(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->endCDATA();
         }
         virtual void SAL_CALL
         comment(const OUString& sComment) throw (::com::sun::star::xml::sax::SAXException,
-                ::com::sun::star::uno::RuntimeException, std::exception)
+                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->comment(sComment);
         }
         virtual void SAL_CALL
-        unknown(const OUString& sString) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        unknown(const OUString& sString) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->unknown(sString);
         }
         virtual void SAL_CALL
-        allowLineBreak(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception)
+        allowLineBreak(void) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             m_handler->allowLineBreak();
         }

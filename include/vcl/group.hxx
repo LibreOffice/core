@@ -39,21 +39,21 @@ private:
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
-    virtual void    FillLayoutData() const;
+    virtual void    FillLayoutData() const SAL_OVERRIDE;
     virtual const Font&
-                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
-                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
 public:
     explicit        GroupBox( Window* pParent, WinBits nStyle = 0 );
     explicit        GroupBox( Window* pParent, const ResId& );
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void    Resize();
-    virtual void    StateChanged( StateChangedType nType );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_GROUP_HXX

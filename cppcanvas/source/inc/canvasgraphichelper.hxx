@@ -47,13 +47,13 @@ namespace cppcanvas
             CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas );
 
             // CanvasGraphic implementation
-            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
-            virtual ::basegfx::B2DHomMatrix          getTransformation() const;
-            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
-            virtual void                             setClip();
-            virtual ::basegfx::B2DPolyPolygon const* getClip() const;
-            virtual void                             setCompositeOp( CompositeOp aOp );
-            virtual CompositeOp                      getCompositeOp() const;
+            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) SAL_OVERRIDE;
+            virtual ::basegfx::B2DHomMatrix          getTransformation() const SAL_OVERRIDE;
+            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) SAL_OVERRIDE;
+            virtual void                             setClip() SAL_OVERRIDE;
+            virtual ::basegfx::B2DPolyPolygon const* getClip() const SAL_OVERRIDE;
+            virtual void                             setCompositeOp( CompositeOp aOp ) SAL_OVERRIDE;
+            virtual CompositeOp                      getCompositeOp() const SAL_OVERRIDE;
 
         protected:
             // for our clients

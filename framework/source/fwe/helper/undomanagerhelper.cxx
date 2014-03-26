@@ -76,10 +76,10 @@ namespace framework
                             );
         virtual             ~UndoActionWrapper();
 
-        virtual OUString    GetComment() const;
-        virtual void        Undo();
-        virtual void        Redo();
-        virtual bool        CanRepeat(SfxRepeatTarget&) const;
+        virtual OUString    GetComment() const SAL_OVERRIDE;
+        virtual void        Undo() SAL_OVERRIDE;
+        virtual void        Redo() SAL_OVERRIDE;
+        virtual bool        CanRepeat(SfxRepeatTarget&) const SAL_OVERRIDE;
 
     private:
         const Reference< XUndoAction >  m_xUndoAction;
@@ -254,17 +254,17 @@ namespace framework
         }
 
         // SfxUndoListener
-        virtual void actionUndone( const OUString& i_actionComment );
-        virtual void actionRedone( const OUString& i_actionComment );
-        virtual void undoActionAdded( const OUString& i_actionComment );
-        virtual void cleared();
-        virtual void clearedRedo();
-        virtual void resetAll();
-        virtual void listActionEntered( const OUString& i_comment );
-        virtual void listActionLeft( const OUString& i_comment );
-        virtual void listActionLeftAndMerged();
-        virtual void listActionCancelled();
-        virtual void undoManagerDying();
+        virtual void actionUndone( const OUString& i_actionComment ) SAL_OVERRIDE;
+        virtual void actionRedone( const OUString& i_actionComment ) SAL_OVERRIDE;
+        virtual void undoActionAdded( const OUString& i_actionComment ) SAL_OVERRIDE;
+        virtual void cleared() SAL_OVERRIDE;
+        virtual void clearedRedo() SAL_OVERRIDE;
+        virtual void resetAll() SAL_OVERRIDE;
+        virtual void listActionEntered( const OUString& i_comment ) SAL_OVERRIDE;
+        virtual void listActionLeft( const OUString& i_comment ) SAL_OVERRIDE;
+        virtual void listActionLeftAndMerged() SAL_OVERRIDE;
+        virtual void listActionCancelled() SAL_OVERRIDE;
+        virtual void undoManagerDying() SAL_OVERRIDE;
 
         // public operations
         void disposing();

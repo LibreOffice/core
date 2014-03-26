@@ -230,8 +230,8 @@ class TOOLS_DLLPUBLIC INetRFC822Message : public INetMessage
     sal_uIntPtr m_nIndex[INETMSG_RFC822_NUMHDR];
 
 protected:
-    virtual SvStream& operator<< (SvStream& rStrm) const;
-    virtual SvStream& operator>> (SvStream& rStrm);
+    virtual SvStream& operator<< (SvStream& rStrm) const SAL_OVERRIDE;
+    virtual SvStream& operator>> (SvStream& rStrm) SAL_OVERRIDE;
 
 public:
     INetRFC822Message();
@@ -247,7 +247,7 @@ public:
     virtual sal_uIntPtr SetHeaderField (
         const INetMessageHeader &rHeader,
         sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
-    );
+    ) SAL_OVERRIDE;
 
     // Header fields.
 
@@ -411,8 +411,8 @@ class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
     void SetHeaderParsed() { bHeaderParsed = true; }
 
 protected:
-    virtual SvStream& operator<< (SvStream& rStrm) const;
-    virtual SvStream& operator>> (SvStream& rStrm);
+    virtual SvStream& operator<< (SvStream& rStrm) const SAL_OVERRIDE;
+    virtual SvStream& operator>> (SvStream& rStrm) SAL_OVERRIDE;
 
 public:
     INetMIMEMessage();
@@ -430,7 +430,7 @@ public:
     virtual sal_uIntPtr SetHeaderField (
         const INetMessageHeader &rHeader,
         sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
-    );
+    ) SAL_OVERRIDE;
 
     // Header fields.
 

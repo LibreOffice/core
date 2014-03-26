@@ -41,22 +41,22 @@ public:
     // SalBitmap
     virtual bool            Create( const Size& rSize,
                                     sal_uInt16 nBitCount,
-                                    const BitmapPalette& rPal );
-    virtual bool            Create( const SalBitmap& rSalBmp );
+                                    const BitmapPalette& rPal ) SAL_OVERRIDE;
+    virtual bool            Create( const SalBitmap& rSalBmp ) SAL_OVERRIDE;
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    SalGraphics* pGraphics );
+                                    SalGraphics* pGraphics ) SAL_OVERRIDE;
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    sal_uInt16 nNewBitCount );
+                                    sal_uInt16 nNewBitCount ) SAL_OVERRIDE;
     virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                                     Size& rSize,
-                                    bool bMask = false );
-    virtual void            Destroy();
-    virtual Size            GetSize() const;
-    virtual sal_uInt16      GetBitCount() const;
+                                    bool bMask = false ) SAL_OVERRIDE;
+    virtual void            Destroy() SAL_OVERRIDE;
+    virtual Size            GetSize() const SAL_OVERRIDE;
+    virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;
 
-    virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly );
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
-    virtual bool            GetSystemData( BitmapSystemData& rData );
+    virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly ) SAL_OVERRIDE;
+    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
+    virtual bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
     static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );
 };

@@ -55,8 +55,8 @@ protected:
 
     static OUString             GetToken( const OUString &sStr, sal_Int32 &nIndex );
 
-    virtual void                SetTabs();
-    virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
+    virtual void                SetTabs() SAL_OVERRIDE;
+    virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
 
     OUString                    GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
     SvTreeListEntry*            GetEntryOnPos( sal_uLong _nEntryPos ) const;
@@ -76,7 +76,7 @@ public:
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos=TREELIST_APPEND, void* pUserData = 0,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox ) SAL_OVERRIDE;
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
@@ -84,7 +84,7 @@ public:
                                          SvTreeListEntry* pParent = 0,
                                          bool bChildrenOnDemand = false,
                                          sal_uLong nPos = TREELIST_APPEND, void* pUserData = 0,
-                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
+                                         SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox ) SAL_OVERRIDE;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
@@ -94,7 +94,7 @@ public:
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
                                  sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
-    virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
+    virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     OUString         GetEntryText( SvTreeListEntry*, sal_uInt16 nCol ) const;
     OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
@@ -104,7 +104,7 @@ public:
     sal_uLong        GetEntryPos( const OUString&, sal_uInt16 nCol = 0xffff );
     sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
-    virtual void     Resize();
+    virtual void     Resize() SAL_OVERRIDE;
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
 };
 
@@ -142,20 +142,20 @@ public:
     SvHeaderTabListBox( Window* pParent, WinBits nBits );
     ~SvHeaderTabListBox();
 
-    virtual void    Paint( const Rectangle& );
+    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
     bool            IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
-                                 sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
+                                 sal_uInt16 nCol = 0xffff, void* pUserData = NULL ) SAL_OVERRIDE;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
-                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL ) SAL_OVERRIDE;
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
-                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND);
-    virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = TREELIST_APPEND );
+                                 sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL ) SAL_OVERRIDE;
+    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND) SAL_OVERRIDE;
+    virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = TREELIST_APPEND ) SAL_OVERRIDE;
     void            RemoveEntry( SvTreeListEntry* _pEntry );
     void            Clear();
 
@@ -167,85 +167,85 @@ public:
     bool            IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
 
     /** @return  The count of the rows. */
-    virtual long                    GetRowCount() const;
+    virtual long                    GetRowCount() const SAL_OVERRIDE;
     /** @return  The count of the columns. */
-    virtual sal_uInt16              GetColumnCount() const;
+    virtual sal_uInt16              GetColumnCount() const SAL_OVERRIDE;
 
     /** @return  The position of the current row. */
-    virtual sal_Int32               GetCurrRow() const;
+    virtual sal_Int32               GetCurrRow() const SAL_OVERRIDE;
     /** @return  The position of the current column. */
-    virtual sal_uInt16              GetCurrColumn() const;
+    virtual sal_uInt16              GetCurrColumn() const SAL_OVERRIDE;
 
     /** @return  The description of a row.
         @param _nRow The row which description is in demand. */
-    virtual OUString         GetRowDescription( sal_Int32 _nRow ) const;
+    virtual OUString         GetRowDescription( sal_Int32 _nRow ) const SAL_OVERRIDE;
     /** @return  The description of a column.
         @param _nColumn The column which description is in demand. */
-    virtual OUString         GetColumnDescription( sal_uInt16 _nColumn ) const;
+    virtual OUString         GetColumnDescription( sal_uInt16 _nColumn ) const SAL_OVERRIDE;
 
     /** @return  <TRUE/>, if the object has a row header. */
-    virtual bool                    HasRowHeader() const; //GetColumnId
+    virtual bool                    HasRowHeader() const SAL_OVERRIDE; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
-    virtual bool                    IsCellFocusable() const;
-    virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual bool                    IsCellFocusable() const SAL_OVERRIDE;
+    virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) SAL_OVERRIDE;
 
-    virtual void                    SetNoSelection();
+    virtual void                    SetNoSelection() SAL_OVERRIDE;
     using SvListView::SelectAll;
-    virtual void                    SelectAll();
-    virtual void                    SelectAll( bool bSelect, bool bPaint = true );
-    virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true );
-    virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true );
-    virtual sal_Int32               GetSelectedRowCount() const;
-    virtual sal_Int32               GetSelectedColumnCount() const;
+    virtual void                    SelectAll() SAL_OVERRIDE;
+    virtual void                    SelectAll( bool bSelect, bool bPaint = true ) SAL_OVERRIDE;
+    virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true ) SAL_OVERRIDE;
+    virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) SAL_OVERRIDE;
+    virtual sal_Int32               GetSelectedRowCount() const SAL_OVERRIDE;
+    virtual sal_Int32               GetSelectedColumnCount() const SAL_OVERRIDE;
     /** @return  <TRUE/>, if the row is selected. */
-    virtual bool                    IsRowSelected( long _nRow ) const;
-    virtual bool                    IsColumnSelected( long _nColumn ) const;
-    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const;
-    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
+    virtual bool                    IsRowSelected( long _nRow ) const SAL_OVERRIDE;
+    virtual bool                    IsColumnSelected( long _nColumn ) const SAL_OVERRIDE;
+    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const SAL_OVERRIDE;
+    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const SAL_OVERRIDE;
 
     /** @return  <TRUE/>, if the cell is visible. */
-    virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
-    virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const;
+    virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const SAL_OVERRIDE;
+    virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const SAL_OVERRIDE;
 
-    virtual Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true );
-    virtual Rectangle               calcTableRect( bool _bOnScreen = true );
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen = true );
+    virtual Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) SAL_OVERRIDE;
+    virtual Rectangle               calcTableRect( bool _bOnScreen = true ) SAL_OVERRIDE;
+    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen = true ) SAL_OVERRIDE;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow );
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos );
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) SAL_OVERRIDE;
 
-    virtual sal_Int32               GetAccessibleControlCount() const;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex );
-    virtual bool                    ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
+    virtual sal_Int32               GetAccessibleControlCount() const SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) SAL_OVERRIDE;
+    virtual bool                    ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) SAL_OVERRIDE;
 
-    virtual bool                    ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint );
-    virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint );
-    virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint );
+    virtual bool                    ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint ) SAL_OVERRIDE;
+    virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) SAL_OVERRIDE;
+    virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) SAL_OVERRIDE;
 
-    virtual OUString                GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
-    virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
-    virtual Window*                 GetWindowInstance();
+    virtual OUString                GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const SAL_OVERRIDE;
+    virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const SAL_OVERRIDE;
+    virtual Window*                 GetWindowInstance() SAL_OVERRIDE;
 
     using SvTreeListBox::FillAccessibleStateSet;
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const;
-    virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
-    virtual void                    GrabTableFocus();
+    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const SAL_OVERRIDE;
+    virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const SAL_OVERRIDE;
+    virtual void                    GrabTableFocus() SAL_OVERRIDE;
 
     // OutputDevice
-    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) SAL_OVERRIDE;
 
     // Window
-    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
-    virtual void                    GrabFocus();
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true );
-    virtual Window*                 GetAccessibleParentWindow() const;
+    virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const SAL_OVERRIDE;
+    virtual void                    GrabFocus() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
+    virtual Window*                 GetAccessibleParentWindow() const SAL_OVERRIDE;
 
     /** Creates and returns the accessible object of the whole BrowseBox. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
-    virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
-    virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
+    virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) SAL_OVERRIDE;
+    virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVTOOLS_SVTABBX_HXX

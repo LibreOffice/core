@@ -68,34 +68,34 @@ namespace svt { namespace table
         virtual void    PaintHeaderArea(
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
-                            const StyleSettings& _rStyle );
+                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
         virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle );
+                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rRowArea,
-                            const StyleSettings& _rStyle );
+                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
         virtual void    PaintRowHeader(
                             bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle );
+                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
         virtual void    PaintCell( ColPos const i_col,
                             bool i_hasControlFocus, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle );
-        virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
-        virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect);
+                            const StyleSettings& _rStyle ) SAL_OVERRIDE;
+        virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
+        virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
         virtual bool    FitsIntoCell(
                             ::com::sun::star::uno::Any const & i_cellContent,
                             ColPos const i_colPos, RowPos const i_rowPos,
                             bool const i_active, bool const i_selected,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
-                        ) const;
+                        ) const SAL_OVERRIDE;
         virtual bool    GetFormattedCellString(
                             ::com::sun::star::uno::Any const & i_cellValue,
                             ColPos const i_colPos, RowPos const i_rowPos,
                             OUString & o_cellString
-                        ) const;
+                        ) const SAL_OVERRIDE;
 
     private:
         struct CellRenderContext;

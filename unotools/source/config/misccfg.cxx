@@ -51,8 +51,8 @@ public:
     SfxMiscCfg( );
     ~SfxMiscCfg( );
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
-    virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
+    virtual void            Commit() SAL_OVERRIDE;
 
     bool        IsNotFoundWarning()     const {return bNotFound;}
     void        SetNotFoundWarning( bool bSet);

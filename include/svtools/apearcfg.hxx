@@ -60,8 +60,8 @@ public:
     SvtTabAppearanceCfg( );
     ~SvtTabAppearanceCfg( );
 
-    virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     sal_uInt16  GetDragMode  () const { return nDragMode; }
 

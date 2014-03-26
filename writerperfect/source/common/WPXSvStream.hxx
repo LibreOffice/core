@@ -32,14 +32,14 @@ public:
     virtual WPXInputStream * getSubStreamByName(const char *name);
     virtual WPXInputStream * getSubStreamById(unsigned id);
 
-    virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
-    virtual int seek(long offset, WPX_SEEK_TYPE seekType);
-    virtual long tell();
+    virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead) SAL_OVERRIDE;
+    virtual int seek(long offset, WPX_SEEK_TYPE seekType) SAL_OVERRIDE;
+    virtual long tell() SAL_OVERRIDE;
     virtual bool isEnd();
 
-    virtual bool isOLEStream();
-    virtual WPXInputStream * getDocumentOLEStream(const char *name);
-    virtual bool atEOS();
+    virtual bool isOLEStream() SAL_OVERRIDE;
+    virtual WPXInputStream * getDocumentOLEStream(const char *name) SAL_OVERRIDE;
+    virtual bool atEOS() SAL_OVERRIDE;
 
 private:
     WPXSvInputStreamImpl *mpImpl;

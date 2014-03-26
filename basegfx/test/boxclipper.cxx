@@ -79,7 +79,7 @@ private:
 
 public:
     // initialise your test code values here.
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
         B2DRange aCenter(100, 100, -100, -100);
         B2DRange aOffside(800, 800, 1000, 1000);
@@ -180,7 +180,7 @@ public:
 #endif
     }
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {
     }
 

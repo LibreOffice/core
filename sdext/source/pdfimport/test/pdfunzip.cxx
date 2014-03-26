@@ -64,10 +64,10 @@ class FileEmitContext : public EmitContext
     FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop );
     virtual ~FileEmitContext();
 
-    virtual bool write( const void* pBuf, unsigned int nLen ) throw();
-    virtual unsigned int getCurPos() throw();
-    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw();
-    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw();
+    virtual bool write( const void* pBuf, unsigned int nLen ) throw() SAL_OVERRIDE;
+    virtual unsigned int getCurPos() throw() SAL_OVERRIDE;
+    virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() SAL_OVERRIDE;
+    virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() SAL_OVERRIDE;
 };
 
 FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop )

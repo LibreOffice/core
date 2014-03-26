@@ -103,8 +103,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void Characters( const OUString &rChars );
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList);
+    virtual void Characters( const OUString &rChars ) SAL_OVERRIDE;
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList) SAL_OVERRIDE;
 };
 
 
@@ -124,8 +124,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
 
     sal_Int16       GetLanguage() const         { return nLanguage; }
     sal_Int16   GetConversionType() const   { return nConversionType; }
@@ -148,8 +148,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
 
     const OUString &    GetLeftText() const { return aLeftText; }
     sal_Int16           GetPropertyType() const { return nPropertyType; }
@@ -174,9 +174,9 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void EndElement();
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
-    virtual void Characters( const OUString &rChars );
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
+    virtual void Characters( const OUString &rChars ) SAL_OVERRIDE;
 
     const OUString &    GetRightText() const    { return aRightText; }
     const OUString &    GetLeftText() const     { return rEntryContext.GetLeftText(); }

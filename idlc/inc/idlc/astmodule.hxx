@@ -36,7 +36,7 @@ public:
     {}
     virtual ~AstModule() {}
 
-    virtual bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey) SAL_OVERRIDE;
 };
 
 #endif // _IDLC_ASTMODULE_HXX_

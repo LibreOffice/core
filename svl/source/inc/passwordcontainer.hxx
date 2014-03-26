@@ -216,8 +216,8 @@ public:
     void setUseStorage( bool bUse );
     bool useStorage();
 
-    virtual void            Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void            Commit();
+    virtual void            Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void            Commit() SAL_OVERRIDE;
 };
 
 
@@ -302,37 +302,37 @@ public:
                                const OUString& aUserName,
                                const ::com::sun::star::uno::Sequence< OUString >& aPasswords,
                                const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL addPersistent( const OUString& aUrl,
                                             const OUString& aUserName,
                                          const ::com::sun::star::uno::Sequence< OUString >& aPasswords,
                                           const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::task::UrlRecord SAL_CALL
                             find( const OUString& aUrl,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::task::UrlRecord SAL_CALL
                             findForName( const OUString& aUrl,
                                          const OUString& aUserName,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL remove( const OUString& aUrl,
                                   const OUString& aUserName )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removePersistent( const OUString& aUrl,
                                             const OUString& aUserName )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL removeAllPersistent() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL removeAllPersistent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::task::UrlRecord > SAL_CALL
-                            getAllPersistent( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getAllPersistent( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // provide factory
@@ -345,34 +345,34 @@ public:
                     impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual OUString    SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL            supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString    SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL            supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                                        getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                        getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL        disposing( const ::com::sun::star::lang::EventObject& Source )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMasterPasswordHandling
     virtual ::sal_Bool SAL_CALL authorizateWithMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL changeMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeMasterPassword() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL hasMasterPassword(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL allowPersistentStoring( ::sal_Bool bAllow ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL isPersistentStoringAllowed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL changeMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeMasterPassword() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL hasMasterPassword(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL allowPersistentStoring( ::sal_Bool bAllow ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL isPersistentStoringAllowed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMasterPasswordHandling2
-    virtual ::sal_Bool SAL_CALL useDefaultMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL useDefaultMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUrlContainer
-    virtual void SAL_CALL addUrl( const OUString& Url, ::sal_Bool MakePersistent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL findUrl( const OUString& Url ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeUrl( const OUString& Url ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getUrls( ::sal_Bool OnlyPersistent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addUrl( const OUString& Url, ::sal_Bool MakePersistent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL findUrl( const OUString& Url ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeUrl( const OUString& Url ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getUrls( ::sal_Bool OnlyPersistent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void            Notify();
 };

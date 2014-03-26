@@ -48,21 +48,21 @@ namespace cppcanvas
 
             virtual ~ImplPolyPolygon();
 
-            virtual void            addPolygon( const ::basegfx::B2DPolygon& rPoly );
-            virtual void            addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly );
+            virtual void            addPolygon( const ::basegfx::B2DPolygon& rPoly ) SAL_OVERRIDE;
+            virtual void            addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly ) SAL_OVERRIDE;
 
-            virtual void            setRGBAFillColor( Color::IntSRGBA );
-            virtual void            setRGBALineColor( Color::IntSRGBA );
-            virtual Color::IntSRGBA getRGBAFillColor() const;
-            virtual Color::IntSRGBA getRGBALineColor() const;
+            virtual void            setRGBAFillColor( Color::IntSRGBA ) SAL_OVERRIDE;
+            virtual void            setRGBALineColor( Color::IntSRGBA ) SAL_OVERRIDE;
+            virtual Color::IntSRGBA getRGBAFillColor() const SAL_OVERRIDE;
+            virtual Color::IntSRGBA getRGBALineColor() const SAL_OVERRIDE;
 
-            virtual void            setStrokeWidth( const double& rStrokeWidth );
-            virtual double          getStrokeWidth() const;
+            virtual void            setStrokeWidth( const double& rStrokeWidth ) SAL_OVERRIDE;
+            virtual double          getStrokeWidth() const SAL_OVERRIDE;
 
-            virtual bool            draw() const;
+            virtual bool            draw() const SAL_OVERRIDE;
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const;
+                ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const SAL_OVERRIDE;
 
         private:
             // default: disabled copy/assignment

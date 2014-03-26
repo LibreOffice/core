@@ -109,7 +109,7 @@ public:
     size_t                  Count()
                                 { return aFormatters.size(); }
 
-    virtual void            ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void            ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 };
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()

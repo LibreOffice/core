@@ -70,13 +70,13 @@ protected:
     /** process parameters */
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
     /** set values */
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     /** pick up title characters */
-    virtual void Characters(const OUString& sString);
+    virtual void Characters(const OUString& sString) SAL_OVERRIDE;
 };
 
 #endif

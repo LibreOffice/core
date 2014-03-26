@@ -327,7 +327,7 @@ public:
                   Dest( -1 ), Submit( false ), SubmitGet( false )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new PushButtonWidget( *this );
         }
@@ -344,7 +344,7 @@ public:
                   ButtonIsLeft( true )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new CheckBoxWidget( *this );
         }
@@ -364,7 +364,7 @@ public:
                   ButtonIsLeft( true )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new RadioButtonWidget( *this );
         }
@@ -393,7 +393,7 @@ public:
                   MaxLen( 0 )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new EditWidget( *this );
         }
@@ -417,7 +417,7 @@ public:
                   MultiSelect( false )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new ListBoxWidget( *this );
         }
@@ -435,7 +435,7 @@ public:
                   Sort( false )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new ComboBoxWidget( *this );
         }
@@ -457,7 +457,7 @@ public:
                   SigHidden( true )
         {}
 
-        virtual AnyWidget* Clone() const
+        virtual AnyWidget* Clone() const SAL_OVERRIDE
         {
             return new SignatureWidget( *this );
         }

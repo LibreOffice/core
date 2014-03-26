@@ -58,10 +58,10 @@ public:
     }
 
     // SvXMLExport
-    void _ExportAutoStyles()    {}
-    void _ExportMasterStyles()  {}
-    void _ExportContent();
-    sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
+    void _ExportAutoStyles() SAL_OVERRIDE    {}
+    void _ExportMasterStyles() SAL_OVERRIDE  {}
+    void _ExportContent() SAL_OVERRIDE;
+    sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
 
     sal_Bool    Export();
 };
@@ -96,12 +96,12 @@ public:
     {
     }
 
-    virtual void SAL_CALL startDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL endDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL startDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL endDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual SvXMLImportContext * CreateContext(
         sal_uInt16 nPrefix, const OUString &rLocalName,
-        const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList );
+        const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
 
     ConvDic *   GetDic()                    { return pDic; }
     sal_Int16       GetLanguage() const         { return nLanguage; }

@@ -60,9 +60,9 @@ private:
 
 protected:
 
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:
 

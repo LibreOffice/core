@@ -52,7 +52,7 @@ public:
     virtual storeError initialize (
         ILockBytes *    pLockBytes,
         storeAccessMode eAccessMode,
-        sal_uInt16 &    rnPageSize);
+        sal_uInt16 &    rnPageSize) SAL_OVERRIDE;
 
     /** isValid.
      *  @return sal_True  upon successful initialization,

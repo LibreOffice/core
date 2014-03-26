@@ -1164,12 +1164,12 @@ namespace oglcanvas
 #endif
             unsigned int               mnTexture;
 
-            virtual bool startBufferRendering()
+            virtual bool startBufferRendering() SAL_OVERRIDE
             {
                 return mrDeviceHelper.activatePBufferContext(maSize,mpPBuffer);
             }
 
-            virtual bool endBufferRendering()
+            virtual bool endBufferRendering() SAL_OVERRIDE
             {
                 mrDeviceHelper.updatePBufferTexture(maSize,mnTexture);
                 if( !mrDeviceHelper.activateWindowContext() )

@@ -272,7 +272,7 @@ class ParserThread: public salhelper::Thread
 public:
     ParserThread(FastSaxParserImpl *pParser): Thread("Parser"), mpParser(pParser) {}
 private:
-    virtual void execute()
+    virtual void execute() SAL_OVERRIDE
     {
         try
         {
@@ -335,10 +335,10 @@ public:
     void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (RuntimeException, std::exception);
-    virtual OUString SAL_CALL getPublicId(void) throw (RuntimeException, std::exception);
-    virtual OUString SAL_CALL getSystemId(void) throw (RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getColumnNumber(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getLineNumber(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getPublicId(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSystemId(void) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     FastSaxParserImpl *mpParser;

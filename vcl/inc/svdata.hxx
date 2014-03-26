@@ -98,7 +98,7 @@ namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteO
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
 public:
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 };
 
 struct ImplSVAppData

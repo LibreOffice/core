@@ -76,7 +76,7 @@ protected:
     ::osl::Condition& m_MyCon;
     ConditionType m_MyType;
 
-    void SAL_CALL run()
+    void SAL_CALL run() SAL_OVERRIDE
     {
         switch ( m_MyType )
         {
@@ -233,7 +233,7 @@ namespace osl_Condition
         bool bRes, bRes1, bRes2;
         TimeValue *tv1;
 
-        void setUp( )
+        void setUp( ) SAL_OVERRIDE
         {
             tv1 = new TimeValue;
             tv1->Seconds = 1;
@@ -241,7 +241,7 @@ namespace osl_Condition
 
         }
 
-        void tearDown( )
+        void tearDown( ) SAL_OVERRIDE
         {
             delete tv1;
         }

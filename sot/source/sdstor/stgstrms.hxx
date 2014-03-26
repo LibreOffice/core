@@ -98,15 +98,15 @@ public:
 // FAT allocator.
 
 class StgFATStrm : public StgStrm {     // the master FAT stream
-    virtual bool Pos2Page( sal_Int32 nBytePos );
+    virtual bool Pos2Page( sal_Int32 nBytePos ) SAL_OVERRIDE;
     bool  SetPage( short, sal_Int32 );
 public:
     StgFATStrm( StgIo& );
     virtual ~StgFATStrm() {}
     using StgStrm::GetPage;
     sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = 0);
-    virtual bool SetSize( sal_Int32 );
-    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, bool bForce = false );
+    virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
+    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, bool bForce = false ) SAL_OVERRIDE;
 };
 
 // The stream has a size increment which normally is 1, but which can be
@@ -121,9 +121,9 @@ public:
     StgDataStrm( StgIo&, StgDirEntry& );
     void* GetPtr( sal_Int32 nPos, bool bForce, bool bDirty );
     void SetIncrement( short n ) { nIncr = n ; }
-    virtual bool SetSize( sal_Int32 );
-    virtual sal_Int32 Read( void*, sal_Int32 );
-    virtual sal_Int32 Write( const void*, sal_Int32 );
+    virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
+    virtual sal_Int32 Read( void*, sal_Int32 ) SAL_OVERRIDE;
+    virtual sal_Int32 Write( const void*, sal_Int32 ) SAL_OVERRIDE;
 };
 
 // The small stream class provides access to streams with a size < 4096 bytes.
@@ -138,9 +138,9 @@ class StgSmallStrm : public StgStrm     // a logical data stream
 public:
     StgSmallStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen );
     StgSmallStrm( StgIo&, StgDirEntry& );
-    virtual sal_Int32 Read( void*, sal_Int32 );
-    virtual sal_Int32 Write( const void*, sal_Int32 );
-    virtual bool IsSmallStrm() const { return true; }
+    virtual sal_Int32 Read( void*, sal_Int32 ) SAL_OVERRIDE;
+    virtual sal_Int32 Write( const void*, sal_Int32 ) SAL_OVERRIDE;
+    virtual bool IsSmallStrm() const SAL_OVERRIDE { return true; }
 };
 
 class StgTmpStrm : public SvMemoryStream
@@ -148,16 +148,16 @@ class StgTmpStrm : public SvMemoryStream
     OUString aName;
     SvFileStream* pStrm;
     using SvMemoryStream::GetData;
-    virtual sal_uLong GetData( void* pData, sal_uLong nSize );
-    virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
-    virtual sal_uLong SeekPos( sal_uLong nPos );
-    virtual void FlushData();
+    virtual sal_uLong GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual sal_uLong SeekPos( sal_uLong nPos ) SAL_OVERRIDE;
+    virtual void FlushData() SAL_OVERRIDE;
 
 public:
     StgTmpStrm( sal_uLong=16 );
    ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
-    void SetSize( sal_uLong );
+    void SetSize( sal_uLong ) SAL_OVERRIDE;
     sal_uLong GetSize() const;
 };
 

@@ -46,8 +46,8 @@ public:
     SvxHtmlOptions();
     ~SvxHtmlOptions();
 
-    virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     sal_uInt16      GetFontSize(sal_uInt16 nPos) const;
     void        SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize);

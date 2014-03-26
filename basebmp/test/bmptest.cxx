@@ -145,7 +145,7 @@ private:
     }
 
 public:
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {
         const basegfx::B2ISize aSize(10,10);
         mpDevice1bpp = createBitmapDevice( aSize,

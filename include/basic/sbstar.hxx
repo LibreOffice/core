@@ -75,8 +75,8 @@ private:
     BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
     BASIC_DLLPRIVATE sal_uInt16         BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     BASIC_DLLPRIVATE sal_uInt16         StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
 
 protected:
     virtual sal_Bool    ErrorHdl();
@@ -92,15 +92,15 @@ public:
 
     // #51727 SetModified overridden so that the Modfied-State is
         // not delivered to Parent.
-    virtual void SetModified( sal_Bool );
+    virtual void SetModified( sal_Bool ) SAL_OVERRIDE;
 
     void* operator  new( size_t );
     void operator   delete( void* );
 
-    virtual void    Insert( SbxVariable* );
+    virtual void    Insert( SbxVariable* ) SAL_OVERRIDE;
     using SbxObject::Remove;
-    virtual void    Remove( SbxVariable* );
-    virtual void    Clear();
+    virtual void    Remove( SbxVariable* ) SAL_OVERRIDE;
+    virtual void    Clear() SAL_OVERRIDE;
 
     BasicLibInfo*   GetLibInfo()                    { return pLibInfo;  }
     void            SetLibInfo( BasicLibInfo* p )   { pLibInfo = p;     }
@@ -121,8 +121,8 @@ public:
     static OUString GetErrorMsg();
     static sal_Int32 GetErl();
 
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
-    virtual sal_Bool Call( const OUString&, SbxArray* = NULL );
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
+    virtual sal_Bool Call( const OUString&, SbxArray* = NULL ) SAL_OVERRIDE;
 
     SbxArray*       GetModules() { return pModules; }
     SbxObject*      GetRtl()     { return pRtl;     }

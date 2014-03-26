@@ -55,13 +55,13 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException, std::exception);
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
     // XExceptionThrower
-    virtual void SAL_CALL throwException( Any const & exc ) throw (Exception, std::exception);
-    virtual void SAL_CALL rethrowException() throw (Exception, std::exception);
+    virtual void SAL_CALL throwException( Any const & exc ) throw (Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL rethrowException() throw (Exception, std::exception) SAL_OVERRIDE;
 };
 
 extern "C"

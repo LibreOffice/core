@@ -60,7 +60,7 @@ public:
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+                ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
 
 };
 

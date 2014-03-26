@@ -46,11 +46,11 @@ class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper1< ::com:
         //  XStatusIndicator
 
         virtual void SAL_CALL start   ( const OUString& sText  ,
-                                              sal_Int32        nRange ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL end     (                               ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL reset   (                               ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL setText ( const OUString& sText  ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL setValue(       sal_Int32        nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+                                              sal_Int32        nRange ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL end     (                               ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL reset   (                               ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setText ( const OUString& sText  ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL setValue(       sal_Int32        nValue ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         StatusIndicatorInterfaceWrapper();

@@ -158,11 +158,11 @@ public:
         // Formatueberpruefung waehrend der Eingabe ?
 
     // Spin-Handling
-    virtual void Up();
-    virtual void Down();
+    virtual void Up() SAL_OVERRIDE;
+    virtual void Down() SAL_OVERRIDE;
         // Standard-Implementierung : hoch- oder runterzaehlen des aktuellen double einfach um die gesetzte SpinSize
-    virtual void First();
-    virtual void Last();
+    virtual void First() SAL_OVERRIDE;
+    virtual void Last() SAL_OVERRIDE;
         // Standard-Implementierung : aktuelles double setzen auf eingestellten first respektive last value
 
     void    SetSpinSize(double dStep)   { m_dSpinSize = dStep; }
@@ -178,8 +178,8 @@ public:
     void    TreatAsNumber(bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
 public:
-    virtual void SetText( const OUString& rStr );
-    virtual void SetText( const OUString& rStr, const Selection& rNewSelection );
+    virtual void SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
 
     // die folgenden Methoden sind interesant, wenn m_bTreatAsNumber auf sal_False sitzt
     /** nehmen wir mal an, irgendjemand will das ganze schoene double-Handling gar nicht haben, sondern
@@ -234,9 +234,9 @@ public:
     bool    IsUsingInputStringForFormatting() const;
 
 protected:
-    virtual bool Notify(NotifyEvent& rNEvt);
+    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
     void impl_Modify(bool makeValueDirty = true);
-    virtual void Modify();
+    virtual void Modify() SAL_OVERRIDE;
 
     // CheckText ueberschreiben fuer Ueberpruefung zur Eingabezeit
     virtual bool CheckText(const OUString&) const { return true; }
@@ -254,7 +254,7 @@ protected:
     virtual SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
     SvNumberFormatter*  ImplGetFormatter() const { return m_pFormatter ? m_pFormatter : ((FormattedField*)this)->CreateFormatter(); }
 
-    bool PreNotify(NotifyEvent& rNEvt);
+    bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
     virtual void ReFormat();
 };
@@ -276,9 +276,9 @@ public:
     virtual ~DoubleNumericField();
 
 protected:
-    virtual bool CheckText(const OUString& sText) const;
+    virtual bool CheckText(const OUString& sText) const SAL_OVERRIDE;
 
-    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
+    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) SAL_OVERRIDE;
     void ResetConformanceTester();
 };
 
@@ -303,7 +303,7 @@ public:
     void        setPrependCurrSym(bool _bPrepend);
 
 protected:
-    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
+    virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) SAL_OVERRIDE;
 
     void UpdateCurrencyFormat();
 };

@@ -26,7 +26,7 @@ namespace testupdate {
 class Test : public test::BootstrapFixture
 {
 public:
-    virtual void setUp()
+    virtual void setUp() SAL_OVERRIDE
     {
         // so that comphelper::getProcessServiceFactory() works, m_xContext is
         // set up, etc.
@@ -40,7 +40,7 @@ public:
         m_aRepositoryList[0] = getURLFromSrc( "/extensions/qa/update/simple.xml" );
     }
 
-    virtual void tearDown()
+    virtual void tearDown() SAL_OVERRIDE
     {
         m_xProvider.clear();
         m_aRepositoryList.realloc( 0 );

@@ -72,21 +72,21 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sFilter)
             throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception);
+                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                  const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception);
+                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XContainerQuery
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
-            throw (css::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // internal helper!

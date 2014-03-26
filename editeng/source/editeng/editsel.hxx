@@ -32,16 +32,16 @@ private:
 public:
                     EditSelFunctionSet();
 
-    virtual void    BeginDrag();
+    virtual void    BeginDrag() SAL_OVERRIDE;
 
-    virtual void    CreateAnchor();
-    virtual void    DestroyAnchor();
+    virtual void    CreateAnchor() SAL_OVERRIDE;
+    virtual void    DestroyAnchor() SAL_OVERRIDE;
 
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false );
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false ) SAL_OVERRIDE;
 
-    virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAll();
+    virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
+    virtual void    DeselectAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
+    virtual void    DeselectAll() SAL_OVERRIDE;
 
     void            SetCurView( EditView* pView )       { pCurView = pView; }
 };

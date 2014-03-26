@@ -61,7 +61,7 @@ class CUPSManager : public PrinterInfoManager
     CUPSManager();
     virtual ~CUPSManager();
 
-    virtual void initialize();
+    virtual void initialize() SAL_OVERRIDE;
 
     void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const;
     void runDests();
@@ -76,22 +76,22 @@ public:
 
     const char* authenticateUser( const char* );
 
-    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand );
-    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber );
-    virtual void setupJobContextData( JobData& rData );
+    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) SAL_OVERRIDE;
+    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) SAL_OVERRIDE;
+    virtual void setupJobContextData( JobData& rData ) SAL_OVERRIDE;
 
     /// changes the info about a named printer
-    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo );
+    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo ) SAL_OVERRIDE;
 
     /// check if the printer configuration has changed
-    virtual bool checkPrintersChanged( bool bWait );
+    virtual bool checkPrintersChanged( bool bWait ) SAL_OVERRIDE;
 
     // members for administration
     // disable for CUPS
-    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName );
-    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false );
-    virtual bool writePrinterConfig();
-    virtual bool setDefaultPrinter( const OUString& rPrinterName );
+    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName ) SAL_OVERRIDE;
+    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false ) SAL_OVERRIDE;
+    virtual bool writePrinterConfig() SAL_OVERRIDE;
+    virtual bool setDefaultPrinter( const OUString& rPrinterName ) SAL_OVERRIDE;
 };
 
 } // namespace psp

@@ -46,8 +46,8 @@ namespace comphelper
     public:
         AnyEvent();
 
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     protected:
         virtual ~AnyEvent();
@@ -114,7 +114,7 @@ namespace comphelper
         SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
 
         // Thread
-        SAL_DLLPRIVATE virtual void execute();
+        SAL_DLLPRIVATE virtual void execute() SAL_OVERRIDE;
 
     public:
         /** constructs a notifier thread
@@ -132,7 +132,7 @@ namespace comphelper
             itself, it will return immediately, and the thread will be terminated as soon as
             the current notification is finished.
         */
-        virtual void SAL_CALL terminate();
+        virtual void SAL_CALL terminate() SAL_OVERRIDE;
 
         /** adds an event to the queue, together with the instance which is responsible for
             processing it

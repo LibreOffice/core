@@ -71,7 +71,7 @@ class PluginDisposer : public salhelper::Timer
 private:
     XPlugin_Impl*       m_pPlugin;
 
-    virtual void SAL_CALL onShot();
+    virtual void SAL_CALL onShot() SAL_OVERRIDE;
 public:
     PluginDisposer( XPlugin_Impl* pPlugin ) :
         salhelper::Timer( salhelper::TTimeValue( 2, 0 ),

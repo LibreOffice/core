@@ -41,35 +41,35 @@ public:
 
     virtual sal_Int32 SAL_CALL previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
-        sal_Int32& nDone ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        sal_Int32& nDone ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
-        sal_Int32& nDone ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        sal_Int32& nDone ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType) throw(com::sun::star::uno::RuntimeException, std::exception);
+        const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType) throw(com::sun::star::uno::RuntimeException, std::exception);
+        const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        const com::sun::star::lang::Locale& nLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale ) throw(com::sun::star::uno::RuntimeException, std::exception);
+        const com::sun::star::lang::Locale& nLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
-        throw(com::sun::star::uno::RuntimeException, std::exception);
+        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     const sal_Char *cBreakIterator, *wordRule, *lineRule;

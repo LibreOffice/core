@@ -41,7 +41,7 @@ public:
 
     virtual ~XMLProcAddAttrTransformerContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
 
 #endif  //  _XMLOFF_PROCADDATTRCONTEXT_HXX

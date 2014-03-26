@@ -41,8 +41,8 @@ namespace svt
         OFileURLControl(Window* _pParent, WinBits nStyle);
 
     protected:
-        virtual bool        PreNotify( NotifyEvent& rNEvt );
-        virtual bool        Notify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
 
 

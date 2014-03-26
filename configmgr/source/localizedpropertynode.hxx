@@ -35,9 +35,9 @@ class LocalizedPropertyNode: public Node {
 public:
     LocalizedPropertyNode(int layer, Type staticType, bool nillable);
 
-    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
-    virtual NodeMap & getMembers();
+    virtual NodeMap & getMembers() SAL_OVERRIDE;
 
     Type getStaticType() const;
 
@@ -48,9 +48,9 @@ private:
 
     virtual ~LocalizedPropertyNode();
 
-    virtual Kind kind() const;
+    virtual Kind kind() const SAL_OVERRIDE;
 
-    virtual void clear();
+    virtual void clear() SAL_OVERRIDE;
 
     Type staticType_;
         // as specified in the component-schema (TYPE_ANY, ...,

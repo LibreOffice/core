@@ -135,15 +135,15 @@ protected:
     using vcl::unohelper::DragAndDropClient::dragEnter;
     using vcl::unohelper::DragAndDropClient::dragExit;
     using vcl::unohelper::DragAndDropClient::dragOver;
-    virtual void        dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void        dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void        drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void        dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void        dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void        dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void        dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-    virtual void FillLayoutData() const;
+    virtual void FillLayoutData() const SAL_OVERRIDE;
                         Edit( WindowType nType );
 
 public:
@@ -154,19 +154,19 @@ public:
                         Edit( Window* pParent, const ResId& rResId );
                         virtual ~Edit();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-    virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        StateChanged( StateChangedType nType );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual Window*     GetPreferredKeyInputWindow();
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
     virtual void        Modify();
     virtual void        UpdateData();
@@ -209,9 +209,9 @@ public:
     virtual void        Paste();
     void                Undo();
 
-    virtual void        SetText( const OUString& rStr );
+    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
     virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
-    virtual OUString    GetText() const;
+    virtual OUString    GetText() const SAL_OVERRIDE;
 
     virtual void        SetPlaceholderText( const OUString& rStr );
     virtual OUString    GetPlaceholderText() const;
@@ -232,7 +232,7 @@ public:
 
     virtual Size        CalcMinimumSize() const;
     virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
-    virtual Size        GetOptimalSize() const;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
     virtual Size        CalcSize(sal_Int32 nChars) const;
     virtual sal_Int32   GetMaxVisChars() const;
 
@@ -247,9 +247,9 @@ public:
     static PopupMenu*   CreatePopupMenu();
     static void         DeletePopupMenu( PopupMenu* pMenu );
 
-    virtual OUString GetSurroundingText() const;
-    virtual Selection GetSurroundingTextSelection() const;
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual OUString GetSurroundingText() const SAL_OVERRIDE;
+    virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)

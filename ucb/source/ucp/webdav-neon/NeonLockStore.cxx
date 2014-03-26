@@ -54,7 +54,7 @@ public:
 
 private:
 
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
 };
 
 } // namespace webdav_ucp

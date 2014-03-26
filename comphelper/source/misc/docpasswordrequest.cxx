@@ -53,7 +53,7 @@ public:
     inline bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = false; }
 
-    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) { mbSelected = true; }
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbSelected = true; }
 
 private:
     bool            mbSelected;
@@ -69,16 +69,16 @@ public:
     inline bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = false; }
 
-    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) { mbSelected = true; }
+    virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbSelected = true; }
 
-    virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException, std::exception ) { maPassword = rPass; }
-    virtual OUString SAL_CALL getPassword() throw( RuntimeException, std::exception ) { return maPassword; }
+    virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException, std::exception ) SAL_OVERRIDE { maPassword = rPass; }
+    virtual OUString SAL_CALL getPassword() throw( RuntimeException, std::exception ) SAL_OVERRIDE { return maPassword; }
 
-    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException, std::exception ) { maModifyPassword = rPass; }
-    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException, std::exception ) { return maModifyPassword; }
+    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException, std::exception ) SAL_OVERRIDE { maModifyPassword = rPass; }
+    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException, std::exception ) SAL_OVERRIDE { return maModifyPassword; }
 
-    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException, std::exception ) { mbReadOnly = bReadOnly; }
-    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException, std::exception ) { return mbReadOnly; }
+    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException, std::exception ) SAL_OVERRIDE { mbReadOnly = bReadOnly; }
+    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException, std::exception ) SAL_OVERRIDE { return mbReadOnly; }
 
 private:
     OUString            maPassword;

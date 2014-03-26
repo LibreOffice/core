@@ -28,7 +28,7 @@ namespace connectivity
         class OHSQLColumns : public OColumnsHelper
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() SAL_OVERRIDE;
         public:
             OHSQLColumns(   ::cppu::OWeakObject& _rParent
                             ,sal_Bool _bCase
@@ -47,14 +47,14 @@ namespace connectivity
         {
             OUString m_sAutoIncrement;
         protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const SAL_OVERRIDE;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         public:
             OHSQLColumn(sal_Bool _bCase);
-            virtual void construct();
+            virtual void construct() SAL_OVERRIDE;
 
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
     }
 }

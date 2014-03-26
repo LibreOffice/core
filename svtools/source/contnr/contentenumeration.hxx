@@ -255,7 +255,7 @@ namespace svt
         EnumerationResult enumerateFolderContent();
 
         // Thread overridables
-        virtual void execute();
+        virtual void execute() SAL_OVERRIDE;
 
     private:
         sal_Bool implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const;

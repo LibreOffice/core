@@ -304,9 +304,9 @@ protected:
     virtual void            GraphicManagerDestroyed();
     virtual SvStream*       GetSwapStream() const;
 
-    virtual void            Load( SvStream& );
-    virtual void            Save( SvStream& );
-    virtual void            Assign( const SvDataCopyStream& );
+    virtual void            Load( SvStream& ) SAL_OVERRIDE;
+    virtual void            Save( SvStream& ) SAL_OVERRIDE;
+    virtual void            Assign( const SvDataCopyStream& ) SAL_OVERRIDE;
 
 public:
 

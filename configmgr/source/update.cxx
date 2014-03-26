@@ -74,22 +74,22 @@ private:
 
     virtual void SAL_CALL insertExtensionXcsFile(
         sal_Bool shared, OUString const & fileUri)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL insertExtensionXcuFile(
         sal_Bool shared, OUString const & fileUri)
         throw (css::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeExtensionXcuFile(OUString const & fileUri)
         throw (css::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL insertModificationXcuFile(
         OUString const & fileUri,
         css::uno::Sequence< OUString > const & includedPaths,
         css::uno::Sequence< OUString > const & excludedPaths)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     boost::shared_ptr<osl::Mutex> lock_;
     css::uno::Reference< css::uno::XComponentContext > context_;

@@ -136,7 +136,7 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     DECL_LINK( ScrollHdl, ScrollBar* );
 
 protected:
-    virtual void                Resize();
+    virtual void                Resize() SAL_OVERRIDE;
     void                        InitFixedTexts( void );     // create mnemonics and set text an all fixed texts
 
 public:
@@ -154,16 +154,16 @@ public:
 
     void                        CommitActiveControl();
 
-    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    void SAL_CALL               focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception );
-    void SAL_CALL               focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception );
+    void SAL_CALL               focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    void SAL_CALL               focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     void                        RemoveListeners();
 
-    virtual void                GetFocus();
+    virtual void                GetFocus() SAL_OVERRIDE;
 
-    virtual sal_Bool                HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+    virtual sal_Bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
 };
 
 

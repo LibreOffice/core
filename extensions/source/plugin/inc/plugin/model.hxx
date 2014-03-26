@@ -89,14 +89,14 @@ class PluginModel : public BroadcasterHelperHolder,
     void setMimeType( const OUString& rMime ) { m_aMimeType = rMime; }
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( com::sun::star::uno::RuntimeException, std::exception )
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { return OWeakAggObject::queryInterface( rType ); }
-    virtual void SAL_CALL acquire()  throw()
+    virtual void SAL_CALL acquire()  throw() SAL_OVERRIDE
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release()  throw()
+    virtual void SAL_CALL release()  throw() SAL_OVERRIDE
     { OWeakAggObject::release(); }
 
-    virtual Any SAL_CALL queryAggregation( const Type& ) throw( com::sun::star::uno::RuntimeException, std::exception );
+    virtual Any SAL_CALL queryAggregation( const Type& ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // com::sun::star::lang::XTypeProvider
@@ -109,26 +109,26 @@ class PluginModel : public BroadcasterHelperHolder,
     }
 
     // OPropertySetHelper
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
     virtual sal_Bool  SAL_CALL convertFastPropertyValue( Any & rConvertedValue,
                                                          Any & rOldValue,
                                                          sal_Int32 nHandle,
-                                                         const Any& rValue ) throw();
+                                                         const Any& rValue ) throw() SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                             const Any& rValue )
-        throw(::com::sun::star::uno::Exception, std::exception);
-    virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw();
-    virtual Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(std::exception);
+        throw(::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw() SAL_OVERRIDE;
+    virtual Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(std::exception) SAL_OVERRIDE;
 
     // com::sun::star::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw(std::exception);
-    virtual void SAL_CALL write(const Reference< com::sun::star::io::XObjectOutputStream > & OutStream) throw(std::exception);
-    virtual void SAL_CALL read(const Reference< com::sun::star::io::XObjectInputStream > & InStream) throw(std::exception);
+    virtual OUString SAL_CALL getServiceName() throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const Reference< com::sun::star::io::XObjectOutputStream > & OutStream) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const Reference< com::sun::star::io::XObjectInputStream > & InStream) throw(std::exception) SAL_OVERRIDE;
 
     // com::sun::star::lang::XComponent
-    virtual void SAL_CALL addEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw(std::exception);
-    virtual void SAL_CALL removeEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw(std::exception);
-    virtual void SAL_CALL dispose() throw(std::exception);
+    virtual void SAL_CALL addEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw(std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() throw(std::exception) SAL_OVERRIDE;
   private:
     using cppu::OPropertySetHelper::getFastPropertyValue;
 };

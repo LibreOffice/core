@@ -153,127 +153,127 @@ namespace DOM
         */
         virtual Reference< XNode > SAL_CALL
             appendChild(Reference< XNode > const& xNewChild)
-            throw (RuntimeException, DOMException, std::exception);
+            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns a duplicate of this node, i.e., serves as a generic copy
         constructor for nodes.
         */
         virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         A NamedNodeMap containing the attributes of this node
         (if it is an Element) or null otherwise.
         */
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         A NodeList that contains all children of this node.
         */
         virtual Reference< XNodeList > SAL_CALL getChildNodes()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The first child of this node.
         */
         virtual Reference< XNode > SAL_CALL getFirstChild()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The last child of this node.
         */
         virtual Reference< XNode > SAL_CALL getLastChild()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns the local part of the qualified name of this node.
         */
         virtual OUString SAL_CALL getLocalName()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The namespace URI of this node, or null if it is unspecified.
         */
         virtual OUString SAL_CALL getNamespaceURI()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The node immediately following this node.
         */
         virtual Reference< XNode > SAL_CALL getNextSibling()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The name of this node, depending on its type; see the table above.
         -- virtual implemented by actual node types
         */
         virtual OUString SAL_CALL getNodeName()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         A code representing the type of the underlying object, as defined above.
         */
         virtual NodeType SAL_CALL getNodeType()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The value of this node, depending on its type; see the table above.
         -- virtual implemented by actual node types
         */
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The Document object associated with this node.
         */
         virtual Reference< XDocument > SAL_CALL getOwnerDocument()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The parent of this node.
         */
         virtual Reference< XNode > SAL_CALL getParentNode()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The namespace prefix of this node, or null if it is unspecified.
         */
         virtual OUString SAL_CALL getPrefix()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         The node immediately preceding this node.
         */
         virtual Reference< XNode > SAL_CALL getPreviousSibling()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns whether this node (if it is an element) has any attributes.
         */
         virtual sal_Bool SAL_CALL hasAttributes()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Returns whether this node has any children.
         */
         virtual sal_Bool SAL_CALL hasChildNodes()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Inserts the node newChild before the existing child node refChild.
         */
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (RuntimeException, DOMException, std::exception);
+            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Tests whether the DOM implementation implements a specific feature and
         that feature is supported by this node.
         */
         virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Puts all Text nodes in the full depth of the sub-tree underneath this
@@ -283,14 +283,14 @@ namespace DOM
         Text nodes nor empty Text nodes.
         */
         virtual void SAL_CALL normalize()
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         /**
         Removes the child node indicated by oldChild from the list of children,
         and returns it.
         */
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (RuntimeException, DOMException, std::exception);
+            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         Replaces the child node oldChild with newChild in the list of children,
@@ -298,39 +298,39 @@ namespace DOM
         */
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (RuntimeException, DOMException, std::exception);
+            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         The value of this node, depending on its type; see the table above.
         */
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (RuntimeException, DOMException, std::exception);
+            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
 
         /**
         The namespace prefix of this node, or null if it is unspecified.
         */
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (RuntimeException, DOMException, std::exception);
+            throw (RuntimeException, DOMException, std::exception) SAL_OVERRIDE;
 
 
         // --- XEventTarget
         virtual void SAL_CALL addEventListener(const OUString& eventType,
             const Reference< XEventListener >& listener,
             sal_Bool useCapture)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL removeEventListener(const OUString& eventType,
             const Reference< XEventListener >& listener,
             sal_Bool useCapture)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL dispatchEvent(const Reference< XEvent >& evt)
-            throw(RuntimeException, EventException, std::exception);
+            throw(RuntimeException, EventException, std::exception) SAL_OVERRIDE;
 
         // --- XUnoTunnel
         virtual ::sal_Int64 SAL_CALL
             getSomething(Sequence< ::sal_Int8 > const& rId)
-            throw (RuntimeException, std::exception);
+            throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
     /// eliminate redundant namespace declarations

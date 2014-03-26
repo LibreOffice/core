@@ -102,32 +102,32 @@ public:
 
     // Methods of XEventAttacherManager
     virtual void SAL_CALL registerScriptEvent(sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL registerScriptEvents(sal_Int32 Index, const Sequence< ScriptEventDescriptor >& ScriptEvents)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL revokeScriptEvent(sal_Int32 Index, const OUString& ListenerType, const OUString& EventMethod, const OUString& removeListenerParam)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL revokeScriptEvents(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL insertEntry(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeEntry(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Sequence< ScriptEventDescriptor > SAL_CALL getScriptEvents(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL attach(sal_Int32 Index, const Reference< XInterface >& Object, const Any& Helper)
-        throw( IllegalArgumentException, ServiceNotRegisteredException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, ServiceNotRegisteredException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL detach(sal_Int32 nIndex, const Reference< XInterface >& xObject)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL addScriptListener(const Reference< XScriptListener >& aListener)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeScriptListener(const Reference< XScriptListener >& Listener)
-        throw( IllegalArgumentException, RuntimeException, std::exception );
+        throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methods of XPersistObject
-    virtual OUString SAL_CALL getServiceName(void) throw( RuntimeException, std::exception );
-    virtual void SAL_CALL write(const Reference< XObjectOutputStream >& OutStream) throw( IOException, RuntimeException, std::exception );
-    virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException, std::exception );
+    virtual OUString SAL_CALL getServiceName(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL write(const Reference< XObjectOutputStream >& OutStream) throw( IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
     Reference< XIdlReflection > getReflection() throw( Exception );
@@ -162,11 +162,11 @@ public:
                                 const OUString & rScriptCode_ );
 
     // Methods of XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event) throw( RuntimeException, std::exception );
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw( InvocationTargetException, RuntimeException, std::exception );
+    virtual void SAL_CALL firing(const AllEventObject& Event) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw( InvocationTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methods of XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 

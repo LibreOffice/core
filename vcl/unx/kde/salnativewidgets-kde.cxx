@@ -1209,19 +1209,19 @@ class KDESalGraphics : public X11SalGraphics
   public:
     KDESalGraphics() {}
     virtual ~KDESalGraphics() {}
-    virtual bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual bool IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
     virtual bool hitTestNativeControl( ControlType nType, ControlPart nPart,
                                        const Rectangle& rControlRegion, const Point& aPos,
                                        bool& rIsInside ) SAL_OVERRIDE;
     virtual bool drawNativeControl( ControlType nType, ControlPart nPart,
                                     const Rectangle& rControlRegion, ControlState nState,
                                     const ImplControlValue& aValue,
-                                    const OUString& aCaption );
+                                    const OUString& aCaption ) SAL_OVERRIDE;
     virtual bool getNativeControlRegion( ControlType nType, ControlPart nPart,
                                          const Rectangle& rControlRegion, ControlState nState,
                                          const ImplControlValue& aValue,
                                          const OUString& aCaption,
-                                         Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
+                                         Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
 };
 
 /** What widgets can be drawn the native way.

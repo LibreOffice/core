@@ -76,9 +76,9 @@ protected:
     virtual ~EncryptionEngine(){};
 
     virtual void tryToPerform( )
-        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-    virtual void clearUp( ) const;
-    virtual bool checkReady() const;
+        throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void clearUp( ) const SAL_OVERRIDE;
+    virtual bool checkReady() const SAL_OVERRIDE;
 
     /*
      * starts the main function. This method will be implemented by any sub-class.
@@ -93,7 +93,7 @@ protected:
 public:
     /* XBlockerMonitor */
     virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

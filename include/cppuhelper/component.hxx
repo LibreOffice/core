@@ -62,35 +62,35 @@ public:
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
         ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw ();
+        throw () SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw ();
+        throw () SAL_OVERRIDE;
 
     /** @attention
         XTypeProvider::getImplementationId() has to be implemented separately!
     */
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) = 0;
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     /** @attention
         XTypeProvider::getTypes() has to be re-implemented!
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL dispose()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /** Called in dispose method after the listeners were notified.

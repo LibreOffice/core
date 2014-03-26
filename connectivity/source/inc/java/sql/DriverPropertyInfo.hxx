@@ -35,7 +35,7 @@ namespace connectivity
     // Static data for the class
         static jclass theClass;
     public:
-        virtual jclass getMyClass() const;
+        virtual jclass getMyClass() const SAL_OVERRIDE;
         virtual ~java_sql_DriverPropertyInfo();
         // A ctor that is needed for returning the object
         java_sql_DriverPropertyInfo( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}

@@ -40,8 +40,8 @@ namespace svt
         FileURLBox( Window* _pParent, WinBits _nStyle );
 
     protected:
-        virtual bool        PreNotify( NotifyEvent& rNEvt );
-        virtual bool        Notify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     public:
         /** transforms the given URL content into a system-dependent notation, if possible, and

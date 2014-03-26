@@ -40,13 +40,13 @@ namespace script {
 class ScriptBackendDb: public dp_registry::backend::RegisteredDb
 {
 protected:
-    virtual OUString getDbNSName();
+    virtual OUString getDbNSName() SAL_OVERRIDE;
 
-    virtual OUString getNSPrefix();
+    virtual OUString getNSPrefix() SAL_OVERRIDE;
 
-    virtual OUString getRootElementName();
+    virtual OUString getRootElementName() SAL_OVERRIDE;
 
-    virtual OUString getKeyElementName();
+    virtual OUString getKeyElementName() SAL_OVERRIDE;
 
 
 public:

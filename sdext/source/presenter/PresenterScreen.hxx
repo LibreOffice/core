@@ -66,7 +66,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     // XJob
 
@@ -74,7 +74,7 @@ public:
         const css::uno::Sequence<css::beans::NamedValue >& Arguments)
         throw (css::lang::IllegalArgumentException,
             css::uno::Exception,
-            css::uno::RuntimeException, std::exception);
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
@@ -105,7 +105,7 @@ public:
         const css::uno::Reference<css::frame::XModel2>& rxModel);
     virtual ~PresenterScreen (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     bool isPresenterScreenEnabled(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
@@ -125,7 +125,7 @@ public:
 
     // XEventListener
 
-    virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;

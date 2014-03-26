@@ -107,7 +107,7 @@ namespace connectivity
 
         /** this function is called upon disposing the component
         */
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         /** The default returns "RENAME TABLE " or "RENAME VIEW " depending on the type.
         *
@@ -118,9 +118,9 @@ namespace connectivity
         virtual ~OTableHelper();
 
     public:
-        virtual void refreshColumns();
-        virtual void refreshKeys();
-        virtual void refreshIndexes();
+        virtual void refreshColumns() SAL_OVERRIDE;
+        virtual void refreshKeys() SAL_OVERRIDE;
+        virtual void refreshIndexes() SAL_OVERRIDE;
 
         const ColumnDesc* getColumnDescription(const OUString& _sName) const;
 
@@ -138,19 +138,19 @@ namespace connectivity
                         const OUString& _CatalogName = OUString()
             );
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const SAL_OVERRIDE;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const;
 
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
         // XRename
-        virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XAlterTable
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XNamed
-        virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // helper method to get key properties
         sdbcx::TKeyProperties getKeyProperties(const OUString& _sName) const;

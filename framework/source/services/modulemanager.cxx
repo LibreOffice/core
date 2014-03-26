@@ -70,20 +70,20 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService(
         OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception);
+    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XModuleManager
     virtual OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)
         throw(css::lang::IllegalArgumentException,
               css::frame::UnknownModuleException,
-              css::uno::RuntimeException, std::exception         );
+              css::uno::RuntimeException, std::exception         ) SAL_OVERRIDE;
 
     // XNameReplace
     virtual void SAL_CALL replaceByName(const OUString& sName ,
@@ -91,33 +91,33 @@ public:
         throw (css::lang::IllegalArgumentException   ,
                css::container::NoSuchElementException,
                css::lang::WrappedTargetException     ,
-               css::uno::RuntimeException, std::exception            );
+               css::uno::RuntimeException, std::exception            ) SAL_OVERRIDE;
 
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& sName)
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException     ,
-              css::uno::RuntimeException, std::exception            );
+              css::uno::RuntimeException, std::exception            ) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasByName(const OUString& sName)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType()
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContainerQuery
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
 

@@ -62,8 +62,8 @@ class MyEdit_Impl : public Edit
     SvInplaceEdit2* pOwner;
 public:
                  MyEdit_Impl( Window* pParent, SvInplaceEdit2* pOwner );
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void LoseFocus();
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 };
 
 class MyMultiEdit_Impl : public MultiLineEdit
@@ -71,8 +71,8 @@ class MyMultiEdit_Impl : public MultiLineEdit
     SvInplaceEdit2* pOwner;
 public:
                  MyMultiEdit_Impl( Window* pParent, SvInplaceEdit2* pOwner );
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void LoseFocus();
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 };
 
 MyEdit_Impl::MyEdit_Impl( Window* pParent, SvInplaceEdit2* _pOwner ) :

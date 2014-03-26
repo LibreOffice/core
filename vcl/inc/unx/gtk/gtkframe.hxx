@@ -351,100 +351,100 @@ public:
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
-    virtual SalGraphics*        AcquireGraphics();
-    virtual void                ReleaseGraphics( SalGraphics* pGraphics );
+    virtual SalGraphics*        AcquireGraphics() SAL_OVERRIDE;
+    virtual void                ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual bool                PostEvent( void* pData );
+    virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
 
-    virtual void                SetTitle( const OUString& rTitle );
-    virtual void                SetIcon( sal_uInt16 nIcon );
-    virtual void                SetMenu( SalMenu *pSalMenu );
+    virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
+    virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;
+    virtual void                SetMenu( SalMenu *pSalMenu ) SAL_OVERRIDE;
     virtual SalMenu*            GetMenu( void );
-    virtual void                DrawMenuBar();
+    virtual void                DrawMenuBar() SAL_OVERRIDE;
     void                        EnsureAppMenuWatch();
 
-    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
+    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) SAL_OVERRIDE;
     // Before the window is visible, a resize event
     // must be sent with the correct size
-    virtual void                Show( bool bVisible, bool bNoActivate = false );
-    virtual void                Enable( bool bEnable );
+    virtual void                Show( bool bVisible, bool bNoActivate = false ) SAL_OVERRIDE;
+    virtual void                Enable( bool bEnable ) SAL_OVERRIDE;
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
-    virtual void                SetMinClientSize( long nWidth, long nHeight );
-    virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
-    virtual void                GetClientSize( long& rWidth, long& rHeight );
-    virtual void                GetWorkArea( Rectangle& rRect );
-    virtual SalFrame*           GetParent() const;
-    virtual void                SetWindowState( const SalFrameState* pState );
-    virtual bool            GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
+    virtual void                SetMinClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                SetMaxClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) SAL_OVERRIDE;
+    virtual void                GetClientSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
+    virtual void                GetWorkArea( Rectangle& rRect ) SAL_OVERRIDE;
+    virtual SalFrame*           GetParent() const SAL_OVERRIDE;
+    virtual void                SetWindowState( const SalFrameState* pState ) SAL_OVERRIDE;
+    virtual bool            GetWindowState( SalFrameState* pState ) SAL_OVERRIDE;
+    virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) SAL_OVERRIDE;
     // Enable/Disable ScreenSaver, SystemAgents, ...
-    virtual void                StartPresentation( bool bStart );
+    virtual void                StartPresentation( bool bStart ) SAL_OVERRIDE;
     // Show Window over all other Windows
-    virtual void                SetAlwaysOnTop( bool bOnTop );
+    virtual void                SetAlwaysOnTop( bool bOnTop ) SAL_OVERRIDE;
 
     // Window to top and grab focus
-    virtual void                ToTop( sal_uInt16 nFlags );
+    virtual void                ToTop( sal_uInt16 nFlags ) SAL_OVERRIDE;
 
     // this function can call with the same
     // pointer style
-    virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( bool bMouse );
-    virtual void                SetPointerPos( long nX, long nY );
+    virtual void                SetPointer( PointerStyle ePointerStyle ) SAL_OVERRIDE;
+    virtual void                CaptureMouse( bool bMouse ) SAL_OVERRIDE;
+    virtual void                SetPointerPos( long nX, long nY ) SAL_OVERRIDE;
 
     // flush output buffer
     using SalFrame::Flush;
-    virtual void                Flush();
+    virtual void                Flush() SAL_OVERRIDE;
     // flush output buffer, wait till outstanding operations are done
-    virtual void                Sync();
+    virtual void                Sync() SAL_OVERRIDE;
 
-    virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( sal_uInt16 nFlags );
+    virtual void                SetInputContext( SalInputContext* pContext ) SAL_OVERRIDE;
+    virtual void                EndExtTextInput( sal_uInt16 nFlags ) SAL_OVERRIDE;
 
-    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual OUString              GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
+    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) SAL_OVERRIDE;
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS
-    virtual LanguageType        GetInputLanguage();
+    virtual LanguageType        GetInputLanguage() SAL_OVERRIDE;
 
-    virtual void                UpdateSettings( AllSettings& rSettings );
+    virtual void                UpdateSettings( AllSettings& rSettings ) SAL_OVERRIDE;
 
-    virtual void                Beep();
+    virtual void                Beep() SAL_OVERRIDE;
 
     // returns system data (most prominent: window handle)
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
 
 
     // get current modifier and button mask
-    virtual SalPointerState     GetPointerState();
+    virtual SalPointerState     GetPointerState() SAL_OVERRIDE;
 
-    virtual SalIndicatorState   GetIndicatorState();
+    virtual SalIndicatorState   GetIndicatorState() SAL_OVERRIDE;
 
-    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
 
     // set new parent window
-    virtual void                SetParent( SalFrame* pNewParent );
+    virtual void                SetParent( SalFrame* pNewParent ) SAL_OVERRIDE;
     // reparent window to act as a plugin; implementation
     // may choose to use a new system window internally
     // return false to indicate failure
-    virtual bool                SetPluginParent( SystemParentData* pNewParent );
+    virtual bool                SetPluginParent( SystemParentData* pNewParent ) SAL_OVERRIDE;
 
-    virtual void                SetScreenNumber( unsigned int );
-    virtual void                SetApplicationID( const OUString &rWMClass );
+    virtual void                SetScreenNumber( unsigned int ) SAL_OVERRIDE;
+    virtual void                SetApplicationID( const OUString &rWMClass ) SAL_OVERRIDE;
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
-    virtual void                    ResetClipRegion();
+    virtual void                    ResetClipRegion() SAL_OVERRIDE;
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uLong nRects );
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
     // add a rectangle to the clip region
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     // done setting up the clipregion
-    virtual void                    EndSetClipRegion();
+    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
 
     static GtkSalFrame             *getFromWindow( GtkWindow *pWindow );
 

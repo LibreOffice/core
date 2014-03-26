@@ -29,13 +29,13 @@ class KDESalInstance : public X11SalInstance
     public:
         KDESalInstance( SalYieldMutex* pMutex ) : X11SalInstance( pMutex ) {}
         virtual ~KDESalInstance() {}
-        virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
+        virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
 
-        virtual bool hasNativeFileSelection() const { return true; }
+        virtual bool hasNativeFileSelection() const SAL_OVERRIDE { return true; }
 
         virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
             createFilePicker( const com::sun::star::uno::Reference<
-                                  com::sun::star::uno::XComponentContext >& );
+                                  com::sun::star::uno::XComponentContext >& ) SAL_OVERRIDE;
         int getFrameWidth();
 };
 

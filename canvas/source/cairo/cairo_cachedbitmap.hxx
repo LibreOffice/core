@@ -41,14 +41,14 @@ namespace cairocanvas
                          ::com::sun::star::rendering::XCanvas >&      rTarget   );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     private:
         virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
                                      const ::com::sun::star::rendering::ViewState&  rOldState,
                                      const ::com::sun::star::uno::Reference<
                                      ::com::sun::star::rendering::XCanvas >&        rTargetCanvas,
-                                     bool                                           bSameViewTransform );
+                                     bool                                           bSameViewTransform ) SAL_OVERRIDE;
 
 
         ::cairo::SurfaceSharedPtr mpSurface;

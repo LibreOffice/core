@@ -150,8 +150,8 @@ public:
     virtual ~SvtLinguConfigItem();
 
     // utl::ConfigItem
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames );
-    virtual void    Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
+    virtual void    Commit() SAL_OVERRIDE;
 
     // make some protected functions of utl::ConfigItem public
     using utl::ConfigItem::GetNodeNames;

@@ -94,13 +94,13 @@ public:
         const OUString& rsPaneBorderStyleName,
         const css::awt::Rectangle& rRectangle,
         css::drawing::framework::BorderType eBorderType)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::awt::Rectangle SAL_CALL removeBorder (
         const OUString& rsPaneBorderStyleName,
         const css::awt::Rectangle& rRectangle,
         css::drawing::framework::BorderType eBorderType)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL paintBorder (
         const OUString& rsPaneBorderStyleName,
@@ -108,7 +108,7 @@ public:
         const css::awt::Rectangle& rOuterBorderRectangle,
         const css::awt::Rectangle& rRepaintArea,
         const OUString& rsTitle)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL paintBorderWithCallout (
         const OUString& rsPaneBorderStyleName,
@@ -117,11 +117,11 @@ public:
         const css::awt::Rectangle& rRepaintArea,
         const OUString& rsTitle,
         const css::awt::Point& rCalloutAnchor)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::awt::Point SAL_CALL getCalloutOffset (
         const OUString& rsPaneBorderStyleName)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;

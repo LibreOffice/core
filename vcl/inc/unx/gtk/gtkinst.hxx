@@ -42,8 +42,8 @@ class GtkYieldMutex : public SalYieldMutex
 
 public:
                         GtkYieldMutex();
-    virtual void        acquire();
-    virtual void        release();
+    virtual void        acquire() SAL_OVERRIDE;
+    virtual void        release() SAL_OVERRIDE;
 
     void ThreadsEnter();
     void ThreadsLeave();

@@ -67,7 +67,7 @@ public:
     explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
     virtual         ~WorkWindow();
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
     void            ShowFullScreenMode( bool bFullScreenMode,
                                         sal_Int32 nDisplayScreen );

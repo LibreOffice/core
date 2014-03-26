@@ -36,15 +36,17 @@ class SvStream;
 
 // This version of the Macros does not define Load/StorePrivateData()-methods
 #define SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )       \
-    virtual sal_uInt32 GetCreator() const { return nCre;   }    \
-    virtual sal_uInt16 GetVersion() const { return nVer;   }    \
-    virtual sal_uInt16 GetSbxId() const   { return nSbxId; }
+    virtual sal_uInt32 GetCreator() const SAL_OVERRIDE { return nCre;   }    \
+    virtual sal_uInt16 GetVersion() const SAL_OVERRIDE { return nVer;   }    \
+    virtual sal_uInt16 GetSbxId() const SAL_OVERRIDE   { return nSbxId; }
 
 // This version of the macro defines Load/StorePrivateData()-methods
 #define SBX_DECL_PERSIST( nCre, nSbxId, nVer )              \
     virtual sal_Bool LoadPrivateData( SvStream&, sal_uInt16 );      \
     virtual sal_Bool StorePrivateData( SvStream& ) const;       \
-    SBX_DECL_PERSIST_NODATA( nCre, nSbxId, nVer )
+    virtual sal_uInt32 GetCreator() const { return nCre;   }    \
+    virtual sal_uInt16 GetVersion() const { return nVer;   }    \
+    virtual sal_uInt16 GetSbxId() const   { return nSbxId; }
 
 class SbxBase;
 class SbxFactory;

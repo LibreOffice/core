@@ -48,13 +48,13 @@ public:
                 const *>(0) ).isAssignableFrom(m_type) ); }
 
     // XInterface
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
     virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() throw (RuntimeException, std::exception);
+    virtual void SAL_CALL select() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 // XInterface
@@ -106,9 +106,9 @@ public:
 
     // XInteractionRequest
     virtual Any SAL_CALL getRequest()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< Reference<task::XInteractionContinuation> >
-    SAL_CALL getContinuations() throw (RuntimeException, std::exception);
+    SAL_CALL getContinuations() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 // XInteractionRequest

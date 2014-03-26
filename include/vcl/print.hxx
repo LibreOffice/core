@@ -247,9 +247,9 @@ private:
     bool                        mbUserSetupResult;
     Link                        maErrorHdl;
 
-    bool                        ImplInitGraphics() const;
-    void                        ImplReleaseGraphics( bool bRelease = true );
-    void                        ImplReleaseFonts();
+    bool                        ImplInitGraphics() const SAL_OVERRIDE;
+    void                        ImplReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;
+    void                        ImplReleaseFonts() SAL_OVERRIDE;
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
     SAL_DLLPRIVATE void         ImplInitDisplay( const Window* pWindow );
@@ -273,8 +273,8 @@ public:
     SAL_DLLPRIVATE void         ImplEndPage();
 
 protected:
-    long                        ImplGetGradientStepCount( long nMinRect );
-    void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) { };
+    long                        ImplGetGradientStepCount( long nMinRect ) SAL_OVERRIDE;
+    void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) SAL_OVERRIDE { };
 
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
@@ -285,15 +285,15 @@ protected:
     bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
     virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
                                                 const Point& rDestPt, const Size& rDestSize,
-                                                const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+                                                const Point& rSrcPtPixel, const Size& rSrcSizePixel ) SAL_OVERRIDE;
     bool                        DrawTransformBitmapExDirect(
                                     const basegfx::B2DHomMatrix& aFullTransform,
-                                    const BitmapEx& rBitmapEx);
+                                    const BitmapEx& rBitmapEx) SAL_OVERRIDE;
 
     bool                        TransformReduceBitmapExTargetRange(
                                     const basegfx::B2DHomMatrix& aFullTransform,
                                     basegfx::B2DRange &aVisibleRange,
-                                    double &fMaximumArea);
+                                    double &fMaximumArea) SAL_OVERRIDE;
 
     void                        DrawDeviceBitmap(
                                     const Point& rDestPt, const Size& rDestSize,
@@ -396,16 +396,16 @@ public:
     static void                 PrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
                                           const JobSetup& i_rInitSetup );
 
-    virtual bool                HasMirroredGraphics() const;
+    virtual bool                HasMirroredGraphics() const SAL_OVERRIDE;
 
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize );
+                                            const Point& rSrcPt,  const Size& rSrcSize ) SAL_OVERRIDE;
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize,
-                                            const OutputDevice& rOutDev );
+                                            const OutputDevice& rOutDev ) SAL_OVERRIDE;
     virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
-                                          sal_uInt16 nFlags = 0 );
+                                          sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
 
     // implementation detail of PrintJob being asynchronous

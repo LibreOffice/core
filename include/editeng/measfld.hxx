@@ -44,8 +44,8 @@ public:
     SdrMeasureField(): eMeasureFieldKind(SDRMEASUREFIELD_VALUE) {}
     SdrMeasureField(SdrMeasureFieldKind eNewKind): eMeasureFieldKind(eNewKind) {}
     virtual ~SdrMeasureField();
-    virtual SvxFieldData* Clone() const;
-    virtual bool operator==(const SvxFieldData&) const;
+    virtual SvxFieldData* Clone() const SAL_OVERRIDE;
+    virtual bool operator==(const SvxFieldData&) const SAL_OVERRIDE;
     SdrMeasureFieldKind GetMeasureFieldKind() const { return eMeasureFieldKind; }
     void SetMeasureFieldKind(SdrMeasureFieldKind eNewKind) { eMeasureFieldKind=eNewKind; }
 };

@@ -42,14 +42,14 @@ public:
     VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString& url );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     ::rtl::OUString SAL_CALL getImplementationName()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 }

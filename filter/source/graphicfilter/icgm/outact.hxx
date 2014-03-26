@@ -114,23 +114,23 @@ class CGMImpressOutAct : public CGMOutAct
 public:
                                 CGMImpressOutAct( CGM&, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & ) ;
                                 ~CGMImpressOutAct() {} ;
-    virtual void                InsertPage() ;
-    virtual void                BeginGroup() ;
-    virtual void                EndGroup() ;
-    virtual void                EndGrouping() ;
-    virtual void                DrawRectangle( FloatRect& ) ;
-    virtual void                DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation ) ;
+    virtual void                InsertPage() SAL_OVERRIDE ;
+    virtual void                BeginGroup() SAL_OVERRIDE ;
+    virtual void                EndGroup() SAL_OVERRIDE ;
+    virtual void                EndGrouping() SAL_OVERRIDE ;
+    virtual void                DrawRectangle( FloatRect& ) SAL_OVERRIDE ;
+    virtual void                DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation ) SAL_OVERRIDE ;
     virtual void                DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
-                                    sal_uInt32 etype, double& startangle, double& endangle ) ;
-    virtual void                DrawBitmap( CGMBitmapDescriptor* ) ;
-    virtual void                DrawPolygon( Polygon& ) ;
-    virtual void                DrawPolyLine( Polygon& ) ;
-    virtual void                DrawPolybezier( Polygon& ) ;
-    virtual void                DrawPolyPolygon( PolyPolygon& ) ;
-    virtual void                DrawText( ::com::sun::star::awt::Point& TextRectPos, ::com::sun::star::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) ;
-    virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) ;
-    virtual sal_uInt32              DrawText( TextEntry*, NodeFrameSet&, sal_uInt32 ) ;
-    virtual void                DrawChart();
+                                    sal_uInt32 etype, double& startangle, double& endangle ) SAL_OVERRIDE ;
+    virtual void                DrawBitmap( CGMBitmapDescriptor* ) SAL_OVERRIDE ;
+    virtual void                DrawPolygon( Polygon& ) SAL_OVERRIDE ;
+    virtual void                DrawPolyLine( Polygon& ) SAL_OVERRIDE ;
+    virtual void                DrawPolybezier( Polygon& ) SAL_OVERRIDE ;
+    virtual void                DrawPolyPolygon( PolyPolygon& ) SAL_OVERRIDE ;
+    virtual void                DrawText( ::com::sun::star::awt::Point& TextRectPos, ::com::sun::star::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
+    virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
+    virtual sal_uInt32              DrawText( TextEntry*, NodeFrameSet&, sal_uInt32 ) SAL_OVERRIDE ;
+    virtual void                DrawChart() SAL_OVERRIDE;
 };
 
 

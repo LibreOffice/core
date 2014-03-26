@@ -29,13 +29,13 @@ public:
     explicit DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
     virtual ~DirectoryStream();
 
-    virtual bool isOLEStream();
-    virtual WPXInputStream *getDocumentOLEStream(const char *pName);
+    virtual bool isOLEStream() SAL_OVERRIDE;
+    virtual WPXInputStream *getDocumentOLEStream(const char *pName) SAL_OVERRIDE;
 
-    virtual const unsigned char *read(unsigned long nNumBytes, unsigned long &nNumBytesRead);
-    virtual int seek(long nOffset, WPX_SEEK_TYPE eSeekType);
-    virtual long tell();
-    virtual bool atEOS();
+    virtual const unsigned char *read(unsigned long nNumBytes, unsigned long &nNumBytesRead) SAL_OVERRIDE;
+    virtual int seek(long nOffset, WPX_SEEK_TYPE eSeekType) SAL_OVERRIDE;
+    virtual long tell() SAL_OVERRIDE;
+    virtual bool atEOS() SAL_OVERRIDE;
 
 private:
     Impl *m_pImpl;

@@ -64,15 +64,15 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
         bool isCommandEnabled();
 
         // XInterface
-        virtual uno::Any SAL_CALL queryInterface( const uno::Type& aType ) throw ( uno::RuntimeException, std::exception);
-        virtual void SAL_CALL acquire() throw ();
-        virtual void SAL_CALL release() throw ();
+        virtual uno::Any SAL_CALL queryInterface( const uno::Type& aType ) throw ( uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException, std::exception );
+        virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& Event) throw( uno::RuntimeException, std::exception );
+        virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& Event) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         StateEventHelper();

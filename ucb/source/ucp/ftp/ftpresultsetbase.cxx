@@ -443,20 +443,20 @@ public:
     }
 
     void SAL_CALL acquire( void )
-        throw()
+        throw() SAL_OVERRIDE
     {
         OWeakObject::acquire();
     }
 
 
     void SAL_CALL release( void )
-        throw()
+        throw() SAL_OVERRIDE
     {
         OWeakObject::release();
     }
 
     uno::Any SAL_CALL queryInterface( const uno::Type& rType )
-        throw( uno::RuntimeException, std::exception )
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         uno::Any aRet = cppu::queryInterface(
             rType,
@@ -465,14 +465,14 @@ public:
     }
 
     uno::Sequence< beans::Property > SAL_CALL getProperties()
-        throw( uno::RuntimeException, std::exception )
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return m_aSeq;
     }
 
     beans::Property SAL_CALL getPropertyByName( const OUString& aName )
         throw( beans::UnknownPropertyException,
-               uno::RuntimeException, std::exception)
+               uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         for( int i = 0; i < m_aSeq.getLength(); ++i )
             if( aName == m_aSeq[i].Name )
@@ -481,7 +481,7 @@ public:
     }
 
     sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )
-        throw( uno::RuntimeException, std::exception )
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         for( int i = 0; i < m_aSeq.getLength(); ++i )
             if( Name == m_aSeq[i].Name )

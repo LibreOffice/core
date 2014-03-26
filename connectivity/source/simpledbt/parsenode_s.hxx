@@ -48,7 +48,7 @@ namespace connectivity
         virtual void parseNodeToStr(OUString& _rString,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const IParseContext* _pContext
-        ) const;
+        ) const SAL_OVERRIDE;
 
         virtual void parseNodeToPredicateStr(OUString& _rString,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
@@ -58,11 +58,11 @@ namespace connectivity
             const ::com::sun::star::lang::Locale& _rIntl,
             const sal_Char _cDecSeparator,
             const IParseContext* _pContext
-        ) const;
+        ) const SAL_OVERRIDE;
 
         // disambiguate IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
     };
 
 

@@ -66,7 +66,7 @@ namespace drawinglayer
             double getDiscreteUnit() const { return mfDiscreteUnit; }
 
             /// get local decomposition. Overloaded since this decomposition is view-dependent
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -105,7 +105,7 @@ namespace drawinglayer
             const basegfx::B2DRange& getViewport() const { return maViewport; }
 
             /// get local decomposition. Overloaded since this decomposition is view-dependent
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -144,7 +144,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
 
             /// get local decomposition. Overloaded since this decomposition is view-dependent
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -187,7 +187,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
 
             /// get local decomposition. Overloaded since this decomposition is view-dependent
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

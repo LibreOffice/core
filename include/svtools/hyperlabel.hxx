@@ -40,10 +40,10 @@ namespace svt
         HyperLabelImpl*     m_pImpl;
         Link                maClickHdl;
 
-        virtual void        MouseMove( const MouseEvent& rMEvt );
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void        GetFocus();
-        virtual void        LoseFocus();
+        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        GetFocus() SAL_OVERRIDE;
+        virtual void        LoseFocus() SAL_OVERRIDE;
 
         void                DeactivateHyperMode(Font aFont, const Color aColor);
         void                ActivateHyperMode(Font aFont, const Color aColor);
@@ -55,7 +55,7 @@ namespace svt
         HyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
         ~HyperLabel( );
 
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         void                SetID( sal_Int16 _ID );
         sal_Int16           GetID() const;

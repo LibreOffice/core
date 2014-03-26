@@ -64,7 +64,7 @@ public:
     ~DummyHandler_Impl();
 
     virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& xRequest )
-            throw( uno::RuntimeException, std::exception );
+            throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 

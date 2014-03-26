@@ -36,7 +36,7 @@ namespace connectivity
             ::rtl::OUString getAlterTableColumn(const ::rtl::OUString& rColumn);
 
         protected:
-            void construct();
+            void construct() SAL_OVERRIDE;
 
         public:
             Table(Tables* pTables,
@@ -51,11 +51,11 @@ namespace connectivity
 
             // OTableHelper
             virtual ::connectivity::sdbcx::OCollection* createColumns(
-                const ::connectivity::TStringVector& rNames);
+                const ::connectivity::TStringVector& rNames) SAL_OVERRIDE;
             virtual ::connectivity::sdbcx::OCollection* createKeys(
-                const ::connectivity::TStringVector& rNames);
+                const ::connectivity::TStringVector& rNames) SAL_OVERRIDE;
             virtual ::connectivity::sdbcx::OCollection* createIndexes(
-                const ::connectivity::TStringVector& rNames);
+                const ::connectivity::TStringVector& rNames) SAL_OVERRIDE;
 
             // XAlterTable
             /**
@@ -67,23 +67,23 @@ namespace connectivity
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor)
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::container::NoSuchElementException,
-                      ::com::sun::star::uno::RuntimeException, std::exception);
+                      ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XRename -- UNSUPPORTED
             virtual void SAL_CALL rename(const ::rtl::OUString& sName)
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::container::ElementExistException,
-                      ::com::sun::star::uno::RuntimeException, std::exception);
+                      ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             //XInterface
             virtual ::com::sun::star::uno::Any
                     SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
-                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
                     SAL_CALL getTypes()
-                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         };
 

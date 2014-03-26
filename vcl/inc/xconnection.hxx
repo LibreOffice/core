@@ -46,15 +46,15 @@ namespace vcl {
         void start();
         void terminate();
 
-        virtual bool dispatchEvent( void* pData, int nBytes );
-        virtual bool dispatchErrorEvent( void* pData, int nBytes );
+        virtual bool dispatchEvent( void* pData, int nBytes ) SAL_OVERRIDE;
+        virtual bool dispatchErrorEvent( void* pData, int nBytes ) SAL_OVERRIDE;
 
         // XDisplayConnection
-        virtual void SAL_CALL addEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception);
-        virtual void SAL_CALL removeEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception);
-        virtual void SAL_CALL addErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception);
-        virtual void SAL_CALL removeErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception);
-        virtual ::com::sun::star::uno::Any SAL_CALL getIdentifier() throw(std::exception);
+        virtual void SAL_CALL addEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler ) throw(std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Any SAL_CALL getIdentifier() throw(std::exception) SAL_OVERRIDE;
 
     };
 

@@ -115,7 +115,7 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getValue();
 
 protected:
-    virtual void SAL_CALL       run();
+    virtual void SAL_CALL       run() SAL_OVERRIDE;
 
     virtual void SAL_CALL       handleCommand( const OUString &rCommand/*, bool &rQuit*/ );
     ::std::list< OUString > SAL_CALL tokenize( const OUString &rCommand );

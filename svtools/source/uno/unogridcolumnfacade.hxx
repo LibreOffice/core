@@ -54,24 +54,24 @@ namespace svt { namespace table
 
         // IColumnModel overridables
         virtual ::com::sun::star::uno::Any
-                                getID() const;
-        virtual void            setID( const ::com::sun::star::uno::Any& i_ID );
-        virtual OUString        getName() const;
-        virtual void            setName( const OUString& _rName );
-        virtual OUString        getHelpText() const;
-        virtual void            setHelpText( const OUString& i_helpText );
-        virtual bool            isResizable() const;
-        virtual void            setResizable( bool _bResizable );
-        virtual sal_Int32       getFlexibility() const;
-        virtual void            setFlexibility( sal_Int32 const i_flexibility );
-        virtual TableMetrics    getWidth() const;
-        virtual void            setWidth( TableMetrics _nWidth );
-        virtual TableMetrics    getMinWidth() const;
-        virtual void            setMinWidth( TableMetrics _nMinWidth );
-        virtual TableMetrics    getMaxWidth() const;
-        virtual void            setMaxWidth( TableMetrics _nMaxWidth );
-        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
-        virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
+                                getID() const SAL_OVERRIDE;
+        virtual void            setID( const ::com::sun::star::uno::Any& i_ID ) SAL_OVERRIDE;
+        virtual OUString        getName() const SAL_OVERRIDE;
+        virtual void            setName( const OUString& _rName ) SAL_OVERRIDE;
+        virtual OUString        getHelpText() const SAL_OVERRIDE;
+        virtual void            setHelpText( const OUString& i_helpText ) SAL_OVERRIDE;
+        virtual bool            isResizable() const SAL_OVERRIDE;
+        virtual void            setResizable( bool _bResizable ) SAL_OVERRIDE;
+        virtual sal_Int32       getFlexibility() const SAL_OVERRIDE;
+        virtual void            setFlexibility( sal_Int32 const i_flexibility ) SAL_OVERRIDE;
+        virtual TableMetrics    getWidth() const SAL_OVERRIDE;
+        virtual void            setWidth( TableMetrics _nWidth ) SAL_OVERRIDE;
+        virtual TableMetrics    getMinWidth() const SAL_OVERRIDE;
+        virtual void            setMinWidth( TableMetrics _nMinWidth ) SAL_OVERRIDE;
+        virtual TableMetrics    getMaxWidth() const SAL_OVERRIDE;
+        virtual void            setMaxWidth( TableMetrics _nMaxWidth ) SAL_OVERRIDE;
+        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() SAL_OVERRIDE;
+        virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign) SAL_OVERRIDE;
 
         /** disposes the column wrapper
 

@@ -63,7 +63,7 @@ public:
     virtual ~X11SalData();
 
     virtual void            Init();
-    virtual void            Dispose();
+    virtual void            Dispose() SAL_OVERRIDE;
 
     virtual void            initNWF();
     virtual void            deInitNWF();
@@ -78,8 +78,8 @@ public:
     void                    Timeout() const;
 
     // X errors
-    virtual void            ErrorTrapPush();
-    virtual bool            ErrorTrapPop( bool bIgnoreError );
+    virtual void            ErrorTrapPush() SAL_OVERRIDE;
+    virtual bool            ErrorTrapPop( bool bIgnoreError ) SAL_OVERRIDE;
     void                    XError( Display *pDisp, XErrorEvent *pEvent );
     bool                    HasXErrorOccurred() const
                                 { return m_aXErrorHandlerStack.back().m_bWas; }

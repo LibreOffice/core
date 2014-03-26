@@ -77,10 +77,10 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         hasLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XThesaurus
     virtual ::com::sun::star::uno::Sequence<
@@ -90,17 +90,17 @@ public:
                 const ::com::sun::star::lang::Locale& aLocale,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // LinguDispatcher
     virtual void
         SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
                 const ::com::sun::star::uno::Sequence<
-                    OUString > &rSvcImplNames );
+                    OUString > &rSvcImplNames ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
+        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const SAL_OVERRIDE;
     virtual DspType
-        GetDspType() const;
+        GetDspType() const SAL_OVERRIDE;
 };
 
 

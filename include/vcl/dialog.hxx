@@ -83,7 +83,7 @@ public:
 protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
 
 protected:
     friend class VclBuilder;
@@ -95,27 +95,27 @@ public:
     explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual Size    GetOptimalSize() const;
-    virtual void    Resize();
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
-    virtual void queue_resize();
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual void queue_resize() SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     VclButtonBox* get_action_area();
     VclBox* get_content_area();
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
 
-    virtual void      SetText( const OUString& rStr );
-    virtual OUString  GetText() const;
+    virtual void      SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual OUString  GetText() const SAL_OVERRIDE;
 
 
     // Dialog::Execute replacement API

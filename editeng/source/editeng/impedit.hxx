@@ -247,18 +247,18 @@ protected:
     // DragAndDropClient
     void dragGestureRecognized(const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge)
         throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
     void dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde )
         throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
     void drop(const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde)
         throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
-    void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+               std::exception) SAL_OVERRIDE;
+    void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void dragOver(const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde)
         throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
 
     void ShowDDCursor( const Rectangle& rRect );
     void HideDDCursor();
@@ -684,7 +684,7 @@ private:
     ParaPortionList&        GetParaPortions()       { return aParaPortionList; }
 
 protected:
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 public:
                             ~ImpEditEngine();

@@ -95,29 +95,29 @@ public:
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XSingleComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception);
+        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception);
+        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /**
@@ -285,40 +285,40 @@ public:
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
-    void SAL_CALL acquire() throw()
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL acquire() throw() SAL_OVERRIDE
         { OComponentHelper::acquire(); }
-    void SAL_CALL release() throw()
+    void SAL_CALL release() throw() SAL_OVERRIDE
         { OComponentHelper::release(); }
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Reference<XInterface > SAL_CALL createInstanceWithArguments( const Sequence<Any>& Arguments )
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XSingleComponentFactory
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception);
+        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception);
+        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAggregation
     Any SAL_CALL queryAggregation( const Type & rType )
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUnloadingPreference
     virtual sal_Bool SAL_CALL releaseOnNotification()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     Reference<XInterface >  xTheInstance;
@@ -497,49 +497,49 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException, std::exception);
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     // XPropertySet
     virtual Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertySetHelper
-    virtual IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    virtual IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         Any & rConvertedValue, Any & rOldValue,
         sal_Int32 nHandle, Any const & rValue )
-        throw (lang::IllegalArgumentException);
+        throw (lang::IllegalArgumentException) SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle, Any const & rValue )
-        throw (Exception, std::exception);
+        throw (Exception, std::exception) SAL_OVERRIDE;
     using OPropertySetHelper::getFastPropertyValue;
     virtual void SAL_CALL getFastPropertyValue(
-        Any & rValue, sal_Int32 nHandle ) const;
+        Any & rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     // OSingleFactoryHelper
     Reference<XInterface > createInstanceEveryTime(
         Reference< XComponentContext > const & xContext )
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XSingleComponentFactory
     Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext )
-        throw (Exception, RuntimeException, std::exception);
+        throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XUnloadingPreference
     sal_Bool SAL_CALL releaseOnNotification()
-        throw( RuntimeException, std::exception);
+        throw( RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 private:
@@ -900,20 +900,20 @@ public:
 
     // XSingleServiceFactory
     Reference<XInterface > SAL_CALL createInstance()
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Reference<XInterface > SAL_CALL createInstanceWithArguments(const Sequence<Any>& Arguments)
-        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //XUnloadingPreference
     sal_Bool SAL_CALL releaseOnNotification()
-        throw(::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

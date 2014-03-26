@@ -71,13 +71,13 @@ public:
     virtual ~ResolverImpl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUnoUrlResolver
     virtual Reference< XInterface > SAL_CALL resolve( const OUString & rUnoUrl )
-        throw (NoConnectException, ConnectionSetupException, RuntimeException, std::exception);
+        throw (NoConnectException, ConnectionSetupException, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )

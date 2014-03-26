@@ -48,7 +48,7 @@ namespace connectivity
 
             OEvoabConnection* getConnection() { return m_pConnection;}
 
-            virtual void refreshColumns();
+            virtual void refreshColumns() SAL_OVERRIDE;
 
             OUString getTableName() const { return m_Name; }
             OUString getSchema() const { return m_SchemaName; }

@@ -44,20 +44,20 @@ public:
 
     explicit        TabPage( Window* pParent, const ResId& rResId );
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
 
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
 
     //To-Do, consider inheriting from VclContainer
-    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
-    virtual void    SetPosPixel(const Point& rNewPos);
-    virtual void    SetSizePixel(const Size& rNewSize);
-    virtual Size    GetOptimalSize() const;
+    virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) SAL_OVERRIDE;
+    virtual void    SetPosPixel(const Point& rNewPos) SAL_OVERRIDE;
+    virtual void    SetSizePixel(const Size& rNewSize) SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_TABPAGE_HXX

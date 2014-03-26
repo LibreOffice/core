@@ -156,8 +156,8 @@ class MediatorListener : public osl::Thread
     MediatorListener( Mediator* );
     ~MediatorListener();
 
-    virtual void run();
-    virtual void onTerminated();
+    virtual void run() SAL_OVERRIDE;
+    virtual void onTerminated() SAL_OVERRIDE;
 };
 
 #endif // _MEDIATOR_HXX

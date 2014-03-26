@@ -52,7 +52,7 @@ public:
                   /// the event name (as understood by the API)
                   const OUString & rApiEventName,
                   /// the event type name (as registered)
-                  const OUString & rLanguage);
+                  const OUString & rLanguage) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX

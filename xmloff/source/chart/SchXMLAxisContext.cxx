@@ -78,7 +78,7 @@ public:
                                    const OUString& rLocalName,
                                    OUString& rAddress );
     virtual ~SchXMLCategoriesContext();
-    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
 
 class DateScaleContext : public SvXMLImportContext
@@ -89,7 +89,7 @@ public:
                         const Reference< beans::XPropertySet > xAxisProps );
 
     virtual ~DateScaleContext();
-    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
 private:
     Reference< beans::XPropertySet > m_xAxisProps;

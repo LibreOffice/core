@@ -48,8 +48,8 @@ public:
     Test();
     ~Test();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void testNumberFormat();
     void testSharedString();

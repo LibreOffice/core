@@ -138,54 +138,54 @@ public:
 
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
         getProperties( const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > & xEnv );
+            com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
         getCommands( const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > & xEnv );
+            com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
 
-    virtual OUString getParentURL();
+    virtual OUString getParentURL() SAL_OVERRIDE;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
-        throw();
+        throw() SAL_OVERRIDE;
     virtual void SAL_CALL release()
-        throw();
+        throw() SAL_OVERRIDE;
 
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
     getImplementationName()
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
     getContentType()
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Any SAL_CALL
         execute( const com::sun::star::ucb::Command& aCommand,
         sal_Int32 CommandId,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment )
-            throw( com::sun::star::uno::Exception, com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::Exception, com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL abort( sal_Int32 CommandId )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
         SAL_CALL queryCreatableContentsInfo()
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
         SAL_CALL createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
         queryCreatableContentsInfo(

@@ -142,10 +142,10 @@ protected:
     virtual void WorkOnText(
         OString &rText,
         const OString &rIsoLang
-        );
+        ) SAL_OVERRIDE;
 
-    void WorkOnResourceEnd();
-    void Output(const OString& rOutput);
+    void WorkOnResourceEnd() SAL_OVERRIDE;
+    void Output(const OString& rOutput) SAL_OVERRIDE;
 public:
     CfgExport(
         const OString &rOutputFile,
@@ -168,11 +168,11 @@ private:
     std::ofstream pOutputStream;
 
 protected:
-    virtual void WorkOnText(OString &rText, const OString &rLangIndex);
+    virtual void WorkOnText(OString &rText, const OString &rLangIndex) SAL_OVERRIDE;
 
-    void WorkOnResourceEnd();
+    void WorkOnResourceEnd() SAL_OVERRIDE;
 
-    void Output(const OString& rOutput);
+    void Output(const OString& rOutput) SAL_OVERRIDE;
 public:
     CfgMerge(
         const OString &rMergeSource, const OString &rOutputFile,

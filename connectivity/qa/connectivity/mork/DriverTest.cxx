@@ -32,8 +32,8 @@ public:
     void test_select_default_all();
     void test_select_list_table_joe_doe_5();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(MorkDriverTest);
 

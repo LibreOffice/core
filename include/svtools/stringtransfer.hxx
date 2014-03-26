@@ -41,8 +41,8 @@ namespace svt
 
     protected:
         // TransferableHelper overridables
-        virtual void                AddSupportedFormats();
-        virtual bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor );
+        virtual void                AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor ) SAL_OVERRIDE;
     };
 
 

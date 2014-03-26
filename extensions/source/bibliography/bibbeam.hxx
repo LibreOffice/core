@@ -64,7 +64,7 @@ namespace bib
 
             // FormControlContainer ----------
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                    getControlContainer();
+                    getControlContainer() SAL_OVERRIDE;
         public:
             // #100312# -------------------
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
@@ -75,7 +75,7 @@ namespace bib
 
             void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
 
-            virtual void            GetFocus();
+            virtual void            GetFocus() SAL_OVERRIDE;
     };
 
 

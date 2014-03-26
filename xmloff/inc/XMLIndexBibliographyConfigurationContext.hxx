@@ -81,15 +81,15 @@ protected:
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
-    virtual void CreateAndInsert( sal_Bool bOverwrite );
+    virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
 
     void ProcessAttribute(
         sal_uInt16 nPrefix,

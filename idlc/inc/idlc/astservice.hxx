@@ -40,7 +40,7 @@ public:
         {}
     virtual ~AstService() {}
 
-    virtual bool dump(RegistryKey& rKey);
+    virtual bool dump(RegistryKey& rKey) SAL_OVERRIDE;
 
     void setSingleInterfaceBasedService()
     { m_singleInterfaceBasedService = true; }

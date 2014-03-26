@@ -2201,24 +2201,24 @@ namespace detail
         }
 
         // IValueSource
-        virtual OUString             getString() const           { return m_xRow->getString( m_nPos ); };
-        virtual bool                        getBoolean() const          { return m_xRow->getBoolean( m_nPos ); };
-        virtual sal_Int8                    getByte() const             { return m_xRow->getByte( m_nPos ); };
-        virtual sal_Int16                   getShort() const            { return m_xRow->getShort( m_nPos ); }
-        virtual sal_Int32                   getInt() const              { return m_xRow->getInt( m_nPos ); }
-        virtual sal_Int64                   getLong() const             { return m_xRow->getLong( m_nPos ); }
-        virtual float                       getFloat() const            { return m_xRow->getFloat( m_nPos ); };
-        virtual double                      getDouble() const           { return m_xRow->getDouble( m_nPos ); };
-        virtual Date                        getDate() const             { return m_xRow->getDate( m_nPos ); };
-        virtual Time                        getTime() const             { return m_xRow->getTime( m_nPos ); };
-        virtual DateTime                    getTimestamp() const        { return m_xRow->getTimestamp( m_nPos ); };
-        virtual Sequence< sal_Int8 >        getBytes() const            { return m_xRow->getBytes( m_nPos ); };
-        virtual Reference< XInputStream >   getBinaryStream() const     { return m_xRow->getBinaryStream( m_nPos ); };
-        virtual Reference< XInputStream >   getCharacterStream() const  { return m_xRow->getCharacterStream( m_nPos ); };
-        virtual Reference< XBlob >          getBlob() const             { return m_xRow->getBlob( m_nPos ); };
-        virtual Reference< XClob >          getClob() const             { return m_xRow->getClob( m_nPos ); };
-        virtual Any                         getObject() const           { return m_xRow->getObject( m_nPos ,NULL); };
-        virtual bool                        wasNull() const             { return m_xRow->wasNull( ); };
+        virtual OUString             getString() const SAL_OVERRIDE           { return m_xRow->getString( m_nPos ); };
+        virtual bool                        getBoolean() const SAL_OVERRIDE          { return m_xRow->getBoolean( m_nPos ); };
+        virtual sal_Int8                    getByte() const SAL_OVERRIDE             { return m_xRow->getByte( m_nPos ); };
+        virtual sal_Int16                   getShort() const SAL_OVERRIDE            { return m_xRow->getShort( m_nPos ); }
+        virtual sal_Int32                   getInt() const SAL_OVERRIDE              { return m_xRow->getInt( m_nPos ); }
+        virtual sal_Int64                   getLong() const SAL_OVERRIDE             { return m_xRow->getLong( m_nPos ); }
+        virtual float                       getFloat() const SAL_OVERRIDE            { return m_xRow->getFloat( m_nPos ); };
+        virtual double                      getDouble() const SAL_OVERRIDE           { return m_xRow->getDouble( m_nPos ); };
+        virtual Date                        getDate() const SAL_OVERRIDE             { return m_xRow->getDate( m_nPos ); };
+        virtual Time                        getTime() const SAL_OVERRIDE             { return m_xRow->getTime( m_nPos ); };
+        virtual DateTime                    getTimestamp() const SAL_OVERRIDE        { return m_xRow->getTimestamp( m_nPos ); };
+        virtual Sequence< sal_Int8 >        getBytes() const SAL_OVERRIDE            { return m_xRow->getBytes( m_nPos ); };
+        virtual Reference< XInputStream >   getBinaryStream() const SAL_OVERRIDE     { return m_xRow->getBinaryStream( m_nPos ); };
+        virtual Reference< XInputStream >   getCharacterStream() const SAL_OVERRIDE  { return m_xRow->getCharacterStream( m_nPos ); };
+        virtual Reference< XBlob >          getBlob() const SAL_OVERRIDE             { return m_xRow->getBlob( m_nPos ); };
+        virtual Reference< XClob >          getClob() const SAL_OVERRIDE             { return m_xRow->getClob( m_nPos ); };
+        virtual Any                         getObject() const SAL_OVERRIDE           { return m_xRow->getObject( m_nPos ,NULL); };
+        virtual bool                        wasNull() const SAL_OVERRIDE             { return m_xRow->wasNull( ); };
 
     private:
         const Reference< XRow > m_xRow;
@@ -2234,24 +2234,24 @@ namespace detail
         }
 
         // IValueSource
-        virtual OUString             getString() const           { return m_xColumn->getString(); };
-        virtual bool                        getBoolean() const          { return m_xColumn->getBoolean(); };
-        virtual sal_Int8                    getByte() const             { return m_xColumn->getByte(); };
-        virtual sal_Int16                   getShort() const            { return m_xColumn->getShort(); }
-        virtual sal_Int32                   getInt() const              { return m_xColumn->getInt(); }
-        virtual sal_Int64                   getLong() const             { return m_xColumn->getLong(); }
-        virtual float                       getFloat() const            { return m_xColumn->getFloat(); };
-        virtual double                      getDouble() const           { return m_xColumn->getDouble(); };
-        virtual Date                        getDate() const             { return m_xColumn->getDate(); };
-        virtual Time                        getTime() const             { return m_xColumn->getTime(); };
-        virtual DateTime                    getTimestamp() const        { return m_xColumn->getTimestamp(); };
-        virtual Sequence< sal_Int8 >        getBytes() const            { return m_xColumn->getBytes(); };
-        virtual Reference< XInputStream >   getBinaryStream() const     { return m_xColumn->getBinaryStream(); };
-        virtual Reference< XInputStream >   getCharacterStream() const  { return m_xColumn->getCharacterStream(); };
-        virtual Reference< XBlob >          getBlob() const             { return m_xColumn->getBlob(); };
-        virtual Reference< XClob >          getClob() const             { return m_xColumn->getClob(); };
-        virtual Any                         getObject() const           { return m_xColumn->getObject( NULL ); };
-        virtual bool                        wasNull() const             { return m_xColumn->wasNull( ); };
+        virtual OUString             getString() const SAL_OVERRIDE           { return m_xColumn->getString(); };
+        virtual bool                        getBoolean() const SAL_OVERRIDE          { return m_xColumn->getBoolean(); };
+        virtual sal_Int8                    getByte() const SAL_OVERRIDE             { return m_xColumn->getByte(); };
+        virtual sal_Int16                   getShort() const SAL_OVERRIDE            { return m_xColumn->getShort(); }
+        virtual sal_Int32                   getInt() const SAL_OVERRIDE              { return m_xColumn->getInt(); }
+        virtual sal_Int64                   getLong() const SAL_OVERRIDE             { return m_xColumn->getLong(); }
+        virtual float                       getFloat() const SAL_OVERRIDE            { return m_xColumn->getFloat(); };
+        virtual double                      getDouble() const SAL_OVERRIDE           { return m_xColumn->getDouble(); };
+        virtual Date                        getDate() const SAL_OVERRIDE             { return m_xColumn->getDate(); };
+        virtual Time                        getTime() const SAL_OVERRIDE             { return m_xColumn->getTime(); };
+        virtual DateTime                    getTimestamp() const SAL_OVERRIDE        { return m_xColumn->getTimestamp(); };
+        virtual Sequence< sal_Int8 >        getBytes() const SAL_OVERRIDE            { return m_xColumn->getBytes(); };
+        virtual Reference< XInputStream >   getBinaryStream() const SAL_OVERRIDE     { return m_xColumn->getBinaryStream(); };
+        virtual Reference< XInputStream >   getCharacterStream() const SAL_OVERRIDE  { return m_xColumn->getCharacterStream(); };
+        virtual Reference< XBlob >          getBlob() const SAL_OVERRIDE             { return m_xColumn->getBlob(); };
+        virtual Reference< XClob >          getClob() const SAL_OVERRIDE             { return m_xColumn->getClob(); };
+        virtual Any                         getObject() const SAL_OVERRIDE           { return m_xColumn->getObject( NULL ); };
+        virtual bool                        wasNull() const SAL_OVERRIDE             { return m_xColumn->wasNull( ); };
 
     private:
         const Reference< XColumn >  m_xColumn;

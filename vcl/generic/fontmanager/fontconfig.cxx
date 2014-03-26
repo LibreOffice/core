@@ -1153,7 +1153,7 @@ public:
     {
         FcPatternDestroy(mpPattern);
     }
-    virtual void *GetPattern(void * face, bool bEmbolden, bool /*bVerticalLayout*/) const
+    virtual void *GetPattern(void * face, bool bEmbolden, bool /*bVerticalLayout*/) const SAL_OVERRIDE
     {
         FcValue value;
         value.type = FcTypeFTFace;

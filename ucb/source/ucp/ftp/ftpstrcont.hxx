@@ -46,7 +46,7 @@ namespace ftp {
 
         virtual ~FTPOutputStreamContainer() {}
 
-        virtual size_t write(void *buffer,size_t size,size_t nmemb);
+        virtual size_t write(void *buffer,size_t size,size_t nmemb) SAL_OVERRIDE;
 
 
     private:
@@ -65,7 +65,7 @@ namespace ftp {
 
         virtual ~FTPInputStreamContainer() {}
 
-        virtual size_t write(void *buffer,size_t size,size_t nmemb);
+        virtual size_t write(void *buffer,size_t size,size_t nmemb) SAL_OVERRIDE;
 
         com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream> operator()();

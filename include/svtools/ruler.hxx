@@ -715,13 +715,13 @@ public:
             Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
     virtual ~Ruler();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    Resize();
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual long    StartDrag();
     virtual void    Drag();
@@ -730,8 +730,8 @@ public:
     virtual void    DoubleClick();
     virtual void    ExtraDown();
 
-    void            Activate();
-    void            Deactivate();
+    void            Activate() SAL_OVERRIDE;
+    void            Deactivate() SAL_OVERRIDE;
     bool            IsActive() const { return mbActive; }
 
     void            SetWinPos( long nOff = 0, long nWidth = 0 );
@@ -823,7 +823,7 @@ public:
 
     void            DrawTicks();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
 #endif  // _RULER_HXX

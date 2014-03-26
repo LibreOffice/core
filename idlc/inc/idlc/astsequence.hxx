@@ -38,10 +38,10 @@ public:
     AstType* getMemberType() const
         { return m_pMemberType; }
 
-    virtual bool isUnsigned() const
+    virtual bool isUnsigned() const SAL_OVERRIDE
     { return m_pMemberType != 0 && m_pMemberType->isUnsigned(); }
 
-    virtual const sal_Char* getRelativName() const;
+    virtual const sal_Char* getRelativName() const SAL_OVERRIDE;
 private:
     AstType*        m_pMemberType;
     mutable OString* m_pRelativName;

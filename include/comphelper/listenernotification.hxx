@@ -206,7 +206,7 @@ namespace comphelper
         inline virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
     };
 
 
@@ -270,7 +270,7 @@ namespace comphelper
         inline virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
 
         virtual bool    implTypedNotify(
                             const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener,

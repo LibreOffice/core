@@ -39,27 +39,27 @@ class RscMgr : public RscClass
 public:
                     RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
 
-    void            SetToDefault( const RSCINST & rInst );
-    bool            IsDefault( const RSCINST & rInst );
-    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    void            SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE;
+    bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE;
+    bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
 
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool );
-    void            Destroy( const RSCINST & rInst );
-    sal_uInt32      Size();
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
+    void            Destroy( const RSCINST & rInst ) SAL_OVERRIDE;
+    sal_uInt32      Size() SAL_OVERRIDE;
     void            WriteSrcHeader( const RSCINST & aInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
-                                    const RscId & rId, const char * );
+                                    const RscId & rId, const char * ) SAL_OVERRIDE;
 
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;
     ERRTYPE         WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & rId,
-                                   sal_uInt32, bool bExtra );
+                                   sal_uInt32, bool bExtra ) SAL_OVERRIDE;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra );
-    bool            IsConsistent( const RSCINST & rInst );
-    ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
-    ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
+                             RscTypCont * pTC, sal_uInt32, bool bExtra ) SAL_OVERRIDE;
+    bool            IsConsistent( const RSCINST & rInst ) SAL_OVERRIDE;
+    ERRTYPE         GetRef( const RSCINST & rInst, RscId * ) SAL_OVERRIDE;
+    ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId ) SAL_OVERRIDE;
 };
 
 #endif //_RSCMGR_HXX

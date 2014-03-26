@@ -55,8 +55,8 @@ namespace vclcanvas
             {}
 
         private:
-            virtual OutputDevice&       getOutDev() { return mrOutDev; }
-            virtual const OutputDevice& getOutDev() const { return mrOutDev; }
+            virtual OutputDevice&       getOutDev() SAL_OVERRIDE { return mrOutDev; }
+            virtual const OutputDevice& getOutDev() const SAL_OVERRIDE { return mrOutDev; }
 
             // TODO(Q2): Lifetime issue. This _only_ works reliably,
             // if disposing the Canvas correctly disposes all

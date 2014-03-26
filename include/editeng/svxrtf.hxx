@@ -249,10 +249,10 @@ protected:
     OUString& DelCharAtEnd( OUString& rStr, const sal_Unicode cDel );
 
     // is called for each token that is recognized in CallParser
-    virtual void NextToken( int nToken );
+    virtual void NextToken( int nToken ) SAL_OVERRIDE;
 
-    virtual void ReadBitmapData();
-    virtual void ReadOLEData();
+    virtual void ReadBitmapData() SAL_OVERRIDE;
+    virtual void ReadOLEData() SAL_OVERRIDE;
 
     void ReadStyleTable();
     void ReadColorTable();
@@ -323,7 +323,7 @@ protected:
 
 public:
 
-    virtual SvParserState CallParser();
+    virtual SvParserState CallParser() SAL_OVERRIDE;
 
     inline const Color& GetColor( size_t nId ) const;
     const Font& GetFont( sal_uInt16 nId );      // Changes the dflt Font
@@ -343,7 +343,7 @@ public:
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False  );
 
     // for asynchronous read from the SvStream
-    virtual void Continue( int nToken );
+    virtual void Continue( int nToken ) SAL_OVERRIDE;
 
     // get RTF default ItemSets. Must be used by pard/plain tokens or in
     // reset of Style-Items

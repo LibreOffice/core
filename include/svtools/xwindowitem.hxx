@@ -44,8 +44,8 @@ public:
     XWindowItem( const XWindowItem &rItem );
     ~XWindowItem();
 
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual bool operator == ( const SfxPoolItem& rAttr ) const;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+    virtual bool operator == ( const SfxPoolItem& rAttr ) const SAL_OVERRIDE;
 
     Window *        GetWindowPtr() const    { return VCLUnoHelper::GetWindow( m_xWin ); }
     com::sun::star::uno::Reference< com::sun::star::awt::XWindow >  GetXWindow() const  { return m_xWin; }

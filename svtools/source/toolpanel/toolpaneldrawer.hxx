@@ -47,7 +47,7 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual void Paint( const Rectangle& i_rBoundingBox );
+        virtual void Paint( const Rectangle& i_rBoundingBox ) SAL_OVERRIDE;
 
     private:
         ToolPanelDrawer&    m_rDrawer;
@@ -71,14 +71,14 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual void Resize();
-        virtual void DataChanged( const DataChangedEvent& i_rEvent );
-        virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent );
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& i_rEvent ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( sal_Bool i_bCreate );
+                     GetComponentInterface( sal_Bool i_bCreate ) SAL_OVERRIDE;
 
     private:
         Rectangle   impl_calcTextBoundingBox() const;

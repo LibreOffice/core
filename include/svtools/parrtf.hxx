@@ -53,7 +53,7 @@ protected:
     void SkipGroup();
 
     // scanne das naechste Token,
-    virtual int _GetNextToken();
+    virtual int _GetNextToken() SAL_OVERRIDE;
 
     virtual void ReadUnknownData();
     virtual void ReadBitmapData();
@@ -70,14 +70,14 @@ protected:
 public:
     SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
 
-    virtual SvParserState CallParser();   // Aufruf des Parsers
+    virtual SvParserState CallParser() SAL_OVERRIDE;   // Aufruf des Parsers
 
     int GetOpenBrakets() const { return nOpenBrakets; }
 
     // fuers asynchrone lesen aus dem SvStream
 //  virtual void SaveState( int nToken );
 //  virtual void RestoreState();
-    virtual void Continue( int nToken );
+    virtual void Continue( int nToken ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVTOOLS_PARRTF_HXX

@@ -150,8 +150,8 @@ class ScannerThread : public osl::Thread
     ScannerManager*                             m_pManager; // just for the disposing call
 
 public:
-    virtual void run();
-    virtual void onTerminated() { delete this; }
+    virtual void run() SAL_OVERRIDE;
+    virtual void onTerminated() SAL_OVERRIDE { delete this; }
 public:
     ScannerThread( boost::shared_ptr<SaneHolder> pHolder,
                    const Reference< com::sun::star::lang::XEventListener >& listener,

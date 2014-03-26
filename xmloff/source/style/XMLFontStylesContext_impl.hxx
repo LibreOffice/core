@@ -50,7 +50,7 @@ public:
     virtual ~XMLFontStyleContextFontFace();
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-                       const OUString& rValue );
+                       const OUString& rValue ) SAL_OVERRIDE;
 
     void FillProperties( ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
@@ -64,7 +64,7 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 };
 
 /// Handles <style:font-face-src>
@@ -82,7 +82,7 @@ public:
     virtual SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 };
 
 /// Handles <style:font-face-uri>
@@ -103,13 +103,13 @@ public:
             const XMLFontStyleContextFontFace& font );
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-        const OUString& rValue );
+        const OUString& rValue ) SAL_OVERRIDE;
     void SetFormat( const OUString& rFormat );
-    void EndElement();
+    void EndElement() SAL_OVERRIDE;
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 };
 
 /// Handles <svg:font-face-format>
@@ -126,7 +126,7 @@ public:
             XMLFontStyleContextFontFaceUri& uri );
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-        const OUString& rValue );
+        const OUString& rValue ) SAL_OVERRIDE;
 };
 
 #endif

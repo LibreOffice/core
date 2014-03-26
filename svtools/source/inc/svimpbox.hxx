@@ -53,14 +53,14 @@ public:
     ImpLBSelEng( SvImpLBox* pImp, SelectionEngine* pSelEng,
                  SvTreeListBox* pView );
     virtual ~ImpLBSelEng();
-    void        BeginDrag();
-    void        CreateAnchor();
-    void        DestroyAnchor();
+    void        BeginDrag() SAL_OVERRIDE;
+    void        CreateAnchor() SAL_OVERRIDE;
+    void        DestroyAnchor() SAL_OVERRIDE;
     bool        SetCursorAtPoint( const Point& rPoint,
-                    bool bDontSelectAtCursor=false );
-    bool        IsSelectionAtPoint( const Point& rPoint );
-    void        DeselectAtPoint( const Point& rPoint );
-    void        DeselectAll();
+                    bool bDontSelectAtCursor=false ) SAL_OVERRIDE;
+    bool        IsSelectionAtPoint( const Point& rPoint ) SAL_OVERRIDE;
+    void        DeselectAtPoint( const Point& rPoint ) SAL_OVERRIDE;
+    void        DeselectAll() SAL_OVERRIDE;
 };
 
 // Flags fuer nFlag

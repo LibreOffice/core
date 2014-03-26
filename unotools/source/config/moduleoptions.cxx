@@ -312,8 +312,8 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
         //  overloaded methods of baseclass
 
-        virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames );
-        virtual void Commit(                                                             );
+        virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
+        virtual void Commit(                                                             ) SAL_OVERRIDE;
 
 
         //  public interface

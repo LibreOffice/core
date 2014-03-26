@@ -308,9 +308,9 @@ public:
              );
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
@@ -336,9 +336,9 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLImpHyperlinkContext_Impl, SvXMLImportContext );
@@ -469,9 +469,9 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLImpRubyBaseContext_Impl, SvXMLImportContext );
@@ -538,7 +538,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     void SetTextStyleName( const OUString& s ) { m_sTextStyleName = s; }
     void AppendText( const OUString& s ) { m_sText += s; }
@@ -561,7 +561,7 @@ public:
 
     virtual ~XMLImpRubyTextContext_Impl();
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
@@ -704,15 +704,15 @@ public:
     virtual ~XMLMetaImportContextBase();
 
     virtual void StartElement(
-            const Reference<xml::sax::XAttributeList> & i_xAttrList);
+            const Reference<xml::sax::XAttributeList> & i_xAttrList) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-            const Reference< xml::sax::XAttributeList > & i_xAttrList);
+            const Reference< xml::sax::XAttributeList > & i_xAttrList) SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& i_rChars );
+    virtual void Characters( const OUString& i_rChars ) SAL_OVERRIDE;
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue);
@@ -821,9 +821,9 @@ public:
         sal_Bool & i_rIgnoreLeadingSpace );
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
-        OUString const & i_rLocalName, OUString const & i_rValue);
+        OUString const & i_rLocalName, OUString const & i_rValue) SAL_OVERRIDE;
 
-    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange);
+    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLMetaImportContext, XMLMetaImportContextBase );
@@ -915,9 +915,9 @@ public:
         sal_Bool & i_rIgnoreLeadingSpace );
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
-        OUString const & i_rLocalName, OUString const & i_rValue);
+        OUString const & i_rLocalName, OUString const & i_rValue) SAL_OVERRIDE;
 
-    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange);
+    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLMetaFieldImportContext, XMLMetaImportContextBase );
@@ -1020,7 +1020,7 @@ public:
         enum XMLTextPElemTokens nTok,
         XMLHints_Impl& rHnts);
 
-    void StartElement(const Reference<xml::sax::XAttributeList> & xAttrList);
+    void StartElement(const Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
 protected:
 
@@ -1299,7 +1299,7 @@ protected:
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
                                   const OUString& sLocalName,
                                   const OUString& sValue,
-                                  Reference<beans::XPropertySet>& rPropSet);
+                                  Reference<beans::XPropertySet>& rPropSet) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTOCMarkImportContext_Impl, XMLIndexMarkImportContext_Impl );
@@ -1364,7 +1364,7 @@ protected:
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
                                   const OUString& sLocalName,
                                   const OUString& sValue,
-                                  Reference<beans::XPropertySet>& rPropSet);
+                                  Reference<beans::XPropertySet>& rPropSet) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLUserIndexMarkImportContext_Impl, XMLIndexMarkImportContext_Impl);
@@ -1441,7 +1441,7 @@ protected:
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
                                   const OUString& sLocalName,
                                   const OUString& sValue,
-                                  Reference<beans::XPropertySet>& rPropSet);
+                                  Reference<beans::XPropertySet>& rPropSet) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLAlphaIndexMarkImportContext_Impl,

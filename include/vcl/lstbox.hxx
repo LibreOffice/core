@@ -75,31 +75,31 @@ protected:
 protected:
     explicit            ListBox( WindowType nType );
 
-    virtual void        FillLayoutData() const;
+    virtual void        FillLayoutData() const SAL_OVERRIDE;
 
 public:
     explicit            ListBox( Window* pParent, WinBits nStyle = WB_BORDER );
     explicit            ListBox( Window* pParent, const ResId& );
     virtual             ~ListBox();
 
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
-    virtual void        Resize();
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        StateChanged( StateChangedType nType );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void        Select();
     virtual void        DoubleClick();
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-    virtual Window*     GetPreferredKeyInputWindow();
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual Window*     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 
-    virtual const Wallpaper& GetDisplayBackground() const;
+    virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
 
     virtual void        setPosSizePixel( long nX, long nY,
-                                         long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
-    void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
+                                         long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
+    void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE
                         { Control::SetPosSizePixel( rNewPos, rNewSize ); }
     void                SetDropDownSizePixel( const Size& rNewSize )
     { if( IsDropDownBox() ) setPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
@@ -194,7 +194,7 @@ public:
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
-    virtual Size        GetOptimalSize() const;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
     Size                CalcAdjustedSize( const Size& rPrefSize ) const;
     Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
@@ -230,7 +230,7 @@ public:
     sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
     void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
     void EnableQuickSelection( const bool& b );
 };

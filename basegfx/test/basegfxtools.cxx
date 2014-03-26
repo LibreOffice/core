@@ -51,10 +51,10 @@ public:
         maKeyStops(getTestVector())
     {}
 
-    void setUp()
+    void setUp() SAL_OVERRIDE
     {}
 
-    void tearDown()
+    void tearDown() SAL_OVERRIDE
     {}
 
     void test()

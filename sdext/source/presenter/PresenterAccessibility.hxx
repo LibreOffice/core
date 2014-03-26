@@ -74,31 +74,31 @@ public:
         const sal_Int32 nCurrentSlideIndex,
         const sal_Int32 nSlideCount);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     //----- XAccessible -------------------------------------------------------
 
     virtual cssu::Reference<cssa::XAccessibleContext> SAL_CALL
         getAccessibleContext (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XFocusListener ----------------------------------------------------
 
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& rEvent)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XInitialization ---------------------------------------------------
 
     virtual void SAL_CALL initialize (const cssu::Sequence<cssu::Any>& rArguments)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     class AccessibleObject;
     class AccessibleParagraph;

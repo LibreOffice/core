@@ -112,8 +112,8 @@ public:
                     FontNameMenu();
     virtual         ~FontNameMenu();
 
-    virtual void    Select();
-    virtual void    Highlight();
+    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Highlight() SAL_OVERRIDE;
 
     void            Fill( const FontList* pList );
 
@@ -142,8 +142,8 @@ public:
                     FontSizeMenu();
                     ~FontSizeMenu();
 
-    virtual void    Select();
-    virtual void    Highlight();
+    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Highlight() SAL_OVERRIDE;
 
     void            Fill( const FontInfo& rInfo, const FontList* pList );
 

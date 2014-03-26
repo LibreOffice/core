@@ -377,7 +377,7 @@ namespace
             return boost::dynamic_pointer_cast< BitmapRenderer >( bmp );
         }
 
-        virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const
+        virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const SAL_OVERRIDE
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
@@ -397,7 +397,7 @@ namespace
             return pMask;
         }
 
-        virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
+        virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const SAL_OVERRIDE
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
@@ -409,7 +409,7 @@ namespace
             return boost::dynamic_pointer_cast<alphamask_bitmap_type>( bmp );
         }
 
-        virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
+        virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const SAL_OVERRIDE
         {
             // TODO(P1): dynamic_cast usually called twice for
             // compatible formats
@@ -417,7 +417,7 @@ namespace
         }
 
         virtual void clear_i( Color                   fillColor,
-                              const basegfx::B2IBox&  rBounds )
+                              const basegfx::B2IBox&  rBounds ) SAL_OVERRIDE
         {
             fillImage(destIterRange(maBegin,
                                     maRawAccessor,
@@ -430,7 +430,7 @@ namespace
 
         virtual void setPixel_i( const basegfx::B2IPoint& rPt,
                                  Color                    pixelColor,
-                                 DrawMode                 drawMode )
+                                 DrawMode                 drawMode ) SAL_OVERRIDE
         {
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
@@ -447,7 +447,7 @@ namespace
         virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
                                  Color                        pixelColor,
                                  DrawMode                     drawMode,
-                                 const BitmapDeviceSharedPtr& rClip )
+                                 const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
             boost::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rClip) );
             OSL_ASSERT( pMask );
@@ -468,7 +468,7 @@ namespace
             damagedPixel(rPt);
         }
 
-        virtual Color getPixel_i(const basegfx::B2IPoint& rPt )
+        virtual Color getPixel_i(const basegfx::B2IPoint& rPt ) SAL_OVERRIDE
         {
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
@@ -476,7 +476,7 @@ namespace
             return maAccessor(pixel);
         }
 
-        virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt )
+        virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) SAL_OVERRIDE
         {
             const DestIterator pixel( maBegin +
                                       vigra::Diff2D(rPt.getX(),
@@ -541,7 +541,7 @@ namespace
                                 const basegfx::B2IPoint& rPt2,
                                 const basegfx::B2IBox&   rBounds,
                                 Color                    lineColor,
-                                DrawMode                 drawMode )
+                                DrawMode                 drawMode ) SAL_OVERRIDE
         {
             implDrawLine(rPt1,rPt2,rBounds,lineColor,
                          maBegin,
@@ -562,7 +562,7 @@ namespace
                                 const basegfx::B2IBox&       rBounds,
                                 Color                        lineColor,
                                 DrawMode                     drawMode,
-                                const BitmapDeviceSharedPtr& rClip )
+                                const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
             implDrawLine(rPt1,rPt2,rBounds,lineColor,
                          getMaskedIter(rClip),
@@ -605,7 +605,7 @@ namespace
         virtual void drawPolygon_i(const basegfx::B2DPolygon& rPoly,
                                    const basegfx::B2IBox&     rBounds,
                                    Color                      lineColor,
-                                   DrawMode                   drawMode )
+                                   DrawMode                   drawMode ) SAL_OVERRIDE
         {
             if( drawMode == DrawMode_XOR )
                 implDrawPolygon( rPoly, rBounds, lineColor,
@@ -621,7 +621,7 @@ namespace
                                    const basegfx::B2IBox&       rBounds,
                                    Color                        lineColor,
                                    DrawMode                     drawMode,
-                                   const BitmapDeviceSharedPtr& rClip )
+                                   const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
             if( drawMode == DrawMode_XOR )
                 implDrawPolygon( rPoly, rBounds, lineColor,
@@ -662,7 +662,7 @@ namespace
         virtual void fillPolyPolygon_i(const basegfx::B2DPolyPolygon& rPoly,
                                        Color                          fillColor,
                                        DrawMode                       drawMode,
-                                       const basegfx::B2IBox&         rBounds )
+                                       const basegfx::B2IBox&         rBounds ) SAL_OVERRIDE
         {
             if( drawMode == DrawMode_XOR )
                 implFillPolyPolygon( rPoly, fillColor,
@@ -680,7 +680,7 @@ namespace
                                        Color                          fillColor,
                                        DrawMode                       drawMode,
                                        const basegfx::B2IBox&         rBounds,
-                                       const BitmapDeviceSharedPtr&   rClip )
+                                       const BitmapDeviceSharedPtr&   rClip ) SAL_OVERRIDE
         {
             if( drawMode == DrawMode_XOR )
                 implFillPolyPolygon( rPoly, fillColor,
@@ -788,7 +788,7 @@ namespace
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                   const basegfx::B2IBox&       rSrcRect,
                                   const basegfx::B2IBox&       rDstRect,
-                                  DrawMode                     drawMode )
+                                  DrawMode                     drawMode ) SAL_OVERRIDE
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
@@ -823,7 +823,7 @@ namespace
                                   const basegfx::B2IBox&       rSrcRect,
                                   const basegfx::B2IBox&       rDstRect,
                                   DrawMode                     drawMode,
-                                  const BitmapDeviceSharedPtr& rClip )
+                                  const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
@@ -853,7 +853,7 @@ namespace
         virtual void drawMaskedColor_i(Color                        aSrcColor,
                                        const BitmapDeviceSharedPtr& rAlphaMask,
                                        const basegfx::B2IBox&       rSrcRect,
-                                       const basegfx::B2IPoint&     rDstPoint )
+                                       const basegfx::B2IPoint&     rDstPoint ) SAL_OVERRIDE
         {
             boost::shared_ptr<mask_bitmap_type>      pMask( getCompatibleClipMask(rAlphaMask) );
             boost::shared_ptr<alphamask_bitmap_type> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
@@ -903,7 +903,7 @@ namespace
                                        const BitmapDeviceSharedPtr& rAlphaMask,
                                        const basegfx::B2IBox&       rSrcRect,
                                        const basegfx::B2IPoint&     rDstPoint,
-                                       const BitmapDeviceSharedPtr& rClip )
+                                       const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
             boost::shared_ptr<mask_bitmap_type>      pMask( getCompatibleClipMask(rAlphaMask) );
             boost::shared_ptr<alphamask_bitmap_type> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
@@ -1031,7 +1031,7 @@ namespace
                                         const BitmapDeviceSharedPtr& rMask,
                                         const basegfx::B2IBox&       rSrcRect,
                                         const basegfx::B2IBox&       rDstRect,
-                                        DrawMode                     drawMode )
+                                        DrawMode                     drawMode ) SAL_OVERRIDE
         {
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
@@ -1068,7 +1068,7 @@ namespace
                                         const basegfx::B2IBox&       rSrcRect,
                                         const basegfx::B2IBox&       rDstRect,
                                         DrawMode                     drawMode,
-                                        const BitmapDeviceSharedPtr& rClip )
+                                        const BitmapDeviceSharedPtr& rClip ) SAL_OVERRIDE
         {
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
@@ -1100,11 +1100,11 @@ namespace
             damaged( rDstRect );
         }
 
-        IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const
+        IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const SAL_OVERRIDE
         {
             return mpDamage;
         }
-        void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+        void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage ) SAL_OVERRIDE
         {
             mpDamage = rDamage;
         }

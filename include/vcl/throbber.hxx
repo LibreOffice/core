@@ -71,7 +71,7 @@ public:
 
 protected:
     // Window overridables
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 
 private:
     SAL_DLLPRIVATE void initImages();

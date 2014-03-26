@@ -37,8 +37,8 @@ namespace chelp {
         ResultSetFactory*                    m_pFactory;
 
     private:
-        virtual void initStatic();
-        virtual void initDynamic();
+        virtual void initStatic() SAL_OVERRIDE;
+        virtual void initDynamic() SAL_OVERRIDE;
 
     public:
         DynamicResultSet(

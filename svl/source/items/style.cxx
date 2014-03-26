@@ -374,7 +374,7 @@ struct DoesStyleMatchStyleSheetPredicate SAL_FINAL : public svl::StyleSheetPredi
             : mIterator(it) {;}
 
     bool
-    Check(const SfxStyleSheetBase& styleSheet)
+    Check(const SfxStyleSheetBase& styleSheet) SAL_OVERRIDE
     {
         bool bMatchFamily = ((mIterator->GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
                 ( styleSheet.GetFamily() == mIterator->GetSearchFamily() ));
@@ -681,7 +681,7 @@ struct AddStyleSheetCallback : svl::StyleSheetCallback
     AddStyleSheetCallback(SfxStyleSheetBasePool *pool)
     : mPool(pool) {;}
 
-    void DoIt(const SfxStyleSheetBase& ssheet)
+    void DoIt(const SfxStyleSheetBase& ssheet) SAL_OVERRIDE
     {
         mPool->Add(ssheet);
     }
@@ -785,7 +785,7 @@ struct StyleSheetDisposerFunctor SAL_FINAL : public svl::StyleSheetDisposer
             : mPool(pool) {;}
 
     void
-    Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet)
+    Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) SAL_OVERRIDE
     {
         cppu::OWeakObject* weakObject = static_cast< ::cppu::OWeakObject* >(styleSheet.get());
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >

@@ -54,14 +54,14 @@ public:
         {}
 
     // XInterface
-    Any SAL_CALL        queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    void SAL_CALL       acquire() throw();
-    void SAL_CALL       release() throw();
+    Any SAL_CALL        queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL       acquire() throw() SAL_OVERRIDE;
+    void SAL_CALL       release() throw() SAL_OVERRIDE;
 
     // XAdapter
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL queryAdapted() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    void SAL_CALL addReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XReference >& xRef ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    void SAL_CALL removeReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XReference >& xRef ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL queryAdapted() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL addReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XReference >& xRef ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL removeReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XReference >& xRef ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Called from the weak object if the reference count goes to zero.
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
@@ -324,12 +324,12 @@ public:
     virtual ~OWeakRefListener() SAL_THROW(());
 
     // XInterface
-    Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException, std::exception);
-    void SAL_CALL acquire() throw();
-    void SAL_CALL release() throw();
+    Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    void SAL_CALL release() throw() SAL_OVERRIDE;
 
     // XReference
-    void SAL_CALL   dispose() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void SAL_CALL   dispose() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// The reference counter.
     oslInterlockedCount         m_aRefCount;

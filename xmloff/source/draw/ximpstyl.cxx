@@ -70,7 +70,7 @@ public:
                                    const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
-                                   const XMLPropertyState& rProp);
+                                   const XMLPropertyState& rProp) SAL_OVERRIDE;
 };
 
 TYPEINIT1( SdXMLDrawingPagePropertySetContext, SvXMLPropertySetContext );
@@ -145,14 +145,14 @@ public:
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void Finish( bool bOverwrite );
+    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 
     // #i35918#
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet );
+                ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( SdXMLDrawingPageStyleContext, XMLPropStyleContext );

@@ -71,9 +71,9 @@ public:
         XMLFootnoteConfigurationImportContext& rConfigImport,
         bool bBegin);
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
-    virtual void Characters( const OUString& rChars );
+    virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLFootnoteConfigHelper, SvXMLImportContext );

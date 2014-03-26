@@ -109,24 +109,24 @@ public:
     // XEventListener
     virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& rSource )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XLinguServiceEventBroadcaster
     virtual sal_Bool SAL_CALL
         addLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         removeLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // non-UNO functions
     void    LNG_DLLPUBLIC AddAsPropListener();
@@ -166,7 +166,7 @@ public:
     // XPropertyChangeListener
     virtual void SAL_CALL
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class LNG_DLLPUBLIC PropertyHelper_Thesaurus
@@ -212,10 +212,10 @@ class LNG_DLLPUBLIC PropertyHelper_Spell :
 
 protected:
     // PropertyChgHelper
-    virtual void    SetDefaultValues();
-    virtual void    GetCurrentValues();
+    virtual void    SetDefaultValues() SAL_OVERRIDE;
+    virtual void    GetCurrentValues() SAL_OVERRIDE;
     virtual sal_Bool    propertyChange_Impl(
-                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
+                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) SAL_OVERRIDE;
 
 public:
     PropertyHelper_Spell(
@@ -225,12 +225,12 @@ public:
                 ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
     virtual ~PropertyHelper_Spell();
 
-    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals ) SAL_OVERRIDE;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int16   GetDefaultNumberOfSuggestions() const;
 
@@ -294,10 +294,10 @@ class PropertyHelper_Hyphen :
 
 protected:
     // PropertyChgHelper
-    virtual void    SetDefaultValues();
-    virtual void    GetCurrentValues();
+    virtual void    SetDefaultValues() SAL_OVERRIDE;
+    virtual void    GetCurrentValues() SAL_OVERRIDE;
     virtual sal_Bool    propertyChange_Impl(
-                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
+                            const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) SAL_OVERRIDE;
 
 public:
     PropertyHelper_Hyphen(
@@ -307,12 +307,12 @@ public:
                 ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet);
     virtual ~PropertyHelper_Hyphen();
 
-    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals ) SAL_OVERRIDE;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
     sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }

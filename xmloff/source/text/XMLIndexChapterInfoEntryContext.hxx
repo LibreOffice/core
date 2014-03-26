@@ -61,12 +61,12 @@ protected:
     /** process parameters */
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+            ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(
         ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rValues);
+            ::com::sun::star::beans::PropertyValue> & rValues) SAL_OVERRIDE;
 };
 
 #endif

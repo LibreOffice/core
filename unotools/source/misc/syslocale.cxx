@@ -46,7 +46,7 @@ public:
     virtual                     ~SvtSysLocale_Impl();
 
     CharClass*                  GetCharClass();
-    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
 private:
     void                        setDateAcceptancePatternsConfig();

@@ -31,8 +31,8 @@ class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     rtl::Reference< HierarchyContent > m_xContent;
 
 private:
-    virtual void initStatic();
-    virtual void initDynamic();
+    virtual void initStatic() SAL_OVERRIDE;
+    virtual void initDynamic() SAL_OVERRIDE;
 
 public:
     DynamicResultSet(

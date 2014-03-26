@@ -29,8 +29,8 @@
 class TOOLKIT_DLLPUBLIC VCLExternalSolarLock : public ::comphelper::IMutex
 {
 public:
-    virtual void acquire();
-    virtual void release();
+    virtual void acquire() SAL_OVERRIDE;
+    virtual void release() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_TOOLKIT_HELPER_EXTERNALLOCK_HXX

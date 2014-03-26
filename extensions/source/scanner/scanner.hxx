@@ -53,22 +53,22 @@ public:
     virtual                                 ~ScannerManager();
 
     // XInterface
-    virtual Any SAL_CALL                    queryInterface( const Type & rType ) throw( RuntimeException, std::exception );
-    virtual void SAL_CALL                   acquire() throw();
-    virtual void SAL_CALL                   release() throw();
+    virtual Any SAL_CALL                    queryInterface( const Type & rType ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL                   acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL                   release() throw() SAL_OVERRIDE;
 
     // XScannerManager
-    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception);
-    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException, std::exception );
-    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception );
-    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception );
-    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException, std::exception );
-    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException, std::exception );
+    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< com::sun::star::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
+    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
+    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
 
     // XBitmap
-    virtual css::awt::Size SAL_CALL              getSize() throw(std::exception);
-    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() throw(std::exception);
-    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() throw(std::exception);
+    virtual css::awt::Size SAL_CALL              getSize() throw(std::exception) SAL_OVERRIDE;
+    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() throw(std::exception) SAL_OVERRIDE;
+    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() throw(std::exception) SAL_OVERRIDE;
 
     // Misc
     static OUString                         getImplementationName_Static() throw();

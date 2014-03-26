@@ -348,7 +348,7 @@ public:
     void    initialCffRead( void);
     bool    emitAsType1( class Type1Emitter&,
                 const sal_GlyphId* pGlyphIds, const U8* pEncoding,
-                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
+                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) SAL_OVERRIDE;
 
     // used by charstring converter
     void    setCharStringType( int);

@@ -41,7 +41,7 @@ public:
                              XMLTransformerOASISEventMap_Impl& rMap,
                              XMLTransformerOASISEventMap_Impl* pMap2    );
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOASISTCONTEXT_HXX

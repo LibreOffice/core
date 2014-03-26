@@ -44,7 +44,7 @@ public:
                         TabDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
                         ~TabDialog();
 
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     void                AdjustLayout();
 

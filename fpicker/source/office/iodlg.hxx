@@ -165,7 +165,7 @@ private:
     void    implUpdateImages( );
 
 protected:
-    virtual bool                Notify( NotifyEvent& rNEvt );
+    virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     void                        EnableInternet( sal_Bool bInternet );
 
     // originally from VclFileDialog
@@ -203,8 +203,8 @@ public:
                                 ~SvtFileDialog();
 
     virtual long                OK();
-    virtual short               Execute();
-    virtual void                StartExecuteModal( const Link& rEndDialogHdl );
+    virtual short               Execute() SAL_OVERRIDE;
+    virtual void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
 
             void                FileSelect();
             void                FilterSelect();
@@ -227,8 +227,8 @@ public:
             sal_uInt16          GetFilterCount() const;
             const OUString&     GetFilterName( sal_uInt16 nPos ) const;
 
-    virtual void                Resize();
-    virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
 
     void                        PrevLevel_Impl();
     void                        OpenURL_Impl( const OUString& rURL );
@@ -313,9 +313,9 @@ private:
     sal_uInt16                  adjustFilter( const OUString& _rFilter );
 
     // IFilePickerController, needed by OControlAccess
-    virtual Control*            getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl = sal_False ) const;
-    virtual void                enableControl( sal_Int16 _nControlId, sal_Bool _bEnable );
-    virtual OUString            getCurFilter( ) const;
+    virtual Control*            getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl = sal_False ) const SAL_OVERRIDE;
+    virtual void                enableControl( sal_Int16 _nControlId, sal_Bool _bEnable ) SAL_OVERRIDE;
+    virtual OUString            getCurFilter( ) const SAL_OVERRIDE;
 
     OUString                    implGetInitialURL( const OUString& _rPath, const OUString& _rFallback );
 

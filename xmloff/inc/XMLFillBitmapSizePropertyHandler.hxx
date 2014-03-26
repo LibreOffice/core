@@ -41,13 +41,13 @@ public:
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
 
     /// Exports the given value in cas of the given XML-data-type
     virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
-            const SvXMLUnitConverter& rUnitConverter ) const;
+            const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_INC_XMLFILLBITMAPSIZEPROPERTYHANDLER_HXX

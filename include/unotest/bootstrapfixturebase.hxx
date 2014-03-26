@@ -68,8 +68,8 @@ public:
 
   // return a Path to a given c-str path from the workdir directory
   OUString getPathFromWorkdir( const char *pPath );
-  virtual void setUp();
-  virtual void tearDown();
+  virtual void setUp() SAL_OVERRIDE;
+  virtual void tearDown() SAL_OVERRIDE;
 
 };
 

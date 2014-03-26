@@ -154,7 +154,7 @@ protected:
     int _GetNextRawToken();
 
     // scanne das naechste Token,
-    virtual int _GetNextToken();
+    virtual int _GetNextToken() SAL_OVERRIDE;
 
     virtual ~HTMLParser();
 
@@ -163,7 +163,7 @@ protected:
 public:
     HTMLParser( SvStream& rIn, bool bReadNewDoc = true );
 
-    virtual SvParserState CallParser();   // Aufruf des Parsers
+    virtual SvParserState CallParser() SAL_OVERRIDE;   // Aufruf des Parsers
 
     bool IsNewDoc() const       { return bNewDoc; }
     bool IsInHeader() const     { return bIsInHeader; }
@@ -217,7 +217,7 @@ public:
     const HTMLOptions& GetOptions( sal_uInt16 *pNoConvertToken=0 );
 
     // fuers asynchrone lesen aus dem SvStream
-    virtual void Continue( int nToken );
+    virtual void Continue( int nToken ) SAL_OVERRIDE;
 
 
 protected:

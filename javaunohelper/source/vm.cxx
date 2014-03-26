@@ -44,7 +44,7 @@ class SingletonFactory : public MutexHolder, public t_impl
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > m_vm_access;
 
 protected:
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
     inline SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
@@ -55,10 +55,10 @@ public:
     // XSingleComponentFactory impl
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & xContext )
-        throw (css::uno::Exception, std::exception);
+        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
         css::uno::Sequence< css::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
-        throw (css::uno::Exception, std::exception);
+        throw (css::uno::Exception, std::exception) SAL_OVERRIDE;
 };
 
 void SingletonFactory::disposing()

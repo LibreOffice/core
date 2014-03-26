@@ -42,11 +42,11 @@ class KDESalFrame : public X11SalFrame
         KDESalFrame( SalFrame* pParent, sal_uLong nStyle );
         virtual ~KDESalFrame();
 
-        virtual SalGraphics* AcquireGraphics();
-        virtual void ReleaseGraphics( SalGraphics *pGraphics );
-        virtual void updateGraphics( bool bClear );
-        virtual void UpdateSettings( AllSettings& rSettings );
-        virtual void Show( bool bVisible, bool bNoActivate );
+        virtual SalGraphics* AcquireGraphics() SAL_OVERRIDE;
+        virtual void ReleaseGraphics( SalGraphics *pGraphics ) SAL_OVERRIDE;
+        virtual void updateGraphics( bool bClear ) SAL_OVERRIDE;
+        virtual void UpdateSettings( AllSettings& rSettings ) SAL_OVERRIDE;
+        virtual void Show( bool bVisible, bool bNoActivate ) SAL_OVERRIDE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

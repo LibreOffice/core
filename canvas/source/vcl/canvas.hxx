@@ -100,7 +100,7 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
@@ -108,7 +108,7 @@ namespace vclcanvas
                               const com::sun::star::rendering::RenderState& renderState,
                               const ::Point&                                rPt,
                               const ::Size&                                 rSz,
-                              const GraphicAttr&                            rAttr ) const;
+                              const GraphicAttr&                            rAttr ) const SAL_OVERRIDE;
 
     private:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                maArguments;

@@ -34,8 +34,8 @@ class SVT_DLLPUBLIC IMapRectangleObject : public IMapObject
 protected:
 
     // Binaer-Im-/Export
-    virtual void        WriteIMapObject( SvStream& rOStm ) const;
-    virtual void        ReadIMapObject(  SvStream& rIStm );
+    virtual void        WriteIMapObject( SvStream& rOStm ) const SAL_OVERRIDE;
+    virtual void        ReadIMapObject(  SvStream& rIStm ) SAL_OVERRIDE;
 
 public:
 
@@ -50,13 +50,13 @@ public:
                                              bool bPixelCoords = true );
     virtual             ~IMapRectangleObject() {};
 
-    virtual sal_uInt16  GetType() const;
-    virtual bool        IsHit( const Point& rPoint ) const;
+    virtual sal_uInt16  GetType() const SAL_OVERRIDE;
+    virtual bool        IsHit( const Point& rPoint ) const SAL_OVERRIDE;
 
     Rectangle           GetRectangle( bool bPixelCoords = true ) const;
 
     // liefert das BoundRect des Rechteck-Objektes in 1/100mm
-    virtual Rectangle   GetBoundRect() const { return aRect; }
+    virtual Rectangle   GetBoundRect() const SAL_OVERRIDE { return aRect; }
 
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 

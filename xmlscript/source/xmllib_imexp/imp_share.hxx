@@ -139,19 +139,19 @@ public:
     // XRoot
     virtual void SAL_CALL startDocument(
         Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument()
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL processingInstruction(
         OUString const & rTarget, OUString const & rData )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDocumentLocator(
         Reference< xml::sax::XLocator > const & xLocator )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< xml::input::XElement > SAL_CALL startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class LibElementBase
@@ -175,27 +175,27 @@ public:
 
     // XElement
     virtual Reference< xml::input::XElement > SAL_CALL getParent()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getLocalName()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getUid()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< xml::input::XAttributes > SAL_CALL getAttributes()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL ignorableWhitespace(
         OUString const & rWhitespaces )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL characters( OUString const & rChars )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL processingInstruction(
         OUString const & rTarget, OUString const & rData )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endElement()
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class LibrariesElement : public LibElementBase
@@ -209,9 +209,9 @@ public:
     virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endElement()
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     LibrariesElement(
         OUString const & rLocalName,
@@ -232,9 +232,9 @@ public:
     virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endElement()
-        throw (xml::sax::SAXException, RuntimeException, std::exception);
+        throw (xml::sax::SAXException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     LibraryElement(
         OUString const & rLocalName,
