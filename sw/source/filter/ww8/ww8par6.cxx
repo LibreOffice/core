@@ -1232,6 +1232,13 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
                 for( int i = 0; i < 4; ++i )
                     nBorder |= int(_SetWW8_BRC( 8, brc[ i ], pSprm[ i ] ))<<i;
              }
+             // Version 9 BRCs if present will override version 8
+             if( pSep->Find4Sprms(  0xD234,   0xD235,   0xD236,   0xD237,
+                                    pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
+             {
+                for( int i = 0; i < 4; ++i )
+                    nBorder |= int(_SetWW8_BRC( 9, brc[ i ], pSprm[ i ] ))<<i;
+             }
         }
     }
     else
