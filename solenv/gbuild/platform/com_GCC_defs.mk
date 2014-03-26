@@ -98,7 +98,7 @@ ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_LTOFLAGS := -flto
 else
-gb_LTOFLAGS := -flto -fuse-linker-plugin -O2
+gb_LTOFLAGS := -flto=$(PARALLELISM) -fuse-linker-plugin -O2
 endif
 endif
 
