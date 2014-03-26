@@ -57,7 +57,7 @@ void CellMarginHandler::lcl_attribute(Id rName, Value & rVal)
     {
         case NS_ooxml::LN_CT_TblWidth_w:
             m_nWidth = nIntValue;
-            m_nValue = ConversionHelper::convertTwipToMM100( nIntValue );
+            m_nValue = ConversionHelper::convertTwipToMM100Unsigned( nIntValue );
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
             OSL_ENSURE( NS_ooxml::LN_Value_ST_TblWidth_dxa == sal::static_int_cast<Id>(nIntValue), "cell margins work for absolute values, only");
