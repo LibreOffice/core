@@ -135,4 +135,8 @@
 [ language=pl ]
     a69f9221864b1360e38ff3f0b0cc9222 http://sourceforge.net/projects/aoo-extensions/files/806/4/pl-dict.oxt/download "pl-dict.oxt"
 
+# Portuguese (European).
+[ language=pt || language=pt_PT ]
+    ad882aa5fcd1b48ebc2421b0d25ee178 http://sourceforge.net/projects/aoo-extensions/files/1196/27/oo3x-pt-pt-14.1.1.1.oxt/download "dict-pt.oxt"
+
 
