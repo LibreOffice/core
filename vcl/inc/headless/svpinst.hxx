@@ -82,8 +82,7 @@ class SvpSalInstance : public SalGenericInstance
 
     bool                    isFrameAlive( const SalFrame* pFrame ) const;
 
-protected:
-    virtual void            DoReleaseYield( int nTimeoutMS );
+    void                    DoReleaseYield( int nTimeoutMS );
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -107,13 +106,13 @@ public:
     bool                    CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle );
-    virtual void            DestroyFrame( SalFrame* pFrame );
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual void            DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
 
     // Object (System Child Window)
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
-    virtual void            DestroyObject( SalObject* pObject );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
+    virtual void            DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
 
     // VirtualDevice
     // nDX and nDY in Pixel
@@ -121,47 +120,47 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) SAL_OVERRIDE;
 
     // Printer
     // pSetupData->mpDriverData can be 0
     // pSetupData must be updatet with the current
     // JobSetup
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData );
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual void            DestroyPrinter( SalPrinter* pPrinter );
+                                               ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) SAL_OVERRIDE;
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter ) SAL_OVERRIDE;
+    virtual void            DestroyPrinter( SalPrinter* pPrinter ) SAL_OVERRIDE;
 
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual OUString   GetDefaultPrinter();
-    virtual void            PostPrintersChanged();
+    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) SAL_OVERRIDE;
+    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
+    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
+    virtual OUString        GetDefaultPrinter() SAL_OVERRIDE;
+    virtual void            PostPrintersChanged() SAL_OVERRIDE;
 
     // SalTimer
-    virtual SalTimer*       CreateSalTimer();
+    virtual SalTimer*       CreateSalTimer() SAL_OVERRIDE;
     // SalI18NImeStatus
-    virtual SalI18NImeStatus*   CreateI18NImeStatus();
+    virtual SalI18NImeStatus*   CreateI18NImeStatus() SAL_OVERRIDE;
     // SalSystem
-    virtual SalSystem*      CreateSalSystem();
+    virtual SalSystem*      CreateSalSystem() SAL_OVERRIDE;
     // SalBitmap
-    virtual SalBitmap*      CreateSalBitmap();
+    virtual SalBitmap*      CreateSalBitmap() SAL_OVERRIDE;
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
-    virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool            AnyInput( sal_uInt16 nType );
+    virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual bool            AnyInput( sal_uInt16 nType ) SAL_OVERRIDE;
 
     // may return NULL to disable session management
-    virtual SalSession*     CreateSalSession();
+    virtual SalSession*     CreateSalSession() SAL_OVERRIDE;
 
-    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
 
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
 
-    virtual GenPspGraphics *CreatePrintGraphics();
+    virtual GenPspGraphics *CreatePrintGraphics() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX

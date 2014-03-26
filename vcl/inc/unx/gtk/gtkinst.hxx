@@ -67,39 +67,39 @@ public:
             GtkInstance( SalYieldMutex* pMutex );
     virtual ~GtkInstance();
     void    EnsureInit();
-    virtual void AfterAppInit();
+    virtual void AfterAppInit() SAL_OVERRIDE;
 
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uLong nStyle );
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
-    virtual SalSystem*          CreateSalSystem();
-    virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup);
-    virtual SalPrinter*         CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual SalMenu*            CreateMenu( bool, Menu* );
-    virtual void                DestroyMenu( SalMenu* pMenu );
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* );
-    virtual void                DestroyMenuItem( SalMenuItem* pItem );
-    virtual SalTimer*           CreateSalTimer();
-    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) SAL_OVERRIDE;
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
+    virtual SalSystem*          CreateSalSystem() SAL_OVERRIDE;
+    virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup) SAL_OVERRIDE;
+    virtual SalPrinter*         CreatePrinter( SalInfoPrinter* pInfoPrinter ) SAL_OVERRIDE;
+    virtual SalMenu*            CreateMenu( bool, Menu* ) SAL_OVERRIDE;
+    virtual void                DestroyMenu( SalMenu* pMenu ) SAL_OVERRIDE;
+    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* ) SAL_OVERRIDE;
+    virtual void                DestroyMenuItem( SalMenuItem* pItem ) SAL_OVERRIDE;
+    virtual SalTimer*           CreateSalTimer() SAL_OVERRIDE;
+    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
                                                      long nDX, long nDY,
                                                      sal_uInt16 nBitCount,
-                                                     const SystemGraphicsData* );
-    virtual SalBitmap*          CreateSalBitmap();
+                                                     const SystemGraphicsData* ) SAL_OVERRIDE;
+    virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
 
-    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool                AnyInput( sal_uInt16 nType );
+    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual bool                AnyInput( sal_uInt16 nType ) SAL_OVERRIDE;
 
-    virtual GenPspGraphics     *CreatePrintGraphics();
+    virtual GenPspGraphics     *CreatePrintGraphics() SAL_OVERRIDE;
 
-    virtual bool hasNativeFileSelection() const { return true; }
+    virtual bool hasNativeFileSelection() const SAL_OVERRIDE { return true; }
 
     virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
         createFilePicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& );
+                              com::sun::star::uno::XComponentContext >& ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const com::sun::star::uno::Reference<
-                                com::sun::star::uno::XComponentContext >& );
+                                com::sun::star::uno::XComponentContext >& ) SAL_OVERRIDE;
 
     void                        RemoveTimer (SalTimer *pTimer);
 
@@ -108,7 +108,8 @@ public:
     void                        subtractEvent( sal_uInt16 nMask );
 
     boost::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
-  private:
+
+private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();
     bool                        bNeedsInit;

@@ -41,34 +41,35 @@ private:
 
 protected:
     SalXLib *mpXLib;
+
 public:
     X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ), mpXLib(NULL) {}
     virtual ~X11SalInstance();
 
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
-    virtual void                DestroyFrame( SalFrame* pFrame );
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;
+    virtual void                DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
 
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
-    virtual void                DestroyObject( SalObject* pObject );
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
+    virtual void                DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
-    virtual void                PostPrintersChanged();
-    virtual GenPspGraphics     *CreatePrintGraphics();
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) SAL_OVERRIDE;
+    virtual void                PostPrintersChanged() SAL_OVERRIDE;
+    virtual GenPspGraphics     *CreatePrintGraphics() SAL_OVERRIDE;
 
-    virtual SalTimer*           CreateSalTimer();
-    virtual SalI18NImeStatus*   CreateI18NImeStatus();
-    virtual SalSystem*          CreateSalSystem();
-    virtual SalBitmap*          CreateSalBitmap();
-    virtual SalSession*         CreateSalSession();
+    virtual SalTimer*           CreateSalTimer() SAL_OVERRIDE;
+    virtual SalI18NImeStatus*   CreateI18NImeStatus() SAL_OVERRIDE;
+    virtual SalSystem*          CreateSalSystem() SAL_OVERRIDE;
+    virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
+    virtual SalSession*         CreateSalSession() SAL_OVERRIDE;
 
-    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool                AnyInput( sal_uInt16 nType );
+    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual bool                AnyInput( sal_uInt16 nType ) SAL_OVERRIDE;
 
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
-    void                        FillFontPathList( std::list< OString >& o_rFontPaths );
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
+    virtual void                FillFontPathList( std::list< OString >& o_rFontPaths ) SAL_OVERRIDE;
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     // dtrans implementation
