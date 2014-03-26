@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 
@@ -147,11 +148,11 @@ Sequence< beans::PropertyState > SAL_CALL
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
-    sal_Int32 * pHandles = new sal_Int32[ aPropertyName.getLength() ];
-    rPH.fillHandles( pHandles, aPropertyName );
+    boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ aPropertyName.getLength() ]);
+    rPH.fillHandles( pHandles.get(), aPropertyName );
 
-    ::std::vector< sal_Int32 > aHandles( pHandles, pHandles + aPropertyName.getLength());
-    delete[] pHandles;
+    ::std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyName.getLength());
+    pHandles.reset();
 
     return m_pImplProperties->GetPropertyStatesByHandle( aHandles );
 }
@@ -198,11 +199,11 @@ void SAL_CALL
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
-    sal_Int32 * pHandles = new sal_Int32[ aPropertyNames.getLength() ];
-    rPH.fillHandles( pHandles, aPropertyNames );
+    boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ aPropertyNames.getLength() ]);
+    rPH.fillHandles( pHandles.get(), aPropertyNames );
 
-    ::std::vector< sal_Int32 > aHandles( pHandles, pHandles + aPropertyNames.getLength());
-    delete[] pHandles;
+    ::std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyNames.getLength());
+    pHandles.reset();
 
     m_pImplProperties->SetPropertiesToDefault( aHandles );
 }
