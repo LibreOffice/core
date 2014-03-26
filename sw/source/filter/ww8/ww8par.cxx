@@ -1947,7 +1947,9 @@ void SwWW8ImplReader::ImportDop()
         }
     }
 
-    mpDocShell->SetModifyPasswordHash(pWDop->lKeyProtDoc);
+    // Still allow editing of form fields.
+    if (!pWDop->fProtEnabled)
+        mpDocShell->SetModifyPasswordHash(pWDop->lKeyProtDoc);
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
