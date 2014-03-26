@@ -76,7 +76,7 @@ public:
     virtual void     setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) = 0;
     virtual OUString getLibraryPassword( const OUString& rLibraryName ) = 0;
     virtual void     clearLibraryPassword( const OUString& rLibraryName ) = 0;
-    virtual sal_Bool hasLibraryPassword( const OUString& rLibraryName ) = 0;
+    virtual bool     hasLibraryPassword( const OUString& rLibraryName ) = 0;
 
 protected:
     ~OldBasicPassword() {}
@@ -130,17 +130,17 @@ private:
     BASIC_DLLPRIVATE void Init();
 
 protected:
-    sal_Bool        ImpLoadLibrary( BasicLibInfo* pLibInfo ) const;
-    sal_Bool        ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False );
+    bool            ImpLoadLibrary( BasicLibInfo* pLibInfo ) const;
+    bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly = false );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
-    void            LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, sal_Bool bLoadBasics = sal_True );
+    void            LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadBasics = true );
     void            LoadOldBasicManager( SotStorage& rStorage );
-    sal_Bool        ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
-    sal_Bool        ImplEncryptStream( SvStream& rStream ) const;
+    bool            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
+    bool            ImplEncryptStream( SvStream& rStream ) const;
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
-    void            CheckModules( StarBASIC* pBasic, sal_Bool bReference ) const;
+    void            CheckModules( StarBASIC* pBasic, bool bReference ) const;
     ~BasicManager();
 
 public:
@@ -182,11 +182,11 @@ public:
     const ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
-    sal_Bool        LoadLib( sal_uInt16 nLib );
-    sal_Bool        RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage );
+    bool            LoadLib( sal_uInt16 nLib );
+    bool            RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
-    sal_Bool        IsBasicModified() const;
+    bool            IsBasicModified() const;
 
     std::vector<BasicError>& GetErrors();
 
@@ -215,14 +215,14 @@ public:
     ErrCode         ExecuteMacro( OUString const& i_fullyQualifiedName, OUString const& i_commaSeparatedArgs, SbxValue* i_retValue );
 
 private:
-    BASIC_DLLPRIVATE sal_Bool IsReference( sal_uInt16 nLib );
+    BASIC_DLLPRIVATE bool IsReference( sal_uInt16 nLib );
 
-    BASIC_DLLPRIVATE sal_Bool SetLibName( sal_uInt16 nLib, const OUString& rName );
+    BASIC_DLLPRIVATE bool SetLibName( sal_uInt16 nLib, const OUString& rName );
 
     BASIC_DLLPRIVATE StarBASIC* GetStdLib() const;
-    BASIC_DLLPRIVATE StarBASIC* AddLib( SotStorage& rStorage, const OUString& rLibName, sal_Bool bReference );
-    BASIC_DLLPRIVATE sal_Bool RemoveLib( sal_uInt16 nLib );
-    BASIC_DLLPRIVATE sal_Bool HasLib( const OUString& rName ) const;
+    BASIC_DLLPRIVATE StarBASIC* AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference );
+    BASIC_DLLPRIVATE bool RemoveLib( sal_uInt16 nLib );
+    BASIC_DLLPRIVATE bool HasLib( const OUString& rName ) const;
 
     BASIC_DLLPRIVATE StarBASIC* CreateLibForLibContainer( const OUString& rLibName,
                         const com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >&

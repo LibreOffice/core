@@ -120,7 +120,7 @@ void SfxScriptLibraryContainer::clearLibraryPassword( const OUString& rLibraryNa
     catch(const NoSuchElementException& ) {}
 }
 
-sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const OUString& rLibraryName )
+bool SfxScriptLibraryContainer::hasLibraryPassword( const OUString& rLibraryName )
 {
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
     return pImplLib->mbPasswordProtected;

@@ -40,14 +40,14 @@ ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< OUString >& sModule
     m_lContinuations[1] = m_xAbort;
 }
 
-sal_Bool
+bool
 ModuleSizeExceeded::isAbort() const
 {
     comphelper::OInteractionAbort* pBase = static_cast< comphelper::OInteractionAbort* >( m_xAbort.get() );
     return pBase->wasSelected();
 }
 
-sal_Bool
+bool
 ModuleSizeExceeded::isApprove() const
 {
     comphelper::OInteractionApprove* pBase = static_cast< comphelper::OInteractionApprove* >( m_xApprove.get() );

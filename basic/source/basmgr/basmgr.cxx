@@ -83,12 +83,12 @@ typedef WeakImplHelper1< script::XStarBasicAccess > StarBasicAccessHelper;
 //    sal_uIntPtr   nEndPos
 //    sal_uInt16    nId
 //    sal_uInt16    nVer
-//    sal_Bool      bDoLoad
+//    bool      bDoLoad
 //    String    LibName
 //    String    AbsStorageName
 //    String    RelStorageName
 // Version 2
-//  + sal_Bool      bReference
+//  + bool      bReference
 
 static const char szStdLibName[] = "Standard";
 static const char szBasicStorage[] = "StarBASIC";
@@ -235,7 +235,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
         pLib->MakeModule32( aModuleName, aMod );
         }
 
-        pLib->SetModified( sal_False );
+        pLib->SetModified( false );
     }
 }
 
@@ -292,7 +292,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
                 }
                 else
                     pLib->MakeModule32( aName, aMod );
-                pLib->SetModified( sal_False );
+                pLib->SetModified( false );
             }
         }
     }
@@ -324,7 +324,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
         else
                 pLib->MakeModule32( aName, aMod );
 
-        pLib->SetModified( sal_False );
+        pLib->SetModified( false );
     }
 }
 
@@ -343,7 +343,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
         if( pLib )
         {
             sal_uInt16 nLibId = mpMgr->GetLibId( aName );
-            mpMgr->RemoveLib( nLibId, sal_False );
+            mpMgr->RemoveLib( nLibId, false );
         }
     }
     else
@@ -353,7 +353,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
         if( pMod )
         {
             pLib->Remove( pMod );
-            pLib->SetModified( sal_False );
+            pLib->SetModified( false );
         }
     }
 }
@@ -384,9 +384,9 @@ private:
     OUString          aRelStorageName;
     OUString          aPassword;
 
-    sal_Bool            bDoLoad;
-    sal_Bool            bReference;
-    sal_Bool            bPasswordVerified;
+    bool              bDoLoad;
+    bool              bReference;
+    bool              bPasswordVerified;
 
     // Lib represents library in new UNO library container
     uno::Reference< script::XLibraryContainer > mxScriptCont;
@@ -394,39 +394,39 @@ private:
 public:
     BasicLibInfo();
 
-    sal_Bool            IsReference() const     { return bReference; }
-    sal_Bool&           IsReference()           { return bReference; }
+    bool              IsReference() const     { return bReference; }
+    bool&             IsReference()           { return bReference; }
 
-    sal_Bool            IsExtern() const        { return ! aStorageName.equalsAscii(szImbedded); }
+    bool              IsExtern() const        { return ! aStorageName.equalsAscii(szImbedded); }
 
-    void            SetStorageName( const OUString& rName )   { aStorageName = rName; }
+    void              SetStorageName( const OUString& rName )   { aStorageName = rName; }
     const OUString&   GetStorageName() const                  { return aStorageName; }
 
-    void            SetRelStorageName( const OUString& rN )   { aRelStorageName = rN; }
+    void              SetRelStorageName( const OUString& rN )   { aRelStorageName = rN; }
     const OUString&   GetRelStorageName() const               { return aRelStorageName; }
 
-    StarBASICRef    GetLib() const
+    StarBASICRef      GetLib() const
     {
         if( mxScriptCont.is() && mxScriptCont->hasByName( aLibName ) &&
             !mxScriptCont->isLibraryLoaded( aLibName ) )
                 return StarBASICRef();
         return xLib;
     }
-    StarBASICRef&   GetLibRef()                         { return xLib; }
-    void            SetLib( StarBASIC* pBasic )         { xLib = pBasic; }
+    StarBASICRef&     GetLibRef()                         { return xLib; }
+    void              SetLib( StarBASIC* pBasic )         { xLib = pBasic; }
 
     const OUString&   GetLibName() const                  { return aLibName; }
-    void            SetLibName( const OUString& rName )   { aLibName = rName; }
+    void              SetLibName( const OUString& rName )   { aLibName = rName; }
 
     // Only temporary for Load/Save
-    sal_Bool            DoLoad()                            { return bDoLoad; }
+    bool              DoLoad()                            { return bDoLoad; }
 
-    sal_Bool            HasPassword() const                 { return !aPassword.isEmpty(); }
+    bool              HasPassword() const                 { return !aPassword.isEmpty(); }
     const OUString&   GetPassword() const                 { return aPassword; }
-    void            SetPassword( const OUString& rNewPassword )
+    void              SetPassword( const OUString& rNewPassword )
                                                         { aPassword = rNewPassword; }
-    sal_Bool            IsPasswordVerified() const          { return bPasswordVerified; }
-    void            SetPasswordVerified()               { bPasswordVerified = sal_True; }
+    bool              IsPasswordVerified() const          { return bPasswordVerified; }
+    void              SetPasswordVerified()               { bPasswordVerified = true; }
 
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
 
@@ -529,9 +529,9 @@ BasicLibInfo* BasicLibs::Remove( BasicLibInfo* LibInfo )
 
 BasicLibInfo::BasicLibInfo()
 {
-    bReference          = sal_False;
-    bPasswordVerified   = sal_False;
-    bDoLoad             = sal_False;
+    bReference          = false;
+    bPasswordVerified   = false;
+    bDoLoad             = false;
     mxScriptCont        = NULL;
     aStorageName        = szImbedded;
     aRelStorageName     = szImbedded;
@@ -553,8 +553,8 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     if( nId == LIBINFO_ID )
     {
         // Reload?
-        sal_Bool bDoLoad;
-        rSStream.ReadUChar( bDoLoad );
+        bool bDoLoad;
+        rSStream.ReadCharAsBool( bDoLoad );
         pInfo->bDoLoad = bDoLoad;
 
         // The name of the lib...
@@ -571,8 +571,8 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
 
         if ( nVer >= 2 )
         {
-            sal_Bool bReferenz;
-            rSStream.ReadUChar( bReferenz );
+            bool bReferenz;
+            rSStream.ReadCharAsBool( bReferenz );
             pInfo->IsReference() = bReferenz;
         }
 
@@ -614,7 +614,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
             xStdLib->SetName( OUString(szStdLibName) );
             pStdLibInfo->SetLibName( OUString(szStdLibName) );
             xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
-            xStdLib->SetModified( sal_False );
+            xStdLib->SetModified( false );
         }
         else
         {
@@ -630,7 +630,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
                 }
             }
             // Modified through insert
-            pStdLib->SetModified( sal_False );
+            pStdLib->SetModified( false );
         }
 
         // #91626 Save all stream data to save it unmodified if basic isn't modified
@@ -748,7 +748,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                 StarBASIC* pLib = pBasLibInfo->GetLib();
                 if( !pLib )
                 {
-                    sal_Bool bLoaded = ImpLoadLibrary( pBasLibInfo, NULL, sal_False );
+                    bool bLoaded = ImpLoadLibrary( pBasLibInfo, NULL, false );
                     if( bLoaded )
                         pLib = pBasLibInfo->GetLib();
                 }
@@ -793,7 +793,7 @@ BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr )
     pSLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 
     // Save is only necessary if basic has changed
-    xStdLib->SetModified( sal_False );
+    xStdLib->SetModified( false );
 }
 
 void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
@@ -810,7 +810,7 @@ void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
     xStdLib->SetName( OUString(szStdLibName) );
     pStdLibInfo->SetLibName( OUString(szStdLibName) );
     xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
-    xStdLib->SetModified( sal_False );
+    xStdLib->SetModified( false );
 }
 
 
@@ -824,7 +824,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     pStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 }
 
-void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, sal_Bool bLoadLibs )
+void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadLibs )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -983,7 +983,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             }
             if ( xStorageRef.Is() )
             {
-                AddLib( *xStorageRef, aLibName, sal_False );
+                AddLib( *xStorageRef, aLibName, false );
             }
             else
             {
@@ -1049,7 +1049,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
     return pInf;
 }
 
-sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly )
+bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1101,7 +1101,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
         }
         else
         {
-            sal_Bool bLoaded = sal_False;
+            bool bLoaded = false;
             if ( xBasicStream->Seek( STREAM_SEEK_TO_END ) != 0 )
             {
                 if ( !bInfosOnly )
@@ -1116,7 +1116,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
                     xBasicStream->SetBufferSize( 0 );
                     StarBASICRef xStdLib = pLibInfo->GetLib();
                     xStdLib->SetName( pLibInfo->GetLibName() );
-                    xStdLib->SetModified( sal_False );
+                    xStdLib->SetModified( false );
                     xStdLib->SetFlag( SBX_DONTSTORE );
                 }
                 else
@@ -1125,7 +1125,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
                     xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
                     ImplEncryptStream( *xBasicStream );
                     SbxBase::Skip( *xBasicStream );
-                    bLoaded = sal_True;
+                    bLoaded = true;
                 }
             }
             if ( !bLoaded )
@@ -1152,20 +1152,20 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
             return bLoaded;
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
+bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
 {
     sal_Size nPos = rStrm.Tell();
     sal_uInt32 nCreator;
     rStrm.ReadUInt32( nCreator );
     rStrm.Seek( nPos );
-    sal_Bool bProtected = sal_False;
+    bool bProtected = false;
     if ( nCreator != SBXCR_SBX )
     {
         // Should only be the case for encrypted Streams
-        bProtected = sal_True;
+        bProtected = true;
         rStrm.SetCryptMaskKey(szCryptingKey);
         rStrm.RefreshBuffer();
     }
@@ -1174,11 +1174,11 @@ sal_Bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
 
 // This code is necessary to load the BASIC of Beta 1
 // TODO: Which Beta 1?
-sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const
+bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const
 {
-    sal_Bool bProtected = ImplEncryptStream( rStrm );
+    bool bProtected = ImplEncryptStream( rStrm );
     SbxBaseRef xNew = SbxBase::Load( rStrm );
-    sal_Bool bLoaded = sal_False;
+    bool bLoaded = false;
     if( xNew.Is() )
     {
         if( xNew->IsA( TYPE(StarBASIC) ) )
@@ -1199,8 +1199,8 @@ sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic )
             // Fill new libray container (5.2 -> 6.0)
             copyToLibraryContainer( pNew, mpImpl->maContainerInfo );
 
-            pNew->SetModified( sal_False );
-            bLoaded = sal_True;
+            pNew->SetModified( false );
+            bLoaded = true;
         }
     }
     if ( bProtected )
@@ -1210,13 +1210,13 @@ sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic )
     return bLoaded;
 }
 
-void BasicManager::CheckModules( StarBASIC* pLib, sal_Bool bReference ) const
+void BasicManager::CheckModules( StarBASIC* pLib, bool bReference ) const
 {
     if ( !pLib )
     {
         return;
     }
-    sal_Bool bModified = pLib->IsModified();
+    bool bModified = pLib->IsModified();
 
     for ( sal_uInt16 nMod = 0; nMod < pLib->GetModules()->Count(); nMod++ )
     {
@@ -1233,11 +1233,11 @@ void BasicManager::CheckModules( StarBASIC* pLib, sal_Bool bReference ) const
     if( !bModified && bReference )
     {
         OSL_FAIL( "Referenced basic library is not compiled!" );
-        pLib->SetModified( sal_False );
+        pLib->SetModified( false );
     }
 }
 
-StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName, sal_Bool bReference )
+StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1260,7 +1260,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
 
     // Set StorageName before load because it is compared with pCurStorage
     pLibInfo->SetStorageName( aStorageName );
-    sal_Bool bLoaded = ImpLoadLibrary( pLibInfo, &rStorage );
+    bool bLoaded = ImpLoadLibrary( pLibInfo, &rStorage );
 
     if ( bLoaded )
     {
@@ -1270,19 +1270,19 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
         }
         if ( bReference )
         {
-            pLibInfo->GetLib()->SetModified( sal_False );   // Don't save in this case
+            pLibInfo->GetLib()->SetModified( false );   // Don't save in this case
             pLibInfo->SetRelStorageName( OUString() );
-            pLibInfo->IsReference() = sal_True;
+            pLibInfo->IsReference() = true;
         }
         else
         {
-            pLibInfo->GetLib()->SetModified( sal_True ); // Must be saved after Add!
+            pLibInfo->GetLib()->SetModified( true ); // Must be saved after Add!
             pLibInfo->SetStorageName( OUString(szImbedded) ); // Save in BasicManager-Storage
         }
     }
     else
     {
-        RemoveLib( nLibId, sal_False );
+        RemoveLib( nLibId, false );
         pLibInfo = 0;
     }
 
@@ -1290,7 +1290,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
 
 }
 
-sal_Bool BasicManager::IsReference( sal_uInt16 nLib )
+bool BasicManager::IsReference( sal_uInt16 nLib )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1300,16 +1300,16 @@ sal_Bool BasicManager::IsReference( sal_uInt16 nLib )
     {
         return pLibInfo->IsReference();
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib )
+bool BasicManager::RemoveLib( sal_uInt16 nLib )
 {
     // Only pyhsical deletion if no reference
     return RemoveLib( nLib, !IsReference( nLib ) );
 }
 
-sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage )
+bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 {
     DBG_CHKTHIS( BasicManager, 0 );
     DBG_ASSERT( nLib, "Standard-Lib cannot be removed!" );
@@ -1321,7 +1321,7 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
     {
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, OUString(), ERRCODE_BUTTON_OK );
         aErrors.push_back(BasicError(*pErrInf, BASERR_REASON_STDLIB, pLibInfo->GetLibName()));
-        return sal_False;
+        return false;
     }
 
     // If one of the streams cannot be opened, this is not an error,
@@ -1384,7 +1384,7 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
         GetStdLib()->Remove( pLibInfo->GetLib() );
     }
     delete pLibs->Remove( pLibInfo );
-    return sal_True;    // Remove was successful, del unimportant
+    return true;    // Remove was successful, del unimportant
 }
 
 sal_uInt16 BasicManager::GetLibCount() const
@@ -1444,7 +1444,7 @@ sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
     return LIB_NOTFOUND;
 }
 
-sal_Bool BasicManager::HasLib( const OUString& rName ) const
+bool BasicManager::HasLib( const OUString& rName ) const
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1453,14 +1453,14 @@ sal_Bool BasicManager::HasLib( const OUString& rName ) const
     {
         if ( pInf->GetLibName().equalsIgnoreAsciiCase(rName))
         {
-            return sal_True;
+            return true;
         }
         pInf = pLibs->Next();
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool BasicManager::SetLibName( sal_uInt16 nLib, const OUString& rName )
+bool BasicManager::SetLibName( sal_uInt16 nLib, const OUString& rName )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1473,11 +1473,11 @@ sal_Bool BasicManager::SetLibName( sal_uInt16 nLib, const OUString& rName )
         {
             StarBASICRef xStdLib = pLibInfo->GetLib();
             xStdLib->SetName( rName );
-            xStdLib->SetModified( sal_True );
+            xStdLib->SetModified( true );
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 OUString BasicManager::GetLibName( sal_uInt16 nLib )
@@ -1493,11 +1493,11 @@ OUString BasicManager::GetLibName( sal_uInt16 nLib )
     return OUString();
 }
 
-sal_Bool BasicManager::LoadLib( sal_uInt16 nLib )
+bool BasicManager::LoadLib( sal_uInt16 nLib )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
     DBG_ASSERT( pLibInfo, "Lib?!" );
     if ( pLibInfo )
@@ -1511,7 +1511,7 @@ sal_Bool BasicManager::LoadLib( sal_uInt16 nLib )
         }
         else
         {
-            bDone = ImpLoadLibrary( pLibInfo, NULL, sal_False );
+            bDone = ImpLoadLibrary( pLibInfo, NULL, false );
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {
@@ -1558,7 +1558,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
             SotStorageRef xStorage = new SotStorage( false, LinkTargetURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
             if( !xStorage->GetError() )
             {
-                pLib = AddLib( *xStorage, rLibName, sal_True );
+                pLib = AddLib( *xStorage, rLibName, true );
             }
 
             DBG_ASSERT( pLib, "XML Import: Linked basic library could not be loaded");
@@ -1614,7 +1614,7 @@ BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic ) const
 }
 
 
-sal_Bool BasicManager::IsBasicModified() const
+bool BasicManager::IsBasicModified() const
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1623,11 +1623,11 @@ sal_Bool BasicManager::IsBasicModified() const
     {
         if ( pInf->GetLib().Is() && pInf->GetLib()->IsModified() )
         {
-            return sal_True;
+            return true;
         }
         pInf = pLibs->Next();
     }
-    return sal_False;
+    return false;
 }
 
 std::vector<BasicError>& BasicManager::GetErrors()
@@ -2136,7 +2136,7 @@ sal_Bool DialogContainer_Impl::hasElements()
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
         if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -2193,7 +2193,7 @@ sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
     if( pVar && pVar->ISA( SbxObject ) &&
            ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
     {
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }

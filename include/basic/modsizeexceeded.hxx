@@ -30,8 +30,8 @@ class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com
     public:
     ModuleSizeExceeded( const com::sun::star::uno::Sequence<OUString>& sModules );
 
-    sal_Bool isAbort() const;
-    sal_Bool isApprove() const;
+    bool isAbort() const;
+    bool isApprove() const;
 
     // UNO interface
     public:

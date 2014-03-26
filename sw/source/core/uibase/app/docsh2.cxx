@@ -1317,7 +1317,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
 
                     // Only the modules are deleted from the standard-lib
                     if( nLibCount )
-                        pBasicMan->RemoveLib( nLibCount, sal_True );
+                        pBasicMan->RemoveLib( nLibCount, true );
                     else
                         pBasic->Clear();
                 }

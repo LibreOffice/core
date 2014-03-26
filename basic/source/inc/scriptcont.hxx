@@ -84,7 +84,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) SAL_OVERRIDE;
     virtual OUString getLibraryPassword( const OUString& rLibraryName ) SAL_OVERRIDE;
     virtual void clearLibraryPassword( const OUString& rLibraryName ) SAL_OVERRIDE;
-    virtual sal_Bool hasLibraryPassword( const OUString& rLibraryName ) SAL_OVERRIDE;
+    virtual bool hasLibraryPassword( const OUString& rLibraryName ) SAL_OVERRIDE;
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const SAL_OVERRIDE;
     virtual const sal_Char* SAL_CALL    getOldInfoFileName() const SAL_OVERRIDE;
