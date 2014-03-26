@@ -224,10 +224,11 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     OUString sLevel;
                     if(bOn)
                         sLevel = rDesc.GetStyleNames(i);
-                    sal_uInt16 nStyles = comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
+                    const sal_Int32 nStyles =
+                        comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
                     uno::Sequence<OUString> aStyles(nStyles);
                     OUString* pArr = aStyles.getArray();
-                    for(sal_uInt16 nStyle = 0; nStyle < nStyles; nStyle++)
+                    for(sal_Int32 nStyle = 0; nStyle < nStyles; nStyle++)
                         pArr[nStyle] = sLevel.getToken(nStyle, TOX_STYLE_DELIMITER);
                     uno::Any aAny(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
                     xAcc->replaceByIndex(i, aAny);
@@ -282,16 +283,9 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         {
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_COMMA_SEPARATED, pForm->IsCommaSeparated());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, 0 != (nIdxOptions&nsSwTOIOptions::TOI_ALPHA_DELIMITTER));
-            sal_uInt16 nStartLevel = USHRT_MAX;
-            sal_uInt16 nEndLevel = USHRT_MAX;
-            if(nCurrentLevel < pForm->GetFormMax())
-                nStartLevel = nEndLevel = nCurrentLevel;
-            else
-            {
-                nStartLevel = 0;
-                nEndLevel = pForm->GetFormMax() - 1;
-            }
-
+            const bool bUseCurrent = nCurrentLevel < pForm->GetFormMax();
+            const sal_uInt16 nStartLevel = bUseCurrent ? nCurrentLevel : 0;
+            const sal_uInt16 nEndLevel = bUseCurrent ? nCurrentLevel : pForm->GetFormMax() - 1;
             if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_FORMAT))
             {
                 for(sal_uInt16 nCurrLevel = nStartLevel; nCurrLevel <= nEndLevel; nCurrLevel++)
