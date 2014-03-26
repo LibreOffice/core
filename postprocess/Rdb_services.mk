@@ -215,6 +215,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 	$(if $(ENABLE_OPENGL), \
 		slideshow/source/engine/OGLTrans/ogltrans \
+		avmedia/source/opengl/avmediaogl \
 	) \
 	$(if $(ENABLE_TDE), \
 		shell/source/backends/kdebe/tdebe1 \

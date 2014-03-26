@@ -51,4 +51,11 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 endif
 
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	Library_avmediaogl \
+))
+endif
+
+
 # vim: set noet sw=4 ts=4:
