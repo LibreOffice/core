@@ -59,7 +59,6 @@ public:
 
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( const char* pDir, const char* pName );
 
-    void loadDocx(const char* pDir, const char* pName);
     virtual void setUp();
     virtual void tearDown();
 
