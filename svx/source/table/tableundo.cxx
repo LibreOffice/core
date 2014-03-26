@@ -129,8 +129,13 @@ void CellUndo::setDataToCell( const Data& rData )
     mxCell->mnRowSpan = rData.mnRowSpan;
     mxCell->mnColSpan = rData.mnColSpan;
 
-    if( mxObjRef.is() )
+    if(mxObjRef.is())
+    {
+        // #i120201# ActionChanged is not enough, we need to trigger TableLayouter::UpdateBorderLayout()
+        // and this is done best using ReformatText() for table objects
         mxObjRef->ActionChanged();
+        mxObjRef->NbcReformatText();
+    }
 }
 
 void CellUndo::getDataFromCell( Data& rData )
