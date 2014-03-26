@@ -3655,13 +3655,10 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
     if(nLevPos   != LISTBOX_ENTRY_NOTFOUND &&
        nTemplPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        OUString aStr(m_pLevelLB->GetEntry(nLevPos));
-        sal_Int32 nDelPos = aStr.indexOf(aDeliStart);
-        if(nDelPos != -1)
-            aStr = aStr.copy(0, nDelPos-1);
-        aStr += " " + OUString(aDeliStart)
-              + m_pParaLayLB->GetSelectEntry()
-              + OUString(aDeliEnd);
+        const OUString aStr(m_pLevelLB->GetEntry(nLevPos).getToken(0, aDeliStart)
+            + " " + OUString(aDeliStart)
+            + m_pParaLayLB->GetSelectEntry()
+            + OUString(aDeliEnd));
 
         m_pCurrentForm->SetTemplate(nLevPos, m_pParaLayLB->GetSelectEntry());
 
@@ -3675,13 +3672,10 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 {
-    sal_Int32 nPos = m_pLevelLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLevelLB->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        OUString aStr(m_pLevelLB->GetEntry(nPos));
-        sal_Int32 nDelPos = aStr.indexOf(aDeliStart);
-        if(nDelPos != -1)
-            aStr = aStr.copy(0, nDelPos-1);
+        const OUString aStr(m_pLevelLB->GetEntry(nPos).getToken(0, aDeliStart));
         m_pLevelLB->RemoveEntry(nPos);
         m_pLevelLB->InsertEntry(aStr, nPos);
         m_pLevelLB->SelectEntry(aStr);
