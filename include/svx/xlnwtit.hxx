@@ -29,7 +29,7 @@
 class SVX_DLLPUBLIC XLineWidthItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineWidthItem(long nWidth = 0);
                             XLineWidthItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

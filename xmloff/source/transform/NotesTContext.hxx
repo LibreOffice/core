@@ -29,7 +29,7 @@ class XMLNotesTransformerContext : public XMLPersElemContentTContext
     ::xmloff::token::XMLTokenEnum m_eTypeToken;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLNotesTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,

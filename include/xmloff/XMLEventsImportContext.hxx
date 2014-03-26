@@ -64,7 +64,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLEventsImportContext(
         SvXMLImport& rImport,

@@ -41,7 +41,7 @@ protected:
     sal_Bool                        mbSetTransform;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DObjectContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -65,7 +65,7 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
     sal_Bool                    mbMaxEdgeUsed;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -88,7 +88,7 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
     sal_Bool                    mbSizeUsed;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -109,7 +109,7 @@ class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
     OUString               maViewBox;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -127,7 +127,7 @@ public:
 class SdXML3DLatheObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -145,7 +145,7 @@ public:
 class SdXML3DExtrudeObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,

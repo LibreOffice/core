@@ -25,7 +25,7 @@ class SwBezierShell: public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_BEZIERSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
             SwBezierShell(SwView &rView);
 

@@ -43,7 +43,7 @@ private:
     mutable ScStyleSheet::Usage eUsage;
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 

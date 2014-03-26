@@ -38,7 +38,7 @@ private:
     void operator=(const DlgEdModel& rSrcModel);    // not implemented
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     DlgEdModel();
     virtual ~DlgEdModel();

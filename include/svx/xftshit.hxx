@@ -33,7 +33,7 @@
 class SVX_DLLPUBLIC XFormTextShadowItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XFormTextShadowItem(XFormTextShadow = XFTSHADOW_NONE);
                             XFormTextShadowItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

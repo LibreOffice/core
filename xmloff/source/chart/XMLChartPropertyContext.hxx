@@ -24,7 +24,7 @@
 class XMLChartPropertyContext : public SvXMLPropertySetContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLChartPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                              const OUString& rLName,

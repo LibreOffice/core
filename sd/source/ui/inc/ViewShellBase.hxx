@@ -62,7 +62,7 @@ class ViewShellBase
     : public SfxViewShell
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_VIEWFACTORY(ViewShellBase);
     SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE)
 

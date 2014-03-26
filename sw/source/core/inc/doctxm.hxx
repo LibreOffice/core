@@ -84,7 +84,7 @@ public:
     void Update( const SfxItemSet* pAttr = 0,
                  const bool        _bNewTOX = false );
     void UpdatePageNum();               // insert page numbering
-    TYPEINFO();                         // for rtti
+    TYPEINFO_OVERRIDE();                         // for rtti
 
     SwTOXSortTabBases* GetTOXSortTabBases() { return &aSortArr; }
 

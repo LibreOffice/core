@@ -54,7 +54,7 @@ class SdPageFormatUndoAction : public SdUndoAction
     sal_Bool        mbNewFullSize;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdPageFormatUndoAction( SdDrawDocument* pDoc,
                             SdPage*         pThePage,
                             const Size&     rOldSz,
@@ -117,7 +117,7 @@ class SdPageLRUndoAction : public SdUndoAction
     sal_Int32   mnNewRight;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdPageLRUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
                         sal_Int32 nOldLft, sal_Int32 nOldRgt,
                         sal_Int32 nNewLft, sal_Int32 nNewRgt ) :
@@ -146,7 +146,7 @@ class SdPageULUndoAction : public SdUndoAction
     sal_Int32   mnNewLower;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdPageULUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
                         sal_Int32 nOldUpr, sal_Int32 nOldLwr,
                         sal_Int32 nNewUpr, sal_Int32 nNewLwr ) :

@@ -1088,7 +1088,7 @@ class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
     OUString m_aOldClass;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLDocumentTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
@@ -1237,7 +1237,7 @@ class XMLBodyTransformerContext_Impl : public XMLTransformerContext
     OUString m_aClassQName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLBodyTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
@@ -1299,7 +1299,7 @@ void XMLBodyTransformerContext_Impl::EndElement()
 class XMLTabStopOOoTContext_Impl : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTabStopOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
@@ -1400,7 +1400,7 @@ class XMLTrackedChangesOOoTContext_Impl : public XMLTransformerContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTrackedChangesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
@@ -1476,7 +1476,7 @@ class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
     OUString m_aElemQName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );

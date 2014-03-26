@@ -31,7 +31,7 @@ class SVX_DLLPUBLIC SdrGrafCropItem : public SvxGrfCrop
 {
 public:
 
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
 
                             SdrGrafCropItem( sal_Int32 nLeftCrop = 0, sal_Int32 nTopCrop = 0,
                                              sal_Int32 nRightCrop = 0, sal_Int32 nBottomCrop = 0,

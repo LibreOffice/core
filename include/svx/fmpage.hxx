@@ -45,7 +45,7 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
     OUString            m_sPageName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     FmFormPage(const FmFormPage& rPage);

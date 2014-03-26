@@ -379,7 +379,7 @@ public:
     OUString        maPathShapeId;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLAnimationsEffectContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -399,7 +399,7 @@ class XMLAnimationsSoundContext : public SvXMLImportContext
     XMLAnimationsEffectContext* mpParent;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
     virtual ~XMLAnimationsSoundContext();

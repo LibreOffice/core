@@ -53,7 +53,7 @@ private:
     void operator=(const OReportModel& rSrcModel);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
     virtual ~OReportModel();

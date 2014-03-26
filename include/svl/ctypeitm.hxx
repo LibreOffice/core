@@ -31,7 +31,7 @@ private:
     OUString _aPresentation;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     CntContentTypeItem();
     CntContentTypeItem( sal_uInt16 nWhich, const OUString& rType );

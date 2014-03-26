@@ -34,7 +34,7 @@ class SwTableShell: public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_TABSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);

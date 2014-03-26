@@ -41,7 +41,7 @@ class XMLIndexBodyContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexBodyContext(
         SvXMLImport& rImport,

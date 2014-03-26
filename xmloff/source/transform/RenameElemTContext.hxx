@@ -31,7 +31,7 @@ class XMLRenameElemTransformerContext : public XMLTransformerContext
     OUString m_aAttrValue;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // The following consutructor renames the element names "rQName"
     // to bPrefix/eToken

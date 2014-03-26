@@ -49,7 +49,7 @@ private:
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_EDIT_SHELL)
 
                     ScEditShell(EditView* pView, ScViewData* pData);

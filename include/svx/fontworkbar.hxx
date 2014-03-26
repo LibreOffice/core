@@ -38,7 +38,7 @@ bool SVX_DLLPUBLIC checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nChe
 class SVX_DLLPUBLIC FontworkBar : public SfxShell
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SVX_INTERFACE_FONTWORK_BAR)
 
      FontworkBar(SfxViewShell* pViewShell );

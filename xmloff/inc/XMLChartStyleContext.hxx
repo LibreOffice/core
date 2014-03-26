@@ -35,7 +35,7 @@ protected:
                                const OUString& rValue );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLChartStyleContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,

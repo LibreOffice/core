@@ -32,7 +32,7 @@ public:
     SwFmtFollowTextFlow( sal_Bool bFlag = sal_False )
         : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

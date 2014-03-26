@@ -35,7 +35,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
     OUString                aCommentText;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
                     const OUString &rLibName,

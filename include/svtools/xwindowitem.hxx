@@ -39,7 +39,7 @@ class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
     XWindowItem & operator = ( const XWindowItem & );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     XWindowItem();
     XWindowItem( const XWindowItem &rItem );
     ~XWindowItem();

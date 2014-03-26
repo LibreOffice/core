@@ -36,7 +36,7 @@ class XMLStringBufferImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLStringBufferImportContext(
         SvXMLImport& rImport,

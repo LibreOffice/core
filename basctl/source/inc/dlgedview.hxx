@@ -38,7 +38,7 @@ private:
     DlgEditor& rDlgEditor;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor);
     virtual ~DlgEdView();

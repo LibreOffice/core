@@ -39,7 +39,7 @@ class XMLFormPropValueTContext_Impl : public XMLTransformerContext
     sal_Bool m_bIsVoid;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // element content persistence only
     XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,

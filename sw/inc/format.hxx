@@ -65,7 +65,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     ///< Already in base class Client.
+    TYPEINFO_OVERRIDE();     ///< Already in base class Client.
 
     virtual ~SwFmt();
     SwFmt &operator=(const SwFmt&);

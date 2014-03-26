@@ -77,7 +77,7 @@ public:
         XMLTransformerContext::SetQName( rQName );
     };
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLPropertiesTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,

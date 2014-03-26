@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
     XColorListRef     pColorList;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxColorListItem();
                             SvxColorListItem( XColorListRef pTable,
                                     sal_uInt16 nWhich  );
@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
     XGradientListRef  pGradientList;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientListRef pList,
                                     sal_uInt16 nWhich  );
@@ -94,7 +94,7 @@ class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
     XHatchListRef     pHatchList;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchListRef pList,
                                     sal_uInt16 nWhich  );
@@ -125,7 +125,7 @@ class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
     XBitmapListRef    pBitmapList;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapListRef pBL,
                                     sal_uInt16 nWhich  );
@@ -156,7 +156,7 @@ class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
     XDashListRef      pDashList;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxDashListItem();
                             SvxDashListItem( XDashListRef pList,
                                     sal_uInt16 nWhich  );
@@ -184,7 +184,7 @@ class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
     XLineEndListRef   pLineEndList;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndListRef pList,
                                     sal_uInt16 nWhich  );

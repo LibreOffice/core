@@ -29,7 +29,7 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
     SvLockBytesRef          _xVal;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxLockBytesItem();
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             SfxLockBytesItem( const SfxLockBytesItem& );

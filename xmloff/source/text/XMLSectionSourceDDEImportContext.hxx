@@ -40,7 +40,7 @@ class XMLSectionSourceDDEImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLSectionSourceDDEImportContext(
         SvXMLImport& rImport,

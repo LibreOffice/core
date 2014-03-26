@@ -29,7 +29,7 @@ class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
     SvGlobalName            m_aName;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxGlobalNameItem();
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
                             ~SfxGlobalNameItem();

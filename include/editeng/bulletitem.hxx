@@ -78,7 +78,7 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     void    SetDefaults_Impl();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxBulletItem( sal_uInt16 nWhich = 0 );
     explicit SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );

@@ -77,7 +77,7 @@ protected:
     void BreakSingle3DObj(E3dObject* pObj);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     E3dView(SdrModel* pModel, OutputDevice* pOut = 0L);
     virtual ~E3dView();
 

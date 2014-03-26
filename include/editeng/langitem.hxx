@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
                      const sal_uInt16 nId  );

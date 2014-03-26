@@ -99,7 +99,7 @@ protected:
     sal_Bool isPresentationShape() const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLShapeContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -130,7 +130,7 @@ class SdXMLRectShapeContext : public SdXMLShapeContext
     sal_Int32                   mnRadius;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLRectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -154,7 +154,7 @@ class SdXMLLineShapeContext : public SdXMLShapeContext
     sal_Int32                   mnY2;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLLineShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -181,7 +181,7 @@ class SdXMLEllipseShapeContext : public SdXMLShapeContext
     sal_Int32                   mnStartAngle;
     sal_Int32                   mnEndAngle;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLEllipseShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -204,7 +204,7 @@ class SdXMLPolygonShapeContext : public SdXMLShapeContext
     sal_Bool                    mbClosed;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLPolygonShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -225,7 +225,7 @@ class SdXMLPathShapeContext : public SdXMLShapeContext
     OUString               maViewBox;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLPathShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -246,7 +246,7 @@ class SdXMLTextBoxShapeContext : public SdXMLShapeContext
     sal_Int32                   mnRadius;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLTextBoxShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -268,7 +268,7 @@ private:
     OUString maFormId;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLControlShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -304,7 +304,7 @@ private:
     com::sun::star::uno::Any maPath;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLConnectorShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -327,7 +327,7 @@ private:
     ::com::sun::star::awt::Point maEnd;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLMeasureShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -349,7 +349,7 @@ class SdXMLPageShapeContext : public SdXMLShapeContext
 private:
     sal_Int32   mnPageNumber;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLPageShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -372,7 +372,7 @@ private:
     sal_Int32 mnRadius;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLCaptionShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -395,7 +395,7 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLGraphicObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -420,7 +420,7 @@ class SdXMLChartShapeContext : public SdXMLShapeContext
     SvXMLImportContext*         mpChartContext;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLChartShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -448,7 +448,7 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -481,7 +481,7 @@ private:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -512,7 +512,7 @@ private:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -540,7 +540,7 @@ private:
     OUString maHref;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -571,7 +571,7 @@ protected:
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -601,7 +601,7 @@ protected :
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -624,7 +624,7 @@ public:
 class SdXMLTableShapeContext : public SdXMLShapeContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,

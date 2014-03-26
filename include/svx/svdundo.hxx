@@ -56,7 +56,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     virtual ~SdrUndoAction();
 
     virtual bool CanRepeat(SfxRepeatTarget& rView) const;

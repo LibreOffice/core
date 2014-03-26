@@ -69,7 +69,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrCircObj(SdrObjKind eNewKind); // Circ, CArc, Sect or CCut
     SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect);
 

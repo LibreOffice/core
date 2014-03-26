@@ -148,7 +148,7 @@ SV_DECL_IMPL_REF(SvLockBytes);
 class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvOpenLockBytes() : SvLockBytes(0, false) {}
     SvOpenLockBytes(SvStream * pStream, bool bOwner):
@@ -174,7 +174,7 @@ class SvAsyncLockBytes: public SvOpenLockBytes
     bool m_bTerminated;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvAsyncLockBytes(SvStream * pStream, bool bOwner):
         SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(false) {}

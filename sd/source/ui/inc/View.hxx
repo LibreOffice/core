@@ -67,7 +67,7 @@ struct SdViewRedrawRec
 class View : public FmFormView
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     View (
         SdDrawDocument& rDrawDoc,

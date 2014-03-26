@@ -48,7 +48,7 @@ class XMLIndexTableSourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexTableSourceContext(
         SvXMLImport& rImport,

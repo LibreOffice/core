@@ -223,7 +223,7 @@ private:
 public:
     VclWindowEvent( Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
     virtual ~VclWindowEvent() {}
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     Window* GetWindow() const { return pWindow; }
     void*   GetData() const { return pData; }
@@ -238,7 +238,7 @@ private:
 public:
     VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
     virtual ~VclMenuEvent() {}
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     Menu* GetMenu() const { return pMenu; }
     sal_uInt16 GetItemPos() const { return mnPos; }

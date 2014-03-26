@@ -35,7 +35,7 @@ class SVL_DLLPUBLIC SvOutputStreamOpenLockBytes: public SvOpenLockBytes
     sal_uInt32 m_nPosition;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvOutputStreamOpenLockBytes(
             const com::sun::star::uno::Reference<

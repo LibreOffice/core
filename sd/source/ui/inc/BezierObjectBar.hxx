@@ -33,7 +33,7 @@ class BezierObjectBar
     : public SfxShell
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR)
 
     BezierObjectBar (ViewShell* pSdViewShell, View* pSdView);

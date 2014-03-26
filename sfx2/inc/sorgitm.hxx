@@ -29,7 +29,7 @@ private:
     OUString aLanguage;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SfxScriptOrganizerItem();
     SfxScriptOrganizerItem( const SfxScriptOrganizerItem& );
     virtual ~SfxScriptOrganizerItem();

@@ -28,7 +28,7 @@
 class EDITENG_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxHorJustifyItem( const sal_uInt16 nId );
 
@@ -61,7 +61,7 @@ public:
 class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxVerJustifyItem( const sal_uInt16 nId  );
 

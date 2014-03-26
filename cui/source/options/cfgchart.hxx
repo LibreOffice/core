@@ -93,7 +93,7 @@ public:
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 

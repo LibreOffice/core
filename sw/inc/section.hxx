@@ -163,7 +163,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    TYPEINFO();     // rtti
+    TYPEINFO_OVERRIDE();     // rtti
 
     SwSection(SectionType const eType, OUString const& rName,
                 SwSectionFmt & rFormat);
@@ -299,7 +299,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    TYPEINFO();     // Already contained in base class client.
+    TYPEINFO_OVERRIDE();     // Already contained in base class client.
     ~SwSectionFmt();
 
     // Deletes all Frms in aDepend (Frms are recognized via PTR_CAST).

@@ -33,7 +33,7 @@ public:
     // But implement yourself.
     SFX_DECL_INTERFACE(SW_WEBDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     ~SwWebDocShell();

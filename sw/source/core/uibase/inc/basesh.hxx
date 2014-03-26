@@ -69,7 +69,7 @@ public:
     virtual     ~SwBaseShell();
 
     SFX_DECL_INTERFACE(SW_BASESHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     void        ExecDelete(SfxRequest &);
 

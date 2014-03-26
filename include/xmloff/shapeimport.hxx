@@ -256,7 +256,7 @@ public:
     SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
         const OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getShape() const { return mxShape; }
 

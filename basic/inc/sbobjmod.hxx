@@ -37,7 +37,7 @@ protected:
     virtual ~SbObjModule();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbObjModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
 
@@ -63,7 +63,7 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
 //protected:
     virtual void InitObject();
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbUserFormModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t );

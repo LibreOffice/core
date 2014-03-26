@@ -206,7 +206,7 @@ public:
 
     ~SwXStyle();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

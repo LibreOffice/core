@@ -79,7 +79,7 @@ namespace connectivity
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             inline sal_Bool isValid() const;
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
         class OOO_DLLPUBLIC_FILE OOperandRow : public OOperand
@@ -95,7 +95,7 @@ namespace connectivity
             virtual void setValue(const ORowSetValue& _rVal);
             void bindValue(const OValueRefRow& _pRow); // Bind to the value that the operand represents
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
         // Attributes from a result row
@@ -110,7 +110,7 @@ namespace connectivity
 
             virtual sal_Bool isIndexed() const;
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
         // Parameter for a predicate
@@ -118,7 +118,7 @@ namespace connectivity
         {
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
         // Value operands
@@ -139,7 +139,7 @@ namespace connectivity
             virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
 
@@ -149,7 +149,7 @@ namespace connectivity
         public:
             OOperandConst(const connectivity::OSQLParseNode& rColumnRef, const OUString& aStrValue);
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
 
@@ -164,7 +164,7 @@ namespace connectivity
         public:
             OOperandResult(const ORowSetValue& _rVar)
                             :OOperandValue(_rVar, _rVar.getTypeKind()) {}
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
 
@@ -195,7 +195,7 @@ namespace connectivity
         {
         public:
             OStopOperand(){}
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
         // Operators
@@ -205,7 +205,7 @@ namespace connectivity
             virtual void Exec(OCodeStack&) = 0;
             virtual sal_uInt16 getRequestedOperands() const;    // Count of requested operands
                                                                 // Defaults to 2
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         };
 
 
@@ -213,7 +213,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OBoolOperator : public OOperator
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             virtual void Exec(OCodeStack&);
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
@@ -221,7 +221,7 @@ namespace connectivity
         class OOp_NOT : public OBoolOperator
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
         protected:
             virtual void Exec(OCodeStack&);
@@ -232,7 +232,7 @@ namespace connectivity
         class OOp_AND : public OBoolOperator
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
         protected:
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
@@ -241,7 +241,7 @@ namespace connectivity
         class OOp_OR : public OBoolOperator
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         protected:
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
@@ -249,7 +249,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OOp_ISNULL : public OBoolOperator
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         public:
             virtual void Exec(OCodeStack&);
             virtual sal_uInt16 getRequestedOperands() const;
@@ -259,14 +259,14 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OOp_ISNOTNULL : public OOp_ISNULL
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             virtual sal_Bool operate(const OOperand*, const OOperand* = NULL) const;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_LIKE : public OBoolOperator
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         protected:
             const sal_Unicode cEscape;
 
@@ -279,7 +279,7 @@ namespace connectivity
         class OOp_NOTLIKE : public OOp_LIKE
         {
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
         public:
             OOp_NOTLIKE(const sal_Unicode cEsc = L'\0'):OOp_LIKE(cEsc){};
 
@@ -291,7 +291,7 @@ namespace connectivity
             sal_Int32 aPredicateType;
 
         public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             OOp_COMPARE(sal_Int32 aPType)
                          :aPredicateType(aPType) {}
 
@@ -305,7 +305,7 @@ namespace connectivity
         public:
             virtual void Exec(OCodeStack&);
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
         protected:
             virtual double operate(const double& fLeft,const double& fRight) const = 0;
@@ -346,7 +346,7 @@ namespace connectivity
         public:
             virtual void Exec(OCodeStack&);
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const = 0;
@@ -357,7 +357,7 @@ namespace connectivity
         public:
             virtual void Exec(OCodeStack&);
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const = 0;
@@ -370,7 +370,7 @@ namespace connectivity
             virtual sal_uInt16 getRequestedOperands() const;
             virtual ORowSetValue operate(const ORowSetValue& lhs) const = 0;
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
         };
     }

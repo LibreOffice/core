@@ -45,7 +45,7 @@ class XMLIndexChapterInfoEntryContext : public XMLIndexSimpleEntryContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexChapterInfoEntryContext(
         SvXMLImport& rImport,

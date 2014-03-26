@@ -66,7 +66,7 @@ class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexAlphabeticalSourceContext(
         SvXMLImport& rImport,

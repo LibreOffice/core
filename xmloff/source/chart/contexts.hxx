@@ -49,7 +49,7 @@ public:
         const OUString& rLName );
     virtual ~SchXMLDocContext();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,

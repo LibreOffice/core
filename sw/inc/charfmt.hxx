@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwCharFmt : public SwFmt
     {}
 
 public:
-    TYPEINFO();    // already in base class Client
+    TYPEINFO_OVERRIDE();    // already in base class Client
 };
 
 namespace CharFmt

@@ -32,7 +32,7 @@ private:
     SvxXMLTabStopArray_Impl*    mpTabStops;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxXMLTabStopImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                 const OUString& rLName,

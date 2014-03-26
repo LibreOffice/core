@@ -30,7 +30,7 @@ public:
 
     SFX_DECL_VIEWFACTORY(SwWebView);
     SFX_DECL_INTERFACE(SW_WEBVIEWSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwWebView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwWebView();

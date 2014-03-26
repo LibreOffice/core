@@ -40,7 +40,7 @@ class XMLIndexIllustrationSourceContext : public XMLIndexTableSourceContext
 {
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexIllustrationSourceContext(
         SvXMLImport& rImport,

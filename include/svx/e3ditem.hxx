@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
     basegfx::B3DVector  aVal;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SvxB3DVectorItem();
                             SvxB3DVectorItem( sal_uInt16 nWhich, const basegfx::B3DVector& rVal );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );

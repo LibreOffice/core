@@ -80,7 +80,7 @@ class SbUnoStructRefObject: public SbxObject
     OUString Impl_DumpProperties();
     OUString getDbgObjectName();
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     StructRefInfo getStructMember( const OUString& rMember );
     StructRefInfo getStructInfo() { return maMemberInfo; }
     SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
@@ -119,7 +119,7 @@ class SbUnoObject: public SbxObject
 
 public:
     static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbUnoObject( const OUString& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
     ~SbUnoObject();
 
@@ -166,7 +166,7 @@ class SbUnoMethod : public SbxMethod
     bool mbDirectInvocation; // Method should be used with XDirectInvocation interface
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
         bool bInvocation,
@@ -200,7 +200,7 @@ class SbUnoProperty : public SbxProperty
     SbUnoProperty& operator = ( const SbUnoProperty&);
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbUnoProperty( const OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
         const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
@@ -224,7 +224,7 @@ class SbUnoClass : public SbxObject
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbUnoClass( const OUString& aName_ )
         : SbxObject( aName_ )
     {}
@@ -255,7 +255,7 @@ class SbUnoService : public SbxObject
     bool m_bNeedsInit;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbUnoService( const OUString& aName_,
         const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
             : SbxObject( aName_ )
@@ -284,7 +284,7 @@ class SbUnoServiceCtor : public SbxMethod
     SbUnoServiceCtor* pNext;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SbUnoServiceCtor( const OUString& aName_, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
@@ -301,7 +301,7 @@ class SbUnoSingleton : public SbxObject
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbUnoSingleton( const OUString& aName_,
         const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
@@ -326,7 +326,7 @@ public:
     const ::com::sun::star::uno::Any& getValue( void )
         { return mVal; }
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 };
 
 
@@ -337,7 +337,7 @@ class AutomationNamedArgsSbxArray : public SbxArray
 {
     ::com::sun::star::uno::Sequence< OUString >      maNameSeq;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
         : maNameSeq( nSeqSize )
     {}
@@ -385,7 +385,7 @@ class BasicCollection : public SbxObject
     void CollRemove( SbxArray* pPar_ );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     BasicCollection( const OUString& rClassname );
     virtual SbxVariable* Find( const OUString&, SbxClassType );
     virtual void Clear();

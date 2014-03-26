@@ -77,7 +77,7 @@ class XMLSectionImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLSectionImportContext(
         SvXMLImport& rImport,

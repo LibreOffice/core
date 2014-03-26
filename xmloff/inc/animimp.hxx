@@ -32,7 +32,7 @@ class XMLAnimationsContext : public SvXMLImportContext
     AnimImpImpl*    mpImpl;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLAnimationsContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,

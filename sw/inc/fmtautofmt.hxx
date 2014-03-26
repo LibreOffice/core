@@ -42,7 +42,7 @@ private:
     SwFmtAutoFmt & operator= (const SwFmtAutoFmt &);
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const;

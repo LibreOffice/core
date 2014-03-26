@@ -33,7 +33,7 @@ class ScPaintHint : public SfxHint
     ScPaintHint(); // disabled
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
                     ~ScPaintHint();
 
@@ -59,7 +59,7 @@ class ScUpdateRefHint : public SfxHint
     SCsTAB          nDz;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
 
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                         SCsCOL nX, SCsROW nY, SCsTAB nZ );
@@ -79,7 +79,7 @@ class ScPointerChangedHint : public SfxHint
     sal_uInt16          nFlags;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
 
                     ~ScPointerChangedHint();
 
@@ -105,7 +105,7 @@ class ScLinkRefreshedHint : public SfxHint
                             //! also use source data for area links?
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScLinkRefreshedHint();
                     ~ScLinkRefreshedHint();
 
@@ -132,7 +132,7 @@ class ScAutoStyleHint : public SfxHint
     sal_uLong   nTimeout;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
                                         sal_uLong nT, const OUString& rSt2 );
                     ~ScAutoStyleHint();
@@ -148,7 +148,7 @@ class ScDBRangeRefreshedHint : public SfxHint
     ScImportParam   aParam;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
                     ~ScDBRangeRefreshedHint();
 
@@ -160,7 +160,7 @@ class ScDataPilotModifiedHint : public SfxHint
     OUString        maName;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScDataPilotModifiedHint( const OUString& rName );
                     ~ScDataPilotModifiedHint();
 

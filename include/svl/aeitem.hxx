@@ -35,7 +35,7 @@ protected:
     sal_uInt16                  _GetPosByValue( sal_uInt16 nValue ) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
                             SfxAllEnumItem();
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );

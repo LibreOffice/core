@@ -218,7 +218,7 @@ protected:
 public:
     SFX_DECL_VIEWFACTORY(SwPagePreview);
     SFX_DECL_INTERFACE(SW_PAGEPREVIEW)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
     inline SwViewShell*       GetViewShell() const { return pViewWin->GetViewShell(); }

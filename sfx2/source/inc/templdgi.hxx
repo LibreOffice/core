@@ -273,7 +273,7 @@ protected:
     SfxObjectShell *    SaveSelection();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window*, bool );
     virtual ~SfxCommonTemplateDialog_Impl();
@@ -363,7 +363,7 @@ protected:
 
 public:
     friend class SfxTemplateDialog;
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplateDialog* pDlgWindow );
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );

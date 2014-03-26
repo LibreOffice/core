@@ -41,7 +41,7 @@ private:
     OSectionView(const OSectionView&);
     void operator =(const OSectionView&);
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
     virtual ~OSectionView();

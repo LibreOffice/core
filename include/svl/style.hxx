@@ -285,7 +285,7 @@ class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
                      public SfxListener, public SfxBroadcaster, public svl::StyleSheetUser
 {
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         SfxStyleSheet( const OUString&, const SfxStyleSheetBasePool&, SfxStyleFamily, sal_uInt16 );
                         SfxStyleSheet( const SfxStyleSheet& );
@@ -338,7 +338,7 @@ class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
     sal_uInt16 nHint;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
                         SfxStyleSheetPoolHint(sal_uInt16 nArgHint) :  nHint(nArgHint){}
     sal_uInt16              GetHint() const
@@ -353,7 +353,7 @@ class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
     sal_uInt16              nHint;
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
@@ -367,7 +367,7 @@ class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
     OUString            aName;
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         SfxStyleSheetHintExtended( sal_uInt16, const OUString& rOld,
                                                    SfxStyleSheetBase& );

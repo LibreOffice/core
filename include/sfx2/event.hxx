@@ -42,7 +42,7 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
     sal_uInt16              nEventId;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj = 0 )
                         :   pObjShell(pObj),
                             aEventName(aName),
@@ -66,7 +66,7 @@ class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
     ::com::sun::star::uno::Reference< css::frame::XController2 > xViewController;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
@@ -91,7 +91,7 @@ class SfxNamedHint : public SfxHint
     OUString            _aArgs;
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         SfxNamedHint( const OUString& rName,
                                       const OUString& rArgs,
@@ -119,7 +119,7 @@ class SfxPrintingHint : public SfxViewEventHint
     sal_Int32 mnPrintableState;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOpts;
 public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         SfxPrintingHint(
                 sal_Int32 nEvent,

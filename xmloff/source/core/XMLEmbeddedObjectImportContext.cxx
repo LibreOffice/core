@@ -70,7 +70,7 @@ class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
         ::com::sun::star::xml::sax::XDocumentHandler > xHandler;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,

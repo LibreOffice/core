@@ -38,7 +38,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_FORMAT_SHELL)
 
                 ScFormatShell(ScViewData* pData);

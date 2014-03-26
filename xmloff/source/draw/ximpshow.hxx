@@ -32,7 +32,7 @@ class SdXMLShowsContext : public SvXMLImportContext
     ShowsImpImpl*   mpImpl;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLShowsContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,

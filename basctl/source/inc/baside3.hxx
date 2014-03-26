@@ -77,7 +77,7 @@ protected:
     void                InitSettings(bool bFont, bool bForeground, bool bBackground);
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
     DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();

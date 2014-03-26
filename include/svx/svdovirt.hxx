@@ -52,7 +52,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrVirtObj(SdrObject& rNewObj);
     virtual ~SdrVirtObj();
     virtual SdrObject& ReferencedObj();

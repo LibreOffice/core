@@ -62,7 +62,7 @@ class XMLFootnoteConfigHelper : public SvXMLImportContext
     bool bIsBegin;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLFootnoteConfigHelper(
         SvXMLImport& rImport,

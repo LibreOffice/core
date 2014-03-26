@@ -33,7 +33,7 @@
 class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XFillStyleItem(XFillStyle = XFILL_SOLID);
                             XFillStyleItem(XFillStyle, sal_uInt16 nWhich);
                             XFillStyleItem(SvStream& rIn);

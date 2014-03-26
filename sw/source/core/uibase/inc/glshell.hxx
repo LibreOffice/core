@@ -33,7 +33,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_GLOSDOCSHELL)
 
     SwGlosDocShell( sal_Bool bNewShow = sal_True);
@@ -63,7 +63,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL)
 
     SwWebGlosDocShell();

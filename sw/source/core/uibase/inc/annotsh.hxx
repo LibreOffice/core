@@ -32,7 +32,7 @@ class SwAnnotationShell: public SfxShell
 
 public:
     SFX_DECL_INTERFACE(SW_ANNOTATIONSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
                 SwAnnotationShell(SwView&);
     virtual     ~SwAnnotationShell();

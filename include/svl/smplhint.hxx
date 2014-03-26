@@ -62,7 +62,7 @@ class SVL_DLLPUBLIC SfxSimpleHint: public SfxHint
 private:
     sal_uLong mnId;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SfxSimpleHint( sal_uLong nId ) { mnId = nId; }
     sal_uLong GetId() const { return mnId; }
 };
@@ -75,7 +75,7 @@ public:
             Type  aObj; \
         \
         public: \
-            TYPEINFO(); \
+            TYPEINFO_OVERRIDE(); \
             Name( sal_uInt16 nId, const Type& rObject ); \
             ~Name(); \
             const Type& GetObject() const { return aObj; } \

@@ -39,7 +39,7 @@ public:
             bool  bIsOwner; \
         \
         public: \
-            TYPEINFO(); \
+            TYPEINFO_OVERRIDE(); \
             explicit Name( Type* Object, bool bOwnedByHint = false ); \
             ~Name(); \
         \

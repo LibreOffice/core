@@ -45,7 +45,7 @@ private:
     sal_Int32   mnEnd;
 
 public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             SvxEditSourceHint( sal_uLong nId );
             SvxEditSourceHint( sal_uLong nId, sal_uLong nValue, sal_Int32 nStart=0, sal_Int32 nEnd=0 );
 
@@ -56,7 +56,7 @@ public:
 class SvxEditSourceHintEndPara :public SvxEditSourceHint
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxEditSourceHintEndPara( sal_uInt32 nId )
         :SvxEditSourceHint(nId) {}
     SvxEditSourceHintEndPara( sal_uInt32 nId, sal_uInt32 nValue, sal_uInt32 nStart=0, sal_uInt32 nEnd=0 )

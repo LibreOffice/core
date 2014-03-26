@@ -27,7 +27,7 @@ class SwWebFrameShell: public SwFrameShell
 
 public:
     SFX_DECL_INTERFACE(SW_WEBFRAMESHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
              SwWebFrameShell(SwView &rView);
     virtual ~SwWebFrameShell();

@@ -90,7 +90,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -213,7 +213,7 @@ protected:
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,

@@ -44,7 +44,7 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
     static bool bEnableStoreUnicodeNames;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxFontItem( const sal_uInt16 nId  );
     SvxFontItem( const FontFamily eFam, const OUString& rFamilyName,

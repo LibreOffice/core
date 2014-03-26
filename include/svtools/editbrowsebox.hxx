@@ -238,7 +238,7 @@ namespace svt
         bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         EditCellController( Edit* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         ~EditCellController( );
@@ -261,7 +261,7 @@ namespace svt
     class SVT_DLLPUBLIC SpinCellController : public CellController
     {
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         SpinCellController(SpinField* pSpinField);
         SpinField& GetSpinWindow() const {return (SpinField &)GetWindow();}
 
@@ -313,7 +313,7 @@ namespace svt
     class SVT_DLLPUBLIC CheckBoxCellController : public CellController
     {
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         CheckBoxCellController(CheckBoxControl* pWin):CellController(pWin){}
         CheckBox& GetCheckBox() const;
@@ -346,7 +346,7 @@ namespace svt
     class SVT_DLLPUBLIC ComboBoxCellController : public CellController
     {
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         ComboBoxCellController(ComboBoxControl* pParent);
         ComboBoxControl& GetComboBox() const {return (ComboBoxControl &)GetWindow();}
@@ -379,7 +379,7 @@ namespace svt
     class SVT_DLLPUBLIC ListBoxCellController : public CellController
     {
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         ListBoxCellController(ListBoxControl* pParent);
         ListBoxControl& GetListBox() const {return (ListBoxControl &)GetWindow();}
@@ -398,7 +398,7 @@ namespace svt
     class SVT_DLLPUBLIC FormattedFieldCellController : public EditCellController
     {
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         FormattedFieldCellController( FormattedField* _pFormatted );
 
         virtual void CommitModifications();

@@ -32,7 +32,7 @@ class ScChartShell: public ScDrawShell
 {
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_CHART_SHELL)
 
                 ScChartShell(ScViewData* pData);

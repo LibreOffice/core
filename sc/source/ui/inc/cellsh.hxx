@@ -68,7 +68,7 @@ private:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_CELL_SHELL)
 
                 ScCellShell(ScViewData* pData);

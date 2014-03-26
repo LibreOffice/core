@@ -31,7 +31,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLEventsContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,

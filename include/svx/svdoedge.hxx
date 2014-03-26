@@ -213,7 +213,7 @@ protected:
     void ImpSetEdgeInfoToAttr(); // Werte vom aEdgeInfo in den Pool kopieren
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdrEdgeObj();
     virtual ~SdrEdgeObj();

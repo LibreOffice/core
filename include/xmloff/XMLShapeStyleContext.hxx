@@ -42,7 +42,7 @@ protected:
                                const OUString& rLocalName,
                                const OUString& rValue );
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLShapeStyleContext(
         SvXMLImport& rImport,

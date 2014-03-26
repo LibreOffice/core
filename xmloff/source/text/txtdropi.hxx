@@ -35,7 +35,7 @@ private:
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextDropCapImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,

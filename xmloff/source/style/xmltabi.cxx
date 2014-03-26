@@ -61,7 +61,7 @@ private:
      style::TabStop aTabStop;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,

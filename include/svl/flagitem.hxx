@@ -32,7 +32,7 @@ class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
     sal_uInt16                   nVal;
 
 public:
-                             TYPEINFO();
+                             TYPEINFO_OVERRIDE();
 
     explicit                 SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
                              SfxFlagItem( const SfxFlagItem& );

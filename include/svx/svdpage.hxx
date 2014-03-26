@@ -483,7 +483,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
     // Copy-Ctor und Zuweisungeoperator sind nicht getestet!
     SdrPage(const SdrPage& rSrcPage);

@@ -64,7 +64,7 @@ private:
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SdrUnoObj(const OUString& rModelName, bool bOwnsModel = true);
     SdrUnoObj(const OUString& rModelName,

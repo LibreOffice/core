@@ -40,7 +40,7 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,

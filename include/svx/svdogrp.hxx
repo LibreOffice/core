@@ -47,7 +47,7 @@ protected:
     bool                        bRefPoint; // Ist ein RefPoint gesetzt?
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrObjGroup();
     virtual ~SdrObjGroup();
 

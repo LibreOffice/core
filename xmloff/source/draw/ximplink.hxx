@@ -39,7 +39,7 @@ class SdXMLShapeLinkContext : public SvXMLShapeContext
     OUString msHyperlink;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,

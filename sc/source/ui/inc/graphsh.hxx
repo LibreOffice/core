@@ -33,7 +33,7 @@ class ScGraphicShell: public ScDrawShell
 {
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_GRAPHIC_SHELL)
 
                 ScGraphicShell(ScViewData* pData);

@@ -134,7 +134,7 @@ public:
         SEARCH_COL  // column selection
     };
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // single argument ctors shall be explicit.
     explicit SwTable( SwTableFmt* );
@@ -344,7 +344,7 @@ class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrmFmt.
     SwTableBox *pUpper;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwTableLine() : pUpper(0) {}
 
@@ -398,7 +398,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
     SwTableBoxFmt* CheckBoxFmt( SwTableBoxFmt* );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwTableBox() : pSttNd(0), pUpper(0), pImpl(0) {}
 

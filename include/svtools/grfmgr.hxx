@@ -310,7 +310,7 @@ protected:
 
 public:
 
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
 
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );

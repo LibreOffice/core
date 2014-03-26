@@ -156,7 +156,7 @@ void XMLCharContext::InsertString(const OUString& _sString)
 class XMLStartReferenceContext_Impl : public SvXMLImportContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // Do everything in constructor. Well ...
     XMLStartReferenceContext_Impl (
@@ -227,7 +227,7 @@ sal_Bool XMLStartReferenceContext_Impl::FindName(
 class XMLEndReferenceContext_Impl : public SvXMLImportContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // Do everything in constructor. Well ...
     XMLEndReferenceContext_Impl(
@@ -284,7 +284,7 @@ class XMLImpSpanContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImpSpanContext_Impl(
             SvXMLImport& rImport,
@@ -322,7 +322,7 @@ class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImpHyperlinkContext_Impl(
             SvXMLImport& rImport,
@@ -455,7 +455,7 @@ class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImpRubyBaseContext_Impl(
             SvXMLImport& rImport,
@@ -524,7 +524,7 @@ class XMLImpRubyContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImpRubyContext_Impl(
             SvXMLImport& rImport,
@@ -550,7 +550,7 @@ class XMLImpRubyTextContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImpRubyTextContext_Impl(
             SvXMLImport& rImport,
@@ -692,7 +692,7 @@ protected:
     OUString m_XmlId;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLMetaImportContextBase(
         SvXMLImport& i_rImport,
@@ -811,7 +811,7 @@ class XMLMetaImportContext : public XMLMetaImportContextBase
     OUString m_sDatatype;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLMetaImportContext(
         SvXMLImport& i_rImport,
@@ -905,7 +905,7 @@ class XMLMetaFieldImportContext : public XMLMetaImportContextBase
     OUString m_DataStyleName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLMetaFieldImportContext(
         SvXMLImport& i_rImport,
@@ -1011,7 +1011,7 @@ class XMLIndexMarkImportContext_Impl : public SvXMLImportContext
     OUString sID;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1284,7 +1284,7 @@ class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
     const OUString sLevel;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTOCMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1349,7 +1349,7 @@ class XMLUserIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
     const OUString sLevel;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLUserIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1426,7 +1426,7 @@ class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Imp
     const OUString sMainEntry;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLAlphaIndexMarkImportContext_Impl(
         SvXMLImport& rImport,

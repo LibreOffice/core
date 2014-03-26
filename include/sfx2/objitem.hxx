@@ -32,7 +32,7 @@ class SFX2_DLLPUBLIC SfxObjectItem: public SfxPoolItem
     SfxShell*                _pSh;
 
 public:
-                             TYPEINFO();
+                             TYPEINFO_OVERRIDE();
                              SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=0 );
 
     virtual bool             operator==( const SfxPoolItem& ) const;

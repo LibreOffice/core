@@ -32,7 +32,7 @@ class SvStream;
 class SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxOrientationItem(
         const SvxCellOrientation eOrientation /*= SVX_ORIENTATION_STANDARD*/,
@@ -78,7 +78,7 @@ class SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
     sal_Int16       nRightMargin;
     sal_Int16       nBottomMargin;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxMarginItem( const sal_uInt16 nId  );
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,

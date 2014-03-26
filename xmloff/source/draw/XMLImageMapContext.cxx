@@ -125,7 +125,7 @@ protected:
     sal_Bool bValid;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImageMapObjectContext(
         SvXMLImport& rImport,
@@ -319,7 +319,7 @@ class XMLImageMapRectangleContext : public XMLImageMapObjectContext
     sal_Bool bHeightOK;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImageMapRectangleContext(
         SvXMLImport& rImport,
@@ -429,7 +429,7 @@ class XMLImageMapPolygonContext : public XMLImageMapObjectContext
     sal_Bool bPointsOK;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImageMapPolygonContext(
         SvXMLImport& rImport,
@@ -527,7 +527,7 @@ class XMLImageMapCircleContext : public XMLImageMapObjectContext
     sal_Bool bRadiusOK;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLImageMapCircleContext(
         SvXMLImport& rImport,

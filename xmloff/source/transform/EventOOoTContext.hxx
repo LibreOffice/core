@@ -29,7 +29,7 @@ class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
     sal_Bool m_bPersistent;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,

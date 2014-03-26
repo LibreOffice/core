@@ -81,7 +81,7 @@ protected:
 
 public:
     OUString GetStyleString();
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdrOle2Obj(bool bFrame_ = false);
     SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false);

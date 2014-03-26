@@ -171,7 +171,7 @@ private:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLVarFieldImportContext(
         // for XMLTextFieldImportContext:
@@ -221,7 +221,7 @@ class XMLVariableGetFieldImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLVariableGetFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -246,7 +246,7 @@ class XMLExpressionFieldImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLExpressionFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -267,7 +267,7 @@ class XMLTextInputFieldImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextInputFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -296,7 +296,7 @@ class XMLSetVarFieldImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLSetVarFieldImportContext(
         // for XMLTextFieldImportContext:
@@ -341,7 +341,7 @@ class XMLVariableSetFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLVariableSetFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -366,7 +366,7 @@ class XMLVariableInputFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLVariableInputFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -390,7 +390,7 @@ class XMLUserFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLUserFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -405,7 +405,7 @@ class XMLUserFieldInputImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLUserFieldInputImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -435,7 +435,7 @@ class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLSequenceFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -471,7 +471,7 @@ class XMLVariableDeclsImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLVariableDeclsImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -506,7 +506,7 @@ class XMLVariableDeclImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLVariableDeclImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -544,7 +544,7 @@ class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTableFormulaImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -585,7 +585,7 @@ class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLDatabaseDisplayImportContext(
         SvXMLImport& rImport,                   /// XML Import

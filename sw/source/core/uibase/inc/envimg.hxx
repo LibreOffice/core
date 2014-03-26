@@ -59,7 +59,7 @@ public:
     SwEnvItem();
     SwEnvItem(const SwEnvItem& rItem);
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwEnvItem& operator =(const SwEnvItem& rItem);
 

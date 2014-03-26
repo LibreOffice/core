@@ -28,7 +28,7 @@ class SdDrawDocument;
 class SD_DLLPUBLIC SdUndoAction : public SfxUndoAction
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
                             SdUndoAction(SdDrawDocument* pSdDrawDocument)
                                 : mpDoc(pSdDrawDocument)  {}
     virtual                 ~SdUndoAction() {}

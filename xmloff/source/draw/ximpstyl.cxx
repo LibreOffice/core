@@ -54,7 +54,7 @@ class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
@@ -131,7 +131,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
 class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,

@@ -203,7 +203,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLConditionContext_Impl();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     bool IsValid() const { return 0 != nCondition; }
 
@@ -268,7 +268,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -448,7 +448,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwXMLItemSetStyleContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
@@ -737,7 +737,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
@@ -928,7 +928,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwXMLMasterStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,

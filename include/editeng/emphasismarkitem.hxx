@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
                           const sal_uInt16 nId  );

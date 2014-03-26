@@ -40,7 +40,7 @@ private:
     Color                   mColor;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxColorItem( const sal_uInt16 nId );
     SvxColorItem( const Color& aColor, const sal_uInt16 nId  );

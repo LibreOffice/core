@@ -32,7 +32,7 @@ class ScHint : public SfxSimpleHint
     ScAddress   aAddress;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     ScHint( sal_uLong n, const ScAddress& a );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
@@ -44,7 +44,7 @@ class ScAreaChangedHint : public SfxHint
 private:
     ScRange aNewRange;
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScAreaChangedHint(const ScRange& rRange) : aNewRange(rRange) {}
     const ScRange&  GetRange() const { return aNewRange; }
 };

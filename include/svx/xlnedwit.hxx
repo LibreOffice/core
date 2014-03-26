@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XLineEndWidthItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineEndWidthItem(long nWidth = LINE_END_WIDTH_DEFAULT);
                             XLineEndWidthItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

@@ -38,7 +38,7 @@ private:
     DlgEdForm*      pDlgEdForm;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
     virtual ~DlgEdPage();

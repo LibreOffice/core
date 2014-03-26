@@ -29,7 +29,7 @@ class FuConstructArc
     : public FuConstruct
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
     virtual void DoExecute( SfxRequest& rReq );

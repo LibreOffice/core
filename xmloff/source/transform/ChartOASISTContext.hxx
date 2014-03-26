@@ -25,7 +25,7 @@
 class XMLChartOASISTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLChartOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName    );

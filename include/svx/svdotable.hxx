@@ -109,7 +109,7 @@ public:
     SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows);
     virtual ~SdrTableObj();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // table stuff
 

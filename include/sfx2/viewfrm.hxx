@@ -90,7 +90,7 @@ protected:
 public:
                             SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = NULL );
 
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
 
     static void             SetViewFrame( SfxViewFrame* );
@@ -293,7 +293,7 @@ class SFX2_DLLPUBLIC SfxViewFrameItem: public SfxPoolItem
     SfxViewFrame*           pFrame;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxViewFrameItem( SfxViewFrame *pViewFrame ):
                                 SfxPoolItem( 0 ),
                                 pFrame( pViewFrame)
@@ -316,7 +316,7 @@ class SfxVerbListItem : public SfxPoolItem
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbs;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxVerbListItem( sal_uInt16 nWhichId = SID_OBJECT ) :
                                 SfxPoolItem( nWhichId )
                             {}

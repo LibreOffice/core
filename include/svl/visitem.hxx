@@ -33,7 +33,7 @@ class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
     ::com::sun::star::frame::status::Visibility m_nValue;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SfxVisibilityItem(sal_uInt16 which = 0, bool bVisible = true):
         SfxPoolItem(which)

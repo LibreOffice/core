@@ -56,7 +56,7 @@ class XMLFootnoteImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLFootnoteImportContext(
         SvXMLImport& rImport,

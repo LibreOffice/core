@@ -27,7 +27,7 @@ class XMLTransformerOASISEventMap_Impl;
 class XMLEventOASISTransformerContext : public XMLRenameElemTransformerContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLEventOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );

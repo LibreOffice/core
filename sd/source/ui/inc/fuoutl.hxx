@@ -41,7 +41,7 @@ class FuOutline
     : public FuPoor
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual sal_Bool Command(const CommandEvent& rCEvt);
 

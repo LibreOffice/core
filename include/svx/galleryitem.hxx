@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
     com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > m_xGraphic;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );

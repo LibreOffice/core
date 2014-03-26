@@ -71,7 +71,7 @@ private:
 
     public :
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
 
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );

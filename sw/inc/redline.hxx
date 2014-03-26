@@ -370,7 +370,7 @@ public:
         , pView(pV)
         {}
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     const SwRangeRedline* GetRedline() const { return pRedline; }
     sal_Int16 Which() const { return nWhich; }
         const SwView* GetView() const { return pView; }

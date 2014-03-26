@@ -27,7 +27,7 @@ class SwDrawFormShell: public SwDrawBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_DRAWFORMSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
                 SwDrawFormShell(SwView &rView);
     virtual     ~SwDrawFormShell();

@@ -42,7 +42,7 @@ class SelectionFunction
       private ::boost::noncopyable
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 

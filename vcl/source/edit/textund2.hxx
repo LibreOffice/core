@@ -31,7 +31,7 @@ private:
     TextNode*       mpNode; // points at the valid not-destroyed object
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
                     ~TextUndoDelPara();
 
@@ -49,7 +49,7 @@ private:
     sal_uInt16          mnSepPos;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoConnectParas();
 
@@ -67,7 +67,7 @@ private:
     sal_uInt16          mnSepPos;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoSplitPara();
 
@@ -85,7 +85,7 @@ private:
     OUString        maText;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
 
     virtual void    Undo();
@@ -104,7 +104,7 @@ private:
     OUString        maText;
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
 
     virtual void    Undo();
@@ -120,7 +120,7 @@ private:
     TextSelection       maSelection;
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
                         ~TextUndoSetAttribs();
 

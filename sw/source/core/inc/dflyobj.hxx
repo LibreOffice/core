@@ -44,7 +44,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwFlyDrawObj();
     ~SwFlyDrawObj();
@@ -76,7 +76,7 @@ public:
     basegfx::B2DRange getOuterBound() const;
     basegfx::B2DRange getInnerBound() const;
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
     ~SwVirtFlyDrawObj();

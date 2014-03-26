@@ -43,7 +43,7 @@ class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
     sal_uInt16              nWidth;
     SvxShadowLocation   eLocation;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxShadowItem( const sal_uInt16 nId ,
                  const Color *pColor = 0, const sal_uInt16 nWidth = 100 /*5pt*/,

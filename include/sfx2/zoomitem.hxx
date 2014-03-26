@@ -42,7 +42,7 @@ class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
     SvxZoomType             eType;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxZoomItem( SvxZoomType eZoomType = SVX_ZOOM_PERCENT,
                  sal_uInt16 nVal = 0, sal_uInt16 nWhich = SID_ATTR_ZOOM );

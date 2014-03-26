@@ -52,7 +52,7 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMETHOD,2);
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     virtual SbxInfo* GetInfo();
     SbxArray*  GetStatics();
     void       ClearStatics();
@@ -76,7 +76,7 @@ class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
     SbMethodRef mxImplMeth;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
         : SbMethod( rName, pImplMeth->GetType(), NULL )
         , mxImplMeth( pImplMeth )

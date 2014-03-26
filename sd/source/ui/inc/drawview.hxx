@@ -34,7 +34,7 @@ class DrawViewShell;
 class DrawView : public ::sd::View
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     DrawView (
         DrawDocShell* pDocSh,

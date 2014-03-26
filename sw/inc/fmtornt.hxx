@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
     sal_Int16       eOrient;
     sal_Int16       eRelation;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SwFmtVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
@@ -71,7 +71,7 @@ class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
     sal_Int16       eRelation;
     sal_Bool            bPosToggle : 1; ///< Flip position on even pages.
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
         sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, sal_Bool bPos = sal_False );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );

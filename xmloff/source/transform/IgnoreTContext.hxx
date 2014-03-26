@@ -31,7 +31,7 @@ class XMLIgnoreTransformerContext : public XMLTransformerContext
     sal_Bool m_bRecursiveUse;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.

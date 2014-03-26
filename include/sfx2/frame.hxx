@@ -233,7 +233,7 @@ class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
     SAL_DLLPRIVATE void SetFramePtr_Impl( SfxFrame* /*pFrameP*/ ) { pFrame = wFrame; }
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
 
                             SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p );
                             SfxFrameItem( SfxFrame *p=0 );
@@ -256,7 +256,7 @@ class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem
 {
     ::com::sun::star::uno::Any  aValue;
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SfxUsrAnyItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Any& rAny );
     ::com::sun::star::uno::Any  GetValue() const
                                 { return aValue; }
@@ -272,7 +272,7 @@ class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
                                 m_xFrame;
 
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SfxUnoFrameItem();
                                 SfxUnoFrameItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&

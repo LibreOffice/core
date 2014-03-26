@@ -90,7 +90,7 @@ protected:
 
 public:
 
-    TYPEINFO(); ///< Already in base class Client.
+    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
@@ -163,7 +163,7 @@ protected:
     {}
 
 public:
-    TYPEINFO(); ///< Already in base class Client.
+    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 };
 
 // FEATURE::CONDCOLL
@@ -194,7 +194,7 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     } aSubCondition;
 
 public:
-    TYPEINFO(); ///< Already in base class Client.
+    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
@@ -241,7 +241,7 @@ protected:
     {}
 
 public:
-    TYPEINFO(); ///< Already in base class Client.
+    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     virtual ~SwConditionTxtFmtColl();
 

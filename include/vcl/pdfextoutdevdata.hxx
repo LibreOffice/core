@@ -96,7 +96,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 
 public :
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     PDFExtOutDevData( const OutputDevice& rOutDev );
     virtual ~PDFExtOutDevData();
 

@@ -332,7 +332,7 @@ class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
 {
     SfxVoidItem & operator=( const SfxVoidItem& ); // not implemented.
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );
@@ -360,7 +360,7 @@ class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
     SfxSetItem & operator=( const SfxSetItem& ); // not implemented.
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );

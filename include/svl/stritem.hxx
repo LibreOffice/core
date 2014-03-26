@@ -27,7 +27,7 @@
 class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxStringItem() {}
 

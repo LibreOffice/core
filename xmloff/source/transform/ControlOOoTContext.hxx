@@ -30,7 +30,7 @@ class XMLControlOOoTransformerContext : public XMLTransformerContext
     OUString m_aElemQName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLControlOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );

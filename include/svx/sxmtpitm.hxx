@@ -31,7 +31,7 @@ enum SdrMeasureTextVPos {SDRMEASURE_TEXTVAUTO,SDRMEASURE_ABOVE,SDRMEASURETEXT_BR
 
 class SVX_DLLPUBLIC SdrMeasureTextHPosItem: public SfxEnumItem {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrMeasureTextHPosItem(SdrMeasureTextHPos ePos=SDRMEASURE_TEXTHAUTO): SfxEnumItem(SDRATTR_MEASURETEXTHPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextHPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;
@@ -51,7 +51,7 @@ public:
 
 class SVX_DLLPUBLIC SdrMeasureTextVPosItem: public SfxEnumItem {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrMeasureTextVPosItem(SdrMeasureTextVPos ePos=SDRMEASURE_TEXTVAUTO): SfxEnumItem(SDRATTR_MEASURETEXTVPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextVPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTVPOS,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;

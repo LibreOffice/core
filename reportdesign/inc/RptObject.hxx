@@ -57,7 +57,7 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
         DlgEdHint(DlgEdHint&);
         void operator =(DlgEdHint&);
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint();
 
@@ -158,7 +158,7 @@ protected:
     void SetObjectItemHelper(const SfxPoolItem& rItem);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual ~OCustomShape();
 
@@ -205,7 +205,7 @@ protected:
     virtual SdrPage* GetImplPage() const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual ~OOle2Obj();
 
@@ -253,7 +253,7 @@ protected:
     virtual SdrPage* GetImplPage() const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual sal_Int32   GetStep() const;
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);

@@ -38,7 +38,7 @@ class XMLIndexBibliographySourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexBibliographySourceContext(
         SvXMLImport& rImport,

@@ -49,7 +49,7 @@ class XMLIndexObjectSourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexObjectSourceContext(
         SvXMLImport& rImport,

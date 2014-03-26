@@ -54,7 +54,7 @@ public:
 SV_DECL_IMPL_REF(SvRttiBase)
 
 #define SV_DECL_PERSIST( Class, CLASS_ID )                          \
-    TYPEINFO();                                                     \
+    TYPEINFO_OVERRIDE();                                                     \
     static  sal_Int32  StaticClassId() { return CLASS_ID; }            \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \

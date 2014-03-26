@@ -89,7 +89,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -200,7 +200,7 @@ protected:
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     ScXMLMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -225,7 +225,7 @@ class ScMasterPageContext : public XMLTextMasterPageContext
     void ClearContent(const OUString& rContent);
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     ScMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

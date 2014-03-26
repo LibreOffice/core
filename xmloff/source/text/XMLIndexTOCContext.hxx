@@ -70,7 +70,7 @@ class XMLIndexTOCContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexTOCContext(
         SvXMLImport& rImport,

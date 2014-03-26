@@ -63,7 +63,7 @@ protected:
     virtual ~SdrAttrObj();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // Detects if bFilledObj && Fill != FillNone
     bool HasFill() const;

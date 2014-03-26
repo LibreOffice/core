@@ -304,7 +304,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SwCrsrShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     // disguised copy constructor
     SwCrsrShell( SwCrsrShell& rShell, Window *pWin );

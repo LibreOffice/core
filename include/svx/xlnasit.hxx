@@ -33,7 +33,7 @@
 class SVX_DLLPUBLIC XLineAttrSetItem : public SfxSetItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineAttrSetItem(SfxItemSet* pItemSet );
                             XLineAttrSetItem(SfxItemPool* pItemPool);
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr);

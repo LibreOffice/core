@@ -33,7 +33,7 @@ private:
     sal_uInt16                  nFrom;
     sal_uInt16                  nTo;
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SfxRangeItem();
                                 SfxRangeItem( sal_uInt16 nWID, sal_uInt16 nFrom, sal_uInt16 nTo );
                                 SfxRangeItem( const SfxRangeItem& rItem );
@@ -61,7 +61,7 @@ private:
     sal_uInt16*                 _pRanges;
 
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SfxUShortRangesItem();
                                 SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxUShortRangesItem( const SfxUShortRangesItem& rItem );

@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC XColorItem : public NameOrIndex
     Color   aColor;
 
 public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             XColorItem() {}
             XColorItem(sal_uInt16 nWhich, sal_Int32 nIndex, const Color& rTheColor);
 

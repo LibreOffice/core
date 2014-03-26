@@ -25,7 +25,7 @@
 
 class SVX_DLLPUBLIC SdrTextAniAmountItem: public SfxInt16Item {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,nVal) {}
     SdrTextAniAmountItem(SvStream& rIn): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;

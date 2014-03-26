@@ -28,7 +28,7 @@ class XMLControlOASISTransformerContext : public XMLTransformerContext
     sal_Bool m_bCreateControl;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,

@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SvxCharRotateItem : public SfxUInt16Item
 {
     bool bFitToLine;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxCharRotateItem( sal_uInt16 nValue /*= 0*/,
                        bool bFitIntoLine /*= false*/,

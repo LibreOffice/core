@@ -38,7 +38,7 @@ SVX_DLLPUBLIC bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyEx
 class SVX_DLLPUBLIC ExtrusionBar : public SfxShell
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SVX_INTERFACE_EXTRUSION_BAR)
 
      ExtrusionBar(SfxViewShell* pViewShell );

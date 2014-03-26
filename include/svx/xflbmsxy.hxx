@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XFillBmpSizeXItem( long nSizeX = 0 );
                             SVX_DLLPRIVATE XFillBmpSizeXItem( SvStream& rIn );
 
@@ -47,7 +47,7 @@ public:
 class SVX_DLLPUBLIC XFillBmpSizeYItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XFillBmpSizeYItem( long nSizeY = 0 );
                             SVX_DLLPRIVATE XFillBmpSizeYItem( SvStream& rIn );
 

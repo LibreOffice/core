@@ -115,7 +115,7 @@ class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
                                          sal_uInt16 nPrfx,
@@ -151,7 +151,7 @@ class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                   const OUString& rLName,
@@ -209,7 +209,7 @@ class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                   const OUString& rLName,
@@ -430,7 +430,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     sal_Bool CreateIfNotThere();
     const OUString& GetHRef() const { return sHRef; }

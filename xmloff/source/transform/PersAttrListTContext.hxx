@@ -37,7 +37,7 @@ protected:
     void SetExportQName( const OUString& r ) { m_aElemQName = r; }
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.

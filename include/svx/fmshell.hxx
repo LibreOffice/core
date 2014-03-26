@@ -60,7 +60,7 @@ class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
     bool m_bDesignMode;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmDesignModeChangedHint( bool bDesMode );
     virtual ~FmDesignModeChangedHint();
 
@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
 
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FORM_SH)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmFormShell(SfxViewShell* pParent, FmFormView* pView = NULL);
     virtual ~FmFormShell();

@@ -47,7 +47,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwBaseLink( sal_uInt16 nMode, sal_uInt16 nFormat, SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),

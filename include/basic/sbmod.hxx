@@ -94,7 +94,7 @@ protected:
     virtual ~SbModule();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
                     SbModule( const OUString&, sal_Bool bCompat = sal_False );
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
@@ -148,7 +148,7 @@ class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
     bool        mbInitializeEventDone;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbClassModuleObject( SbModule* pClassModule );
     ~SbClassModuleObject();
 

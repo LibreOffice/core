@@ -208,7 +208,7 @@ protected:
 
 public:
 
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
                         ~SdDrawDocument();

@@ -37,7 +37,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
 

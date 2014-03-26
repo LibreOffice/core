@@ -28,7 +28,7 @@ class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
     std::vector<SdUndoAction*>  aCtn;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
                               : SdUndoAction(pSdDrawDocument),
                                 aCtn() {}

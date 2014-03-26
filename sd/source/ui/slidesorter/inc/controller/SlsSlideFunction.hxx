@@ -35,7 +35,7 @@ class SlideFunction
     : public FuPoor
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual sal_Bool MouseMove (const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonUp (const MouseEvent& rMEvt);

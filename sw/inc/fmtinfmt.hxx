@@ -48,7 +48,7 @@ public:
     SwFmtINetFmt();                     ///< For TypeInfo.
     virtual ~SwFmtINetFmt();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const;

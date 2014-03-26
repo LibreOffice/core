@@ -36,7 +36,7 @@ class TextObjectBar
     : public SfxShell
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWTEXTOBJECTBAR)
 
     TextObjectBar (

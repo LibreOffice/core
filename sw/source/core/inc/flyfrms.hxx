@@ -64,7 +64,7 @@ protected:
 
 public:
     // #i28701#
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual ~SwFlyFreeFrm();
 
@@ -123,7 +123,7 @@ class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
     // #i28701#
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
@@ -150,7 +150,7 @@ protected:
 
 public:
     // #i28701#
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
@@ -185,7 +185,7 @@ protected:
 
 public:
     // #i28701#
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 

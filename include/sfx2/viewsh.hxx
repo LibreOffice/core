@@ -162,7 +162,7 @@ public:
     static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
 
                                 SfxViewShell( SfxViewFrame *pFrame, sal_uInt16 nFlags = 0 );

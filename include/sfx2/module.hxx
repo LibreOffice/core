@@ -66,7 +66,7 @@ private:
     SAL_DLLPRIVATE void Construct_Impl();
 
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
 
                                 SfxModule( ResMgr* pMgrP, bool bDummy,

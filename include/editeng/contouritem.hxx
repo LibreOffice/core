@@ -31,7 +31,7 @@
 class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxContourItem( const bool bContoured /*= false*/,
                     const sal_uInt16 nId );

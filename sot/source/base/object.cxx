@@ -24,7 +24,7 @@
 class SotObjectFactory : public SotFactory
 {
 public:
-         TYPEINFO();
+         TYPEINFO_OVERRIDE();
         SotObjectFactory( const SvGlobalName & rName,
                           const OUString & rClassName,
                           CreateInstanceType pCreateFuncP )

@@ -35,7 +35,7 @@ namespace linguistic2{
 class EDITENG_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxSpellCheckItem( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
@@ -68,7 +68,7 @@ class EDITENG_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
     sal_uInt8 nMinTrail;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxHyphenRegionItem( const sal_uInt16 nId  );
     SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem );

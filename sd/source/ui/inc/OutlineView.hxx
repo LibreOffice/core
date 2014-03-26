@@ -69,7 +69,7 @@ public:
     void ConnectToApplication (void);
     void DisconnectFromApplication (void);
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
     SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);

@@ -104,7 +104,7 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     rtl_TextEncoding            eCharSet;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     ImpSdrObjTextLinkUserData(SdrTextObj* pObj1);
     virtual ~ImpSdrObjTextLinkUserData();
 
@@ -312,7 +312,7 @@ protected:
     virtual ~SdrTextObj();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // #101684#
     bool IsInEditMode() const { return mbInEditMode; }

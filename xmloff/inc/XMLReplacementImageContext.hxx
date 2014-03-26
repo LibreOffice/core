@@ -40,7 +40,7 @@ class XMLReplacementImageContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLReplacementImageContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,

@@ -75,7 +75,7 @@ public:
     SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc);
     ~SwXRedline();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}

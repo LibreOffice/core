@@ -46,7 +46,7 @@ class XMLIndexTabStopEntryContext : public XMLIndexSimpleEntryContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexTabStopEntryContext(
         SvXMLImport& rImport,

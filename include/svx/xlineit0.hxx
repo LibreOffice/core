@@ -30,7 +30,7 @@
 class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineStyleItem(XLineStyle = XLINE_SOLID);
                             XLineStyleItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

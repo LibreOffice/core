@@ -39,7 +39,7 @@ class SwDrawTextShell: public SfxShell
     sal_Bool        IsTextEdit();
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwView     &GetView() { return rView; }
     SwWrtShell &GetShell();

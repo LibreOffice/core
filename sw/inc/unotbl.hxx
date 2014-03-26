@@ -99,7 +99,7 @@ public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, size_t nPos = NOTFOUND);
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -174,7 +174,7 @@ protected:
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -329,7 +329,7 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     //XTextTable
     virtual void SAL_CALL initialize( sal_Int32 nRows, sal_Int32 nColumns ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -460,7 +460,7 @@ public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
     ~SwXCellRange();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -555,7 +555,7 @@ protected:
 public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
@@ -596,7 +596,7 @@ protected:
 public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );

@@ -40,7 +40,7 @@ protected:
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragMovHdl(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -64,7 +64,7 @@ private:
     bool                        bRight;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragRotate(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -93,7 +93,7 @@ private:
     bool                        bSlant;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragShear(SdrDragView& rNewView,bool bSlant1);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -120,7 +120,7 @@ private:
     bool ImpCheckSide(const Point& rPnt) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragMirror(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -146,7 +146,7 @@ private:
     bool                        bIsGradient : 1;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragGradient(SdrDragView& rNewView, bool bGrad = true);
 
     bool IsGradient() const { return bIsGradient; }
@@ -198,7 +198,7 @@ protected:
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragCrook(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -232,7 +232,7 @@ protected:
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragDistort(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -253,7 +253,7 @@ public:
 class SdrDragCrop : public SdrDragObjOwn
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragCrop(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;

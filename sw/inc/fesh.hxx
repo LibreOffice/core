@@ -212,7 +212,7 @@ public:
 
     using SwEditShell::Insert;
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SwFEShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     SwFEShell( SwEditShell& rShell, Window *pWin );
     virtual ~SwFEShell();

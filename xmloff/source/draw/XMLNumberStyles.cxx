@@ -489,7 +489,7 @@ private:
     boost::shared_ptr< SvXMLImportContext > mpSlaveContext;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,

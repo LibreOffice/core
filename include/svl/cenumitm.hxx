@@ -36,7 +36,7 @@ protected:
         SfxPoolItem(rItem) {}
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual bool operator ==(const SfxPoolItem & rItem) const;
 

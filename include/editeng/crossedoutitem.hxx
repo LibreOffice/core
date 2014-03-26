@@ -34,7 +34,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
                        const sal_uInt16 nId  );

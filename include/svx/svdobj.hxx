@@ -448,7 +448,7 @@ protected:
     virtual ~SdrObject();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrObject();
 
     // frees the SdrObject pointed to by the argument

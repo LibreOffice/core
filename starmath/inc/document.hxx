@@ -159,7 +159,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1)
     using SotObject::GetInterface;
     SFX_DECL_OBJECTFACTORY();

@@ -103,7 +103,7 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLDocContext_Impl();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,

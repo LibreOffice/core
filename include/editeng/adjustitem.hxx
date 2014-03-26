@@ -48,7 +48,7 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
 
     friend SvStream& WriteSvxAdjustItem( SvStream&, SvxAdjustItem& ); //$ ostream
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,
                    const sal_uInt16 nId );

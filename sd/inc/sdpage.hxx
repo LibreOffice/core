@@ -154,7 +154,7 @@ protected:
     double mfTransitionDuration;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage=sal_False);
     SdPage(const SdPage& rSrcPage);

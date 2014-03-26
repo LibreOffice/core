@@ -145,7 +145,7 @@ inline bool ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
+                TYPEINFO_OVERRIDE();
                 ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );

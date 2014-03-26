@@ -83,7 +83,7 @@ protected:
     ::std::vector< FmFilterData* >  m_aChildren;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmParentData(FmParentData* pParent, const OUString& rText)
         : FmFilterData(pParent, rText)
     {}
@@ -100,7 +100,7 @@ class FmFormItem : public FmParentData
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >  m_xFilterController;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmFormItem(  FmParentData* _pParent,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & _xController,
@@ -124,7 +124,7 @@ public:
 class FmFilterItems : public FmParentData
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterItems() : FmParentData(NULL, OUString()) {}
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
@@ -139,7 +139,7 @@ class FmFilterItem : public FmFilterData
     const sal_Int32     m_nComponentIndex;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterItem(
         FmFilterItems* pParent,
         const OUString& aFieldName,
@@ -166,7 +166,7 @@ class FmFilterModel : public FmParentData
     FmFilterItems*          m_pCurrentItems;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterModel();
     virtual ~FmFilterModel();
 

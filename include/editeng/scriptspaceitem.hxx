@@ -33,7 +33,7 @@
 class EDITENG_DLLPUBLIC SvxScriptSpaceItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxScriptSpaceItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );

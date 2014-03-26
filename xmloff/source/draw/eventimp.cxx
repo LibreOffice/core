@@ -75,7 +75,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
     virtual ~SdXMLEventContext();
@@ -103,7 +103,7 @@ class XMLEventSoundContext : public SvXMLImportContext
     SdXMLEventContext*  mpParent;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent );
     virtual ~XMLEventSoundContext();

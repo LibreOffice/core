@@ -28,7 +28,7 @@ class FuLineEnd
     : public FuPoor
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual void Activate();
     virtual void Deactivate();

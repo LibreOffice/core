@@ -67,7 +67,7 @@ class FmNavInsertedHint : public SfxHint
     sal_uInt32 nPos;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
     virtual ~FmNavInsertedHint();
 
@@ -81,7 +81,7 @@ class FmNavModelReplacedHint : public SfxHint
     FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
     virtual ~FmNavModelReplacedHint();
 
@@ -94,7 +94,7 @@ class FmNavRemovedHint : public SfxHint
     FmEntryData* pEntryData;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavRemovedHint( FmEntryData* pInsertedEntryData );
     virtual ~FmNavRemovedHint();
 
@@ -108,7 +108,7 @@ class FmNavNameChangedHint : public SfxHint
     OUString          aNewName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName );
     virtual ~FmNavNameChangedHint();
 
@@ -120,7 +120,7 @@ public:
 class FmNavClearedHint : public SfxHint
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavClearedHint();
     virtual ~FmNavClearedHint();
 };
@@ -130,7 +130,7 @@ class FmNavViewMarksChanged : public SfxHint
 {
     FmFormView* pView;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
     virtual ~FmNavViewMarksChanged() {}
 
@@ -225,7 +225,7 @@ class FmNavRequestSelectHint : public SfxHint
     FmEntryDataArray    m_arredToSelect;
     sal_Bool                m_bMixedSelection;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmNavRequestSelectHint() { }
     virtual ~FmNavRequestSelectHint() {}
 
@@ -243,7 +243,7 @@ class FmFormData : public FmEntryData
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > m_xContainer;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmFormData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
@@ -277,7 +277,7 @@ class FmControlData : public FmEntryData
     Image GetImage(const ImageList& ilNavigatorImages) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmControlData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxComponent,

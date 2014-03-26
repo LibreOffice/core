@@ -28,7 +28,7 @@ namespace com { namespace sun { namespace star {
 class XMLSymbolImageContext : public XMLElementPropertyContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLSymbolImageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                            const OUString& rLName,

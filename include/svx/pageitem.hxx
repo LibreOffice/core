@@ -68,7 +68,7 @@ private:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxPageItem( const sal_uInt16 nId );
     SvxPageItem( const SvxPageItem& rItem );
 

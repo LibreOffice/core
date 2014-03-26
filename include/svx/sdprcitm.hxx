@@ -31,7 +31,7 @@
 class SVX_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrPercentItem(): SfxUInt16Item() {}
     SdrPercentItem(sal_uInt16 nId, sal_uInt16 nVal=0): SfxUInt16Item(nId,nVal) {}
     SdrPercentItem(sal_uInt16 nId, SvStream& rIn):  SfxUInt16Item(nId,rIn) {}
@@ -49,7 +49,7 @@ public:
 class SVX_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrSignedPercentItem(): SfxInt16Item() {}
     SdrSignedPercentItem( sal_uInt16 nId, sal_Int16 nVal = 0 ) : SfxInt16Item( nId,nVal ) {}
     SdrSignedPercentItem( sal_uInt16 nId, SvStream& rIn ) : SfxInt16Item( nId,rIn ) {}

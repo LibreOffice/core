@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxWidowsItem: public SfxByteItem
 {
     friend SvStream & WriteSvxWidowsItem( SvStream & aS, SvxWidowsItem & );
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxWidowsItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
 

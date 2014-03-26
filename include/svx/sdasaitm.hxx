@@ -43,7 +43,7 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 
     public :
 
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
             SVX_DLLPUBLIC ~SdrCustomShapeAdjustmentItem();

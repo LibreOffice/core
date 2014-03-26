@@ -29,7 +29,7 @@ DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)
 class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {
 public:
-                             TYPEINFO();
+                             TYPEINFO_OVERRIDE();
     explicit                 SfxMetricItem( sal_uInt16 nWhich = 0, sal_uInt32 nValue = 0 );
                              SfxMetricItem( sal_uInt16 nWhich, SvStream & );
                              SfxMetricItem( const SfxMetricItem& );

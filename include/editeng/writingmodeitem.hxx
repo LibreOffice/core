@@ -28,7 +28,7 @@
 class EDITENG_DLLPUBLIC SvxWritingModeItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxWritingModeItem( ::com::sun::star::text::WritingMode eValue /*= com::sun::star::text::WritingMode_LR_TB*/,
                 sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );

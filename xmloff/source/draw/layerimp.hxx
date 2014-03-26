@@ -31,7 +31,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLayerManager;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLLayerSetContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,

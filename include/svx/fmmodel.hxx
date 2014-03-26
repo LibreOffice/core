@@ -46,7 +46,7 @@ private:
     SVX_DLLPRIVATE void operator=(const FmFormModel& rSrcModel);   // never implemented
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     FmFormModel(const OUString& rPath, SfxItemPool* pPool=NULL,

@@ -46,7 +46,7 @@ protected:
     void add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, OUString& rText );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,

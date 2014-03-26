@@ -397,7 +397,7 @@ public:
 
     SFX_DECL_VIEWFACTORY(SwView);
     SFX_DECL_INTERFACE(SW_VIEWSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxDispatcher   &GetDispatcher();
 

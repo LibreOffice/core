@@ -53,7 +53,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxXMLListStyleContext(
             SvXMLImport& rImport, sal_uInt16 nPrfx,

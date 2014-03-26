@@ -32,7 +32,7 @@ class SVX_DLLPUBLIC SdrGrafInvertItem : public SdrOnOffItem
 {
 public:
 
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
 
                             SdrGrafInvertItem( bool bInvert = false ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
                             SdrGrafInvertItem( SvStream& rIn ) : SdrOnOffItem( SDRATTR_GRAFINVERT, rIn ) {}

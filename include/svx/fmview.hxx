@@ -61,7 +61,7 @@ class SVX_DLLPUBLIC FmFormView : public E3dView
     void Init();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     FmFormView(FmFormModel* pModel, OutputDevice* pOut = 0L);
     virtual ~FmFormView();

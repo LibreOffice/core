@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC SvxViewHint : public SfxHint
 {
 public:
     enum HintType { SVX_HINT_VIEWCHANGED };
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     explicit SvxViewHint (HintType eType);
     HintType GetHintType (void) const;
 
@@ -284,7 +284,7 @@ protected:
     virtual ~SdrPaintView();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual void ClearPageView();
     SdrModel* GetModel() const { return pMod; }

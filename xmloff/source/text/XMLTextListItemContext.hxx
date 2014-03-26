@@ -38,7 +38,7 @@ class XMLTextListItemContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextListItemContext(
             SvXMLImport& rImport,

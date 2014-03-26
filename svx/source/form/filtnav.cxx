@@ -232,7 +232,7 @@ class FmFilterHint : public SfxHint
     FmFilterData*   m_pData;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterHint(FmFilterData* pData):m_pData(pData){}
     FmFilterData* GetData() const { return m_pData; }
 };
@@ -244,7 +244,7 @@ class FmFilterInsertedHint : public FmFilterHint
     sal_uLong m_nPos;   // Position relative to the parent of the data
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterInsertedHint(FmFilterData* pData, sal_uLong nRelPos)
         :FmFilterHint(pData)
         ,m_nPos(nRelPos){}
@@ -257,7 +257,7 @@ TYPEINIT1( FmFilterInsertedHint, FmFilterHint );
 class FmFilterRemovedHint : public FmFilterHint
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterRemovedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
 
@@ -268,7 +268,7 @@ TYPEINIT1( FmFilterRemovedHint, FmFilterHint );
 class FmFilterTextChangedHint : public FmFilterHint
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterTextChangedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
 
@@ -279,7 +279,7 @@ TYPEINIT1( FmFilterTextChangedHint, FmFilterHint );
 class FilterClearingHint : public SfxHint
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FilterClearingHint(){}
 };
 TYPEINIT1( FilterClearingHint, SfxHint );
@@ -288,7 +288,7 @@ TYPEINIT1( FilterClearingHint, SfxHint );
 class FmFilterCurrentChangedHint : public SfxHint
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FmFilterCurrentChangedHint(){}
 };
 TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );

@@ -46,7 +46,7 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
     sal_Bool    bFirst : 1;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

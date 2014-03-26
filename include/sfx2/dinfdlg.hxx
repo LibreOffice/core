@@ -86,7 +86,7 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty > m_aCmisProperties;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
         const ::com::sun::star::uno::Reference<

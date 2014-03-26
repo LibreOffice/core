@@ -48,7 +48,7 @@ public:
     SVX_DLLPUBLIC FmFormObj(const OUString& rModelName);
     SVX_DLLPUBLIC FmFormObj();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }

@@ -77,7 +77,7 @@ class XMLLineNumberingImportContext : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLLineNumberingImportContext(
         SvXMLImport& rImport,

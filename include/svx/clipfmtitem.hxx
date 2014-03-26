@@ -34,7 +34,7 @@ protected:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxClipboardFmtItem( sal_uInt16 nId = 0 );
     SvxClipboardFmtItem( const SvxClipboardFmtItem& );
     virtual ~SvxClipboardFmtItem();

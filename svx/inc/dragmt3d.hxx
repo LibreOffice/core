@@ -72,7 +72,7 @@ protected:
     bool                                mbMovedAtAll;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     E3dDragMethod(
         SdrDragView &rView,
         const SdrMarkList& rMark,
@@ -103,7 +103,7 @@ class E3dDragRotate : public E3dDragMethod
     basegfx::B3DPoint                   maGlobalCenter;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     E3dDragRotate(
         SdrDragView &rView,
         const SdrMarkList& rMark,
@@ -127,7 +127,7 @@ class E3dDragMove : public E3dDragMethod
     Point                   maScaleFixPos;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     E3dDragMove(
         SdrDragView &rView,
         const SdrMarkList& rMark,

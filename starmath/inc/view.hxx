@@ -275,7 +275,7 @@ protected:
     virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
     ~SmViewShell();

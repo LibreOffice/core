@@ -30,7 +30,7 @@
 
 class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrMetricItem(): SfxInt32Item() {}
     SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal=0):  SfxInt32Item(nId,nVal) {}
     SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}

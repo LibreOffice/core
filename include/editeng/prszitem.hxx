@@ -32,7 +32,7 @@
 class EDITENG_DLLPUBLIC SvxPropSizeItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxPropSizeItem( const sal_uInt16 nPercent /*= 100*/,
                  const sal_uInt16 nID  );

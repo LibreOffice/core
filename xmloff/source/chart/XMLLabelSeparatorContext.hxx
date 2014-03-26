@@ -24,7 +24,7 @@
 class XMLLabelSeparatorContext : public XMLElementPropertyContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLLabelSeparatorContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                            const OUString& rLName,

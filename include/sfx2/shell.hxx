@@ -166,7 +166,7 @@ protected:
     SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
 
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
     virtual                     ~SfxShell();
 
     virtual SfxInterface*       GetInterface() const;

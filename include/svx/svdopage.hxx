@@ -42,7 +42,7 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrPageObj(SdrPage* pNewPage = 0L);
     SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage = 0L);
     ~SdrPageObj();

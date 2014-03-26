@@ -28,7 +28,7 @@
 class XMLPersMixedContentTContext : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     // mixed content persistence only
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,

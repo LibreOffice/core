@@ -48,7 +48,7 @@ class XMLFootnoteSeparatorImport : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLFootnoteSeparatorImport(
         SvXMLImport& rImport,

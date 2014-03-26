@@ -39,7 +39,7 @@ class SwTextShell: public SwBaseShell
 public:
 
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );

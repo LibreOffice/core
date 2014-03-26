@@ -83,7 +83,7 @@ namespace offapp
         DriverPoolingSettings   m_aSettings;
 
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
 

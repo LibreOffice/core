@@ -115,7 +115,7 @@ private:
 class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
+                TYPEINFO_OVERRIDE();
                 ScTpViewItem( sal_uInt16 nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 ~ScTpViewItem();

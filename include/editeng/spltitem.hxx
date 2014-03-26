@@ -34,7 +34,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxFmtSplitItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     ~SvxFmtSplitItem();
 
     inline SvxFmtSplitItem( const bool bSplit /*= true*/,

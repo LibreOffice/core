@@ -48,7 +48,7 @@ protected:
                                bool bTemplate = false ) const;
 
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         using SotObject::GetInterface;
                         SFX_DECL_OBJECTFACTORY();

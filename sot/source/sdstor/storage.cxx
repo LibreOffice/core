@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 class SotStorageStreamFactory : public SotFactory
 {
 public:
-         TYPEINFO();
+         TYPEINFO_OVERRIDE();
         SotStorageStreamFactory( const SvGlobalName & rName,
                                  const OUString & rClassName,
                                  CreateInstanceType pCreateFuncP )
@@ -294,7 +294,7 @@ bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::sta
 class SotStorageFactory : public SotFactory
 {
 public:
-         TYPEINFO();
+         TYPEINFO_OVERRIDE();
         SotStorageFactory( const SvGlobalName & rName,
                            const OUString & rClassName,
                            CreateInstanceType pCreateFuncP )

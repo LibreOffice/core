@@ -61,7 +61,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     ///< Already in base class Client.
+    TYPEINFO_OVERRIDE();     ///< Already in base class Client.
 
     /// Destroys all Frms in aDepend (Frms are identified via PTR_CAST).
     virtual void DelFrms();
@@ -160,7 +160,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     ~SwFlyFrmFmt();
 
     /// Creates the views.
@@ -257,7 +257,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     ~SwDrawFrmFmt();
 
     /** DrawObjects are removed from the arrays at the layout.

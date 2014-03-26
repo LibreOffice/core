@@ -124,7 +124,7 @@ public:
     SdrHintKind                             meHint;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SdrHint(SdrHintKind eNewHint);
     explicit SdrHint(const SdrObject& rNewObj);
@@ -279,7 +279,7 @@ private:
 public:
     bool     IsPasteResize() const        { return bPasteResize; }
     void     SetPasteResize(bool bOn) { bPasteResize=bOn; }
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     // Steckt man hier seinen eigenen Pool rein, so wird die Klasse auch
     // Aktionen an ihm vornehmen (Put(),Remove()). Bei Zerstoerung von
     // SdrModel wird dieser Pool ver delete geloescht!

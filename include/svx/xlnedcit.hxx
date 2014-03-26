@@ -29,7 +29,7 @@
 class SVX_DLLPUBLIC XLineEndCenterItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineEndCenterItem(bool bEndCenter = false);
                             XLineEndCenterItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

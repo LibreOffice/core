@@ -36,7 +36,7 @@ namespace xmloff
                 ,public OStackedLogging
     {
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         OFormsRootImport( SvXMLImport& _rImport, sal_uInt16 _nPrfx, const OUString& _rLocalName);
         virtual ~OFormsRootImport();

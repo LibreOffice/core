@@ -132,7 +132,7 @@ Dieses Item beschreibt eine Makro-Tabelle.
 class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 

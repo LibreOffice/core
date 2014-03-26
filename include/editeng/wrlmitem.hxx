@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxWordLineModeItem( const bool bWordLineMode /*= false*/,
                      const sal_uInt16 nId  );

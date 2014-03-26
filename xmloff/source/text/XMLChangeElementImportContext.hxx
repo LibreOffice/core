@@ -59,7 +59,7 @@ class XMLChangeElementImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLChangeElementImportContext(
         SvXMLImport& rImport,

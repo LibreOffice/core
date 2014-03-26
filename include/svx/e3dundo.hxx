@@ -36,7 +36,7 @@ class E3dUndoAction : public SdrUndoAction
         E3dObject *pMy3DObj;
 
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         E3dUndoAction (SdrModel  *pModel,
                        E3dObject *p3DObj) :
             SdrUndoAction (*pModel),
@@ -60,7 +60,7 @@ class E3dRotateUndoAction : public E3dUndoAction
         basegfx::B3DHomMatrix aMyNewRotation;
 
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         E3dRotateUndoAction (SdrModel       *pModel,
                              E3dObject      *p3DObj,
                              const basegfx::B3DHomMatrix &aOldRotation,
@@ -93,7 +93,7 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
     const SfxItemSet aOldSet;
 
  public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         E3dAttributesUndoAction( SdrModel &rModel,
             E3dObject* pInObject,
             const SfxItemSet& rNewSet,

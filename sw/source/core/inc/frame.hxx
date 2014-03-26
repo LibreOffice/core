@@ -438,7 +438,7 @@ public:
         return uno::Sequence< style::TabStop >();
     }
 
-    TYPEINFO(); // already in base class
+    TYPEINFO_OVERRIDE(); // already in base class
 
     sal_uInt16 GetType() const { return 0x1 << mnType; }
 

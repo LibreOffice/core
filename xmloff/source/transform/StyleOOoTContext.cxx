@@ -148,7 +148,7 @@ class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
@@ -236,7 +236,7 @@ class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,

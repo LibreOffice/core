@@ -118,7 +118,7 @@ public:
                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLBodyContext_Impl();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -165,7 +165,7 @@ public:
                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLDocContext_Impl();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -255,7 +255,7 @@ public:
                 const Reference< document::XDocumentProperties >& xDocProps);
     virtual ~SwXMLOfficeDocContext_Impl();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual SvXMLImportContext *CreateChildContext(
                 sal_uInt16 nPrefix,
@@ -319,7 +319,7 @@ public:
                                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLDocStylesContext_Impl();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual void EndElement();
 };

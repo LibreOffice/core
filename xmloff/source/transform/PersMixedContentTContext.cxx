@@ -28,7 +28,7 @@ class XMLPersTextTContext_Impl : public XMLTransformerContext
     OUString m_aCharacters;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rChars );

@@ -132,7 +132,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
                    const OUString& rLName,

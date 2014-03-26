@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint = com::sun::star::drawing::LineJoint_ROUND );
                             XLineJointItem( SvStream& rIn );
 

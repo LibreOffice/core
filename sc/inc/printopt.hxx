@@ -55,7 +55,7 @@ public:
 class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
+                TYPEINFO_OVERRIDE();
                 ScTpPrintItem( sal_uInt16 nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );

@@ -155,7 +155,7 @@ protected:
 
 public:
     // #i26791#
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual ~SwFlyFrm();
     // get client information

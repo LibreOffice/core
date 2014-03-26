@@ -40,7 +40,7 @@ protected:
                               const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwAutoCorrect( const SvxAutoCorrect& rACorr );
     virtual ~SwAutoCorrect();

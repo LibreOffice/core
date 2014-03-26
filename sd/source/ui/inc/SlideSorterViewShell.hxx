@@ -42,7 +42,7 @@ class SlideSorterViewShell
     friend class controller::SlotManager;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
     static ::boost::shared_ptr<SlideSorterViewShell> Create(

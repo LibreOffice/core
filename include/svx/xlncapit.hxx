@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     XLineCapItem(com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
     XLineCapItem(SvStream& rIn);
 

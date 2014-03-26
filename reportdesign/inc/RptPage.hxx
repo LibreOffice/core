@@ -50,7 +50,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     OReportPage( OReportModel& rModel
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection

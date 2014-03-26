@@ -43,7 +43,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
     friend SvStream & WriteSvxHyphenZoneItem( SvStream & aS, SvxHyphenZoneItem & );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxHyphenZoneItem( const bool bHyph /*= false*/,
                        const sal_uInt16 nId  );

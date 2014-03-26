@@ -90,7 +90,7 @@ public:
 class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SwCropGrf();
     SwCropGrf(  sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom );
@@ -204,7 +204,7 @@ class SW_DLLPUBLIC SwGammaGrf : public SfxPoolItem
 {
     double nValue;
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SwGammaGrf() : SfxPoolItem( RES_GRFATR_GAMMA ), nValue( 1.0 )
     {}
 

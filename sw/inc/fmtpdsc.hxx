@@ -55,7 +55,7 @@ public:
     SwFmtPageDesc &operator=( const SwFmtPageDesc &rCpy );
     ~SwFmtPageDesc();
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const;

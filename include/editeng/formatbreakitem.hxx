@@ -36,7 +36,7 @@
 class EDITENG_DLLPUBLIC SvxFmtBreakItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     inline SvxFmtBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
                             const sal_uInt16 nWhich );

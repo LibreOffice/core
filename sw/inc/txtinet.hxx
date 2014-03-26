@@ -40,7 +40,7 @@ virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 public:
     SwTxtINetFmt( SwFmtINetFmt& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTxtINetFmt();
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 

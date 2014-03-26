@@ -32,7 +32,7 @@ class PresentationViewShellBase
     : public ViewShellBase
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SFX_DECL_VIEWFACTORY(PresentationViewShellBase);
 
     /** This constructor is used by the view factory of the SFX

@@ -43,7 +43,7 @@ protected:
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     FileList() {};
     ~FileList();
 

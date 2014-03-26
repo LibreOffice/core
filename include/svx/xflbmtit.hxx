@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC XFillBmpTileItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XFillBmpTileItem( bool bTile = true );
                             XFillBmpTileItem( SvStream& rIn );
 

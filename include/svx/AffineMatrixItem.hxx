@@ -33,7 +33,7 @@ private:
     com::sun::star::geometry::AffineMatrix2D        maMatrix;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     AffineMatrixItem(const com::sun::star::geometry::AffineMatrix2D* pMatrix = 0);
     AffineMatrixItem(SvStream& rIn);
     AffineMatrixItem(const AffineMatrixItem&);

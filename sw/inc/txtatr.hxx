@@ -90,7 +90,7 @@ protected:
 public:
     SwTxtRuby( SwFmtRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTxtRuby();
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 

@@ -203,7 +203,7 @@ protected:
     void AddToRecentlyUsedList();
 
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
@@ -740,7 +740,7 @@ class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
     SfxObjectShell*         pObjSh;
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxObjectShellItem() :
                                 SfxPoolItem( 0 ),
                                 pObjSh( 0 )

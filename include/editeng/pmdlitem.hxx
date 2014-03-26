@@ -35,7 +35,7 @@ private:
     bool bAuto;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit inline SvxPageModelItem( sal_uInt16 nWh  );
     inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,

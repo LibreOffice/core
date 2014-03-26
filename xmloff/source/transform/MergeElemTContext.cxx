@@ -33,7 +33,7 @@ using namespace ::xmloff::token;
 class XMLParagraphTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
@@ -107,7 +107,7 @@ void XMLParagraphTransformerContext::Characters( const OUString& rChars )
 class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLPersTextContentRNGTransformTContext(
         XMLTransformerBase& rTransformer,

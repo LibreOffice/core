@@ -34,7 +34,7 @@ using ::com::sun::star::uno::Reference;
 class XMLAxisOOoContext : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLAxisOOoContext( XMLTransformerBase& rTransformer,
                        const OUString& rQName );

@@ -80,7 +80,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    TYPEINFO();   // rtti
+    TYPEINFO_OVERRIDE();   // rtti
 
     // single argument ctors shall be explicit.
     explicit SwTOXMark( const SwTOXType* pTyp );

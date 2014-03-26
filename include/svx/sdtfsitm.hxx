@@ -44,7 +44,7 @@ enum SdrFitToSizeType {
 
 class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
     SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const;

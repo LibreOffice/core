@@ -27,7 +27,7 @@ class SwGlobalDocShell : public SwDocShell
 public:
 
     SFX_DECL_OBJECTFACTORY();
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwGlobalDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     ~SwGlobalDocShell();

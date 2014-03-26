@@ -42,7 +42,7 @@ public:
     ~SwFmtHeader();
     SwFmtHeader& operator=( const SwFmtHeader &rCpy );
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const;
@@ -75,7 +75,7 @@ public:
     ~SwFmtFooter();
     SwFmtFooter& operator=( const SwFmtFooter &rCpy );
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const;

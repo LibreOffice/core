@@ -163,7 +163,7 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 */
 {
     public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
 
                             SfxListUndoAction( const OUString &rComment,
                                 const OUString& rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
@@ -453,7 +453,7 @@ private:
     void LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate);
 
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             SfxLinkUndoAction(::svl::IUndoManager *pManager);
                             ~SfxLinkUndoAction();
 

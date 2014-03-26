@@ -43,7 +43,7 @@ protected:
         { mxChildren = rNew; }
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SdXML3DSceneShapeContext(
         SvXMLImport& rImport,

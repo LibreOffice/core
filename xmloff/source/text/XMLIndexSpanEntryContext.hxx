@@ -39,7 +39,7 @@ class XMLIndexSpanEntryContext : public XMLIndexSimpleEntryContext
 
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLIndexSpanEntryContext(
         SvXMLImport& rImport,

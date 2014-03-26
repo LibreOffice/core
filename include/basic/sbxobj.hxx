@@ -44,7 +44,7 @@ protected:
                              const SfxHint& rHint, const TypeId& rHintType );
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_OBJECT,1);
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbxObject( const OUString& rClassname );
     SbxObject( const SbxObject& );
     SbxObject& operator=( const SbxObject& );

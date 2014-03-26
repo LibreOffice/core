@@ -97,7 +97,7 @@ class XMLTextColumnContext_Impl: public SvXMLImportContext
     text::TextColumn aColumn;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextColumnContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,
@@ -179,7 +179,7 @@ class XMLTextColumnSepContext_Impl: public SvXMLImportContext
     VerticalAlignment eVertAlign;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextColumnSepContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,

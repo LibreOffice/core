@@ -25,7 +25,7 @@
 class XMLDlgOASISTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLDlgOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );

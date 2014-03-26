@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxOrphansItem: public SfxByteItem
 {
     friend SvStream & WriteSvxOrphansItem( SvStream & aS, SvxOrphansItem & );
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxOrphansItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
 

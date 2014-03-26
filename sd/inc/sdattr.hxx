@@ -91,7 +91,7 @@ public:
 class DiaEffectItem : public SfxEnumItem
 {
 public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             DiaEffectItem( ::com::sun::star::presentation::FadeEffect eFade = com::sun::star::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
@@ -106,7 +106,7 @@ public:
 class DiaSpeedItem : public SfxEnumItem
 {
 public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
@@ -121,7 +121,7 @@ public:
 class DiaAutoItem : public SfxEnumItem
 {
 public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
@@ -135,7 +135,7 @@ public:
 class DiaTimeItem : public SfxUInt32Item
 {
 public:
-            TYPEINFO();
+            TYPEINFO_OVERRIDE();
             DiaTimeItem( sal_uInt32 nValue = 0L );
 
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;

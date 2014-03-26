@@ -39,7 +39,7 @@ public:
     virtual     ~SwDrawBaseShell();
 
     SFX_DECL_INTERFACE(SW_DRAWBASESHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);

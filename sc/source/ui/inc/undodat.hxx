@@ -45,7 +45,7 @@ class ScMarkData;
 class ScUndoDoOutline: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoDoOutline( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, bool bNewColumns,
@@ -74,7 +74,7 @@ private:
 class ScUndoMakeOutline: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoMakeOutline( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -101,7 +101,7 @@ private:
 class ScUndoOutlineLevel: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoOutlineLevel( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
@@ -129,7 +129,7 @@ private:
 class ScUndoOutlineBlock: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoOutlineBlock( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -156,7 +156,7 @@ private:
 class ScUndoRemoveAllOutlines: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -181,7 +181,7 @@ private:
 class ScUndoAutoOutline: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoAutoOutline( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -206,7 +206,7 @@ private:
 class ScUndoSubTotals: public ScDBFuncUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
@@ -236,7 +236,7 @@ private:
 class ScUndoSort: public ScDBFuncUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoSort( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSortParam& rParam,
                             ScDocument* pNewUndoDoc,
@@ -263,7 +263,7 @@ private:
 class ScUndoQuery: public ScDBFuncUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScQueryParam& rParam, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pOld,
@@ -300,7 +300,7 @@ private:
     void            DoChange( bool bUndo );
 
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
                                       const OUString& rName, bool bSet );
     virtual         ~ScUndoAutoFilter();
@@ -317,7 +317,7 @@ public:
 class ScUndoDBData: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoDBData( ScDocShell* pNewDocShell,
                             ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl );
     virtual         ~ScUndoDBData();
@@ -338,7 +338,7 @@ private:
 class ScUndoImportData: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoImportData( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
                             SCCOL nNewFormula,
@@ -370,7 +370,7 @@ private:
 class ScUndoRepeatDB: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                             SCROW nResultEndRow, SCCOL nCurX, SCROW nCurY,
@@ -404,7 +404,7 @@ private:
 class ScUndoDataPilot: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj,
@@ -430,7 +430,7 @@ private:
 class ScUndoConsolidate: public ScSimpleUndo
 {
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
                         ScUndoConsolidate( ScDocShell* pNewDocShell,
                                 const ScArea& rArea, const ScConsolidateParam& rPar,
                                 ScDocument* pNewUndoDoc, bool bReference,
@@ -459,7 +459,7 @@ private:
 class ScUndoChartData: public ScSimpleUndo
 {
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
                         ScUndoChartData( ScDocShell* pNewDocShell,
                                 const OUString& rName, const ScRange& rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
@@ -492,7 +492,7 @@ private:
 class ScUndoDataForm: public ScBlockUndo
 {
 public:
-                    TYPEINFO();
+                    TYPEINFO_OVERRIDE();
                     ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,

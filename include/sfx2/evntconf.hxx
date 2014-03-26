@@ -74,7 +74,7 @@ class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
     SfxEventNamesList aEventsList;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxEventNamesItem ( const sal_uInt16 nId ) : SfxPoolItem( nId ) {}
 

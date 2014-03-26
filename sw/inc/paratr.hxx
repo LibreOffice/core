@@ -47,7 +47,7 @@ class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
     sal_uInt8  nChars;          ///< Character count.
     sal_Bool   bWholeWord;      ///< First word with initials.
 public:
-    TYPEINFO(); ///< Already in base class SwClient.
+    TYPEINFO_OVERRIDE(); ///< Already in base class SwClient.
 
     SwFmtDrop();
     virtual ~SwFmtDrop();
@@ -101,7 +101,7 @@ public:
 class SwRegisterItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     inline SwRegisterItem( const sal_Bool bRegister = sal_False );
 
@@ -131,7 +131,7 @@ inline SwRegisterItem& SwRegisterItem::operator=(
 class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, OUString() ) {}
@@ -161,7 +161,7 @@ public:
 class SwParaConnectBorderItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     inline SwParaConnectBorderItem( const sal_Bool bConnect = sal_True );
 

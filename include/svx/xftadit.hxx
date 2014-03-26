@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XFormTextAdjustItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XFormTextAdjustItem(XFormTextAdjust = XFT_CENTER);
                             XFormTextAdjustItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

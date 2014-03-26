@@ -61,7 +61,7 @@ namespace rptxml
 
     public:
 
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
@@ -128,7 +128,7 @@ namespace rptxml
 
     public:
 
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
 
         OReportStylesContext( ORptFilter& rImport, sal_uInt16 nPrfx ,
                 const OUString& rLName ,

@@ -37,7 +37,7 @@ class BASIC_DLLPUBLIC SbProperty : public SbxProperty
     virtual ~SbProperty();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICPROP,1);
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SbModule* GetModule() { return pMod; }
 };
 
@@ -54,7 +54,7 @@ public:
             : SbxProperty( r, t ) // , pMod( p )
             , mbSet( false )
     {}
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     bool isSet( void )
         { return mbSet; }

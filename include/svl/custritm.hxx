@@ -32,7 +32,7 @@ class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
     OUString m_aValue;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     CntUnencodedStringItem(sal_uInt16 which = 0): SfxPoolItem(which)
     { DBG_CTOR(CntUnencodedStringItem, 0); }

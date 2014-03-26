@@ -59,7 +59,7 @@ protected:
         ::com::sun::star::style::XStyle > GetStyle() { return xStyle; }
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLTextMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

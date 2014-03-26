@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvXMLAttrContainerItem: public SfxPoolItem
     SvXMLAttrContainerData  *pImpl;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvXMLAttrContainerItem( sal_uInt16 nWhich = 0 );
     SvXMLAttrContainerItem( const SvXMLAttrContainerItem& );

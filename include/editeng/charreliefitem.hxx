@@ -34,7 +34,7 @@
 class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxCharReliefItem( FontRelief eValue /*= RELIEF_NONE*/,
                        const sal_uInt16 nId );

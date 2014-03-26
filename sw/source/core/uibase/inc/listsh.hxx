@@ -25,7 +25,7 @@ class SwListShell: public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_LISTSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
             SwListShell(SwView &rView);
 

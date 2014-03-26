@@ -25,7 +25,7 @@ class SwWebTableShell: public SwTableShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBTABSHELL)
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     virtual     ~SwWebTableShell();
                 SwWebTableShell(SwView &rView);

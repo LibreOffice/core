@@ -34,7 +34,7 @@ protected:
     SfxImpStringList*   pImp;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=NULL );

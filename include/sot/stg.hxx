@@ -75,7 +75,7 @@ public:
 class BaseStorageStream : public StorageBase
 {
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
     virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
     virtual sal_uLong   Seek( sal_uLong nPos ) = 0;
@@ -92,7 +92,7 @@ public:
 class BaseStorage : public StorageBase
 {
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
     virtual const OUString&     GetName() const = 0;
     virtual bool                IsRoot() const = 0;
     virtual void                SetClassId( const ClsId& ) = 0;
@@ -156,7 +156,7 @@ class StorageStream : public BaseStorageStream, public OLEStorageBase
 protected:
                         ~StorageStream();
 public:
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
     virtual sal_uLong   Read( void * pData, sal_uLong nSize );
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize );
@@ -185,7 +185,7 @@ class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
 protected:
                                 ~Storage();
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 Storage( const OUString &, StreamMode = STREAM_STD_READWRITE, bool bDirect = true );
                                 Storage( SvStream& rStrm, bool bDirect = true );
                                 Storage( UCBStorageStream& rStrm, bool bDirect = true );
@@ -249,7 +249,7 @@ friend class UCBStorage;
 protected:
                                 ~UCBStorageStream();
 public:
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
                                 UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
@@ -308,7 +308,7 @@ public:
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, bool bDirect = true );
 
-                                TYPEINFO();
+                                TYPEINFO_OVERRIDE();
     virtual const OUString&     GetName() const;
     virtual bool                IsRoot() const;
     virtual void                SetClassId( const ClsId& );

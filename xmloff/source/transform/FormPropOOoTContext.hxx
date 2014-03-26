@@ -42,7 +42,7 @@ class XMLFormPropOOoTransformerContext : public XMLTransformerContext
     sal_Bool m_bIsList;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLFormPropOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );

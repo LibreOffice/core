@@ -27,7 +27,7 @@ class XMLFrameOOoTransformerContext : public XMLPersElemContentTContext
     OUString m_aElemQName;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     XMLFrameOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );

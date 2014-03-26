@@ -34,7 +34,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSet;
 
     public:
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         OPropertySetItem(sal_Int16 nWhich);
         OPropertySetItem(sal_Int16 nWhich,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet);

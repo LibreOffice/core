@@ -84,7 +84,7 @@ class RptMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
     void operator =(const RptMLMasterStylesContext_Impl&);
 public:
 
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     RptMLMasterStylesContext_Impl(
             ORptFilter& rImport, sal_uInt16 nPrfx,

@@ -236,7 +236,7 @@ protected:
     virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragMove(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -259,7 +259,7 @@ protected:
     Fraction                    aYFact;
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragResize(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
@@ -288,7 +288,7 @@ protected:
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SdrDragObjOwn(SdrDragView& rNewView);
     virtual ~SdrDragObjOwn();
 

@@ -47,7 +47,7 @@ private:
     SVX_DLLPRIVATE const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
@@ -81,7 +81,7 @@ private:
     SVX_DLLPRIVATE const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
@@ -113,7 +113,7 @@ protected:
 private:
     SVX_DLLPRIVATE const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &); // n.i.
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
     SvxPagePosSizeItem(const SvxPagePosSizeItem &);
     SvxPagePosSizeItem();
@@ -174,7 +174,7 @@ protected:
     virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
     SvxColumnItem(sal_uInt16 nAct = 0);
@@ -233,7 +233,7 @@ private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY,
                   bool bLimits = false);

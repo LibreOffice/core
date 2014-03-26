@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XLineTransparenceItem: public SfxUInt16Item
 {
 public:
-                            TYPEINFO();
+                            TYPEINFO_OVERRIDE();
                             XLineTransparenceItem(sal_uInt16 nLineTransparence = 0);
                             XLineTransparenceItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const;

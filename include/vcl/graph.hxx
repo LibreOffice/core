@@ -90,7 +90,7 @@ public:
 
 public:
 
-                        TYPEINFO();
+                        TYPEINFO_OVERRIDE();
 
                         Graphic();
                         Graphic( const Graphic& rGraphic );

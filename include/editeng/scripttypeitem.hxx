@@ -38,7 +38,7 @@ short  GetI18NScriptType( sal_uInt16 nItemType );
 class EDITENG_DLLPUBLIC SvxScriptTypeItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     explicit SvxScriptTypeItem( sal_uInt16 nType = SCRIPTTYPE_LATIN );
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
@@ -48,7 +48,7 @@ public:
 class EDITENG_DLLPUBLIC SvxScriptSetItem : public SfxSetItem
 {
 public:
-    TYPEINFO();
+    TYPEINFO_OVERRIDE();
 
     SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool );
 
