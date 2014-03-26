@@ -49,7 +49,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
@@ -114,7 +113,7 @@ boost::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
     }
     else if(rFilterName == "calc8")
     {
-        // validate(pTempFile->GetFileName(), test::ODF);
+        validate(pTempFile->GetFileName(), test::ODF);
     }
 
     CPPUNIT_ASSERT(mxComponent.is());
@@ -136,6 +135,7 @@ void ChartTest::tearDown()
     test::BootstrapFixture::tearDown();
 
 }
+
 Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
 {
     // let us assume that we only have one chart per sheet
@@ -165,6 +165,7 @@ Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, uno::Refe
     return xChartComp;
 
 }
+
 Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, xComponent), UNO_QUERY_THROW );
@@ -209,7 +210,6 @@ Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::X
 
     return xSeries;
 }
-
 
 uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XComponent > mxComponent )
 {
