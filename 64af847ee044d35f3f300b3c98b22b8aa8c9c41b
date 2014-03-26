@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_b28546af",
+        "filename": "basic/source/runtime/iosys.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-26T18:40:29Z",
+      "side": 1,
+      "message": "need to change return type here too - which you did change on the definition below; probably this happens to build on 64bit platforms by accident",
+      "revId": "64af847ee044d35f3f300b3c98b22b8aa8c9c41b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_12bc526c",
+        "filename": "basic/source/runtime/iosys.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-26T18:40:29Z",
+      "side": 1,
+      "message": "one sal_uIntPtr remains here",
+      "revId": "64af847ee044d35f3f300b3c98b22b8aa8c9c41b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_d292baf5",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-26T18:40:29Z",
+      "side": 1,
+      "message": "it looks like Date::operator+\u003d takes a \"long\" parameter, not sal_uInt64 (you are excused for not looking at that class since doing so causes eye cancer)\n\nbtw, good idea to convert it to C++ casts if the line is changed anyway",
+      "revId": "64af847ee044d35f3f300b3c98b22b8aa8c9c41b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_f28fbeca",
+        "filename": "basic/source/sbx/sbxdec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-26T18:40:29Z",
+      "side": 1,
+      "message": "it turns out that this is Win32 specific code, \"VarDecFromUI4\" is actually a Windows function, and it wants a \"ULONG\"... probably it was erroneously converted back in commit 642cfe8ac206af4fe82bc695d38b5c7f0edf7dc7",
+      "revId": "64af847ee044d35f3f300b3c98b22b8aa8c9c41b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
