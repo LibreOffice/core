@@ -573,7 +573,8 @@ void SwSidebarWin::SetPosAndSize()
     }
 
     // text range overlay
-    if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
+    if ( mrMgr.ShowNotes()
+         && mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
          && mrSidebarItem.maLayoutInfo.mnStartContent != -1 )
     {
         std::vector< basegfx::B2DRange > aAnnotationTextRanges;
