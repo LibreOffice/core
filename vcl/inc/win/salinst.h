@@ -44,8 +44,6 @@ public:
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
                                                      sal_uInt16 nBitCount, const SystemGraphicsData *pData );
-    virtual void            DestroyVirtualDevice( SalVirtualDevice* pDevice );
-
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData );
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );

@@ -151,15 +151,6 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
 }
 
-
-
-void WinSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
-{
-    delete pDevice;
-}
-
-
-
 WinSalVirtualDevice::WinSalVirtualDevice()
 {
     setHDC((HDC)NULL);          // HDC or 0 for Cache Device

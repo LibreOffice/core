@@ -78,11 +78,6 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     return pVDev;
 }
 
-void X11SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
-{
-    delete pDevice;
-}
-
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
                            bool bDeleteColormap )
 {

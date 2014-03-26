@@ -86,7 +86,6 @@ public:
                             CreateVirtualDevice( SalGraphics* pGraphics,
                                                  long nDX, long nDY,
                                                  sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
-    virtual void            DestroyVirtualDevice( SalVirtualDevice* pDevice ) = 0;
 
     // Printer
     // pSetupData->mpDriverData can be 0

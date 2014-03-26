@@ -254,8 +254,7 @@ VirtualDevice::~VirtualDevice()
 
     ImplReleaseGraphics();
 
-    if ( mpVirDev )
-        pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
+    delete mpVirDev;
 
     // remove this VirtualDevice from the double-linked global list
     if( mpPrev )
@@ -350,7 +349,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ImplReleaseGraphics();
-                pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
+                delete mpVirDev;
                 mpVirDev = pNewVirDev;
                 mnOutWidth  = rNewSize.Width();
                 mnOutHeight = rNewSize.Height();
@@ -359,7 +358,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             else
             {
                 bRet = false;
-                pSVData->mpDefInst->DestroyVirtualDevice( pNewVirDev );
+                delete pNewVirDev;
             }
         }
         else

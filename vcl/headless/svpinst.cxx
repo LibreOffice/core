@@ -228,11 +228,6 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics
     return pNew;
 }
 
-void SvpSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
-{
-    delete pDevice;
-}
-
 #endif
 
 SalTimer* SvpSalInstance::CreateSalTimer()

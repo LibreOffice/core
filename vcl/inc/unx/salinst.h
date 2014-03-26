@@ -55,7 +55,6 @@ public:
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
                                                      sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
-    virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice );
     virtual void                PostPrintersChanged();
     virtual GenPspGraphics     *CreatePrintGraphics();
 
