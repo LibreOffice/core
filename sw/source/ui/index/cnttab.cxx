@@ -3336,11 +3336,8 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         {
             if (!rToken.sCharStyleName.isEmpty())
             {
-                if(bBalloon)
-                    sEntry += "\n";
-                else
-                    sEntry += " ";
-                sEntry += sCharStyle + rToken.sCharStyleName;
+                sEntry += OUString(bBalloon ? '\n' : ' ')
+                        + sCharStyle + rToken.sCharStyleName;
             }
         }
         if(bBalloon)
