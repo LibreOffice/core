@@ -49,8 +49,8 @@ uno::Reference<chart2::XChartType> GL3DBarChartTypeTemplate::getChartTypeForInde
 }
 
 uno::Reference<chart2::XChartType>
-GL3DBarChartTypeTemplate::getChartTypeForNewSeries(
-    const uno::Sequence<uno::Reference<chart2::XChartType> >& xOldChartTypes )
+GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Reference<chart2::XChartType> >& xOldChartTypes )
+    throw (::css::uno::RuntimeException, ::std::exception)
 {
     uno::Reference<chart2::XChartType> xResult;
 
@@ -77,6 +77,7 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries(
 }
 
 sal_Bool GL3DBarChartTypeTemplate::supportsCategories()
+    throw (::css::uno::RuntimeException, ::std::exception)
 {
     return false;
 }
