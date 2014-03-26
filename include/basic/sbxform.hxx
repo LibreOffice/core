@@ -105,13 +105,13 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     OUString  BasicFormat( double dNumber, const OUString& sFormatStrg );
     OUString  BasicFormatNull( const OUString& sFormatStrg );
 
-    static  sal_Bool isBasicFormat( const OUString& sFormatStrg );
+    static  bool isBasicFormat( const OUString& sFormatStrg );
 
   private:
     BASIC_DLLPRIVATE inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );
     BASIC_DLLPRIVATE void   AppendDigit( OUStringBuffer& sStrg, short nDigit );
     BASIC_DLLPRIVATE void   LeftShiftDecimalPoint( OUStringBuffer& sStrg );
-    BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos, sal_Bool& bOverflow );
+    BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& bOverflow );
     BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos );
     BASIC_DLLPRIVATE void   ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
                                        short nFormatPos );
@@ -119,30 +119,30 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
     // Methods for string conversion with sprintf():
     BASIC_DLLPRIVATE void   InitScan( double _dNum );
     BASIC_DLLPRIVATE void   InitExp( double _dNewExp );
-    BASIC_DLLPRIVATE short  GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigit );
+    BASIC_DLLPRIVATE short  GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit );
     BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( double dNewExponent, short nPos,
-                                                  sal_Bool& bFoundFirstDigit );
-    BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstDigit );
+                                                  bool& bFoundFirstDigit );
+    BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit );
 #else
     // Methods for direct 'calculation' with log10() and pow():
     BASIC_DLLPRIVATE short  GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
-                                           sal_Bool& bFoundFirstDigit );
+                                           bool& bFoundFirstDigit );
     BASIC_DLLPRIVATE short  RoundDigit( double dNumber );
 #endif
-    BASIC_DLLPRIVATE OUString GetPosFormatString( const OUString& sFormatStrg, sal_Bool & bFound );
-    BASIC_DLLPRIVATE OUString GetNegFormatString( const OUString& sFormatStrg, sal_Bool & bFound );
-    BASIC_DLLPRIVATE OUString Get0FormatString( const OUString& sFormatStrg, sal_Bool & bFound );
-    BASIC_DLLPRIVATE OUString GetNullFormatString( const OUString& sFormatStrg, sal_Bool & bFound );
+    BASIC_DLLPRIVATE OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
     BASIC_DLLPRIVATE short  AnalyseFormatString( const OUString& sFormatStrg,
                                                  short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                                                  short& nNoOfOptionalDigitsLeft,
                                                  short& nNoOfExponentDigits,
                                                  short& nNoOfOptionalExponentDigits,
-                                                 sal_Bool& bPercent, sal_Bool& bCurrency, sal_Bool& bScientific,
-                                                 sal_Bool& bGenerateThousandSeparator,
+                                                 bool& bPercent, bool& bCurrency, bool& bScientific,
+                                                 bool& bGenerateThousandSeparator,
                                                  short& nMultipleThousandSeparators );
     BASIC_DLLPRIVATE void   ScanFormatString( double dNumber, const OUString& sFormatStrg,
-                                              OUString& sReturnStrg, sal_Bool bCreateSign );
+                                              OUString& sReturnStrg, bool bCreateSign );
 
     //*** Data ***
     sal_Unicode cDecPoint;      // sign for the decimal point

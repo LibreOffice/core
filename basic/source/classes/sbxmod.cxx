@@ -1259,8 +1259,8 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                     {
                     }
                     // VBA always ensures screenupdating is enabled after completing
-                    ::basic::vba::lockControllersOfAllDocuments( xModel, sal_False );
-                    ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, sal_True );
+                    ::basic::vba::lockControllersOfAllDocuments( xModel, false );
+                    ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, true );
                 }
 
 #ifdef DBG_TRACE_BASIC

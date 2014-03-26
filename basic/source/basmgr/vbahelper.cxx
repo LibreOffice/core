@@ -102,7 +102,7 @@ uno::Any SAL_CALL DocumentsEnumeration::nextElement() throw (container::NoSuchEl
 
 /** Locks or unlocks the controllers of the specified document model.
  */
-void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, sal_Bool bLockControllers )
+void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, bool bLockControllers )
 {
     if( rxModel.is() ) try
     {
@@ -121,7 +121,7 @@ void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, sal_Boo
 /** Enables or disables the container windows of all controllers of the
     specified document model.
  */
-void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, sal_Bool bEnableWindows )
+void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, bool bEnableWindows )
 {
     try
     {
@@ -149,12 +149,12 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
 
 
 
-typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, sal_Bool );
+typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, bool );
 
 /** Implementation iterating over all documents that have the same type as the
     specified model, and calling the passed functor.
  */
-void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Reference< frame::XModel >& rxModel, sal_Bool bModificator )
+void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Reference< frame::XModel >& rxModel, bool bModificator )
 {
     uno::Reference< container::XEnumeration > xDocumentsEnum( new DocumentsEnumeration( rxModel ) );
     // iterate over all open documents
@@ -182,14 +182,14 @@ struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool 
 
 
 
-void lockControllersOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bLockControllers )
+void lockControllersOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, bool bLockControllers )
 {
     lclIterateDocuments( &lclLockControllers, rxModel, bLockControllers );
 }
 
 
 
-void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bEnableWindows )
+void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, bool bEnableWindows )
 {
     lclIterateDocuments( &lclEnableContainerWindows, rxModel, bEnableWindows );
 }

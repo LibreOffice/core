@@ -166,13 +166,13 @@ void SbxBasicFormater::LeftShiftDecimalPoint( OUStringBuffer& sStrg )
 }
 
 // returns a flag if rounding a 9
-void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, sal_Bool& bOverflow )
+void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& bOverflow )
 {
     if( nPos<0 )
     {
         return;
     }
-    bOverflow = sal_False;
+    bOverflow = false;
     sal_Unicode c = sStrg[nPos];
     if( nPos > 0 && (c == cDecPoint || c == cThousandSep) )
     {
@@ -194,7 +194,7 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, sal_Boo
     {
         ShiftString( sStrg, 0 );
         sStrg[0] = (sal_Unicode)'1';
-        bOverflow = sal_True;
+        bOverflow = true;
     }
     else
     {
@@ -215,14 +215,14 @@ void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos, sal_Boo
         {
             ShiftString( sStrg,nPos+1 );
             sStrg[nPos + 1] = (sal_Unicode)'1';
-            bOverflow = sal_True;
+            bOverflow = true;
         }
     }
 }
 
 void SbxBasicFormater::StrRoundDigit( OUStringBuffer& sStrg, short nPos )
 {
-    sal_Bool bOverflow;
+    bool bOverflow;
 
     StrRoundDigit( sStrg, nPos, bOverflow );
 }
@@ -263,7 +263,7 @@ void SbxBasicFormater::InitExp( double _dNewExp )
 }
 
 
-short SbxBasicFormater::GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigit )
+short SbxBasicFormater::GetDigitAtPosScan( short nPos, bool& bFoundFirstDigit )
 {
     // trying to read a higher digit,
     // e. g. position 4 in 1.234,
@@ -282,11 +282,11 @@ short SbxBasicFormater::GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigi
     no += nNumExp-nPos;
     // query of the number's first valid digit --> set flag
     if( nPos==nNumExp )
-        bFoundFirstDigit = sal_True;
+        bFoundFirstDigit = true;
     return (short)(sSciNumStrg[ no ] - ASCII_0);
 }
 
-short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstDigit )
+short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit )
 {
     if( nPos>nExpExp )
         return -1;
@@ -295,14 +295,14 @@ short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstD
     no += nExpExp-nPos;
 
     if( nPos==nExpExp )
-        bFoundFirstDigit = sal_True;
+        bFoundFirstDigit = true;
     return (short)(sNumExpStrg[ no ] - ASCII_0);
 }
 
 // a value for the exponent can be given because the number maybe shall
 // not be displayed in a normed way (e. g. 1.2345e-03) but maybe 123.345e-3 !
 short SbxBasicFormater::GetDigitAtPosExpScan( double dNewExponent, short nPos,
-                                              sal_Bool& bFoundFirstDigit )
+                                              bool& bFoundFirstDigit )
 {
     InitExp( dNewExponent );
 
@@ -334,7 +334,7 @@ TODO: an 'intelligent' peek-parser might be needed to detect rounding
 // this is used to prevent 'errors' on parsing 202
 // ATTENTION: apparently there are sometimes still problems with rounding mistakes!
 short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
-                                double& dNextNumber, sal_Bool& bFoundFirstDigit )
+                                double& dNextNumber, bool& bFoundFirstDigit )
 {
     double dDigit;
     short  nMaxDigit;
@@ -347,7 +347,7 @@ short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
     if( nMaxDigit<nPos && !bFoundFirstDigit && nPos>=0 )
         return _NO_DIGIT;
 
-    bFoundFirstDigit = sal_True;
+    bFoundFirstDigit = true;
     for( short i=nMaxDigit; i>=nPos; i-- )
     {
         double dI = (double)i;
@@ -375,14 +375,14 @@ short SbxBasicFormater::RoundDigit( double dNumber )
 
 // Copies the respective part of the format-string, if existing, and returns it.
 // So a new string is created, which has to be freed by the caller later.
-OUString SbxBasicFormater::GetPosFormatString( const OUString& sFormatStrg, sal_Bool & bFound )
+OUString SbxBasicFormater::GetPosFormatString( const OUString& sFormatStrg, bool & bFound )
 {
-    bFound = sal_False;     // default...
+    bFound = false;     // default...
     sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
 
     if( nPos >= 0 )
     {
-        bFound = sal_True;
+        bFound = true;
         // the format-string for positive numbers is
         // everything before the first ';'
         return sFormatStrg.copy( 0,nPos );
@@ -394,9 +394,9 @@ OUString SbxBasicFormater::GetPosFormatString( const OUString& sFormatStrg, sal_
 }
 
 // see also GetPosFormatString()
-OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, sal_Bool & bFound )
+OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, bool & bFound )
 {
-    bFound = sal_False;     // default...
+    bFound = false;     // default...
     sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
 
     if( nPos >= 0)
@@ -405,7 +405,7 @@ OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, sal_
         // everything between the first and the second ';'
         OUString sTempStrg = sFormatStrg.copy( nPos+1 );
         nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
-        bFound = sal_True;
+        bFound = true;
         if( nPos < 0 )
         {
             return sTempStrg;
@@ -421,9 +421,9 @@ OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, sal_
 }
 
 // see also GetPosFormatString()
-OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, sal_Bool & bFound )
+OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, bool & bFound )
 {
-    bFound = sal_False;     // default...
+    bFound = false;     // default...
     sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
 
     if( nPos >= 0 )
@@ -434,7 +434,7 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, sal_Bo
         nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
         if( nPos >= 0 )
         {
-            bFound = sal_True;
+            bFound = true;
             sTempStrg = sTempStrg.copy( nPos+1 );
             nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
             if( nPos < 0 )
@@ -454,9 +454,9 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, sal_Bo
 }
 
 // see also GetPosFormatString()
-OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, sal_Bool & bFound )
+OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, bool & bFound )
 {
-    bFound = sal_False;     // default...
+    bFound = false;     // default...
     sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
 
     if( nPos >= 0 )
@@ -471,7 +471,7 @@ OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, sal
             nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
             if( nPos >= 0 )
             {
-                bFound = sal_True;
+                bFound = true;
                 return sTempStrg.copy( nPos+1 );
             }
         }
@@ -487,8 +487,8 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits, short& nNoOfOptionalExponentDigits,
-                sal_Bool& bPercent, sal_Bool& bCurrency, sal_Bool& bScientific,
-                sal_Bool& bGenerateThousandSeparator,
+                bool& bPercent, bool& bCurrency, bool& bScientific,
+                bool& bGenerateThousandSeparator,
                 short& nMultipleThousandSeparators )
 {
     sal_Int32 nLen;
@@ -500,9 +500,9 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
     nNoOfOptionalDigitsLeft = 0;
     nNoOfExponentDigits = 0;
     nNoOfOptionalExponentDigits = 0;
-    bPercent = sal_False;
-    bCurrency = sal_False;
-    bScientific = sal_False;
+    bPercent = false;
+    bCurrency = false;
+    bScientific = false;
     // from 11.7.97: as soon as a comma (point?) is found in the format string,
     // all three decimal powers are marked (i. e. thousand, million, ...)
     bGenerateThousandSeparator = sFormatStrg.indexOf( ',' ) >= 0;
@@ -559,10 +559,10 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             }
             break;
         case '%':
-            bPercent = sal_True;
+            bPercent = true;
             break;
         case '(':
-            bCurrency = sal_True;
+            bCurrency = true;
             break;
         case ',':
             {
@@ -580,7 +580,7 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             if( nNoOfDigitsLeft > 0 || nNoOfDigitsRight > 0 )
             {
                 nState = -1;   // abort counting digits
-                bScientific = sal_True;
+                bScientific = true;
             }
             break;
             // OWN command-character which turns on
@@ -590,7 +590,7 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             i++;
             break;
         case CREATE_1000SEP_CHAR:
-            bGenerateThousandSeparator = sal_True;
+            bGenerateThousandSeparator = true;
             break;
         }
     }
@@ -601,12 +601,12 @@ short SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
 // shall be created
 void SbxBasicFormater::ScanFormatString( double dNumber,
                                          const OUString& sFormatStrg, OUString& sReturnStrgFinal,
-                                         sal_Bool bCreateSign )
+                                         bool bCreateSign )
 {
     short   /*nErr,*/nNoOfDigitsLeft,nNoOfDigitsRight,nNoOfOptionalDigitsLeft,
         nNoOfExponentDigits,nNoOfOptionalExponentDigits,
         nMultipleThousandSeparators;
-    sal_Bool    bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
+    bool    bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
 
     OUStringBuffer sReturnStrg = OUStringBuffer();
 
@@ -646,11 +646,11 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     double dExponent;
     short i,nLen;
     short nState,nDigitPos,nExponentPos,nMaxDigit,nMaxExponentDigit;
-    sal_Bool bFirstDigit,bFirstExponentDigit,bFoundFirstDigit,
+    bool bFirstDigit,bFirstExponentDigit,bFoundFirstDigit,
         bIsNegative,bZeroSpaceOn, bSignHappend,bDigitPosNegative;
 
-    bSignHappend = sal_False;
-    bFoundFirstDigit = sal_False;
+    bSignHappend = false;
+    bFoundFirstDigit = false;
     bIsNegative = dNumber < 0.0;
     nLen = sFormatStrg.getLength();
     dExponent = get_number_of_digits( dNumber );
@@ -671,10 +671,10 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         // no exponent-data is needed here!
         bDigitPosNegative = (nDigitPos < 0);
     }
-    bFirstDigit = sal_True;
-    bFirstExponentDigit = sal_True;
+    bFirstDigit = true;
+    bFirstExponentDigit = true;
     nState = 0; // 0 --> mantissa; 1 --> exponent
-    bZeroSpaceOn = 0;
+    bZeroSpaceOn = false;
 
 
 #ifdef _with_sprintf
@@ -707,7 +707,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     //         leading sign shall be shown with ()
                     if( bIsNegative && !bCreateSign && !bSignHappend )
                     {
-                        bSignHappend = sal_True;
+                        bSignHappend = true;
                         sReturnStrg.append('-');
                     }
                     // output redundant positions, i. e. those which
@@ -724,7 +724,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
 #endif
                             if( nTempDigit!=_NO_DIGIT )
                             {
-                                bFirstDigit = sal_False;
+                                bFirstDigit = false;
                             }
                             if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit >= nDigitPos ) && j > 0 && (j % 3 == 0) )
                             {
@@ -737,8 +737,8 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 if( nMaxDigit<nDigitPos && ( c=='0' || bZeroSpaceOn ) )
                 {
                     AppendDigit( sReturnStrg, 0 );
-                    bFirstDigit = sal_False;
-                    bZeroSpaceOn = 1;
+                    bFirstDigit = false;
+                    bZeroSpaceOn = true;
                     // Remark: in Visual-Basic the first 0 turns on the 0 for
                     //         all the following # (up to the decimal point),
                     //         this behaviour is simulated here with the flag.
@@ -758,7 +758,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
 
                     if( nTempDigit != _NO_DIGIT )
                     {
-                        bFirstDigit = sal_False;
+                        bFirstDigit = false;
                     }
                     if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit>=nDigitPos ) && nDigitPos>0 && (nDigitPos % 3 == 0) )
                     {
@@ -773,7 +773,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 if( bFirstExponentDigit )
                 {
                     // leading sign has been given out at e/E already
-                    bFirstExponentDigit = sal_False;
+                    bFirstExponentDigit = false;
                     if( nMaxExponentDigit > nExponentPos )
                         // output redundant positions, i. e. those which
                         // are undocumented by the format-string
@@ -836,7 +836,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     break;
                 }
 
-                sal_Bool bOverflow = sal_False;
+                bool bOverflow = false;
 #ifdef _with_sprintf
                 short nNextDigit = GetDigitAtPosScan( nDigitPos, bFoundFirstDigit );
 #else
@@ -956,7 +956,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
 
 OUString SbxBasicFormater::BasicFormatNull( const OUString& sFormatStrg )
 {
-    sal_Bool bNullFormatFound;
+    bool bNullFormatFound;
     OUString sNullFormatStrg = GetNullFormatString( sFormatStrg, bNullFormatFound );
 
     if( bNullFormatFound )
@@ -968,7 +968,7 @@ OUString SbxBasicFormater::BasicFormatNull( const OUString& sFormatStrg )
 
 OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormatStrg )
 {
-    sal_Bool bPosFormatFound,bNegFormatFound,b0FormatFound;
+    bool bPosFormatFound,bNegFormatFound,b0FormatFound;
     OUString sFormatStrg = _sFormatStrg;
 
     // analyse format-string concerning predefined formats:
@@ -1036,7 +1036,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
         {
             sTempStrg = sPosFormatStrg;
         }
-        ScanFormatString( dNumber, sTempStrg, sReturnStrg,/*bCreateSign=*/sal_False );
+        ScanFormatString( dNumber, sTempStrg, sReturnStrg,/*bCreateSign=*/false );
     }
     else
     {
@@ -1066,51 +1066,51 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
         {
             ScanFormatString( dNumber,
                     (/*sPosFormatStrg!=EMPTYFORMATSTRING*/bPosFormatFound ? sPosFormatStrg : sFormatStrg),
-                    sReturnStrg,/*bCreateSign=*/sal_False );
+                    sReturnStrg,/*bCreateSign=*/false );
         }
     }
     return sReturnStrg;
 }
 
-sal_Bool SbxBasicFormater::isBasicFormat( const OUString& sFormatStrg )
+bool SbxBasicFormater::isBasicFormat( const OUString& sFormatStrg )
 {
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_GENERALNUMBER ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_CURRENCY ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_FIXED ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_STANDARD ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_PERCENT ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_SCIENTIFIC ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_YESNO ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_TRUEFALSE ) )
     {
-        return sal_True;
+        return true;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_ONOFF ) )
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,7 +50,7 @@ namespace vba {
  */
 BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-    sal_Bool bLockControllers );
+    bool bLockControllers );
 
 
 
@@ -71,7 +71,7 @@ BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
  */
 BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-    sal_Bool bEnableWindows );
+    bool bEnableWindows );
 
 
 
