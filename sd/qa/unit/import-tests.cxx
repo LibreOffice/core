@@ -23,6 +23,7 @@
 
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdogrp.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -62,6 +63,7 @@ public:
     void testFdo72998();
     void testStrictOOXML();
     void testN862510_1();
+    void testN862510_2();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -80,6 +82,7 @@ public:
     CPPUNIT_TEST(testFdo72998);
     CPPUNIT_TEST(testStrictOOXML);
     CPPUNIT_TEST(testN862510_1);
+    CPPUNIT_TEST(testN862510_2);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -259,6 +262,25 @@ void SdFiltersTest::testN862510_1()
             const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>( (*it).pAttr );
             CPPUNIT_ASSERT_MESSAGE( "Baseline attribute not handled properly", !( pFontEscapement && pFontEscapement->GetProp() != 100 ) );
         }
+    }
+}
+
+void SdFiltersTest::testN862510_2()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 1 ) );
+        CPPUNIT_ASSERT( pGrpObj );
+        SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );
+        CPPUNIT_ASSERT( pObj );
+        CPPUNIT_ASSERT_MESSAGE( "Wrong Text Rotation!", pObj->GetExtraTextRotation( true ) == 90 );
     }
 }
 
