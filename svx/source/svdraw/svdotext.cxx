@@ -52,7 +52,6 @@
 #include <svx/sdr/properties/textproperties.hxx>
 #include <vcl/metaact.hxx>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
-#include <svx/svdotable.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -1442,10 +1441,8 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     }
 
     SetTextSizeDirty();
-    // #i124389# also need to call NbcAdjustTextFrameWidthAndHeight when we are a table object (triggered from undo)
-    if((IsTextFrame() || 0 != dynamic_cast< sdr::table::SdrTableObj* >(this)) && (IsAutoGrowHeight() || IsAutoGrowWidth()))
-    {
-        // adapt text frame
+    if (IsTextFrame() && (IsAutoGrowHeight() || IsAutoGrowWidth()))
+    { // adapt text frame!
         NbcAdjustTextFrameWidthAndHeight();
     }
     if (!IsTextFrame())

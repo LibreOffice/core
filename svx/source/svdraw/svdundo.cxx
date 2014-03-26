@@ -41,7 +41,7 @@
 #include <svx/svdviter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
-
+#include <svx/svdotable.hxx> // #i124389#
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -1193,46 +1193,79 @@ void SdrUndoObjSetText::AfterSetText()
 
 void SdrUndoObjSetText::Undo()
 {
+    // only works with SdrTextObj
+    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(pObj);
+
+    if(!pTarget)
+    {
+        OSL_ENSURE(false, "SdrUndoObjSetText::Undo with SdrObject not based on SdrTextObj (!)");
+        return;
+    }
+
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     // save old text for Redo
-    if (!bNewTextAvailable)
+    if(!bNewTextAvailable)
+    {
         AfterSetText();
+    }
 
-    SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
+    SdrText* pText = pTarget->getText(mnText);
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
         OutlinerParaObject* pText1 = pOldText ? new OutlinerParaObject(*pOldText) : NULL;
         pText->SetOutlinerParaObject(pText1);
-        static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
+        pTarget->NbcSetOutlinerParaObjectForText(pText1, pText);
     }
 
-    pObj->SetEmptyPresObj( bEmptyPresObj );
-    pObj->ActionChanged();
+    pTarget->SetEmptyPresObj(bEmptyPresObj);
+    pTarget->ActionChanged();
+
+    // #i124389# if it's a table, also need to relayout TextFrame
+    if(0 != dynamic_cast< sdr::table::SdrTableObj* >(pTarget))
+    {
+        pTarget->NbcAdjustTextFrameWidthAndHeight();
+    }
 
     // #i122410# SetOutlinerParaObject at SdrText does not trigger a
     // BroadcastObjectChange, but it is needed to make evtl. SlideSorters
     // update their preview.
-    pObj->BroadcastObjectChange();
+    pTarget->BroadcastObjectChange();
 }
 
 void SdrUndoObjSetText::Redo()
 {
-    SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
+    // only works with SdrTextObj
+    SdrTextObj* pTarget = dynamic_cast< SdrTextObj* >(pObj);
+
+    if(!pTarget)
+    {
+        OSL_ENSURE(false, "SdrUndoObjSetText::Redo with SdrObject not based on SdrTextObj (!)");
+        return;
+    }
+
+    SdrText* pText = pTarget->getText(mnText);
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
         OutlinerParaObject* pText1 = pNewText ? new OutlinerParaObject(*pNewText) : NULL;
-        static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
+        pTarget->NbcSetOutlinerParaObjectForText( pText1, pText );
     }
-    pObj->ActionChanged();
+
+    pTarget->ActionChanged();
+
+    // #i124389# if it's a table, als oneed to relayout TextFrame
+    if(0 != dynamic_cast< sdr::table::SdrTableObj* >(pTarget))
+    {
+        pTarget->NbcAdjustTextFrameWidthAndHeight();
+    }
 
     // #i122410# NbcSetOutlinerParaObjectForText at SdrTextObj does not trigger a
     // BroadcastObjectChange, but it is needed to make evtl. SlideSorters
     // update their preview.
-    pObj->BroadcastObjectChange();
+    pTarget->BroadcastObjectChange();
 
     // Trigger PageChangeCall
     ImpShowPageOfThisObject();
