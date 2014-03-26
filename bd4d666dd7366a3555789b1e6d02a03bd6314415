@@ -1,0 +1,249 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_327eb6e5",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "to make the incomplete type SvMemoryStream available below, it suffices to forward-declare it, no need for a full #include",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_923e8228",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "I\u0027m undecided what\u0027s the best return type here.  An Sv(Memory)Stream feels somewhat \"heavy\" here, an OString would look more natural.  (Though returning a pointer has the nice pro of providing an obvious error-reporting channel by returning null, but the con of memory-management hassle---at least for a naked ptr).\n\nAlso, please move to the section with member functions for specific URI schemes (i.e., past the \"// File URLs:\" block).",
+      "range": {
+        "startLine": 420,
+        "startChar": 20,
+        "endLine": 420,
+        "endChar": 27
+      },
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_52832acc",
+        "filename": "sw/source/filter/html/htmlgrin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "memory leak",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_72882ee8",
+        "filename": "sw/source/filter/html/htmlgrin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "potential null pointer dereference",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_f245feb3",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "no need to check HasURLPath first, as GetURLPath returns an empty string if !HasURLPath()\n\nalso, if you decode the path here anyway (implicitly with DECODE_TO_IURI), I\u0027d already decode it here properly so that it does not need to be decoded a second time below; where \"properly\" would mean DECODE_WITH_CHARSET and RTL_TEXTENCODING_ISO_8859_1 to get the individual bytes encoded in the path as individual sal_Unicode values (in the range U+0000--00FF)",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_b23b8637",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "this is wrong, as \";base64,\" can also legitimately appear in a \u003cquoted-string\u003e \u003cvalue\u003e of a \u003cparameter\u003e of the \u003cmediatype\u003e and in \u003cdata\u003e",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_d248face",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "\",\" can legitimately appear in \u003cdata\u003e",
+      "range": {
+        "startLine": 604,
+        "startChar": 42,
+        "endLine": 604,
+        "endChar": 53
+      },
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_121292b4",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "using OUString::copy is easier here",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_321796a5",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "see above for decoding",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_520c0a95",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "using aDecodedData.getLength() (instead of OUStringToOString(aDecodedData,RTL_TEXTENCODING_UTF8).getLength()) would only be correct if the conversion to OString would correctly use RTL_TEXTENCODING_ISO_8859_1 instead of RTL_TEXTENCODING_UTF8",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_72110eac",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "this fails to remove the \";base64,\" part (and again, OUString::copy is easier)",
+      "range": {
+        "startLine": 612,
+        "startChar": 17,
+        "endLine": 612,
+        "endChar": 28
+      },
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_f21c1ec4",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "that unfortunately does not report back any errors in the input",
+      "range": {
+        "startLine": 614,
+        "startChar": 15,
+        "endLine": 614,
+        "endChar": 24
+      },
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1279b2fc",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-26T11:22:46Z",
+      "side": 1,
+      "message": "why handle the empty case specially? instead, would be more natural to reserve null return to indicate error",
+      "revId": "bd4d666dd7366a3555789b1e6d02a03bd6314415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
