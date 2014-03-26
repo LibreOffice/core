@@ -79,7 +79,7 @@ OUString ChartTest::getFileExtension( const OUString& aFileName )
 void ChartTest::load( const OUString& aDir, const OUString& aName )
 {
     OUString extension = getFileExtension(aName);
-    if(extension == "ods")
+    if(extension == "ods" || extension == "xlsx")
     {
         maServiceName = "com.sun.star.sheet.SpreadsheetDocument";
     }
