@@ -113,7 +113,7 @@ public:
 
     virtual             ~VirtualDevice();
 
-    virtual void        EnableRTL( bool bEnable = true ) SAL_OVERRIDE;
+    virtual void        EnableRTL( bool bEnable = true );
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
     bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
@@ -134,8 +134,8 @@ public:
 
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
-    sal_uInt16          GetBitCount() const SAL_OVERRIDE;
-    sal_uInt16          GetAlphaBitCount() const SAL_OVERRIDE;
+    sal_uInt16          GetBitCount() const;
+    sal_uInt16          GetAlphaBitCount() const;
 
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
