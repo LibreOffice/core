@@ -80,8 +80,8 @@ void TextBodyProperties::pushRotationAdjustments( sal_Int32 nRotation )
         // Hack for n#760986
         // TODO: Preferred method would be to have a textbox on top
         // of the shape and the place it according to the (off,ext)
-        if( nOff == 0 && moTextOffX ) nVal = *moTextOffX;
-        if( nOff == 1 && moTextOffY ) nVal = *moTextOffY;
+        if( nOff == 0 && moTextOffX && mbAnchorCtr ) nVal = *moTextOffX;
+        if( nOff == 1 && moTextOffY && mbAnchorCtr ) nVal = *moTextOffY;
         if( nVal < 0 ) nVal = 0;
 
         if( moInsets[i] )
