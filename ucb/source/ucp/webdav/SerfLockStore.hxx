@@ -56,12 +56,14 @@ class SerfLockStore
 {
     osl::Mutex         m_aMutex;
     TickerThread     * m_pTickerThread;
+    bool               m_bFinishing;
     LockInfoMap        m_aLockInfoMap;
 
 public:
     SerfLockStore();
     ~SerfLockStore();
 
+    bool finishing() const;
     OUString getLockToken( const OUString& rLock );
 
     void addLock( const OUString& rLock,
