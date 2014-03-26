@@ -121,6 +121,7 @@ public:
     void testFormulaRefUpdateMove();
     void testFormulaRefUpdateMoveUndo();
     void testFormulaRefUpdateNamedExpression();
+    void testFormulaRefUpdateNamedExpressionMove();
     void testFormulaRefUpdateNamedExpressionExpandRef();
     void testMultipleOperations();
     void testFuncCOLUMN();
@@ -367,6 +368,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateMove);
     CPPUNIT_TEST(testFormulaRefUpdateMoveUndo);
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpression);
+    CPPUNIT_TEST(testFormulaRefUpdateNamedExpressionMove);
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpressionExpandRef);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);

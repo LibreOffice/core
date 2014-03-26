@@ -1818,6 +1818,86 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNamedExpressionMove()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set values to B2:B4.
+    m_pDoc->SetValue(ScAddress(1,1,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,2,0), 2.0);
+    m_pDoc->SetValue(ScAddress(1,3,0), 3.0);
+
+    // Set named range for B2:B4.
+    bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$Test.$B$2:$B$4");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set formula in A10.
+    m_pDoc->SetString(ScAddress(0,9,0), "=SUM(MyRange)");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+
+    ScRangeData* pData = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pData);
+    OUString aSymbol;
+    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), aSymbol);
+
+    // Move B2:B4 to D3.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bMoved = rFunc.MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(3,2,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    // The named range should have moved as well.
+    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3:$D$5"), aSymbol);
+
+    // The value of A10 should remain unchanged.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    // Undo and check.
+    pUndoMgr->Undo();
+
+    pData = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pData);
+    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$2:$B$4"), aSymbol);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+
+    // Redo and check.
+    pUndoMgr->Redo();
+
+    pData = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pData);
+    pData->GetSymbol(aSymbol, m_pDoc->GetGrammar());
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$D$3:$D$5"), aSymbol);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+
+    // Undo again to bring it back to the initial condition, and clear the undo buffer.
+    pUndoMgr->Undo();
+    pUndoMgr->Clear();
+
+    // Add an identical formula to A11 and make a formula group over A10:A11.
+    m_pDoc->SetString(ScAddress(0,10,0), "=SUM(MyRange)");
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,9,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // Move B2:B4 to D3 again.
+    bMoved = rFunc.MoveBlock(ScRange(1,1,0,1,3,0), ScAddress(3,2,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    // Values of A10 and A11 should remain the same.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,10,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateNamedExpressionExpandRef()
 {
     m_pDoc->InsertTab(0, "Test");
