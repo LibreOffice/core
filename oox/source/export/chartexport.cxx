@@ -1364,8 +1364,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
         if( aBarPositionSequence.getLength() )
         {
             sal_Int32 nOverlap = aBarPositionSequence[0];
-            if( nOverlap > 0 )
-                pFS->singleElement( FSNS( XML_c, XML_overlap ),
+            pFS->singleElement( FSNS( XML_c, XML_overlap ),
                     XML_val, I32S( nOverlap ),
                     FSEND );
         }
