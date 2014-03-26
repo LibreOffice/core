@@ -38,7 +38,7 @@ class AbortContinuation:
 public:
     inline AbortContinuation() {}
 
-    virtual inline void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+    virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
 
 private:
     AbortContinuation(AbortContinuation &); // not implemented
