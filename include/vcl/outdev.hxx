@@ -267,94 +267,94 @@ class VCL_DLLPUBLIC OutputDevice
     friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
-    mutable SalGraphics*        mpGraphics;         ///< Graphics context to draw on
-    mutable OutputDevice*       mpPrevGraphics;     ///< Previous output device in list
-    mutable OutputDevice*       mpNextGraphics;     ///< Next output device in list
-    GDIMetaFile*                mpMetaFile;
-    mutable ImplFontEntry*      mpFontEntry;
-    mutable ImplFontCache*      mpFontCache;
+    mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
+    mutable OutputDevice*           mpPrevGraphics;     ///< Previous output device in list
+    mutable OutputDevice*           mpNextGraphics;     ///< Next output device in list
+    GDIMetaFile*                    mpMetaFile;
+    mutable ImplFontEntry*          mpFontEntry;
+    mutable ImplFontCache*          mpFontCache;
     mutable PhysicalFontCollection* mpFontCollection;
-    mutable ImplGetDevFontList* mpGetDevFontList;
-    mutable ImplGetDevSizeList* mpGetDevSizeList;
-    ImplObjStack*               mpObjStack;
-    ImplOutDevData*             mpOutDevData;
-    VCLXGraphicsList_impl*      mpUnoGraphicsList;
-    vcl::PDFWriterImpl*         mpPDFWriter;
-    vcl::ExtOutDevData*         mpExtOutDevData;
+    mutable ImplGetDevFontList*     mpGetDevFontList;
+    mutable ImplGetDevSizeList*     mpGetDevSizeList;
+    ImplObjStack*                   mpObjStack;
+    ImplOutDevData*                 mpOutDevData;
+    VCLXGraphicsList_impl*          mpUnoGraphicsList;
+    vcl::PDFWriterImpl*             mpPDFWriter;
+    vcl::ExtOutDevData*             mpExtOutDevData;
 
     // TEMP TEMP TEMP
-    VirtualDevice*              mpAlphaVDev;
+    VirtualDevice*                  mpAlphaVDev;
 
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    long                        mnOutOffOrigX;
+    long                            mnOutOffOrigX;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    long                        mnOutOffLogicX;
+    long                            mnOutOffLogicX;
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    long                        mnOutOffOrigY;
+    long                            mnOutOffOrigY;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    long                        mnOutOffLogicY;
+    long                            mnOutOffLogicY;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    long                        mnOutOffX;
+    long                            mnOutOffX;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    long                        mnOutOffY;
-    long                        mnOutWidth;
-    long                        mnOutHeight;
-    sal_Int32                   mnDPIX;
-    sal_Int32                   mnDPIY;
-    sal_Int32                   mnDPIScaleFactor; ///< For Hi-DPI displays, we want to draw everything mnDPIScaleFactor-times larger
+    long                            mnOutOffY;
+    long                            mnOutWidth;
+    long                            mnOutHeight;
+    sal_Int32                       mnDPIX;
+    sal_Int32                       mnDPIY;
+    sal_Int32                       mnDPIScaleFactor; ///< For Hi-DPI displays, we want to draw everything mnDPIScaleFactor-times larger
     /// font specific text alignment offsets in pixel units
-    mutable long                mnTextOffX;
-    mutable long                mnTextOffY;
-    mutable long                mnEmphasisAscent;
-    mutable long                mnEmphasisDescent;
-    sal_uLong                   mnDrawMode;
-    sal_uLong                   mnTextLayoutMode;
-    ImplMapRes                  maMapRes;
-    ImplThresholdRes            maThresRes;
-    OutDevType                  meOutDevType;
-    OutDevViewType              meOutDevViewType;
-    Region                      maRegion;           // contains the clip region, see SetClipRegion(...)
-    Color                       maLineColor;
-    Color                       maFillColor;
-    Font                        maFont;
-    Color                       maTextColor;
-    Color                       maTextLineColor;
-    Color                       maOverlineColor;
-    TextAlign                   meTextAlign;
-    RasterOp                    meRasterOp;
-    Wallpaper                   maBackground;
-    boost::scoped_ptr<AllSettings> mxSettings;
-    MapMode                     maMapMode;
-    Point                       maRefPoint;
-    sal_uInt16                  mnAntialiasing;
-    LanguageType                meTextLanguage;
+    mutable long                    mnTextOffX;
+    mutable long                    mnTextOffY;
+    mutable long                    mnEmphasisAscent;
+    mutable long                    mnEmphasisDescent;
+    sal_uLong                       mnDrawMode;
+    sal_uLong                       mnTextLayoutMode;
+    ImplMapRes                      maMapRes;
+    ImplThresholdRes                maThresRes;
+    OutDevType                      meOutDevType;
+    OutDevViewType                  meOutDevViewType;
+    Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
+    Color                           maLineColor;
+    Color                           maFillColor;
+    Font                            maFont;
+    Color                           maTextColor;
+    Color                           maTextLineColor;
+    Color                           maOverlineColor;
+    TextAlign                       meTextAlign;
+    RasterOp                        meRasterOp;
+    Wallpaper                       maBackground;
+    boost::scoped_ptr<AllSettings>  mxSettings;
+    MapMode                         maMapMode;
+    Point                           maRefPoint;
+    sal_uInt16                      mnAntialiasing;
+    LanguageType                    meTextLanguage;
 
     /// bitfield
-    mutable bool                mbMap : 1;
-    mutable bool                mbMapIsDefault : 1;
-    mutable bool                mbClipRegion : 1;
-    mutable bool                mbBackground : 1;
-    mutable bool                mbOutput : 1;
-    mutable bool                mbDevOutput : 1;
-    mutable bool                mbOutputClipped : 1;
-    mutable bool                mbLineColor : 1;
-    mutable bool                mbFillColor : 1;
-    mutable bool                mbInitLineColor : 1;
-    mutable bool                mbInitFillColor : 1;
-    mutable bool                mbInitFont : 1;
-    mutable bool                mbInitTextColor : 1;
-    mutable bool                mbInitClipRegion : 1;
-    mutable bool                mbClipRegionSet : 1;
-    mutable bool                mbKerning : 1;
-    mutable bool                mbNewFont : 1;
-    mutable bool                mbTextLines : 1;
-    mutable bool                mbTextSpecial : 1;
-    mutable bool                mbRefPoint : 1;
-    mutable bool                mbEnableRTL : 1;
+    mutable bool                    mbMap : 1;
+    mutable bool                    mbMapIsDefault : 1;
+    mutable bool                    mbClipRegion : 1;
+    mutable bool                    mbBackground : 1;
+    mutable bool                    mbOutput : 1;
+    mutable bool                    mbDevOutput : 1;
+    mutable bool                    mbOutputClipped : 1;
+    mutable bool                    mbLineColor : 1;
+    mutable bool                    mbFillColor : 1;
+    mutable bool                    mbInitLineColor : 1;
+    mutable bool                    mbInitFillColor : 1;
+    mutable bool                    mbInitFont : 1;
+    mutable bool                    mbInitTextColor : 1;
+    mutable bool                    mbInitClipRegion : 1;
+    mutable bool                    mbClipRegionSet : 1;
+    mutable bool                    mbKerning : 1;
+    mutable bool                    mbNewFont : 1;
+    mutable bool                    mbTextLines : 1;
+    mutable bool                    mbTextSpecial : 1;
+    mutable bool                    mbRefPoint : 1;
+    mutable bool                    mbEnableRTL : 1;
 
 
 protected:
-     virtual void               ImplReleaseFonts();
+     virtual void                   ImplReleaseFonts();
 
 public:
     /** @name Initialization and accessor functions
@@ -368,7 +368,7 @@ public:
      @returns SalGraphics instance.
      */
     SAL_DLLPRIVATE SalGraphics const *ImplGetGraphics() const;
-    SAL_DLLPRIVATE SalGraphics* ImplGetGraphics();
+    SAL_DLLPRIVATE SalGraphics*     ImplGetGraphics();
 
     /** Initialize the graphics device that the output device uses to draw on.
 
@@ -645,9 +645,9 @@ public:
     SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
-    SAL_DLLPRIVATE static bool ImplIsUnderlineAbove( const Font& );
+    SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const Font& );
 
-    SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
+    SAL_DLLPRIVATE static       FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     static
@@ -778,7 +778,7 @@ public:
     /** @name Layout functions
      */
     ///@{
-    SAL_DLLPRIVATE bool     ImplIsRecordLayout() const;
+    SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
@@ -832,7 +832,7 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
-	virtual void               ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
+    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
 
     virtual void                DrawDeviceBitmap(
                                     const Point& rDestPt, const Size& rDestSize,
@@ -938,26 +938,26 @@ public:
     static OUString             GetNonMnemonicString( const OUString& rStr )
                                             { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
-    bool                    GetTextBoundRect( Rectangle& rRect,
+    bool                        GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    bool                    GetTextOutline( PolyPolygon&,
+    bool                        GetTextOutline( PolyPolygon&,
                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                 sal_Int32 nLen = -1, bool bOptimize = true,
                                                 sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    bool                    GetTextOutlines( PolyPolyVector&,
+    bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    bool                    GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
+    bool                        GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
+    bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, int nBase, MetricVector& rVector );
 
     void                        DrawPixel( const Point& rPt );
@@ -1147,25 +1147,25 @@ public:
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
 
     void                        EnableMapMode( bool bEnable = true );
-    bool                    IsMapModeEnabled() const { return mbMap; }
+    bool                        IsMapModeEnabled() const { return mbMap; }
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
     void                        EnableRTL( bool bEnable = true);
-    bool                    IsRTLEnabled() const { return mbEnableRTL; }
+    bool                        IsRTLEnabled() const { return mbEnableRTL; }
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
 
     void                        EnableOutput( bool bEnable = true );
-    bool                    IsOutputEnabled() const { return mbOutput; }
-    bool                    IsDeviceOutput() const { return mbDevOutput; }
-    bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+    bool                        IsOutputEnabled() const { return mbOutput; }
+    bool                        IsDeviceOutput() const { return mbDevOutput; }
+    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
 
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
     Region                      GetClipRegion() const;
-    bool                    IsClipRegion() const { return mbClipRegion; }
+    bool                        IsClipRegion() const { return mbClipRegion; }
     Region                      GetActiveClipRegion() const;
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
@@ -1200,18 +1200,18 @@ public:
     void                        SetLineColor();
     void                        SetLineColor( const Color& rColor );
     const Color&                GetLineColor() const { return maLineColor; }
-    bool                    IsLineColor() const { return mbLineColor; }
+    bool                        IsLineColor() const { return mbLineColor; }
 
     void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
     const Color&                GetFillColor() const { return maFillColor; }
-    bool                    IsFillColor() const { return mbFillColor; }
+    bool                        IsFillColor() const { return mbFillColor; }
 
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );
 
     const Wallpaper&            GetBackground() const { return maBackground; }
-    bool                    IsBackground() const { return mbBackground; }
+    bool                        IsBackground() const { return mbBackground; }
 
     void                        SetFont( const Font& rNewFont );
     const Font&                 GetFont() const { return maFont; }
@@ -1227,15 +1227,15 @@ public:
     void                        SetTextFillColor( const Color& rColor );
 
     Color                       GetTextFillColor() const;
-    bool                    IsTextFillColor() const { return !maFont.IsTransparent(); }
+    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
     const Color&                GetTextLineColor() const { return maTextLineColor; }
-    bool                    IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+    bool                        IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
     void                        SetOverlineColor();
     void                        SetOverlineColor( const Color& rColor );
     const Color&                GetOverlineColor() const { return maOverlineColor; }
-    bool                    IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
+    bool                        IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
     void                        SetTextAlign( TextAlign eAlign );
     TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
 
@@ -1249,12 +1249,12 @@ public:
     virtual void                SetMapMode( const MapMode& rNewMapMode );
     virtual void                SetRelativeMapMode( const MapMode& rNewMapMode );
     const MapMode&              GetMapMode() const { return maMapMode; }
-    bool                    IsMapMode() const { return mbMap; }
+    bool                        IsMapMode() const { return mbMap; }
 
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
     const Point&                GetRefPoint() const { return maRefPoint; }
-    bool                    IsRefPoint() const { return mbRefPoint; }
+    bool                        IsRefPoint() const { return mbRefPoint; }
 
      // #i75163#
     basegfx::B2DHomMatrix       GetViewTransformation() const;
@@ -1389,16 +1389,16 @@ public:
     void                        Erase();
     void                        Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
-    bool                    AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
+    bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     int                         GetDevFontCount() const;
     FontInfo                    GetDevFont( int nDevFontIndex ) const;
     int                         GetDevFontSizeCount( const Font& ) const;
     Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
-    bool                    IsFontAvailable( const OUString& rFontName ) const;
+    bool                        IsFontAvailable( const OUString& rFontName ) const;
 
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const Font& rFont ) const;
-    bool                    GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
@@ -1417,7 +1417,7 @@ public:
 
     sal_uInt16                  GetBitCount() const;
 
-    bool                    GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+    bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
     /** Query the existence and depth of the alpha channel
 
@@ -1438,7 +1438,7 @@ public:
 
         @return sal_True, if this device has an alpha channel.
      */
-    bool                    HasAlpha();
+    bool                        HasAlpha();
 
     /// request XCanvas render interface for this OutputDevice
     css::uno::Reference< css::rendering::XCanvas >
@@ -1488,7 +1488,7 @@ public:
         @attention This method ignores negative rDstSz values, thus
         mirroring must happen outside this method (e.g. in DrawBitmap)
      */
-    Bitmap                  GetDownsampledBitmap( const Size& rDstSz,
+    Bitmap                      GetDownsampledBitmap( const Size& rDstSz,
                                                       const Point& rSrcPt, const Size& rSrcSz,
                                                       const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
 
@@ -1497,17 +1497,17 @@ public:
     // These all just call through to the private mpGraphics functions of the same name.
 
     // Query the platform layer for control support
-    bool                    IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
+    bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
 
     // Query the native control to determine if it was acted upon
-    bool                    HitTestNativeControl(   ControlType nType,
+    bool                        HitTestNativeControl(   ControlType nType,
                                                         ControlPart nPart,
                                                         const Rectangle& rControlRegion,
                                                         const Point& aPos,
                                                         bool& rIsInside ) const;
 
     // Request rendering of a particular control and/or part
-    bool                    DrawNativeControl(  ControlType nType,
+    bool                        DrawNativeControl(  ControlType nType,
                                                     ControlPart nPart,
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
@@ -1515,7 +1515,7 @@ public:
                                                     const OUString& aCaption );
 
     // Query the native control's actual drawing region (including adornment)
-    bool                    GetNativeControlRegion( ControlType nType,
+    bool                        GetNativeControlRegion( ControlType nType,
                                                         ControlPart nPart,
                                                         const Rectangle& rControlRegion,
                                                         ControlState nState,
