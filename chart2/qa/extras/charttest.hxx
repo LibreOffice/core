@@ -61,7 +61,6 @@ public:
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( const char* pDir, const char* pName );
 
     void loadDocx(const char* pDir, const char* pName);
-    utl::TempFile reloadDocx();
     virtual void setUp();
     virtual void tearDown();
 
