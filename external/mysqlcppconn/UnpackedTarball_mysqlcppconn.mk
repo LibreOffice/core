@@ -18,7 +18,6 @@ $(eval $(call gb_UnpackedTarball_add_file,mysqlcppconn,driver/nativeapi/binding_
 $(eval $(call gb_UnpackedTarball_add_patches,mysqlcppconn,\
 	external/mysqlcppconn/patches/mysql-connector-c++-1.1.0.patch \
 	external/mysqlcppconn/patches/default_to_protocol_tcp.patch \
-	external/mysqlcppconn/patches/retrieve_grants.patch.1 \
 	external/mysqlcppconn/patches/warnings.patch.0 \
 ))
 
