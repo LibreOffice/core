@@ -2592,37 +2592,47 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
     if ( bHasShadow )
     {
-        // #160376# sj: activating shadow only if fill and or linestyle is used
-        // this is required because of the latest drawing layer core changes.
-        // Issue i104085 is related to this.
-        sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
-        if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( rObjData.eShapeType ))
-            nLineFlags &= ~0x08;
-        sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
-        if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( rObjData.eShapeType ))
-            nFillFlags &= ~0x10;
-        if ( nFillFlags & 0x10 )
+        static bool bCheckShadow(false);
+
+        // #i124477# Found no reason not to set shadow, esp. since it is applied to evtl. existing text
+        // and will lead to an error of in PPT someone used text and added the object shadow to the
+        // object carryintg that text. I found no cases where this leads to problems (the old bugtracker
+        // task #160376# from sj is unfortunately no longer available). Keeping the code for now
+        // to allow easy fallback when this shows problems in the future
+        if(bCheckShadow)
         {
-            MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
-            switch( eMSO_FillType )
+            // #160376# sj: activating shadow only if fill and or linestyle is used
+            // this is required because of the latest drawing layer core changes.
+            // #i104085# is related to this.
+            sal_uInt32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
+            if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( rObjData.eShapeType ))
+                nLineFlags &= ~0x08;
+            sal_uInt32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
+            if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( rObjData.eShapeType ))
+                nFillFlags &= ~0x10;
+            if ( nFillFlags & 0x10 )
             {
-                case mso_fillSolid :
-                case mso_fillPattern :
-                case mso_fillTexture :
-                case mso_fillPicture :
-                case mso_fillShade :
-                case mso_fillShadeCenter :
-                case mso_fillShadeShape :
-                case mso_fillShadeScale :
-                case mso_fillShadeTitle :
-                break;
-                default:
-                    nFillFlags &=~0x10;         // no fillstyle used
-                break;
+                MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
+                switch( eMSO_FillType )
+                {
+                    case mso_fillSolid :
+                    case mso_fillPattern :
+                    case mso_fillTexture :
+                    case mso_fillPicture :
+                    case mso_fillShade :
+                    case mso_fillShadeCenter :
+                    case mso_fillShadeShape :
+                    case mso_fillShadeScale :
+                    case mso_fillShadeTitle :
+                    break;
+                    default:
+                        nFillFlags &=~0x10;         // no fillstyle used
+                    break;
+                }
             }
+            if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) && ( rObjData.eShapeType != mso_sptPictureFrame ))    // if there is no fillstyle and linestyle
+                bHasShadow = sal_False;                                             // we are turning shadow off.
         }
-        if ( ( ( nLineFlags & 0x08 ) == 0 ) && ( ( nFillFlags & 0x10 ) == 0 ) && ( rObjData.eShapeType != mso_sptPictureFrame ))    // if there is no fillstyle and linestyle
-            bHasShadow = sal_False;                                             // we are turning shadow off.
 
         if ( bHasShadow )
             rSet.Put( SdrShadowItem( bHasShadow ) );
