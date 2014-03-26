@@ -37,6 +37,7 @@ public:
     void testN823651();
     void testFdo36868();
     void testListNolevel();
+    void testCp1000044();
     void testCp1000039();
     void testBnc821208();
 
@@ -67,6 +68,7 @@ void Test::run()
         {"n823651.doc", &Test::testN823651},
         {"fdo36868.doc", &Test::testFdo36868},
         {"list-nolevel.doc", &Test::testListNolevel},
+        {"cp1000044.doc", &Test::testCp1000044},
         {"cp1000039.doc", &Test::testCp1000039},
         {"bnc821208.doc", &Test::testBnc821208},
     };
@@ -286,6 +288,13 @@ void Test::testListNolevel()
     OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='POR_NUMBER']", "rText");
     // POR_NUMBER was completely missing.
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
+}
+
+void Test::testCp1000044()
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    // It wasn't possible to fill out this form.
+    CPPUNIT_ASSERT_EQUAL(false, bool(xStorable->isReadonly()));
 }
 
 void Test::testCp1000039()
