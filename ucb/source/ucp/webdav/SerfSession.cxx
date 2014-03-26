@@ -352,6 +352,13 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
+    // When called from SerfLockStore::~SerfLockStore(),
+    // css::xml::crypto::SEInitializer::create() will fail
+    // but we want to send unlock commands anyway,
+    // so just ignore certificates and return here.
+    if (apr_environment::AprEnv::getAprEnv()->getSerfLockStore()->finishing())
+        return APR_SUCCESS;
+
     // Create some crypto objects to decode and handle the base64
     // encoded certificate chain.
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
