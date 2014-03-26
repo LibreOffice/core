@@ -1065,7 +1065,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
     }
 }
 
-void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const
+void SwTxtPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const
 {
     SwRect aIntersect;
     CalcRect( rPor, &aIntersect, 0 );
@@ -1087,7 +1087,8 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
         m_pOut->SetLineColor( Color(0, 0, 0));
         m_pOut->SetFillColor();
         m_pOut->DrawRect( r );
-        if (checked) {
+        if (bChecked)
+        {
             m_pOut->DrawLine(r.TopLeft(), r.BottomRight());
             m_pOut->DrawLine(r.TopRight(), r.BottomLeft());
         }

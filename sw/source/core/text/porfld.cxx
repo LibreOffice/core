@@ -40,7 +40,6 @@
 #include <porftn.hxx>
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
-
 #include <unicode/ubidi.h>
 
 using namespace ::com::sun::star;
@@ -1312,6 +1311,11 @@ KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     if( !GetLen() ) // for the dummy part at the end of the line, where
         return 0;   // the combined portion doesn't fit.
     return SwFldPortion::GetViewWidth( rInf );
+}
+
+SwFldPortion *SwFieldFormDropDownPortion::Clone(const OUString &rExpand) const
+{
+    return new SwFieldFormDropDownPortion(rExpand);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

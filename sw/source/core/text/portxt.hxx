@@ -107,11 +107,12 @@ class SwFieldMarkPortion : public SwTxtPortion
         virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 };
 
-class SwFieldFormPortion : public SwTxtPortion
+class SwFieldFormCheckboxPortion : public SwTxtPortion
 {
-    public:
-        inline SwFieldFormPortion() : SwTxtPortion()
-            { }
+public:
+    SwFieldFormCheckboxPortion() : SwTxtPortion()
+    {
+    }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 };

@@ -900,32 +900,7 @@ bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
     return false;
 }
 
-namespace {
-    static sal_Int32 getCurrentListIndex( IFieldmark* pBM,
-            OUString* io_pCurrentText = NULL )
-    {
-        const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
-        sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(OUString(ODF_FORMDROPDOWN_RESULT));
-        if(pResult != pParameters->end())
-            pResult->second >>= nCurrentIdx;
-        if(io_pCurrentText)
-        {
-            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(OUString(ODF_FORMDROPDOWN_LISTENTRY));
-            if(pListEntries != pParameters->end())
-            {
-                uno::Sequence< OUString > vListEntries;
-                pListEntries->second >>= vListEntries;
-                if(nCurrentIdx < vListEntries.getLength())
-                    *io_pCurrentText = vListEntries[nCurrentIdx];
-            }
-        }
-        return nCurrentIdx;
-    }
-}
-
-//FIXME Fieldbk
-void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
+void SwFieldFormCheckboxPortion::Paint( const SwTxtPaintInfo& rInf ) const
 {
     SwTxtNode* pNd = const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
     const SwDoc *doc=pNd->GetDoc();
@@ -934,61 +909,30 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 
     IFieldmark* pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
 
-    OSL_ENSURE( pBM,
-        "SwFieldFormPortion::Paint(..)"
-        " - Where is my form field bookmark???");
+    OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX,
+        "Where is my form field bookmark???");
 
-    if ( pBM != NULL )
+    if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
-        if ( pBM->GetFieldname( ) == ODF_FORMCHECKBOX )
-        { // a checkbox...
-            const ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
-            bool checked = pCheckboxFm && pCheckboxFm->IsChecked();
-            rInf.DrawCheckBox(*this, checked);
-        }
-        else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
-        { // a list...
-            OUString aTxt;
-            getCurrentListIndex( pBM, &aTxt );
-            rInf.DrawViewOpt( *this, POR_FLD );
-            rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
-        }
-        else
-        {
-            assert(false); // unknown type...
-        }
+        const ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+        bool bChecked = pCheckboxFm && pCheckboxFm->IsChecked();
+        rInf.DrawCheckBox(*this, bChecked);
     }
 }
 
-bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
+bool SwFieldFormCheckboxPortion::Format( SwTxtFormatInfo & rInf )
 {
     SwTxtNode *pNd = const_cast < SwTxtNode * >( rInf.GetTxtFrm(  )->GetTxtNode(  ) );
     const SwDoc *doc = pNd->GetDoc(  );
     SwIndex aIndex( pNd, rInf.GetIdx(  ) );
     SwPosition aPosition( *pNd, aIndex );
     IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
-    OSL_ENSURE( pBM != NULL, "Where is my form field bookmark???" );
-    if ( pBM != NULL )
+    OSL_ENSURE(pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX, "Where is my form field bookmark???");
+    if (pBM && pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
     {
-        if ( pBM->GetFieldname( ) == ODF_FORMCHECKBOX )
-        {
-            Width( rInf.GetTxtHeight(  ) );
-            Height( rInf.GetTxtHeight(  ) );
-            SetAscent( rInf.GetAscent(  ) );
-        }
-        else if ( pBM->GetFieldname( ) == ODF_FORMDROPDOWN )
-        {
-            OUString aTxt;
-            getCurrentListIndex( pBM, &aTxt );
-            SwPosSize aPosSize = rInf.GetTxtSize( aTxt );
-            Width( aPosSize.Width(  ) );
-            Height( aPosSize.Height(  ) );
-            SetAscent( rInf.GetAscent(  ) );
-        }
-        else
-        {
-            assert( false );        // unknown type...
-        }
+        Width( rInf.GetTxtHeight(  ) );
+        Height( rInf.GetTxtHeight(  ) );
+        SetAscent( rInf.GetAscent(  ) );
     }
     return false;
 }

@@ -247,6 +247,21 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
+namespace sw { namespace mark {
+    class IFieldmark;
+} }
+
+class SwFieldFormDropDownPortion : public SwFldPortion
+{
+public:
+    SwFieldFormDropDownPortion(const OUString &rExpand)
+        : SwFldPortion(rExpand)
+    {
+    }
+    // Field cloner for SplitGlue
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

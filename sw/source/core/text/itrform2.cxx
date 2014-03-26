@@ -54,6 +54,7 @@
 #include <doc.hxx>
 #include <pormulti.hxx>
 #include <unotools/charclass.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <vector>
 
@@ -872,10 +873,31 @@ void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
+namespace {
+    using namespace sw::mark;
+    static OUString getCurrentListIndex(IFieldmark* pBM)
+    {
+        const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
+        sal_Int32 nCurrentIdx = 0;
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(OUString(ODF_FORMDROPDOWN_RESULT));
+        if(pResult != pParameters->end())
+            pResult->second >>= nCurrentIdx;
+
+        const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(OUString(ODF_FORMDROPDOWN_LISTENTRY));
+        if (pListEntries != pParameters->end())
+        {
+            uno::Sequence< OUString > vListEntries;
+            pListEntries->second >>= vListEntries;
+            if (nCurrentIdx < vListEntries.getLength())
+                return vListEntries[nCurrentIdx];
+        }
+        return OUString();
+    }
+}
+
 /*************************************************************************
  *                      SwTxtFormatter::WhichTxtPor()
  *************************************************************************/
-
 SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
 {
     SwTxtPortion *pPor = 0;
@@ -907,7 +929,29 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
                 else if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDEND )
                     pPor = new SwFieldMarkPortion();
                 else if( rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FORMELEMENT )
-                    pPor = new SwFieldFormPortion();
+                {
+                    SwTxtNode *pNd = const_cast<SwTxtNode *>(rInf.GetTxtFrm()->GetTxtNode());
+                    const SwDoc *doc = pNd->GetDoc();
+                    SwIndex aIndex(pNd, rInf.GetIdx());
+                    SwPosition aPosition(*pNd, aIndex);
+                    sw::mark::IFieldmark *pBM = doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
+                    OSL_ENSURE(pBM != NULL, "Where is my form field bookmark???");
+                    if (pBM != NULL)
+                    {
+                        if (pBM->GetFieldname( ) == ODF_FORMCHECKBOX)
+                        {
+                            pPor = new SwFieldFormCheckboxPortion();
+                        }
+                        else if (pBM->GetFieldname( ) == ODF_FORMDROPDOWN)
+                        {
+                            pPor = new SwFieldFormDropDownPortion(getCurrentListIndex(pBM));
+                        }
+                        else
+                        {
+                            assert( false );        // unknown type...
+                        }
+                    }
+                }
             }
             if( !pPor )
             {
@@ -1004,7 +1048,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
 /*************************************************************************
  *                 SwTxtFormatter::WhichFirstPortion()
  *************************************************************************/
-
 SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 {
     SwLinePortion *pPor = 0;

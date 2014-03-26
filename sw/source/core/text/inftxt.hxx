@@ -485,7 +485,7 @@ public:
     **/
     void DrawBorder( const SwLinePortion &rPor ) const;
 
-    void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
+    void DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const;
 
     inline void NotifyURL( const SwLinePortion &rPor ) const
         { if( URLNotify() ) _NotifyURL( rPor ); }
