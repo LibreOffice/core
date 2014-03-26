@@ -30,7 +30,7 @@ published constants PropertyAttribute
 
     /** indicates that a property value can be void.
 
-        <p>It does not mean that the type of the property is void!
+        <p>It does not mean that the type of the property is void!</p>
      */
     const short MAYBEVOID = 1;
 
@@ -85,7 +85,7 @@ published constants PropertyAttribute
 
         <p>This attribute is not of interest for concrete property
         implementations. It's needed for property specifications inside
-        service specifications in UNOIDL.
+        service specifications in UNOIDL.</p>
 
         @see com::sun::star::reflection::XPropertyTypeDescription
         @see com::sun::star::reflection::XServiceTypeDescription
