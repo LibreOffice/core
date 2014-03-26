@@ -484,7 +484,7 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
 // A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
 // could be found from other module.
 
-SbModule::SbModule( const OUString& rName,  sal_Bool bVBACompat )
+SbModule::SbModule( const OUString& rName, bool bVBACompat )
          : SbxObject( "StarBASICModule" ),
            pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
 {
@@ -519,9 +519,9 @@ SbModule::GetUnoModule()
     return mxWrapper;
 }
 
-sal_Bool SbModule::IsCompiled() const
+bool SbModule::IsCompiled() const
 {
-    return sal_Bool( pImage != 0 );
+    return pImage != 0;
 }
 
 const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
@@ -545,7 +545,7 @@ void SbModule::StartDefinitions()
     {
         SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
         if( p )
-            p->bInvalid = sal_True;
+            p->bInvalid = true;
     }
     for( i = 0; i < pProps->Count(); )
     {
@@ -577,7 +577,7 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
     }
     // The method is per default valid, because it could be
     // created from the compiler (code generator) as well.
-    pMeth->bInvalid = sal_False;
+    pMeth->bInvalid = false;
     pMeth->ResetFlag( SBX_FIXED );
     pMeth->SetFlag( SBX_WRITE );
     pMeth->SetType( t );
@@ -644,7 +644,7 @@ SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod( const OUString& rName, SbMe
         pMapperMethod->SetFlags( SBX_READ );
         pMethods->Put( pMapperMethod, pMethods->Count() );
     }
-    pMapperMethod->bInvalid = sal_False;
+    pMapperMethod->bInvalid = false;
     return pMapperMethod;
 }
 
@@ -657,7 +657,7 @@ TYPEINIT1(SbIfaceMapperMethod,SbMethod)
 
 // From the code generator: remove invalid entries
 
-void SbModule::EndDefinitions( sal_Bool bNewState )
+void SbModule::EndDefinitions( bool bNewState )
 {
     for( sal_uInt16 i = 0; i < pMethods->Count(); )
     {
@@ -677,7 +677,7 @@ void SbModule::EndDefinitions( sal_Bool bNewState )
         else
             i++;
     }
-    SetModified( sal_True );
+    SetModified( true );
 }
 
 void SbModule::Clear()
@@ -925,7 +925,7 @@ void SbModule::SetSource32( const OUString& r )
                     }
                     else if ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) )
                     {
-                        sal_Bool bIsVBA = ( aTok.GetDbl()== 1 );
+                        bool bIsVBA = ( aTok.GetDbl()== 1 );
                         SetVBACompat( bIsVBA );
                         aTok.SetCompatible( bIsVBA );
                     }
@@ -949,7 +949,7 @@ void SbModule::SetSource32( const OUString& r )
                 pMeth = GetMethod( aName_, t );
                 pMeth->nLine1 = pMeth->nLine2 = nLine1;
                 // The method is for a start VALID
-                pMeth->bInvalid = sal_False;
+                pMeth->bInvalid = false;
             }
             else
             {
@@ -973,7 +973,7 @@ void SbModule::SetSource32( const OUString& r )
             }
         }
     }
-    EndDefinitions( sal_True );
+    EndDefinitions( true );
 }
 
 // Broadcast of a hint to all Basics
@@ -1514,11 +1514,11 @@ void SbModule::GlobalRunDeInit( void )
 
 const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine, sal_uInt16& nCol ) const
 {
-    return FindNextStmnt( p, nLine, nCol, sal_False );
+    return FindNextStmnt( p, nLine, nCol, false );
 }
 
 const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine, sal_uInt16& nCol,
-    sal_Bool bFollowJumps, const SbiImage* pImg ) const
+    bool bFollowJumps, const SbiImage* pImg ) const
 {
     sal_uInt32 nPC = (sal_uInt32) ( p - (const sal_uInt8*) pImage->GetCode() );
     while( nPC < pImage->GetCodeSize() )
@@ -1557,19 +1557,19 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
 
 // Test, if a line contains STMNT-Opcodes
 
-sal_Bool SbModule::IsBreakable( sal_uInt16 nLine ) const
+bool SbModule::IsBreakable( sal_uInt16 nLine ) const
 {
     if( !pImage )
-        return sal_False;
+        return false;
     const sal_uInt8* p = (const sal_uInt8* ) pImage->GetCode();
     sal_uInt16 nl, nc;
     while( ( p = FindNextStmnt( p, nl, nc ) ) != NULL )
         if( nl == nLine )
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
-sal_Bool SbModule::IsBP( sal_uInt16 nLine ) const
+bool SbModule::IsBP( sal_uInt16 nLine ) const
 {
     if( pBreaks )
     {
@@ -1577,18 +1577,18 @@ sal_Bool SbModule::IsBP( sal_uInt16 nLine ) const
         {
             sal_uInt16 b = pBreaks->operator[]( i );
             if( b == nLine )
-                return sal_True;
+                return true;
             if( b < nLine )
                 break;
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SbModule::SetBP( sal_uInt16 nLine )
+bool SbModule::SetBP( sal_uInt16 nLine )
 {
     if( !IsBreakable( nLine ) )
-        return sal_False;
+        return false;
     if( !pBreaks )
         pBreaks = new SbiBreakpoints;
     size_t i;
@@ -1596,7 +1596,7 @@ sal_Bool SbModule::SetBP( sal_uInt16 nLine )
     {
         sal_uInt16 b = pBreaks->operator[]( i );
         if( b == nLine )
-            return sal_True;
+            return true;
         if( b < nLine )
             break;
     }
@@ -1609,9 +1609,9 @@ sal_Bool SbModule::SetBP( sal_uInt16 nLine )
     return IsBreakable( nLine );
 }
 
-sal_Bool SbModule::ClearBP( sal_uInt16 nLine )
+bool SbModule::ClearBP( sal_uInt16 nLine )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if( pBreaks )
     {
         for( size_t i = 0; i < pBreaks->size(); i++ )
@@ -1620,7 +1620,7 @@ sal_Bool SbModule::ClearBP( sal_uInt16 nLine )
             if( b == nLine )
             {
                 pBreaks->erase( pBreaks->begin() + i );
-                bRes = sal_True;
+                bRes = true;
                 break;
             }
             if( b < nLine )
@@ -1658,11 +1658,11 @@ SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
 
 }
 
-sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
-        return sal_False;
+        return false;
     // As a precaution...
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     sal_uInt8 bImage;
@@ -1675,7 +1675,7 @@ sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         if( !p->Load( rStrm, nImgVer ) )
         {
             delete p;
-            return sal_False;
+            return false;
         }
         // If the image is in old format, we fix up the method start offsets
         if ( nImgVer < B_EXT_IMG_VERSION )
@@ -1703,17 +1703,17 @@ sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             delete p;
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbModule::StoreData( SvStream& rStrm ) const
+bool SbModule::StoreData( SvStream& rStrm ) const
 {
     bool bFixup = ( pImage && !pImage->ExceedsLegacyLimits() );
     if ( bFixup )
         fixUpMethodStart( true );
-    sal_Bool bRet = SbxObject::StoreData( rStrm );
+    bool bRet = SbxObject::StoreData( rStrm );
     if ( !bRet )
-        return sal_False;
+        return false;
 
     if( pImage )
     {
@@ -1742,7 +1742,7 @@ sal_Bool SbModule::StoreData( SvStream& rStrm ) const
     }
 }
 
-sal_Bool SbModule::ExceedsLegacyModuleSize()
+bool SbModule::ExceedsLegacyModuleSize()
 {
     if ( !IsCompiled() )
         Compile();
@@ -1839,14 +1839,14 @@ bool SbModule::HasExeCode()
 }
 
 // Store only image, no source
-sal_Bool SbModule::StoreBinaryData( SvStream& rStrm )
+bool SbModule::StoreBinaryData( SvStream& rStrm )
 {
     return StoreBinaryData( rStrm, 0 );
 }
 
-sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    sal_Bool bRet = Compile();
+    bool bRet = Compile();
     if( bRet )
     {
         bool bFixup = ( !nVer && !pImage->ExceedsLegacyLimits() );// save in old image format, fix up method starts
@@ -1876,7 +1876,7 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 
 // Called for >= OO 1.0 passwd protected libraries only
 
-sal_Bool SbModule::LoadBinaryData( SvStream& rStrm )
+bool SbModule::LoadBinaryData( SvStream& rStrm )
 {
     OUString aKeepSource = aOUSource;
     bool bRet = LoadData( rStrm, 2 );
@@ -1885,7 +1885,7 @@ sal_Bool SbModule::LoadBinaryData( SvStream& rStrm )
     return bRet;
 }
 
-sal_Bool SbModule::LoadCompleted()
+bool SbModule::LoadCompleted()
 {
     SbxArray* p = GetMethods();
     sal_uInt16 i;
@@ -1902,7 +1902,7 @@ sal_Bool SbModule::LoadCompleted()
         if( q )
             q->pMod = this;
     }
-    return sal_True;
+    return true;
 }
 
 void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -2000,28 +2000,28 @@ SbJScriptModule::SbJScriptModule( const OUString& rName )
 {
 }
 
-sal_Bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     (void)nVer;
 
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
-        return sal_False;
+        return false;
 
     // Get the source string
     aOUSource = rStrm.ReadUniOrByteString( osl_getThreadTextEncoding() );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
+bool SbJScriptModule::StoreData( SvStream& rStrm ) const
 {
     if( !SbxObject::StoreData( rStrm ) )
-        return sal_False;
+        return false;
 
     // Write the source string
     OUString aTmp = aOUSource;
     rStrm.WriteUniOrByteString( aTmp, osl_getThreadTextEncoding() );
-    return sal_True;
+    return true;
 }
 
 
@@ -2030,7 +2030,7 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
 SbMethod::SbMethod( const OUString& r, SbxDataType t, SbModule* p )
         : SbxMethod( r, t ), pMod( p )
 {
-    bInvalid     = sal_True;
+    bInvalid     = true;
     nStart       =
     nDebugFlags  =
     nLine1       =
@@ -2069,31 +2069,31 @@ SbxArray* SbMethod::GetStatics()
     return refStatics;
 }
 
-sal_Bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     if( !SbxMethod::LoadData( rStrm, 1 ) )
-        return sal_False;
+        return false;
     sal_Int16 n;
     rStrm.ReadInt16( n );
     sal_Int16 nTempStart = (sal_Int16)nStart;
     if( nVer == 2 )
-        rStrm.ReadUInt16( nLine1 ).ReadUInt16( nLine2 ).ReadInt16( nTempStart ).ReadUChar( bInvalid );
+        rStrm.ReadUInt16( nLine1 ).ReadUInt16( nLine2 ).ReadInt16( nTempStart ).ReadCharAsBool( bInvalid );
     // HACK ue to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
     nStart = nTempStart;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbMethod::StoreData( SvStream& rStrm ) const
+bool SbMethod::StoreData( SvStream& rStrm ) const
 {
     if( !SbxMethod::StoreData( rStrm ) )
-        return sal_False;
+        return false;
     rStrm.WriteInt16( (sal_Int16) nDebugFlags )
          .WriteInt16( (sal_Int16) nLine1 )
          .WriteInt16( (sal_Int16) nLine2 )
          .WriteInt16( (sal_Int16) nStart )
          .WriteUChar( (sal_uInt8)  bInvalid );
-    return sal_True;
+    return true;
 }
 
 void SbMethod::GetLineRange( sal_uInt16& l1, sal_uInt16& l2 )

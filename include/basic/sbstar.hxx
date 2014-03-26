@@ -69,14 +69,14 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
-    sal_Bool            CError( SbError, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
+    bool                                CError( SbError, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
 private:
-    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, sal_Int32, sal_Int32, sal_Int32 );
-    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
+    BASIC_DLLPRIVATE bool               RTError( SbError, sal_Int32, sal_Int32, sal_Int32 );
+    BASIC_DLLPRIVATE bool               RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
     BASIC_DLLPRIVATE sal_uInt16         BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     BASIC_DLLPRIVATE sal_uInt16         StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
 
 protected:
     virtual sal_Bool    ErrorHdl();
@@ -92,7 +92,7 @@ public:
 
     // #51727 SetModified overridden so that the Modfied-State is
         // not delivered to Parent.
-    virtual void SetModified( sal_Bool ) SAL_OVERRIDE;
+    virtual void SetModified( bool ) SAL_OVERRIDE;
 
     void* operator  new( size_t );
     void operator   delete( void* );
@@ -109,7 +109,7 @@ public:
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule32( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule32( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, const OUString& rSrc );
-    sal_Bool        Compile( SbModule* );
+    bool            Compile( SbModule* );
     static void     Stop();
     static void     Error( SbError );
     static void     Error( SbError, const OUString& rMsg );

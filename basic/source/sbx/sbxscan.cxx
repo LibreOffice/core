@@ -619,7 +619,7 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
 }
 
 
-sal_Bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
+bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
 {
     SbxError eRes = SbxERR_OK;
     if( !CanWrite() )
@@ -642,11 +642,12 @@ sal_Bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     }
     if( eRes )
     {
-        SetError( eRes ); return sal_False;
+        SetError( eRes );
+        return false;
     }
     else
     {
-        return sal_True;
+        return true;
     }
 }
 

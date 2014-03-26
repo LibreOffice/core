@@ -942,13 +942,13 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 // This routine is defined here, so that the
 // compiler can be loaded as a discrete segment.
 
-sal_Bool SbModule::Compile()
+bool SbModule::Compile()
 {
     if( pImage )
-        return sal_True;
+        return true;
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
     if( !pBasic )
-        return sal_False;
+        return false;
     SbxBase::ResetError();
 
     SbModule* pOld = GetSbData()->pCompMod;
@@ -967,7 +967,7 @@ sal_Bool SbModule::Compile()
 
     // compiling a module, the module-global
     // variables of all modules become invalid
-    sal_Bool bRet = IsCompiled();
+    bool bRet = IsCompiled();
     if( bRet )
     {
         if( !this->ISA(SbObjModule) )

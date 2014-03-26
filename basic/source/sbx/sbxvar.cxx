@@ -192,7 +192,7 @@ SbxInfo* SbxVariable::GetInfo()
         Broadcast( SBX_HINT_INFOWANTED );
         if( pInfo.Is() )
         {
-            SetModified( sal_True );
+            SetModified( true );
         }
     }
     return pInfo;
@@ -390,7 +390,7 @@ SbxClassType SbxVariable::GetClass() const
     return SbxCLASS_VARIABLE;
 }
 
-void SbxVariable::SetModified( sal_Bool b )
+void SbxVariable::SetModified( bool b )
 {
     if( IsSet( SBX_NO_MODIFY ) )
     {
@@ -470,7 +470,7 @@ void SbxVariable::ClearComListener( void )
 
 ////////////////////////////// Loading/Saving
 
-sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     sal_uInt16 nType;
     sal_uInt8 cMark;
@@ -479,7 +479,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         if( !SbxValue::LoadData( rStrm, nVer ) )
         {
-            return sal_False;
+            return false;
         }
         maName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
                                                                 RTL_TEXTENCODING_ASCII_US);
@@ -524,7 +524,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             if( ImpScan( aTmpString, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
             {
                 aTmp.nSingle = 0;
-                return sal_False;
+                return false;
             }
             aTmp.nSingle = (float) d;
             break;
@@ -539,7 +539,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
             {
                 aTmp.nDouble = 0;
-                return sal_False;
+                return false;
             }
             break;
         }
@@ -553,12 +553,12 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         default:
             aData.eType = SbxNULL;
             DBG_ASSERT( !this, "Loaded a non-supported data type" );
-            return sal_False;
+            return false;
         }
         // putt value
         if( nType != SbxNULL && nType != SbxEMPTY && !Put( aTmp ) )
         {
-            return sal_False;
+            return false;
         }
     }
     rStrm.ReadUChar( cMark );
@@ -569,7 +569,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         if( cMark > 2 )
         {
-            return sal_False;
+            return false;
         }
         pInfo = new SbxInfo;
         pInfo->LoadData( rStrm, (sal_uInt16) cMark );
@@ -577,18 +577,18 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     // Load private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
     {
-        return sal_False;
+        return false;
     }
     ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
     nHash =  MakeHashCode( maName );
-    SetModified( sal_True );
-    return sal_True;
+    SetModified( true );
+    return true;
 }
 
-sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
+bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
     rStrm.WriteUChar( (sal_uInt8) 0xFF );      // Marker
-    sal_Bool bValStore;
+    bool bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
         // #50200 Avoid that objects , which during the runtime
@@ -611,7 +611,7 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
     if( !bValStore )
     {
-        return sal_False;
+        return false;
     }
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
@@ -632,7 +632,7 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
     else
     {
-        return sal_True;
+        return true;
     }
 }
 
@@ -702,7 +702,7 @@ void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     }
 }
 
-void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
+void SbxVariable::Dump( SvStream& rStrm, bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US));
     rStrm.WriteCharPtr( "Variable( " )

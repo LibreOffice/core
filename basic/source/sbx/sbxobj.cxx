@@ -76,7 +76,7 @@ SbxObject& SbxObject::operator=( const SbxObject& r )
         pDfltProp  = r.pDfltProp;
         SetName( r.GetName() );
         SetFlags( r.GetFlags() );
-        SetModified( sal_True );
+        SetModified( true );
     }
     return *this;
 }
@@ -131,7 +131,7 @@ void SbxObject::Clear()
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
     pDfltProp  = NULL;
-    SetModified( sal_False );
+    SetModified( false );
 }
 
 void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
@@ -334,7 +334,7 @@ void SbxObject::SetDfltProperty( const OUString& rName )
         pDfltProp = NULL;
     }
     aDfltPropName = rName;
-    SetModified( sal_True );
+    SetModified( true );
 }
 
 // Search of an already available variable. If it was located,
@@ -419,7 +419,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     }
     pVar->SetParent( this );
     pArray->Put( pVar, pArray->Count() );
-    SetModified( sal_True );
+    SetModified( true );
     // The object listen always
     StartListening( pVar->GetBroadcaster(), true );
     Broadcast( SBX_HINT_OBJECTCHANGED );
@@ -443,7 +443,7 @@ SbxObject* SbxObject::MakeObject( const OUString& rName, const OUString& rClass 
         pVar->SetName( rName );
         pVar->SetParent( this );
         pObjs->Put( pVar, pObjs->Count() );
-        SetModified( sal_True );
+        SetModified( true );
         // The object listen always
         StartListening( pVar->GetBroadcaster(), true );
         Broadcast( SBX_HINT_OBJECTCHANGED );
@@ -490,7 +490,7 @@ void SbxObject::Insert( SbxVariable* pVar )
         {
             pVar->SetParent( this );
         }
-        SetModified( sal_True );
+        SetModified( true );
         Broadcast( SBX_HINT_OBJECTCHANGED );
 #ifdef DBG_UTIL
         static const char* pCls[] =
@@ -535,7 +535,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         {
             pVar->SetParent( this );
         }
-        SetModified( sal_True );
+        SetModified( true );
 #ifdef DBG_UTIL
         static const char* pCls[] =
             { "DontCare","Array","Value","Variable","Method","Property","Object" };
@@ -590,7 +590,7 @@ void SbxObject::Remove( SbxVariable* pVar )
         {
             pVar_->SetParent( NULL );
         }
-        SetModified( sal_True );
+        SetModified( true );
         Broadcast( SBX_HINT_OBJECTCHANGED );
     }
 }
@@ -618,18 +618,18 @@ static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 
 // The load of an object is additive!
 
-sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     // Help for the read in of old objects: just return TRUE,
     // LoadPrivateData() has to set the default status up
     if( !nVer )
     {
-        return sal_True;
+        return true;
     }
     pDfltProp = NULL;
     if( !SbxVariable::LoadData( rStrm, nVer ) )
     {
-        return sal_False;
+        return false;
     }
     // If it contains no alien object, insert ourselves
     if( aData.eType == SbxOBJECT && !aData.pObj )
@@ -644,7 +644,7 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadUInt32( nSize );
     if( !LoadPrivateData( rStrm, nVer ) )
     {
-        return sal_False;
+        return false;
     }
     sal_Size nNewPos = rStrm.Tell();
     nPos += nSize;
@@ -657,22 +657,22 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         !LoadArray( rStrm, this, pProps ) ||
         !LoadArray( rStrm, this, pObjs ) )
     {
-        return sal_False;
+        return false;
     }
     // Set properties
     if( !aDfltProp.isEmpty() )
     {
         pDfltProp = (SbxProperty*) pProps->Find( aDfltProp, SbxCLASS_PROPERTY );
     }
-    SetModified( sal_False );
-    return sal_True;
+    SetModified( false );
+    return true;
 }
 
-sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
+bool SbxObject::StoreData( SvStream& rStrm ) const
 {
     if( !SbxVariable::StoreData( rStrm ) )
     {
-        return sal_False;
+        return false;
     }
     OUString aDfltProp;
     if( pDfltProp )
@@ -685,7 +685,7 @@ sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
     rStrm.WriteUInt32( (sal_uInt32) 0L );
     if( !StorePrivateData( rStrm ) )
     {
-        return sal_False;
+        return false;
     }
     sal_Size nNew = rStrm.Tell();
     rStrm.Seek( nPos );
@@ -693,18 +693,18 @@ sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
     rStrm.Seek( nNew );
     if( !pMethods->Store( rStrm ) )
     {
-        return sal_False;
+        return false;
     }
     if( !pProps->Store( rStrm ) )
     {
-        return sal_False;
+        return false;
     }
     if( !pObjs->Store( rStrm ) )
     {
-        return sal_False;
+        return false;
     }
-    ((SbxObject*) this)->SetModified( sal_False );
-    return sal_True;
+    ((SbxObject*) this)->SetModified( false );
+    return true;
 }
 
 OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
@@ -806,7 +806,7 @@ static bool CollectAttrs( const SbxBase* p, OUString& rRes )
     }
 }
 
-void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
+void SbxObject::Dump( SvStream& rStrm, bool bFill )
 {
     // Shifting
     static sal_uInt16 nLevel = 0;

@@ -3136,7 +3136,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
 
     // variable for the return value
     SbxVariableRef refVar = rPar.Get(0);
-    refVar->PutBool( sal_False );
+    refVar->PutBool( false );
 
     // get the Uno-Object
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
@@ -3180,7 +3180,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
     }
 
     // Every thing works; then return TRUE
-    refVar->PutBool( sal_True );
+    refVar->PutBool( true );
 }
 
 void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -3197,7 +3197,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 
     // variable for the return value
     SbxVariableRef refVar = rPar.Get(0);
-    refVar->PutBool( sal_False );
+    refVar->PutBool( false );
 
     // get the Uno-Object
     SbxVariableRef xParam = rPar.Get( 1 );
@@ -3214,7 +3214,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType == TypeClass_STRUCT )
     {
-        refVar->PutBool( sal_True );
+        refVar->PutBool( true );
     }
 }
 
@@ -3232,7 +3232,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 
     // variable for the return value
     SbxVariableRef refVar = rPar.Get(0);
-    refVar->PutBool( sal_False );
+    refVar->PutBool( false );
 
     // get the Uno-Objects
     SbxVariableRef xParam1 = rPar.Get( 1 );
@@ -3275,7 +3275,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 
     if( x1 == x2 )
     {
-        refVar->PutBool( sal_True );
+        refVar->PutBool( true );
     }
 }
 

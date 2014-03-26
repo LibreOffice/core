@@ -940,7 +940,7 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
 
 // #51727 Override SetModified so that the modified state
 // is not given to the parent
-void StarBASIC::SetModified( sal_Bool b )
+void StarBASIC::SetModified( bool b )
 {
     SbxBase::SetModified( b );
 }
@@ -1081,7 +1081,7 @@ SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInf
     p->SetSource32( rSrc );
     p->SetParent( this );
     pModules->Insert( p, pModules->Count() );
-    SetModified( sal_True );
+    SetModified( true );
     return p;
 }
 
@@ -1095,11 +1095,11 @@ void StarBASIC::Insert( SbxVariable* pVar )
     }
     else
     {
-        sal_Bool bWasModified = IsModified();
+        bool bWasModified = IsModified();
         SbxObject::Insert( pVar );
         if( !bWasModified && pVar->IsSet( SBX_DONTSTORE ) )
         {
-            SetModified( sal_False );
+            SetModified( false );
         }
     }
 }
@@ -1120,9 +1120,9 @@ void StarBASIC::Remove( SbxVariable* pVar )
     }
 }
 
-sal_Bool StarBASIC::Compile( SbModule* pMod )
+bool StarBASIC::Compile( SbModule* pMod )
 {
-    return pMod ? pMod->Compile() : sal_False;
+    return pMod && pMod->Compile();
 }
 
 void StarBASIC::Clear()
@@ -1626,7 +1626,7 @@ struct BasicStringList_Impl : private Resource
     ~BasicStringList_Impl() { FreeResource(); }
 
     OUString GetString(){ return aResId.toString(); }
-    sal_Bool IsErrorTextAvailable( void )
+    bool IsErrorTextAvailable( void )
         { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 };
 
@@ -1667,7 +1667,7 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     }
 }
 
-sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
+bool StarBASIC::CError( SbError code, const OUString& rMsg,
                             sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SolarMutexGuard aSolarGuard;
@@ -1679,7 +1679,7 @@ sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
         StarBASIC* pStartedBasic = GetSbData()->pInst->GetBasic();
         if( pStartedBasic != this )
         {
-            return sal_False;
+            return false;
         }
         Stop();
     }
@@ -1710,12 +1710,12 @@ sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
     return bRet;
 }
 
-sal_Bool StarBASIC::RTError( SbError code, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
+bool StarBASIC::RTError( SbError code, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     return RTError( code, OUString(), l, c1, c2 );
 }
 
-sal_Bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
+bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1859,11 +1859,11 @@ SbxArrayRef StarBASIC::getUnoListeners( void )
 *
 **************************************************************************/
 
-sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
+bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
 {
     if( !SbxObject::LoadData( r, nVer ) )
     {
-        return sal_False;
+        return false;
     }
     // #95459 Delete dialogs, otherwise endless recursion
     // in SbxVarable::GetType() if dialogs are accessed
@@ -1896,7 +1896,7 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         SbModule* pMod = dynamic_cast<SbModule*>(pBase);
         if( !pMod )
         {
-            return sal_False;
+            return false;
         }
         else if( pMod->ISA(SbJScriptModule) )
         {
@@ -1924,14 +1924,14 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     // Search via StarBASIC is at all times global
     DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic loaded without GBLSEARCH" );
     SetFlag( SBX_GBLSEARCH );
-    return sal_True;
+    return true;
 }
 
-sal_Bool StarBASIC::StoreData( SvStream& r ) const
+bool StarBASIC::StoreData( SvStream& r ) const
 {
     if( !SbxObject::StoreData( r ) )
     {
-        return sal_False;
+        return false;
     }
     r.WriteUInt16( (sal_uInt16) pModules->Count() );
     for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
@@ -1939,10 +1939,10 @@ sal_Bool StarBASIC::StoreData( SvStream& r ) const
         SbModule* p = (SbModule*) pModules->Get( i );
         if( !p->Store( r ) )
         {
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )
@@ -2090,9 +2090,9 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
     if( p )
     {
         sal_uIntPtr nId = p->GetId();
-        sal_Bool bRead  = sal_Bool( nId == SBX_HINT_DATAWANTED );
-        sal_Bool bWrite = sal_Bool( nId == SBX_HINT_DATACHANGED );
-        sal_Bool bRequestInfo = sal_Bool( nId == SBX_HINT_INFOWANTED );
+        bool bRead  = nId == SBX_HINT_DATAWANTED;
+        bool bWrite = nId == SBX_HINT_DATACHANGED;
+        bool bRequestInfo = nId == SBX_HINT_INFOWANTED;
         SbxVariable* pVar = p->GetVar();
         SbxArray* pArg = pVar->GetParameters();
         OUString aVarName( pVar->GetName() );

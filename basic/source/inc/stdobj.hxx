@@ -37,7 +37,7 @@ class SbiStdObject : public SbxObject
 public:
     SbiStdObject( const OUString&, StarBASIC* );
     virtual SbxVariable* Find( const OUString&, SbxClassType );
-    virtual void SetModified( sal_Bool );
+    virtual void SetModified( bool );
 };
 
 #endif

@@ -75,7 +75,7 @@ protected:
     SbProperty*     GetProperty( const OUString&, SbxDataType );
     SbProcedureProperty* GetProcedureProperty( const OUString&, SbxDataType );
     SbIfaceMapperMethod* GetIfaceMapperMethod( const OUString&, SbMethod* );
-    void            EndDefinitions( sal_Bool=sal_False );
+    void            EndDefinitions( bool=false );
     sal_uInt16      Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
@@ -84,10 +84,10 @@ protected:
     void            GlobalRunDeInit( void );
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
     const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
-                                    sal_Bool bFollowJumps, const SbiImage* pImg=NULL ) const;
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
-    virtual sal_Bool LoadCompleted() SAL_OVERRIDE;
+                                    bool bFollowJumps, const SbiImage* pImg=NULL ) const;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadCompleted() SAL_OVERRIDE;
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
     void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -95,7 +95,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO_OVERRIDE();
-                    SbModule( const OUString&, sal_Bool bCompat = sal_False );
+                    SbModule( const OUString&, bool bCompat = false );
     virtual void    SetParent( SbxObject* ) SAL_OVERRIDE;
     virtual void    Clear() SAL_OVERRIDE;
 
@@ -107,22 +107,22 @@ public:
     virtual void     SetSource( const OUString& r );
     void             SetSource32( const OUString& r );
 
-    virtual sal_Bool Compile();
-    virtual sal_Bool IsCompiled() const;
+    virtual bool Compile();
+    virtual bool IsCompiled() const;
     const SbxObject* FindType( const OUString& aTypeName ) const;
 
-    virtual sal_Bool IsBreakable( sal_uInt16 nLine ) const;
-    virtual sal_Bool IsBP( sal_uInt16 nLine ) const;
-    virtual sal_Bool SetBP( sal_uInt16 nLine );
-    virtual sal_Bool ClearBP( sal_uInt16 nLine );
+    virtual bool IsBreakable( sal_uInt16 nLine ) const;
+    virtual bool IsBP( sal_uInt16 nLine ) const;
+    virtual bool SetBP( sal_uInt16 nLine );
+    virtual bool ClearBP( sal_uInt16 nLine );
     virtual void     ClearAllBP();
 
     // Store only image, no source (needed for new password protection)
-    sal_Bool StoreBinaryData( SvStream& );
-    sal_Bool StoreBinaryData( SvStream&, sal_uInt16 nVer );
-    sal_Bool LoadBinaryData( SvStream&, sal_uInt16 nVer );
-    sal_Bool LoadBinaryData( SvStream& );
-    sal_Bool ExceedsLegacyModuleSize();
+    bool StoreBinaryData( SvStream& );
+    bool StoreBinaryData( SvStream&, sal_uInt16 nVer );
+    bool LoadBinaryData( SvStream&, sal_uInt16 nVer );
+    bool LoadBinaryData( SvStream& );
+    bool ExceedsLegacyModuleSize();
     void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
     bool     HasExeCode();
     bool     IsVBACompat() const;

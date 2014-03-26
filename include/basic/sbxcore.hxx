@@ -42,8 +42,8 @@ class SvStream;
 
 // This version of the macro defines Load/StorePrivateData()-methods
 #define SBX_DECL_PERSIST( nCre, nSbxId, nVer )              \
-    virtual sal_Bool LoadPrivateData( SvStream&, sal_uInt16 );      \
-    virtual sal_Bool StorePrivateData( SvStream& ) const;       \
+    virtual bool LoadPrivateData( SvStream&, sal_uInt16 );      \
+    virtual bool StorePrivateData( SvStream& ) const;       \
     virtual sal_uInt32 GetCreator() const { return nCre;   }    \
     virtual sal_uInt16 GetVersion() const { return nVer;   }    \
     virtual sal_uInt16 GetSbxId() const   { return nSbxId; }
@@ -56,8 +56,8 @@ DBG_NAMEEX_VISIBILITY(SbxBase, BASIC_DLLPUBLIC)
 
 class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
-    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual bool LoadData( SvStream&, sal_uInt16 );
+    virtual bool StoreData( SvStream& ) const;
 protected:
     sal_uInt16 nFlags;          // Flag-Bits
 
@@ -72,17 +72,17 @@ public:
     inline sal_uInt16   GetFlags() const;
     inline void         SetFlag( sal_uInt16 n );
     inline void         ResetFlag( sal_uInt16 n );
-    inline sal_Bool     IsSet( sal_uInt16 n ) const;
-    inline sal_Bool     IsReset( sal_uInt16 n ) const;
-    inline sal_Bool     CanRead() const;
-    inline sal_Bool     CanWrite() const;
-    inline sal_Bool     IsModified() const;
-    inline sal_Bool     IsConst() const;
-    inline sal_Bool     IsHidden() const;
-    inline sal_Bool     IsVisible() const;
+    inline bool         IsSet( sal_uInt16 n ) const;
+    inline bool         IsReset( sal_uInt16 n ) const;
+    inline bool         CanRead() const;
+    inline bool         CanWrite() const;
+    inline bool         IsModified() const;
+    inline bool         IsConst() const;
+    inline bool         IsHidden() const;
+    inline bool         IsVisible() const;
 
-    virtual sal_Bool    IsFixed() const;
-    virtual void        SetModified( sal_Bool );
+    virtual bool        IsFixed() const;
+    virtual void        SetModified( bool );
 
     virtual SbxDataType GetType()  const;
     virtual SbxClassType GetClass() const;
@@ -91,13 +91,13 @@ public:
 
     static SbxBase* Load( SvStream& );
     static void     Skip( SvStream& );
-    sal_Bool        Store( SvStream& );
-    virtual sal_Bool LoadCompleted();
-    virtual sal_Bool StoreCompleted();
+    bool            Store( SvStream& );
+    virtual bool    LoadCompleted();
+    virtual bool    StoreCompleted();
 
     static SbxError GetError();
     static void SetError( SbxError );
-    static sal_Bool IsError();
+    static bool IsError();
     static void ResetError();
 
     // Set the factory for Load/Store/Create
@@ -125,28 +125,28 @@ inline void SbxBase::ResetFlag( sal_uInt16 n )
 { //DBG_CHKTHIS( SbxBase, 0 );
  nFlags &= ~n; }
 
-inline sal_Bool SbxBase::IsSet( sal_uInt16 n ) const
-{ DBG_CHKTHIS( SbxBase, 0 ); return sal_Bool( ( nFlags & n ) != 0 ); }
+inline bool SbxBase::IsSet( sal_uInt16 n ) const
+{ DBG_CHKTHIS( SbxBase, 0 ); return ( nFlags & n ) != 0; }
 
-inline sal_Bool SbxBase::IsReset( sal_uInt16 n ) const
-{ DBG_CHKTHIS( SbxBase, 0 ); return sal_Bool( ( nFlags & n ) == 0 ); }
+inline bool SbxBase::IsReset( sal_uInt16 n ) const
+{ DBG_CHKTHIS( SbxBase, 0 ); return ( nFlags & n ) == 0; }
 
-inline sal_Bool SbxBase::CanRead() const
+inline bool SbxBase::CanRead() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_READ ); }
 
-inline sal_Bool SbxBase::CanWrite() const
+inline bool SbxBase::CanWrite() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_WRITE ); }
 
-inline sal_Bool SbxBase::IsModified() const
+inline bool SbxBase::IsModified() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_MODIFIED ); }
 
-inline sal_Bool SbxBase::IsConst() const
+inline bool SbxBase::IsConst() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_CONST ); }
 
-inline sal_Bool SbxBase::IsHidden() const
+inline bool SbxBase::IsHidden() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_HIDDEN ); }
 
-inline sal_Bool SbxBase::IsVisible() const
+inline bool SbxBase::IsVisible() const
 { DBG_CHKTHIS( SbxBase, 0 ); return IsReset( SBX_INVISIBLE ); }
 
 #endif

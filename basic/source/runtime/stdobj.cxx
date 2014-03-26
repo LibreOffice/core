@@ -814,7 +814,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
 }
 
 // SetModified must be pinched off at the RTL
-void SbiStdObject::SetModified( sal_Bool )
+void SbiStdObject::SetModified( bool )
 {
 }
 

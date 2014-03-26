@@ -336,8 +336,8 @@ SwCalc::SwCalc( SwDoc& rD )
         VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, 0 );
     }
 
-    ((SwCalcExp*)VarTable[ aHashValue[ 0 ] ])->nValue.PutBool( sal_False );
-    ((SwCalcExp*)VarTable[ aHashValue[ 1 ] ])->nValue.PutBool( sal_True );
+    ((SwCalcExp*)VarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
+    ((SwCalcExp*)VarTable[ aHashValue[ 1 ] ])->nValue.PutBool( true );
     ((SwCalcExp*)VarTable[ aHashValue[ 2 ] ])->nValue.PutDouble( F_PI );
     ((SwCalcExp*)VarTable[ aHashValue[ 3 ] ])->nValue.PutDouble( 2.7182818284590452354 );
 
@@ -1597,7 +1597,7 @@ SwSbxValue::~SwSbxValue()
 sal_Bool SwSbxValue::GetBool() const
 {
     return SbxSTRING == GetType() ? !GetOUString().isEmpty()
-                                  : 0 != SbxValue::GetBool();
+                                  : SbxValue::GetBool();
 }
 
 double SwSbxValue::GetDouble() const

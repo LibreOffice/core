@@ -42,12 +42,12 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     sal_uInt16    nDebugFlags;
     sal_uInt16    nLine1, nLine2;
     sal_uInt32    nStart;
-    sal_Bool      bInvalid;
+    bool          bInvalid;
     SbxArrayRef   refStatics;
     BASIC_DLLPRIVATE SbMethod( const OUString&, SbxDataType, SbModule* );
     BASIC_DLLPRIVATE SbMethod( const SbMethod& );
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual ~SbMethod();
 
 public:

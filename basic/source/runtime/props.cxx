@@ -64,7 +64,7 @@ RTLFUNC(False)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get(0)->PutBool( sal_False );
+    rPar.Get(0)->PutBool( false );
 }
 
 RTLFUNC(Empty)
@@ -105,7 +105,7 @@ RTLFUNC(True)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get( 0 )->PutBool( sal_True );
+    rPar.Get( 0 )->PutBool( true );
 }
 
 RTLFUNC(ATTR_NORMAL)

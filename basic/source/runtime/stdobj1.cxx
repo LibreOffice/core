@@ -347,7 +347,7 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool
         return;
     }
 
-    pVar->PutBool( sal_False );
+    pVar->PutBool( false );
 }
 
 void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )

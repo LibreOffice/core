@@ -475,7 +475,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
     sal_uInt32 nCount = pData->size();
     if( !nCount )
         return NULL;
-    sal_Bool bExtSearch = IsSet( SBX_EXTSEARCH );
+    bool bExtSearch = IsSet( SBX_EXTSEARCH );
     sal_uInt16 nHash = SbxVariable::MakeHashCode( rName );
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -523,11 +523,11 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
     return p;
 }
 
-sal_Bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     sal_uInt16 nElem;
     Clear();
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     sal_uInt16 f = nFlags;
     nFlags |= SBX_WRITE;
     rStrm.ReadUInt16( nElem );
@@ -544,7 +544,8 @@ sal_Bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         }
         else
         {
-            bRes = sal_False; break;
+            bRes = false;
+            break;
         }
     }
     if( bRes )
@@ -553,7 +554,7 @@ sal_Bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return bRes;
 }
 
-sal_Bool SbxArray::StoreData( SvStream& rStrm ) const
+bool SbxArray::StoreData( SvStream& rStrm ) const
 {
     sal_uInt32 nElem = 0;
     sal_uInt32 n;
@@ -574,7 +575,7 @@ sal_Bool SbxArray::StoreData( SvStream& rStrm ) const
         {
             rStrm.WriteUInt16( (sal_uInt16) n );
             if( !p->Store( rStrm ) )
-                return sal_False;
+                return false;
         }
     }
     return StorePrivateData( rStrm );
@@ -640,7 +641,7 @@ void SbxDimArray::Clear()
 
 // Add a dimension
 
-void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, sal_Bool bAllowSize0 )
+void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, bool bAllowSize0 )
 {
     SbxError eRes = SbxERR_OK;
     if( ub < lb && !bAllowSize0 )
@@ -669,51 +670,53 @@ short SbxDimArray::GetDims() const
 
 void SbxDimArray::AddDim( short lb, short ub )
 {
-    AddDimImpl32( lb, ub, sal_False );
+    AddDimImpl32( lb, ub, false );
 }
 
 void SbxDimArray::unoAddDim( short lb, short ub )
 {
-    AddDimImpl32( lb, ub, sal_True );
+    AddDimImpl32( lb, ub, true );
 }
 
 void SbxDimArray::AddDim32( sal_Int32 lb, sal_Int32 ub )
 {
-    AddDimImpl32( lb, ub, sal_False );
+    AddDimImpl32( lb, ub, false );
 }
 
 void SbxDimArray::unoAddDim32( sal_Int32 lb, sal_Int32 ub )
 {
-    AddDimImpl32( lb, ub, sal_True );
+    AddDimImpl32( lb, ub, true );
 }
 
 
 // Readout dimension data
 
-sal_Bool SbxDimArray::GetDim32( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
+bool SbxDimArray::GetDim32( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
 {
     if( n < 1 || n > nDim )
     {
-        SetError( SbxERR_BOUNDS ); rub = rlb = 0; return sal_False;
+        SetError( SbxERR_BOUNDS );
+        rub = rlb = 0;
+        return false;
     }
     SbxDim* p = pFirst;
     while( --n )
         p = p->pNext;
     rub = p->nUbound;
     rlb = p->nLbound;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
+bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
 {
     sal_Int32 rlb32, rub32;
-    sal_Bool bRet = GetDim32( n, rlb32, rub32 );
+    bool bRet = GetDim32( n, rlb32, rub32 );
     if( bRet )
     {
         if( rlb32 < -SBX_MAXINDEX || rub32 > SBX_MAXINDEX )
         {
             SetError( SbxERR_BOUNDS );
-            return sal_False;
+            return false;
         }
         rub = (short)rub32;
         rlb = (short)rlb32;
@@ -815,7 +818,7 @@ SbxVariable* SbxDimArray::Get( SbxArray* pPar )
     return SbxArray::Get32( Offset32( pPar ) );
 }
 
-sal_Bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     short nDimension;
     rStrm.ReadInt16( nDimension );
@@ -828,7 +831,7 @@ sal_Bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return SbxArray::LoadData( rStrm, nVer );
 }
 
-sal_Bool SbxDimArray::StoreData( SvStream& rStrm ) const
+bool SbxDimArray::StoreData( SvStream& rStrm ) const
 {
     rStrm.WriteInt16( (sal_Int16) nDim );
     for( short i = 0; i < nDim; i++ )

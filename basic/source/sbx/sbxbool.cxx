@@ -183,7 +183,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
             if( pVal )
-                pVal->PutBool( sal_Bool( n != 0 ) );
+                pVal->PutBool( n != 0 );
             else
                 SbxBase::SetError( SbxERR_NO_OBJECT );
             break;

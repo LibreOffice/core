@@ -37,8 +37,8 @@ protected:
     SbxProperty* pDfltProp;                 // Default-Property
     OUString     aClassName;                // Classname
     OUString     aDfltPropName;
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual ~SbxObject();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
@@ -52,7 +52,7 @@ public:
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
     virtual void Clear() SAL_OVERRIDE;
 
-    virtual sal_Bool  IsClass( const OUString& ) const;
+    virtual sal_Bool IsClass( const OUString& ) const;
     const OUString& GetClassName() const { return aClassName; }
     void SetClassName( const OUString &rNew ) { aClassName = rNew; }
     // Default-Property
@@ -67,7 +67,7 @@ public:
     // Execution of DDE-Commands
     SbxVariable* Execute( const OUString& );
     // Manage elements
-    virtual sal_Bool GetAll( SbxClassType ) { return sal_True; }
+    virtual bool GetAll( SbxClassType ) { return true; }
     SbxVariable* Make( const OUString&, SbxClassType, SbxDataType );
     virtual SbxObject* MakeObject( const OUString&, const OUString& );
     virtual void Insert( SbxVariable* );
@@ -85,7 +85,7 @@ public:
     SbxArray* GetProperties()   { return pProps;    }
     SbxArray* GetObjects()      { return pObjs;     }
     // Debugging
-    void Dump( SvStream&, sal_Bool bDumpAll=sal_False );
+    void Dump( SvStream&, bool bDumpAll=false );
 };
 
 SV_DECL_REF(SbxObject)

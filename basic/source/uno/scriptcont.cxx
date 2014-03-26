@@ -960,7 +960,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 if( !pMod )
                 {
                     pMod = pBasicLib->MakeModule( aElementName, OUString() );
-                    pBasicLib->SetModified( sal_False );
+                    pBasicLib->SetModified( false );
                 }
 
                 OUString aCodeStreamName= aElementName;
@@ -1083,7 +1083,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         if( !pMod )
                         {
                             pMod = pBasicLib->MakeModule( aElementName, OUString() );
-                            pBasicLib->SetModified( sal_False );
+                            pBasicLib->SetModified( false );
                         }
 
                         try

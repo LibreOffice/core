@@ -94,13 +94,13 @@ void SbxBase::Clear()
     DBG_CHKTHIS( SbxBase, 0 );
 }
 
-sal_Bool SbxBase::IsFixed() const
+bool SbxBase::IsFixed() const
 {
     DBG_CHKTHIS( SbxBase, 0 );
     return IsSet( SBX_FIXED );
 }
 
-void SbxBase::SetModified( sal_Bool b )
+void SbxBase::SetModified( bool b )
 {
     DBG_CHKTHIS( SbxBase, 0 );
     if( IsSet( SBX_NO_MODIFY ) )
@@ -123,9 +123,9 @@ void SbxBase::SetError( SbxError e )
         r.eSbxError = e;
 }
 
-sal_Bool SbxBase::IsError()
+bool SbxBase::IsError()
 {
-    return sal_Bool( GetSbxData_Impl().eSbxError != SbxERR_OK );
+    return GetSbxData_Impl().eSbxError != SbxERR_OK;
 }
 
 void SbxBase::ResetError()
@@ -268,7 +268,7 @@ void SbxBase::Skip( SvStream& rStrm )
     rStrm.Seek( nStartPos + nSize );
 }
 
-sal_Bool SbxBase::Store( SvStream& rStrm )
+bool SbxBase::Store( SvStream& rStrm )
 {
     DBG_CHKTHIS( SbxBase, 0 );
     if( !( nFlags & SBX_DONTSTORE ) )
@@ -279,55 +279,55 @@ sal_Bool SbxBase::Store( SvStream& rStrm )
              .WriteUInt16( (sal_uInt16) GetVersion() );
         sal_Size nOldPos = rStrm.Tell();
         rStrm.WriteUInt32( (sal_uInt32) 0L );
-        sal_Bool bRes = StoreData( rStrm );
+        bool bRes = StoreData( rStrm );
         sal_Size nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
         rStrm.WriteUInt32( (sal_uInt32) ( nNewPos - nOldPos ) );
         rStrm.Seek( nNewPos );
         if( rStrm.GetError() != SVSTREAM_OK )
-            bRes = sal_False;
+            bRes = false;
         if( bRes )
             bRes = StoreCompleted();
         return bRes;
     }
     else
-        return sal_True;
+        return true;
 }
 
-sal_Bool SbxBase::LoadData( SvStream&, sal_uInt16 )
+bool SbxBase::LoadData( SvStream&, sal_uInt16 )
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SbxBase::StoreData( SvStream& ) const
+bool SbxBase::StoreData( SvStream& ) const
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_False;
+    return false;
 }
 
-sal_Bool SbxBase::LoadPrivateData( SvStream&, sal_uInt16 )
+bool SbxBase::LoadPrivateData( SvStream&, sal_uInt16 )
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbxBase::StorePrivateData( SvStream& ) const
+bool SbxBase::StorePrivateData( SvStream& ) const
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbxBase::LoadCompleted()
+bool SbxBase::LoadCompleted()
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbxBase::StoreCompleted()
+bool SbxBase::StoreCompleted()
 {
     DBG_CHKTHIS( SbxBase, 0 );
-    return sal_True;
+    return true;
 }
 
 //////////////////////////////// SbxFactory
@@ -364,7 +364,7 @@ const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
         return &(aParams[n - 1]);
 }
 
-sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     aParams.clear();
     sal_uInt16 nParam;
@@ -386,10 +386,10 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         SbxParamInfo& p(aParams.back());
         p.nUserData = nUserData;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
+bool SbxInfo::StoreData( SvStream& rStrm ) const
 {
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aComment,
         RTL_TEXTENCODING_ASCII_US );
@@ -404,7 +404,7 @@ sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
              .WriteUInt16( (sal_uInt16) i->nFlags )
              .WriteUInt32( (sal_uInt32) i->nUserData );
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

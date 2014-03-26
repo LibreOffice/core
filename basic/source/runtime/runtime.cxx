@@ -1421,7 +1421,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         if( !pTRUE )
         {
             pTRUE = new SbxVariable;
-            pTRUE->PutBool( sal_True );
+            pTRUE->PutBool( true );
             pTRUE->AddRef();
         }
         PushVar( pTRUE );
@@ -1431,7 +1431,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         if( !pFALSE )
         {
             pFALSE = new SbxVariable;
-            pFALSE->PutBool( sal_False );
+            pFALSE->PutBool( false );
             pFALSE->AddRef();
         }
         PushVar( pFALSE );
@@ -3172,7 +3172,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     {
         // set Code-pointer to the next statement
         sal_uInt16 n1, n2;
-        pCode = pMod->FindNextStmnt( pErrCode, n1, n2, sal_True, pImg );
+        pCode = pMod->FindNextStmnt( pErrCode, n1, n2, true, pImg );
     }
     else
         pCode = pErrStmnt;

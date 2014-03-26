@@ -232,16 +232,16 @@ void SbxCollection::CollRemove( SbxArray* pPar_ )
     }
 }
 
-sal_Bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    sal_Bool bRes = SbxObject::LoadData( rStrm, nVer );
+    bool bRes = SbxObject::LoadData( rStrm, nVer );
     Initialize();
     return bRes;
 }
 
 
 SbxStdCollection::SbxStdCollection
-                    ( const OUString& rClass, const OUString& rElem, sal_Bool b )
+                    ( const OUString& rClass, const OUString& rElem, bool b )
                   : SbxCollection( rClass ), aElemClass( rElem ),
                     bAddRemoveOk( b )
 {}
@@ -297,21 +297,21 @@ void SbxStdCollection::CollRemove( SbxArray* pPar_ )
         SbxCollection::CollRemove( pPar_ );
 }
 
-sal_Bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    sal_Bool bRes = SbxCollection::LoadData( rStrm, nVer );
+    bool bRes = SbxCollection::LoadData( rStrm, nVer );
     if( bRes )
     {
         aElemClass = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm.ReadUChar( bAddRemoveOk );
+        rStrm.ReadCharAsBool( bAddRemoveOk );
     }
     return bRes;
 }
 
-sal_Bool SbxStdCollection::StoreData( SvStream& rStrm ) const
+bool SbxStdCollection::StoreData( SvStream& rStrm ) const
 {
-    sal_Bool bRes = SbxCollection::StoreData( rStrm );
+    bool bRes = SbxCollection::StoreData( rStrm );
     if( bRes )
     {
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aElemClass,

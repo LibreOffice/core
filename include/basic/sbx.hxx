@@ -71,8 +71,8 @@ class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
     SbxParams       aParams;
 
 protected:
-    sal_Bool LoadData( SvStream&, sal_uInt16 );
-    sal_Bool StoreData( SvStream& ) const;
+    bool LoadData( SvStream&, sal_uInt16 );
+    bool StoreData( SvStream& ) const;
     virtual ~SbxInfo();
 public:
     SbxInfo();
@@ -131,8 +131,8 @@ class BASIC_DLLPUBLIC SbxArray : public SbxBase
 protected:
     SbxDataType eType;            // Data type of the array
     virtual ~SbxArray();
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_ARRAY,1);
@@ -172,14 +172,14 @@ class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
 {
     SbxDim* pFirst, *pLast;               // Links to Dimension table
     short   nDim;                         // Number of dimensions
-    BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, sal_Bool bAllowSize0 );
+    BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, bool bAllowSize0 );
     bool mbHasFixedSize;
 protected:
     sal_uInt16  Offset( const short* );
     sal_uInt32  Offset32( const sal_Int32* );
     sal_uInt32  Offset32( SbxArray* );
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual ~SbxDimArray();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_DIMARRAY,1);
@@ -198,7 +198,7 @@ public:
     short  GetDims() const;
     void   AddDim( short, short );
     void   unoAddDim( short, short );
-    sal_Bool   GetDim( short, short&, short& ) const;
+    bool   GetDim( short, short&, short& ) const;
 
     using SbxArray::GetRef32;
     using SbxArray::Get32;
@@ -207,7 +207,7 @@ public:
     void Put32( SbxVariable*, const sal_Int32* );
     void   AddDim32( sal_Int32, sal_Int32 );
     void   unoAddDim32( sal_Int32, sal_Int32 );
-    sal_Bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
+    bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
     bool hasFixedSize() { return mbHasFixedSize; };
     void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
@@ -217,7 +217,7 @@ class BASIC_DLLPUBLIC SbxCollection : public SbxObject
     BASIC_DLLPRIVATE void Initialize();
 protected:
     virtual ~SbxCollection();
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
     // Overridable methods (why not pure virtual?):
@@ -240,16 +240,16 @@ class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
 {
 protected:
     OUString aElemClass;
-    sal_Bool bAddRemoveOk;
+    bool bAddRemoveOk;
     virtual ~SbxStdCollection();
-    virtual sal_Bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual sal_Bool StoreData( SvStream& ) const SAL_OVERRIDE;
+    virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual void CollAdd( SbxArray* pPar ) SAL_OVERRIDE;
     virtual void CollRemove( SbxArray* pPar ) SAL_OVERRIDE;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
     TYPEINFO_OVERRIDE();
-    SbxStdCollection( const OUString& rClassname, const OUString& rElemClass, sal_Bool=sal_True );
+    SbxStdCollection( const OUString& rClassname, const OUString& rElemClass, bool=true );
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );
     virtual void Insert( SbxVariable* ) SAL_OVERRIDE;
