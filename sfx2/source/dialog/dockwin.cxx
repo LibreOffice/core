@@ -211,7 +211,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( true );
 }
 
 SfxChildWindow*  SfxDockingWrapper::CreateImpl(

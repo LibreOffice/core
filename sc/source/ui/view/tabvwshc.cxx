@@ -135,7 +135,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     SfxModelessDialog* pResult = 0;
 
     if(pCW)
-        pCW->SetHideNotDelete(sal_True);
+        pCW->SetHideNotDelete(true);
 
     ScDocument* pDoc = GetViewData()->GetDocument();
 

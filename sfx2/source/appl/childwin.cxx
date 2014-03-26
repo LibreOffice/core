@@ -48,10 +48,10 @@ struct SfxChildWindow_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xListener;
     SfxChildWinFactory* pFact;
-    sal_Bool                bHideNotDelete;
+    bool                bHideNotDelete;
     sal_Bool                bVisible;
-    sal_Bool                bHideAtToggle;
-    sal_Bool                bWantsFocus;
+    bool                bHideAtToggle;
+    bool                bWantsFocus;
     SfxModule*          pContextModule;
     SfxWorkWindow*      pWorkWin;
 };
@@ -102,10 +102,10 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
 
 
 
-sal_Bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
+bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
 {
     if ( comphelper::string::getTokenCount(rStr, '/') != 4 )
-        return sal_False;
+        return false;
 
     sal_Int32 nIdx = 0;
     rPos.X() = rStr.getToken(0, '/', nIdx).toInt32();
@@ -115,12 +115,12 @@ sal_Bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
 
     // negative sizes are invalid
     if ( rSize.Width() < 0 || rSize.Height() < 0 )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
+bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
 {
     sal_Int32 nIndex = rStr.indexOf( ',' );
     if ( nIndex != -1 )
@@ -129,19 +129,19 @@ sal_Bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
 
         sal_Int32 nCount = comphelper::string::getTokenCount(aStr, ';');
         if ( nCount != 2 )
-            return sal_False;
+            return false;
 
         rSize.Width() = aStr.getToken(0, ';' ).toInt32();
         rSize.Height() = aStr.getToken(1, ';' ).toInt32();
 
         // negative sizes are invalid
         if ( rSize.Width() < 0 || rSize.Height() < 0 )
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -153,9 +153,9 @@ SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
 {
     pImp = new SfxChildWindow_Impl;
     pImp->pFact = 0L;
-    pImp->bHideNotDelete = sal_False;
-    pImp->bHideAtToggle = sal_False;
-    pImp->bWantsFocus = sal_True;
+    pImp->bHideNotDelete = false;
+    pImp->bHideAtToggle = false;
+    pImp->bWantsFocus = true;
     pImp->bVisible = sal_True;
     pImp->pContextModule = NULL;
     pImp->pWorkWin = NULL;
@@ -533,9 +533,9 @@ void SfxChildWindowContext::Resizing( Size& )
 {
 }
 
-sal_Bool SfxChildWindowContext::Close()
+bool SfxChildWindowContext::Close()
 {
-    return sal_True;
+    return true;
 }
 
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
@@ -543,32 +543,32 @@ void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
     pImp->pFact = pF;
 }
 
-void SfxChildWindow::SetHideNotDelete( sal_Bool bOn )
+void SfxChildWindow::SetHideNotDelete( bool bOn )
 {
     pImp->bHideNotDelete = bOn;
 }
 
-sal_Bool SfxChildWindow::IsHideNotDelete() const
+bool SfxChildWindow::IsHideNotDelete() const
 {
     return pImp->bHideNotDelete;
 }
 
-sal_Bool SfxChildWindow::IsHideAtToggle() const
+bool SfxChildWindow::IsHideAtToggle() const
 {
     return pImp->bHideAtToggle;
 }
 
-void SfxChildWindow::SetWantsFocus( sal_Bool bSet )
+void SfxChildWindow::SetWantsFocus( bool bSet )
 {
     pImp->bWantsFocus = bSet;
 }
 
-sal_Bool SfxChildWindow::WantsFocus() const
+bool SfxChildWindow::WantsFocus() const
 {
     return pImp->bWantsFocus;
 }
 
-sal_Bool SfxChildWinInfo::GetExtraData_Impl
+bool SfxChildWinInfo::GetExtraData_Impl
 (
     SfxChildAlignment   *pAlign,
     SfxChildAlignment   *pLastAlign,
@@ -579,11 +579,11 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
 {
     // invalid?
     if ( aExtraString.isEmpty() )
-        return sal_False;
+        return false;
     OUString aStr;
     sal_Int32 nPos = aExtraString.indexOf("AL:");
     if ( nPos == -1 )
-        return sal_False;
+        return false;
 
     // Try to read the alignment string "ALIGN :(...)", but if
     // it is not present, then use an older version
@@ -601,14 +601,14 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
 
     // First extract the Alignment
     if ( aStr.isEmpty() )
-        return sal_False;
+        return false;
     if ( pAlign )
         *pAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
 
     // then the LastAlignment
     nPos = aStr.indexOf(',');
     if ( nPos == -1 )
-        return sal_False;
+        return false;
     aStr = aStr.copy(nPos+1);
     if ( pLastAlign )
         *pLastAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
@@ -617,7 +617,7 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     nPos = aStr.indexOf(',');
     if ( nPos == -1 )
         // No docking in a Splitwindow
-        return sal_True;
+        return true;
     aStr = aStr.copy(nPos+1);
     Point aChildPos;
     Size aChildSize;
@@ -629,9 +629,9 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
             *pLine = (sal_uInt16) aChildPos.X();
         if ( pPos )
             *pPos = (sal_uInt16) aChildPos.Y();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SfxChildWindow::IsVisible() const
@@ -698,9 +698,9 @@ void SfxChildWindow::Deactivate_Impl()
 {
 }
 
-sal_Bool SfxChildWindow::QueryClose()
+bool SfxChildWindow::QueryClose()
 {
-    sal_Bool bAllow = sal_True;
+    bool bAllow = true;
 
     if ( pImp->xFrame.is() )
     {
@@ -743,7 +743,7 @@ void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::su
     }
 }
 
-sal_Bool SfxChildWindow::CanGetFocus() const
+bool SfxChildWindow::CanGetFocus() const
 {
     return !(pImp->pFact->aInfo.nFlags & SFX_CHILDWIN_CANTGETFOCUS);
 }

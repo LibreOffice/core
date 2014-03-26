@@ -50,7 +50,7 @@ class SfxChildWindowContext;
 // ChildWindow Configuration
 struct SfxChildWinInfo
 {
-    sal_Bool            bVisible;
+    sal_Bool            bVisible; // this can be sal_True, or sal_False, or 42
     Point               aPos;
     Size                aSize;
     sal_uInt16          nFlags;
@@ -63,7 +63,7 @@ struct SfxChildWinInfo
                             bVisible = sal_False;
                             nFlags = 0;
                         }
-    sal_Bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
+    bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
                                            SfxChildAlignment    *pLastAlign = 0,
                                            Size                 *pSize = 0,
                                            sal_uInt16               *pLine = 0,
@@ -141,7 +141,7 @@ public:
     FloatingWindow*     GetFloatingWindow() const;
 
     virtual void        Resizing( Size& rSize );
-    virtual sal_Bool        Close();
+    virtual bool        Close();
     static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
 };
 
@@ -181,13 +181,13 @@ public:
                         { pWindow->SetPosSizePixel(rPoint, rSize); }
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
-    virtual void                Hide();
-    virtual void                Show( sal_uInt16 nFlags );
+    virtual void        Hide();
+    virtual void        Show( sal_uInt16 nFlags );
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
-    sal_Bool                CanGetFocus() const;
-    sal_uInt16              GetPosition();
-    sal_uInt16              GetType()
+    bool                CanGetFocus() const;
+    sal_uInt16          GetPosition();
+    sal_uInt16          GetType()
                         { return nType; }
 
     void                CreateContext( sal_uInt16 nContextId, SfxBindings& );
@@ -205,14 +205,14 @@ public:
     static void         RegisterChildWindow(SfxModule*, SfxChildWinFactory*);
 
     static SfxChildWindow* CreateChildWindow( sal_uInt16, ::Window*, SfxBindings*, SfxChildWinInfo&);
-    void                SetHideNotDelete( sal_Bool bOn );
-    sal_Bool                IsHideNotDelete() const;
-    sal_Bool                IsHideAtToggle() const;
+    void                SetHideNotDelete( bool bOn );
+    bool                IsHideNotDelete() const;
+    bool                IsHideAtToggle() const;
     sal_Bool                IsVisible() const;
-    void                SetWantsFocus( sal_Bool );
-    sal_Bool            WantsFocus() const;
+    void                SetWantsFocus( bool );
+    bool                WantsFocus() const;
 
-    virtual sal_Bool    QueryClose();
+    virtual bool        QueryClose();
     virtual com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >           GetFrame();
     void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
 

@@ -49,7 +49,7 @@ AnimationChildWindow::AnimationChildWindow(
 
     pAnimWin->Initialize( pInfo );
 
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( true );
 }
 
 } // end of namespace sd

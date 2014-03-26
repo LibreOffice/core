@@ -69,7 +69,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     pWindow->SetSizePixel( Size( 175, 175 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( true );
 }
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
@@ -88,7 +88,7 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
         pWin->GetBindings().SetActiveFrame( NULL );
 }
 
-sal_Bool SfxPartChildWnd_Impl::QueryClose()
+bool SfxPartChildWnd_Impl::QueryClose()
 {
     return ( (SfxPartDockWnd_Impl*)pWindow )->QueryClose();
 }

@@ -67,7 +67,7 @@ PaneChildWindow::PaneChildWindow (
         SD_RESSTR( nTitleBarResId ) );
     eChildAlignment = eAlignment;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
-    SetHideNotDelete(sal_True);
+    SetHideNotDelete(true);
 
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
     if (pBase != NULL)

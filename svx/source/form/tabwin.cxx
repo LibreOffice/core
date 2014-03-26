@@ -432,7 +432,7 @@ FmFieldWinMgr::FmFieldWinMgr(Window* _pParent, sal_uInt16 _nId,
               :SfxChildWindow(_pParent, _nId)
 {
     pWindow = new FmFieldWin(_pBindings, this, _pParent);
-    SetHideNotDelete(sal_True);
+    SetHideNotDelete(true);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
 }

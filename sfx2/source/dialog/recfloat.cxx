@@ -132,7 +132,7 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParentWnd
                     , pBindings( pBind )
 {
     pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParentWnd );
-    SetWantsFocus( sal_False );
+    SetWantsFocus( false );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ( ( SfxFloatingWindow* ) pWindow )->Initialize( pInfo );
 }
@@ -145,10 +145,10 @@ SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
         pBindings->GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
 }
 
-sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
+bool SfxRecordingFloatWrapper_Impl::QueryClose()
 {
     // asking for recorded macro should be replaced if index access is available!
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {

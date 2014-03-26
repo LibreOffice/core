@@ -87,7 +87,7 @@ SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const
     return SfxChildWindow::GetInfo();
 }
 
-sal_Bool SvxHlinkDlgWrapper::QueryClose()
+bool SvxHlinkDlgWrapper::QueryClose()
 {
     return !mpDlg || mpDlg->QueryClose();
 }
