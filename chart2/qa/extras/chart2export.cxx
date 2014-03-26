@@ -421,6 +421,7 @@ void Chart2ExportTest::testErrorBarXLSX()
 // in an export -> import cycle using different file formats - ODS, XLS and XLSX.
 void Chart2ExportTest::testTrendline()
 {
+    mbSkipValidation = true;
     load("/chart2/qa/extras/data/ods/", "trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("calc8");

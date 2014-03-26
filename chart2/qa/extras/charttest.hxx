@@ -52,6 +52,7 @@ using namespace com::sun::star::uno;
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
+    ChartTest():mbSkipValidation(false) {}
     void load( const OUString& rDir, const OUString& rFileName );
     boost::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
@@ -65,6 +66,7 @@ public:
 protected:
     Reference< lang::XComponent > mxComponent;
     OUString maServiceName;
+    bool mbSkipValidation; // if you set this flag for a new test I'm going to haunt you!
 };
 
 OUString ChartTest::getFileExtension( const OUString& aFileName )
@@ -112,7 +114,8 @@ boost::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
     }
     else if(rFilterName == "calc8")
     {
-        validate(pTempFile->GetFileName(), test::ODF);
+        if(!mbSkipValidation)
+            validate(pTempFile->GetFileName(), test::ODF);
     }
 
     CPPUNIT_ASSERT(mxComponent.is());
