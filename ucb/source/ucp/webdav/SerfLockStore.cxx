@@ -75,6 +75,7 @@ void TickerThread::run()
 // -------------------------------------------------------------------
 SerfLockStore::SerfLockStore()
     : m_pTickerThread( 0 )
+    , m_bFinishing( false )
 {
 }
 
@@ -82,6 +83,7 @@ SerfLockStore::SerfLockStore()
 SerfLockStore::~SerfLockStore()
 {
     stopTicker();
+    m_bFinishing = true;
 
     // release active locks, if any.
     OSL_ENSURE( m_aLockInfoMap.size() == 0,
@@ -97,7 +99,11 @@ SerfLockStore::~SerfLockStore()
     }
 }
 
-// -------------------------------------------------------------------
+bool SerfLockStore::finishing() const
+{
+    return m_bFinishing;
+}
+
 void SerfLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
