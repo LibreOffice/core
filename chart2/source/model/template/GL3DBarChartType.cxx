@@ -9,10 +9,83 @@
 
 #include "GL3DBarChartType.hxx"
 #include <servicenames_charttypes.hxx>
+#include <PropertyHelper.hxx>
+
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace com::sun::star;
 
 namespace chart {
+
+namespace {
+
+enum
+{
+    PROP_GL3DCHARTTYPE_ROUNDED_RECTANGLE
+};
+
+struct DefaultsInitializer
+{
+    tPropertyValueMap* operator()()
+    {
+        static tPropertyValueMap aStaticDefaults;
+
+        if (aStaticDefaults.empty())
+            addDefaults(aStaticDefaults);
+
+        return &aStaticDefaults;
+    }
+private:
+
+    void addDefaults( tPropertyValueMap & rOutMap )
+    {
+        PropertyHelper::setPropertyValueDefault(rOutMap, PROP_GL3DCHARTTYPE_ROUNDED_RECTANGLE, false);
+    }
+};
+
+struct Defaults : public rtl::StaticAggregate<tPropertyValueMap, DefaultsInitializer> {};
+
+struct InfoHelperInitializer
+{
+    cppu::OPropertyArrayHelper* operator()()
+    {
+        static cppu::OPropertyArrayHelper aHelper(getProperties());
+        return &aHelper;
+    }
+
+    uno::Sequence<beans::Property> getProperties()
+    {
+        uno::Sequence<beans::Property> aRet(1);
+
+        aRet[0] = beans::Property(
+            "RoundedRectangle",
+            PROP_GL3DCHARTTYPE_ROUNDED_RECTANGLE,
+            ::getCppuBooleanType(),
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+
+        return aRet;
+    }
+};
+
+struct InfoHelper : public rtl::StaticAggregate<cppu::OPropertyArrayHelper, InfoHelperInitializer> {};
+
+struct ChartTypeInfoInitializer
+{
+    uno::Reference<beans::XPropertySetInfo>* operator()()
+    {
+        static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo;
+
+        if (!xPropertySetInfo.is())
+            xPropertySetInfo = cppu::OPropertySetHelper::createPropertySetInfo(*InfoHelper::get());
+
+        return &xPropertySetInfo;
+    }
+};
+
+struct ChartTypeInfo : public rtl::StaticAggregate<uno::Reference<beans::XPropertySetInfo>, ChartTypeInfoInitializer> {};
+
+}
 
 GL3DBarChartType::GL3DBarChartType( const uno::Reference<uno::XComponentContext>& xContext ) :
     ChartType(xContext)
@@ -48,6 +121,25 @@ GL3DBarChartType::createClone()
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     return uno::Reference<util::XCloneable>(new GL3DBarChartType(*this));
+}
+
+css::uno::Any GL3DBarChartType::GetDefaultValue( sal_Int32 nHandle ) const
+    throw (css::beans::UnknownPropertyException)
+{
+    const tPropertyValueMap& rDefaults = *Defaults::get();
+    tPropertyValueMap::const_iterator it = rDefaults.find(nHandle);
+    return it == rDefaults.end() ? uno::Any() : it->second;
+}
+
+cppu::IPropertyArrayHelper& GL3DBarChartType::getInfoHelper()
+{
+    return *InfoHelper::get();
+}
+
+css::uno::Reference<css::beans::XPropertySetInfo> GL3DBarChartType::getPropertySetInfo()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return *ChartTypeInfo::get();
 }
 
 }

@@ -33,11 +33,22 @@ protected:
     GL3DBarChartType( const GL3DBarChartType& rOther );
 
     virtual OUString SAL_CALL getChartType()
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception);
 
-    virtual com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
-        SAL_CALL createClone()
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL
+        createClone()
+            throw (css::uno::RuntimeException, std::exception);
+
+    // OPropertySet
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw (css::beans::UnknownPropertyException);
+
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+    // XPropertySet
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
+        getPropertySetInfo()
+            throw (css::uno::RuntimeException, std::exception);
 };
 
 }
