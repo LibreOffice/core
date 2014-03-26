@@ -65,7 +65,15 @@ public:
                                           StorageMode = 0 );
                         SotStorageStream( BaseStorageStream *pStm );
                         SotStorageStream();
-                        SO2_DECL_BASIC_CLASS_DLL(SotStorageStream,SOTDATA())
+
+private:
+    static SotFactory **       GetFactoryAdress()
+                              { return &(SOTDATA()->pSotStorageStreamFactory); }
+public:
+    static void *             CreateInstance( SotObject ** = NULL );
+    static SotFactory *        ClassFactory();
+    virtual const SotFactory * GetSvFactory() const;
+    virtual void *            Cast( const SotFactory * );
 
     virtual void        ResetError();
 
@@ -120,7 +128,15 @@ public:
                         SotStorage( bool bUCBStorage, SvStream & rStm );
                         SotStorage( SvStream * pStm, bool bDelete );
                         SotStorage();
-                        SO2_DECL_BASIC_CLASS_DLL(SotStorage,SOTDATA())
+
+private:
+    static SotFactory **       GetFactoryAdress()
+                              { return &(SOTDATA()->pSotStorageFactory); }
+public:
+    static void *             CreateInstance( SotObject ** = NULL );
+    static SotFactory *        ClassFactory();
+    virtual const SotFactory * GetSvFactory() const;
+    virtual void *            Cast( const SotFactory * );
 
     SvMemoryStream *    CreateMemoryStream();
 

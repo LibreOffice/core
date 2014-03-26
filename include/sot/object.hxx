@@ -25,19 +25,6 @@
 #include <tools/ref.hxx>
 #include <sot/sotdllapi.h>
 
-/*************************************************************************
-*************************************************************************/
-
-#define SO2_DECL_BASIC_CLASS_DLL(ClassName,FacName)                       \
-private:                                                                  \
-    static SotFactory **       GetFactoryAdress()                          \
-                              { return &(FacName->p##ClassName##Factory); } \
-public:                                                                   \
-    static void *             CreateInstance( SotObject ** = NULL );       \
-    static SotFactory *        ClassFactory();                             \
-    virtual const SotFactory * GetSvFactory() const;                       \
-    virtual void *            Cast( const SotFactory * );
-
 #define SO2_DECL_BASIC_CLASS(ClassName)                                   \
 private:                                                                  \
     static SotFactory *        pFactory;                                   \
@@ -280,7 +267,15 @@ protected:
     virtual bool        Close();
 public:
                         SotObject();
-                        SO2_DECL_BASIC_CLASS_DLL(SotObject,SOTDATA())
+
+private:
+    static SotFactory **       GetFactoryAdress()
+                              { return &(SOTDATA()->pSotObjectFactory); }
+public:
+    static void *             CreateInstance( SotObject ** = NULL );
+    static SotFactory *        ClassFactory();
+    virtual const SotFactory * GetSvFactory() const;
+    virtual void *            Cast( const SotFactory * );
 
                         // Nur damit die Makros in So3 nicht ganz ausufern
     virtual IUnknown *  GetInterface( const SvGlobalName & );
