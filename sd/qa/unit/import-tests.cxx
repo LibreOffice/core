@@ -19,6 +19,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <rsc/rscsfx.hxx>
 
 #include <svx/svdotext.hxx>
@@ -64,6 +65,7 @@ public:
     void testStrictOOXML();
     void testN862510_1();
     void testN862510_2();
+    void testN862510_3();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -83,6 +85,7 @@ public:
     CPPUNIT_TEST(testStrictOOXML);
     CPPUNIT_TEST(testN862510_1);
     CPPUNIT_TEST(testN862510_2);
+    CPPUNIT_TEST(testN862510_3);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -281,6 +284,25 @@ void SdFiltersTest::testN862510_2()
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );
         CPPUNIT_ASSERT( pObj );
         CPPUNIT_ASSERT_MESSAGE( "Wrong Text Rotation!", pObj->GetExtraTextRotation( true ) == 90 );
+    }
+}
+
+void SdFiltersTest::testN862510_3()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_3.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage( 1 );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 1 ) );
+        CPPUNIT_ASSERT( pGrpObj );
+        SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );
+        CPPUNIT_ASSERT( pObj );
+        CPPUNIT_ASSERT_MESSAGE( "Left Spacing is wrong! check attribute anchorCtr", pObj->GetTextLeftDistance() < 30);
     }
 }
 
