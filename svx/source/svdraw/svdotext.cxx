@@ -52,6 +52,7 @@
 #include <svx/sdr/properties/textproperties.hxx>
 #include <vcl/metaact.hxx>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
+#include <svx/svdotable.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -59,8 +60,6 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "svdconv.hxx"
-
-
 
 using namespace com::sun::star;
 
@@ -1443,8 +1442,10 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     }
 
     SetTextSizeDirty();
-    if (IsTextFrame() && (IsAutoGrowHeight() || IsAutoGrowWidth()))
-    { // adapt text frame!
+    // #i124389# also need to call NbcAdjustTextFrameWidthAndHeight when we are a table object (triggered from undo)
+    if((IsTextFrame() || 0 != dynamic_cast< sdr::table::SdrTableObj* >(this)) && (IsAutoGrowHeight() || IsAutoGrowWidth()))
+    {
+        // adapt text frame
         NbcAdjustTextFrameWidthAndHeight();
     }
     if (!IsTextFrame())
