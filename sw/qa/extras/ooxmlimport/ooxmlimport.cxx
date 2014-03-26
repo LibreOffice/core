@@ -1981,6 +1981,14 @@ DECLARE_OOXMLIMPORT_TEST(testLargeTwips, "large-twips.docx" )
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx" )
+{
+    // Sligtly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
+    // while MSO seems to ignore that as well.
+    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
+    CPPUNIT_ASSERT( width.toInt32() > 0 );
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
 {
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
