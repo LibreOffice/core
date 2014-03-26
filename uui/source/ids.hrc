@@ -70,6 +70,9 @@
 #define STR_SAME_NAME_USED                              (RID_UUI_START + 60)
 #define STR_ENTER_SIMPLE_PASSWORD                       (RID_UUI_START + 61)
 #define STR_CONFIRM_SIMPLE_PASSWORD                     (RID_UUI_START + 62)
+#define STR_TITLE_CREATE_PASSWORD                       (RID_UUI_START + 63)
+#define STR_TITLE_ENTER_PASSWORD                        (RID_UUI_START + 64)
+#define STR_PASSWORD_MISMATCH                           (RID_UUI_START + 65)
 
 #define ERRCODE_UUI_IO_ABORT                                    (ERRCODE_AREA_UUI + 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED                             (ERRCODE_AREA_UUI + 1)

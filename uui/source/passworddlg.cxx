@@ -18,7 +18,6 @@
  */
 
 #include "passworddlg.hxx"
-#include "passworddlg.hrc"
 #include "ids.hrc"
 
 #include <vcl/msgbox.hxx>
