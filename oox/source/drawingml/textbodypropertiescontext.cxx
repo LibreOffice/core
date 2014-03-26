@@ -57,11 +57,9 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
     }
 
     mrTextBodyProp.mbAnchorCtr = rAttribs.getBool( XML_anchorCtr, false );
-    if( rAttribs.hasAttribute( XML_anchorCtr ) ) {
-        if( mrTextBodyProp.mbAnchorCtr )
-            mrTextBodyProp.maPropertyMap.setProperty( PROP_TextHorizontalAdjust,
-                TextHorizontalAdjust_CENTER);
-    }
+    if( mrTextBodyProp.mbAnchorCtr )
+        mrTextBodyProp.maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER );
+
 //   bool bCompatLineSpacing = rAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = rAttribs.getBool( XML_forceAA, false );
 //   bool bFromWordArt = rAttribs.getBool( XML_fromWordArt, false );
