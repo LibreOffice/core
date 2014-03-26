@@ -77,6 +77,8 @@ private:
         ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
         ~ClipUndoHandle();
     };
+    bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
+    void ensureClip();
 
 public:
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
