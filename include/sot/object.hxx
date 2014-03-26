@@ -25,18 +25,6 @@
 #include <tools/ref.hxx>
 #include <sot/sotdllapi.h>
 
-#define SO2_DECL_BASIC_CLASS(ClassName)                                   \
-private:                                                                  \
-    static SotFactory *        pFactory;                                   \
-    static SotFactory **       GetFactoryAdress() { return &pFactory; }    \
-public:                                                                   \
-    static void *             CreateInstance( SotObject ** = NULL );       \
-    static SotFactory *        ClassFactory();                             \
-    virtual const SotFactory * GetSvFactory() const;                       \
-    virtual void *            Cast( const SotFactory * );
-
-/**************************************************************************
-**************************************************************************/
 #define SO2_IMPL_BASIC_CLASS_DLL(ClassName,FactoryName,GlobalName)        \
 SotFactory * ClassName::ClassFactory()                                     \
 {                                                                         \
@@ -67,12 +55,6 @@ void * ClassName::Cast( const SotFactory * pFact )                         \
     return pRet;                                                          \
 }
 
-#define SO2_IMPL_BASIC_CLASS(ClassName,FactoryName,GlobalName)                        \
-SotFactory * ClassName::pFactory = NULL;                                   \
-    SO2_IMPL_BASIC_CLASS_DLL(ClassName,FactoryName,GlobalName)
-
-/**************************************************************************
-**************************************************************************/
 #define SO2_IMPL_BASIC_CLASS1_DLL(ClassName,FactoryName,Super1,GlobalName)\
 SotFactory * ClassName::ClassFactory()                                     \
 {                                                                         \
@@ -108,145 +90,6 @@ void * ClassName::Cast( const SotFactory * pFact )                \
     return pRet;                                                          \
 }
 
-#define SO2_IMPL_BASIC_CLASS1(ClassName,FactoryName,Super1,GlobalName)    \
-SotFactory * ClassName::pFactory = NULL;                                   \
-    SO2_IMPL_BASIC_CLASS1_DLL(ClassName,FactoryName,Super1,GlobalName)
-
-/**************************************************************************
-**************************************************************************/
-#define SO2_IMPL_BASIC_CLASS2_DLL(ClassName,FactoryName,Super1,Super2,GlobalName)  \
-SotFactory * ClassName::ClassFactory()                                     \
-{                                                                         \
-    SotFactory **ppFactory = GetFactoryAdress();                           \
-    if( !*ppFactory )                                                     \
-    {                                                                     \
-        *ppFactory = new FactoryName( GlobalName,                         \
-            OUString( #ClassName ), ClassName::CreateInstance );     \
-        (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
-        (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
-    }                                                                     \
-    return *ppFactory;                                                    \
-}                                                                         \
-void * ClassName::CreateInstance( SotObject ** ppObj )            \
-{                                                                         \
-    ClassName * p = new ClassName();                                      \
-    if( ppObj )                                                           \
-        *ppObj = p;                                                       \
-    return p;                                                             \
-}                                                                         \
-const SotFactory * ClassName::GetSvFactory() const                \
-{                                                                         \
-    return ClassFactory();                                                \
-}                                                                         \
-void * ClassName::Cast( const SotFactory * pFact )                \
-{                                                                         \
-    void * pRet = NULL;                                                   \
-    if( !pFact || pFact == ClassFactory() )                               \
-        pRet = this;                                                      \
-    if( !pRet )                                                           \
-        pRet = Super1::Cast( pFact );                                     \
-    if( !pRet )                                                           \
-        pRet = Super2::Cast( pFact );                                     \
-    return pRet;                                                          \
-}
-#define SO2_IMPL_BASIC_CLASS2(ClassName,FactoryName,Super1,Super2,GlobalName)  \
-SotFactory * ClassName::pFactory = NULL;                                   \
-    SO2_IMPL_BASIC_CLASS2_DLL(ClassName,FactoryName,Super1,Super2,GlobalName)
-
-/**************************************************************************
-**************************************************************************/
-#define SO2_IMPL_BASIC_CLASS3_DLL(ClassName,FactoryName,Super1,Super2,Super3,GlobalName)  \
-SotFactory * ClassName::ClassFactory()                                     \
-{                                                                         \
-    SotFactory **ppFactory = GetFactoryAdress();                           \
-    if( !*ppFactory )                                                     \
-    {                                                                     \
-        *ppFactory = new FactoryName( GlobalName,                         \
-            OUString( #ClassName ), ClassName::CreateInstance );     \
-        (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
-        (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
-        (*ppFactory)->PutSuperClass( Super3::ClassFactory() );            \
-    }                                                                     \
-    return *pFactory;                                                     \
-}                                                                         \
-void * ClassName::CreateInstance( SotObject ** ppObj )            \
-{                                                                         \
-    ClassName * p = new ClassName();                                      \
-    if( ppObj )                                                           \
-        *ppObj = p;                                                       \
-    return p;                                                             \
-}                                                                         \
-const SotFactory * ClassName::GetSvFactory() const                \
-{                                                                         \
-    return ClassFactory();                                                \
-}                                                                         \
-void * ClassName::Cast( const SotFactory * pFact )                \
-{                                                                         \
-    void * pRet = NULL;                                                   \
-    if( !pFact || pFact == ClassFactory() )                               \
-        pRet = this;                                                      \
-    if( !pRet )                                                           \
-        pRet = Super1::Cast( pFact );                                     \
-    if( !pRet )                                                           \
-        pRet = Super2::Cast( pFact );                                     \
-    if( !pRet )                                                           \
-        pRet = Super3::Cast( pFact );                                     \
-    return pRet;                                                          \
-}
-
-#define SO2_IMPL_BASIC_CLASS3(ClassName,FactoryName,Super1,Super2,Super3,GlobalName)  \
-SotFactory * ClassName::pFactory = NULL;                                   \
-    SO2_IMPL_BASIC_CLASS3_DLL(ClassName,FactoryName,Super1,Super2,Super3,GlobalName)
-
-/**************************************************************************
-**************************************************************************/
-#define SO2_IMPL_BASIC_CLASS4_DLL(ClassName,FactoryName,Super1,Super2,Super3,Super4,GlobalName)  \
-SotFactory * ClassName::ClassFactory()                                     \
-{                                                                         \
-    SotFactory **ppFactory = GetFactoryAdress();                           \
-    if( !*ppFactory )                                                     \
-    {                                                                     \
-        *ppFactory = new SotFactory( GlobalName,                           \
-            OUString( #ClassName ), ClassName::CreateInstance );     \
-        (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
-        (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
-        (*ppFactory)->PutSuperClass( Super3::ClassFactory() );            \
-        (*ppFactory)->PutSuperClass( Super4::ClassFactory() );            \
-    }                                                                     \
-    return *ppFactory;                                                    \
-}                                                                         \
-void * ClassName::CreateInstance( SotObject ** ppObj )            \
-{                                                                         \
-    ClassName * p = new ClassName();                                      \
-    if( ppObj )                                                           \
-        *ppObj = p;                                                       \
-    return p;                                                             \
-}                                                                         \
-const SotFactory * ClassName::GetSvFactory() const                \
-{                                                                         \
-    return ClassFactory();                                                \
-}                                                                         \
-void * ClassName::Cast( const SotFactory * pFact )                \
-{                                                                         \
-    void * pRet = NULL;                                                   \
-    if( !pFact || pFact == ClassFactory() )                               \
-        pRet = this;                                                      \
-    if( !pRet )                                                           \
-        pRet = Super1::Cast( pFact );                                     \
-    if( !pRet )                                                           \
-        pRet = Super2::Cast( pFact );                                     \
-    if( !pRet )                                                           \
-        pRet = Super3::Cast( pFact );                                     \
-    if( !pRet )                                                           \
-        pRet = Super4::Cast( pFact );                                     \
-    return pRet;                                                          \
-}
-
-#define SO2_IMPL_BASIC_CLASS4(ClassName,FactoryName,Super1,Super2,Super3,Super4,GlobalName)  \
-SotFactory * ClassName::pFactory = NULL;                                   \
-    SO2_IMPL_BASIC_CLASS4_DLL(ClassName,FactoryName,Super1,Super2,Super3,Super4,GlobalName)
-
-//==================class SotObject========================================
 #ifdef _MSC_VER
 #pragma warning(disable: 4250)
 #endif
