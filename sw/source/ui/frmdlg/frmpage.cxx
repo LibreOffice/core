@@ -449,7 +449,7 @@ static void lcl_InsertVectors(ListBox& rBox,
         nEntry = rBox.InsertEntry(*aIt);
     rBox.SetSeparatorPos(nEntry);
     //now insert all strings sorted
-    sal_uInt16 nStartPos = static_cast<sal_uInt16>(rBox.GetEntryCount());
+    const sal_Int32 nStartPos = rBox.GetEntryCount();
 
     for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
         ::InsertStringSorted(*aIt, rBox, nStartPos );

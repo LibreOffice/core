@@ -92,7 +92,7 @@ void SetApplyCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,
-SW_DLLPUBLIC sal_uInt16 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_uInt16 nOffset);
+SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
 
 // Get table width and alignement
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,

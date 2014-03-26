@@ -664,21 +664,22 @@ void    SetDfltMetric( FieldUnit eMetric, sal_Bool bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-sal_uInt16 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_uInt16 nOffset )
+sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset )
 {
-    sal_uInt16 i = nOffset;
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
-
-    for( ; i < rToFill.GetEntryCount(); i++ )
+    const sal_Int32 nCount = rToFill.GetEntryCount();
+    while ( nOffset < nCount )
     {
-        if( 0 < rCaseColl.compareString( rToFill.GetEntry(i), rEntry ))
-            break;
+        if( 0 < rCaseColl.compareString( rToFill.GetEntry(nOffset), rEntry ))
+            return rToFill.InsertEntry(rEntry, nOffset);
+        ++nOffset;
     }
-    return rToFill.InsertEntry(rEntry, i);
+    return nCount;
 }
+
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
 {
-    sal_Bool bHasOffset = rToFill.GetEntryCount() > 0;
+    const sal_Int32 nOffset = rToFill.GetEntryCount() > 0 ? 1 : 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
     pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
     SwDoc* pDoc = pDocSh->GetDoc();
@@ -689,11 +690,9 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
     {
         if(bWithDefault || pBase->GetName() !=  sStandard)
         {
-            sal_uInt16 nPos;
-            if(bSorted)
-                nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset );
-            else
-                nPos = rToFill.InsertEntry(pBase->GetName());
+            const sal_Int32 nPos = bSorted
+                ? InsertStringSorted(pBase->GetName(), rToFill, nOffset )
+                : rToFill.InsertEntry(pBase->GetName());
             sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
@@ -701,7 +700,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
     }
     // non-pool styles
     const SwCharFmts* pFmts = pDoc->GetCharFmts();
-    for(sal_uInt16 i = 0; i < pFmts->size(); i++)
+    for(size_t i = 0; i < pFmts->size(); ++i)
     {
         const SwCharFmt* pFmt = (*pFmts)[i];
         if(pFmt->IsDefault())
@@ -709,11 +708,9 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
         const OUString& rName = pFmt->GetName();
         if(rToFill.GetEntryPos(rName) == LISTBOX_ENTRY_NOTFOUND)
         {
-            sal_uInt16 nPos;
-            if(bSorted)
-                nPos = InsertStringSorted(rName, rToFill, bHasOffset );
-            else
-                nPos = rToFill.InsertEntry(rName);
+            const sal_Int32 nPos = bSorted
+                ? InsertStringSorted(rName, rToFill, nOffset )
+                : rToFill.InsertEntry(rName);
             sal_IntPtr nPoolId = USHRT_MAX;
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
