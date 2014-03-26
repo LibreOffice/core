@@ -242,6 +242,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
     bool bOpaque = true;
 
+    boost::optional<sal_Int16> oRelativeWidth, oRelativeHeight;
+    sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
+    sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
+
     // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
     if (std::find_if(rShape.aProperties.begin(),
                 rShape.aProperties.end(),
@@ -540,6 +544,49 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             oRelBottom.reset(TWIP_TO_MM100(i->second.toInt32()));
         else if (i->first == "fBehindDocument")
             bOpaque = !i->second.toInt32();
+        else if (i->first == "pctHoriz" || i->first == "pctVert")
+        {
+            sal_Int16 nPercentage = rtl::math::round(i->second.toDouble() / 10);
+            boost::optional<sal_Int16>& rPercentage = i->first == "pctHoriz" ? oRelativeWidth : oRelativeHeight;
+            if (nPercentage)
+                rPercentage = nPercentage;
+        }
+        else if (i->first == "sizerelh")
+        {
+            if (xPropertySet.is())
+            {
+                switch (i->second.toInt32())
+                {
+                case 0: // margin
+                    nRelativeWidthRelation = text::RelOrientation::FRAME;
+                    break;
+                case 1: // page
+                    nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
+                    break;
+                default:
+                    SAL_WARN("writerfilter", "RTFSdrImport::resolve: unhandled sizerelh value: " << i->second);
+                    break;
+                }
+            }
+        }
+        else if (i->first == "sizerelv")
+        {
+            if (xPropertySet.is())
+            {
+                switch (i->second.toInt32())
+                {
+                case 0: // margin
+                    nRelativeHeightRelation = text::RelOrientation::FRAME;
+                    break;
+                case 1: // page
+                    nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
+                    break;
+                default:
+                    SAL_WARN("writerfilter", "RTFSdrImport::resolve: unhandled sizerelv value: " << i->second);
+                    break;
+                }
+            }
+        }
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
@@ -675,6 +722,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         }
         xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
         xPropertySet->setPropertyValue("Opaque", uno::makeAny(bOpaque));
+        if (oRelativeWidth)
+        {
+            xPropertySet->setPropertyValue("RelativeWidth", uno::makeAny(*oRelativeWidth));
+            xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(nRelativeWidthRelation));
+        }
+        if (oRelativeHeight)
+        {
+            xPropertySet->setPropertyValue("RelativeHeight", uno::makeAny(*oRelativeHeight));
+            xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(nRelativeHeightRelation));
+        }
     }
 
     if (m_rImport.isInBackground())
