@@ -45,6 +45,7 @@ class SplineResourceGroup;
 class GeometryResourceGroup;
 class ChartTypeParameter;
 class SortByXValuesResourceGroup;
+class GL3DResourceGroup;
 
 class ChartTypeTabPage : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
 {
@@ -87,6 +88,7 @@ protected:
     SplineResourceGroup*        m_pSplineResourceGroup;
     GeometryResourceGroup*      m_pGeometryResourceGroup;
     SortByXValuesResourceGroup* m_pSortByXValuesResourceGroup;
+    GL3DResourceGroup* m_pGL3DResourceGroup;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;

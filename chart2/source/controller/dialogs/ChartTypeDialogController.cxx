@@ -60,6 +60,7 @@ ChartTypeParameter::ChartTypeParameter()
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
                     , bSortByXValues(false)
+                    , mbGLRoundedEdge(false)
 {
 }
 
@@ -79,6 +80,7 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
                     , bSortByXValues(false)
+                    , mbGLRoundedEdge(false)
 {
 }
 ChartTypeParameter::~ChartTypeParameter()
@@ -212,6 +214,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 CurveStyle       eCurveStyle = rParameter.eCurveStyle;
                 sal_Int32        nGeometry3D = rParameter.nGeometry3D;
                 bool             bSortByXValues = rParameter.bSortByXValues;
+                bool bGLRoundedEdge = rParameter.mbGLRoundedEdge;
 
                 rParameter = (*aIter).second;
 
@@ -222,6 +225,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 rParameter.eCurveStyle = eCurveStyle;
                 rParameter.nGeometry3D = nGeometry3D;
                 rParameter.bSortByXValues = bSortByXValues;
+                rParameter.mbGLRoundedEdge = bGLRoundedEdge;
 
                 bFoundSomeMatch = true;
                 break;
@@ -368,6 +372,11 @@ bool ChartTypeDialogController::shouldShow_GeometryControl() const
     return false;
 }
 bool ChartTypeDialogController::shouldShow_SortByXValuesResourceGroup() const
+{
+    return false;
+}
+
+bool ChartTypeDialogController::shouldShow_GL3DResourceGroup() const
 {
     return false;
 }

@@ -104,9 +104,10 @@ APPHELPER_XSERVICEINFO_IMPL(
 
 uno::Sequence<OUString> GL3DBarChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence<OUString> aServices(2);
+    uno::Sequence<OUString> aServices(3);
     aServices[0] = CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR;
     aServices[1] = "com.sun.star.chart2.ChartType";
+    aServices[2] = "com.sun.star.beans.PropertySet";
     return aServices;
 }
 

@@ -285,6 +285,40 @@ IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl)
         m_pChangeListener->stateChanged(this);
     return 0;
 }
+
+class GL3DResourceGroup : public ChangingResource
+{
+public:
+    GL3DResourceGroup( VclBuilderContainer* pWindow );
+
+    void showControls( bool bShow );
+    void fillControls( const ChartTypeParameter& rParam );
+    void fillParameter( ChartTypeParameter& rParam );
+
+private:
+    CheckBox* m_pCB_RoundedEdge;
+};
+
+GL3DResourceGroup::GL3DResourceGroup( VclBuilderContainer* pWindow )
+{
+    pWindow->get(m_pCB_RoundedEdge, "rounded-edge");
+}
+
+void GL3DResourceGroup::showControls( bool bShow )
+{
+    m_pCB_RoundedEdge->Show(bShow);
+}
+
+void GL3DResourceGroup::fillControls( const ChartTypeParameter& rParam )
+{
+    m_pCB_RoundedEdge->Check(rParam.mbGLRoundedEdge);
+}
+
+void GL3DResourceGroup::fillParameter( ChartTypeParameter& rParam )
+{
+    rParam.mbGLRoundedEdge = m_pCB_RoundedEdge->IsChecked();
+}
+
 class SplinePropertiesDialog : public ModalDialog
 {
 public:
@@ -662,6 +696,7 @@ ChartTypeTabPage::ChartTypeTabPage(Window* pParent
         , m_pSplineResourceGroup( new SplineResourceGroup(this) )
         , m_pGeometryResourceGroup( new GeometryResourceGroup( this ) )
         , m_pSortByXValuesResourceGroup( new SortByXValuesResourceGroup( this ) )
+        , m_pGL3DResourceGroup(new GL3DResourceGroup(this))
         , m_xChartModel( xChartModel )
         , m_xCC( xContext )
         , m_aChartTypeDialogControllerList(0)
@@ -744,6 +779,7 @@ ChartTypeTabPage::ChartTypeTabPage(Window* pParent
     m_pSplineResourceGroup->setChangeListener( this );
     m_pGeometryResourceGroup->setChangeListener( this );
     m_pSortByXValuesResourceGroup->setChangeListener( this );
+    m_pGL3DResourceGroup->setChangeListener(this);
 }
 
 ChartTypeTabPage::~ChartTypeTabPage()
@@ -763,6 +799,7 @@ ChartTypeTabPage::~ChartTypeTabPage()
     delete m_pSplineResourceGroup;
     delete m_pGeometryResourceGroup;
     delete m_pSortByXValuesResourceGroup;
+    delete m_pGL3DResourceGroup;
 }
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
 {
@@ -773,6 +810,7 @@ ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
     m_pSplineResourceGroup->fillParameter( aParameter );
     m_pGeometryResourceGroup->fillParameter( aParameter );
     m_pSortByXValuesResourceGroup->fillParameter( aParameter );
+    m_pGL3DResourceGroup->fillParameter(aParameter);
     return aParameter;
 }
 void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
@@ -879,6 +917,8 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
     m_pGeometryResourceGroup->showControls( bShow );
     bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
     m_pSortByXValuesResourceGroup->showControls( bShow );
+    bShow = rTypeController.shouldShow_GL3DResourceGroup();
+    m_pGL3DResourceGroup->showControls(bShow);
     rTypeController.showExtraControls(this);
 }
 
@@ -895,6 +935,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_pSplineResourceGroup->fillControls( rParameter );
     m_pGeometryResourceGroup->fillControls( rParameter );
     m_pSortByXValuesResourceGroup->fillControls( rParameter );
+    m_pGL3DResourceGroup->fillControls(rParameter);
     m_nChangingCalls--;
 }
 
@@ -947,6 +988,7 @@ void ChartTypeTabPage::initializePage()
         m_pSplineResourceGroup->showControls( false );
         m_pGeometryResourceGroup->showControls( false );
         m_pSortByXValuesResourceGroup->showControls( false );
+        m_pGL3DResourceGroup->showControls(false);
     }
 }
 

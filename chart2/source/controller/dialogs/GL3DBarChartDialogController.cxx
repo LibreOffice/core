@@ -20,6 +20,11 @@ GL3DBarChartDialogController::GL3DBarChartDialogController() {}
 
 GL3DBarChartDialogController::~GL3DBarChartDialogController() {}
 
+bool GL3DBarChartDialogController::shouldShow_GL3DResourceGroup() const
+{
+    return true;
+}
+
 OUString GL3DBarChartDialogController::getName()
 {
     return SchResId(STR_TYPE_GL3D_BAR).toString();

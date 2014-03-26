@@ -79,6 +79,8 @@ public:
 
     ThreeDLookScheme    eThreeDLookScheme;
     bool                bSortByXValues;
+
+    bool mbGLRoundedEdge;
 };
 
 typedef ::comphelper::MakeMap< OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;
@@ -100,6 +102,7 @@ public:
     virtual bool    shouldShow_SplineControl() const;
     virtual bool    shouldShow_GeometryControl() const;
     virtual bool    shouldShow_SortByXValuesResourceGroup() const;
+    virtual bool    shouldShow_GL3DResourceGroup() const;
 
     virtual void    showExtraControls(VclBuilderContainer* pParent);
     virtual void    hideExtraControls() const;

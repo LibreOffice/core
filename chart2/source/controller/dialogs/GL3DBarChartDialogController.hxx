@@ -20,6 +20,8 @@ public:
     GL3DBarChartDialogController();
     virtual ~GL3DBarChartDialogController();
 
+    virtual bool shouldShow_GL3DResourceGroup() const;
+
     virtual OUString getName();
     virtual Image getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
