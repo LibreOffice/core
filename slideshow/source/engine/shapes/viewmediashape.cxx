@@ -184,13 +184,11 @@ namespace slideshow
             if( !pCanvas )
                 return false;
 
-            if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
+            if( !mpMediaWindow.get() && !mxPlayerWindow.is() && mxPlayer.is())
             {
                 // draw placeholder for no-video (no window) case
                 // no window and player == audio icon
-                // no window and no player == broken icon
-                BitmapEx aAudioLogo(mxPlayer.is() ?
-                    avmedia::MediaWindow::getAudioLogo() : avmedia::MediaWindow::getEmptyLogo() );
+                BitmapEx aAudioLogo(avmedia::MediaWindow::getAudioLogo());
 
                 uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(
                     pCanvas->getUNOCanvas()->getDevice(), aAudioLogo));
@@ -314,6 +312,7 @@ namespace slideshow
                             }
                         }
 
+
                         // create visible object
                         uno::Sequence< uno::Any > aDeviceParams;
 
@@ -426,7 +425,7 @@ namespace slideshow
         bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams)
         {
-                    OSL_TRACE( "ViewMediaShape::implInitializeVCLBasedPlayerWindow" );
+            OSL_TRACE( "ViewMediaShape::implInitializeVCLBasedPlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
             {
                 try
