@@ -228,7 +228,7 @@ SfxTabPage*  SvxSingleNumPickTabPage::Create( Window* pParent,
     return new SvxSingleNumPickTabPage(pParent, rAttrSet);
 }
 
-sal_Bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( (bPreset || bModified) && pSaveNum)
     {
@@ -389,7 +389,7 @@ SfxTabPage*  SvxBulletPickTabPage::Create( Window* pParent,
     return new SvxBulletPickTabPage(pParent, rAttrSet);
 }
 
-sal_Bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( (bPreset || bModified) && pActNum)
     {
@@ -586,7 +586,7 @@ SfxTabPage*  SvxNumPickTabPage::Create( Window* pParent,
     return new SvxNumPickTabPage(pParent, rAttrSet);
 }
 
-sal_Bool  SvxNumPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxNumPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( (bPreset || bModified) && pActNum)
     {
@@ -869,11 +869,11 @@ int  SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
     return sal_True;
 }
 
-sal_Bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if ( aGrfNames.empty() )
     {
-        return sal_False;
+        return false;
     }
     if( (bPreset || bModified) && pActNum)
     {
@@ -1194,7 +1194,7 @@ int     SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
     return sal_True;
 }
 
-sal_Bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     rSet.Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
     if(bModified && pActNum)
@@ -2961,7 +2961,7 @@ int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
     return sal_True;
 }
 
-sal_Bool SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
 {
     rSet.Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
 

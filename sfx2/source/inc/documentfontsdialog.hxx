@@ -33,7 +33,7 @@ public:
     SfxDocumentFontsPage( Window* parent, const SfxItemSet& set );
     static SfxTabPage* Create( Window* parent, const SfxItemSet& set );
 protected:
-    virtual sal_Bool FillItemSet( SfxItemSet& set );
+    virtual bool FillItemSet( SfxItemSet& set );
     virtual void Reset( const SfxItemSet& set );
 private:
     CheckBox* embedFontsCheckbox;

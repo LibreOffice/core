@@ -76,9 +76,9 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 }
 
 // Description: fill ItemSet when changed
-sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
+bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
-    return sal_False;
+    return false;
 }
 
 void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)

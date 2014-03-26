@@ -839,9 +839,9 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
 
 
 
-sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp )
+bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     FontNameBox* pNameBox = NULL;
     FontStyleBox* pStyleBox = NULL;
@@ -915,7 +915,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( bChanged && !rFontName.isEmpty() )
     {
         rSet.Put( aFontItem );
-        bModified = sal_True;
+        bModified = true;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         rSet.ClearItem( nWhich );
@@ -965,7 +965,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( bChanged && !aText.isEmpty() )
     {
         rSet.Put( aWeightItem );
-        bModified = sal_True;
+        bModified = true;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         CLEARTITEM;
@@ -1012,7 +1012,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( bChanged && !aText.isEmpty() )
     {
         rSet.Put( aPostureItem );
-        bModified = sal_True;
+        bModified = true;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         CLEARTITEM;
@@ -1072,7 +1072,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
             float fSize = (float)nSize / 10;
             rSet.Put( SvxFontHeightItem( CalcToUnit( fSize, eUnit ), 100, nWhich ) );
         }
-        bModified = sal_True;
+        bModified = true;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         CLEARTITEM;
@@ -1103,7 +1103,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( bChanged && nLangPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rSet.Put( SvxLanguageItem( eLangType, nWhich ) );
-        bModified = sal_True;
+        bModified = true;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         CLEARTITEM;
@@ -1179,9 +1179,9 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
 
 
 
-sal_Bool SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
+bool SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = FillItemSet_Impl( rSet, Western );
+    bool bModified = FillItemSet_Impl( rSet, Western );
     bModified |= FillItemSet_Impl( rSet, Asian );
     bModified |= FillItemSet_Impl( rSet, Ctl );
     return bModified;
@@ -2161,7 +2161,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
 
 
-sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
+bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 {
     const SfxPoolItem* pOld = 0;
     const SfxItemSet& rOldSet = GetItemSet();
@@ -3119,7 +3119,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
 
 
-sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
+bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 {
     //  Position (high, normal or low)
     const SfxItemSet& rOldSet = GetItemSet();
@@ -3465,7 +3465,7 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
 
 
 
-sal_Bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
+bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 {
     const SfxItemSet& rOldSet = GetItemSet();
     sal_Bool bModified = sal_False, bChanged = sal_True;

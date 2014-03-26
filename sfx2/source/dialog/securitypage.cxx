@@ -155,7 +155,7 @@ struct SfxSecurityPage_Impl
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
     ~SfxSecurityPage_Impl();
 
-    sal_Bool    FillItemSet_Impl( SfxItemSet & );
+    bool    FillItemSet_Impl( SfxItemSet & );
     void    Reset_Impl( const SfxItemSet & );
 };
 
@@ -188,7 +188,7 @@ SfxSecurityPage_Impl::~SfxSecurityPage_Impl()
 }
 
 
-sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
+bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
 {
     bool bModified = false;
 
@@ -439,7 +439,7 @@ SfxSecurityPage::~SfxSecurityPage()
 }
 
 
-sal_Bool SfxSecurityPage::FillItemSet( SfxItemSet & rItemSet )
+bool SfxSecurityPage::FillItemSet( SfxItemSet & rItemSet )
 {
     bool bModified = false;
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );

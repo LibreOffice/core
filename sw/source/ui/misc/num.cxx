@@ -405,7 +405,7 @@ int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 
 }
 
-sal_Bool SwNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
+bool SwNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if(pOutlineDlg)
         *pOutlineDlg->GetNumRule() = *pActNum;

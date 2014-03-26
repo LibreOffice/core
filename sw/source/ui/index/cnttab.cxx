@@ -931,9 +931,9 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
     }
 }
 
-sal_Bool SwTOXSelectTabPage::FillItemSet( SfxItemSet& )
+bool SwTOXSelectTabPage::FillItemSet( SfxItemSet& )
 {
-    return sal_True;
+    return true;
 }
 
 static long lcl_TOXTypesToUserData(CurTOXType eType)
@@ -1927,10 +1927,10 @@ SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
 }
 
-sal_Bool SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
+bool SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
 {
     // nothing to do
-    return sal_True;
+    return true;
 }
 
 void SwTOXEntryTabPage::Reset( const SfxItemSet& )
@@ -3585,9 +3585,9 @@ SwTOXStylesTabPage::~SwTOXStylesTabPage()
     delete m_pCurrentForm;
 }
 
-sal_Bool SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
+bool SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
 {
-    return sal_True;
+    return true;
 }
 
 void SwTOXStylesTabPage::Reset( const SfxItemSet& rSet )

@@ -264,7 +264,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    sal_Bool SpecialSettingsPage::FillItemSet( SfxItemSet& _rSet )
+    bool SpecialSettingsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -357,7 +357,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
 
-    sal_Bool GeneratedValuesPage::FillItemSet(SfxItemSet& _rSet)
+    bool GeneratedValuesPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
 

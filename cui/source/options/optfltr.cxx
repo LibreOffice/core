@@ -76,7 +76,7 @@ SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
     return new OfaMSFilterTabPage( pParent, rAttrSet );
 }
 
-sal_Bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
+bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
@@ -100,7 +100,7 @@ sal_Bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
     if( aPBasicStgCB->GetSavedValue() != (bFlag = aPBasicStgCB->IsChecked()))
         rOpt.SetLoadPPointBasicStorage( bFlag );
 
-    return sal_False;
+    return false;
 }
 
 void OfaMSFilterTabPage::Reset( const SfxItemSet& )
@@ -170,7 +170,7 @@ SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
     return new OfaMSFilterTabPage2( pParent, rAttrSet );
 }
 
-sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
+bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
@@ -221,7 +221,7 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void OfaMSFilterTabPage2::Reset( const SfxItemSet& )

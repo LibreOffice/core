@@ -103,7 +103,7 @@ sal_uInt16* SwParagraphNumTabPage::GetRanges()
     return aPageRg;
 }
 
-sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( m_pOutlineLvLB->GetSelectEntryPos() != m_pOutlineLvLB->GetSavedValue())
     {

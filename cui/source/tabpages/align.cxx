@@ -265,7 +265,7 @@ sal_uInt16* AlignmentTabPage::GetRanges()
     return s_pRanges;
 }
 
-sal_Bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
+bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bChanged = SfxTabPage::FillItemSet(rSet);
 

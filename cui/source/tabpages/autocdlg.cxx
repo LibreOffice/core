@@ -197,7 +197,7 @@ SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
     return new OfaAutocorrOptionsPage(pParent, rSet);
 }
 
-sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
+bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     long nFlags = pAutoCorrect->GetFlags();
@@ -481,7 +481,7 @@ SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
     return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
 }
 
-sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
+bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 {
     bool bModified = false;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -594,7 +594,7 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
         rCfg.Commit();
     }
 
-    return sal_True;
+    return true;
 }
 
 void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
@@ -921,7 +921,7 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
     return LEAVE_PAGE;
 }
 
-sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
+bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
@@ -959,7 +959,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         pAutoCorrect->MakeCombinedChanges( aNewWords, aDeleteWords, eCurrentLang );
     }
     aChangesTable.clear();
-    return sal_False;
+    return false;
 }
 
 void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
@@ -1422,7 +1422,7 @@ int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
     return LEAVE_PAGE;
 }
 
-sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
+bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     for(StringsTable::reverse_iterator it1 = aStringsTable.rbegin(); it1 != aStringsTable.rend(); ++it1)
@@ -1526,7 +1526,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         pAutoCorrect->SetAutoCorrFlag( SaveWordCplSttLst, m_pAutoAbbrevCB->IsChecked());
     if(TriState(m_pAutoCapsCB->IsChecked()) != m_pAutoCapsCB->GetSavedValue())
         pAutoCorrect->SetAutoCorrFlag( SaveWordWrdSttLst, m_pAutoCapsCB->IsChecked());
-    return sal_False;
+    return false;
 }
 
 void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
@@ -1823,7 +1823,7 @@ SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
     return new OfaQuoteTabPage(pParent, rAttrSet);
 }
 
-sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
+bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
@@ -2148,7 +2148,7 @@ SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
     return new OfaAutoCompleteTabPage( pParent, rSet );
 }
 
-sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
+bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
 {
     bool bModified = false, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -2198,7 +2198,7 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
         rCfg.SetModified();
         rCfg.Commit();
     }
-    return sal_True;
+    return true;
 }
 
 void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
@@ -2518,7 +2518,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
 
 /** Propagates the current settings to the smart tag manager.
 */
-sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
+bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -2526,7 +2526,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 
     // robust!
     if ( !pSmartTagMgr )
-        return sal_False;
+        return false;
 
     sal_Bool bModifiedSmartTagTypes = sal_False;
     std::vector< OUString > aDisabledSmartTagTypes;
@@ -2556,7 +2556,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
                                           bModifiedSmartTagTypes ? &aDisabledSmartTagTypes : 0 );
     }
 
-    return sal_True;
+    return true;
 }
 
 /** Sets the controls based on the current settings at SmartTagMgr.

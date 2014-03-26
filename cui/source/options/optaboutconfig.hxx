@@ -63,7 +63,7 @@ public:
    void     Reset(/* const SfxItemSet&*/ );
    void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess);
    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, sal_Bool bUpdate );
-   virtual sal_Bool FillItemSet( /* SfxItemSet& rSet*/ );
+   virtual bool FillItemSet( /* SfxItemSet& rSet*/ );
 
    virtual Size GetOptimalSize() const;
 };

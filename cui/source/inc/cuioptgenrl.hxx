@@ -54,7 +54,7 @@ private:
 
     DECL_LINK( ModifyHdl_Impl, Edit * );
 
-    sal_Bool            GetAddress_Impl();
+    bool                GetAddress_Impl();
     void                SetAddress_Impl();
 
     void InitControls ();
@@ -69,7 +69,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

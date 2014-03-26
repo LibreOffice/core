@@ -278,7 +278,7 @@ namespace dbaui
         OConnectionHelper::fillControls(_rControlList);
     }
 
-    sal_Bool OConnectionTabPage::FillItemSet(SfxItemSet& _rSet)
+    bool OConnectionTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
 

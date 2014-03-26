@@ -179,7 +179,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &
 }
 
 
-sal_Bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet& rSet)
+bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet& rSet)
 {
     sal_uInt16  nPrintSize;
     if (m_pSizeNormal->IsChecked())

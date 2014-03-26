@@ -187,7 +187,7 @@ void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
     }
 }
 
-sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
+bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     ScPageHFItem    aItem( nWhich );
     EditTextObject* pLeft   = m_pWndLeft->CreateTextObject();
@@ -203,7 +203,7 @@ sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 
     rCoreSet.Put( aItem );
 
-    return sal_True;
+    return true;
 }
 
 

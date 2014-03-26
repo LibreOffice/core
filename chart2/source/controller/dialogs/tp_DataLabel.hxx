@@ -41,7 +41,7 @@ public:
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
     virtual void Reset(const SfxItemSet& rInAttrs);
-    virtual sal_Bool FillItemSet(SfxItemSet& rOutAttrs);
+    virtual bool FillItemSet(SfxItemSet& rOutAttrs);
 
 private:
     DataLabelResources  m_aDataLabelResources;

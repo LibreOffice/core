@@ -39,7 +39,7 @@ namespace dbaui
     class OSpreadSheetConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
         static  OGenericAdministrationPage* CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
@@ -58,7 +58,7 @@ namespace dbaui
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
            static   OGenericAdministrationPage* CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
@@ -80,7 +80,7 @@ namespace dbaui
     class OLDAPConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
         static  OGenericAdministrationPage* CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual Link getControlModifiedLink() { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
@@ -121,7 +121,7 @@ namespace dbaui
         virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
 
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         virtual Link getControlModifiedLink();
@@ -146,7 +146,7 @@ namespace dbaui
     static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -181,7 +181,7 @@ namespace dbaui
     protected:
         virtual bool checkTestConnection();
 
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -214,7 +214,7 @@ namespace dbaui
         DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
 
     protected:
-        virtual sal_Bool FillItemSet(SfxItemSet& _rSet);
+        virtual bool FillItemSet(SfxItemSet& _rSet);
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -236,7 +236,7 @@ namespace dbaui
     class OAuthentificationPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
         static  OGenericAdministrationPage* CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
@@ -259,7 +259,7 @@ namespace dbaui
     class OFinalDBPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
            static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet);
 
         FixedText*   m_pFTFinalHeader;

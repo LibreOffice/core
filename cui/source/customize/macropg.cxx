@@ -314,7 +314,7 @@ void _SvxMacroTabPage::InitResources()
 
 // the following method is called when the user clicks OK
 // We use the contents of the hashes to replace the settings
-sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
+bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     try
     {
@@ -365,7 +365,7 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
     {
     }
     // what is the return value about??
-    return sal_False;
+    return false;
 }
 
 // the following method clears the bindings in the hashes for both doc & app

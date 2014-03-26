@@ -122,7 +122,7 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 
 
 
-sal_Bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     sal_Bool                bAttrsChanged   = false;
     sal_uInt16              nWhich          = GetWhich( SID_SCATTR_PROTECTION );

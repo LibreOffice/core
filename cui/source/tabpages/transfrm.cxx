@@ -273,7 +273,7 @@ void SvxAngleTabPage::Construct()
     }
 }
 
-sal_Bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
+bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 {
     sal_Bool bModified = sal_False;
 
@@ -476,7 +476,7 @@ void SvxSlantTabPage::Construct()
 
 
 
-sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
+bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     sal_Bool  bModified = sal_False;
     OUString aStr = m_pMtrRadius->GetText();
@@ -782,7 +782,7 @@ void SvxPositionSizeTabPage::Construct()
 
 
 
-sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     sal_Bool bModified(sal_False);
 

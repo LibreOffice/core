@@ -32,7 +32,7 @@ public:
     virtual         ~ScHFPage();
 
     virtual void    Reset( const SfxItemSet& rSet );
-    virtual sal_Bool    FillItemSet( SfxItemSet& rOutSet );
+    virtual bool    FillItemSet( SfxItemSet& rOutSet );
 
     void            SetPageStyle( const OUString& rName )    { aStrPageStyle = rName; }
     void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }

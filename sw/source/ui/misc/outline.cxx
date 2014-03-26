@@ -818,9 +818,9 @@ int SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
     return LEAVE_PAGE;
 }
 
-sal_Bool SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
+bool SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
 {
-    return sal_True;
+    return true;
 }
 
 void SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )

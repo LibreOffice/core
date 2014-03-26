@@ -66,9 +66,9 @@ SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }
 
-sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
+bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     SvtCTLOptions aCTLOptions;
 
     // Sequence checking
@@ -76,20 +76,20 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
     if ( bChecked != m_pSequenceCheckingCB->GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
-        bModified = sal_True;
+        bModified = true;
     }
 
     bChecked = m_pRestrictedCB->IsChecked();
     if( bChecked != m_pRestrictedCB->GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
-        bModified = sal_True;
+        bModified = true;
     }
     bChecked = m_pTypeReplaceCB->IsChecked();
     if( bChecked != m_pTypeReplaceCB->GetSavedValue())
     {
         aCTLOptions.SetCTLSequenceCheckingTypeAndReplace(bChecked);
-        bModified = sal_True;
+        bModified = true;
     }
 
     bool bLogicalChecked = m_pMovementLogicalRB->IsChecked();
@@ -100,14 +100,14 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
         SvtCTLOptions::CursorMovement eMovement =
             bLogicalChecked ? SvtCTLOptions::MOVEMENT_LOGICAL : SvtCTLOptions::MOVEMENT_VISUAL;
         aCTLOptions.SetCTLCursorMovement( eMovement );
-        bModified = sal_True;
+        bModified = true;
     }
 
     sal_uInt16 nPos = m_pNumeralsLB->GetSelectEntryPos();
     if ( nPos != m_pNumeralsLB->GetSavedValue() )
     {
         aCTLOptions.SetCTLTextNumerals( (SvtCTLOptions::TextNumerals)nPos );
-        bModified = sal_True;
+        bModified = true;
     }
 
     return bModified;

@@ -539,7 +539,7 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
     return 0;
 }
 
-sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
+bool SwFldDokPage::FillItemSet(SfxItemSet& )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
@@ -628,7 +628,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aEmptyOUStr, aVal, nFormat, ' ', m_pNumFormatLB->IsAutomaticLanguage() );
     }
 
-    return sal_False;
+    return false;
 }
 
 SfxTabPage* SwFldDokPage::Create(   Window* pParent,

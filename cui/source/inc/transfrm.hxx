@@ -151,7 +151,7 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -206,7 +206,7 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -250,7 +250,7 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );

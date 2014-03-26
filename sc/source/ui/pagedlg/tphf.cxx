@@ -102,7 +102,7 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
 
 
 
-sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
+bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
     sal_Bool bResult = SvxHFPage::FillItemSet( rOutSet );
 

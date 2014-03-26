@@ -1183,9 +1183,9 @@ SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
 
 
 
-sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    sal_Bool bModified = sal_True; // !!!!
+    bool bModified = true; // !!!!
 
     // if not HideGroups was called with GROUP_MODULES...
     if (m_pLinguModulesCLB->IsVisible())
@@ -1340,7 +1340,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     {
         rCoreSet.Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
                                 bNewAutoCheck ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     return bModified;

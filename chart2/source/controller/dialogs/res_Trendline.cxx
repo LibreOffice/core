@@ -242,7 +242,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
 }
 
-sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
+bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bTrendLineUnique )
         rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
@@ -278,7 +278,7 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
     m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aValue);
     rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
 
-    return sal_True;
+    return true;
 }
 
 void TrendlineResources::FillValueSets()

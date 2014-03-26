@@ -352,7 +352,7 @@ IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
 
 
-sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
+bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
 /*  [Description]
 

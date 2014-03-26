@@ -246,7 +246,7 @@ SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
     return new ScaleTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     OSL_PRECOND( pNumFormatter, "No NumberFormatter available" );
 
@@ -278,7 +278,7 @@ sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_MAIN_TIME_UNIT,m_nMainTimeUnit));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_HELP_TIME_UNIT,m_nHelpTimeUnit));
 
-    return sal_True;
+    return true;
 }
 
 void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)

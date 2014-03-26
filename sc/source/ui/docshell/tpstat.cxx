@@ -70,7 +70,7 @@ ScDocStatPage::~ScDocStatPage()
 
 
 
-sal_Bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     return false;
 }

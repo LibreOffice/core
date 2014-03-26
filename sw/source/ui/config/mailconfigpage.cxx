@@ -143,7 +143,7 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SwMailConfigPage(pParent, rAttrSet);
 }
 
-sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
+bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     if(m_pDisplayNameED->GetText() != m_pDisplayNameED->GetSavedValue())
         m_pConfigItem->SetMailDisplayName(m_pDisplayNameED->GetText());
@@ -162,7 +162,7 @@ sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
     m_pConfigItem->SetSecureConnection(m_pSecureCB->IsChecked());
 
     m_pConfigItem->Commit();
-    return sal_True;
+    return true;
 }
 
 void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )

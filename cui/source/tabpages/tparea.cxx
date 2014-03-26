@@ -293,7 +293,7 @@ sal_uInt16* SvxTransparenceTabPage::GetRanges()
     return(pTransparenceRanges);
 }
 
-sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
+bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     const SfxPoolItem* pGradientItem = NULL;
     const SfxPoolItem* pLinearItem = NULL;
@@ -966,7 +966,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Int32  _nPos;
     sal_Bool    bModified = sal_False;

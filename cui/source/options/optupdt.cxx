@@ -157,9 +157,9 @@ SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 
 
 
-sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
+bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     sal_Bool bValue;
     sal_Int64 nValue;
@@ -168,7 +168,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     {
         bValue = m_pAutoCheckCheckBox->IsChecked();
         m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::makeAny( bValue ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     nValue = 0;
@@ -191,14 +191,14 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     if( nValue > 0 )
     {
         m_xUpdateAccess->replaceByName( "CheckInterval", uno::makeAny( nValue ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if( m_pAutoDownloadCheckBox->GetSavedValue() != TriState(m_pAutoDownloadCheckBox->IsChecked()) )
     {
         bValue = m_pAutoDownloadCheckBox->IsChecked();
         m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::makeAny( bValue ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     OUString sValue, aURL;
@@ -208,7 +208,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
         ( ! aURL.equals( sValue ) ) )
     {
         m_xUpdateAccess->replaceByName( "DownloadDestination", uno::makeAny( aURL ) );
-        bModified = sal_True;
+        bModified = true;
     }
 
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xUpdateAccess, uno::UNO_QUERY);

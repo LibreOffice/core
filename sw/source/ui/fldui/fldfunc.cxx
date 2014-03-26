@@ -519,7 +519,7 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     return 0;
 }
 
-sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
+bool SwFldFuncPage::FillItemSet(SfxItemSet& )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
@@ -582,7 +582,7 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
 
     ModifyHdl();    // enable/disable Insert if applicable
 
-    return sal_False;
+    return false;
 }
 
 OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)

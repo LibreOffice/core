@@ -58,7 +58,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDocument );
     void Reset(const SfxItemSet& rInAttrs);
-    sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
+    bool FillItemSet(SfxItemSet& rOutAttrs) const;
 
     void FillValueSets();
 

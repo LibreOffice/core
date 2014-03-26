@@ -236,7 +236,7 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
     }
 }
 
-sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
+bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
    OUString sURL = m_pURLED->GetText();
    if(!sURL.isEmpty())

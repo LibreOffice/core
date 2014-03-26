@@ -227,7 +227,7 @@ SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreS
     return new ScTpFormulaOptions(pParent, rCoreSet);
 }
 
-sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
+bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 {
     bool bRet = false;
     ScFormulaOptions aOpt;

@@ -269,7 +269,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Description:    stuff attributes into the set when OK
  --------------------------------------------------------------------*/
-sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
+bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bModified = false;
     const SfxPoolItem* pOldItem;

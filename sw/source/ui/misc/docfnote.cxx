@@ -348,7 +348,7 @@ static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtNa
     return pFmt;
 }
 
-sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
+bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 {
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
 
@@ -392,7 +392,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
             pSh->SetFtnInfo( *pI );
     }
     delete pInf;
-    return sal_True;
+    return true;
 }
 
 SwFootNoteOptionPage::SwFootNoteOptionPage( Window *pParent, const SfxItemSet &rSet ) :

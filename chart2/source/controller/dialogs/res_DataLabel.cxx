@@ -273,7 +273,7 @@ void DataLabelResources::EnableControls()
     m_pBxOrientation->Enable( bEnableRotation );
 }
 
-sal_Bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
+bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
 {
     if( m_pCBNumber->IsChecked() )
     {
@@ -318,7 +318,7 @@ sal_Bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
         rOutAttrs.Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 
-    return sal_True;
+    return true;
 }
 
 void DataLabelResources::Reset(const SfxItemSet& rInAttrs)

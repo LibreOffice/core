@@ -306,7 +306,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 
 
-sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == sal_False )
     {
@@ -340,7 +340,7 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
 
         delete pXGradient;
     }
-    return sal_True;
+    return true;
 }
 
 

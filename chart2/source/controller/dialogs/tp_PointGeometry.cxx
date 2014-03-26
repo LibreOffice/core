@@ -50,7 +50,7 @@ SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
     return new SchLayoutTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
 
     if(m_pGeometryResources && m_pGeometryResources->GetSelectEntryCount())
@@ -64,7 +64,7 @@ sal_Bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
         rOutAttrs.Put(Svx3DHorizontalSegmentsItem(nSegs));
     }
-    return sal_True;
+    return true;
 }
 
 void SchLayoutTabPage::Reset(const SfxItemSet& rInAttrs)

@@ -776,7 +776,7 @@ IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
     return 0;
 }
 
-sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
+bool SwFldRefPage::FillItemSet(SfxItemSet& )
 {
     sal_Bool bModified = sal_False;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
@@ -957,7 +957,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
 
     ModifyHdl();    // enable/disable insert if applicable
 
-    return sal_False;
+    return false;
 }
 
 SfxTabPage* SwFldRefPage::Create(   Window* pParent,

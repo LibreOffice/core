@@ -53,7 +53,7 @@ void SfxDocumentFontsPage::Reset( const SfxItemSet& )
     embedFontsCheckbox->Check( bVal );
 }
 
-sal_Bool SfxDocumentFontsPage::FillItemSet( SfxItemSet& )
+bool SfxDocumentFontsPage::FillItemSet( SfxItemSet& )
 {
     bool bVal = embedFontsCheckbox->IsChecked();
     SfxObjectShell* pDocSh = SfxObjectShell::Current();

@@ -726,7 +726,7 @@ sal_uInt16* SvxSwPosSizeTabPage::GetRanges()
     return pSwPosRanges;
 }
 
-sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
+bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
 {
     bool bAnchorChanged = false;
     short nAnchor = GetAnchorType(&bAnchorChanged);

@@ -155,9 +155,9 @@ SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAt
 
 
 
-sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
+bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
@@ -199,7 +199,7 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     if( TriState(m_pQuickLaunchCB->IsChecked()) != m_pQuickLaunchCB->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
-        bModified = sal_True;
+        bModified = true;
     }
 
     return bModified;

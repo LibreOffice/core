@@ -493,11 +493,11 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
 }
 
-sal_Bool SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
+bool SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     rSet.Put(GetParentSwEnvDlg()->aEnvItem);
-    return sal_True;
+    return true;
 }
 
 void SwEnvFmtPage::Reset(const SfxItemSet& rSet)

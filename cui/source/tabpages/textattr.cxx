@@ -320,7 +320,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
+bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -460,7 +460,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
             rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
     }
 
-    return( sal_True );
+    return true;
 }
 
 void SvxTextAttrPage::Construct()

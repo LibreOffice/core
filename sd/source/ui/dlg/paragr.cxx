@@ -43,7 +43,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*  GetRanges();
 
-    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
 private:
@@ -90,7 +90,7 @@ sal_uInt16* SdParagraphNumTabPage::GetRanges()
     return aRange;
 }
 
-sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if(m_pNewStartCB->GetState() != m_pNewStartCB->GetSavedValue() ||
         m_pNewStartNumberCB->GetState() != m_pNewStartNumberCB->GetSavedValue()||

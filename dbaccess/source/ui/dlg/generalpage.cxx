@@ -466,7 +466,7 @@ namespace dbaui
         m_pDatasourceType->Enable( bValid );
     }
 
-    sal_Bool OGeneralPageDialog::FillItemSet( SfxItemSet& _rCoreAttrs )
+    bool OGeneralPageDialog::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -626,7 +626,7 @@ namespace dbaui
         return OGeneralPage::approveDatasourceType( eType, _inout_rDisplayName );
     }
 
-    sal_Bool OGeneralPageWizard::FillItemSet(SfxItemSet& _rCoreAttrs)
+    bool OGeneralPageWizard::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
 

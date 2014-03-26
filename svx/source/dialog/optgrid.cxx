@@ -191,7 +191,7 @@ SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 
 
-sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     if ( bAttrModified )
     {

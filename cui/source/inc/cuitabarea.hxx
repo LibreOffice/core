@@ -168,7 +168,7 @@ public:
     static SfxTabPage* Create(Window*, const SfxItemSet&);
     static sal_uInt16* GetRanges();
 
-    virtual sal_Bool FillItemSet(SfxItemSet&);
+    virtual bool FillItemSet(SfxItemSet&);
     virtual void Reset(const SfxItemSet&);
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet);
@@ -280,7 +280,7 @@ public:
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
@@ -345,7 +345,7 @@ public:
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
@@ -423,7 +423,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -499,7 +499,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -585,7 +585,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -720,7 +720,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );

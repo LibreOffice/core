@@ -549,14 +549,14 @@ namespace dbaui
         return pReturn;
     }
 
-    sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+    bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bValid, bReadonly;
         getFlags(_rCoreAttrs, bValid, bReadonly);
 
         if (!bValid || bReadonly)
             // don't store anything if the data we're working with is invalid or readonly
-            return sal_True;
+            return true;
 
         // create the output string which contains all the table names
         if ( m_xCurrentConnection.is() )
@@ -574,7 +574,7 @@ namespace dbaui
             _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
         }
 
-        return sal_True;
+        return true;
     }
 
     void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)

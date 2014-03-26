@@ -661,7 +661,7 @@ void SvxPageDescPage::FillUserData()
 
 
 
-sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
+bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
     const SfxItemSet& rOldSet = GetItemSet();

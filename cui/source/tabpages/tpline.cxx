@@ -666,7 +666,7 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem* pOld = NULL;
     sal_Int32  nPos;

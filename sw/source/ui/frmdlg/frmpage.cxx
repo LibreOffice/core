@@ -1039,7 +1039,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Description:    stuff attributes into the set when OK
  --------------------------------------------------------------------*/
-sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
+bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bRet = false;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
@@ -2523,7 +2523,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     m_pBmpWin->Invalidate();
 }
 
-sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
+bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 {
     sal_Bool bModified = sal_False;
     if ( m_pMirrorHorzBox->GetSavedValue() != TriState(m_pMirrorHorzBox->IsChecked()) ||
@@ -2795,7 +2795,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     pClientCB->SaveValue();
 }
 
-sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
+bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bModified = sal_False;
     const SwFmtURL* pOldURL = (SwFmtURL*)GetOldItem(rSet, RES_URL);
@@ -3087,7 +3087,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     m_pVertAlignLB->SaveValue();
 }
 
-sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
+bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bRet = false;
     if (pNameED->GetText() != pNameED->GetSavedValue())

@@ -37,7 +37,7 @@ class ScTpUserLists : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rAttrSet );
-    virtual sal_Bool        FillItemSet     ( SfxItemSet& rCoreAttrs );
+    virtual bool        FillItemSet     ( SfxItemSet& rCoreAttrs );
     virtual void        Reset           ( const SfxItemSet& rCoreAttrs );
     using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );

@@ -242,7 +242,7 @@ SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 
 
-sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
+bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
@@ -652,7 +652,7 @@ SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
     return new OfaViewTabPage(pParent, rAttrSet);
 }
 
-sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
+bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFontOptions aFontOpt;
     SvtMenuOptions aMenuOpt;
@@ -1179,7 +1179,7 @@ static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBool
     }
 }
 
-sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
+bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
     // lock configuration broadcasters so that we can coordinate the notifications
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( true );
@@ -1414,7 +1414,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     pLangConfig->aLanguageOptions.BlockBroadcasts( false );
     pLangConfig->aLinguConfig.BlockBroadcasts( false );
 
-    return sal_False;
+    return false;
 }
 
 void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )

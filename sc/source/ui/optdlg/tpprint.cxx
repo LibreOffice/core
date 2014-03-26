@@ -94,7 +94,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 
 
 
-sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
 
@@ -113,7 +113,7 @@ sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         {
             rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_pSelectedSheetsCB->IsChecked() ) );
         }
-        return sal_True;
+        return true;
     }
     else
     {

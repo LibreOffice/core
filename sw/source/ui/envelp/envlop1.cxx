@@ -336,11 +336,11 @@ void SwEnvPage::FillItem(SwEnvItem& rItem)
     rItem.aSendText = m_pSenderEdit->GetText();
 }
 
-sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
+bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     rSet.Put(GetParentSwEnvDlg()->aEnvItem);
-    return sal_True;
+    return true;
 }
 
 void SwEnvPage::Reset(const SfxItemSet& rSet)

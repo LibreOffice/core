@@ -128,7 +128,7 @@ SfxTabPage* SwLoadOptPage::Create( Window* pParent,
     return new SwLoadOptPage(pParent, rAttrSet );
 }
 
-sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
+bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SwModule* pMod = SW_MOD();
@@ -494,7 +494,7 @@ SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
     return new SwCaptionOptPage(pParent, rAttrSet );
 }
 
-sal_Bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
+bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 {
     sal_Bool bRet = sal_False;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();

@@ -244,7 +244,7 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     const SfxPoolItem*  pOld = NULL;
     sal_Bool                bModified = sal_False;

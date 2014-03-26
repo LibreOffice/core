@@ -231,7 +231,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     m_pEdScalePageNum->SaveValue();
 }
 
-sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
+bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
     sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);

@@ -494,12 +494,12 @@ void SwLabPage::FillItem(SwLabItem& rItem)
     rItem.aLstType = m_pTypeBox->GetSelectEntry();
 }
 
-sal_Bool SwLabPage::FillItemSet(SfxItemSet& rSet)
+bool SwLabPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem( aItem );
     rSet.Put( aItem );
 
-    return sal_True;
+    return true;
 }
 
 void SwLabPage::Reset(const SfxItemSet& rSet)
@@ -614,7 +614,7 @@ int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
     return LEAVE_PAGE;
 }
 
-sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
+bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 {
     const OUString* pGroup = (const OUString*)m_pAutoTextGroupLB->GetEntryData(
                                     m_pAutoTextGroupLB->GetSelectEntryPos());
@@ -627,7 +627,7 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
     if(pSelEntry)
         aLabItem.sGlossaryBlockName = *(OUString*)pSelEntry->GetUserData();
     rSet.Put(aLabItem);
-    return sal_True;
+    return true;
 }
 
 static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockName)
@@ -747,7 +747,7 @@ int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
     return LEAVE_PAGE;
 }
 
-sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
+bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
 {
 
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
@@ -771,7 +771,7 @@ sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
     aItem.aPrivMail      = m_pMailED->GetText(  );
 
     rSet.Put(aItem);
-    return sal_True;
+    return true;
 }
 
 void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
@@ -835,7 +835,7 @@ int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
     return LEAVE_PAGE;
 }
 
-sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
+bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
 
@@ -855,7 +855,7 @@ sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
     aItem.aCompMail      = m_pMailED->GetText();
 
     rSet.Put(aItem);
-    return sal_True;
+    return true;
 }
 
 void SwBusinessDataPage::Reset(const SfxItemSet& rSet)

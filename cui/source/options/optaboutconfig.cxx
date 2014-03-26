@@ -187,9 +187,9 @@ void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
     m_pPrefBox->SetUpdateMode(true);
 }
 
-sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
+bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     std::vector< boost::shared_ptr< Prop_Impl > >::iterator pIter;
     for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
@@ -198,7 +198,7 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
         xNameReplace->replaceByName( (*pIter)->Property, (*pIter)->Value );
-        bModified = sal_True;
+        bModified = true;
 
         Reference< util::XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY_THROW );
         xChangesBatch->commitChanges();

@@ -640,22 +640,22 @@ SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttr
 
 
 
-sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
+bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if ( TriState(m_pExperimentalCB->IsChecked()) != m_pExperimentalCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( TriState(m_pMacroCB->IsChecked()) != m_pMacroCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetMacroRecorderMode( m_pMacroCB->IsChecked() );
-        bModified = sal_True;
+        bModified = true;
     }
 
 #if HAVE_FEATURE_JAVA
@@ -674,7 +674,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters" );
         pParamArrIter = pParamArr;
         rtl_freeMemory( pParamArr );
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( m_pPathDlg )
@@ -685,7 +685,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
             eErr = jfw_setUserClassPath( sPath.pData );
             DBG_ASSERT( JFW_E_NONE == eErr,
                         "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath" );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -721,7 +721,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     eErr = jfw_setSelectedJRE( pInfo );
                     DBG_ASSERT( JFW_E_NONE == eErr,
                                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE" );
-                    bModified = sal_True;
+                    bModified = true;
                 }
             }
             jfw_freeJavaInfo( pSelectedJava );
@@ -738,7 +738,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );
         DBG_ASSERT( JFW_E_NONE == eErr,
                     "SvxJavaOptionsPage::FillItemSet(): error in jfw_setEnabled" );
-        bModified = sal_True;
+        bModified = true;
     }
 #endif
 

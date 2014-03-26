@@ -154,7 +154,7 @@ SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
 Page: FillItemSet-Overload
 ****************************************************************************/
 
-sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
+bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bModified = sal_True;
     SwCondCollItem aCondItem;

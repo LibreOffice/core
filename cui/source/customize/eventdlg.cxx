@@ -206,7 +206,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     return sal_True;
 }
 
-sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
+bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {
     return _SvxMacroTabPage::FillItemSet( rSet );
 }

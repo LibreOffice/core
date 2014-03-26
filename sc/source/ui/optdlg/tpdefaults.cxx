@@ -39,7 +39,7 @@ SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet &rCore
     return new ScTpDefaultsOptions(pParent, rCoreAttrs);
 }
 
-sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
+bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
 {
     sal_Bool bRet = false;
     ScDefaultsOptions aOpt;

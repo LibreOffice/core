@@ -238,9 +238,9 @@ void SfxSaveTabPage::DetectHiddenControls()
 
 }
 
-sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
+bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     SvtSaveOptions aSaveOpt;
     if(TriState(aLoadUserSettingsCB->IsChecked()) != aLoadUserSettingsCB->GetSavedValue())
     {
@@ -260,55 +260,55 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
                                aDocInfoCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     if ( aBackupCB->IsEnabled() && TriState(aBackupCB->IsChecked()) != aBackupCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     if ( TriState(aAutoSaveCB->IsChecked()) != aAutoSaveCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
                                aAutoSaveCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
     if ( TriState(aWarnAlienFormatCB->IsChecked()) != aWarnAlienFormatCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
                                aWarnAlienFormatCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     if ( aAutoSaveEdit->GetText() != aAutoSaveEdit->GetSavedValue() )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
                                  (sal_uInt16)aAutoSaveEdit->GetValue() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     if ( TriState(aUserAutoSaveCB->IsChecked()) != aUserAutoSaveCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
                                aUserAutoSaveCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
     // save relatively
     if ( TriState(aRelativeFsysCB->IsChecked()) != aRelativeFsysCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
                                aRelativeFsysCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     if ( TriState(aRelativeInetCB->IsChecked()) != aRelativeInetCB->GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
                                aRelativeInetCB->IsChecked() ) );
-        bModified |= sal_True;
+        bModified |= true;
     }
 
     SvtModuleOptions aModuleOpt;

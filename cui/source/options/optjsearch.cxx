@@ -211,16 +211,16 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
 }
 
 
-sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
+bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 {
     sal_Int32 nOldVal = nTransliterationFlags;
     nTransliterationFlags = GetTransliterationFlags_Impl();
-    sal_Bool bModified = nOldVal != nTransliterationFlags;
+    bool bModified = nOldVal != nTransliterationFlags;
 
     if (!IsSaveOptions())
         return bModified;
 
-    bModified = sal_False;
+    bModified = false;
     SvtSearchOptions aOpt;
     sal_Bool bNewVal, bChanged;
 
@@ -229,133 +229,133 @@ sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
     if (bChanged)
     {
         aOpt.SetMatchCase(!bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchFullHalfWidth->IsChecked();
     bChanged = bNewVal != m_pMatchFullHalfWidth->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchFullHalfWidthForms( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchHiraganaKatakana->IsChecked();
     bChanged = bNewVal != m_pMatchHiraganaKatakana->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchHiraganaKatakana( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchContractions->IsChecked();
     bChanged = bNewVal != m_pMatchContractions->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchContractions( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchMinusDashChoon->IsChecked();
     bChanged = bNewVal != m_pMatchMinusDashChoon->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchMinusDashChoon( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchRepeatCharMarks->IsChecked();
     bChanged = bNewVal != m_pMatchRepeatCharMarks->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchRepeatCharMarks( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchVariantFormKanji->IsChecked();
     bChanged = bNewVal != m_pMatchVariantFormKanji->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchVariantFormKanji( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchOldKanaForms->IsChecked();
     bChanged = bNewVal != m_pMatchOldKanaForms->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchOldKanaForms( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchDiziDuzu->IsChecked();
     bChanged = bNewVal != m_pMatchDiziDuzu->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchDiziDuzu( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchBavaHafa->IsChecked();
     bChanged = bNewVal != m_pMatchBavaHafa->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchBavaHafa( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchTsithichiDhizi->IsChecked();
     bChanged = bNewVal != m_pMatchTsithichiDhizi->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchTsithichiDhizi( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchHyuiyuByuvyu->IsChecked();
     bChanged = bNewVal != m_pMatchHyuiyuByuvyu->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchHyuiyuByuvyu( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchSesheZeje->IsChecked();
     bChanged = bNewVal != m_pMatchSesheZeje->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchSesheZeje( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchIaiya->IsChecked();
     bChanged = bNewVal != m_pMatchIaiya->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchIaiya( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchKiku->IsChecked();
     bChanged = bNewVal != m_pMatchKiku->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetMatchKiku( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pIgnorePunctuation->IsChecked();
     bChanged = bNewVal != m_pIgnorePunctuation->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnorePunctuation( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pIgnoreWhitespace->IsChecked();
     bChanged = bNewVal != m_pIgnoreWhitespace->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreWhitespace( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pMatchProlongedSoundMark->IsChecked();
     bChanged = bNewVal != m_pMatchProlongedSoundMark->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreProlongedSoundMark( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
     bNewVal  = m_pIgnoreMiddleDot->IsChecked();
     bChanged = bNewVal != m_pIgnoreMiddleDot->GetSavedValue();
     if (bChanged)
     {
         aOpt.SetIgnoreMiddleDot( bNewVal );
-        bModified = sal_True;
+        bModified = true;
     }
 
     return bModified;

@@ -1093,7 +1093,7 @@ IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
     return 0;
 }
 
-sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
+bool SwFldVarPage::FillItemSet(SfxItemSet& )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
@@ -1217,7 +1217,7 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
 
     UpdateSubType();
 
-    return sal_False;
+    return false;
 }
 
 SfxTabPage* SwFldVarPage::Create(   Window* pParent,

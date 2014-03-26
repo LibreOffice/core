@@ -73,7 +73,7 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
     return new SchAlignmentTabPage(pParent, rInAttrs, false);
 }
 
-sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
     bool bStacked = m_pOrientHlp->GetStackedState() == TRISTATE_TRUE;
@@ -85,7 +85,7 @@ sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     SvxFrameDirection aDirection( m_pLbTextDirection->GetSelectEntryValue() );
     rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, aDirection ) );
 
-    return sal_True;
+    return true;
 }
 
 void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)

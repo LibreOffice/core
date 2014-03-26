@@ -556,7 +556,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 
 
-sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( ( nDlgType != 0 ) ||
         ( *pPageType == PT_COLOR && *pbAreaTP == sal_False ) )
@@ -580,7 +580,7 @@ sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( XFillStyleItem( XFILL_SOLID ) );
     }
 
-    return( sal_True );
+    return true;
 }
 
 void SvxColorTabPage::UpdateModified()

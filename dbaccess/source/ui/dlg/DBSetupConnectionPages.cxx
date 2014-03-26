@@ -116,7 +116,7 @@ using namespace ::com::sun::star;
         m_pTextConnectionHelper->implInitControls(_rSet, bValid);
     }
 
-    sal_Bool OTextConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OTextConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         bChangedSomething = m_pTextConnectionHelper->FillItemSet(_rSet, bChangedSomething);
@@ -156,7 +156,7 @@ using namespace ::com::sun::star;
         FreeResource();
     }
 
-    sal_Bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
            sal_Bool bChangedSomething = sal_False;
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
@@ -281,10 +281,10 @@ using namespace ::com::sun::star;
     {
     }
 
-    sal_Bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
+    bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
     {
         OSL_FAIL("Who called me?! Please ask oj for more information.");
-        return sal_True;
+        return true;
     }
 
     OMySQLIntroPageSetup::ConnectionType OMySQLIntroPageSetup::getMySQLMode()
@@ -329,7 +329,7 @@ using namespace ::com::sun::star;
         m_aMySQLSettings.fillWindows( _rControlList );
     }
 
-    sal_Bool MySQLNativeSetupPage::FillItemSet( SfxItemSet& _rSet )
+    bool MySQLNativeSetupPage::FillItemSet( SfxItemSet& _rSet )
     {
         return m_aMySQLSettings.FillItemSet( _rSet );
     }
@@ -439,7 +439,7 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
     }
 
-    sal_Bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
         fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
@@ -551,7 +551,7 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
     }
 
-    sal_Bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
@@ -668,7 +668,7 @@ using namespace ::com::sun::star;
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
     }
 
-    sal_Bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
         fillBool(_rSet,&m_aCBPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
@@ -732,7 +732,7 @@ using namespace ::com::sun::star;
         m_aETUserName.ClearModifyFlag();
     }
 
-    sal_Bool OAuthentificationPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OAuthentificationPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -816,10 +816,11 @@ using namespace ::com::sun::star;
         m_pCBStartTableWizard->Enable(_bSupportsTableCreation);
     }
 
-    sal_Bool OFinalDBPageSetup::FillItemSet( SfxItemSet& /*_rSet*/ )
+    bool OFinalDBPageSetup::FillItemSet( SfxItemSet& /*_rSet*/ )
     {
-        return sal_True;
+        return true;
     }
+
     IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, CheckBox*, _pBox)
     {
         m_pCBStartTableWizard->Enable( _pBox->IsEnabled() && _pBox->IsChecked() );

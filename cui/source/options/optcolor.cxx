@@ -1082,7 +1082,7 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
     return ( new SvxColorOptionsTabPage( pParent, rAttrSet ) );
 }
 
-sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
+bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
     bFillItemSetCalled = sal_True;
     if(m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
@@ -1094,7 +1094,7 @@ sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
         pColorConfig->Commit();
     if(pExtColorConfig->IsModified())
         pExtColorConfig->Commit();
-    return sal_True;
+    return true;
 }
 
 void SvxColorOptionsTabPage::Reset( const SfxItemSet& )

@@ -40,7 +40,7 @@ public:
             ~SdTpOptionsSnap();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
 };
@@ -62,7 +62,7 @@ public:
             ~SdTpOptionsContents();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 };
 
@@ -135,7 +135,7 @@ public:
             ~SdTpOptionsMisc();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     /** Hide Impress specific controls, make Draw specific controls visible

@@ -191,7 +191,7 @@ public:
 
     void    SetWrtShell(SwWrtShell& rSh);
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -233,7 +233,7 @@ public:
     SwSectionFtnEndTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionFtnEndTabPage();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -251,7 +251,7 @@ public:
     SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();
 
-    virtual sal_Bool    FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,

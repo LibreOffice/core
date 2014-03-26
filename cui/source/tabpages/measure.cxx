@@ -418,7 +418,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
+bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
 {
     sal_Bool     bModified = sal_False;
     sal_Int32    nValue;

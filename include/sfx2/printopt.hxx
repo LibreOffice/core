@@ -96,7 +96,7 @@ public:
                         SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
                         ~SfxCommonPrintOptionsTabPage();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual Window*     GetParentLabeledBy( const Window* pLabel ) const;
     virtual Window*     GetParentLabelFor( const Window* pLabel ) const;

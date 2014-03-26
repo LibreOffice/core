@@ -278,7 +278,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
 
 
 
-sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
     {
@@ -309,7 +309,7 @@ sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
             delete pXHatch;
         }
     }
-    return sal_True;
+    return true;
 }
 
 

@@ -264,7 +264,7 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
 
 
 
-sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
+bool SvxPathTabPage::FillItemSet( SfxItemSet& )
 {
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
     {
@@ -273,7 +273,7 @@ sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
         if ( pPathImpl->eState == SFX_ITEM_SET )
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
     }
-    return sal_True;
+    return true;
 }
 
 

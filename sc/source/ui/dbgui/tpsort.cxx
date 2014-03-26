@@ -238,7 +238,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 
 
 
-sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
+bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam aNewSortData = aSortData;
 
@@ -299,7 +299,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 
     rArgSet.Put( ScSortItem( SCITEM_SORTDATA, NULL, &aNewSortData ) );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -720,7 +720,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 
 
-sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
+bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     // Create local copy of ScParam
     ScSortParam aNewSortData = aSortData;
@@ -764,7 +764,7 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
     rArgSet.Put( ScSortItem( SCITEM_SORTDATA, &aNewSortData ) );
 
-    return sal_True;
+    return true;
 }
 
 

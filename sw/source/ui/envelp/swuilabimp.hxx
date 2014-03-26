@@ -68,7 +68,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwLabItem& rItem);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 
     SwLabDlg* GetParentSwLabDlg() {return (SwLabDlg*) GetParentDialog();}
@@ -119,7 +119,7 @@ public:
 
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 
@@ -157,7 +157,7 @@ public:
 
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 
@@ -193,7 +193,7 @@ public:
 
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 

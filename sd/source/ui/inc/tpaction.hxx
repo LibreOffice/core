@@ -103,7 +103,7 @@ public:
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
 
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );

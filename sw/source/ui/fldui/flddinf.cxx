@@ -414,10 +414,10 @@ sal_Int32 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     return nSize;
 }
 
-sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
+bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
 {
     if (!pSelEntry || (sal_uInt16)(sal_uLong)pSelEntry->GetUserData() == USHRT_MAX)
-        return sal_False;
+        return false;
 
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
     sal_uInt16 nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
@@ -448,7 +448,7 @@ sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
                 ' ', m_pFormatLB->IsAutomaticLanguage());
     }
 
-    return sal_False;
+    return false;
 }
 
 SfxTabPage* SwFldDokInfPage::Create(    Window* pParent,

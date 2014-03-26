@@ -638,7 +638,7 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Description:    stuff attributes into the Set when OK
  --------------------------------------------------------------------*/
-sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
+bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
     if(m_pCLNrEdt->HasChildPathFocus())
         m_pCLNrEdt->GetDownHdl().Call(m_pCLNrEdt);
@@ -663,7 +663,7 @@ sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
         sal_uInt32 nDirection = (sal_uInt32)(sal_IntPtr)m_pTextDirectionLB->GetEntryData( nPos );
         rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------

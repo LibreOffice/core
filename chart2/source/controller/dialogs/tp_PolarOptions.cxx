@@ -53,7 +53,7 @@ SfxTabPage* PolarOptionsTabPage::Create( Window* pWindow,const SfxItemSet& rOutA
     return new PolarOptionsTabPage( pWindow, rOutAttrs );
 }
 
-sal_Bool PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( m_pAngleDial->IsVisible() )
     {
@@ -67,7 +67,7 @@ sal_Bool PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     if (m_pCB_IncludeHiddenCells->IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCB_IncludeHiddenCells->IsChecked()));
 
-    return sal_True;
+    return true;
 }
 
 void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)

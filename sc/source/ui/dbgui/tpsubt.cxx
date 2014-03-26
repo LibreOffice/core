@@ -446,9 +446,9 @@ void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
 
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
-sal_Bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
-sal_Bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
-sal_Bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
+bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
+bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
+bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 #undef FILL
 
 
@@ -541,7 +541,7 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 
 
-sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
+bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
     SfxTabDialog* pDlg = GetTabDialog();

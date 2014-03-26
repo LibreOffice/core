@@ -80,7 +80,7 @@ SdPrintOptions::~SdPrintOptions()
 
 
 
-sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
+bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 {
     if( m_pCbxDraw->GetSavedValue() != TriState(m_pCbxDraw->IsChecked()) ||
         m_pCbxNotes->GetSavedValue() != TriState(m_pCbxNotes->IsChecked()) ||
@@ -126,9 +126,9 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 
         rAttrs.Put( aOptions );
 
-        return( sal_True );
+        return true;
     }
-    return( sal_False );
+    return false;
 }
 
 

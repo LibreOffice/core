@@ -508,12 +508,12 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     }
 }
 
-sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
+bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(aItem);
     rSet.Put(aItem);
 
-    return sal_True;
+    return true;
 }
 
 void SwLabFmtPage::Reset(const SfxItemSet& )

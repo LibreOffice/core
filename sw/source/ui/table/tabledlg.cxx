@@ -373,7 +373,7 @@ SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
     return new SwFormatTablePage( pParent, rAttrSet );
 }
 
-sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
+bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     //Test if one of the controls still has the focus
     if (m_aWidthMF.HasFocus())
@@ -904,7 +904,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     return 0;
 };
 
-sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
+bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
@@ -1319,7 +1319,7 @@ SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
     return new SwTextFlowPage(pParent, rAttrSet);
 }
 
-sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
+bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bModified = false;
 

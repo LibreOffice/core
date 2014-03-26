@@ -205,7 +205,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
 
 
-sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( nDlgType == 0 ) // line dialog
     {
@@ -220,7 +220,7 @@ sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
             rSet.Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
         }
     }
-    return( sal_True );
+    return true;
 }
 
 

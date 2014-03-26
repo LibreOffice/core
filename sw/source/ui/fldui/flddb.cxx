@@ -181,7 +181,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     }
 }
 
-sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
+bool SwFldDBPage::FillItemSet(SfxItemSet& )
 {
     OUString sTableName;
     OUString sColumnName;
@@ -246,7 +246,7 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 SfxTabPage* SwFldDBPage::Create(    Window* pParent,

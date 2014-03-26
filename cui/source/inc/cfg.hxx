@@ -436,7 +436,7 @@ public:
     bool            MoveEntryData(  SvTreeListEntry* pSourceEntry,
                                     SvTreeListEntry* pTargetEntry );
 
-    sal_Bool            FillItemSet( SfxItemSet& );
+    bool            FillItemSet( SfxItemSet& );
     void            Reset( const SfxItemSet& );
 
     virtual bool    DeleteSelectedContent() = 0;

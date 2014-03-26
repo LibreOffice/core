@@ -201,7 +201,7 @@ sal_uInt16* SvxTabulatorTabPage::GetRanges()
 
 
 
-sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 

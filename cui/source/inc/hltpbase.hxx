@@ -141,7 +141,7 @@ public:
     virtual void SetInitFocus();
     virtual void SetMarkStr ( const OUString& aStrMark );
     virtual void Reset( const SfxItemSet& );
-    virtual sal_Bool FillItemSet( SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& );
     virtual void ActivatePage( const SfxItemSet& rItemSet );
     virtual int  DeactivatePage( SfxItemSet* pSet = 0 );
 

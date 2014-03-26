@@ -650,7 +650,7 @@ SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItem
 }
 
 
-sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
+bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 {
     // Test whether a change is present
     const sal_Bool bTitleMod = m_pTitleEd->IsModified();
@@ -659,7 +659,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     const sal_Bool bCommentMod = m_pCommentEd->IsModified();
     if ( !( bTitleMod || bThemeMod || bKeywordsMod || bCommentMod ) )
     {
-        return sal_False;
+        return false;
     }
 
     // Generating the output data
@@ -679,7 +679,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     if ( !pInfo )
     {
         SAL_WARN( "sfx.dialog", "SfxDocumentDescPage::FillItemSet(): no item found" );
-        return sal_False;
+        return false;
     }
 
     if ( bTitleMod )
@@ -704,7 +704,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
         delete pInfo;
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -941,9 +941,9 @@ void SfxDocumentPage::EnableUseUserData()
 
 
 
-sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
+bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( !bHandleDelete && bEnableUseUserData &&
          m_pUseUserDataCB->GetState() != m_pUseUserDataCB->GetSavedValue() &&
@@ -958,7 +958,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             sal_Bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             m_pInfoItem->SetUseUserData( bUseData );
             rSet.Put( SfxDocumentInfoItem( *m_pInfoItem ) );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -979,20 +979,20 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 
             newItem.SetDeleteUserData( true );
             rSet.Put( newItem );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     if ( m_pNameED->IsModified() && !m_pNameED->GetText().isEmpty() )
     {
         rSet.Put( SfxStringItem( ID_FILETP_TITLE, m_pNameED->GetText() ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if ( /* m_pReadOnlyCB->IsModified() */ true )
     {
         rSet.Put( SfxBoolItem( ID_FILETP_READONLY, m_pReadOnlyCB->IsChecked() ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -2057,9 +2057,9 @@ IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl)
     return 0;
 }
 
-sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
+bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     const SfxPoolItem* pItem = NULL;
     SfxDocumentInfoItem* pInfo = NULL;
     bool bMustDelete = false;
@@ -2083,7 +2083,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
         {
             if ( bMustDelete )
                 delete pInfo;
-            return sal_False;
+            return false;
         }
 
         pInfo->ClearCustomProperties();
@@ -2096,7 +2096,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    bModified = sal_True; //!!!
+    bModified = true; //!!!
     if ( bModified )
         rSet.Put( *pInfo );
     if ( bMustDelete )
@@ -2523,7 +2523,7 @@ SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet&
 {
 }
 
-sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
+bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem = NULL;
     SfxDocumentInfoItem* pInfo = NULL;

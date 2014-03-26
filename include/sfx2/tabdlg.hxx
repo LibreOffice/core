@@ -259,7 +259,7 @@ public:
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     bool                HasExchangeSupport() const

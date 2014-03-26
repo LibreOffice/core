@@ -102,7 +102,7 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual sal_Bool    FillItemSet(SfxItemSet &rSet);
+    virtual bool    FillItemSet(SfxItemSet &rSet);
     virtual void    Reset(const SfxItemSet &rSet);
 
     static sal_uInt16*  GetRanges();

@@ -75,7 +75,7 @@ public:
     void    Construct();
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
+    virtual bool FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
 
     void ShowStaggeringControls( sal_Bool bShowStaggeringControls );

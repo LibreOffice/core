@@ -192,7 +192,7 @@ namespace dbaui
         _rControlList.push_back( new ODisableWrapper< RadioButton >( &m_aNamedPipeRadio ) );
     }
 
-    sal_Bool MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
+    bool MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
 

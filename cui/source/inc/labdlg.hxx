@@ -78,7 +78,7 @@ public:
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
     static sal_uInt16*      GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet & );
     void                Construct();
     void                SetView( const SdrView* pSdrView )

@@ -603,7 +603,7 @@ SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
 Page: FillItemSet-Overload
 ****************************************************************************/
 
-sal_Bool  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
+bool  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
 {
     if(bModified)
         FillSet(rSet);

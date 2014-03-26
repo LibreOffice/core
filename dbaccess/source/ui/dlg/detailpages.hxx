@@ -67,7 +67,7 @@ namespace dbaui
         sal_uInt32          m_nControlFlags;
 
     public:
-        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
     protected:
@@ -89,7 +89,7 @@ namespace dbaui
     class ODbaseDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         ODbaseDetailsPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
     private:
@@ -128,7 +128,7 @@ namespace dbaui
     class OOdbcDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -144,7 +144,7 @@ namespace dbaui
     class OUserDriverDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -178,7 +178,7 @@ namespace dbaui
 
     protected:
 
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -220,7 +220,7 @@ namespace dbaui
         CheckBox            m_aPasswordRequired;
 
     protected:
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -230,7 +230,7 @@ namespace dbaui
     class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -266,7 +266,7 @@ namespace dbaui
     class OTextDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;

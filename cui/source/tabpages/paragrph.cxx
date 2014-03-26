@@ -198,7 +198,7 @@ SfxTabPage* SvxStdParagraphTabPage::Create( Window* pParent, const SfxItemSet& r
     return new SvxStdParagraphTabPage( pParent, rSet );
 }
 
-sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
+bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 {
     SfxItemState eState = SFX_ITEM_UNKNOWN;
     const SfxPoolItem* pOld = 0;
@@ -1054,7 +1054,7 @@ sal_uInt16* SvxParaAlignTabPage::GetRanges()
     return pAlignRanges;
 }
 
-sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
+bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
 {
     sal_Bool bModified = sal_False;
 
@@ -1324,7 +1324,7 @@ SfxTabPage* SvxExtParagraphTabPage::Create( Window* pParent,
     return new SvxExtParagraphTabPage( pParent, rSet );
 }
 
-sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
+bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 {
     sal_Bool bModified = sal_False;
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
@@ -2147,7 +2147,7 @@ sal_uInt16*     SvxAsianTabPage::GetRanges()
     return pRanges;
 }
 
-sal_Bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SfxItemPool* pPool = rSet.GetPool();

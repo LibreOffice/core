@@ -225,7 +225,7 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 
 
 
-sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
+bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 {
     if( nDlgType == 0 && *pbAreaTP == sal_False ) // area dialog
     {
@@ -249,7 +249,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 

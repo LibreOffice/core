@@ -115,7 +115,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
@@ -151,7 +151,7 @@ class SvxBulletPickTabPage : public SfxTabPage
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetCharFmtName(const OUString& rName){sBulletCharFmtName = rName;}
@@ -194,7 +194,7 @@ class SvxNumPickTabPage : public SfxTabPage
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetCharFmtNames(const OUString& rCharName, const OUString& rBulName)
@@ -239,7 +239,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
@@ -351,7 +351,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetCharFmts(const OUString& rNumName, const OUString& rBulletName)
@@ -451,7 +451,7 @@ public:
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     static SfxTabPage*  Create( Window* pParent,

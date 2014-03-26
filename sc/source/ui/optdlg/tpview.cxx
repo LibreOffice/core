@@ -113,7 +113,7 @@ SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
     return new ScTpContentOptions(pParent, rCoreSet);
 }
 
-sal_Bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
+bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bRet = false;
     if( pFormulaCB ->GetSavedValue() != TriState(pFormulaCB ->IsChecked()) ||
@@ -432,7 +432,7 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
     return pNew;
 }
 
-sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
+bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bRet = sal_True;
     const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();

@@ -95,7 +95,7 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
     return new OfaHtmlTabPage(pParent, rAttrSet);
 }
 
-sal_Bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
+bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     if(aSize1NF->GetSavedValue() != aSize1NF->GetText())
@@ -140,7 +140,7 @@ sal_Bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
     if( aCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
         rHtmlOpt.SetTextEncoding( aCharSetLB->GetSelectTextEncoding() );
 
-    return sal_False;
+    return false;
 }
 
 void OfaHtmlTabPage::Reset( const SfxItemSet& )

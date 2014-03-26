@@ -51,7 +51,7 @@ namespace dbaui
         static  OGenericAdministrationPage* CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
-        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );

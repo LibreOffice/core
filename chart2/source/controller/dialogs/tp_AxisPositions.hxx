@@ -36,7 +36,7 @@ public:
     AxisPositionsTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
+    virtual bool FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
     using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );

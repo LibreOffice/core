@@ -114,12 +114,12 @@ Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow )
         return SfxTabPage::GetParentLabelFor( pWindow );
 }
 
-sal_Bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
+bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
-    sal_Bool                    bModified = sal_False;
+    bool                    bModified = false;
 
 
     if( TriState(m_pPaperSizeCB->IsChecked()) != m_pPaperSizeCB->GetSavedValue())

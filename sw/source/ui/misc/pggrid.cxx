@@ -158,7 +158,7 @@ SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwTextGridPage(pParent, rSet);
 }
 
-sal_Bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
+bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bRet = sal_False;
     if(m_pNoGridRB->GetSavedValue() != m_pNoGridRB->IsChecked()||

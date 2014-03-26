@@ -51,7 +51,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     static sal_uInt16*      GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
@@ -149,7 +149,7 @@ private:
     SvxGraphicPosition  GetGraphicPosition_Impl();
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                             const OUString& rUserData);
-    sal_Bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
+    bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadTimerHdl_Impl, Timer* );

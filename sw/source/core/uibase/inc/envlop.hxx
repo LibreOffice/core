@@ -113,7 +113,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwEnvItem& rItem);
-    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 

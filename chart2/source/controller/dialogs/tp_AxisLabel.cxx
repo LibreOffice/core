@@ -88,7 +88,7 @@ SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet& rAtt
     return new SchAxisLabelTabPage( pParent, rAttrs );
 }
 
-sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     bool bStacked = false;
     if( m_pOrientHlp->GetStackedState() != TRISTATE_INDET )
@@ -135,7 +135,7 @@ sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
         rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
 
-    return sal_True;
+    return true;
 }
 
 void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )

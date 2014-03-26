@@ -140,7 +140,7 @@ void SvxCaptionTabPage::Construct()
 
 
 
-sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
+bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 {
     SfxItemPool*    pPool = _rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -207,7 +207,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 
 //NYI-------------the angles have to be added here!!! XXX----------------------
 
-    return( sal_True );
+    return true;
 }
 
 

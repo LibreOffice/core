@@ -593,7 +593,7 @@ int SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
+bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 

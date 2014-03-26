@@ -148,7 +148,7 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 
 
 
-sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
     pLocalOptions->SetIterCount( (sal_uInt16)m_pEdSteps->GetValue() );
@@ -167,7 +167,7 @@ sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
     if ( *pLocalOptions != *pOldOptions )
     {
         rCoreAttrs.Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
-        return sal_True;
+        return true;
     }
     else
         return false;

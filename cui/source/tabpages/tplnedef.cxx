@@ -257,7 +257,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
 
 
 
-sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
     if( nDlgType == 0 ) // line dialog
     {
@@ -270,7 +270,7 @@ sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
             rAttrs.Put( XLineDashItem( aString, aDash ) );
         }
     }
-    return( sal_True );
+    return true;
 }
 
 

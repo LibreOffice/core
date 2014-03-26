@@ -51,7 +51,7 @@ namespace dbaui
         OTableSubscriptionDialog* m_pTablesDlg;
 
     public:
-        virtual sal_Bool            FillItemSet(SfxItemSet& _rCoreAttrs);
+        virtual bool            FillItemSet(SfxItemSet& _rCoreAttrs);
         virtual int             DeactivatePage(SfxItemSet* _pSet);
         using OGenericAdministrationPage::DeactivatePage;
 

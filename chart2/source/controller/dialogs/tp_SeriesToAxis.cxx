@@ -82,7 +82,7 @@ SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs
     return new SchOptionTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     if(m_pRbtAxis2->IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_SECONDARY_Y));
@@ -113,7 +113,7 @@ sal_Bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     if (m_pCBIncludeHiddenCells->IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCBIncludeHiddenCells->IsChecked()));
 
-    return sal_True;
+    return true;
 }
 
 void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)

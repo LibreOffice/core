@@ -332,7 +332,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
+bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 {
     sal_Bool bModified = sal_False;
     sal_Int32 nPos;

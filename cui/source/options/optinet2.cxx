@@ -393,9 +393,9 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
     EnableControls_Impl( m_pProxyModeLB->GetSelectEntryPos() == 2 );
 }
 
-sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
+bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
 {
-    sal_Bool bModified=sal_False;
+    bool bModified = false;
 
     try {
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
@@ -406,54 +406,54 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
             if( nSelPos == 1 )
             {
                 RestoreConfigDefaults_Impl();
-                return sal_True;
+                return true;
             }
 
             xPropertySet->setPropertyValue(aProxyModePN,
                 makeAny((sal_Int32) nSelPos));
-            bModified = sal_True;
+            bModified = true;
         }
 
         if(m_pHttpProxyED->GetSavedValue() != m_pHttpProxyED->GetText())
         {
             xPropertySet->setPropertyValue( aHttpProxyPN, makeAny(m_pHttpProxyED->GetText()));
-            bModified = sal_True;
+            bModified = true;
         }
 
         if ( m_pHttpPortED->GetSavedValue() != m_pHttpPortED->GetText() )
         {
             xPropertySet->setPropertyValue( aHttpPortPN, makeAny(m_pHttpPortED->GetText().toInt32()));
-            bModified = sal_True;
+            bModified = true;
         }
 
         if( m_pHttpsProxyED->GetSavedValue() != m_pHttpsProxyED->GetText() )
         {
             xPropertySet->setPropertyValue( aHttpsProxyPN, makeAny(m_pHttpsProxyED->GetText()) );
-            bModified = sal_True;
+            bModified = true;
         }
 
         if ( m_pHttpsPortED->GetSavedValue() != m_pHttpsPortED->GetText() )
         {
             xPropertySet->setPropertyValue( aHttpsPortPN, makeAny(m_pHttpsPortED->GetText().toInt32()) );
-            bModified = sal_True;
+            bModified = true;
         }
 
         if( m_pFtpProxyED->GetSavedValue() != m_pFtpProxyED->GetText())
         {
             xPropertySet->setPropertyValue( aFtpProxyPN, makeAny(m_pFtpProxyED->GetText()) );
-            bModified = sal_True;
+            bModified = true;
         }
 
         if ( m_pFtpPortED->GetSavedValue() != m_pFtpPortED->GetText() )
         {
             xPropertySet->setPropertyValue( aFtpPortPN, makeAny(m_pFtpPortED->GetText().toInt32()));
-            bModified = sal_True;
+            bModified = true;
         }
 
         if ( m_pNoProxyForED->GetSavedValue() != m_pNoProxyForED->GetText() )
         {
             xPropertySet->setPropertyValue( aNoProxyDescPN, makeAny( m_pNoProxyForED->GetText()));
-            bModified = sal_True;
+            bModified = true;
         }
 
         Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
@@ -890,7 +890,7 @@ namespace
     }
 }
 
-sal_Bool SvxSecurityTabPage::FillItemSet( SfxItemSet& )
+bool SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 {
     bool bModified = false;
 
@@ -930,7 +930,8 @@ SfxTabPage* MozPluginTabPage::Create( Window* pParent,
 {
     return new MozPluginTabPage( pParent, rAttrSet );
 }
-sal_Bool MozPluginTabPage::FillItemSet( SfxItemSet& )
+
+bool MozPluginTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool hasInstall = isInstalled();
     sal_Bool hasChecked = m_pWBasicCodeCB->IsChecked();
@@ -945,8 +946,9 @@ sal_Bool MozPluginTabPage::FillItemSet( SfxItemSet& )
     else{
         // do nothing
     }
-    return sal_True;
+    return true;
 }
+
 void MozPluginTabPage::Reset( const SfxItemSet& )
 {
         m_pWBasicCodeCB->Check( isInstalled());
@@ -1232,7 +1234,7 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 
 /* -------------------------------------------------------------------------*/
 
-sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
+bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bMailModified = sal_False;
     if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->GetSavedValue() != m_pMailerURLED->GetText())
@@ -1243,7 +1245,7 @@ sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
     if ( bMailModified )
         pImpl->aMailConfig.Commit();
 
-    return sal_False;
+    return false;
 }
 
 /* -------------------------------------------------------------------------*/

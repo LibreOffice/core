@@ -150,7 +150,7 @@ SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
     return new SvxFontSubstTabPage(pParent, rAttrSet);
 }
 
-sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
+bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 {
     pConfig->ClearSubstitutions();// remove all entries
 
@@ -189,7 +189,7 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
         boost::optional< OUString >(sFontName), batch);
     batch->commit();
 
-    return sal_False;
+    return false;
 }
 
 void  SvxFontSubstTabPage::Reset( const SfxItemSet& )

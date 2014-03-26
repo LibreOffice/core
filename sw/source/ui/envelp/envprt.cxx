@@ -161,11 +161,11 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
     rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(*m_pDownField ));
 }
 
-sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
+bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     rSet.Put(GetParentSwEnvDlg()->aEnvItem);
-    return sal_True;
+    return true;
 }
 
 void SwEnvPrtPage::Reset(const SfxItemSet& rSet)

@@ -60,7 +60,7 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 
 
 
-sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
+bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
@@ -80,7 +80,7 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 
     // we get a possible existing GridItem, this ensures that we do net set
     // some default values by accident
-    return( sal_True );
+    return true;
 }
 
 
@@ -137,7 +137,7 @@ SdTpOptionsContents::~SdTpOptionsContents()
 
 
 
-sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
+bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
 
@@ -365,7 +365,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 
 
 
-sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
+bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
 

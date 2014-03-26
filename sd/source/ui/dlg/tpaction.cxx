@@ -265,7 +265,7 @@ void SdTPAction::Construct()
 
 
 
-sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
+bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;

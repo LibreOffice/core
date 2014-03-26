@@ -382,23 +382,23 @@ namespace offapp
     }
 
 
-    sal_Bool ConnectionPoolOptionsPage::FillItemSet(SfxItemSet& _rSet)
+    bool ConnectionPoolOptionsPage::FillItemSet(SfxItemSet& _rSet)
     {
         commitTimeoutField();
 
-        sal_Bool bModified = sal_False;
+        bool bModified = false;
         // the enabled flag
         if (m_pEnablePooling->GetSavedValue() != TriState(m_pEnablePooling->IsChecked()))
         {
             _rSet.Put(SfxBoolItem(SID_SB_POOLING_ENABLED, m_pEnablePooling->IsChecked()), SID_SB_POOLING_ENABLED);
-            bModified = sal_True;
+            bModified = true;
         }
 
         // the settings for the single drivers
         if (m_pDriverList->isModified())
         {
             _rSet.Put(DriverPoolingSettingsItem(SID_SB_DRIVER_TIMEOUTS, m_pDriverList->getSettings()), SID_SB_DRIVER_TIMEOUTS);
-            bModified = sal_True;
+            bModified = true;
         }
 
         return bModified;

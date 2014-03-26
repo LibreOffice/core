@@ -259,7 +259,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Description:    stuff attributes into the set, when OK
  --------------------------------------------------------------------*/
-sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
+bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
 
@@ -303,7 +303,7 @@ sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
                 aItem != *pOldItem )
         rSet.Put(aItem);
 
-    return sal_True;
+    return true;
 }
 
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)

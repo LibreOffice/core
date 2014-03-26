@@ -83,7 +83,7 @@ public:
     SwFormatTablePage( Window* pParent, const SfxItemSet& rSet );
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -133,7 +133,7 @@ public:
     ~SwTableColumnPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -182,7 +182,7 @@ class SwTextFlowPage : public SfxTabPage
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetShell(SwWrtShell* pSh);

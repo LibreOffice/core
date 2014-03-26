@@ -1420,7 +1420,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
 }
 
 
-sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
+bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     Apply(m_xAct);
     try
@@ -1430,9 +1430,9 @@ sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     catch(const css::uno::RuntimeException&)
         { throw;  }
     catch(const css::uno::Exception&)
-        { return sal_False; }
+        { return false; }
 
-    return sal_True;
+    return true;
 }
 
 

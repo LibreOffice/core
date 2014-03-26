@@ -66,7 +66,7 @@ SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxIt
     return new SvxAccessibilityOptionsTabPage(pParent, rAttrSet);
 }
 
-sal_Bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     //aConfig.Set... from controls
 
@@ -91,7 +91,7 @@ sal_Bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
     Application::MergeSystemSettings( aAllSettings );
     Application::SetSettings(aAllSettings);
 
-    return sal_False;
+    return false;
 }
 
 void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )

@@ -1110,7 +1110,7 @@ short IconChoiceDialog::Ok()
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
-    sal_Bool _bModified = sal_False;
+    bool _bModified = false;
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
@@ -1132,7 +1132,7 @@ short IconChoiceDialog::Ok()
 
                 if ( pPage->FillItemSet( aTmp ) )
                 {
-                    _bModified |= sal_True;
+                    _bModified |= true;
                     pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
                 }
@@ -1141,7 +1141,7 @@ short IconChoiceDialog::Ok()
     }
 
     if ( _bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        _bModified |= sal_True;
+        _bModified |= true;
 
     return _bModified ? RET_OK : RET_CANCEL;
 }

@@ -98,7 +98,7 @@ SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutA
     return new AxisPositionsTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     // axis line
     sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
@@ -136,7 +136,7 @@ sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     if( nMarkPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
 
-    return sal_True;
+    return true;
 }
 
 void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)

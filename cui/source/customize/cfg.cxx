@@ -1820,7 +1820,7 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
     return sModuleID;
 }
 
-sal_Bool SvxConfigPage::FillItemSet( SfxItemSet& )
+bool SvxConfigPage::FillItemSet( SfxItemSet& )
 {
     bool result = false;
 

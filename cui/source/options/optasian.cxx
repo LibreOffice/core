@@ -160,7 +160,7 @@ SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttr
     return new SvxAsianLayoutPage(pParent, rAttrSet);
 }
 
-sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
+bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
 {
     if(m_pCharKerningRB->IsChecked() != m_pCharKerningRB->GetSavedValue())
     {
@@ -212,7 +212,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
     }
     eLastUsedLanguageTypeForForbiddenCharacters = m_pLanguageLB->GetSelectLanguage();
 
-    return sal_False;
+    return false;
 }
 
 void SvxAsianLayoutPage::Reset( const SfxItemSet& )

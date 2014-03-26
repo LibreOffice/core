@@ -180,7 +180,7 @@ namespace dbaui
         return commitURL();
     }
 
-    sal_Bool OConnectionTabPageSetup::FillItemSet(SfxItemSet& _rSet)
+    bool OConnectionTabPageSetup::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
         fillString(_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);

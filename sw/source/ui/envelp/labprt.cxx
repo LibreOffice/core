@@ -119,14 +119,14 @@ void SwLabPrtPage::FillItem(SwLabItem& rItem)
     rItem.bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
 }
 
-sal_Bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
+bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem;
     GetParentSwLabDlg()->GetLabItem(aItem);
     FillItem(aItem);
     rSet.Put(aItem);
 
-    return sal_True;
+    return true;
 }
 
 void SwLabPrtPage::Reset(const SfxItemSet& )

@@ -108,12 +108,12 @@ SfxTabPage* SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet& r
     return new SvxDefaultColorOptPage( pParent, rAttrs );
 }
 
-sal_Bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( pColorConfig )
         rOutAttrs.Put( *(static_cast< SfxPoolItem* >(pColorConfig)));
 
-    return sal_True;
+    return true;
 }
 
 void SvxDefaultColorOptPage::Reset( const SfxItemSet& )

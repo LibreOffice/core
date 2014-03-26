@@ -173,7 +173,7 @@ public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
 
-    virtual sal_Bool                FillItemSet( SfxItemSet& );
+    virtual bool                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
 
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);

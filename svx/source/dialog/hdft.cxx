@@ -215,7 +215,7 @@ SvxHFPage::~SvxHFPage()
 
 
 
-sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
+bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 {
     const sal_uInt16        nWSize      = GetWhich( SID_ATTR_PAGE_SIZE );
     const sal_uInt16        nWLRSpace   = GetWhich( SID_ATTR_LRSPACE );
@@ -315,7 +315,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     SvxSetItem aSetItem( GetWhich( nId ), aSet );
     rSet.Put( aSetItem );
 
-    return sal_True;
+    return true;
 }
 
 

@@ -43,7 +43,7 @@ SfxTabPage* DataLabelsTabPage::Create(Window* pWindow, const SfxItemSet& rOutAtt
     return new DataLabelsTabPage(pWindow, rOutAttrs);
 }
 
-sal_Bool DataLabelsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool DataLabelsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     return m_aDataLabelResources.FillItemSet(rOutAttrs);
 }

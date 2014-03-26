@@ -254,7 +254,7 @@ SfxTabPage::~SfxTabPage()
 
 
 
-sal_Bool SfxTabPage::FillItemSet( SfxItemSet& rSet )
+bool SfxTabPage::FillItemSet( SfxItemSet& rSet )
 {
     return pImpl->maItemConn.DoFillItemSet( rSet, GetItemSet() );
 }
@@ -918,7 +918,7 @@ short SfxTabDialog::Ok()
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
     {
@@ -939,7 +939,7 @@ short SfxTabDialog::Ok()
 
                 if ( pTabPage->FillItemSet( aTmp ) )
                 {
-                    bModified |= sal_True;
+                    bModified |= true;
                     if (pExampleSet)
                         pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
@@ -949,10 +949,10 @@ short SfxTabDialog::Ok()
     }
 
     if ( pImpl->bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        bModified |= sal_True;
+        bModified |= true;
 
     if ( bFmt == 2 )
-        bModified |= sal_True;
+        bModified |= true;
     return bModified ? RET_OK : RET_CANCEL;
 }
 

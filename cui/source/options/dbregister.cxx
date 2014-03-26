@@ -182,10 +182,10 @@ SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
 
 
 
-sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
+bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // the settings for the single drivers
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     DatabaseRegistrations aRegistrations;
     sal_uLong nCount = pPathBox->GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; ++i )
@@ -202,7 +202,7 @@ sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
     if ( m_nOldCount != aRegistrations.size() || m_bModified )
     {
         rCoreSet.Put(DatabaseMapItem( SID_SB_DB_REGISTER, aRegistrations ), SID_SB_DB_REGISTER);
-        bModified = sal_True;
+        bModified = true;
     }
 
     return bModified;

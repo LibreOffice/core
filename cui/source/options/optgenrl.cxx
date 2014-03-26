@@ -304,19 +304,19 @@ SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 
 
-sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
+bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
     // remove leading and trailing whitespaces
     for (unsigned i = 0; i != vFields.size(); ++i)
         vFields[i]->pEdit->SetText(comphelper::string::strip(vFields[i]->pEdit->GetText(), ' '));
 
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     bModified |= GetAddress_Impl();
     SvtSaveOptions aSaveOpt;
     if ( m_pUseDataCB->IsChecked() != aSaveOpt.IsUseUserData() )
     {
         aSaveOpt.SetUseUserData( m_pUseDataCB->IsChecked() );
-        bModified |= sal_True;
+        bModified |= true;
     }
     return bModified;
 }
@@ -383,7 +383,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
 
 
 
-sal_Bool SvxGeneralTabPage::GetAddress_Impl()
+bool SvxGeneralTabPage::GetAddress_Impl()
 {
     // updating
     SvtUserOptions aUserOpt;

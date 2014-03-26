@@ -222,7 +222,7 @@ public:
     SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXSelectTabPage();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     virtual void        ActivatePage( const SfxItemSet& );
@@ -435,7 +435,7 @@ public:
     SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXEntryTabPage();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -481,7 +481,7 @@ public:
     SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXStylesTabPage();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     virtual void        ActivatePage( const SfxItemSet& );

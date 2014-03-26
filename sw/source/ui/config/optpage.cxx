@@ -212,7 +212,7 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
     AnyRulerHdl(m_pAnyRulerCB);
 }
 
-sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
+bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 {
     const SwElemItem*   pOldAttr = (const SwElemItem*)
                         GetOldItem(GetItemSet(), FN_PARAM_ELEM);
@@ -367,7 +367,7 @@ SfxTabPage* SwAddPrinterTabPage::Create( Window* pParent,
     return ( new SwAddPrinterTabPage( pParent, rAttrSet ) );
 }
 
-sal_Bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     if ( bAttrModified )
     {
@@ -612,7 +612,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
     pColl->SetFmtAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
 }
 
-sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
+bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bNotDocOnly = !pDocOnlyCB->IsChecked();
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
@@ -740,7 +740,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
             pWrtShell->SetModified();
         pWrtShell->EndAllAction();
     }
-    return sal_False;
+    return false;
 }
 
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
@@ -1096,7 +1096,7 @@ SfxTabPage* SwTableOptionsTabPage::Create( Window* pParent,
     return new SwTableOptionsTabPage(pParent, rAttrSet );
 }
 
-sal_Bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bRet = sal_False;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -1336,7 +1336,7 @@ void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
         SetWrtShell(pWrtSh->GetValue());
 }
 
-sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     SwShadowCursorItem aOpt;
     aOpt.SetOn( m_pOnOffCB->IsChecked() );
@@ -1739,7 +1739,7 @@ SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& 
     return new SwRedlineOptionsTabPage( pParent, rSet );
 }
 
-sal_Bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     CharAttr *pAttr;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
@@ -1863,7 +1863,7 @@ sal_Bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
@@ -2242,7 +2242,7 @@ SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet& 
     return new SwCompareOptionsTabPage( pParent, rAttrSet );
 }
 
-sal_Bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bRet = sal_False;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
@@ -2367,7 +2367,7 @@ SfxTabPage* SwTestTabPage::Create( Window* pParent,
     return new SwTestTabPage(pParent, rAttrSet);
 }
 
-sal_Bool    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
 
     if ( bAttrModified )

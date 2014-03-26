@@ -39,7 +39,7 @@ public:
     virtual ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
-    sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
+    bool FillItemSet(SfxItemSet& rOutAttrs) const;
 
     void FillValueSets();
 

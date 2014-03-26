@@ -137,7 +137,7 @@ private:
     };
 
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
-    sal_Bool            FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
+    bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
     DECL_LINK(UpdateHdl_Impl, void *);
     DECL_LINK(          FontModifyHdl_Impl, void* );
@@ -156,7 +156,7 @@ public:
     static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
 
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
@@ -235,7 +235,7 @@ public:
     static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
 
     void                DisableControls( sal_uInt16 nDisable );
     void                EnableFlash();
@@ -314,7 +314,7 @@ public:
     static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     virtual void        FillUserData();
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
@@ -357,7 +357,7 @@ public:
     static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet);

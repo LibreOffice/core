@@ -182,7 +182,8 @@ namespace dbaui
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
-    sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
+
+    bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -265,7 +266,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    sal_Bool ODbaseDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool ODbaseDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
@@ -329,7 +330,7 @@ namespace dbaui
         return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
     }
 
-    sal_Bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
@@ -377,7 +378,7 @@ namespace dbaui
         return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
     }
 
-    sal_Bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
@@ -510,7 +511,7 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
 
-    sal_Bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         if ( m_bUseClass )
@@ -637,17 +638,17 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
     }
 
-    sal_Bool MySQLNativePage::FillItemSet( SfxItemSet& _rSet )
+    bool MySQLNativePage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
-        bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
+        bChangedSomething |= (m_aMySQLSettings.FillItemSet( _rSet ) ? 1 : 0);
 
         if ( m_aUserName.GetText() != m_aUserName.GetSavedValue() )
         {
             _rSet.Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
             _rSet.Put( SfxStringItem( DSID_PASSWORD, OUString()));
-            bChangedSomething = sal_True;
+            bChangedSomething = true;
         }
         fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
@@ -717,7 +718,7 @@ namespace dbaui
         return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
     }
 
-    sal_Bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
@@ -825,7 +826,7 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
+    bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
         bChangedSomething = m_pTextConnectionHelper->FillItemSet(rSet, bChangedSomething);

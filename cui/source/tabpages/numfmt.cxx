@@ -685,7 +685,7 @@ void SvxNumberFormatTabPage::HideLanguage(sal_Bool nFlag)
 #*
 #************************************************************************/
 
-sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
+bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     sal_Bool bDataChanged   = m_pFtLanguage->IsEnabled() || m_pCbSourceFormat->IsEnabled();
     if ( bDataChanged )

@@ -47,7 +47,7 @@ public:
                                 const SfxItemSet& rAttrSet);
     static sal_uInt16*      GetRanges();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& rCoreAttrs );
+    virtual bool        FillItemSet( SfxItemSet& rCoreAttrs );
     virtual void        Reset( const SfxItemSet& );
 
     void                HideShadowControls();

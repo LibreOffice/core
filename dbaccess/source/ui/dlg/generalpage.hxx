@@ -105,7 +105,7 @@ namespace dbaui
         OGeneralPageDialog( Window* pParent, const SfxItemSet& _rItems );
 
     protected:
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
 
         virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue );
         virtual void setParentTitle( const OUString& _sURLPrefix );
@@ -170,7 +170,7 @@ namespace dbaui
         DocumentDescriptor      GetSelectedDocument() const;
 
     protected:
-        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
 
         virtual void GetFocus();
 

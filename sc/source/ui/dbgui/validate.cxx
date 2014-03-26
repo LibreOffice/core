@@ -412,7 +412,7 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     CheckHdl( NULL );
 }
 
-sal_Bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
+bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 {
     sal_Int16 nListType = maCbShow.IsChecked() ?
         (maCbSort.IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
@@ -426,7 +426,7 @@ sal_Bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet.Put( SfxBoolItem( FID_VALID_BLANK, maCbAllow.IsChecked() ) );
     rArgSet.Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
-    return sal_True;
+    return true;
 }
 
 OUString ScTPValidationValue::GetFirstFormula() const
@@ -745,13 +745,13 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 
 
 
-sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
+bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == TRISTATE_TRUE ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, pEdtTitle->GetText() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTEXT, pEdInputHelp->GetText() ) );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -841,14 +841,14 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 
 
 
-sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
+bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
     rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectEntryPos() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );
 
-    return sal_True;
+    return true;
 }
 
 

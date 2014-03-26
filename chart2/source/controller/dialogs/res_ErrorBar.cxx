@@ -605,7 +605,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     UpdateControlStates();
 }
 
-sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
+bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bErrorKindUnique )
         rOutAttrs.Put( SvxChartKindErrorItem( m_eErrorKind, SCHATTR_STAT_KIND_ERROR ));
@@ -660,7 +660,7 @@ sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
     rOutAttrs.Put( SfxBoolItem( SCHATTR_STAT_ERRORBAR_TYPE , m_eErrorBarType == ERROR_BAR_Y ));
 
-    return sal_True;
+    return true;
 }
 
 void ErrorBarResources::FillValueSets()

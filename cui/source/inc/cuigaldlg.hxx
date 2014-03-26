@@ -214,7 +214,7 @@ private:
     ExchangeData*       pData;
 
     virtual void        Reset( const SfxItemSet& ) {}
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet );
 
 
 public:
@@ -263,7 +263,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
-    virtual sal_Bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return sal_True; }
+    virtual bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return true; }
     OUString     addExtension( const OUString&, const OUString& );
     void                FillFilterList();
 

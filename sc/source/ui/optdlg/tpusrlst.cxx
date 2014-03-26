@@ -207,7 +207,7 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
 
 
 
-sal_Bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // Modifikationen noch nicht uebernommen?
     // -> Click auf Add-Button simulieren

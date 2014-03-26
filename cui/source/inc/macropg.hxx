@@ -84,9 +84,9 @@ public:
     void                        InitResources();
 
     void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
-    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
+    virtual bool                FillItemSet( SfxItemSet& rSet );
 
-    virtual void        Reset( const SfxItemSet& );
+    virtual void                Reset( const SfxItemSet& );
 
     void                        DisplayAppEvents( bool appEvents);
     void                        SetReadOnly( sal_Bool bSet );
