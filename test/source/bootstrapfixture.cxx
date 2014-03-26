@@ -191,7 +191,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
         if( aContentOUString.indexOf("Error") != -1 )
         {
             SAL_WARN("test", aContentOUString);
-            CPPUNIT_FAIL("validation errors during export");
+            CPPUNIT_FAIL(aContentString.getStr());
         }
     }
 #endif
