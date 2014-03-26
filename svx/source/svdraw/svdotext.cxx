@@ -63,7 +63,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svx/svdotable.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1501,11 +1500,8 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     }
 
     SetTextSizeDirty();
-
-    // #124389# also need to call NbcAdjustTextFrameWidthAndHeight when we are a table object (triggered from undo)
-    if((IsTextFrame() || 0 != dynamic_cast< sdr::table::SdrTableObj* >(this)) && (IsAutoGrowHeight() || IsAutoGrowWidth()))
-    {
-        // adapt text frame
+    if (IsTextFrame() && (IsAutoGrowHeight() || IsAutoGrowWidth()))
+    { // Textrahmen anpassen!
         NbcAdjustTextFrameWidthAndHeight();
     }
     if (!IsTextFrame())
