@@ -1150,7 +1150,7 @@ public:
     bool                        IsMapModeEnabled() const { return mbMap; }
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
-    void                        EnableRTL( bool bEnable = true);
+    virtual void                EnableRTL( bool bEnable = true);
     bool                        IsRTLEnabled() const { return mbEnableRTL; }
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
