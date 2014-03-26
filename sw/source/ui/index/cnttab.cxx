@@ -3330,8 +3330,8 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
                                 (ToxAuthorityField) rToken.nAuthorityField);
         }
 
-     Point aPos = OutputToScreenPixel(pCtrl->GetPosPixel());
-     Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
+        Point aPos = OutputToScreenPixel(pCtrl->GetPosPixel());
+        Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
         if(rToken.eTokenType == TOKEN_TAB_STOP )
         {
         }
