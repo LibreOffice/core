@@ -401,6 +401,7 @@ public:
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
     virtual void                ViewAssigned();
+    // the bUI parameter may be sal_False, sal_True or 2 - there is some kind of hack at work
     virtual bool                PrepareClose( sal_Bool bUI = sal_True );
     virtual bool                IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
