@@ -53,6 +53,7 @@ public:
     void testChartCrash();
     void testPieChartRotation();
     void testEmbeddingsOleObjectGrabBag();
+    void testGapWidthXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testChartCrash);
     CPPUNIT_TEST(testPieChartRotation);
     CPPUNIT_TEST(testEmbeddingsOleObjectGrabBag);
+    CPPUNIT_TEST(testGapWidthXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -710,6 +712,63 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
        }
    }
    CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
+}
+
+namespace {
+
+void checkGapWidth(Reference<beans::XPropertySet> xPropSet, sal_Int32 nValue)
+{
+    uno::Any aAny = xPropSet->getPropertyValue("GapwidthSequence");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    uno::Sequence< sal_Int32 > aSequence;
+    aAny >>= aSequence;
+    CPPUNIT_ASSERT(aSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
+}
+
+void checkOverlap(Reference<beans::XPropertySet> xPropSet, sal_Int32 nValue)
+{
+    uno::Any aAny = xPropSet->getPropertyValue("OverlapSequence");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    uno::Sequence< sal_Int32 > aSequence;
+    aAny >>= aSequence;
+    CPPUNIT_ASSERT(aSequence.getLength());
+    CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
+}
+
+void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > xChartDoc,
+        sal_Int32 nExpectedGapWidth, sal_Int32 nExpectedOverlap)
+{
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0, 0 );
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
+    checkGapWidth(xPropSet, nExpectedGapWidth);
+    checkOverlap(xPropSet, nExpectedOverlap);
+
+}
+
+}
+
+void Chart2ExportTest::testGapWidthXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "gapWidth.xlsx");
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 120, -60);
+
+    xChartDoc = getChartDocFromSheet( 1, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
+
+    reload("Calc Office Open XML");
+
+    xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 120, -60);
+
+    xChartDoc = getChartDocFromSheet( 1, mxComponent );
+    checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
