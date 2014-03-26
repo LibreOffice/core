@@ -1045,9 +1045,6 @@ public:
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize,
                                             const OutputDevice& rOutDev );
-    void                        DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                                            const Point& rSrcPt,  const Size& rSrcSize,
-                                            const Printer& rOutDev );
     virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           sal_uInt16 nFlags = 0 );
