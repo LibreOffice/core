@@ -488,13 +488,14 @@ void PieChart::createShapes()
                         aScreenPosition2D.Y += aDirection.getY();
                     }
 
+                    double nVal = pSeries->getYValue( nPointIndex );
                     aPieLabelInfo.xTextShape = this->createDataLabel( xTextTarget, *pSeries, nPointIndex
-                                    , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
+                                    , nVal, fLogicYSum, aScreenPosition2D, eAlignment );
 
                     uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
                     if( xChild.is() )
                         aPieLabelInfo.xLabelGroupShape = uno::Reference<drawing::XShape>( xChild->getParent(), uno::UNO_QUERY );
-                    aPieLabelInfo.fValue = fLogicYValue;
+                    aPieLabelInfo.fValue = nVal;
                     aPieLabelInfo.bMovementAllowed = bMovementAllowed;
                     aPieLabelInfo.bMoved= false;
                     aPieLabelInfo.xTextTarget = xTextTarget;
