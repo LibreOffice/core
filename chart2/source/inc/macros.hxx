@@ -30,6 +30,8 @@
     typeid( ex ).name() << ", Message: " << \
     ex.Message )
 
+#define ENABLE_GL3D_BARCHART 0
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
