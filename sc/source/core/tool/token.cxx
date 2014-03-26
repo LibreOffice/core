@@ -2634,6 +2634,19 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     return false;
 }
 
+bool isNameModified( const sc::UpdatedRangeNames& rUpdatedNames, SCTAB nOldTab, const formula::FormulaToken& rToken )
+{
+    if (rToken.GetOpCode() != ocName)
+        return false;
+
+    SCTAB nTab = -1;
+    if (!rToken.IsGlobal())
+        nTab = nOldTab;
+
+    // Check if this named expression has been modified.
+    return rUpdatedNames.isNameUpdated(nTab, rToken.GetIndex());
+}
+
 }
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos )
@@ -2772,17 +2785,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
             break;
             case svIndex:
             {
-                const formula::FormulaToken* pToken = *p;
-                if (pToken->GetOpCode() == ocName)
-                {
-                    SCTAB nTab = -1;
-                    if (!pToken->IsGlobal())
-                        nTab = rOldPos.Tab();
-
-                    // Check if this named expression has been modified.
-                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
-                        aRes.mbNameModified = true;
-                }
+                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                    aRes.mbNameModified = true;
             }
             break;
             default:
@@ -2835,6 +2839,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 }
 
                 rRef.SetRange(aAbs, rNewPos);
+            }
+            break;
+            case svIndex:
+            {
+                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                    aRes.mbNameModified = true;
             }
             break;
             default:
@@ -2967,6 +2977,9 @@ bool adjustDoubleRefInName(
 sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
     const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
 {
+    if (rCxt.meMode == URM_MOVE)
+        return AdjustReferenceInMovedName(rCxt, rPos);
+
     sc::RefUpdateResult aRes;
 
     FormulaToken** p = pCode;
@@ -3019,6 +3032,67 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         aRes.mbReferenceModified = true;
                     }
                 }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    return aRes;
+}
+
+sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
+{
+    // When moving, the range is the destination range.
+    ScRange aOldRange = rCxt.maRange;
+    aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
+
+    // In a named expression, we'll move the reference only when the reference
+    // is entirely absolute.
+
+    sc::RefUpdateResult aRes;
+
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                if (rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel())
+                    continue;
+
+                ScAddress aAbs = rRef.toAbs(rPos);
+                if (aOldRange.In(aAbs))
+                {
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    aRes.mbReferenceModified = true;
+                }
+
+                rRef.SetAddress(aAbs, rPos);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                if (rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() || rRef.Ref1.IsTabRel() ||
+                    rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel())
+                    continue;
+
+                ScRange aAbs = rRef.toAbs(rPos);
+                if (aOldRange.In(aAbs))
+                {
+                    aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+                    aRes.mbReferenceModified = true;
+                }
+
+                rRef.SetRange(aAbs, rPos);
             }
             break;
             default:
@@ -3112,17 +3186,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
             break;
             case svIndex:
             {
-                const formula::FormulaToken* pToken = *p;
-                if (pToken->GetOpCode() == ocName)
-                {
-                    SCTAB nTab = -1;
-                    if (!pToken->IsGlobal())
-                        nTab = rOldPos.Tab();
-
-                    // Check if this named expression has been modified.
-                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
-                        aRes.mbNameModified = true;
-                }
+                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                    aRes.mbNameModified = true;
             }
             break;
             default:
@@ -3165,17 +3230,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
             break;
             case svIndex:
             {
-                const formula::FormulaToken* pToken = *p;
-                if (pToken->GetOpCode() == ocName)
-                {
-                    SCTAB nTab = -1;
-                    if (!pToken->IsGlobal())
-                        nTab = rOldPos.Tab();
-
-                    // Check if this named expression has been modified.
-                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
-                        aRes.mbNameModified = true;
-                }
+                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                    aRes.mbNameModified = true;
             }
             break;
             default:
@@ -3239,17 +3295,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
             break;
             case svIndex:
             {
-                const formula::FormulaToken* pToken = *p;
-                if (pToken->GetOpCode() == ocName)
-                {
-                    SCTAB nTab = -1;
-                    if (!pToken->IsGlobal())
-                        nTab = rOldPos.Tab();
-
-                    // Check if this named expression has been modified.
-                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
-                        aRes.mbNameModified = true;
-                }
+                if (isNameModified(rCxt.maUpdatedNames, rOldPos.Tab(), **p))
+                    aRes.mbNameModified = true;
             }
             break;
             default:

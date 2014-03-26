@@ -2833,7 +2833,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     {
         // Update cell or range references.
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMove(rCxt, aOldPos, aPos);
-        bRefModified = aRes.mbReferenceModified;
+        bRefModified = aRes.mbReferenceModified || aRes.mbNameModified;
         bValChanged = aRes.mbValueChanged;
     }
 

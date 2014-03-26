@@ -163,6 +163,8 @@ public:
      */
     sc::RefUpdateResult AdjustReferenceInName( const sc::RefUpdateContext& rCxt, const ScAddress& rPos );
 
+    sc::RefUpdateResult AdjustReferenceInMovedName( const sc::RefUpdateContext& rCxt, const ScAddress& rPos );
+
     /**
      * Adjust all references on sheet deletion.
      *

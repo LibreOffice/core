@@ -2537,8 +2537,21 @@ class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
             bRecalcOnMove = aPos != aOldPos;
 
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMove(*mpCxt, aOldPos, aPos);
-        if (aRes.mbReferenceModified || bRecalcOnMove)
+
+        if (aRes.mbReferenceModified || aRes.mbNameModified || bRecalcOnMove)
         {
+            sc::AutoCalcSwitch(mpCxt->mrDoc, false);
+
+            if (aRes.mbNameModified)
+            {
+                // We need to re-compile the token array when a range name is
+                // modified, to correctly reflect the new references in the
+                // name.
+                ScCompiler aComp(&mpCxt->mrDoc, aPos, *pCode);
+                aComp.SetGrammar(mpCxt->mrDoc.GetGrammar());
+                aComp.CompileTokenArray();
+            }
+
             // Perform end-listening, start-listening, and dirtying on all
             // formula cells in the group.
 
