@@ -3332,10 +3332,7 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
 
         Point aPos = OutputToScreenPixel(pCtrl->GetPosPixel());
         Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
-        if(rToken.eTokenType == TOKEN_TAB_STOP )
-        {
-        }
-        else
+        if ( rToken.eTokenType != TOKEN_TAB_STOP )
         {
             if (!rToken.sCharStyleName.isEmpty())
             {
