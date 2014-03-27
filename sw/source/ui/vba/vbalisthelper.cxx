@@ -447,10 +447,6 @@ void SwVbaListHelper::CreateOutlineNumberForType3() throw( css::uno::RuntimeExce
                 aBulletChar = OUString( sal_Unicode( CHAR_DIAMOND ) );
                 break;
             }
-            default:
-            {
-                throw uno::RuntimeException();
-            }
         }
         setOrAppendPropertyValue( aPropertyValues, OUString(UNO_NAME_BULLET_CHAR ), uno::makeAny( aBulletChar ) );
         mxNumberingRules->replaceByIndex( nLevel, uno::makeAny( aPropertyValues ) );
