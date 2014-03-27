@@ -515,6 +515,8 @@
 
 #define SID_FRAMEDESCRIPTOR                 (SID_SFX_START + 1229)
 
+#define SID_INSERT_3DMODEL                  (SID_SFX_START + 1229)
+
 // SaveTabPage
 #define SID_ATTR_DOCINFO                (SID_OPTIONS_START +  0)
 #define SID_ATTR_BACKUP                 (SID_OPTIONS_START +  1)

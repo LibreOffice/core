@@ -2748,4 +2748,9 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
     ]
+    SID_INSERT_3DMODEL
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
 }

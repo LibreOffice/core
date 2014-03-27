@@ -1167,6 +1167,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_INSERT_3DMODEL:
+        {
+            SetCurrentFunction( FuInsert3DModel::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+
+            Cancel();
+            rReq.Ignore ();
+
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
         case SID_COPYOBJECTS:
         {
             if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )

@@ -5609,6 +5609,11 @@
           <value xml:lang="en-US">Edit with External Tool</value>
         </prop>
       </node>
+      <node oor:name=".uno:Insert3DModel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">3D Model...</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

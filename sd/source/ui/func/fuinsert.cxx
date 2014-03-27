@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
@@ -90,6 +91,7 @@ TYPEINIT1( FuInsertGraphic, FuPoor );
 TYPEINIT1( FuInsertClipboard, FuPoor );
 TYPEINIT1( FuInsertOLE, FuPoor );
 TYPEINIT1( FuInsertAVMedia, FuPoor );
+TYPEINIT1( FuInsert3DModel, FuPoor );
 
 FuInsertGraphic::FuInsertGraphic (
     ViewShell* pViewSh,
@@ -750,6 +752,63 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
             if( mpWindow )
                 mpWindow->LeaveWait();
         }
+    }
+}
+
+FuInsert3DModel::FuInsert3DModel(
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+rtl::Reference<FuPoor> FuInsert3DModel::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    rtl::Reference<FuPoor> xFunc( new FuInsert3DModel( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuInsert3DModel::DoExecute( SfxRequest& )
+{
+    sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+
+    aDlg.SetTitle( "Open 3DModel" );
+    aDlg.AddFilter( "GL Transmission Format", "*.json" );
+    aDlg.AddFilter( "All files", "*.*"  );
+
+    OUString sURL;
+    if( aDlg.Execute() == ERRCODE_NONE )
+    {
+        const INetURLObject aURL( aDlg.GetPath() );
+        sURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+    }
+    else if( !sURL.isEmpty() )
+        sURL = OUString();
+
+    if (!sURL.isEmpty())
+    {
+        if( mpWindow )
+            mpWindow->EnterWait();
+
+        Point aPos;
+        Size aSize(480,360);
+        sal_Int8 nAction = DND_ACTION_COPY;
+
+        if( mpWindow )
+        {
+            aPos = mpWindow->PixelToLogic( Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
+            aPos.X() -= aSize.Width() >> 1;
+            aPos.Y() -= aSize.Height() >> 1;
+        }
+
+        mpView->InsertMediaURL( sURL, nAction, aPos, aSize, false ) ;
+
+        if( mpWindow )
+            mpWindow->LeaveWait();
     }
 }
 

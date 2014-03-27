@@ -217,6 +217,7 @@
                     <menu:menuitem menu:id=".uno:InsertObject"/>
                     <menu:menuitem menu:id=".uno:InsertPlugin"/>
                     <menu:menuitem menu:id=".uno:InsertMath"/>
+                    <menu:menuitem menu:id=".uno:Insert3DModel"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:InsertObjectChart"/>
