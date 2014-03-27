@@ -59,6 +59,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/sdtaitm.hxx>
+#include <sal/macros.h>
 
 #include <frmui.hrc>
 #include <sfx2/filedlghelper.hxx>
@@ -389,48 +390,47 @@ static size_t lcl_GetFrmMapCount( const FrmMap* pMap)
 {
     if ( pMap )
     {
-        int aSizeOf = sizeof(FrmMap);
         if( pMap == aVParaHtmlMap)
-            return sizeof(aVParaHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVParaHtmlMap);
         if( pMap == aVAsCharHtmlMap)
-            return sizeof(aVAsCharHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVAsCharHtmlMap);
         if( pMap == aHParaHtmlMap)
-            return sizeof(aHParaHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHParaHtmlMap);
         if( pMap == aHParaHtmlAbsMap)
-            return sizeof(aHParaHtmlAbsMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHParaHtmlAbsMap);
         if ( pMap == aVPageMap )
-            return sizeof(aVPageMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVPageMap);
         if ( pMap == aVPageHtmlMap )
-            return sizeof(aVPageHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVPageHtmlMap);
         if ( pMap == aVAsCharMap )
-            return sizeof(aVAsCharMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVAsCharMap);
         if ( pMap == aVParaMap )
-            return sizeof(aVParaMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVParaMap);
         if ( pMap == aHParaMap )
-            return sizeof(aHParaMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHParaMap);
         if ( pMap == aHFrameMap )
-            return sizeof(aHFrameMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHFrameMap);
         if ( pMap == aVFrameMap )
-            return sizeof(aVFrameMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVFrameMap);
         if ( pMap == aHCharMap )
-            return sizeof(aHCharMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHCharMap);
         if ( pMap == aHCharHtmlMap )
-            return sizeof(aHCharHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHCharHtmlMap);
         if ( pMap == aHCharHtmlAbsMap )
-            return sizeof(aHCharHtmlAbsMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHCharHtmlAbsMap);
         if ( pMap == aVCharMap )
-            return sizeof(aVCharMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVCharMap);
         if ( pMap == aVCharHtmlMap )
-            return sizeof(aVCharHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVCharHtmlMap);
         if ( pMap == aVCharHtmlAbsMap )
-            return sizeof(aVCharHtmlAbsMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVCharHtmlAbsMap);
         if ( pMap == aHPageHtmlMap )
-            return sizeof(aHPageHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHPageHtmlMap);
         if ( pMap == aHFlyHtmlMap )
-            return sizeof(aHFlyHtmlMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aHFlyHtmlMap);
         if ( pMap == aVFlyHtmlMap )
-            return sizeof(aVFlyHtmlMap) / aSizeOf;
-        return sizeof(aHPageMap) / aSizeOf;
+            return SAL_N_ELEMENTS(aVFlyHtmlMap);
+        return SAL_N_ELEMENTS(aHPageMap);
     }
     return 0;
 }
@@ -523,7 +523,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
         sal_uInt16 nIndex;
-        for(nIndex = 0; nIndex < sizeof(aHoriIds) / sizeof(StringIdPair_Impl); ++nIndex)
+        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
         {
             if(aHoriIds[nIndex].eHori == eStringId)
             {
@@ -532,7 +532,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
             }
         }
         nIndex = 0;
-        for(nIndex = 0; nIndex < sizeof(aVertIds) / sizeof(StringIdPair_Impl); ++nIndex)
+        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
         {
             // --> OD 2009-08-31 #mongolianlayout#
             if ( !bVerticalL2R )
@@ -562,7 +562,7 @@ static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
-    sal_uInt16 nRelMapSize = sizeof(aRelationMap) / sizeof(RelationMap);
+    sal_uInt16 nRelMapSize = SAL_N_ELEMENTS(aRelationMap);
     for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
     {
         if ( aRelationMap[nRelMapPos].nRelation == _nRel )
@@ -1452,7 +1452,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
             OUString sOldEntry(_rLB.GetSelectEntry());
-            sal_uInt16 nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
+            sal_uInt16 nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
             for (size_t nMapPos = 0; nMapPos < nMapCount; nMapPos++)
@@ -1504,7 +1504,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
         }
         else
         {
-            sal_uInt16 nRelCount = sizeof(aRelationMap) / sizeof(RelationMap);
+            sal_uInt16 nRelCount = SAL_N_ELEMENTS(aRelationMap);
 
             // special handling for map <aVCharMap>,
             // because its ambigous in its <eStrId>/<eMirrorStrId>.
