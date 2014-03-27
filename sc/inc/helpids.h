@@ -702,5 +702,7 @@
 #define HID_FUNC_CEIL_MS                                        "SC_HID_FUNC_CEIL_MS"
 #define HID_FUNC_CEIL_ISO                                       "SC_HID_FUNC_CEIL_ISO"
 #define HID_FUNC_FLOOR_MS                                       "SC_HID_FUNC_FLOOR_MS"
+#define HID_FUNC_NETWORKDAYS_MS                                 "SC_HID_FUNC_NETWORKDAYS_MS"
+#define HID_FUNC_WORKDAY_MS                                     "SC_HID_FUNC_WORKDAY_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

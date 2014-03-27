@@ -49,7 +49,9 @@
 
 #include <string.h>
 #include <math.h>
+#include <vector>
 
+using ::std::vector;
 using namespace com::sun::star;
 using namespace formula;
 
@@ -244,6 +246,177 @@ void ScInterpreter::ScEasterSunday()
         nDay = sal::static_int_cast<sal_Int16>( O % 31 + 1 );
         nMonth = sal::static_int_cast<sal_Int16>( int(O / 31) );
         PushDouble( GetDateSerial( nYear, nMonth, nDay, true, true ) );
+    }
+}
+
+void lcl_GetWeekendMask( OUString& aWeekendDays, bool* bWeekendMask )
+{
+
+    for ( int i = 0; i < 7; i++ )
+        bWeekendMask[ i] = false;
+
+    if ( aWeekendDays.isEmpty() )
+    {
+        bWeekendMask[ SATURDAY ] = true;
+        bWeekendMask[ SUNDAY ] = true;
+    }
+    else
+    {
+        if ( aWeekendDays.getLength() == 7 )
+        {
+            // Weekend days defined by string
+            for ( int i = 0; i < 7; i++ )
+                bWeekendMask[ i ] = ( aWeekendDays[ i ] == '1' );
+        }
+        else
+        {
+            // Weekend days defined by code
+            switch ( aWeekendDays.toUInt32() )
+            {
+                case  1 : bWeekendMask[ SATURDAY ]  = true; bWeekendMask[ SUNDAY ]    = true; break;
+                case  2 : bWeekendMask[ SUNDAY ]    = true; bWeekendMask[ MONDAY ]    = true; break;
+                case  3 : bWeekendMask[ MONDAY ]    = true; bWeekendMask[ TUESDAY ]   = true; break;
+                case  4 : bWeekendMask[ TUESDAY ]   = true; bWeekendMask[ WEDNESDAY ] = true; break;
+                case  5 : bWeekendMask[ WEDNESDAY ] = true; bWeekendMask[ THURSDAY ]  = true; break;
+                case  6 : bWeekendMask[ THURSDAY ]  = true; bWeekendMask[ FRIDAY ]    = true; break;
+                case  7 : bWeekendMask[ FRIDAY ]    = true; bWeekendMask[ SATURDAY ]  = true; break;
+                case 11 : bWeekendMask[ SUNDAY ]    = true; break;
+                case 12 : bWeekendMask[ MONDAY ]    = true; break;
+                case 13 : bWeekendMask[ TUESDAY ]   = true; break;
+                case 14 : bWeekendMask[ WEDNESDAY ] = true; break;
+                case 15 : bWeekendMask[ THURSDAY ]  = true; break;
+                case 16 : bWeekendMask[ FRIDAY ]    = true; break;
+                case 17 : bWeekendMask[ SATURDAY ]  = true; break;
+            }
+        }
+    }
+}
+
+void ScInterpreter::ScNetWorkdays_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2, 4 ) )
+    {
+        vector<double> nSortArray;
+        size_t nMax = 0;
+        Date aNullDate = *( pFormatter->GetNullDate() );
+        if ( nParamCount == 4 )
+        {
+            GetSortArray( 1, nSortArray );
+            nMax = nSortArray.size();
+            for ( size_t i = 0; i < nMax; i++ )
+            {
+                Date aTempDate( aNullDate );
+                aTempDate += ::rtl::math::approxFloor( nSortArray.at( i ) );
+                nSortArray.at( i ) = aTempDate.GetDate();
+            }
+        }
+
+        bool bWeekendMask[ 7 ];
+        OUString aWeekendDays;
+        if ( nParamCount >= 3 )
+            aWeekendDays = GetString().getString();
+        lcl_GetWeekendMask( aWeekendDays, bWeekendMask );
+
+        double nDate2 = GetDouble();
+        double nDate1 = GetDouble();
+        Date aDate2( aNullDate );
+        aDate2 += ( long )::rtl::math::approxFloor( nDate2 );
+        Date aDate1( aNullDate );
+        aDate1 += ( long )::rtl::math::approxFloor( nDate1 );
+
+        sal_Int32 nCnt = 0;
+        size_t nRef = 0;
+        bool bReverse = ( aDate1 > aDate2 );
+        if ( bReverse )
+        {
+            Date aTempDate( aDate1 );
+            aDate1 = aDate2;
+            aDate2 = aTempDate;
+        }
+        while ( aDate1 <= aDate2 )
+        {
+            if ( !bWeekendMask[ aDate1.GetDayOfWeek() ] )
+            {
+                while ( nRef < nMax && nSortArray.at( nRef ) < aDate1.GetDate() )
+                    nRef++;
+                if ( !( nRef < nMax && nSortArray.at( nRef ) == aDate1.GetDate() ) )
+                    nCnt++;
+            }
+            aDate1++;
+        }
+        PushDouble( ( double ) ( bReverse ? -nCnt : nCnt ) );
+    }
+}
+
+void ScInterpreter::ScWorkday_MS()
+{
+    nFuncFmtType = NUMBERFORMAT_DATE;
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2, 4 ) )
+    {
+        vector<double> nSortArray;
+        size_t nMax = 0;
+        Date aNullDate = *( pFormatter->GetNullDate() );
+        if ( nParamCount == 4 )
+        {
+            GetSortArray( 1, nSortArray );
+            nMax = nSortArray.size();
+            for ( size_t i = 0; i < nMax; i++ )
+            {
+                Date aTempDate( aNullDate );
+                aTempDate += ::rtl::math::approxFloor( nSortArray.at( i ) );
+                nSortArray.at( i ) = aTempDate.GetDate();
+            }
+        }
+
+        bool bWeekendMask[ 7 ];
+        OUString aWeekendDays;
+        if ( nParamCount >= 3 )
+            aWeekendDays = GetString().getString();
+        lcl_GetWeekendMask( aWeekendDays, bWeekendMask );
+
+        sal_Int32 nDays = ::rtl::math::approxFloor( GetDouble() );
+        double nDate = GetDouble();
+        Date aDate( aNullDate );
+        aDate += ( long )::rtl::math::approxFloor( nDate );
+
+        if ( !nDays )
+            PushDouble( ( double ) ( aDate - aNullDate ) );
+        else
+        {
+            if ( nDays > 0 )
+            {
+                size_t nRef = 0;
+                while ( nDays )
+                {
+                    while ( nRef < nMax && nSortArray.at( nRef ) < aDate.GetDate() )
+                        nRef++;
+                    if ( !( nRef < nMax && nSortArray.at( nRef ) == aDate.GetDate() ) || nRef >= nMax )
+                         nDays--;
+
+                    do
+                        aDate++;
+                    while ( bWeekendMask[ aDate.GetDayOfWeek() ] ); //jump over weekend day(s)
+                }
+            }
+            else
+            {
+                sal_Int16 nRef = nMax - 1;
+                while ( nDays )
+                {
+                    while ( nRef >= 0 && nSortArray.at( nRef ) > aDate.GetDate() )
+                        nRef--;
+                    if ( !( nRef >= 0 && nSortArray.at( nRef ) == aDate.GetDate() ) || nRef < 0 )
+                         nDays++;
+
+                    do
+                      aDate--;
+                    while ( bWeekendMask[ aDate.GetDayOfWeek() ] ); //jump over weekend day(s)
+                }
+            }
+            PushDouble( ( double ) ( aDate - aNullDate ) );
+        }
     }
 }
 

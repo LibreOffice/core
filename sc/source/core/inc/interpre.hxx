@@ -589,6 +589,8 @@ void ScGetDay();
 void ScGetDayOfWeek();
 void ScGetWeekOfYear();
 void ScEasterSunday();
+void ScNetWorkdays_MS();
+void ScWorkday_MS();
 void ScGetHour();
 void ScGetMin();
 void ScGetSec();
