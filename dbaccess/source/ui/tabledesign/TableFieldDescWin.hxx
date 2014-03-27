@@ -49,8 +49,8 @@ namespace dbaui
         IClipboardTest* getActiveChild() const;
 
     protected:
-        virtual void Resize();
-        virtual void Paint( const Rectangle& rRect );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     public:
         OTableFieldDescWin( Window* pParent);
@@ -63,9 +63,9 @@ namespace dbaui
         void SetReadOnly( sal_Bool bReadOnly );
 
         // window overloads
-        virtual bool PreNotify( NotifyEvent& rNEvt );
-        virtual void GetFocus();
-        virtual void LoseFocus();
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
 
         void SetControlText( sal_uInt16 nControlId, const OUString& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
@@ -79,14 +79,14 @@ namespace dbaui
         OUString  BoolStringUI(const OUString& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed();
-        virtual sal_Bool isCopyAllowed();
-        virtual sal_Bool isPasteAllowed();
-        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
+        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
+        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
+        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
+        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
 
-        virtual void copy();
-        virtual void cut();
-        virtual void paste();
+        virtual void copy() SAL_OVERRIDE;
+        virtual void cut() SAL_OVERRIDE;
+        virtual void paste() SAL_OVERRIDE;
 
         inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
         inline OTableDesignHelpBar* getHelpBar() const { return m_pHelpBar; }

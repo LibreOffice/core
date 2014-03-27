@@ -129,9 +129,9 @@ public:
     sal_Bool        isWildcardChecked(SvTreeListEntry* _pEntry) const;
 
 protected:
-    virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
+    virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) SAL_OVERRIDE;
 
-    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
+    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry) SAL_OVERRIDE;
 
     void implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
 

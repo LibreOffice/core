@@ -133,7 +133,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SAL_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // Called by SplitNode.
 
     /// Create the specific AttrSet.
-    SAL_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
+    SAL_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& ) SAL_OVERRIDE;
 
     /// Optimization: Asking for information about hidden characters at SwScriptInfo
     /// updates these flags.
@@ -202,8 +202,8 @@ public:
 
 protected:
     /// for hanging TxtFmtCollections somewhere else (Outline-Numbering!)
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual void SwClientNotify( const SwModify&, const SfxHint& );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify&, const SfxHint& ) SAL_OVERRIDE;
 
 public:
     using SwCntntNode::GetAttr;
@@ -223,18 +223,18 @@ public:
 
     virtual ~SwTxtNode();
 
-    virtual sal_Int32 Len() const;
+    virtual sal_Int32 Len() const SAL_OVERRIDE;
 
     /// Is in itratr.
     void GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax, sal_uLong &rAbs,
                         OutputDevice* pOut = 0 ) const;
 
     /// overriding to handle change of certain paragraph attributes
-    virtual sal_Bool SetAttr( const SfxPoolItem& );
-    virtual sal_Bool SetAttr( const SfxItemSet& rSet );
-    virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
-    virtual sal_Bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr );
-    virtual sal_uInt16 ResetAllAttr();
+    virtual sal_Bool SetAttr( const SfxPoolItem& ) SAL_OVERRIDE;
+    virtual sal_Bool SetAttr( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) SAL_OVERRIDE;
+    virtual sal_Bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr ) SAL_OVERRIDE;
+    virtual sal_uInt16 ResetAllAttr() SAL_OVERRIDE;
 
     /// insert text content
     /// @param rStr text to insert; in case it does not fit into the capacity
@@ -339,10 +339,10 @@ public:
             const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
     /// Virtual methods from CntntNode.
-    virtual SwCntntFrm *MakeFrm( SwFrm* );
-    virtual SwCntntNode *SplitCntntNode( const SwPosition & );
-    virtual SwCntntNode *JoinNext();
-    virtual SwCntntNode *JoinPrev();
+    virtual SwCntntFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
+    virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
+    virtual SwCntntNode *JoinNext() SAL_OVERRIDE;
+    virtual SwCntntNode *JoinPrev() SAL_OVERRIDE;
 
     SwCntntNode *AppendNode( const SwPosition & );
 
@@ -398,7 +398,7 @@ public:
     sal_uInt16 Convert( SwConversionArgs & );
 
     inline SwTxtFmtColl *GetTxtColl() const;
-    virtual SwFmtColl *ChgFmtColl( SwFmtColl* );
+    virtual SwFmtColl *ChgFmtColl( SwFmtColl* ) SAL_OVERRIDE;
     void _ChgTxtCollUpdateNum( const SwTxtFmtColl* pOld,
                                 const SwTxtFmtColl* pNew );
 
@@ -659,7 +659,7 @@ public:
 
     /// in ndcopy.cxx
     bool IsSymbol( const sal_Int32 nBegin ) const; // In itratr.cxx.
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
+    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
 
     /// Interactive hyphenation: we find TxtFrm and call its CalcHyph.
     bool Hyphenate( SwInterHyphInfo &rHyphInf );
@@ -731,7 +731,7 @@ public:
         SwIndex const & rPos,
         const sal_Int32 nChangeLen,
         const bool bNegative = false,
-        const bool bDelete = false );
+        const bool bDelete = false ) SAL_OVERRIDE;
 
     /// change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
@@ -775,16 +775,16 @@ public:
             { m_wXParagraph = xParagraph; }
 
     /// sfx2::Metadatable
-    virtual ::sfx2::IXmlIdRegistry& GetRegistry();
-    virtual bool IsInClipboard() const;
-    virtual bool IsInUndo() const;
-    virtual bool IsInContent() const;
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry() SAL_OVERRIDE;
+    virtual bool IsInClipboard() const SAL_OVERRIDE;
+    virtual bool IsInUndo() const SAL_OVERRIDE;
+    virtual bool IsInContent() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
 
     bool IsCollapse() const;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) SAL_OVERRIDE;
 
     sal_uInt32 GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const;
     sal_uInt32 GetParRsid() const;

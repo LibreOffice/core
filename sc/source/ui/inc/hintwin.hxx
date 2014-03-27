@@ -33,7 +33,7 @@ private:
     Font      aHeadFont;
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
             ScHintWindow( Window* pParent, const OUString& rTit, const OUString& rMsg );

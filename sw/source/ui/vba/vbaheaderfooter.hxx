@@ -39,15 +39,15 @@ public:
     virtual ~SwVbaHeaderFooter(){}
 
     // Attributes
-    virtual ::sal_Bool SAL_CALL getIsHeader() throw (css::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL getLinkToPrevious() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setLinkToPrevious( ::sal_Bool _linktoprevious ) throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Bool SAL_CALL getIsHeader() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL getLinkToPrevious() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setLinkToPrevious( ::sal_Bool _linktoprevious ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAHEADERFOOTER_HXX
 

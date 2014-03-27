@@ -73,9 +73,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     void OpenConnection(bool b);
     void CloseConnection();
@@ -104,9 +104,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLOrContext : public SvXMLImportContext
@@ -131,9 +131,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLConditionContext : public SvXMLImportContext
@@ -165,9 +165,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     void GetOperator(const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry) const;
     void AddSetItem(const ScQueryEntry::Item& rItem);
@@ -190,9 +190,9 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 // Datapilot (Core)
@@ -230,9 +230,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
     void SetUseRegularExpressions(const bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
@@ -283,9 +283,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLDPOrContext : public SvXMLImportContext
@@ -308,9 +308,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLDPConditionContext : public SvXMLImportContext
@@ -339,11 +339,11 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
     void getOperatorXML(
         const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const;
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 #endif

@@ -34,17 +34,17 @@ public:
              , sal_Int32 nDimensionCount );
     virtual ~BubbleChart();
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
+    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
+    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const SAL_OVERRIDE;
 
     // MinimumAndMaximumSupplier
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
-    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
 
-    virtual LegendSymbolStyle getLegendSymbolStyle();
+    virtual LegendSymbolStyle getLegendSymbolStyle() SAL_OVERRIDE;
 
 private: //methods
     //no default constructor

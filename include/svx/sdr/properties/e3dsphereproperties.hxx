@@ -32,7 +32,7 @@ namespace sdr
         {
         protected:
             // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich);
+            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -45,7 +45,7 @@ namespace sdr
             virtual ~E3dSphereProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

@@ -37,11 +37,11 @@ public:
     virtual ~SwVbaListGallery();
 
     // Methods
-    virtual css::uno::Any SAL_CALL ListTemplates( const css::uno::Any& index ) throw ( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Any SAL_CALL ListTemplates( const css::uno::Any& index ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBALISTGALLERY_HXX
 

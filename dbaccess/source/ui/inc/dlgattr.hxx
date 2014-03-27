@@ -36,7 +36,7 @@ namespace dbaui
         SbaSbAttrDlg(Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat, bool bRow = false);
         ~SbaSbAttrDlg();
 
-        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
+        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
     };
 }   // namespace dbaui
 

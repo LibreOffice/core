@@ -144,16 +144,16 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual ~SfxObjectShell_Impl();
 
     // IMacroDocumentAccess overridables
-    virtual sal_Int16 getCurrentMacroExecMode() const;
-    virtual bool setCurrentMacroExecMode( sal_uInt16 nMacroMode );
-    virtual OUString getDocumentLocation() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign();
-    virtual bool documentStorageHasMacros() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
-    virtual sal_Int16 getScriptingSignatureState();
+    virtual sal_Int16 getCurrentMacroExecMode() const SAL_OVERRIDE;
+    virtual bool setCurrentMacroExecMode( sal_uInt16 nMacroMode ) SAL_OVERRIDE;
+    virtual OUString getDocumentLocation() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign() SAL_OVERRIDE;
+    virtual bool documentStorageHasMacros() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
+    virtual sal_Int16 getScriptingSignatureState() SAL_OVERRIDE;
 
-    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor );
-    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
+    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) SAL_OVERRIDE;
+    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const SAL_OVERRIDE;
 };
 
 #endif

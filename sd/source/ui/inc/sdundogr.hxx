@@ -34,10 +34,10 @@ public:
                                 aCtn() {}
     virtual       ~SdUndoGroup();
 
-    virtual bool   Merge( SfxUndoAction* pNextAction );
+    virtual bool   Merge( SfxUndoAction* pNextAction ) SAL_OVERRIDE;
 
-    virtual void   Undo();
-    virtual void   Redo();
+    virtual void   Undo() SAL_OVERRIDE;
+    virtual void   Redo() SAL_OVERRIDE;
 
     void           AddAction(SdUndoAction* pAction);
     sal_uLong      Count() const { return aCtn.size(); }

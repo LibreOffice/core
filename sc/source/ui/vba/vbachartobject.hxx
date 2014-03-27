@@ -49,14 +49,14 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     css::uno::Reference< css::drawing::XShape > setShape() throw ( css::script::BasicErrorException );
 public:
     ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier );
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setName( const OUString& sName ) throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException, std::exception );
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setName( const OUString& sName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException, std::exception ) SAL_OVERRIDE;
     virtual void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
 #endif //SC_VBA_WINDOW_HXX

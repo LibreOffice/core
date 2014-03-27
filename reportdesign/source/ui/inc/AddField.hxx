@@ -80,9 +80,9 @@ public:
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xRowSet);
 
     virtual ~OAddFieldWindow();
-    virtual void Resize();
-    virtual void GetFocus();
-    virtual bool PreNotify( NotifyEvent& _rNEvt );
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual bool PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
     inline const OUString&       GetCommand()            const { return m_aCommandName; }
     inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }
@@ -98,11 +98,11 @@ public:
         @param  _eBitmapSet
             <svtools/imgdef.hxx>
     */
-    virtual ImageList getImageList(sal_Int16 _eBitmapSet) const;
+    virtual ImageList getImageList(sal_Int16 _eBitmapSet) const SAL_OVERRIDE;
 
     /** will be called when the controls need to be resized.
     */
-    virtual void resizeControls(const Size& _rDiff);
+    virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
 
     /// Updates the current field list
     void Update();
@@ -116,11 +116,11 @@ public:
 
 private:
     // FmXChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
     // OContainerListener
-    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } // rptui

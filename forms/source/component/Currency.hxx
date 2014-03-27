@@ -36,33 +36,33 @@ class OCurrencyModel
     ::com::sun::star::uno::Any          m_aSaveValue;
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OCurrencyModel );
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OCurrencyModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
-    ) const;
+    ) const SAL_OVERRIDE;
 
 protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
-                            translateDbColumnToControlValue( );
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+                            translateDbColumnToControlValue( ) SAL_OVERRIDE;
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const;
+                            getDefaultForReset() const SAL_OVERRIDE;
 
-    virtual void            resetNoBroadcast();
+    virtual void            resetNoBroadcast() SAL_OVERRIDE;
 
 protected:
     DECLARE_XCLONEABLE();
@@ -76,13 +76,13 @@ protected:
 class OCurrencyControl: public OBoundControl
 {
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
     OCurrencyControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OCurrencyControl);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 };
 
 

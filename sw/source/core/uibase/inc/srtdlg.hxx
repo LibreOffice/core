@@ -74,7 +74,7 @@ class SwSortDlg : public SvxStandardDialog
     sal_uInt16 nX;
     sal_uInt16 nY;
 
-    virtual void        Apply();
+    virtual void        Apply() SAL_OVERRIDE;
     sal_Unicode         GetDelimChar() const;
 
     DECL_LINK( CheckHdl, CheckBox * );

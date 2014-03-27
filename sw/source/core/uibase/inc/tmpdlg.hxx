@@ -78,10 +78,10 @@ public:
                     SwWrtShell*         pActShell = 0,
                     bool                bNew = false );
 
-    const SfxItemSet* GetRefreshedSet();
+    const SfxItemSet* GetRefreshedSet() SAL_OVERRIDE;
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual short Ok();
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual short Ok() SAL_OVERRIDE;
 };
 
 #endif

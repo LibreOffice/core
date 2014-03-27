@@ -35,11 +35,11 @@ private:
 public:
     SvxNewTableDialog( Window* pWindow );
 
-    virtual short Execute(void);
+    virtual short Execute(void) SAL_OVERRIDE;
     virtual void Apply(void);
 
-    virtual sal_Int32 getRows() const;
-    virtual sal_Int32 getColumns() const;
+    virtual sal_Int32 getRows() const SAL_OVERRIDE;
+    virtual sal_Int32 getColumns() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX

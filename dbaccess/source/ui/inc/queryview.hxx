@@ -39,7 +39,7 @@ namespace dbaui
         // clears the whole query
         virtual void clear() = 0;
         // set the view readonly or not
-        virtual void setReadOnly(sal_Bool _bReadOnly) = 0;
+        virtual void setReadOnly(sal_Bool _bReadOnly) SAL_OVERRIDE = 0;
         // set the statement for representation
         virtual void setStatement(const OUString& _rsStatement) = 0;
         // returns the current sql statement

@@ -47,7 +47,7 @@ public:
     SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc);
     ~SdPhotoAlbumDialog();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
 private:
     static OUString sDirUrl;

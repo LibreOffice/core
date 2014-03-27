@@ -32,10 +32,10 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet);
+            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -48,14 +48,14 @@ namespace sdr
             virtual ~MeasureProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes();
+            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

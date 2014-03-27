@@ -74,7 +74,7 @@ private:
 
     PresentationObjects ePO;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
     // for mapping with the new SvxNumBulletItem
     SfxItemSet aInputSet;

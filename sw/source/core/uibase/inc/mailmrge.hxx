@@ -122,8 +122,8 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK( SaveTypeHdl, RadioButton* pBtn );
 
-    virtual void    Apply();
-    virtual void    Resize();
+    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
     bool            ExecQryShell();
 
 public:

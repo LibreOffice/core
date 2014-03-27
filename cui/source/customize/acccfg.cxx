@@ -623,7 +623,7 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
     virtual ~SfxAccCfgLBoxString_Impl();
 
     virtual void Paint(
-        const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 

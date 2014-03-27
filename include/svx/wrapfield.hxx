@@ -36,9 +36,9 @@ public:
 
 protected:
     /** Up event with wrap-around functionality. */
-    virtual void        Up();
+    virtual void        Up() SAL_OVERRIDE;
     /** Down event with wrap-around functionality. */
-    virtual void        Down();
+    virtual void        Down() SAL_OVERRIDE;
 };
 
 

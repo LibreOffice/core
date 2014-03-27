@@ -73,9 +73,9 @@ public:
 
     void                SetFocusOnEdit();
 
-    virtual bool    Close();
-    virtual void        Move();
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual void        Move() SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 };
 
 

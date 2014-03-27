@@ -97,16 +97,16 @@ public:
 class ExtTreeListBox : public TreeListBox
 {
 protected:
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) SAL_OVERRIDE;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
-    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry );
-    virtual bool            NotifyAcceptDrop( SvTreeListEntry* pEntry );
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+    virtual bool            NotifyAcceptDrop( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
     virtual sal_Bool    NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos );
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
     virtual sal_Bool    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos );
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) SAL_OVERRIDE;
     sal_Bool            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
@@ -133,9 +133,9 @@ public:
     void            CheckEntryPos( sal_uLong nPos );
     bool            IsChecked( sal_uLong nPos ) const;
 
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind);
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel );
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel ) SAL_OVERRIDE;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
@@ -174,7 +174,7 @@ public:
     OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
     ~OrganizeDialog();
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
     DECL_LINK( ActivatePageHdl, TabControl * );
 };
@@ -199,8 +199,8 @@ protected:
 
     TabDialog*          pTabDlg;
 
-    virtual void        ActivatePage();
-    virtual void        DeactivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual void        DeactivatePage() SAL_OVERRIDE;
 
 public:
     ObjectPage(Window* pParent, const OString& rName, sal_uInt16 nMode);
@@ -243,8 +243,8 @@ protected:
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
     SvTreeListEntry*        ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos );
-    virtual void        ActivatePage();
-    virtual void        DeactivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual void        DeactivatePage() SAL_OVERRIDE;
 
     TabDialog*          pTabDlg;
 

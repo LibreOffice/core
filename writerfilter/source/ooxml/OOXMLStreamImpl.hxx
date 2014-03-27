@@ -74,16 +74,16 @@ public:
 
     virtual ~OOXMLStreamImpl();
 
-    virtual uno::Reference<xml::sax::XParser> getParser();
-    virtual uno::Reference<xml::sax::XFastParser> getFastParser();
-    virtual uno::Reference<io::XInputStream> getDocumentStream();
-    virtual uno::Reference<io::XInputStream> getStorageStream();
-    virtual uno::Reference<uno::XComponentContext> getContext();
-    virtual OUString getTargetForId(const OUString & rId);
-    virtual const OUString & getTarget() const;
+    virtual uno::Reference<xml::sax::XParser> getParser() SAL_OVERRIDE;
+    virtual uno::Reference<xml::sax::XFastParser> getFastParser() SAL_OVERRIDE;
+    virtual uno::Reference<io::XInputStream> getDocumentStream() SAL_OVERRIDE;
+    virtual uno::Reference<io::XInputStream> getStorageStream() SAL_OVERRIDE;
+    virtual uno::Reference<uno::XComponentContext> getContext() SAL_OVERRIDE;
+    virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
+    virtual const OUString & getTarget() const SAL_OVERRIDE;
 
     virtual uno::Reference<xml::sax::XFastTokenHandler>
-    getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);
+    getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext) SAL_OVERRIDE;
 
     void setInputStream(uno::Reference<io::XInputStream> rxInputStream);
     uno::Reference<io::XStream> accessDocumentStream();

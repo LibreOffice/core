@@ -36,13 +36,13 @@ namespace apphelper
 #define APPHELPER_XSERVICEINFO_DECL()                                                   \
     virtual OUString SAL_CALL                                        \
         getImplementationName()                                             \
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
     virtual sal_Bool SAL_CALL                                               \
         supportsService( const OUString& ServiceName )               \
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL     \
         getSupportedServiceNames()                                          \
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ); \
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
                                                                             \
     static OUString getImplementationName_Static();                  \
     static ::com::sun::star::uno::Sequence< OUString >               \

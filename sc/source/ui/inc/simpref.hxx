@@ -68,23 +68,23 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( bool bForced = false );
+    virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                  ScViewData*    ptrViewData );
                     ~ScSimpleRefDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 
-    virtual bool    IsRefInputMode() const;
-    virtual void    SetActive();
-    virtual bool    Close();
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
     void            StartRefInput();
 
     void           SetRefString(const OUString &rStr);
-    virtual void   FillInfo(SfxChildWinInfo&) const;
+    virtual void   FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 
     void            SetCloseHdl( const Link& rLink );
     void            SetUnoLinks( const Link& rDone, const Link& rAbort,

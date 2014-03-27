@@ -47,22 +47,22 @@ public:
     static rtl::Reference<FuPoor> Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
-
-    /// Forward to the clipboard manager.
-    virtual void DoCut (void);
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
     /// Forward to the clipboard manager.
-    virtual void DoCopy (void);
+    virtual void DoCut (void) SAL_OVERRIDE;
 
     /// Forward to the clipboard manager.
-    virtual void DoPaste (void);
+    virtual void DoCopy (void) SAL_OVERRIDE;
+
+    /// Forward to the clipboard manager.
+    virtual void DoPaste (void) SAL_OVERRIDE;
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -71,7 +71,7 @@ public:
         @returns
             true if a active function was aborted
     */
-    virtual bool cancel();
+    virtual bool cancel() SAL_OVERRIDE;
 
     void MouseDragged (
         const AcceptDropEvent& rEvent,

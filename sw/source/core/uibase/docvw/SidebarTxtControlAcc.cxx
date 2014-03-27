@@ -43,15 +43,15 @@ class SidebarTextEditSource : public SvxEditSource,
         SidebarTextEditSource( SidebarTxtControl& rSidebarTxtControl );
         virtual ~SidebarTextEditSource();
 
-        virtual SvxEditSource* Clone() const;
+        virtual SvxEditSource* Clone() const SAL_OVERRIDE;
 
-        virtual SvxTextForwarder* GetTextForwarder();
-        virtual SvxViewForwarder* GetViewForwarder();
+        virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+        virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
         virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
 
-        virtual void UpdateData();
+        virtual void UpdateData() SAL_OVERRIDE;
 
-        virtual SfxBroadcaster& GetBroadcaster() const;
+        virtual SfxBroadcaster& GetBroadcaster() const SAL_OVERRIDE;
         DECL_LINK( NotifyHdl, EENotify* );
 
     private:
@@ -134,24 +134,24 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
 
         virtual sal_Int32 SAL_CALL
                 getAccessibleChildCount()
-                throw (::com::sun::star::uno::RuntimeException, std::exception);
+                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleChild( sal_Int32 i )
-                throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+                throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL
                 addAccessibleEventListener (
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
-                throw (::com::sun::star::uno::RuntimeException, std::exception);
+                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL
                 removeAccessibleEventListener (
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
-                throw (::com::sun::star::uno::RuntimeException, std::exception);
+                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+        virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
 
     private:
         SidebarTxtControl& mrSidebarTxtControl;

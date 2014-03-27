@@ -48,7 +48,7 @@ public:
     virtual     ~SwDrawTextShell();
 
     virtual ::svl::IUndoManager*
-                GetUndoManager();
+                GetUndoManager() SAL_OVERRIDE;
 
     void        StateDisableItems(SfxItemSet &);
 

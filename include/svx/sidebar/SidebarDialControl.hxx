@@ -31,11 +31,11 @@ public:
     SidebarDialControl (Window* pParent, WinBits nBits = 0);
     virtual ~SidebarDialControl (void);
 
-    virtual Size GetOptimalSize() const;
-    virtual void MouseButtonDown (const MouseEvent& rMEvt);
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void MouseButtonDown (const MouseEvent& rMEvt) SAL_OVERRIDE;
 
 protected:
-    virtual void HandleMouseEvent (const Point& rPos, bool bInitial);
+    virtual void HandleMouseEvent (const Point& rPos, bool bInitial) SAL_OVERRIDE;
 };
 
 } } // end of namespace svx::sidebar

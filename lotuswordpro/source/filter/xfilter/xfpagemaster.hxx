@@ -115,9 +115,9 @@ public:
                                 XFColor color=XFColor(0,0,0)
                                 );
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStream);
+    virtual void    ToXml(IXFStream *pStream) SAL_OVERRIDE;
 
 private:
     double  m_fPageWidth;

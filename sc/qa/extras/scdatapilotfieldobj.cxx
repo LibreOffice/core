@@ -28,9 +28,9 @@ class ScDataPilotFieldObj : public CalcUnoApiTest, apitest::XDataPilotFieldGroup
                                 apitest::DataPilotField
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
-    virtual uno::Reference< uno::XInterface > init();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
 
     ScDataPilotFieldObj();
 

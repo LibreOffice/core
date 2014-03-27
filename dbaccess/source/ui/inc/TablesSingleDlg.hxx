@@ -64,10 +64,10 @@ class ODbDataSourceAdministrationHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
         inline void endExecution() { m_bStopExecution = sal_True; }
 
-        virtual const SfxItemSet* getOutputSet() const;
-        virtual SfxItemSet* getWriteOutputSet();
+        virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
+        virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
 
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
     };
 
 }   // namespace dbaui

@@ -108,9 +108,9 @@ public:
 
     void        Normalize();
 
-    enumXFContent   GetContentType();
+    enumXFContent   GetContentType() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     void RemoveRow(sal_uInt16 row)
     {

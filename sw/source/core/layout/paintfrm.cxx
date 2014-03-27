@@ -3004,7 +3004,7 @@ namespace
 
             virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
                                     const sdr::contact::ViewObjectContact& rOriginal,
-                                    const sdr::contact::DisplayInfo& rDisplayInfo)
+                                    const sdr::contact::DisplayInfo& rDisplayInfo) SAL_OVERRIDE
             {
                 sal_Bool bPaint( sal_True );
 

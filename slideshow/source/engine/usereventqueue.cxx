@@ -63,12 +63,12 @@ typedef std::map<ShapeSharedPtr, ImpEventQueue,
 class MouseEventHandler_ : public MouseEventHandler
 {
 public:
-    virtual bool handleMousePressed( awt::MouseEvent const& /*e*/ ) { return false;}
-    virtual bool handleMouseReleased( awt::MouseEvent const& /*e*/) { return false;}
-    virtual bool handleMouseEntered( awt::MouseEvent const& /*e*/ ) { return false;}
-    virtual bool handleMouseExited( awt::MouseEvent const& /*e*/ ) { return false; }
-    virtual bool handleMouseDragged( awt::MouseEvent const& /*e*/ ) { return false;}
-    virtual bool handleMouseMoved( awt::MouseEvent const& /*e*/ ) { return false; }
+    virtual bool handleMousePressed( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false;}
+    virtual bool handleMouseReleased( awt::MouseEvent const& /*e*/) SAL_OVERRIDE { return false;}
+    virtual bool handleMouseEntered( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false;}
+    virtual bool handleMouseExited( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false; }
+    virtual bool handleMouseDragged( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false;}
+    virtual bool handleMouseMoved( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false; }
 };
 
 /** @return one event has been posted
@@ -139,7 +139,7 @@ public:
         clearContainer();
     }
 
-    virtual bool handleEvent()
+    virtual bool handleEvent() SAL_OVERRIDE
     {
         return fireAllEvents( maEvents, mrEventQueue );
     }
@@ -161,7 +161,7 @@ public:
         maAnimationEventMap.clear();
     }
 
-    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
+    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) SAL_OVERRIDE
     {
         ENSURE_OR_RETURN_FALSE(
             rNode,
@@ -249,13 +249,13 @@ private:
     }
 
     // triggered by API calls, e.g. space bar
-    virtual bool handleEvent()
+    virtual bool handleEvent() SAL_OVERRIDE
     {
         return handleEvent_impl();
     }
 
     // triggered by mouse release:
-    virtual bool handleMouseReleased( const awt::MouseEvent& evt )
+    virtual bool handleMouseReleased( const awt::MouseEvent& evt ) SAL_OVERRIDE
     {
         if(evt.Buttons != awt::MouseButton::LEFT)
             return false;
@@ -301,7 +301,7 @@ public:
     void skipEffect (void) { handleEvent_impl(false); }
 
 private:
-    virtual bool handleEvent_impl()
+    virtual bool handleEvent_impl() SAL_OVERRIDE
     {
         return handleEvent_impl(true);
     }
@@ -350,7 +350,7 @@ private:
         clearContainer();
     }
 
-    virtual bool handleMouseReleased( awt::MouseEvent const& evt )
+    virtual bool handleMouseReleased( awt::MouseEvent const& evt ) SAL_OVERRIDE
     {
         if(evt.Buttons != awt::MouseButton::RIGHT)
             return false;
@@ -495,14 +495,14 @@ public:
         mrCursorManager( rCursorManager )
     {}
 
-    virtual bool handleMouseReleased( const awt::MouseEvent& e )
+    virtual bool handleMouseReleased( const awt::MouseEvent& e ) SAL_OVERRIDE
     {
         if(e.Buttons != awt::MouseButton::LEFT)
             return false;
         return processEvent( e );
     }
 
-    virtual bool handleMouseMoved( const awt::MouseEvent& e )
+    virtual bool handleMouseMoved( const awt::MouseEvent& e ) SAL_OVERRIDE
     {
         // TODO(P2): Maybe buffer last shape touched
 
@@ -527,7 +527,7 @@ public:
         : MouseHandlerBase( rEventQueue ),
           mpLastShape() {}
 
-    virtual bool handleMouseMoved( const awt::MouseEvent& e )
+    virtual bool handleMouseMoved( const awt::MouseEvent& e ) SAL_OVERRIDE
     {
         // TODO(P2): Maybe buffer last shape touched, and
         // check against that _first_
@@ -565,7 +565,7 @@ public:
         : MouseHandlerBase( rEventQueue ),
           maLastIter() {}
 
-    virtual bool handleMouseMoved( const awt::MouseEvent& e )
+    virtual bool handleMouseMoved( const awt::MouseEvent& e ) SAL_OVERRIDE
     {
         // TODO(P2): Maybe buffer last shape touched, and
         // check against that _first_

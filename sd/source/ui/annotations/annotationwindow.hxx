@@ -52,13 +52,13 @@ private:
     AnnotationWindow*   mpAnnotationWindow;
 
 protected:
-    virtual void    Paint( const Rectangle& rRect);
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    LoseFocus();
+    virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
@@ -66,10 +66,10 @@ public:
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
 
-    virtual OUString GetSurroundingText() const;
-    virtual Selection GetSurroundingTextSelection() const;
+    virtual OUString GetSurroundingText() const SAL_OVERRIDE;
+    virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
 
-    virtual void    GetFocus();
+    virtual void    GetFocus() SAL_OVERRIDE;
 };
 
 
@@ -94,7 +94,7 @@ class AnnotationWindow : public FloatingWindow
         basegfx::B2DPolygon     maPopupTriangle;
 
     protected:
-        void            SetSizePixel( const Size& rNewSize );
+        void            SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
 
         DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
@@ -142,12 +142,12 @@ class AnnotationWindow : public FloatingWindow
 
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
 
-        virtual void    Deactivate();
-        virtual void    Paint( const Rectangle& rRect);
-        virtual void    MouseMove( const MouseEvent& rMEvt );
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void    Command( const CommandEvent& rCEvt );
-        virtual void    GetFocus();
+        virtual void    Deactivate() SAL_OVERRIDE;
+        virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+        virtual void    GetFocus() SAL_OVERRIDE;
 
         void            SetColor();
 

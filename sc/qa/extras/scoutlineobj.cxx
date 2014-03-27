@@ -25,10 +25,10 @@ class ScOutlineObj : public CalcUnoApiTest, apitest::XSheetOutline
 public:
     ScOutlineObj();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
-    virtual uno::Reference< uno::XInterface > init();
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScOutlineObj);
     CPPUNIT_TEST(testHideDetail);

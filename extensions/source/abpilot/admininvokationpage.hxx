@@ -44,11 +44,11 @@ namespace abp
 
     protected:
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        initializePage();
+        virtual void        ActivatePage() SAL_OVERRIDE;
+        virtual void        initializePage() SAL_OVERRIDE;
 
         // OImportPage overridables
-        virtual bool        canAdvance() const;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnInvokeAdminDialog, void* );

@@ -96,15 +96,15 @@ private:
     XFContentContainer* m_pXFContainer;
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     void XFConvertFrameInCell(XFContentContainer* pCont);
     void XFConvertFrameInFrame(XFContentContainer* pCont);
     void XFConvertFrameInHeaderFooter(XFContentContainer* pCont);
 
 public:
-    void RegisterStyle();
-    void Parse(IXFStream* pOutputStream);
-    virtual void XFConvert(XFContentContainer* pCont);
+    void RegisterStyle() SAL_OVERRIDE;
+    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     void XFConvertFrameInPage(XFContentContainer* pCont);
     inline LwpDLVListHeadTail* GetParaList();
     inline LwpObjectID* GetFirstPara();

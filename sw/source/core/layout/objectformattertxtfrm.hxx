@@ -116,15 +116,15 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
 
     protected:
 
-        virtual SwFrm& GetAnchorFrm();
+        virtual SwFrm& GetAnchorFrm() SAL_OVERRIDE;
 
     public:
         virtual ~SwObjectFormatterTxtFrm();
 
         // #i40147# - add parameter <_bCheckForMovedFwd>.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
-                                  const bool _bCheckForMovedFwd = false );
-        virtual bool DoFormatObjs();
+                                  const bool _bCheckForMovedFwd = false ) SAL_OVERRIDE;
+        virtual bool DoFormatObjs() SAL_OVERRIDE;
 
         /** method to create an instance of <SwObjectFormatterTxtFrm> is
             necessary.

@@ -69,35 +69,35 @@ public:
     // XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (
         const css::ui::ContextChangeEventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUIElement
     virtual cssu::Reference<css::frame::XFrame> SAL_CALL getFrame (void)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::rtl::OUString SAL_CALL getResourceURL (void)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL getType (void)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual cssu::Reference<cssu::XInterface> SAL_CALL getRealInterface (void)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XToolPanel
     virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible (
         const cssu::Reference<css::accessibility::XAccessible>& rxParentAccessible)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual cssu::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSidebarPanel
     virtual css::ui::LayoutSize SAL_CALL getHeightForWidth (sal_Int32 nWidth)
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getMinimalWidth ()
-        throw(cssu::RuntimeException, std::exception);
+        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     cssu::Reference<css::frame::XFrame> mxFrame;
@@ -110,7 +110,7 @@ protected:
     virtual ~SidebarPanelBase (void);
 
     virtual void SAL_CALL disposing (void)
-        throw (cssu::RuntimeException);
+        throw (cssu::RuntimeException) SAL_OVERRIDE;
 
 private:
     Window* mpControl;

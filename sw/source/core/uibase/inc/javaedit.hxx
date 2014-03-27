@@ -65,7 +65,7 @@ private:
     DECL_LINK(InsertFileHdl, PushButton *);
     DECL_LINK(DlgClosedHdl, void *);
 
-    virtual void    Apply();
+    virtual void    Apply() SAL_OVERRIDE;
 
     void            CheckTravel();
     void            SetFld();

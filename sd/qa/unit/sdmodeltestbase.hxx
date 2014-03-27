@@ -65,7 +65,7 @@ public:
     {
     }
 
-    virtual void setUp()
+    virtual void setUp() SAL_OVERRIDE
     {
         test::BootstrapFixture::setUp();
 
@@ -75,7 +75,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
     }
 
-    virtual void tearDown()
+    virtual void tearDown() SAL_OVERRIDE
     {
         uno::Reference< lang::XComponent >( m_xDrawComponent, uno::UNO_QUERY_THROW )->dispose();
         test::BootstrapFixture::tearDown();

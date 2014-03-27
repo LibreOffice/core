@@ -34,7 +34,7 @@ public:
 
     void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CONTROLFOCUSHELPER_HXX

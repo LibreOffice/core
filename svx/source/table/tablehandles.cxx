@@ -49,7 +49,7 @@ protected:
     bool                    mbVisible;
 
     // geometry creation for OverlayObject
-    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
 public:
     OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );

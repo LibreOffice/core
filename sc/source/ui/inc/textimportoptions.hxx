@@ -32,7 +32,7 @@ public:
     ScTextImportOptionsDlg(Window* pParent);
     virtual ~ScTextImportOptionsDlg();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     LanguageType getLanguageType() const;
     bool isDateConversionSet() const;

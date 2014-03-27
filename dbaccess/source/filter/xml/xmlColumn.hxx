@@ -49,7 +49,7 @@ namespace dbaxml
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLColumn();
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
     };
 } // namespace dbaxml
 

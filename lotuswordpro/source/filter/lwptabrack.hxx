@@ -139,7 +139,7 @@ public:
     LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm);
     virtual ~LwpTabRack(){}
 public:
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_uInt16 GetNumTabs();
     LwpTab* Lookup(sal_uInt16 nIndex);
     LwpTabRack* GetNext();

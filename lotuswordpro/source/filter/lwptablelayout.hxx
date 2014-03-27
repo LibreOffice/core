@@ -89,9 +89,9 @@ class LwpTableLayout: public LwpLayout
 public:
     LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_TABLE_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_LAYOUT;}
     LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;}
-    void RegisterStyle();
+    void RegisterStyle() SAL_OVERRIDE;
     LwpTable *  GetTable();
     LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;}
     LwpSuperTableLayout * GetSuperTableLayout();
@@ -105,7 +105,7 @@ public:
         m_WordProCellsMap[nRow * m_nCols + nCol] = pCell;
     };
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     void TraverseTable();
     void RegisterColumns();
     void RegisterRows();
@@ -129,7 +129,7 @@ private:
     LwpColumnLayout ** m_pColumns;
 
 public:
-    void XFConvert(XFContentContainer* pCont);
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     void ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol);
     OUString GetDefaultRowStyleName(){return m_DefaultRowStyleName;}
@@ -162,7 +162,7 @@ class LwpSuperTableLayout: public LwpPlacableLayout
 public:
     LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTableLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_SUPERTABLE_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_SUPERTABLE_LAYOUT;}
     void RegisterNewStyle();
     // for table style
     // add by , 06/03/2005
@@ -172,17 +172,17 @@ public:
 
     void ApplyBackColor(XFTableStyle *pTableStyle);
     void ApplyShadow(XFTableStyle *pTableStyle);
-    double GetWidth();
+    double GetWidth() SAL_OVERRIDE;
     double GetTableWidth();
     void ApplyWatermark(XFTableStyle *pTableStyle);
     void ApplyAlignment(XFTableStyle * pTableStyle);
-    void XFConvert(XFContentContainer* pCont);
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     // for frame style
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False);
+    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
     void RegisterFrameStyle();
     LwpTableHeadingLayout* GetTableHeadingLayout();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpTableLayout* GetTableLayout();
     sal_Bool IsSizeRightToContent();
     sal_Bool IsJustifiable();
@@ -199,14 +199,14 @@ class LwpColumnLayout : public LwpVirtualLayout
 public:
     LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpColumnLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_COLUMN_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_COLUMN_LAYOUT;}
     sal_uInt32 GetColumnID(){return ccolid;}
-    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(cwidth);}
+    double GetWidth() SAL_OVERRIDE {return LwpTools::ConvertFromUnitsToMetric(cwidth);}
     using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
     sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_uInt8 ccolid;
     sal_Int32 cwidth;
 
@@ -220,11 +220,11 @@ class LwpTableHeadingLayout : public LwpTableLayout
 public:
     LwpTableHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableHeadingLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_TABLE_HEADING_LAYOUT;}
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_HEADING_LAYOUT;}
     void GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nEndRow);
     LwpRowHeadingLayout * GetFirstRowHeadingLayout();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_uInt16 cStartRow;
     sal_uInt16 cEndRow;
 };
@@ -238,7 +238,7 @@ public:
     LwpSuperParallelColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperParallelColumnLayout();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -251,7 +251,7 @@ public:
     LwpParallelColumnsLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpParallelColumnsLayout();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 class LwpSuperGlossaryLayout : public LwpSuperTableLayout
@@ -260,7 +260,7 @@ public:
     LwpSuperGlossaryLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperGlossaryLayout();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 #include "lwpcelllayout.hxx"

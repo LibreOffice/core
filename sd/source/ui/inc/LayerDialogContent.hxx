@@ -41,8 +41,8 @@ public:
     virtual ~LayerDialogContent (void);
 
 protected:
-    virtual bool Close (void);
-    virtual void Resize (void);
+    virtual bool Close (void) SAL_OVERRIDE;
+    virtual void Resize (void) SAL_OVERRIDE;
 
 private:
     LayerTabBar maLayerTabBar;

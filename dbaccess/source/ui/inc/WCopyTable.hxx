@@ -65,7 +65,7 @@ namespace dbaui
 
         virtual ~TExportColumnFindFunctor() {}
 
-        inline bool operator()(const OUString& _sColumnName) const
+        inline bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
         {
             return m_pColumns->find(_sColumnName) != m_pColumns->end();
         }
@@ -85,7 +85,7 @@ namespace dbaui
 
         virtual ~TMultiListBoxEntryFindFunctor() {}
 
-        inline bool operator()(const OUString& _sColumnName) const
+        inline bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
         {
             return ::std::find_if(m_pVector->begin(),m_pVector->end(),
                 ::std::bind2nd(m_aCase, _sColumnName)) != m_pVector->end();
@@ -158,18 +158,18 @@ namespace dbaui
         );
 
         // ICopyTableSourceObject overridables
-        virtual OUString     getQualifiedObjectName() const;
-        virtual bool                isView() const;
-        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
-        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+        virtual OUString     getQualifiedObjectName() const SAL_OVERRIDE;
+        virtual bool                isView() const SAL_OVERRIDE;
+        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString >
-                                    getColumnNames() const;
+                                    getColumnNames() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString >
-                                    getPrimaryKeyColumnNames() const;
-        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const;
-        virtual OUString     getSelectStatement() const;
+                                    getPrimaryKeyColumnNames() const SAL_OVERRIDE;
+        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const SAL_OVERRIDE;
+        virtual OUString     getSelectStatement() const SAL_OVERRIDE;
         virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
-                                    getPreparedSelectStatement() const;
+                                    getPreparedSelectStatement() const SAL_OVERRIDE;
     };
 
     // NamedTableCopySource
@@ -192,18 +192,18 @@ namespace dbaui
         );
 
         // ICopyTableSourceObject overridables
-        virtual OUString     getQualifiedObjectName() const;
-        virtual bool                isView() const;
-        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
-        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+        virtual OUString     getQualifiedObjectName() const SAL_OVERRIDE;
+        virtual bool                isView() const SAL_OVERRIDE;
+        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString >
-                                    getColumnNames() const;
+                                    getColumnNames() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString >
-                                    getPrimaryKeyColumnNames() const;
-        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const;
-        virtual OUString     getSelectStatement() const;
+                                    getPrimaryKeyColumnNames() const SAL_OVERRIDE;
+        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const SAL_OVERRIDE;
+        virtual OUString     getSelectStatement() const SAL_OVERRIDE;
         virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
-                                    getPreparedSelectStatement() const;
+                                    getPreparedSelectStatement() const SAL_OVERRIDE;
 
     private:
         void    impl_ensureColumnInfo_throw();
@@ -324,7 +324,7 @@ namespace dbaui
 
         virtual ~OCopyTableWizard();
 
-        virtual long        DeactivatePage();
+        virtual long        DeactivatePage() SAL_OVERRIDE;
         OKButton&           GetOKButton() { return m_pbFinish; }
         Wizard_Button_Style GetPressedButton() const { return m_ePressed; }
         void                EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable);

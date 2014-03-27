@@ -47,7 +47,7 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
     DECL_LINK(DocSelectHdl, RadioButton*);
     DECL_LINK(FileSelectHdl, PushButton*);
 
-    virtual bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+    virtual bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
 public:
         SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent);

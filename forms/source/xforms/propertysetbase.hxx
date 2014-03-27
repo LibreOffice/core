@@ -51,8 +51,8 @@ protected:
     virtual ~PropertyAccessorBase();
 
 public:
-    virtual oslInterlockedCount SAL_CALL acquire();
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     virtual bool    approveValue( const com::sun::star::uno::Any& rValue ) const = 0;
     virtual void    setValue( const com::sun::star::uno::Any& rValue ) = 0;
@@ -83,25 +83,25 @@ public:
     {
     }
 
-    virtual bool    approveValue( const com::sun::star::uno::Any& rValue ) const
+    virtual bool    approveValue( const com::sun::star::uno::Any& rValue ) const SAL_OVERRIDE
     {
         VALUE aVal;
         return ( rValue >>= aVal );
     }
 
-    virtual void    setValue( const com::sun::star::uno::Any& rValue )
+    virtual void    setValue( const com::sun::star::uno::Any& rValue ) SAL_OVERRIDE
     {
         VALUE aTypedVal = VALUE();
         OSL_VERIFY( rValue >>= aTypedVal );
         (m_pInstance->*m_pWriter)( aTypedVal );
     }
 
-    virtual void getValue( com::sun::star::uno::Any& rValue ) const
+    virtual void getValue( com::sun::star::uno::Any& rValue ) const SAL_OVERRIDE
     {
         rValue = com::sun::star::uno::makeAny( (m_pInstance->*m_pReader)() );
     }
 
-    virtual bool isWriteable() const
+    virtual bool isWriteable() const SAL_OVERRIDE
     {
         return m_pWriter != 0;
     }
@@ -261,13 +261,13 @@ protected:
 
     /// OPropertysetHelper methods
     virtual sal_Bool SAL_CALL convertFastPropertyValue( Any_t& rConvertedValue, Any_t& rOldValue, sal_Int32 nHandle, const Any_t& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
+        throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any_t& rValue )
-        throw (::com::sun::star::uno::Exception, std::exception);
-    virtual void SAL_CALL getFastPropertyValue( Any_t& rValue, sal_Int32 nHandle ) const;
+        throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL getFastPropertyValue( Any_t& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     /// helper struct for granting selective access to some notification-related methods

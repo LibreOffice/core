@@ -107,7 +107,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -183,10 +183,10 @@ public:
                     ExtensionBox_Impl(Window* pParent, TheExtensionManager *pManager);
                    ~ExtensionBox_Impl();
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Paint( const Rectangle &rPaintRect );
-    virtual void    Resize();
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
@@ -218,42 +218,42 @@ public:
     //These functions are used for automatic testing
 
     /** @return  The count of the entries in the list box. */
-    virtual sal_Int32 getItemCount() const;
+    virtual sal_Int32 getItemCount() const SAL_OVERRIDE;
 
     /** @return  The index of the first selected entry in the list box.
         When nothing is selected, which is the case when getItemCount returns '0',
         then this function returns ENTRY_NOTFOUND */
-    virtual sal_Int32 getSelIndex() const;
+    virtual sal_Int32 getSelIndex() const SAL_OVERRIDE;
 
     /** @return  The item name of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemName( sal_Int32 index ) const;
+    virtual OUString getItemName( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The version string of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemVersion( sal_Int32 index ) const;
+    virtual OUString getItemVersion( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The description string of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemDescription( sal_Int32 index ) const;
+    virtual OUString getItemDescription( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The publisher string of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemPublisher( sal_Int32 index ) const;
+    virtual OUString getItemPublisher( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The link behind the publisher text of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemPublisherLink( sal_Int32 index ) const;
+    virtual OUString getItemPublisherLink( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** The entry at the given position will be selected
         Index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual void select( sal_Int32 pos );
+    virtual void select( sal_Int32 pos ) SAL_OVERRIDE;
 
     /** The first found entry with the given name will be selected
         When there was no entry found with the name, the selection doesn't change.
@@ -262,7 +262,7 @@ public:
             1. the name is not unique
             2. one extension can be installed as user and shared extension.
     */
-    virtual void select( const OUString & sName );
+    virtual void select( const OUString & sName ) SAL_OVERRIDE;
 };
 
 }

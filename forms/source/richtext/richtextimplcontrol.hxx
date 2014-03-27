@@ -172,7 +172,7 @@ namespace frm
         inline  bool    hasHScrollBar( ) const { return m_pHScroll != NULL; }
 
         // IEngineStatusListener overridables
-        virtual void EditEngineStatusChanged( const EditStatus& _rStatus );
+        virtual void EditEngineStatusChanged( const EditStatus& _rStatus ) SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnInvalidateAllAttributes, void* );

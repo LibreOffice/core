@@ -343,7 +343,7 @@ public:
 
 class Ww1SingleSprmByteSized : public Ww1SingleSprm {
 public:
-    sal_uInt16 Size(sal_uInt8*);
+    sal_uInt16 Size(sal_uInt8*) SAL_OVERRIDE;
     Ww1SingleSprmByteSized(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
         }
@@ -351,7 +351,7 @@ public:
 
 class Ww1SingleSprmWordSized : public Ww1SingleSprm {
 public:
-    sal_uInt16 Size(sal_uInt8*);
+    sal_uInt16 Size(sal_uInt8*) SAL_OVERRIDE;
     Ww1SingleSprmWordSized(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
         }
@@ -399,7 +399,7 @@ public:
 class Ww1SingleSprmTab : public Ww1SingleSprm {
 public:
     std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
-    sal_uInt16 Size(sal_uInt8*);
+    sal_uInt16 Size(sal_uInt8*) SAL_OVERRIDE;
     Ww1SingleSprmTab(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
         }
@@ -410,8 +410,8 @@ public:
     Ww1SingleSprmPJc(sal_Char* sName) :
         Ww1SingleSprmByte(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDxa : public Ww1SingleSprmWord {
@@ -419,7 +419,7 @@ public:
     Ww1SingleSprmPDxa(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDxaRight : public Ww1SingleSprmPDxa {
@@ -427,7 +427,7 @@ public:
     Ww1SingleSprmPDxaRight(sal_Char* sName) :
         Ww1SingleSprmPDxa(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDxaLeft : public Ww1SingleSprmPDxa {
@@ -435,7 +435,7 @@ public:
     Ww1SingleSprmPDxaLeft(sal_Char* sName) :
         Ww1SingleSprmPDxa(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDxaLeft1 : public Ww1SingleSprmPDxa {
@@ -443,7 +443,7 @@ public:
     Ww1SingleSprmPDxaLeft1(sal_Char* sName) :
         Ww1SingleSprmPDxa(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPFKeep : public Ww1SingleSprmBool {
@@ -451,8 +451,8 @@ public:
     Ww1SingleSprmPFKeep(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPFKeepFollow : public Ww1SingleSprmBool {
@@ -460,8 +460,8 @@ public:
     Ww1SingleSprmPFKeepFollow(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPPageBreakBefore : public Ww1SingleSprmBool {
@@ -469,8 +469,8 @@ public:
     Ww1SingleSprmPPageBreakBefore(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPBrc : public Ww1SingleSprmWord {
@@ -486,7 +486,7 @@ public:
     Ww1SingleSprmPBrc(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
     // SetBorder() is needed for tables, too. That's why it's public
     static editeng::SvxBorderLine* SetBorder(editeng::SvxBorderLine*, W1_BRC10*);
 };
@@ -510,21 +510,21 @@ public:
     Ww1SingleSprmPBrc10(sal_uInt16 nL, sal_Char* sName)
     : Ww1SingleSprmPBrc(sName), nLine(nL) {}
 
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmParaSpace : public Ww1SingleSprmWord {
 public:
     Ww1SingleSprmParaSpace(sal_Char* sName)
     : Ww1SingleSprmWord(sName) {}
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDyaBefore : public Ww1SingleSprmParaSpace {
 public:
     Ww1SingleSprmPDyaBefore(sal_Char* sName)
     : Ww1SingleSprmParaSpace(sName) {}
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDyaAfter : public Ww1SingleSprmParaSpace {
@@ -532,7 +532,7 @@ public:
     Ww1SingleSprmPDyaAfter(sal_Char* sName) :
         Ww1SingleSprmParaSpace(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDyaLine : public Ww1SingleSprmWord {
@@ -540,8 +540,8 @@ public:
     Ww1SingleSprmPDyaLine(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPChgTabsPapx : public Ww1SingleSprmByteSized {
@@ -550,8 +550,8 @@ public:
         Ww1SingleSprmByteSized(0, sName) {
         }
     // Size() is not yet activated!
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmSGprfIhdt : public Ww1SingleSprmByte {
@@ -559,7 +559,7 @@ public:
     Ww1SingleSprmSGprfIhdt(sal_Char* sName) :
         Ww1SingleSprmByte(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmSColumns : public Ww1SingleSprmWord {
@@ -567,7 +567,7 @@ public:
     Ww1SingleSprmSColumns(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPFInTable : public Ww1SingleSprmBool {
@@ -575,8 +575,8 @@ public:
     Ww1SingleSprmPFInTable(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPTtp : public Ww1SingleSprmBool {
@@ -584,8 +584,8 @@ public:
     Ww1SingleSprmPTtp(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmTJc : public Ww1SingleSprmWord {
@@ -599,7 +599,7 @@ public:
     Ww1SingleSprmTDxaGapHalf(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmTDefTable10 : public Ww1SingleSprmWordSized {
@@ -607,7 +607,7 @@ public:
     Ww1SingleSprmTDefTable10(sal_Char* sName) :
         Ww1SingleSprmWordSized(0, sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmTDyaRowHeight : public Ww1SingleSprmWord {
@@ -615,7 +615,7 @@ public:
     Ww1SingleSprmTDyaRowHeight(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 // Class definitions for table fastsave attributes
@@ -628,7 +628,7 @@ public:
     Ww1SingleSprmPpc(sal_Char* sName) :
         Ww1SingleSprmByte(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDxaAbs : public Ww1SingleSprmWord {
@@ -636,7 +636,7 @@ public:
     Ww1SingleSprmPDxaAbs(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDyaAbs : public Ww1SingleSprmWord {
@@ -644,7 +644,7 @@ public:
     Ww1SingleSprmPDyaAbs(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPDxaWidth : public Ww1SingleSprmWord {
@@ -652,7 +652,7 @@ public:
     Ww1SingleSprmPDxaWidth(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 class Ww1SingleSprmPFromText : public Ww1SingleSprmWord {
@@ -660,7 +660,7 @@ public:
     Ww1SingleSprmPFromText(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) SAL_OVERRIDE;
 };
 
 // The data type Sprm actually appearing in the file

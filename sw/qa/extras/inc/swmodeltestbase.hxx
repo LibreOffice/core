@@ -70,7 +70,7 @@ using namespace com::sun::star;
     void Import_Export_Import() {\
         executeImportExportImportTest(filename);\
     }\
-    void verify();\
+    void verify() SAL_OVERRIDE;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
@@ -85,7 +85,7 @@ using namespace com::sun::star;
     void Import() { \
         executeImportTest(filename);\
     }\
-    void verify();\
+    void verify() SAL_OVERRIDE;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
@@ -107,14 +107,14 @@ public:
     {
     }
 
-    virtual void setUp()
+    virtual void setUp() SAL_OVERRIDE
     {
         test::BootstrapFixture::setUp();
 
         mxDesktop.set( com::sun::star::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())) );
     }
 
-    virtual void tearDown()
+    virtual void tearDown() SAL_OVERRIDE
     {
         if (mxComponent.is())
             mxComponent->dispose();

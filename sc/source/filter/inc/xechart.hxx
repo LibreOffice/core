@@ -170,7 +170,7 @@ public:
     virtual             ~XclExpChGroupBase();
 
     /** Saves the header record. Calls WriteSubRecords() to let derived classes write sub records. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     /** Derived classes return whether there are any records embedded in this group. */
     virtual bool        HasSubRecords() const;
     /** Derived classes implement writing any records embedded in this group. */
@@ -197,7 +197,7 @@ public:
                             XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize = 0 );
 
     /** Writes missing CHFRBLOCKBEGIN records and this record. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
 // Frame formatting ===========================================================
@@ -211,7 +211,7 @@ public:
     inline XclChFramePos& GetFramePosData() { return maData; }
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChFramePos       maData;             /// Position of the frame.
@@ -245,7 +245,7 @@ public:
     bool                IsDefault( XclChFrameType eDefFrameType ) const;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChLineFormat     maData;             /// Contents of the CHLINEFORMAT record.
@@ -278,7 +278,7 @@ public:
     bool                IsDefault( XclChFrameType eDefFrameType ) const;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChAreaFormat     maData;             /// Contents of the CHAREAFORMAT record.
@@ -302,17 +302,17 @@ public:
     bool                IsValid() const;
 
     /** Writes the CHESCHERFORMAT record group to the stream, if complex formatting is extant. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     /** Returns true, if this record group contains a CHPICFORMAT record. */
-    virtual bool        HasSubRecords() const;
+    virtual bool        HasSubRecords() const SAL_OVERRIDE;
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Inserts a color from the contained Escher property set into the color palette. */
     sal_uInt32          RegisterColor( sal_uInt16 nPropId );
 
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChEscherFormat   maData;             /// Fill properties for complex areas (CHESCHERFORMAT record).
@@ -380,12 +380,12 @@ public:
     bool                IsDeleteable() const;
 
     /** Writes the entire record group. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChFrame          maData;             /// Contents of the CHFRAME record.
@@ -421,10 +421,10 @@ public:
     inline bool         HasString() const { return mxString && !mxString->IsEmpty(); }
 
     /** Writes the CHSOURCELINK record and optionally a CHSTRING record with explicit string data. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
@@ -454,7 +454,7 @@ public:
     explicit            XclExpChObjectLink( sal_uInt16 nLinkTarget, const XclChDataPointPos& rPointPos );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChObjectLink     maData;             /// Contents of the CHOBJECTLINK record.
@@ -477,7 +477,7 @@ public:
                             bool bShowPercent, bool bShowBubble );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChFrLabelProps   maData;             /// Contents of the CHFRLABELPROPS record.
@@ -523,9 +523,9 @@ public:
     explicit            XclExpChText( const XclExpChRoot& rRoot );
 
     /** Sets font color and color identifier to internal data structures. */
-    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId );
+    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId ) SAL_OVERRIDE;
     /** Sets text rotation to internal data structures. */
-    virtual void        SetRotation( sal_uInt16 nRotation );
+    virtual void        SetRotation( sal_uInt16 nRotation ) SAL_OVERRIDE;
 
     /** Converts all text settings of the passed title text object. */
     void                ConvertTitle( XTitleRef xTitle, sal_uInt16 nTarget, const OUString* pSubTitle = NULL );
@@ -543,10 +543,10 @@ public:
     sal_uInt16          GetAttLabelFlags() const;
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChText           maData;             /// Contents of the CHTEXT record.
@@ -587,7 +587,7 @@ private:
     /** Registers marker colors in palette and stores color identifiers. */
     void                RegisterColors( const XclExpChRoot& rRoot );
 
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChMarkerFormat   maData;             /// Contents of the CHMARKERFORMAT record.
@@ -623,7 +623,7 @@ public:
     void                Convert( const ScfPropertySet& rPropSet );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclCh3dDataFormat   maData;             /// Contents of the CH3DDATAFORMAT record.
@@ -667,10 +667,10 @@ public:
     inline bool         IsSeriesFormat() const { return maData.maPointPos.mnPointIdx == EXC_CHDATAFORMAT_ALLPOINTS; }
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChDataFormat     maData;             /// Contents of the CHDATAFORMAT record.
@@ -703,7 +703,7 @@ public:
     inline XclExpChTextRef GetDataLabel() const { return mxLabel; }
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChSerTrendLine   maData;             /// Contents of the CHSERTRENDLINE record.
@@ -725,7 +725,7 @@ public:
     bool                Convert( XclExpChSourceLink& rValueLink, sal_uInt16& rnValueCount, const ScfPropertySet& rPropSet );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChSerErrorBar    maData;             /// Contents of the CHSERERRORBAR record.
@@ -770,7 +770,7 @@ public:
     void                ConvertCategSequence( XLabeledDataSeqRef xCategSeq );
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Initializes members of this series to represent a child of the passed series. */
@@ -785,7 +785,7 @@ private:
     void                CreateErrorBar( const ScfPropertySet& rPropSet,
                             const OUString& rShowPropName, sal_uInt8 nBarId );
 
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpChDataFormat > XclExpChDataFormatList;
@@ -831,7 +831,7 @@ public:
     inline const XclChTypeInfo& GetTypeInfo() const { return maTypeInfo; }
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChType           maData;             /// Contents of the chart type record.
@@ -855,7 +855,7 @@ public:
     inline bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChChart3d        maData;             /// Contents of the CHCHART3D record.
@@ -879,10 +879,10 @@ public:
     void                Convert( const ScfPropertySet& rPropSet );
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChLegend         maData;             /// Contents of the CHLEGEND record.
@@ -909,10 +909,10 @@ public:
     void                Convert( const ScfPropertySet& rPropSet );
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChObjectType     meObjType;          /// Type of the dropbar.
@@ -968,7 +968,7 @@ public:
     inline bool         IsCombinable2d() const { return !Is3dChart() && maTypeInfo.mbCombinable2d; }
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Returns an unused format index to be used for the next created series. */
@@ -983,7 +983,7 @@ private:
     bool                CreateStockSeries( XDataSeriesRef xDataSeries,
                             const OUString& rValueRole, bool bCloseSymbol );
 
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpChSeries >          XclExpChSeriesList;
@@ -1019,8 +1019,8 @@ public:
                             { ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
 
 private:
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChLabelRange     maLabelData;        /// Contents of the CHLABELRANGE record.
@@ -1042,7 +1042,7 @@ public:
     void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChValueRange     maData;             /// Contents of the CHVALUERANGE record.
@@ -1065,7 +1065,7 @@ public:
     void                SetRotation( sal_uInt16 nRotation );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChTick           maData;             /// Contents of the CHTICK record.
@@ -1093,9 +1093,9 @@ public:
     explicit            XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType );
 
     /** Sets font color and color identifier to internal data structures. */
-    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId );
+    virtual void        SetFont( XclExpChFontRef xFont, const Color& rColor, sal_uInt32 nColorId ) SAL_OVERRIDE;
     /** Sets text rotation to internal data structures. */
-    virtual void        SetRotation( sal_uInt16 nRotation );
+    virtual void        SetRotation( sal_uInt16 nRotation ) SAL_OVERRIDE;
 
     /** Converts formatting and scaling settings from the passed axis. */
     void                Convert( XAxisRef xAxis, XAxisRef xCrossingAxis,
@@ -1109,10 +1109,10 @@ public:
     inline sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclChAxis           maData;             /// Contents of the CHAXIS record.
@@ -1160,7 +1160,7 @@ public:
     bool                Is3dChart() const;
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Returns first inserted chart type group. */
@@ -1174,7 +1174,7 @@ private:
                             XCoordSystemRef xCoordSystem, const XclChExtTypeInfo& rTypeInfo,
                             sal_Int32 nCrossingAxisDim );
 
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpChTypeGroup > XclExpChTypeGroupList;
@@ -1220,10 +1220,10 @@ public:
     void                SetManualPlotArea();
 
     /** Writes all embedded records. */
-    virtual void        WriteSubRecords( XclExpStream& rStrm );
+    virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpChSeries >  XclExpChSeriesList;
@@ -1253,7 +1253,7 @@ public:
                             const Size& rChartSize );
     virtual             ~XclExpChartDrawing();
 
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     boost::shared_ptr< XclExpObjectManager > mxObjMgr;

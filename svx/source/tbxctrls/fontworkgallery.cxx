@@ -307,8 +307,8 @@ class FontworkAlignmentWindow : public ToolbarMenu
 public:
     FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-    virtual void statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     svt::ToolboxController& mrController;
@@ -430,11 +430,11 @@ class FontworkAlignmentControl : public svt::PopupWindowController
 public:
     FontworkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual ::Window* createPopupWindow( ::Window* pParent );
+    virtual ::Window* createPopupWindow( ::Window* pParent ) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     using  svt::PopupWindowController::createPopupWindow;
 };
@@ -501,7 +501,7 @@ class FontworkCharacterSpacingWindow : public ToolbarMenu
 public:
     FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-    virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 private:
     svt::ToolboxController& mrController;
 
@@ -668,11 +668,11 @@ class FontworkCharacterSpacingControl : public svt::PopupWindowController
 public:
     FontworkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-    virtual ::Window* createPopupWindow( ::Window* pParent );
+    virtual ::Window* createPopupWindow( ::Window* pParent ) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     using svt::PopupWindowController::createPopupWindow;
 };

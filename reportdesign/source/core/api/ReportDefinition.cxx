@@ -242,7 +242,7 @@ class OStyle :   public ::comphelper::OMutexAndBroadcastHelper
     awt::Size m_aSize;
 
 protected:
-    void getPropertyDefaultByHandle( sal_Int32 _nHandle, uno::Any& _rDefault ) const;
+    void getPropertyDefaultByHandle( sal_Int32 _nHandle, uno::Any& _rDefault ) const SAL_OVERRIDE;
     ~OStyle(){}
 public:
     OStyle();
@@ -251,28 +251,28 @@ public:
     DECLARE_XINTERFACE( )
 
     // XPropertySet
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception);
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-    ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
     // XStyle
-    ::sal_Bool SAL_CALL isUserDefined(  ) throw (uno::RuntimeException, std::exception);
-    ::sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException, std::exception);
-    OUString SAL_CALL getParentStyle(  ) throw (uno::RuntimeException, std::exception);
-    void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception);
+    ::sal_Bool SAL_CALL isUserDefined(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    ::sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    OUString SAL_CALL getParentStyle(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNamed
-    OUString SAL_CALL getName(  ) throw (uno::RuntimeException, std::exception);
-    void SAL_CALL setName( const OUString& aName ) throw (uno::RuntimeException, std::exception);
+    OUString SAL_CALL getName(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setName( const OUString& aName ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMultiPropertyState
-    uno::Sequence< beans::PropertyState > SAL_CALL getPropertyStates( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+    uno::Sequence< beans::PropertyState > SAL_CALL getPropertyStates( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return OStyle_PBASE::getPropertyStates(aPropertyNames);
     }
-    void SAL_CALL setAllPropertiesToDefault(  ) throw (uno::RuntimeException, std::exception);
-    void SAL_CALL setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception);
-    uno::Sequence< uno::Any > SAL_CALL getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
+    void SAL_CALL setAllPropertiesToDefault(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    uno::Sequence< uno::Any > SAL_CALL getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 OStyle::OStyle()
@@ -483,8 +483,8 @@ namespace
         virtual ~FactoryLoader(){}
 
         /// Working method which should be overridden.
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL onTerminated();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
+        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
     };
 
     void SAL_CALL FactoryLoader::run()
@@ -2421,23 +2421,23 @@ public:
     OStylesHelper(const uno::Type _aType = ::getCppuType(static_cast< uno::Reference< container::XElementAccess >* >(NULL)));
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeByName( const OUString& Name ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException, std::exception);
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeByName( const OUString& Name ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException, std::exception);
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // container::XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw(uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(uno::RuntimeException, std::exception);
+    virtual uno::Type SAL_CALL getElementType(  ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // container::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException, std::exception);
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // container::XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception);
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 OStylesHelper::OStylesHelper(const uno::Type _aType)

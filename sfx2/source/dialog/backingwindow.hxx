@@ -104,13 +104,13 @@ public:
     BackingWindow( Window* pParent );
     ~BackingWindow();
 
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual bool        Notify( NotifyEvent& rNEvt );
-    virtual void        GetFocus();
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
 

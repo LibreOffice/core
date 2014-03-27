@@ -115,7 +115,7 @@ public:
 
     void ShowMinLengthText(bool bShow);
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SFX2_PASSWD_HXX

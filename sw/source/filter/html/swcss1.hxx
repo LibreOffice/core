@@ -70,7 +70,7 @@ class SwCSS1Parser : public SvxCSS1Parser
 protected:
     virtual sal_Bool StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
-                              SvxCSS1PropertyInfo& rPropInfo );
+                              SvxCSS1PropertyInfo& rPropInfo ) SAL_OVERRIDE;
 
     using CSS1Parser::ParseStyleSheet;
 
@@ -78,13 +78,13 @@ public:
     SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const OUString& rBaseURL, sal_Bool bNewDoc );
     virtual ~SwCSS1Parser();
 
-    virtual sal_Bool ParseStyleSheet( const OUString& rIn );
+    virtual sal_Bool ParseStyleSheet( const OUString& rIn ) SAL_OVERRIDE;
 
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
-    virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;
+    virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const SAL_OVERRIDE;
 
     // Die aktuelle Font-Liste holen (auch 0 ist erlaubt)
-    virtual const FontList *GetFontList() const;
+    virtual const FontList *GetFontList() const SAL_OVERRIDE;
 
     // das Zeichen-Format zu einem Token und einer ggf leeren Klasse
     // ermitteln
@@ -160,7 +160,7 @@ public:
     inline void SetATagStyles();
     inline void SetDelayedStyles();
 
-    virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
+    virtual void SetDfltEncoding( rtl_TextEncoding eEnc ) SAL_OVERRIDE;
 };
 
 inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFmtName )

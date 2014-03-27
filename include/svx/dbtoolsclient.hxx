@@ -68,7 +68,7 @@ namespace svxform
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
 
     protected:
-        virtual bool ensureLoaded() const;
+        virtual bool ensureLoaded() const SAL_OVERRIDE;
 
     public:
         OStaticDataAccessTools();

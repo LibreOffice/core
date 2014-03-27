@@ -64,7 +64,7 @@ class LwpFribTable : public LwpFrib
 public:
     LwpFribTable( LwpPara* pPara ) : LwpFrib(pPara){}
     ~LwpFribTable(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpSuperTableLayout* GetSuperTable();
     void RegisterNewStyle();
     virtual void XFConvert(XFContentContainer* pCont);

@@ -76,9 +76,9 @@ public:
 
     virtual ~LwpCharacterBorderOverride();
 
-    virtual LwpCharacterBorderOverride* clone() const;
+    virtual LwpCharacterBorderOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     inline LwpBorderStuff* GetBorderStuff();
     inline LwpMargins* GetMargins();

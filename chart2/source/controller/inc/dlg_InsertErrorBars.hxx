@@ -48,7 +48,7 @@ public:
         const OUString& rSelectedObjectCID );
 
     void FillItemSet( SfxItemSet& rOutAttrs );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     const SfxItemSet & rInAttrs;

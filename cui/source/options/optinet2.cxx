@@ -1114,8 +1114,8 @@ public:
     MailerProgramCfg_Impl();
     virtual ~MailerProgramCfg_Impl();
 
-    virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 };
 
 /* -------------------------------------------------------------------------*/

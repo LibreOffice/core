@@ -40,8 +40,8 @@ public:
     SwMsgPoolItem( sal_uInt16 nWhich );
 
     // "Overhead" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 };
 
 // SwPtrMsgPoolItem (old SwObjectDying!)

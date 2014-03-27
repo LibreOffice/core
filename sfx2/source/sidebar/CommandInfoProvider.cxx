@@ -57,13 +57,13 @@ namespace
         virtual ~FrameListener (void)
         {
         }
-        virtual void SAL_CALL disposing (void)
+        virtual void SAL_CALL disposing (void) SAL_OVERRIDE
         {
             if (mxFrame.is())
                 mxFrame->removeEventListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (cssu::RuntimeException, std::exception)
+            throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)rEvent;
             mrInfoProvider.SetFrame(NULL);

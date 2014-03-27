@@ -40,8 +40,8 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet);
         OPropertySetItem(const OPropertySetItem& _rSource);
 
-        virtual bool             operator==(const SfxPoolItem& _rItem) const;
-        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const;
+        virtual bool             operator==(const SfxPoolItem& _rItem) const SAL_OVERRIDE;
+        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const SAL_OVERRIDE;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 getPropertySet() const { return m_xSet; }

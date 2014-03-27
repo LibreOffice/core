@@ -51,7 +51,7 @@ public:
     OString aWinState;
     SfxChildWindow* pMgr;
     sal_Bool            bConstructed;
-    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     Timer           aMoveTimer;
 };
@@ -77,7 +77,7 @@ public:
     sal_Bool            bConstructed;
     Timer           aMoveTimer;
 
-    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )

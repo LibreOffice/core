@@ -82,7 +82,7 @@ public:
 
     virtual ~SwFldPage();
 
-    virtual void        ActivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
 
     inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );

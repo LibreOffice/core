@@ -60,8 +60,8 @@ public:
 
 protected:
     // ____ ::utl::ConfigItem ____
-    virtual void                    Commit();
-    virtual void Notify( const Sequence< OUString > & aPropertyNames );
+    virtual void                    Commit() SAL_OVERRIDE;
+    virtual void Notify( const Sequence< OUString > & aPropertyNames ) SAL_OVERRIDE;
 
 private:
     ConfigItemListener & m_rListener;

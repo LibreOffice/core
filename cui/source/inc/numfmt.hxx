@@ -51,9 +51,9 @@ private:
     void            InitSettings( sal_Bool bForeground, sal_Bool bBackground );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SvxNumberPreview(Window* pParent, WinBits nStyle = WB_BORDER);
@@ -74,9 +74,9 @@ public:
                                     const SfxItemSet& rAttrSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool            FillItemSet( SfxItemSet& rSet );
-    virtual void            Reset( const SfxItemSet& rSet );
-    virtual int             DeactivatePage  ( SfxItemSet* pSet = NULL );
+    virtual bool            FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void            Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int             DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
     void                    SetInfoItem( const SvxNumberInfoItem& rItem );
     void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )
@@ -84,8 +84,8 @@ public:
 
     void                    SetOkHdl( const Link& rOkHandler );
     void                    HideLanguage(sal_Bool nFlag=sal_True);
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual void            PageCreated (SfxAllItemSet aSet);
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 private:
     SvxNumberFormatTabPage( Window* pParent,
                             const SfxItemSet& rCoreAttrs );

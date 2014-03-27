@@ -84,9 +84,9 @@ public:
      */
     void                SetText(const OUString& text);
 
-    virtual enumXFContent GetContentType();
+    virtual enumXFContent GetContentType() SAL_OVERRIDE;
 
-    virtual void        ToXml(IXFStream *pStrm);
+    virtual void        ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     OUString       m_strText;

@@ -44,7 +44,7 @@ public:
 
     DECL_LINK(OKHdl, void *);
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
     void            EnableInsert(sal_Bool bEnable);
     void            InsertHdl();

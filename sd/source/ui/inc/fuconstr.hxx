@@ -34,18 +34,18 @@ class FuConstruct
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual void DoExecute( SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
-    virtual void SelectionHasChanged() { bSelectionChanged = true; }
+    virtual void SelectionHasChanged() SAL_OVERRIDE { bSelectionChanged = true; }
 
     // SJ: setting stylesheet, the use of a filled or unfilled style
     // is determined by the member nSlotId :

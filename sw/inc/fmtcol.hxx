@@ -86,7 +86,7 @@ protected:
     { pNextTxtFmtColl = this; }
 
     /// To get UL- / LR- / FontHeight-changes.
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
 
@@ -109,12 +109,12 @@ public:
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
      the paragragh style at the corresponding <SwNumRule> instance. */
-    virtual bool SetFmtAttr( const SfxPoolItem& rAttr );
-    virtual bool SetFmtAttr( const SfxItemSet& rSet );
-    virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual bool SetFmtAttr( const SfxPoolItem& rAttr ) SAL_OVERRIDE;
+    virtual bool SetFmtAttr( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) SAL_OVERRIDE;
 
     /// Override <ResetAllFmtAttr()> to stay assigned to list level of outline style.
-    virtual sal_uInt16 ResetAllFmtAttr();
+    virtual sal_uInt16 ResetAllFmtAttr() SAL_OVERRIDE;
 
     inline bool StayAssignedToListLevelOfOutlineStyle() const
     {

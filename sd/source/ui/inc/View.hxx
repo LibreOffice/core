@@ -75,17 +75,17 @@ public:
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
-    void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) SAL_OVERRIDE;
 
     virtual sal_Bool            GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
     virtual sal_Bool            SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
-    virtual void            MarkListHasChanged();
-    virtual void            ModelHasChanged();
+    virtual void            MarkListHasChanged() SAL_OVERRIDE;
+    virtual void            ModelHasChanged() SAL_OVERRIDE;
     virtual void            SelectAll();
     virtual void            DoCut(::Window* pWindow=NULL);
     virtual void            DoCopy(::Window* pWindow=NULL);
     virtual void            DoPaste(::Window* pWindow=NULL);
-    virtual void            DoConnect(SdrOle2Obj* pOleObj);
+    virtual void            DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
     virtual sal_Bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
     virtual void            StartDrag( const Point& rStartPos, ::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
@@ -121,9 +121,9 @@ public:
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
-        bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
+        bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true) SAL_OVERRIDE;
 
-    virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
+    virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false) SAL_OVERRIDE;
 
     bool RestoreDefaultText( SdrTextObj* pTextObj );
 
@@ -167,29 +167,29 @@ public:
                           std::vector<OUString> &rBookmarkList,
                           const sal_uInt16 nType );
 
-    virtual void onAccessibilityOptionsChanged();
+    virtual void onAccessibilityOptionsChanged() SAL_OVERRIDE;
 
-    virtual SdrModel*   GetMarkedObjModel() const;
-    virtual bool        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual SdrModel*   GetMarkedObjModel() const SAL_OVERRIDE;
+    virtual bool        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0) SAL_OVERRIDE;
     using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */
     bool isRecordingUndo() const;
 
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl() SAL_OVERRIDE;
 
     SmartTagSet& getSmartTags() { return maSmartTags; }
     void selectSmartTag( const SmartTagReference& xTag );
     void updateHandles();
 
-    virtual SdrViewContext GetContext() const;
-    virtual bool HasMarkablePoints() const;
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual bool HasMarkedPoints() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual bool IsPointMarkable(const SdrHdl& rHdl) const;
-    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
-    virtual void CheckPossibilities();
+    virtual SdrViewContext GetContext() const SAL_OVERRIDE;
+    virtual bool HasMarkablePoints() const SAL_OVERRIDE;
+    virtual sal_uLong GetMarkablePointCount() const SAL_OVERRIDE;
+    virtual bool HasMarkedPoints() const SAL_OVERRIDE;
+    virtual sal_uLong GetMarkedPointCount() const SAL_OVERRIDE;
+    virtual bool IsPointMarkable(const SdrHdl& rHdl) const SAL_OVERRIDE;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false) SAL_OVERRIDE;
+    virtual void CheckPossibilities() SAL_OVERRIDE;
     virtual sal_Bool MarkPoints(const ::Rectangle* pRect, sal_Bool bUnmark);
     using SdrMarkView::MarkPoints;
 
@@ -236,8 +236,8 @@ protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );
 
-    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
-    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos ) SAL_OVERRIDE;
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos ) SAL_OVERRIDE;
 
     SdDrawDocument&         mrDoc;
     DrawDocShell*           mpDocSh;

@@ -87,9 +87,9 @@ class SwWrapTabPage: public SfxTabPage
 
     void            ApplyImageList();
     void            EnableModes(const SfxItemSet& rSet);
-    virtual void    ActivatePage(const SfxItemSet& rSet);
-    virtual int     DeactivatePage(SfxItemSet *pSet);
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     DECL_LINK( RangeModifyHdl, MetricField * );
     DECL_LINK( WrapTypeHdl, RadioButton * );
@@ -102,8 +102,8 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual bool    FillItemSet(SfxItemSet &rSet);
-    virtual void    Reset(const SfxItemSet &rSet);
+    virtual bool    FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void    Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
     static sal_uInt16*  GetRanges();
     inline void     SetNewFrame(sal_Bool bNewFrame) { bNew = bNewFrame; }

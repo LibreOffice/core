@@ -66,14 +66,14 @@ public:
 
     virtual bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                             const OUString & rMimeType,
-                            bool bSynchron = false );
+                            bool bSynchron = false ) SAL_OVERRIDE;
 
-    virtual bool Connect( sfx2::SvBaseLink* );
-    virtual void Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl );
+    virtual bool Connect( sfx2::SvBaseLink* ) SAL_OVERRIDE;
+    virtual void Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl ) SAL_OVERRIDE;
 
     // Ask whether you can access data directly or whether it has to be triggered
-    virtual bool IsPending() const;
-    virtual bool IsDataComplete() const;
+    virtual bool IsPending() const SAL_OVERRIDE;
+    virtual bool IsDataComplete() const SAL_OVERRIDE;
 
     void CancelTransfers();
 };

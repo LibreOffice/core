@@ -34,13 +34,13 @@ class ScVbaProgressBar : public ProgressBarImpl_BASE
 public:
     ScVbaProgressBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );
    // Attributes
-    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) { return OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return OUString("Value"); }
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPROGRESSBAR_HXX

@@ -140,15 +140,15 @@ public:
     void TextEditDrawing(SdrPaintWindow& rPaintWindow) const;
 
     // Actionhandling fuer Macromodus
-    virtual bool IsAction() const;
-    virtual void MovAction(const Point& rPnt);
-    virtual void EndAction();
-    virtual void BrkAction();
-    virtual void BckAction();
-    virtual void TakeActionRect(Rectangle& rRect) const;
+    virtual bool IsAction() const SAL_OVERRIDE;
+    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
+    virtual void EndAction() SAL_OVERRIDE;
+    virtual void BrkAction() SAL_OVERRIDE;
+    virtual void BckAction() SAL_OVERRIDE;
+    virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-    virtual void ModelHasChanged();
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void ModelHasChanged() SAL_OVERRIDE;
 
 
     // TextEdit ueber einen Outliner
@@ -181,7 +181,7 @@ public:
     // SDRENDTEXTEDIT_SHOULDBEDELETED (anstelle von SDRENDTEXTEDIT_BEDELETED)
     // der besagt, dass das Objekt geloescht werden sollte.
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
-    virtual bool IsTextEdit() const;
+    virtual bool IsTextEdit() const SAL_OVERRIDE;
 
     // Diese Methode liefert sal_True, wenn der Punkt rHit innerhalb der
     // des Objektbereichs oder der OutlinerView liegt.
@@ -200,7 +200,7 @@ public:
     SdrObject* GetTextEditObject() const { return mxTextEditObj.get(); }
 
     // info about TextEditPageView. Default is 0L.
-    virtual SdrPageView* GetTextEditPageView() const;
+    virtual SdrPageView* GetTextEditPageView() const SAL_OVERRIDE;
 
     // Das aktuelle Win des Outliners
     Window* GetTextEditWin() const { return pTextEditWin; }
@@ -214,11 +214,11 @@ public:
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView
     virtual sal_uInt16 GetScriptType() const;
@@ -231,8 +231,8 @@ public:
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     // Intern: Beim Splitteraufziehen neue OutlinerView...
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin);
-    virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
+    virtual void AddWindowToPaintView(OutputDevice* pNewWin) SAL_OVERRIDE;
+    virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) SAL_OVERRIDE;
 
     sal_uInt16 GetSelectionLevel() const;
 
@@ -257,7 +257,7 @@ public:
         Leaves the any untouched if there currently is no text selected */
     void getTextSelection( ::com::sun::star::uno::Any& rSelection );
 
-    virtual void MarkListHasChanged();
+    virtual void MarkListHasChanged() SAL_OVERRIDE;
 
     rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
 

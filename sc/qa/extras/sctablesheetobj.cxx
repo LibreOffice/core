@@ -26,7 +26,7 @@ class ScTableSheetObj : public CalcUnoApiTest, apitest::XSearchable, apitest::XR
 public:
     ScTableSheetObj();
 
-    virtual uno::Reference< uno::XInterface > init();
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
     CPPUNIT_TEST(testFindAll);

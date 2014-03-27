@@ -37,9 +37,9 @@ public:
     SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw();
     virtual ~SlideFragmentHandler() throw();
 
-    virtual void finalizeImport();
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
-    virtual void onCharacters( const OUString& rChars );
+    virtual void finalizeImport() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onCharacters( const OUString& rChars ) SAL_OVERRIDE;
 
     const ::std::vector< OUString>& getCharVector() { return maCharVector; }
 

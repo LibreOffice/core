@@ -105,7 +105,7 @@ class MSFILTER_DLLPUBLIC WString : public TBBase
 public:
     WString(){};
     ~WString(){};
-    bool Read(SvStream &rS);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
     OUString getString(){ return sString; }
 };
 
@@ -124,8 +124,8 @@ class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
 public:
     TBCExtraInfo();
     ~TBCExtraInfo(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     OUString getOnAction();
 };
 
@@ -140,8 +140,8 @@ class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
 public:
     TBCGeneralInfo();
     ~TBCGeneralInfo() {}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     bool ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
     OUString CustomText() { return customText.getString(); }
     OUString DescriptionText() { return descriptionText.getString(); }
@@ -156,8 +156,8 @@ friend class TBCBSpecific; // #FIXME hacky access, need to fix
 public:
     TBCBitMap();
     ~TBCBitMap();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     Bitmap& getBitMap();
 };
 
@@ -168,8 +168,8 @@ class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
 public:
     TBCMenuSpecific();
     ~TBCMenuSpecific(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     OUString Name();
 };
 
@@ -186,8 +186,8 @@ class MSFILTER_DLLPUBLIC TBCCDData : public TBBase
 public:
     TBCCDData();
     ~TBCCDData();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class TBCComboDropdownSpecific : public TBBase
@@ -196,8 +196,8 @@ class TBCComboDropdownSpecific : public TBBase
 public:
     TBCComboDropdownSpecific( const TBCHeader& header );
     TBCComboDropdownSpecific(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class TBCBSpecific :  public TBBase
@@ -211,8 +211,8 @@ class TBCBSpecific :  public TBBase
 public:
     TBCBSpecific();
     ~TBCBSpecific(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     // #TODO just add a getGraphic member here
     TBCBitMap* getIcon();
     TBCBitMap* getIconMask();
@@ -259,8 +259,8 @@ public:
     sal_uInt16 getTcID() const { return tcid; }
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
     bool isBeginGroup() { return ( bFlagsTCR & 0x2 ); }
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     sal_uInt32 getTbct() { return tbct; };
 };
 
@@ -274,8 +274,8 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
 public:
     TBCData( const TBCHeader& Header );
     ~TBCData(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
     TBCGeneralInfo& getGeneralInfo() { return controlGeneralInfo; }
     TBCMenuSpecific* getMenuSpecific();
@@ -294,8 +294,8 @@ class MSFILTER_DLLPUBLIC TB : public TBBase
 public:
     TB();
     ~TB(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     sal_Int16 getcCL(){ return cCL; }
     WString& getName(){ return name; }
     bool IsEnabled();
@@ -310,8 +310,8 @@ public:
     sal_Int16 top;
     sal_Int16 right;
     sal_Int16 bottom;
-    bool Read( SvStream &rS ) { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
-    void Print( FILE* fo );
+    bool Read( SvStream &rS ) SAL_OVERRIDE { rS.ReadInt16( left ).ReadInt16( top ).ReadInt16( right ).ReadInt16( bottom ); return true; }
+    void Print( FILE* fo ) SAL_OVERRIDE;
 };
 
 typedef cppu::WeakImplHelper1< css::container::XIndexContainer > PropertyValueIndexContainer_BASE;
@@ -329,8 +329,8 @@ class MSFILTER_DLLPUBLIC TBVisualData : public TBBase
 public:
     TBVisualData();
     ~TBVisualData(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 #endif
 

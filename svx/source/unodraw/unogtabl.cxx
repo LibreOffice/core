@@ -39,14 +39,14 @@ public:
     SvxUnoGradientTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoGradientTable() throw();
 
-    virtual NameOrIndex* createItem() const throw();
+    virtual NameOrIndex* createItem() const throw() SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception );
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception);
+    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 SvxUnoGradientTable::SvxUnoGradientTable( SdrModel* pModel ) throw()

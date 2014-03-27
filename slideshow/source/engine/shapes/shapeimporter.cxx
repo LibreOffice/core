@@ -155,20 +155,20 @@ public:
                   double                                     nPrio );
 
     // Shape:
-    virtual uno::Reference<drawing::XShape> getXShape() const;
+    virtual uno::Reference<drawing::XShape> getXShape() const SAL_OVERRIDE;
     virtual void addViewLayer( ViewLayerSharedPtr const& pNewLayer,
-                               bool                      bRedrawLayer );
-    virtual bool removeViewLayer( ViewLayerSharedPtr const& pNewLayer );
-    virtual bool clearAllViewLayers();
-    virtual bool update() const;
-    virtual bool render() const;
-    virtual bool isContentChanged() const;
-    virtual basegfx::B2DRectangle getBounds() const;
-    virtual basegfx::B2DRectangle getDomBounds() const;
-    virtual basegfx::B2DRectangle getUpdateArea() const;
-    virtual bool isVisible() const;
-    virtual double getPriority() const;
-    virtual bool isBackgroundDetached() const;
+                               bool                      bRedrawLayer ) SAL_OVERRIDE;
+    virtual bool removeViewLayer( ViewLayerSharedPtr const& pNewLayer ) SAL_OVERRIDE;
+    virtual bool clearAllViewLayers() SAL_OVERRIDE;
+    virtual bool update() const SAL_OVERRIDE;
+    virtual bool render() const SAL_OVERRIDE;
+    virtual bool isContentChanged() const SAL_OVERRIDE;
+    virtual basegfx::B2DRectangle getBounds() const SAL_OVERRIDE;
+    virtual basegfx::B2DRectangle getDomBounds() const SAL_OVERRIDE;
+    virtual basegfx::B2DRectangle getUpdateArea() const SAL_OVERRIDE;
+    virtual bool isVisible() const SAL_OVERRIDE;
+    virtual double getPriority() const SAL_OVERRIDE;
+    virtual bool isBackgroundDetached() const SAL_OVERRIDE;
 
 private:
     ShapeSharedPtr const                  mpGroupShape;

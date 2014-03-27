@@ -36,7 +36,7 @@ private:
     bool                bNegativeEnabled;
 
 protected:
-    void            Modify();
+    void            Modify() SAL_OVERRIDE;
 
 public:
     SvxRelativeField( Window* pParent, WinBits nBits);

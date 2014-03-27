@@ -36,8 +36,8 @@ namespace dbaui
     protected:
         OTableRowView* m_pTabDgnCtrl;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OTableDesignUndoAct( OTableRowView* pOwner ,sal_uInt16 nCommentID);
@@ -64,8 +64,8 @@ namespace dbaui
         ::com::sun::star::uno::Any  m_sOldText;
         ::com::sun::star::uno::Any  m_sNewText;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, sal_uInt16 nColumn );
@@ -80,8 +80,8 @@ namespace dbaui
         TOTypeInfoSP    m_pOldType;
         TOTypeInfoSP    m_pNewType;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType );
@@ -93,8 +93,8 @@ namespace dbaui
     protected:
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_aDeletedRows;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OTableEditorDelUndoAct( OTableEditorCtrl* pOwner );
@@ -107,8 +107,8 @@ namespace dbaui
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_vInsertedRows;
         long                        m_nInsPos;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
@@ -123,8 +123,8 @@ namespace dbaui
         long m_nInsPos;
         long m_nInsRows;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition, long nInsertedRows );
@@ -138,8 +138,8 @@ namespace dbaui
                             m_aInsKeys;
         OTableEditorCtrl* m_pEditorCtrl;
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
         OPrimKeyUndoAct( OTableEditorCtrl* pOwner, MultiSelection aDeletedKeys, MultiSelection aInsertedKeys );

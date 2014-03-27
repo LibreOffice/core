@@ -208,11 +208,11 @@ class SwTxtFrm: public SwCntntFrm
                                  sal_Int32 &nChgStart, sal_Int32 &nChgEnd,
                                  sal_Int32 &nInvStart, sal_Int32 &nInvEnd);
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
 
-    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos );
+    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) SAL_OVERRIDE;
     //public, weil der eine oder andere die Methode rufen darf um das
     //Prepare zu sparen - mit Vorsicht zu geniessen!
     void Init();
@@ -229,7 +229,7 @@ public:
     // Additional information can be obtained by passing an SwCrsrMoveState object.
     // Returns false if rPos > number of character is string
     virtual bool GetCharRect( SwRect& rRect, const SwPosition& rPos,
-                                SwCrsrMoveState* pCMS = 0 ) const;
+                                SwCrsrMoveState* pCMS = 0 ) const SAL_OVERRIDE;
     // Eine etwas abgespeckte GetCharRect-Version fuer autopositionierte Rahmen
     bool GetAutoPos( SwRect &, const SwPosition& ) const;
 
@@ -255,7 +255,7 @@ public:
     bool GetTopOfLine( SwTwips& _onTopOfLine,
                        const SwPosition& _rPos ) const;
 
-    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
     //Liefert in nOffset den Offset des Characters innerhalb des
     //gesetzten Textbuffers zurueck, welcher der durch aPoint
@@ -263,7 +263,7 @@ public:
     //naechsten ist. Wenn der SPoint ausserhalb der SSize liegt,
     //liefert die Funktion false, true sonst.
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
     // (z.B. Wechsel in den zeichengebundenen Frame).
@@ -273,18 +273,18 @@ public:
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
     virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
-    virtual bool GetInfo( SfxPoolItem & ) const;
+                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem & ) const SAL_OVERRIDE;
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,
     //vorhergehende/naechste Zeile, gleiche horizontale Position.
-    virtual bool LeftMargin(SwPaM *) const;
-    virtual bool RightMargin(SwPaM *, bool bAPI = false) const;
+    virtual bool LeftMargin(SwPaM *) const SAL_OVERRIDE;
+    virtual bool RightMargin(SwPaM *, bool bAPI = false) const SAL_OVERRIDE;
 
     virtual bool UnitUp(SwPaM *, const SwTwips nOffset = 0,
-                            bool bSetInReadOnly = false ) const;
+                            bool bSetInReadOnly = false ) const SAL_OVERRIDE;
     virtual bool UnitDown(SwPaM *, const SwTwips nOffset = 0,
-                            bool bSetInReadOnly = false ) const;
+                            bool bSetInReadOnly = false ) const SAL_OVERRIDE;
     bool _UnitUp(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const;
     bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
@@ -324,12 +324,12 @@ public:
     // Wer den void* falsch casted ist selbst Schuld!
     // Auf jedenfall muss der void* auf 0 geprueft werden.
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, bool bNotify = true );
+                          const void *pVoid = 0, bool bNotify = true ) SAL_OVERRIDE;
 
     // nMaxHeight is the required height
     // bSplit indicates, that the paragraph has to be split
     // bTst indicates, that we are currently doing a test formatting
-    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
+    virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst ) SAL_OVERRIDE;
 
     // Hier das WouldFit-Aequivalent fuer mal kurz probeweise
     // umgehaengte TextFrames, auch hier liefert
@@ -418,8 +418,8 @@ public:
     inline SwTwips GetLeftMargin() const;
     inline SwTwips GetRightMargin() const;
 
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void CheckDirection( bool bVert );
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
     // Liefert die Summe der Zeilenhoehen in pLine zurueck.
     sal_uInt16 GetParHeight() const;
@@ -581,7 +581,7 @@ public:
 
     static void repaintTextFrames( const SwTxtNode& rNode );
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
 };
 
 /*************************************************************************

@@ -50,13 +50,13 @@ public:
     PresentationFactoryProvider (const Reference<XComponentContext>& rxContext);
     virtual ~PresentationFactoryProvider (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -79,10 +79,10 @@ public:
 
     // XView
 
-    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException, std::exception)
+    virtual Reference<XResourceId> SAL_CALL getResourceId (void) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return mxResourceId; };
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException, std::exception)
+    virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return false; }
 
 

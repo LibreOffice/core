@@ -53,7 +53,7 @@ private:
     inline void         SetNfGraphicObjectCacheMax( long nSizeInBytes );
     inline void         SetNfGraphicObjectCacheLast( long nSizeInBytes );
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
     OfaMemoryOptionsPage( Window* pParent, const SfxItemSet& rSet );
@@ -61,8 +61,8 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 

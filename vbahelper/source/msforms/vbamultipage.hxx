@@ -41,13 +41,13 @@ public:
         ov::AbstractGeometryAttributes* pGeomHelper);
 
    // Attributes
-    virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setValue( sal_Int32 _value ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL Pages( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
     // XDefaultProperty
     OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
 };

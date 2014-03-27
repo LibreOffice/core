@@ -53,13 +53,13 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                DisableControls( const sal_uInt16 nFlag );
 
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
     SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rSet );
@@ -117,7 +117,7 @@ private:
     DECL_LINK( GetFillCharHdl_Impl, Edit* );
     DECL_LINK( GetDezCharHdl_Impl, Edit* );
 
-    virtual void            PageCreated(SfxAllItemSet aSet);
+    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_TABSTPGE_HXX

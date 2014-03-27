@@ -34,10 +34,10 @@ class XclExpHeaderFooter : public XclExpRecord
 public:
     explicit            XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrString );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     /** Writes the header or footer string. Writes an empty record, if no header/footer present. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     OUString            maHdrString;        /// Header or footer contents.
@@ -51,10 +51,10 @@ class XclExpSetup : public XclExpRecord
 public:
     explicit            XclExpSetup( const XclPageData& rPageData );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     /** Writes the contents of the SETUP record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     const XclPageData&  mrData;             /// Page settings data of current sheet.
@@ -72,12 +72,12 @@ public:
                             sal_uInt16 nMaxPos );
 
     /** Writes the record, if the list is not empty. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Writes the page break list. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     const ScfUInt16Vec& mrPageBreaks;       /// Page settings data of current sheet.
@@ -97,8 +97,8 @@ public:
     inline const XclPageData& GetPageData() const { return maData; }
 
     /** Writes all page settings records to the stream. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclPageData         maData;         /// Page settings data.
@@ -117,7 +117,7 @@ public:
     inline const XclPageData& GetPageData() const { return maData; }
 
     /** Writes all page settings records to the stream. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclPageData         maData;         /// Page settings data.

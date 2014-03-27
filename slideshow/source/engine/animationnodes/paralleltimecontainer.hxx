@@ -44,8 +44,8 @@ public:
 #endif
 
 private:
-    virtual void activate_st();
-    virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode );
+    virtual void activate_st() SAL_OVERRIDE;
+    virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode ) SAL_OVERRIDE;
 };
 
 } // namespace internal

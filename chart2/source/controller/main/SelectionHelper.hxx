@@ -107,8 +107,8 @@ public:
     virtual ~SelectionHelper();
 
     //MarkHandleProvider:
-    virtual bool getMarkHandles( SdrHdlList& rHdlList );
-    virtual bool getFrameDragSingles();
+    virtual bool getMarkHandles( SdrHdlList& rHdlList ) SAL_OVERRIDE;
+    virtual bool getFrameDragSingles() SAL_OVERRIDE;
 
     SdrObject*   getObjectToMark();//sets also internally the mark object
     //-> getMarkHandles will behave different if this method has found a Mark Object different from m_pSelectedObj

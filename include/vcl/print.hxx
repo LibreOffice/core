@@ -298,7 +298,7 @@ protected:
     void                        DrawDeviceBitmap(
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                    BitmapEx& rBitmapEx );
+                                    BitmapEx& rBitmapEx ) SAL_OVERRIDE;
 
 public:
                                 Printer();

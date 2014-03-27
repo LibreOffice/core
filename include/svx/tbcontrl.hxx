@@ -176,21 +176,21 @@ public:
     SvxStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxStyleToolBoxControl();
 
-    virtual Window* CreateItemWindow( Window *pParent );
+    virtual Window* CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     DECL_LINK( VisibilityNotification, void* );
 protected:
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUpdatable
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
 
@@ -227,8 +227,8 @@ public:
     SvxFontNameToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
     virtual void    StateChanged        ( sal_uInt16 nSID, SfxItemState eState,
-                                          const SfxPoolItem* pState );
-    virtual Window* CreateItemWindow    ( Window *pParent );
+                                          const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window* CreateItemWindow    ( Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -250,9 +250,9 @@ public:
     ~SvxFontColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 
@@ -278,10 +278,10 @@ public:
     ~SvxColorExtToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                Select( bool bMod1 = false );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
+    virtual void                Select( bool bMod1 = false ) SAL_OVERRIDE;
 };
 
 
@@ -301,9 +301,9 @@ public:
     ~SvxColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 
@@ -319,10 +319,10 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 };
 
@@ -339,10 +339,10 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameLineStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 
@@ -365,9 +365,9 @@ public:
     ~SvxFrameLineColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 class SVX_DLLPUBLIC SvxSimpleUndoRedoController : public SfxToolBoxControl
@@ -381,7 +381,7 @@ public:
     ~SvxSimpleUndoRedoController();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_TBCONTRL_HXX

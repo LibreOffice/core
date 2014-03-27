@@ -57,27 +57,27 @@ namespace dbaui
     public:
         OCreationList( OTasksWindow& _rParent );
         // window overloads
-        virtual void MouseMove( const MouseEvent& rMEvt );
-        virtual void MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void KeyInput( const KeyEvent& rKEvt );
-        virtual void Paint( const Rectangle& rRect );
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
-        virtual void GetFocus();
-        virtual void LoseFocus();
+        virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
 
         inline void resetLastActive() { m_pLastActiveEntry = NULL;}
 
         void    updateHelpText();
 
     protected:
-        virtual void        PreparePaint( SvTreeListEntry* _pEntry );
-        virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine );
-        virtual void        ModelHasCleared();
+        virtual void        PreparePaint( SvTreeListEntry* _pEntry ) SAL_OVERRIDE;
+        virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) SAL_OVERRIDE;
+        virtual void        ModelHasCleared() SAL_OVERRIDE;
 
         // IMnemonicEntryList
-        virtual void        SelectSearchEntry( const void* _pEntry );
-        virtual void        ExecuteSearchEntry( const void* _pEntry ) const;
+        virtual void        SelectSearchEntry( const void* _pEntry ) SAL_OVERRIDE;
+        virtual void        ExecuteSearchEntry( const void* _pEntry ) const SAL_OVERRIDE;
 
     private:
         void    onSelected( SvTreeListEntry* _pEntry ) const;
@@ -120,13 +120,13 @@ namespace dbaui
         DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
         void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt);
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
         OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView);
         virtual ~OTasksWindow();
 
         // window overloads
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
         OApplicationDetailView* getDetailView() const { return m_pDetailView; }
 
@@ -155,13 +155,13 @@ namespace dbaui
         void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
 
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt);
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
 
     public:
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // window overloads
-        virtual void GetFocus();
+        virtual void GetFocus() SAL_OVERRIDE;
 
         /** creates the tables page
             @param  _xConnection
@@ -190,13 +190,13 @@ namespace dbaui
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks.getChildWindow() ); }
 
-        sal_Bool isCutAllowed() ;
-        sal_Bool isCopyAllowed()    ;
-        sal_Bool isPasteAllowed();
-        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
-        void copy();
-        void cut();
-        void paste();
+        sal_Bool isCutAllowed() SAL_OVERRIDE ;
+        sal_Bool isCopyAllowed() SAL_OVERRIDE    ;
+        sal_Bool isPasteAllowed() SAL_OVERRIDE;
+        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        void copy() SAL_OVERRIDE;
+        void cut() SAL_OVERRIDE;
+        void paste() SAL_OVERRIDE;
 
         /** return the qualified name.
             @param  _pEntry

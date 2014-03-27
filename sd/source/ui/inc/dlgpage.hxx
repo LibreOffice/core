@@ -47,7 +47,7 @@ public:
     SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage = sal_True );
     ~SdPageDlg() {};
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX

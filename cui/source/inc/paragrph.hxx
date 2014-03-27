@@ -93,7 +93,7 @@ private:
     DECL_LINK( AutoHdl_Impl, CheckBox* );
 
 protected:
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 
 public:
@@ -102,8 +102,8 @@ public:
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool            FillItemSet( SfxItemSet& rSet );
-    virtual void            Reset( const SfxItemSet& rSet );
+    virtual bool            FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void            Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 
     void                    SetPageWidth( sal_uInt16 nPageWidth );
@@ -113,7 +113,7 @@ public:
     void                    EnableAutoFirstLine();
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
-    virtual void            PageCreated(SfxAllItemSet aSet);
+    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 
     virtual                ~SvxStdParagraphTabPage();
 };
@@ -157,17 +157,17 @@ class SvxParaAlignTabPage : public SfxTabPage
     virtual                 ~SvxParaAlignTabPage();
 
 protected:
-    virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool            FillItemSet( SfxItemSet& rSet );
-    virtual void            Reset( const SfxItemSet& rSet );
+    virtual bool            FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void            Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                    EnableJustifyExt();
-    virtual void            PageCreated(SfxAllItemSet aSet);
+    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 // class SvxExtParagraphTabPage ------------------------------------------
@@ -195,13 +195,13 @@ public:
                                 const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                DisablePageBreak();
 
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
                         SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
@@ -252,7 +252,7 @@ private:
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
 
-    virtual void            PageCreated(SfxAllItemSet aSet);
+    virtual void            PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 
@@ -275,8 +275,8 @@ public:
                                 const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 };
 

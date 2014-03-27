@@ -35,12 +35,12 @@ public:
     virtual ~SwVbaTemplate();
 
    // XTemplate
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBATEMPLATE_HXX
 

@@ -140,7 +140,7 @@ namespace basctl
 
             virtual ~FilterDocuments() {}
 
-            virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const;
+            virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const SAL_OVERRIDE;
 
         private:
             bool    impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument ) const;
@@ -279,15 +279,15 @@ namespace basctl
 
     protected:
         // DocumentEventListener
-        virtual void onDocumentCreated( const ScriptDocument& _rDocument );
-        virtual void onDocumentOpened( const ScriptDocument& _rDocument );
-        virtual void onDocumentSave( const ScriptDocument& _rDocument );
-        virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
-        virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
-        virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
-        virtual void onDocumentClosed( const ScriptDocument& _rDocument );
-        virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
-        virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
+        virtual void onDocumentCreated( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentOpened( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentSave( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentClosed( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+        virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
 
     private:
         bool        impl_initDocument_nothrow( const Reference< XModel >& _rxModel );

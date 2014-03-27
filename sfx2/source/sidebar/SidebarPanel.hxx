@@ -59,7 +59,7 @@ protected:
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEventObject)
         throw(cssu::RuntimeException);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 private:
     Panel* mpPanel;

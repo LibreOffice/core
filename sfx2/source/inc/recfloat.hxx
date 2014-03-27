@@ -34,7 +34,7 @@ public:
                         ~SfxRecordingFloatWrapper_Impl();
 
                         SFX_DECL_CHILDWINDOW(SfxRecordingFloatWrapper_Impl);
-    virtual bool        QueryClose();
+    virtual bool        QueryClose() SAL_OVERRIDE;
 };
 
 class SfxRecordingFloat_Impl : public SfxFloatingWindow
@@ -46,9 +46,9 @@ public:
                             SfxChildWindow* pChildWin ,
                             Window* pParent );
     virtual             ~SfxRecordingFloat_Impl();
-    virtual bool        Close();
-    virtual void        FillInfo( SfxChildWinInfo& rInfo ) const;
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual bool        Close() SAL_OVERRIDE;
+    virtual void        FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     DECL_LINK( Select, ToolBox * );
 };

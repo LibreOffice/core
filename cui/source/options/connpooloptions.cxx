@@ -47,9 +47,9 @@ namespace offapp
     public:
         DriverListControl(Window* _pParent);
 
-        virtual void Init();
+        virtual void Init() SAL_OVERRIDE;
                 void Update(const DriverPoolingSettings& _rSettings);
-        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
+        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
 
         // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
         // or NULL if no valid current row exists
@@ -66,22 +66,22 @@ namespace offapp
         sal_Bool    isModified() const;
 
     protected:
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
 
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
+        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
 
-        virtual bool SeekRow( long nRow );
-        virtual bool SaveModified();
+        virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
+        virtual bool SaveModified() SAL_OVERRIDE;
 
-        virtual bool IsTabAllowed(bool _bForward) const;
+        virtual bool IsTabAllowed(bool _bForward) const SAL_OVERRIDE;
 
-        virtual void StateChanged( StateChangedType nStateChange );
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-        virtual void CursorMoved();
+        virtual void CursorMoved() SAL_OVERRIDE;
 
     protected:
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
 
 
     private:

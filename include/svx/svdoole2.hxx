@@ -55,8 +55,8 @@ private:
     SdrObject* createSdrGrafObjReplacement(bool bAddText, bool bUseHCGraphic) const;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
@@ -127,8 +127,8 @@ public:
 
     void AbandonObject();
 
-    virtual void SetPage(SdrPage* pNewPage);
-    virtual void SetModel(SdrModel* pModel);
+    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
+    virtual void SetModel(SdrModel* pModel) SAL_OVERRIDE;
 
     /** Change the IsClosedObj attribute
 
@@ -138,21 +138,21 @@ public:
     void SetClosedObj( bool bIsClosed );
 
     // FullDrag support
-    virtual SdrObject* getFullDragClone() const;
+    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 
-    SdrOle2Obj* Clone() const;
+    SdrOle2Obj* Clone() const SAL_OVERRIDE;
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
-    virtual void NbcMove(const Size& rSize);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual void SetGeoData(const SdrObjGeoData& rGeo);
+    virtual void NbcMove(const Size& rSize) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void SetGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
     static bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
                                          sal_Int64 nAspect );
@@ -188,7 +188,7 @@ public:
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
 
     // #i118485# missing converter added
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SVDOOLE2_HXX

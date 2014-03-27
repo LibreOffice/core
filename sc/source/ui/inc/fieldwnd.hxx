@@ -85,7 +85,7 @@ public:
     {
     public:
         ScrollBar(Window* pParent, WinBits nStyle);
-        virtual void Command( const CommandEvent& rCEvt );
+        virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     private:
         Window* mpParent;
     };
@@ -171,26 +171,26 @@ public:
 
     size_t GetFieldIndexByData( const ScPivotFuncData& rData ) const;
 
-    virtual void            Paint( const Rectangle& rRect );
+    virtual void            Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 protected:
-    virtual void            StateChanged( StateChangedType nStateChange );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void            KeyInput( const KeyEvent& rKEvt );
-    virtual void            Command( const CommandEvent& rCEvt );
-    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void            GetFocus();
-    virtual void            LoseFocus();
-    virtual void            Resize();
+    virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void            KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void            Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            GetFocus() SAL_OVERRIDE;
+    virtual void            LoseFocus() SAL_OVERRIDE;
+    virtual void            Resize() SAL_OVERRIDE;
 
 protected:
     FieldNames& GetFieldNames();
     const FieldNames& GetFieldNames() const;
 
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void FieldFocusChanged(size_t nOldSelected, size_t nFieldSelected);
 
@@ -272,26 +272,26 @@ private:
 class ScDPHorFieldControl : public ScDPFieldControlBase
 {
 protected:
-    virtual size_t          CalcNewFieldIndex(SCsCOL nDX, SCsROW nDY) const;
-    virtual size_t          GetDisplayPosition(size_t nIndex) const;
-    virtual void            Redraw();
+    virtual size_t          CalcNewFieldIndex(SCsCOL nDX, SCsROW nDY) const SAL_OVERRIDE;
+    virtual size_t          GetDisplayPosition(size_t nIndex) const SAL_OVERRIDE;
+    virtual void            Redraw() SAL_OVERRIDE;
 
 public:
     ScDPHorFieldControl(Window* pParent);
 
     virtual                 ~ScDPHorFieldControl();
 
-    virtual void            CalcSize();
-    virtual bool            IsValidIndex( size_t nIndex ) const;
-    virtual Point           GetFieldPosition(size_t nIndex);
-    virtual Size            GetFieldSize() const;
-    virtual size_t          GetFieldIndex( const Point& rPos );
-    virtual OUString        GetDescription() const;
+    virtual void            CalcSize() SAL_OVERRIDE;
+    virtual bool            IsValidIndex( size_t nIndex ) const SAL_OVERRIDE;
+    virtual Point           GetFieldPosition(size_t nIndex) SAL_OVERRIDE;
+    virtual Size            GetFieldSize() const SAL_OVERRIDE;
+    virtual size_t          GetFieldIndex( const Point& rPos ) SAL_OVERRIDE;
+    virtual OUString        GetDescription() const SAL_OVERRIDE;
 
-    virtual void ScrollToEnd();
-    virtual void ScrollToShowSelection();
-    virtual void ResetScrollBar();
-    virtual void HandleWheelScroll(long nNotch);
+    virtual void ScrollToEnd() SAL_OVERRIDE;
+    virtual void ScrollToShowSelection() SAL_OVERRIDE;
+    virtual void ResetScrollBar() SAL_OVERRIDE;
+    virtual void HandleWheelScroll(long nNotch) SAL_OVERRIDE;
 
 private:
     bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
@@ -316,8 +316,8 @@ public:
     ScDPPageFieldControl(  Window* pParent );
     virtual ~ScDPPageFieldControl();
 
-    virtual ScPivotFieldType GetFieldType() const;
-    virtual OUString GetDescription() const;
+    virtual ScPivotFieldType GetFieldType() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
 
@@ -328,8 +328,8 @@ public:
     ScDPColFieldControl(  Window* pParent );
     virtual ~ScDPColFieldControl();
 
-    virtual ScPivotFieldType GetFieldType() const;
-    virtual OUString GetDescription() const;
+    virtual ScPivotFieldType GetFieldType() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
 
@@ -344,23 +344,23 @@ public:
 
     virtual                 ~ScDPRowFieldControl();
 
-    virtual void            CalcSize();
-    virtual bool            IsValidIndex( size_t nIndex ) const;
-    virtual Point           GetFieldPosition( size_t nIndex );
-    virtual Size            GetFieldSize() const;
-    virtual size_t          GetFieldIndex( const Point& rPos );
-    virtual OUString        GetDescription() const;
-    virtual ScPivotFieldType   GetFieldType() const;
+    virtual void            CalcSize() SAL_OVERRIDE;
+    virtual bool            IsValidIndex( size_t nIndex ) const SAL_OVERRIDE;
+    virtual Point           GetFieldPosition( size_t nIndex ) SAL_OVERRIDE;
+    virtual Size            GetFieldSize() const SAL_OVERRIDE;
+    virtual size_t          GetFieldIndex( const Point& rPos ) SAL_OVERRIDE;
+    virtual OUString        GetDescription() const SAL_OVERRIDE;
+    virtual ScPivotFieldType   GetFieldType() const SAL_OVERRIDE;
 
-    virtual void ScrollToEnd();
-    virtual void ScrollToShowSelection();
-    virtual void ResetScrollBar();
-    virtual void HandleWheelScroll(long nNotch);
+    virtual void ScrollToEnd() SAL_OVERRIDE;
+    virtual void ScrollToShowSelection() SAL_OVERRIDE;
+    virtual void ResetScrollBar() SAL_OVERRIDE;
+    virtual void HandleWheelScroll(long nNotch) SAL_OVERRIDE;
 
 protected:
-    virtual size_t          CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
-    virtual size_t          GetDisplayPosition(size_t nIndex) const;
-    virtual void            Redraw();
+    virtual size_t          CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const SAL_OVERRIDE;
+    virtual size_t          GetDisplayPosition(size_t nIndex) const SAL_OVERRIDE;
+    virtual void            Redraw() SAL_OVERRIDE;
 
 private:
     bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
@@ -383,8 +383,8 @@ public:
     ScDPSelectFieldControl( Window* pParent );
     virtual ~ScDPSelectFieldControl();
 
-    virtual ScPivotFieldType GetFieldType() const;
-    virtual OUString GetDescription() const;
+    virtual ScPivotFieldType GetFieldType() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
 
@@ -395,9 +395,9 @@ public:
     ScDPDataFieldControl( Window* pParent );
     virtual ~ScDPDataFieldControl();
 
-    virtual ScPivotFieldType GetFieldType() const;
-    virtual Size GetFieldSize() const;
-    virtual OUString GetDescription() const;
+    virtual ScPivotFieldType GetFieldType() const SAL_OVERRIDE;
+    virtual Size GetFieldSize() const SAL_OVERRIDE;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
 #endif

@@ -3434,7 +3434,7 @@ public:
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-        const SvTreeListEntry* pEntry);
+        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 void SwContentTree::InitEntry(SvTreeListEntry* pEntry,

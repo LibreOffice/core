@@ -39,9 +39,9 @@ private:
     DECL_LINK( UpdateHdl, void* );
 
 protected:
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void GetFocus();
-    virtual void LoseFocus();
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
     RefEdit( Window* _pParent,IControlReferenceHandler* pParent, Window* pShrinkModeLabel, const ResId& rResId );
@@ -59,8 +59,8 @@ public:
 
     using Edit::SetText;
 
-    void         SetText( const OUString& rStr );
-    virtual void Modify();
+    void         SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void Modify() SAL_OVERRIDE;
 
     void         StartUpdateData();
 
@@ -89,10 +89,10 @@ private:
     RefEdit*                  pRefEdit;     // zugeordnetes Edit-Control
 
 protected:
-    virtual void Click();
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void GetFocus();
-    virtual void LoseFocus();
+    virtual void Click() SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
     RefButton(Window* _pParent, const ResId& rResId);

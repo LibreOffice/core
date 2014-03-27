@@ -327,7 +327,7 @@ public:
         : SvSimpleTable(rContainer, 0)
     {
     }
-    virtual void Resize()
+    virtual void Resize() SAL_OVERRIDE
     {
         SvSimpleTable::Resize();
         if (isInitialLayout(this))

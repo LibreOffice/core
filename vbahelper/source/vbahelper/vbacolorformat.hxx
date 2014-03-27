@@ -100,16 +100,16 @@ private:
     sal_Int16 m_nColorFormatType;
     sal_Int32 m_nFillFormatBackColor;
 protected:
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 public:
     ScVbaColorFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XHelperInterface > xInternalParent, const css::uno::Reference< css::drawing::XShape > xShape, const sal_Int16 nColorFormatType );
 
     // Attributes
-    virtual sal_Int32 SAL_CALL getRGB() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setRGB( sal_Int32 _rgb ) throw (css::uno::RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL getSchemeColor() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setSchemeColor( sal_Int32 _schemecolor ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getRGB() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setRGB( sal_Int32 _rgb ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getSchemeColor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSchemeColor( sal_Int32 _schemecolor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

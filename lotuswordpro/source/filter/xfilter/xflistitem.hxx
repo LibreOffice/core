@@ -72,7 +72,7 @@ public:
 public:
     void    SetIsHeader(sal_Bool isHeader=sal_True);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     sal_Bool    m_bIsHeader;

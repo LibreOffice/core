@@ -106,19 +106,19 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         void _InvalidatePage( SwPageFrm* _pPageFrm );
 
     protected:
-        virtual void ObjectAttachedToAnchorFrame();
+        virtual void ObjectAttachedToAnchorFrame() SAL_OVERRIDE;
 
         /** method to assure that anchored object is registered at the correct
             page frame
 
             @author OD
         */
-        virtual void RegisterAtCorrectPage();
+        virtual void RegisterAtCorrectPage() SAL_OVERRIDE;
 
-        virtual bool _SetObjTop( const SwTwips _nTop);
-        virtual bool _SetObjLeft( const SwTwips _nLeft);
+        virtual bool _SetObjTop( const SwTwips _nTop) SAL_OVERRIDE;
+        virtual bool _SetObjLeft( const SwTwips _nLeft) SAL_OVERRIDE;
 
-        virtual const SwRect GetObjBoundRect() const;
+        virtual const SwRect GetObjBoundRect() const SAL_OVERRIDE;
 
     public:
         TYPEINFO_OVERRIDE();
@@ -127,19 +127,19 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         virtual ~SwAnchoredDrawObject();
 
         // declaration of pure virtual methods of base class <SwAnchoredObject>
-        virtual void MakeObjPos();
-        virtual void InvalidateObjPos();
+        virtual void MakeObjPos() SAL_OVERRIDE;
+        virtual void InvalidateObjPos() SAL_OVERRIDE;
         inline bool IsValidPos() const
         {
             return mbValidPos;
         }
 
         // accessors to the format
-        virtual SwFrmFmt& GetFrmFmt();
-        virtual const SwFrmFmt& GetFrmFmt() const;
+        virtual SwFrmFmt& GetFrmFmt() SAL_OVERRIDE;
+        virtual const SwFrmFmt& GetFrmFmt() const SAL_OVERRIDE;
 
         // accessors to the object area and its position
-        virtual const SwRect GetObjRect() const;
+        virtual const SwRect GetObjRect() const SAL_OVERRIDE;
         // Return value can be NULL.
         const Rectangle* GetLastObjRect() const;
 
@@ -171,7 +171,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         */
         virtual void NotifyBackground( SwPageFrm* _pPageFrm,
                                        const SwRect& _rRect,
-                                       PrepareHint _eHint );
+                                       PrepareHint _eHint ) SAL_OVERRIDE;
 
         inline bool NotYetPositioned() const
         {
@@ -180,7 +180,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
         // change of layout direction needs to be tracked
         // for setting <mbCaptureAfterLayoutDirChange>.
-        virtual void UpdateLayoutDir();
+        virtual void UpdateLayoutDir() SAL_OVERRIDE;
         bool IsOutsidePage() const;
 
         // new Loop control
@@ -188,7 +188,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
         /** The element name to show in the XML dump.
           */
-        virtual const char* getElementName( ) { return "SwAnchoredDrawObject"; }
+        virtual const char* getElementName( ) SAL_OVERRIDE { return "SwAnchoredDrawObject"; }
 };
 
 #endif

@@ -39,12 +39,12 @@ public:
                             Drawing& rDrawing );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        openFragmentStream() const;
+                        openFragmentStream() const SAL_OVERRIDE;
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    virtual void        finalizeImport();
+    virtual void        finalizeImport() SAL_OVERRIDE;
 
 private:
     Drawing&            mrDrawing;

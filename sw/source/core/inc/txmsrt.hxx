@@ -186,13 +186,13 @@ struct SwTOXIndex : public SwTOXSortTabBase
                 const ::com::sun::star::lang::Locale& rLocale );
     virtual ~SwTOXIndex() {}
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
-    virtual sal_uInt16  GetLevel() const;
-    virtual bool    operator==( const SwTOXSortTabBase& );
-    virtual bool    operator<( const SwTOXSortTabBase& );
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const SAL_OVERRIDE;
+    virtual sal_uInt16  GetLevel() const SAL_OVERRIDE;
+    virtual bool    operator==( const SwTOXSortTabBase& ) SAL_OVERRIDE;
+    virtual bool    operator<( const SwTOXSortTabBase& ) SAL_OVERRIDE;
 
 private:
-    virtual TextAndReading GetText_Impl() const;
+    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE;
 
     sal_uInt8   nKeyLevel;
 };
@@ -204,12 +204,12 @@ struct SwTOXCustom : public SwTOXSortTabBase
                  const ::com::sun::star::lang::Locale& rLocale );
     virtual ~SwTOXCustom() {}
 
-    virtual sal_uInt16 GetLevel() const;
-    virtual bool   operator==( const SwTOXSortTabBase& );
-    virtual bool   operator<( const SwTOXSortTabBase& );
+    virtual sal_uInt16 GetLevel() const SAL_OVERRIDE;
+    virtual bool   operator==( const SwTOXSortTabBase& ) SAL_OVERRIDE;
+    virtual bool   operator<( const SwTOXSortTabBase& ) SAL_OVERRIDE;
 
 private:
-    virtual TextAndReading GetText_Impl() const;
+    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE;
 
     TextAndReading m_aKey;
     sal_uInt16  nLev;
@@ -225,10 +225,10 @@ struct SwTOXContent : public SwTOXSortTabBase
                 const SwTOXInternational& rIntl );
     virtual ~SwTOXContent() {}
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
-    virtual sal_uInt16  GetLevel() const;
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const SAL_OVERRIDE;
+    virtual sal_uInt16  GetLevel() const SAL_OVERRIDE;
 private:
-    virtual TextAndReading GetText_Impl() const;
+    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE;
 
 };
 
@@ -240,12 +240,12 @@ struct SwTOXPara : public SwTOXSortTabBase
     void    SetStartIndex(sal_Int32 nSet)    { nStartIndex = nSet; }
     void    SetEndIndex(sal_Int32 nSet)      { nEndIndex = nSet; }
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
-    virtual sal_uInt16  GetLevel() const;
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const SAL_OVERRIDE;
+    virtual sal_uInt16  GetLevel() const SAL_OVERRIDE;
 
-    virtual OUString  GetURL() const;
+    virtual OUString  GetURL() const SAL_OVERRIDE;
 private:
-    virtual TextAndReading GetText_Impl() const;
+    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE;
 
     SwTOXElement eType;
     sal_uInt16 m_nLevel;
@@ -261,11 +261,11 @@ struct SwTOXTable : public SwTOXSortTabBase
 
     void    SetLevel(sal_uInt16 nSet){nLevel = nSet;}
 
-    virtual sal_uInt16  GetLevel() const;
+    virtual sal_uInt16  GetLevel() const SAL_OVERRIDE;
 
-    virtual OUString  GetURL() const;
+    virtual OUString  GetURL() const SAL_OVERRIDE;
 private:
-    virtual TextAndReading GetText_Impl() const;
+    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE;
 
     sal_uInt16 nLevel;
 };
@@ -274,8 +274,8 @@ struct SwTOXAuthority : public SwTOXSortTabBase
 {
 private:
     SwFmtFld& m_rField;
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
-    virtual TextAndReading GetText_Impl() const;
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const SAL_OVERRIDE;
+    virtual TextAndReading GetText_Impl() const SAL_OVERRIDE;
 
 public:
     SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
@@ -283,9 +283,9 @@ public:
 
     SwFmtFld& GetFldFmt() {return m_rField;}
 
-    virtual bool    operator==( const SwTOXSortTabBase& );
-    virtual bool    operator<( const SwTOXSortTabBase& );
-    virtual sal_uInt16  GetLevel() const;
+    virtual bool    operator==( const SwTOXSortTabBase& ) SAL_OVERRIDE;
+    virtual bool    operator<( const SwTOXSortTabBase& ) SAL_OVERRIDE;
+    virtual sal_uInt16  GetLevel() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TXMSRT_HXX

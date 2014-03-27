@@ -128,10 +128,10 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
     void    EnableAnchorTypes(sal_uInt16 nAnchorEnable);
 

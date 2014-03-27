@@ -35,7 +35,7 @@ public:
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 

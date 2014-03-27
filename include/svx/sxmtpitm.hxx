@@ -34,16 +34,16 @@ public:
     TYPEINFO_OVERRIDE();
     SdrMeasureTextHPosItem(SdrMeasureTextHPos ePos=SDRMEASURE_TEXTHAUTO): SfxEnumItem(SDRATTR_MEASURETEXTHPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextHPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,rIn)    {}
-    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16         GetValueCount() const; // { return 4; }
+    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
+    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual sal_uInt16         GetValueCount() const SAL_OVERRIDE; // { return 4; }
             SdrMeasureTextHPos GetValue() const { return (SdrMeasureTextHPos)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
 
 
@@ -54,16 +54,16 @@ public:
     TYPEINFO_OVERRIDE();
     SdrMeasureTextVPosItem(SdrMeasureTextVPos ePos=SDRMEASURE_TEXTVAUTO): SfxEnumItem(SDRATTR_MEASURETEXTVPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
     SdrMeasureTextVPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTVPOS,rIn)    {}
-    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16         GetValueCount() const; // { return 5; }
+    virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
+    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual sal_uInt16         GetValueCount() const SAL_OVERRIDE; // { return 5; }
             SdrMeasureTextVPos GetValue() const { return (SdrMeasureTextVPos)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
 
 #endif

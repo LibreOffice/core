@@ -239,12 +239,12 @@ public:
                             SfxFrameItem( SfxFrame *p=0 );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual OUString        GetValueText() const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     bool                    FrameKilled() const { return &wFrame != pFrame; }
 
@@ -260,10 +260,10 @@ public:
                                 SfxUsrAnyItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Any& rAny );
     ::com::sun::star::uno::Any  GetValue() const
                                 { return aValue; }
-    virtual bool                operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
@@ -278,10 +278,10 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
                                 GetFrame() const
                                 { return m_xFrame; }
-    virtual bool                operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
 
 typedef SfxUsrAnyItem SfxUnoAnyItem;

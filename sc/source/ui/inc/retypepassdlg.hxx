@@ -47,7 +47,7 @@ public:
     explicit ScRetypePassDlg(Window* pParent);
     virtual ~ScRetypePassDlg();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     void SetDataFromDocument(const ScDocument& rDoc);
     void SetDesiredHash(ScPasswordHash eHash);
@@ -129,7 +129,7 @@ public:
     explicit ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected);
     virtual ~ScRetypePassInputDlg();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     bool IsRemovePassword() const;
     OUString GetNewPassword() const;

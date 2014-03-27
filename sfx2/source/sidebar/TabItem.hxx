@@ -36,10 +36,10 @@ public:
     TabItem (Window* pParentWindow);
     virtual ~TabItem (void);
 
-    virtual void Paint (const Rectangle& rUpdateArea);
-    virtual void MouseMove (const MouseEvent& rEvent);
-    virtual void MouseButtonDown (const MouseEvent& rMouseEvent);
-    virtual void MouseButtonUp (const MouseEvent& rMouseEvent);
+    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
 
 private:
     bool mbIsLeftButtonDown;

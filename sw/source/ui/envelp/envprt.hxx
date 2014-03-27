@@ -63,11 +63,11 @@ public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
             void FillItem(SwEnvItem& rItem);
-    virtual bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet& rSet) SAL_OVERRIDE;
 
     inline void SetPrt(Printer* pPrinter) { pPrt = pPrinter; }
 };

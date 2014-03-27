@@ -33,7 +33,7 @@ private:
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
     sal_uInt16 m_nOrganizerId;
 protected:
-    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
 
 public:
     SfxStyleDialog(Window* pParent, const OString& rID,
@@ -44,7 +44,7 @@ public:
     SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }
     const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }
 
-    virtual short               Ok();
+    virtual short               Ok() SAL_OVERRIDE;
 };
 
 #endif

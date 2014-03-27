@@ -60,7 +60,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     DECL_LINK(NumberExtCharHdl, void *);
     DECL_LINK(NextPrevHdl, Button *);
 
-    virtual void    Apply();
+    virtual void    Apply() SAL_OVERRIDE;
 
     void            Init();
 

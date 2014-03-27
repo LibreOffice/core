@@ -81,7 +81,7 @@ public:
     SvxXMLColorEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLColorEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
 };
 
 class SvxXMLLineEndEntryExporter : public SvxXMLTableEntryExporter
@@ -91,7 +91,7 @@ public:
     SvxXMLLineEndEntryExporter();
     virtual ~SvxXMLLineEndEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
 private:
     XMLMarkerStyleExport maMarkerStyle;
 };
@@ -102,7 +102,7 @@ public:
     SvxXMLDashEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLDashEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
 
 private:
     XMLDashStyleExport maDashStyle;
@@ -114,7 +114,7 @@ public:
     SvxXMLHatchEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLHatchEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
 private:
     XMLHatchStyleExport maHatchStyle;
 };
@@ -125,7 +125,7 @@ public:
     SvxXMLGradientEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLGradientEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
 private:
     XMLGradientStyleExport maGradientStyle;
 };
@@ -136,7 +136,7 @@ public:
     SvxXMLBitmapEntryExporter( SvXMLExport& rExport );
     virtual ~SvxXMLBitmapEntryExporter();
 
-    virtual void exportEntry( const OUString& rStrName, const Any& rValue );
+    virtual void exportEntry( const OUString& rStrName, const Any& rValue ) SAL_OVERRIDE;
 
 private:
     XMLImageStyle maImageStyle;

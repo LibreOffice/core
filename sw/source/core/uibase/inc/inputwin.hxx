@@ -40,7 +40,7 @@ public:
                                 const OUString& aTblName );
 
 protected:
-    virtual void    KeyInput( const KeyEvent&  );
+    virtual void    KeyInput( const KeyEvent&  ) SAL_OVERRIDE;
 };
 
 class SwInputWindow : public ToolBox
@@ -72,8 +72,8 @@ friend class InputEdit;
     using Window::IsActive;
 
 protected:
-    virtual void    Resize();
-    virtual void    Click();
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Click() SAL_OVERRIDE;
     DECL_LINK( MenuHdl, Menu * );
     DECL_LINK( DropdownClickHdl, void* );
     void            ApplyFormula();
@@ -83,7 +83,7 @@ public:
                     SwInputWindow( Window* pParent, SfxBindings* pBindings );
     virtual         ~SwInputWindow();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            SelectHdl( ToolBox*);
 

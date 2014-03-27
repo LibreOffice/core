@@ -67,7 +67,7 @@ public:
                             SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
     virtual                 ~SdAnimationInfo();
 
-    virtual SdrObjUserData* Clone(SdrObject* pObject) const;
+    virtual SdrObjUserData* Clone(SdrObject* pObject) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_INC_ANMINFO_HXX

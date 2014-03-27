@@ -55,7 +55,7 @@ public:
 
        @return the rewriter for this undo object
      */
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 };
 
 class SwUndoInsBookmark : public SwUndoBookmark
@@ -63,8 +63,8 @@ class SwUndoInsBookmark : public SwUndoBookmark
 public:
     SwUndoInsBookmark( const ::sw::mark::IMark& );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOBOOKMARK_HXX

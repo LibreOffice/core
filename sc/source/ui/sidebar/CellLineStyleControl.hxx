@@ -47,7 +47,7 @@ private:
 public:
     CellLineStyleControl(Window* pParent, CellAppearancePropertyPanel& rPanel);
 
-    void GetFocus();
+    void GetFocus() SAL_OVERRIDE;
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
 
     ValueSet& GetValueSet()

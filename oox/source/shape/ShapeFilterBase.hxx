@@ -44,27 +44,27 @@ public:
     virtual             ~ShapeFilterBase();
 
     /** Has to be implemented by each filter, returns the current theme. */
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
 
     void setCurrentTheme(::oox::drawingml::ThemePtr pTheme);
 
     /** Has to be implemented by each filter to return the collection of VML shapes. */
-    virtual ::oox::vml::Drawing* getVmlDrawing();
+    virtual ::oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
 
     /** Has to be implemented by each filter to return TableStyles. */
-    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
+    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
 
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
 
-    virtual bool importDocument() { return true; }
-    virtual bool exportDocument() { return true; }
+    virtual bool importDocument() SAL_OVERRIDE { return true; }
+    virtual bool exportDocument() SAL_OVERRIDE { return true; }
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
 private:
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual OUString implGetImplementationName() const;
-    virtual GraphicHelper* implCreateGraphicHelper() const;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
+    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
+    virtual GraphicHelper* implCreateGraphicHelper() const SAL_OVERRIDE;
 
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;

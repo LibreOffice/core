@@ -69,44 +69,44 @@ public:
     OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
 
     // XControl
-    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
-    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception);
-    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception);
-    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception);
-    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL Move( double Left, double Top, const ::com::sun::star::uno::Any& Width, const ::com::sun::star::uno::Any& Height ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Move( double Left, double Top, const ::com::sun::star::uno::Any& Width, const ::com::sun::star::uno::Any& Height ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setControlSource( const OUString& _controlsource ) throw (css::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getRowSource() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getControlTipText() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setControlTipText( const OUString& ) throw (css::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getTag() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setTag( const OUString& aTag ) throw (css::uno::RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException, std::exception);
-    virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setControlSource( const OUString& _controlsource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getRowSource() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getControlTipText() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setControlTipText( const OUString& ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getTag() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTag( const OUString& aTag ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     //XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
     //General helper methods for properties ( may or maynot be relevant for all
     //controls
     sal_Int32 getBackColor() throw (css::uno::RuntimeException);

@@ -45,7 +45,7 @@ namespace sdr
             virtual ~AsynchGraphicLoadingEvent();
 
             // the called method if the event is triggered
-            virtual void ExecuteEvent();
+            virtual void ExecuteEvent() SAL_OVERRIDE;
         };
 
         AsynchGraphicLoadingEvent::AsynchGraphicLoadingEvent(

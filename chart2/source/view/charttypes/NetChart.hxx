@@ -37,19 +37,19 @@ public:
              );
     virtual ~NetChart();
 
-    virtual void createShapes();
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
+    virtual void createShapes() SAL_OVERRIDE;
+    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
-    virtual bool keepAspectRatio() const;
+    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const SAL_OVERRIDE;
+    virtual bool keepAspectRatio() const SAL_OVERRIDE;
 
     // MinimumAndMaximumSupplier
-    virtual double getMaximumX();
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
-    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual double getMaximumX() SAL_OVERRIDE;
+    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
 
-    virtual LegendSymbolStyle getLegendSymbolStyle();
-    virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
+    virtual LegendSymbolStyle getLegendSymbolStyle() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ ) SAL_OVERRIDE;
 
 private: //methods
     //no default constructor

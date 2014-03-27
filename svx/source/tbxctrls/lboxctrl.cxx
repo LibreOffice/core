@@ -73,16 +73,16 @@ public:
     virtual ~SvxPopupWindowListBox();
 
     // SfxPopupWindow
-    virtual SfxPopupWindow *    Clone() const;
-    virtual void                PopupModeEnd();
+    virtual SfxPopupWindow *    Clone() const SAL_OVERRIDE;
+    virtual void                PopupModeEnd() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     inline ListBox &            GetListBox()    { return *pListBox; }
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
-    /*virtual*/Window*                     GetPreferredKeyInputWindow();
+    /*virtual*/Window*                     GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
 
 

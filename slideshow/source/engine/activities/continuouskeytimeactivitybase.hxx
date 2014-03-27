@@ -64,7 +64,7 @@ namespace slideshow
 
             /// From SimpleContinuousActivityBase class
             virtual void simplePerform( double      nSimpleTime,
-                                        sal_uInt32  nRepeatCount ) const;
+                                        sal_uInt32  nRepeatCount ) const SAL_OVERRIDE;
 
         private:
             const ::basegfx::tools::KeyStopLerp maLerper;

@@ -40,8 +40,8 @@ public:
     SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings );
     virtual ~SdHeaderFooterUndoAction();
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNDOHEADERFOOTER_HXX

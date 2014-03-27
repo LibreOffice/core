@@ -40,7 +40,7 @@ class SwAsyncRetrieveInputStreamThread : public ObservableThread
 
     protected:
 
-        virtual void threadFunction();
+        virtual void threadFunction() SAL_OVERRIDE;
 
     private:
 

@@ -40,8 +40,8 @@ public:
             ~SdTpOptionsSnap();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
 };
 
@@ -62,8 +62,8 @@ public:
             ~SdTpOptionsContents();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 };
 
 /**
@@ -127,16 +127,16 @@ private:
     void UpdateCompatibilityControls (void);
 
 protected:
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
 public:
             SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  );
             ~SdTpOptionsMisc();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
     /** Hide Impress specific controls, make Draw specific controls visible
         and arrange the visible controls.  Do not call this method or the
@@ -149,7 +149,7 @@ public:
         <member>SetDrawMode()</member> method more than once.
     */
     void SetImpressMode (void);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

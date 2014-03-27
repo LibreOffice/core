@@ -31,7 +31,7 @@ class SwFmtVertOrient;
 class WinwordAnchoring : public EscherExClientRecord_Base
 {
 public:
-    void WriteData(EscherEx& rEx) const;
+    void WriteData(EscherEx& rEx) const SAL_OVERRIDE;
     void SetAnchoring(const SwFrmFmt& rFmt);
 
     /** method to perform conversion of positioning attributes with the help
@@ -81,7 +81,7 @@ public:
 
 private:
     /** Overloaded to create a new memory stream for picture data. */
-    virtual SvStream*   ImplQueryPictureStream();
+    virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
 
 private:
     boost::shared_ptr< SvStream > mxPicStrm;
@@ -155,23 +155,23 @@ private:
         sal_uInt32 nTxtBox, DrawObjPointerVector &rPVec);
     void WriteOCXControl(const SwFrmFmt& rFmt,sal_uInt32 nShapeId);
     virtual sal_Int32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
-        EscherPropertyContainer& rPropOpt);
+        EscherPropertyContainer& rPropOpt) SAL_OVERRIDE;
 
     virtual sal_uInt32 QueryTextID(
         const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &,sal_uInt32);
+        com::sun::star::drawing::XShape > &,sal_uInt32) SAL_OVERRIDE;
     virtual void SetPicId(const SdrObject &rSdrObj, sal_uInt32 nShapeId,
-        EscherPropertyContainer &rPropOpt);
+        EscherPropertyContainer &rPropOpt) SAL_OVERRIDE;
 public:
     SwEscherEx( SvStream* pStrm, WW8Export& rWW8Wrt );
     virtual ~SwEscherEx();
     void FinishEscher();
-    virtual void WritePictures();
+    virtual void WritePictures() SAL_OVERRIDE;
 
-    virtual void WriteFrmExtraData(const SwFrmFmt& rFmt);
+    virtual void WriteFrmExtraData(const SwFrmFmt& rFmt) SAL_OVERRIDE;
 
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &, const Rectangle*) {return &aHostData;}
+        com::sun::star::drawing::XShape > &, const Rectangle*) SAL_OVERRIDE {return &aHostData;}
 private:
     //No copying
     SwEscherEx(const SwEscherEx&);

@@ -65,8 +65,8 @@ class SwAddressControl_Impl : public Control
 
     void                MakeVisible(const Rectangle& aRect);
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        Command( const CommandEvent& rCEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     using Window::SetData;
 

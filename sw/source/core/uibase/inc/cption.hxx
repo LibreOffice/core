@@ -55,7 +55,7 @@ public:
         : ComboBox( pParent, nStyle )
     {}
 
-    virtual bool PreNotify( NotifyEvent& rNEvt );
+    virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 class SwCaptionDialog : public SvxStandardDialog
@@ -96,7 +96,7 @@ class SwCaptionDialog : public SvxStandardDialog
     DECL_LINK(OptionHdl, Button *);
     DECL_LINK(CaptionHdl, void *);
 
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
 
     void    DrawSample();
     void    CheckButtonWidth();

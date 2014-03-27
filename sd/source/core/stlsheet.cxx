@@ -108,7 +108,7 @@ class ModifyListenerForewarder : public SfxListener
 public:
     ModifyListenerForewarder( SdStyleSheet* pStyleSheet );
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
     SdStyleSheet* mpStyleSheet;

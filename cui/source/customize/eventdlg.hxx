@@ -53,7 +53,7 @@ public:
     void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
 protected:
-    virtual bool    FillItemSet( SfxItemSet& );
+    virtual bool    FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
 
 private:
     void    ImplInitDocument();

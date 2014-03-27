@@ -35,11 +35,11 @@ class MultipleItemConverter : public ItemConverter
 public:
     virtual ~MultipleItemConverter();
 
-    virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
-    virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
+    virtual void FillItemSet( SfxItemSet & rOutItemSet ) const SAL_OVERRIDE;
+    virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) SAL_OVERRIDE;
 
     /// implemented empty (returns always false)
-    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
 
 protected:
     MultipleItemConverter( SfxItemPool& rItemPool );

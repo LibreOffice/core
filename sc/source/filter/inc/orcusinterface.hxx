@@ -43,7 +43,7 @@ class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_se
 public:
     ScOrcusGlobalSettings(ScDocumentImport& rDoc);
 
-    virtual void set_origin_date(int year, int month, int day);
+    virtual void set_origin_date(int year, int month, int day) SAL_OVERRIDE;
 };
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
@@ -54,21 +54,21 @@ class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_str
 public:
     ScOrcusSharedStrings(ScOrcusFactory& rFactory);
 
-    virtual size_t append(const char* s, size_t n);
-    virtual size_t add(const char* s, size_t n);
+    virtual size_t append(const char* s, size_t n) SAL_OVERRIDE;
+    virtual size_t add(const char* s, size_t n) SAL_OVERRIDE;
 
-    virtual void set_segment_bold(bool b);
-    virtual void set_segment_italic(bool b);
-    virtual void set_segment_font(size_t font_index);
-    virtual void set_segment_font_name(const char* s, size_t n);
-    virtual void set_segment_font_size(double point);
+    virtual void set_segment_bold(bool b) SAL_OVERRIDE;
+    virtual void set_segment_italic(bool b) SAL_OVERRIDE;
+    virtual void set_segment_font(size_t font_index) SAL_OVERRIDE;
+    virtual void set_segment_font_name(const char* s, size_t n) SAL_OVERRIDE;
+    virtual void set_segment_font_size(double point) SAL_OVERRIDE;
     virtual void set_segment_font_color(orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue);
-    virtual void append_segment(const char* s, size_t n);
+            orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+    virtual void append_segment(const char* s, size_t n) SAL_OVERRIDE;
 
-    virtual size_t commit_segments();
+    virtual size_t commit_segments() SAL_OVERRIDE;
 };
 
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
@@ -89,35 +89,35 @@ public:
     ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
     // Orcus import interface
-    virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
-    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex);
-    virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value);
-    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value);
+    virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) SAL_OVERRIDE;
+    virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value) SAL_OVERRIDE;
+    virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, bool value) SAL_OVERRIDE;
     virtual void set_date_time(
-        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, int year, int month, int day, int hour, int minute, double second);
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, int year, int month, int day, int hour, int minute, double second) SAL_OVERRIDE;
 
-    virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index);
+    virtual void set_format(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t xf_index) SAL_OVERRIDE;
 
-    virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n);
-    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
-
-    virtual void set_shared_formula(
-        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
-        const char* p_formula, size_t n_formula);
+    virtual void set_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, const char* p, size_t n) SAL_OVERRIDE;
+    virtual void set_formula_result(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
 
     virtual void set_shared_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
-        const char* p_formula, size_t n_formula, const char* p_range, size_t n_range);
+        const char* p_formula, size_t n_formula) SAL_OVERRIDE;
 
-    virtual void set_shared_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex);
+    virtual void set_shared_formula(
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar, size_t sindex,
+        const char* p_formula, size_t n_formula, const char* p_range, size_t n_range) SAL_OVERRIDE;
+
+    virtual void set_shared_formula(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, size_t sindex) SAL_OVERRIDE;
 
     virtual void set_array_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
-        const char* p, size_t n, orcus::spreadsheet::row_t array_rows, orcus::spreadsheet::col_t array_cols);
+        const char* p, size_t n, orcus::spreadsheet::row_t array_rows, orcus::spreadsheet::col_t array_cols) SAL_OVERRIDE;
 
     virtual void set_array_formula(
         orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::formula_grammar_t grammar,
-        const char* p, size_t n, const char* p_range, size_t n_range);
+        const char* p, size_t n, const char* p_range, size_t n_range) SAL_OVERRIDE;
 
     SCTAB getIndex() const { return mnTab; }
 };
@@ -128,77 +128,77 @@ class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
 public:
     // font
 
-    virtual void set_font_count(size_t n);
-    virtual void set_font_bold(bool b);
-    virtual void set_font_italic(bool b);
-    virtual void set_font_name(const char* s, size_t n);
-    virtual void set_font_size(double point);
-    virtual void set_font_underline(orcus::spreadsheet::underline_t e);
+    virtual void set_font_count(size_t n) SAL_OVERRIDE;
+    virtual void set_font_bold(bool b) SAL_OVERRIDE;
+    virtual void set_font_italic(bool b) SAL_OVERRIDE;
+    virtual void set_font_name(const char* s, size_t n) SAL_OVERRIDE;
+    virtual void set_font_size(double point) SAL_OVERRIDE;
+    virtual void set_font_underline(orcus::spreadsheet::underline_t e) SAL_OVERRIDE;
     virtual void set_font_color( orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue);
-    virtual size_t commit_font();
+            orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+    virtual size_t commit_font() SAL_OVERRIDE;
 
     // fill
 
-    virtual void set_fill_count(size_t n);
-    virtual void set_fill_pattern_type(const char* s, size_t n);
-    virtual void set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue);
-    virtual void set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue);
-    virtual size_t commit_fill();
+    virtual void set_fill_count(size_t n) SAL_OVERRIDE;
+    virtual void set_fill_pattern_type(const char* s, size_t n) SAL_OVERRIDE;
+    virtual void set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+    virtual void set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+    virtual size_t commit_fill() SAL_OVERRIDE;
 
     // border
 
-    virtual void set_border_count(size_t n);
-    virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, const char* s, size_t n);
+    virtual void set_border_count(size_t n) SAL_OVERRIDE;
+    virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, const char* s, size_t n) SAL_OVERRIDE;
     virtual void set_border_color(orcus::spreadsheet::border_direction_t dir,
             orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
-            orcus::spreadsheet::color_elem_t blue);
-    virtual size_t commit_border();
+            orcus::spreadsheet::color_elem_t blue) SAL_OVERRIDE;
+    virtual size_t commit_border() SAL_OVERRIDE;
 
     // cell protection
-    virtual void set_cell_hidden(bool b);
-    virtual void set_cell_locked(bool b);
-    virtual size_t commit_cell_protection();
+    virtual void set_cell_hidden(bool b) SAL_OVERRIDE;
+    virtual void set_cell_locked(bool b) SAL_OVERRIDE;
+    virtual size_t commit_cell_protection() SAL_OVERRIDE;
 
     // number format
-    virtual void set_number_format_count(size_t n);
-    virtual void set_number_format_identifier(size_t n);
-    virtual void set_number_format_code(const char* s, size_t n);
-    virtual size_t commit_number_format();
+    virtual void set_number_format_count(size_t n) SAL_OVERRIDE;
+    virtual void set_number_format_identifier(size_t n) SAL_OVERRIDE;
+    virtual void set_number_format_code(const char* s, size_t n) SAL_OVERRIDE;
+    virtual size_t commit_number_format() SAL_OVERRIDE;
 
     // cell style xf
 
-    virtual void set_cell_style_xf_count(size_t n);
-    virtual size_t commit_cell_style_xf();
+    virtual void set_cell_style_xf_count(size_t n) SAL_OVERRIDE;
+    virtual size_t commit_cell_style_xf() SAL_OVERRIDE;
 
     // cell xf
 
-    virtual void set_cell_xf_count(size_t n);
-    virtual size_t commit_cell_xf();
+    virtual void set_cell_xf_count(size_t n) SAL_OVERRIDE;
+    virtual size_t commit_cell_xf() SAL_OVERRIDE;
 
     // xf (cell format) - used both by cell xf and cell style xf.
 
-    virtual void set_xf_number_format(size_t index);
-    virtual void set_xf_font(size_t index);
-    virtual void set_xf_fill(size_t index);
-    virtual void set_xf_border(size_t index);
-    virtual void set_xf_protection(size_t index);
-    virtual void set_xf_style_xf(size_t index);
-    virtual void set_xf_apply_alignment(bool b);
-    virtual void set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t align);
-    virtual void set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t align);
+    virtual void set_xf_number_format(size_t index) SAL_OVERRIDE;
+    virtual void set_xf_font(size_t index) SAL_OVERRIDE;
+    virtual void set_xf_fill(size_t index) SAL_OVERRIDE;
+    virtual void set_xf_border(size_t index) SAL_OVERRIDE;
+    virtual void set_xf_protection(size_t index) SAL_OVERRIDE;
+    virtual void set_xf_style_xf(size_t index) SAL_OVERRIDE;
+    virtual void set_xf_apply_alignment(bool b) SAL_OVERRIDE;
+    virtual void set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t align) SAL_OVERRIDE;
+    virtual void set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t align) SAL_OVERRIDE;
 
     // cell style entry
 
-    virtual void set_cell_style_count(size_t n);
-    virtual void set_cell_style_name(const char* s, size_t n);
-    virtual void set_cell_style_xf(size_t index);
-    virtual void set_cell_style_builtin(size_t index);
-    virtual size_t commit_cell_style();
+    virtual void set_cell_style_count(size_t n) SAL_OVERRIDE;
+    virtual void set_cell_style_name(const char* s, size_t n) SAL_OVERRIDE;
+    virtual void set_cell_style_xf(size_t index) SAL_OVERRIDE;
+    virtual void set_cell_style_builtin(size_t index) SAL_OVERRIDE;
+    virtual size_t commit_cell_style() SAL_OVERRIDE;
 };
 
 class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
@@ -232,13 +232,13 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 public:
     ScOrcusFactory(ScDocument& rDoc);
 
-    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length);
-    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length);
-    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(orcus::spreadsheet::sheet_t sheet_index);
-    virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings();
-    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings();
-    virtual orcus::spreadsheet::iface::import_styles* get_styles();
-    virtual void finalize();
+    virtual orcus::spreadsheet::iface::import_sheet* append_sheet(const char *sheet_name, size_t sheet_name_length) SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(const char *sheet_name, size_t sheet_name_length) SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_sheet* get_sheet(orcus::spreadsheet::sheet_t sheet_index) SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_global_settings* get_global_settings() SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_shared_strings* get_shared_strings() SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_styles* get_styles() SAL_OVERRIDE;
+    virtual void finalize() SAL_OVERRIDE;
 
     size_t appendString(const OUString& rStr);
     size_t addString(const OUString& rStr);

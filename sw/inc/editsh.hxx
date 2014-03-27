@@ -583,7 +583,7 @@ public:
     sal_Bool HasOtherCnt() const;
 
     /// Apply ViewOptions with Start-/EndAction.
-    virtual void ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void ApplyViewOptions( const SwViewOption &rOpt ) SAL_OVERRIDE;
 
     /** Query text within selection.
      @returns FALSE, if selected range is too large to be copied

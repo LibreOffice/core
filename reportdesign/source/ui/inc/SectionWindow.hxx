@@ -86,12 +86,12 @@ namespace rptui
         DECL_LINK(EndSplitHdl, Splitter*);
 
 
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
         // windows overload
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
     protected:
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     public:
         OSectionWindow( OViewsWindow* _pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection

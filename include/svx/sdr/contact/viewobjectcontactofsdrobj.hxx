@@ -50,7 +50,7 @@ namespace sdr
             ViewObjectContactOfSdrObj(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfSdrObj();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
 
             /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
 

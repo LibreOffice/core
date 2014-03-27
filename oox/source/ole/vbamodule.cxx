@@ -60,7 +60,7 @@ class OleIdToNameContainer : public OleIdToNameContainer_BASE
 public:
     OleIdToNameContainer() {}
     // XIndexContainer Methods
-    virtual void SAL_CALL insertByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+    virtual void SAL_CALL insertByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OUString sOleName;
@@ -68,7 +68,7 @@ public:
             throw IllegalArgumentException();
         ObjIdToNameHash[ Index ] = sOleName;
     }
-    virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+    virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByIndex( Index ) )
@@ -76,7 +76,7 @@ public:
         ObjIdToNameHash.erase( ObjIdToNameHash.find( Index ) );
     }
     // XIndexReplace Methods
-    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByIndex( Index ) )
@@ -87,12 +87,12 @@ public:
         ObjIdToNameHash[ Index ] = sOleName;
     }
     // XIndexAccess Methods
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception)
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ObjIdToNameHash.size();
     }
-    virtual Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+    virtual Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByIndex( Index ) )
@@ -100,11 +100,11 @@ public:
         return makeAny( ObjIdToNameHash[ Index ] );
     }
     // XElementAccess Methods
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception)
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ::getCppuType( static_cast< const OUString* >( 0 ) );
     }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( getCount() > 0 );

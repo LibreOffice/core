@@ -49,18 +49,18 @@ public:
     const EditTextObject* GetEditTextObject() const { return mpEditObj; }
 
     using ScAccessibleContextBase::disposing;
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
    ///=====  SfxListener  =====================================================
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     ///=====  XAccessibleComponent  ============================================
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XAccessibleContext  ==============================================
 
@@ -68,20 +68,20 @@ public:
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
-                    throw (::com::sun::star::uno::RuntimeException, std::exception);
+                    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException, std::exception);
+                ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XServiceInfo  ====================================================
 
@@ -89,14 +89,14 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName(void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext and Accessible service.
     */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames(void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ///=====  XTypeProvider  ===================================================
 
@@ -104,14 +104,14 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     EditTextObject* mpEditObj;

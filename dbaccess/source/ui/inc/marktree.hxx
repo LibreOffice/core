@@ -42,15 +42,15 @@ public:
     OMarkableTreeListBox( Window* pParent, const ResId& rResId );
     ~OMarkableTreeListBox();
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    CheckButtonHdl();
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    CheckButtonHdl() SAL_OVERRIDE;
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
     /// the handler given is called whenever the check state of one or more items changed
     void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
 
 protected:
-    virtual void Paint(const Rectangle& _rRect);
+    virtual void Paint(const Rectangle& _rRect) SAL_OVERRIDE;
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
     SvButtonState   implDetermineState(SvTreeListEntry* _pEntry);

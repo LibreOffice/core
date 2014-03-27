@@ -94,7 +94,7 @@ private:
 public:
                         CertificateViewerGeneralTP( Window* pParent, CertificateViewer* _pDlg );
 
-    virtual void        ActivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
 };
 
 
@@ -115,7 +115,7 @@ public:
                         CertificateViewerDetailsTP( Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerDetailsTP();
 
-    virtual void        ActivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
 };
 
 
@@ -144,7 +144,7 @@ public:
                         CertificateViewerCertPathTP( Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerCertPathTP();
 
-    virtual void        ActivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
 };
 
 

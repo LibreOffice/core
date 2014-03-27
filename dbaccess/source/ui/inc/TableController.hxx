@@ -70,15 +70,15 @@ namespace dbaui
         void reload();
 
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures();
+        virtual void            describeSupportedFeatures() SAL_OVERRIDE;
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
-        virtual void losingConnection( );
+        virtual void losingConnection( ) SAL_OVERRIDE;
 
-        virtual OUString getPrivateTitle( ) const;
+        virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
 
         void        doEditIndexes();
         sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
@@ -97,7 +97,7 @@ namespace dbaui
         inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
         inline const OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
-        virtual void impl_onModifyChanged();
+        virtual void impl_onModifyChanged() SAL_OVERRIDE;
 
         inline ::std::vector< ::boost::shared_ptr<OTableRow> >* getRows() { return &m_vRowList; }
 
@@ -111,19 +111,19 @@ namespace dbaui
 
         inline TOTypeInfoSP                 getTypeInfoFallBack() const { return m_pTypeInfo; }
 
-        virtual sal_Bool                    Construct(Window* pParent);
+        virtual sal_Bool                    Construct(Window* pParent) SAL_OVERRIDE;
         // XEventListener
-        virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL               disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL disposing();
+        virtual void        SAL_CALL disposing() SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
         static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -137,7 +137,7 @@ namespace dbaui
     protected:
         void startTableListening();
         void stopTableListening();
-        virtual void impl_initialize();
+        virtual void impl_initialize() SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX

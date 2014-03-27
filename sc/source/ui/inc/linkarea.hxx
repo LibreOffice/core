@@ -71,7 +71,7 @@ public:
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh );
 
-    virtual short   Execute();          // overwritten to set dialog parent
+    virtual short   Execute() SAL_OVERRIDE;          // overwritten to set dialog parent
 
     OUString       GetURL();
     OUString       GetFilter();        // may be empty

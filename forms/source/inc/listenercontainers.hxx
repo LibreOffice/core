@@ -119,7 +119,7 @@ namespace frm
         virtual bool    implTypedNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
     };
 
 

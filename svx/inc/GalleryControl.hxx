@@ -56,8 +56,8 @@ private:
 
     void InitSettings (void);
 
-    virtual void Resize (void);
-    virtual void GetFocus (void);
+    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void GetFocus (void) SAL_OVERRIDE;
 
     DECL_LINK(SplitHdl, void*);
 

@@ -83,20 +83,20 @@ public:
     //===== lang::XEventListener ==============================================
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //===== beans::XPropertySetListener =======================================
     virtual void SAL_CALL
         propertyChange (
             const com::sun::star::beans::PropertyChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== view::XSelectionChangeListener ====================================
     virtual void SAL_CALL
         selectionChanged (
             const com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== frame::XFrameActionListener  ======================================
     /** For certain actions the listener connects to a new controller of the
@@ -105,21 +105,21 @@ public:
     */
     virtual void SAL_CALL
         frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== drawing::framework::XConfigurationChangeListener ==================
     virtual void SAL_CALL
         notifyConfigurationChange (
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 protected:
     virtual void Notify (
         SfxBroadcaster& rBroadcaster,
-        const SfxHint& rHint);
+        const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
     ViewShellBase& mrBase;

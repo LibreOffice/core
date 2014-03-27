@@ -120,14 +120,14 @@ namespace dbaui
 
     protected:
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures();
+        virtual void            describeSupportedFeatures() SAL_OVERRIDE;
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
-        virtual void            reconnect( sal_Bool _bUI );
-        virtual OUString getPrivateTitle( ) const;
+        virtual void            reconnect( sal_Bool _bUI ) SAL_OVERRIDE;
+        virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
 
         OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
@@ -140,7 +140,7 @@ namespace dbaui
 
         void            clearFields();
 
-        virtual void impl_onModifyChanged();
+        virtual void impl_onModifyChanged() SAL_OVERRIDE;
 
         // should the statement be parsed by our own sql parser
         sal_Bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
@@ -165,22 +165,22 @@ namespace dbaui
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
 
-        virtual sal_Bool Construct(Window* pParent);
+        virtual sal_Bool Construct(Window* pParent) SAL_OVERRIDE;
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         // XPropertySet
-        virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL disposing();
+        virtual void        SAL_CALL disposing() SAL_OVERRIDE;
 
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
         static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -188,13 +188,13 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // XController
-        virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
+        virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager) SAL_OVERRIDE;
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         // OPropertySetHelper
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -202,21 +202,21 @@ namespace dbaui
                                     ::com::sun::star::uno::Any& rOldValue,
                                     sal_Int32 nHandle,
                                     const ::com::sun::star::uno::Any& rValue
-                                ) throw (::com::sun::star::lang::IllegalArgumentException);
+                                ) throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const ::com::sun::star::uno::Any& rValue
-                                ) throw (::com::sun::star::uno::Exception, std::exception );
+                                ) throw (::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL getFastPropertyValue(
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
-                                ) const;
+                                ) const SAL_OVERRIDE;
 
-        virtual OJoinDesignView*  getJoinView();
+        virtual OJoinDesignView*  getJoinView() SAL_OVERRIDE;
         // ask the user if the design should be saved when it is modified
-        virtual short saveModified();
-        virtual void reset();
-        virtual void impl_initialize();
+        virtual short saveModified() SAL_OVERRIDE;
+        virtual void reset() SAL_OVERRIDE;
+        virtual void impl_initialize() SAL_OVERRIDE;
 
         void    impl_reset( const bool i_bIgnoreQuerySettings = false );
         /// tells the user that we needed to switch to SQL view automatically
@@ -232,8 +232,8 @@ namespace dbaui
         void    setEscapeProcessing_fireEvent( const sal_Bool _bEscapeProcessing );
 
         // OJoinController overridables
-        virtual bool allowViews() const;
-        virtual bool allowQueries() const;
+        virtual bool allowViews() const SAL_OVERRIDE;
+        virtual bool allowQueries() const SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnExecuteAddTable, void* );

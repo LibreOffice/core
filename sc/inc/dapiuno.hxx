@@ -101,53 +101,53 @@ public:
                             ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT);
     virtual                 ~ScDataPilotTablesObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
                             // XDataPilotTables
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotDescriptor > SAL_CALL
-                            createDataPilotDescriptor() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            createDataPilotDescriptor() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   insertNewByName( const OUString& aName,
                                     const ::com::sun::star::table::CellAddress& aOutputAddress,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::sheet::XDataPilotDescriptor >& xDescriptor )
                                     throw(::com::sun::star::uno::RuntimeException,
-                                          std::exception);
+                                          std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removeByName( const OUString& aName )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 //  ScDataPilotDescriptorBase is never instantiated directly
@@ -170,11 +170,11 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL   release() throw() SAL_OVERRIDE;
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     ScDocShell*             GetDocShell() const     { return pDocShell; }
 
@@ -186,76 +186,76 @@ public:
                             //  getName, setName, getTag, setTag in derived classes
 
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getSourceRange()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setSourceRange( const ::com::sun::star::table::CellRangeAddress& aSourceRange )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetFilterDescriptor > SAL_CALL
-                            getFilterDescriptor() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getFilterDescriptor() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-                            getDataPilotFields() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getDataPilotFields() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-                            getColumnFields() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getColumnFields() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-                            getRowFields() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getRowFields() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-                            getPageFields() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getPageFields() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-                            getDataFields() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getDataFields() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
-                            getHiddenFields() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            getHiddenFields() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
                                     ::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
                                        ::com::sun::star::lang::WrappedTargetException,
                                        ::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XDataPilotDataLayoutFieldSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
                             SAL_CALL getDataLayoutField()
                                 throw (::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     SC_DLLPUBLIC static ScDataPilotDescriptorBase* getImplementation( const com::sun::star::uno::Reference<
@@ -263,9 +263,9 @@ public:
 
                             // XTypeProvider (overloaded in ScDataPilotTableObj)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo is in derived classes
 };
@@ -279,24 +279,24 @@ public:
                             ScDataPilotDescriptor(ScDocShell* pDocSh);
     virtual                 ~ScDataPilotDescriptor();
 
-    virtual ScDPObject* GetDPObject() const;
-    virtual void SetDPObject(ScDPObject* pDPObj);
+    virtual ScDPObject* GetDPObject() const SAL_OVERRIDE;
+    virtual void SetDPObject(ScDPObject* pDPObj) SAL_OVERRIDE;
 
                             // rest of XDataPilotDescriptor (incl. XNamed)
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getTag() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getTag() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setTag( const OUString& aTag )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
@@ -316,66 +316,66 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL   acquire() throw();
-    virtual void SAL_CALL   release() throw();
+                                    throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL   release() throw() SAL_OVERRIDE;
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual ScDPObject* GetDPObject() const;
-    virtual void SetDPObject(ScDPObject* pDPObj);
+    virtual ScDPObject* GetDPObject() const SAL_OVERRIDE;
+    virtual void SetDPObject(ScDPObject* pDPObj) SAL_OVERRIDE;
 
                             // rest of XDataPilotDescriptor (incl. XNamed)
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getTag() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getTag() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setTag( const OUString& aTag )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XDataPilotTable
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getOutputRange()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XDataPilotTable2
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
         SAL_CALL getDrillDownData(const ::com::sun::star::table::CellAddress& aAddr)
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::sheet::DataPilotTablePositionData
         SAL_CALL getPositionData(const ::com::sun::star::table::CellAddress& aAddr)
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL insertDrillDownSheet(const ::com::sun::star::table::CellAddress& aAddr)
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getOutputRangeByType( sal_Int32 nType )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
-                                      ::com::sun::star::uno::RuntimeException, std::exception);
+                                      ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XModifyBroadcaster
     virtual void SAL_CALL   addModifyListener( const ::com::sun::star::uno::Reference<
                                                 ::com::sun::star::util::XModifyListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removeModifyListener( const ::com::sun::star::uno::Reference<
                                                 ::com::sun::star::util::XModifyListener >& aListener )
-                                throw (::com::sun::star::uno::RuntimeException, std::exception);
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XTypeProvider (overloaded)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 struct ScFieldIdentifier
@@ -449,35 +449,35 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ScDataPilotFieldObj*    GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
@@ -515,15 +515,15 @@ public:
                             // XNamed
     virtual OUString SAL_CALL getName()
         throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setName(const OUString& aName)
         throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
@@ -531,41 +531,41 @@ public:
                                        ::com::sun::star::lang::IllegalArgumentException,
                                        ::com::sun::star::lang::WrappedTargetException,
                                        ::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
                                        ::com::sun::star::lang::WrappedTargetException,
                                        ::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XDatePilotField
     virtual com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> SAL_CALL
-                                getItems() throw (::com::sun::star::uno::RuntimeException, std::exception);
+                                getItems() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // only called from property-functions:
     com::sun::star::sheet::DataPilotFieldOrientation getOrientation(void) const;
@@ -599,20 +599,20 @@ public:
         createNameGroup(const com::sun::star::uno::Sequence< OUString >& aItems)
              throw (::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::lang::IllegalArgumentException,
-                    std::exception);
+                    std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Reference < com::sun::star::sheet::XDataPilotField > SAL_CALL
         createDateGroup(const com::sun::star::sheet::DataPilotFieldGroupInfo& rInfo)
              throw (::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::lang::IllegalArgumentException,
-                    std::exception);
+                    std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
@@ -656,11 +656,11 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                                 // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName,
@@ -668,7 +668,7 @@ public:
                                 throw (::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName,
@@ -676,35 +676,35 @@ public:
                                 throw (::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::container::ElementExistException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName( const OUString& Name )
                                 throw (::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                         // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // implementation
     ScFieldGroup&       getFieldGroup( const OUString& rName ) throw(::com::sun::star::uno::RuntimeException);
@@ -737,11 +737,11 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                                 // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName,
@@ -749,7 +749,7 @@ public:
                                 throw (::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                                 // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName,
@@ -757,40 +757,40 @@ public:
                                 throw (::com::sun::star::lang::IllegalArgumentException,
                                     ::com::sun::star::container::ElementExistException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName( const OUString& Name )
                                 throw (::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XNamed
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ScDataPilotFieldGroupsObj& mrParent;
@@ -811,17 +811,17 @@ public:
     virtual             ~ScDataPilotFieldGroupItemObj();
 
                             // XNamed
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ScDataPilotFieldGroupObj& mrParent;
@@ -847,35 +847,35 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ScDataPilotItemObj* GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
@@ -900,14 +900,14 @@ public:
     virtual             ~ScDataPilotItemObj();
 
                             // XNamed
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setName( const OUString& aName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
@@ -915,45 +915,45 @@ public:
                                        ::com::sun::star::lang::IllegalArgumentException,
                                        ::com::sun::star::lang::WrappedTargetException,
                                        ::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
                                        ::com::sun::star::lang::WrappedTargetException,
                                        ::com::sun::star::uno::RuntimeException,
-                                       std::exception);
+                                       std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception);
+                                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     SfxItemPropertySet  maPropSet;

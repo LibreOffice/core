@@ -198,28 +198,28 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         supportsService(const OUString& rServiceName)
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException, std::exception);
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception);
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception);
+                uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexReplace
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-                lang::WrappedTargetException, uno::RuntimeException, std::exception);
+                lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
@@ -244,28 +244,28 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         supportsService(const OUString& rServiceName)
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames() throw (uno::RuntimeException, std::exception);
+        getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception);
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception);
+                uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexReplace
     virtual void SAL_CALL
         replaceByIndex(sal_Int32 Index, const uno::Any& rElement)
         throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-                lang::WrappedTargetException, uno::RuntimeException, std::exception);
+                lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
@@ -382,7 +382,7 @@ public:
     }
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 };
 
@@ -1611,7 +1611,7 @@ public:
     void    Invalidate();
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 void SwXDocumentIndexMark::Impl::Invalidate()

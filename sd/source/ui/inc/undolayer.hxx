@@ -36,8 +36,8 @@ public:
     const OUString& rOldLayerName, const OUString& rOldLayerTitle, const OUString& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
     const OUString& rNewLayerName, const OUString& rNewLayerTitle, const OUString& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 
 private:
     SdrLayer* mpLayer;

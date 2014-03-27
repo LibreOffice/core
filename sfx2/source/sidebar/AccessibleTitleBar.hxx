@@ -35,7 +35,7 @@ public:
     static cssu::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
 
 protected:
-    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet);
+    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) SAL_OVERRIDE;
 
 private:
     AccessibleTitleBar (VCLXWindow* pWindow);

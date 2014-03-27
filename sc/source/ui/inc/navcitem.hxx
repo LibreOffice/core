@@ -36,7 +36,7 @@ public:
                                SfxBindings& rBindings );
 protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pItem );
+                                      const SfxPoolItem* pItem ) SAL_OVERRIDE;
 
 private:
     ScNavigatorDlg& rNavigatorDlg;

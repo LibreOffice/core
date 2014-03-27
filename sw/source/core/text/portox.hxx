@@ -30,8 +30,8 @@ class SwToxPortion : public SwTxtPortion
 {
 public:
     inline  SwToxPortion(){ SetWhichPor( POR_TOX ); }
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    OUTPUT_OPERATOR
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -44,15 +44,15 @@ class SwIsoToxPortion : public SwToxPortion
 
 public:
             SwIsoToxPortion();
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual SwLinePortion *Compress();
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual SwLinePortion *Compress() SAL_OVERRIDE;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

@@ -86,8 +86,8 @@ namespace frm
         static bool isMappableSlot( SfxSlotId _nSlotId );
 
         // IMultiAttributeDispatcher
-        virtual AttributeState  getState( AttributeId _nAttributeId ) const;
-        virtual void            executeAttribute( AttributeId _nAttributeId, const SfxPoolItem* _pArgument );
+        virtual AttributeState  getState( AttributeId _nAttributeId ) const SAL_OVERRIDE;
+        virtual void            executeAttribute( AttributeId _nAttributeId, const SfxPoolItem* _pArgument ) SAL_OVERRIDE;
 
         void    SetBackgroundColor( );
         void    SetBackgroundColor( const Color& _rColor );
@@ -102,15 +102,15 @@ namespace frm
               EditView& getView();
 
         // Window overridables
-        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags );
+        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong _nFlags ) SAL_OVERRIDE;
 
     protected:
         // Window overridables
-        virtual void        Resize();
-        virtual void        GetFocus();
-        virtual void        StateChanged( StateChangedType nStateChange );
-        virtual bool        PreNotify( NotifyEvent& _rNEvt );
-        virtual bool        Notify( NotifyEvent& _rNEvt );
+        virtual void        Resize() SAL_OVERRIDE;
+        virtual void        GetFocus() SAL_OVERRIDE;
+        virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual bool        PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
+        virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
     private:
                 void    applyAttributes( const SfxItemSet& _rAttributesToApply );

@@ -43,7 +43,20 @@ public:
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ChartTypeManager();
 
-    APPHELPER_XSERVICEINFO_DECL()
+    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
+    virtual OUString SAL_CALL
+        getImplementationName()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& ServiceName )
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    static OUString getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString >
+        getSupportedServiceNames_Static();
+
     /// establish methods for factory instatiation
     APPHELPER_SERVICE_FACTORY_HELPER( ChartTypeManager )
 
@@ -52,17 +65,17 @@ protected:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier )
         throw (::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments(
             const OUString& ServiceSpecifier,
             const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Any >& Arguments )
         throw (::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence<
         OUString > SAL_CALL getAvailableServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XChartTypeManager ____
     // currently empty

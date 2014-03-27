@@ -51,7 +51,7 @@ public:
     {
     public:
         GlobalInserter(ScXMLImport& rImport);
-        virtual void insert(ScMyNamedExpression* pExp);
+        virtual void insert(ScMyNamedExpression* pExp) SAL_OVERRIDE;
     private:
         ScXMLImport& mrImport;
     };
@@ -65,7 +65,7 @@ public:
     {
     public:
         SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab);
-        virtual void insert(ScMyNamedExpression* pExp);
+        virtual void insert(ScMyNamedExpression* pExp) SAL_OVERRIDE;
     private:
         ScXMLImport& mrImport;
         SCTAB mnTab;
@@ -82,9 +82,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
 private:
     ::boost::shared_ptr<Inserter> mpInserter;
@@ -108,9 +108,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
 private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;
@@ -134,9 +134,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
 private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;

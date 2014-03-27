@@ -92,31 +92,31 @@ namespace slideshow
             }
 
             // ViewEventHandler methods
-            virtual void viewAdded( const UnoViewSharedPtr& rView )
+            virtual void viewAdded( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
             {
                 maViews.push_back( rView );
             }
 
-            virtual void viewRemoved( const UnoViewSharedPtr& rView )
+            virtual void viewRemoved( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
             {
                 maViews.erase( ::std::remove( maViews.begin(),
                                               maViews.end(),
                                               rView ) );
             }
 
-            virtual void viewChanged( const UnoViewSharedPtr& /*rView*/ )
+            virtual void viewChanged( const UnoViewSharedPtr& /*rView*/ ) SAL_OVERRIDE
             {
                 // TODO(F2): for persistent drawings, need to store
                 // polygon and repaint here.
             }
 
-            virtual void viewsChanged()
+            virtual void viewsChanged() SAL_OVERRIDE
             {
                 // TODO(F2): for persistent drawings, need to store
                 // polygon and repaint here.
             }
 
-            bool colorChanged( RGBColor const& rUserColor )
+            bool colorChanged( RGBColor const& rUserColor ) SAL_OVERRIDE
             {
                 mbIsLastPointValid = false;
                 mbActive = true;
@@ -125,7 +125,7 @@ namespace slideshow
                 return true;
             }
 
-            bool widthChanged( double nUserStrokeWidth )
+            bool widthChanged( double nUserStrokeWidth ) SAL_OVERRIDE
             {
                 this->mnStrokeWidth = nUserStrokeWidth;
                 mbIsEraseModeActivated = false;
@@ -167,7 +167,7 @@ namespace slideshow
                     }
             }
 
-            bool eraseAllInkChanged( bool const& rEraseAllInk )
+            bool eraseAllInkChanged( bool const& rEraseAllInk ) SAL_OVERRIDE
             {
                 this->mbIsEraseAllModeActivated= rEraseAllInk;
                 // if the erase all mode is activated it will remove all ink from slide,
@@ -183,7 +183,7 @@ namespace slideshow
             return true;
             }
 
-            bool eraseInkWidthChanged( sal_Int32 rEraseInkSize )
+            bool eraseInkWidthChanged( sal_Int32 rEraseInkSize ) SAL_OVERRIDE
             {
                 // Change the size
                 this->mnSize=rEraseInkSize;
@@ -192,7 +192,7 @@ namespace slideshow
                 return true;
             }
 
-            bool switchPenMode()
+            bool switchPenMode() SAL_OVERRIDE
             {
                 mbIsLastPointValid = false;
                 mbActive = true;
@@ -200,7 +200,7 @@ namespace slideshow
                 return true;
             }
 
-            bool switchEraserMode()
+            bool switchEraserMode() SAL_OVERRIDE
             {
                 mbIsLastPointValid = false;
                 mbActive = true;
@@ -208,7 +208,7 @@ namespace slideshow
                 return true;
             }
 
-            bool disable()
+            bool disable() SAL_OVERRIDE
             {
                 mbIsLastPointValid = false;
                 mbIsLastMouseDownPosValid = false;
@@ -236,7 +236,7 @@ namespace slideshow
             }
 
             // MouseEventHandler methods
-            virtual bool handleMousePressed( const awt::MouseEvent& e )
+            virtual bool handleMousePressed( const awt::MouseEvent& e ) SAL_OVERRIDE
             {
                 if( !mbActive )
                     return false;
@@ -259,7 +259,7 @@ namespace slideshow
                 return true;
             }
 
-            virtual bool handleMouseReleased( const awt::MouseEvent& e )
+            virtual bool handleMouseReleased( const awt::MouseEvent& e ) SAL_OVERRIDE
             {
                 if( !mbActive )
                     return false;
@@ -296,7 +296,7 @@ namespace slideshow
                 return true;
             }
 
-            virtual bool handleMouseEntered( const awt::MouseEvent& e )
+            virtual bool handleMouseEntered( const awt::MouseEvent& e ) SAL_OVERRIDE
             {
                 if( !mbActive )
                     return false;
@@ -308,7 +308,7 @@ namespace slideshow
                 return true;
             }
 
-            virtual bool handleMouseExited( const awt::MouseEvent& )
+            virtual bool handleMouseExited( const awt::MouseEvent& ) SAL_OVERRIDE
             {
                 if( !mbActive )
                     return false;
@@ -319,7 +319,7 @@ namespace slideshow
                 return true;
             }
 
-            virtual bool handleMouseDragged( const awt::MouseEvent& e )
+            virtual bool handleMouseDragged( const awt::MouseEvent& e ) SAL_OVERRIDE
             {
                 if( !mbActive )
                     return false;
@@ -438,7 +438,7 @@ namespace slideshow
                 return true;
             }
 
-            virtual bool handleMouseMoved( const awt::MouseEvent& /*e*/ )
+            virtual bool handleMouseMoved( const awt::MouseEvent& /*e*/ ) SAL_OVERRIDE
             {
                 // not used here
                 return false; // did not handle the event

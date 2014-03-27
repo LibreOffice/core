@@ -62,8 +62,8 @@ using namespace ::com::sun::star;
 class SwDocTest : public test::BootstrapFixture
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void randomTest();
     void testPageDescName();

@@ -1323,10 +1323,10 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
 class ExcXmlRecord : public ExcRecord
 {
 public:
-    virtual sal_Size    GetLen() const;
-    virtual sal_uInt16  GetNum() const;
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) = 0;
+    virtual sal_Size    GetLen() const SAL_OVERRIDE;
+    virtual sal_uInt16  GetNum() const SAL_OVERRIDE;
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE = 0;
 };
 
 sal_Size ExcXmlRecord::GetLen() const
@@ -1353,7 +1353,7 @@ public:
     };
                         StartXmlElement( sal_Int32 nElement, sal_Int32 eBehavior )
                             : mnElement( nElement ), meBehavior( (Behavior) eBehavior ) {}
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     sal_Int32           mnElement;
     Behavior            meBehavior;
@@ -1382,7 +1382,7 @@ class EndXmlElement : public ExcXmlRecord
     sal_Int32           mnElement;
 public:
                         EndXmlElement( sal_Int32 nElement ) : mnElement( nElement) {}
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 void EndXmlElement::SaveXml( XclExpXmlStream& rStrm )
@@ -1394,7 +1394,7 @@ class EndHeaderElement : public EndXmlElement
 {
 public:
                         EndHeaderElement() : EndXmlElement( XML_header ) {}
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 void EndHeaderElement::SaveXml( XclExpXmlStream& rStrm )

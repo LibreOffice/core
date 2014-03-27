@@ -2657,7 +2657,7 @@ public:
 
     virtual ~UpdateRefGroupBoundChecker() {}
 
-    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ )
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) SAL_OVERRIDE
     {
         // Check its tokens and record its reference boundaries.
         ScFormulaCell& rCell = **ppCells;
@@ -2676,12 +2676,12 @@ public:
 
     virtual ~FormulaGroupPicker() {}
 
-    virtual void processNonShared( ScFormulaCell* pCell, size_t nRow )
+    virtual void processNonShared( ScFormulaCell* pCell, size_t nRow ) SAL_OVERRIDE
     {
         mrGroups.push_back(FormulaGroup(pCell, nRow));
     }
 
-    virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength )
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength ) SAL_OVERRIDE
     {
         mrGroups.push_back(FormulaGroup(ppCells, nRow, nLength));
     }

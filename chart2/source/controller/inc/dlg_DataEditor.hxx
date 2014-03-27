@@ -50,7 +50,7 @@ public:
     virtual ~DataEditor();
 
     // Dialog
-    virtual bool Close();
+    virtual bool Close() SAL_OVERRIDE;
 
     void SetReadOnly( bool bReadOnly );
     bool ApplyChangesToModel();

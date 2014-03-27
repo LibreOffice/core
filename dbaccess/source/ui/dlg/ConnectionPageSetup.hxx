@@ -51,10 +51,10 @@ namespace dbaui
         static  OGenericAdministrationPage* CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
-        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(false); }
         inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
@@ -68,7 +68,7 @@ namespace dbaui
 
     protected:
         OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
-        virtual bool checkTestConnection();
+        virtual bool checkTestConnection() SAL_OVERRIDE;
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OConnectionTabPageSetup();
     };

@@ -41,10 +41,10 @@ namespace frm
         // XDispatch
         virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
             throw (::com::sun::star::uno::RuntimeException,
-                   std::exception);
+                   std::exception) SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const;
+        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
 
@@ -62,7 +62,7 @@ namespace frm
 
     protected:
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const;
+        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
 
@@ -75,10 +75,10 @@ namespace frm
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const;
+        virtual ::com::sun::star::frame::FeatureStateEvent  buildStatusEvent() const SAL_OVERRIDE;
     };
 
 
@@ -97,7 +97,7 @@ namespace frm
     protected:
         // OParametrizedAttributeDispatcher
         virtual const SfxPoolItem* convertDispatchArgsToItem(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments ) SAL_OVERRIDE;
     };
 
 

@@ -174,14 +174,14 @@ class OFormSubmitResetThread: public OComponentEventThread
 protected:
 
     // duplicate an event with respect to it's type
-    virtual EventObject *cloneEvent( const EventObject *pEvt ) const;
+    virtual EventObject *cloneEvent( const EventObject *pEvt ) const SAL_OVERRIDE;
 
     // process an event. while processing the mutex isn't locked, and pCompImpl
     // is made sure to remain valid
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
                                const EventObject* _pEvt,
                                const Reference<XControl>& _rControl,
-                               sal_Bool _bSubmit);
+                               sal_Bool _bSubmit) SAL_OVERRIDE;
 
 public:
 

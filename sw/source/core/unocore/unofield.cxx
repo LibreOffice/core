@@ -429,7 +429,7 @@ public:
 
 protected:
     // SwClient
-    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew);
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew) SAL_OVERRIDE;
 };
 
 namespace
@@ -1180,7 +1180,7 @@ public:
 
 protected:
     // SwClient
-    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew);
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew) SAL_OVERRIDE;
 };
 
 namespace
@@ -2945,7 +2945,7 @@ public:
 
 protected:
     // SwClient
-    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew);
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew) SAL_OVERRIDE;
 };
 
 OUString SAL_CALL

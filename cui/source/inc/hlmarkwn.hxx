@@ -44,7 +44,7 @@ private:
 public:
     SvxHlmarkTreeLBox( Window* pParent, const ResId& rResId );
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 
@@ -78,7 +78,7 @@ protected:
     void ClearTree();
     int FillTree( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
 
-    virtual void Move ();
+    virtual void Move () SAL_OVERRIDE;
 
     DECL_LINK (ClickApplyHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );

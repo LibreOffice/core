@@ -100,8 +100,8 @@ public:
     virtual SfxShell* CreateShell (
         ::sd::ShellId nId,
         ::Window* pParentWindow,
-        ::sd::FrameView* pFrameView);
-    virtual void ReleaseShell (SfxShell* pShell);
+        ::sd::FrameView* pFrameView) SAL_OVERRIDE;
+    virtual void ReleaseShell (SfxShell* pShell) SAL_OVERRIDE;
 private:
     ::sd::ViewShell& mrViewShell;
     /** This cache holds the already created object bars.

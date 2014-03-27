@@ -73,23 +73,23 @@ protected:
     virtual sal_Bool SAL_CALL filter(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL cancel()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     inline OUString getDocumentHandler() const { return m_sDocumentHandler; }
     inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
@@ -161,7 +161,7 @@ private:
 class XMLReportFilterHelper : public XMLFilter
 {
     virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
+                                    ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS ) SAL_OVERRIDE;
 public:
     explicit XMLReportFilterHelper( ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext > const & _xContext )
@@ -180,7 +180,7 @@ public:
 protected:
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return getImplementationName_Static();
     }
@@ -189,7 +189,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception)
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         setDocumentHandler( "com.sun.star.comp.report.ImportDocumentHandler" );
         XMLFilter::setTargetDocument(Document);
@@ -200,13 +200,13 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& Document )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception)
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         setDocumentHandler( "com.sun.star.comp.report.ExportDocumentHandler" );
         XMLFilter::setSourceDocument(Document);
     }
 
-    virtual OUString getMediaType(bool _bOasis);
+    virtual OUString getMediaType(bool _bOasis) SAL_OVERRIDE;
 };
 
 } //  namespace chart

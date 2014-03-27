@@ -40,7 +40,7 @@ public:
 #endif
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const;
+    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
 };
 
 } // namespace internal

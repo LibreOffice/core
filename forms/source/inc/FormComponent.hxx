@@ -82,13 +82,13 @@ namespace frm
 
     // macros for quickly declaring/implementing XServiceInfo
     #define DECLARE_XPERSISTOBJECT() \
-    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception);    \
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);    \
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);   \
+    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;    \
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;    \
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;   \
 
     // old macro for quickly implementing XServiceInfo::getImplementationName
     #define IMPLEMENTATION_NAME(ImplName)                                       \
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
         { return OUString("com.sun.star.comp.forms.") + OUString(#ImplName); }
 
     class OControlModel;
@@ -222,45 +222,45 @@ protected:
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 // XComponent (as base of XControl)
-    virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { OComponentHelper::dispose(); }
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { OComponentHelper::addEventListener(_rxListener); }
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { OComponentHelper::removeEventListener(_rxListener); }
 
 // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) = 0;
+    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
 // XServiceInfo - static version
     static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XControl
-    virtual void                                        SAL_CALL setContext(const InterfaceRef& Context) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual InterfaceRef                                SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void                                        SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference<starawt::XWindowPeer>  SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool                                    SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference<starawt::XControlModel>    SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference<starawt::XView>            SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void                                        SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool                                    SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual sal_Bool                                    SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void                                        SAL_CALL setContext(const InterfaceRef& Context) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual InterfaceRef                                SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void                                        SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<starawt::XWindowPeer>  SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool                                    SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<starawt::XControlModel>    SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<starawt::XView>            SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void                                        SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool                                    SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool                                    SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
@@ -299,24 +299,24 @@ public:
     virtual ~OBoundControl();
 
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XBoundControl
-    virtual sal_Bool SAL_CALL   getLock() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL       setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL   getLock() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL       setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // default implementation just disables the controls, overwrite _setLock to change this behaviour
 
     // XControl
-    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes() SAL_OVERRIDE;
     // implement the lock setting
     virtual void         _setLock(sal_Bool _bLock);
 };
@@ -406,65 +406,65 @@ protected:
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 // XNamed
-    virtual OUString SAL_CALL    getName() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL               setName(const OUString& aName) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL    getName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL               setName(const OUString& aName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) = 0;
+    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
 // XSericeInfo - static version(s)
     static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XPersistObject
-    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) = 0;
+    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     virtual void SAL_CALL
-        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+        write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
-        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+        read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XChild (base of XFormComponent)
-    virtual InterfaceRef SAL_CALL   getParent() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL           setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual InterfaceRef SAL_CALL   getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL           setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException);
+                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                throw (::com::sun::star::uno::Exception, std::exception);
+                throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // ::com::sun::star::beans::XPropertyState
-    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
+    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle) SAL_OVERRIDE;
+    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
 // XCloneable
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
 // XPropertyContainer
-    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeProperty( const OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeProperty( const OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XPropertyAccess
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     using OPropertySetAggregationHelper::setPropertyValues;
@@ -476,9 +476,9 @@ protected:
 
 protected:
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // OPropertySetHelper
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     /** describes the properties provided by this class, or its respective
         derived class
@@ -490,13 +490,13 @@ protected:
     ) const;
 
     // IPropertyBagHelperContext
-    virtual ::osl::Mutex&   getMutex();
+    virtual ::osl::Mutex&   getMutex() SAL_OVERRIDE;
     virtual void            describeFixedAndAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rFixedProperties,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _out_rAggregateProperties
-    ) const;
+    ) const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
-                            getPropertiesInterface();
+                            getPropertiesInterface() SAL_OVERRIDE;
 
     /** describes the properties of our aggregate
 
@@ -574,7 +574,7 @@ public:
 
 // XCloneable
 #define DECLARE_XCLONEABLE( ) \
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
 
 #define IMPLEMENT_DEFAULT_CLONING( classname ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL classname::createClone( ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
@@ -712,7 +712,7 @@ protected:
     virtual ~OBoundControlModel();
 
     /// late ctor after cloning
-    virtual void clonedFrom( const OControlModel* _pOriginal );
+    virtual void clonedFrom( const OControlModel* _pOriginal ) SAL_OVERRIDE;
 
     /** initializes the part of the class which is related to the control value.
 
@@ -994,7 +994,7 @@ protected:
     */
     virtual void            resetNoBroadcast();
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes() SAL_OVERRIDE;
 
     /// sets m_xField to the given new value, without notifying our listeners
     void    impl_setField_noNotify(
@@ -1012,7 +1012,7 @@ protected:
     // OControlModel's property handling
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
-    ) const;
+    ) const SAL_OVERRIDE;
 
 public:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& getField() const
@@ -1023,89 +1023,89 @@ public:
 public:
     // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OComponentHelper
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XReset
-    virtual void SAL_CALL reset(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL addResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL reset(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeResetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XResetListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo - static version
     static  StringSequence SAL_CALL getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
     // XChild
-    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
-    virtual void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XBoundComponent
-    virtual sal_Bool SAL_CALL commit() throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL commit() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUpdateBroadcaster (base of XBoundComponent)
-    virtual void SAL_CALL addUpdateListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeUpdateListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL addUpdateListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeUpdateListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException);
+                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                throw (::com::sun::star::uno::Exception, std::exception);
+                throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // ::com::sun::star::beans::XPropertyState
-    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const SAL_OVERRIDE;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XRowSetChangeListener
-    virtual void SAL_CALL onRowSetChanged( const ::com::sun::star::lang::EventObject& i_Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL onRowSetChanged( const ::com::sun::star::lang::EventObject& i_Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XLoadListener
-    virtual void SAL_CALL loaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL unloading( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL unloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL reloading( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL reloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL loaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL unloading( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL unloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL reloading( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL reloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     // XBindableValue
-    virtual void SAL_CALL setValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding > SAL_CALL getValueBinding(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding > SAL_CALL getValueBinding(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XValidatable
-    virtual void SAL_CALL setValidator( const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator >& Validator ) throw (::com::sun::star::util::VetoException, ::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator > SAL_CALL getValidator(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setValidator( const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator >& Validator ) throw (::com::sun::star::util::VetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator > SAL_CALL getValidator(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XValidityConstraintListener
-    virtual void SAL_CALL validityConstraintChanged( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL validityConstraintChanged( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XValidatableFormComponent
-    virtual sal_Bool SAL_CALL isValid(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL addFormComponentValidityListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XFormComponentValidityListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL removeFormComponentValidityListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XFormComponentValidityListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL isValid(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addFormComponentValidityListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XFormComponentValidityListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeFormComponentValidityListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XFormComponentValidityListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     // OPropertyChangeListener
     virtual void
-                _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException );
+                _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
     /// checks whether we currently have an external value binding in place
     inline  bool    hasExternalValueBinding() const { return m_xExternalBinding.is(); }

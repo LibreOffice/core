@@ -37,8 +37,8 @@ public:
     SwNavigationConfig();
     ~SwNavigationConfig();
 
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     sal_Int32   GetRootType()const {return nRootType;}
     void        SetRootType(sal_Int32 nSet){

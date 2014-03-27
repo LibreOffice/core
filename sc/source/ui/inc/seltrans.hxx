@@ -64,9 +64,9 @@ public:
     ScTransferObj*      GetCellData();
     ScDrawTransferObj*  GetDrawData();
 
-    virtual void        AddSupportedFormats();
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void        ObjectReleased();
+    virtual void        AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual void        ObjectReleased() SAL_OVERRIDE;
 };
 
 #endif

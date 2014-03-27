@@ -58,28 +58,28 @@ namespace sdr
             // LazyInvalidate request. Supported here to not automatically
             // invalidate the second interaction state all the time at the
             // original OC
-            virtual void setLazyInvalidate(ViewObjectContact& rVOC);
+            virtual void setLazyInvalidate(ViewObjectContact& rVOC) SAL_OVERRIDE;
 
             // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
-            virtual void Timeout();
+            virtual void Timeout() SAL_OVERRIDE;
 
             // get primitive visualization
             drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
 
             // Own reaction on changes which will be forwarded to the OC of the owner-VOC
-            virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const;
+            virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const SAL_OVERRIDE;
 
             // forward access to SdrPageView of ViewObjectContactOfPageObj
-            virtual bool isOutputToPrinter() const;
-            virtual bool isOutputToWindow() const;
-            virtual bool isOutputToVirtualDevice() const;
-            virtual bool isOutputToRecordingMetaFile() const;
-            virtual bool isOutputToPDFFile() const;
-            virtual bool isDrawModeGray() const;
-            virtual bool isDrawModeBlackWhite() const;
-            virtual bool isDrawModeHighContrast() const;
-            virtual SdrPageView* TryToGetSdrPageView() const;
-            virtual OutputDevice* TryToGetOutputDevice() const;
+            virtual bool isOutputToPrinter() const SAL_OVERRIDE;
+            virtual bool isOutputToWindow() const SAL_OVERRIDE;
+            virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
+            virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
+            virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
+            virtual bool isDrawModeGray() const SAL_OVERRIDE;
+            virtual bool isDrawModeBlackWhite() const SAL_OVERRIDE;
+            virtual bool isDrawModeHighContrast() const SAL_OVERRIDE;
+            virtual SdrPageView* TryToGetSdrPageView() const SAL_OVERRIDE;
+            virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
         };
 
         PagePrimitiveExtractor::PagePrimitiveExtractor(

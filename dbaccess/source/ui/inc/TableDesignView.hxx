@@ -40,13 +40,13 @@ namespace dbaui
         void ArrangeChildren( long nSplitPos ,Rectangle& rRect);
         DECL_LINK( SplitHdl, Splitter* );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt);
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
         OTableBorderWindow(Window* pParent);
         ~OTableBorderWindow();
         // window overloads
-        virtual void Resize();
-        virtual void GetFocus();
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
@@ -70,7 +70,7 @@ namespace dbaui
     protected:
 
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
 
     public:
         OTableDesignView(   Window* pParent,
@@ -79,8 +79,8 @@ namespace dbaui
         virtual ~OTableDesignView();
 
         // window overloads
-        virtual bool            PreNotify( NotifyEvent& rNEvt );
-        virtual void            GetFocus();
+        virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void            GetFocus() SAL_OVERRIDE;
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
@@ -89,18 +89,18 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed();
-        virtual sal_Bool isCopyAllowed();
-        virtual sal_Bool isPasteAllowed();
-        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
-        virtual void copy();
-        virtual void cut();
-        virtual void paste();
+        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
+        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
+        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
+        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual void copy() SAL_OVERRIDE;
+        virtual void cut() SAL_OVERRIDE;
+        virtual void paste() SAL_OVERRIDE;
 
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly);
 
-        virtual void initialize();
+        virtual void initialize() SAL_OVERRIDE;
         void reSync(); // resync window data with realdata
     };
 }

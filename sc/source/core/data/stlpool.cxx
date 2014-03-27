@@ -491,7 +491,7 @@ struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
     }
 
     bool
-    Check(const SfxStyleSheetBase& rStyleSheet)
+    Check(const SfxStyleSheetBase& rStyleSheet) SAL_OVERRIDE
     {
         if (rStyleSheet.GetFamily() == mFamily)
         {

@@ -32,22 +32,22 @@ private:
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 private:
     void checkParameterRangeInDouble( double nRange, double nMin, double nMax ) throw (css::uno::RuntimeException);
 public:
     ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape ) throw( css::lang::IllegalArgumentException );
 
     // Attributes
-    virtual double SAL_CALL getBrightness() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setBrightness( double _brightness ) throw (css::uno::RuntimeException, std::exception);
-    virtual double SAL_CALL getContrast() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setContrast( double _contrast ) throw (css::uno::RuntimeException, std::exception);
+    virtual double SAL_CALL getBrightness() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setBrightness( double _brightness ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getContrast() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setContrast( double _contrast ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods
-    virtual void SAL_CALL IncrementBrightness( double increment ) throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL IncrementContrast( double increment ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL IncrementBrightness( double increment ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL IncrementContrast( double increment ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAPICTUREFORMAT_HXX

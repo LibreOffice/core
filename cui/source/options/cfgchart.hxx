@@ -83,8 +83,8 @@ public:
     const SvxChartColorTable&   GetDefaultColors();
     void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
-    virtual void                Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
+    virtual void                Commit() SAL_OVERRIDE;
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 };
 
 
@@ -97,8 +97,8 @@ public:
     SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     void                    SetOptions( SvxChartOptions* pOpts ) const;
 
     const SvxChartColorTable & GetColorList() const ;

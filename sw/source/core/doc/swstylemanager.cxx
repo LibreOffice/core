@@ -72,14 +72,14 @@ public:
     {}
     virtual ~SwStyleManager();
     virtual StylePool::SfxItemSet_Pointer_t getAutomaticStyle( const SfxItemSet& rSet,
-                                                               IStyleAccess::SwAutoStyleFamily eFamily );
+                                                               IStyleAccess::SwAutoStyleFamily eFamily ) SAL_OVERRIDE;
     virtual StylePool::SfxItemSet_Pointer_t getByName( const OUString& rName,
-                                                               IStyleAccess::SwAutoStyleFamily eFamily );
+                                                               IStyleAccess::SwAutoStyleFamily eFamily ) SAL_OVERRIDE;
     virtual void getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> &rStyles,
-                                                               IStyleAccess::SwAutoStyleFamily eFamily );
+                                                               IStyleAccess::SwAutoStyleFamily eFamily ) SAL_OVERRIDE;
     virtual StylePool::SfxItemSet_Pointer_t cacheAutomaticStyle( const SfxItemSet& rSet,
-                                                               SwAutoStyleFamily eFamily );
-    virtual void clearCaches();
+                                                               SwAutoStyleFamily eFamily ) SAL_OVERRIDE;
+    virtual void clearCaches() SAL_OVERRIDE;
 };
 
 IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems )

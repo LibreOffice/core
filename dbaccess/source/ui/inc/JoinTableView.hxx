@@ -56,7 +56,7 @@ namespace dbaui
         OJoinTableView*     m_pTableView;
 
     protected:
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
     public:
         OScrollWindowHelper( Window* pParent);
@@ -113,12 +113,12 @@ namespace dbaui
         virtual ~OJoinTableView();
 
         // window override
-        virtual void StateChanged( StateChangedType nStateChange );
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual void KeyInput( const KeyEvent& rEvt );
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
         // Accessibility
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         // own methods
         ScrollBar* GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
@@ -222,12 +222,12 @@ namespace dbaui
 
         /** @note used by AddTabDlg to see if more tables can be added */
         virtual sal_Bool IsAddAllowed();
-        virtual bool PreNotify(NotifyEvent& rNEvt);
+        virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
         // DnD stuff
         virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
         /** @note can be used for special ui handling after d&d */
         virtual void lookForUiActivities();
@@ -266,20 +266,20 @@ namespace dbaui
                                             ,const OUString& _rWinName);
 
     protected:
-        virtual void MouseButtonUp( const MouseEvent& rEvt );
-        virtual void MouseButtonDown( const MouseEvent& rEvt );
-        virtual void Tracking( const TrackingEvent& rTEvt );
-        virtual void Paint( const Rectangle& rRect );
+        virtual void MouseButtonUp( const MouseEvent& rEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
+        virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
-        virtual void dragFinished( );
+        virtual void dragFinished( ) SAL_OVERRIDE;
         /// @note here the physical position (that can be changed while
         ///     resizing) is used, as no scrolling can take place while resizing
-        virtual void Command(const CommandEvent& rEvt);
+        virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
 
         virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
                                             ,const OUString& _sTableName

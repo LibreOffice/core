@@ -51,12 +51,12 @@ public:
     GalApp() : mbInBuildTree( false ), mbRelativeURLs( false )
     {
     }
-    virtual int Main();
+    virtual int Main() SAL_OVERRIDE;
 
 protected:
     uno::Reference<lang::XMultiServiceFactory> xMSF;
-    void Init();
-    void DeInit();
+    void Init() SAL_OVERRIDE;
+    void DeInit() SAL_OVERRIDE;
 };
 
 Gallery* createGallery( const OUString& rURL )

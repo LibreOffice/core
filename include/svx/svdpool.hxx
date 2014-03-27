@@ -38,13 +38,13 @@ protected:
     virtual ~SdrItemPool();
 public:
 
-    virtual SfxItemPool* Clone() const;
+    virtual SfxItemPool* Clone() const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation(const SfxPoolItem& rItem,
         SfxItemPresentation ePresentation,
         SfxMapUnit          ePresentationMetric,
         OUString&             rText,
         const IntlWrapper * pIntlWrapper
-        = 0) const;
+        = 0) const SAL_OVERRIDE;
 
     static void TakeItemName(sal_uInt16 nWhich, OUString& rItemName);
 };

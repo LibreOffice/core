@@ -106,8 +106,8 @@ OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    g_addCloseListener( const ::com::sun::st
                     throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual sal_Bool    impl_canStartApiCall();
-    virtual void        impl_apiCallCountReachedNull();
+    virtual sal_Bool    impl_canStartApiCall() SAL_OVERRIDE;
+    virtual void        impl_apiCallCountReachedNull() SAL_OVERRIDE;
 
     void        impl_setOwnership( sal_Bool bDeliverOwnership, sal_Bool bMyVeto );
     sal_Bool    impl_shouldCloseAtNextChance();

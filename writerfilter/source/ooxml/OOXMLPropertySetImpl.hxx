@@ -44,14 +44,14 @@ public:
     OOXMLValue();
     virtual ~OOXMLValue();
 
-    virtual int getInt() const;
+    virtual int getInt() const SAL_OVERRIDE;
     virtual bool getBool() const;
-    virtual OUString getString() const;
-    virtual uno::Any getAny() const;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
-    virtual string toString() const;
+    virtual OUString getString() const SAL_OVERRIDE;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
     virtual OOXMLValue * clone() const;
 };
 
@@ -71,16 +71,16 @@ public:
     OOXMLPropertyImpl(const OOXMLPropertyImpl & rSprm);
     virtual ~OOXMLPropertyImpl();
 
-    virtual sal_uInt32 getId() const;
-    virtual Value::Pointer_t getValue();
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps();
-    virtual string getName() const;
-    virtual Kind getKind();
-    virtual string toString() const;
-    virtual Sprm * clone();
-    virtual void resolve(Properties & rProperties);
+    virtual sal_uInt32 getId() const SAL_OVERRIDE;
+    virtual Value::Pointer_t getValue() SAL_OVERRIDE;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
+    virtual string getName() const SAL_OVERRIDE;
+    virtual Kind getKind() SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual Sprm * clone() SAL_OVERRIDE;
+    virtual void resolve(Properties & rProperties) SAL_OVERRIDE;
 };
 
 class OOXMLBinaryValue : public OOXMLValue
@@ -91,9 +91,9 @@ public:
     explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj);
     virtual ~OOXMLBinaryValue();
 
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLBooleanValue : public OOXMLValue
@@ -105,11 +105,11 @@ public:
     explicit OOXMLBooleanValue(const OUString & rValue);
     virtual ~OOXMLBooleanValue();
 
-    virtual int getInt() const;
-    virtual bool getBool() const;
-    virtual uno::Any getAny() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual int getInt() const SAL_OVERRIDE;
+    virtual bool getBool() const SAL_OVERRIDE;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLStringValue : public OOXMLValue
@@ -120,10 +120,10 @@ public:
     explicit OOXMLStringValue(const OUString & rStr);
     virtual ~OOXMLStringValue();
 
-    virtual uno::Any getAny() const;
-    virtual OUString getString() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual OUString getString() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLInputStreamValue : public OOXMLValue
@@ -135,9 +135,9 @@ public:
     explicit OOXMLInputStreamValue(uno::Reference<io::XInputStream> xInputStream);
     virtual ~OOXMLInputStreamValue();
 
-    virtual uno::Any getAny() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 struct OOXMLPropertySetImplCompare
@@ -157,20 +157,20 @@ public:
     OOXMLPropertySetImpl();
     virtual ~OOXMLPropertySetImpl();
 
-    virtual void resolve(Properties & rHandler);
-    virtual string getType() const;
-    virtual void add(OOXMLProperty::Pointer_t pProperty);
-    virtual void add(OOXMLPropertySet::Pointer_t pPropertySet);
-    virtual OOXMLPropertySet * clone() const;
+    virtual void resolve(Properties & rHandler) SAL_OVERRIDE;
+    virtual string getType() const SAL_OVERRIDE;
+    virtual void add(OOXMLProperty::Pointer_t pProperty) SAL_OVERRIDE;
+    virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) SAL_OVERRIDE;
+    virtual OOXMLPropertySet * clone() const SAL_OVERRIDE;
 
     OOXMLProperties_t::iterator begin();
     OOXMLProperties_t::iterator end();
     OOXMLProperties_t::const_iterator begin() const;
     OOXMLProperties_t::const_iterator end() const;
 
-    virtual void setType(const string & rsType);
+    virtual void setType(const string & rsType) SAL_OVERRIDE;
 
-    virtual string toString();
+    virtual string toString() SAL_OVERRIDE;
 };
 
 class OOXMLPropertySetValue : public OOXMLValue
@@ -180,9 +180,9 @@ public:
     OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual ~OOXMLPropertySetValue();
 
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLIntegerValue : public OOXMLValue
@@ -194,10 +194,10 @@ public:
     explicit OOXMLIntegerValue(const OUString & rValue);
     virtual ~OOXMLIntegerValue();
 
-    virtual int getInt() const;
-    virtual uno::Any getAny() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual int getInt() const SAL_OVERRIDE;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLHexValue : public OOXMLValue
@@ -209,9 +209,9 @@ public:
     explicit OOXMLHexValue(const OUString & rValue);
     virtual ~OOXMLHexValue();
 
-    virtual int getInt() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual int getInt() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 /// Handles OOXML's ST_UniversalMeasure value.
@@ -223,9 +223,9 @@ public:
     explicit OOXMLUniversalMeasureValue(const OUString& rValue);
     virtual ~OOXMLUniversalMeasureValue();
 
-    virtual int getInt() const;
-    virtual string toString() const;
-    virtual OOXMLValue* clone() const;
+    virtual int getInt() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue* clone() const SAL_OVERRIDE;
 };
 
 class OOXMLShapeValue : public OOXMLValue
@@ -236,9 +236,9 @@ public:
     explicit OOXMLShapeValue(uno::Reference<XShape> rShape);
     virtual ~OOXMLShapeValue();
 
-    virtual uno::Any getAny() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLStarMathValue : public OOXMLValue
@@ -249,9 +249,9 @@ public:
     explicit OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > component );
     virtual ~OOXMLStarMathValue();
 
-    virtual uno::Any getAny() const;
-    virtual string toString() const;
-    virtual OOXMLValue * clone() const;
+    virtual uno::Any getAny() const SAL_OVERRIDE;
+    virtual string toString() const SAL_OVERRIDE;
+    virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLTableImpl : public OOXMLTable
@@ -266,10 +266,10 @@ public:
     OOXMLTableImpl();
     virtual ~OOXMLTableImpl();
 
-    virtual void resolve(Table & rTable);
+    virtual void resolve(Table & rTable) SAL_OVERRIDE;
     virtual void add(ValuePointer_t pPropertySet);
-    virtual string getType() const;
-    virtual OOXMLTable * clone() const;
+    virtual string getType() const SAL_OVERRIDE;
+    virtual OOXMLTable * clone() const SAL_OVERRIDE;
 };
 
 class OOXMLPropertySetEntryToString : public Properties
@@ -281,8 +281,8 @@ public:
     OOXMLPropertySetEntryToString(Id nId);
     virtual ~OOXMLPropertySetEntryToString();
 
-    virtual void sprm(Sprm & rSprm);
-    virtual void attribute(Id nId, Value & rValue);
+    virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
+    virtual void attribute(Id nId, Value & rValue) SAL_OVERRIDE;
 
     const OUString & getString() const;
 };
@@ -295,8 +295,8 @@ public:
     OOXMLPropertySetEntryToInteger(Id nId);
     virtual ~OOXMLPropertySetEntryToInteger();
 
-    virtual void sprm(Sprm & rSprm);
-    virtual void attribute(Id nId, Value & rValue);
+    virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
+    virtual void attribute(Id nId, Value & rValue) SAL_OVERRIDE;
 
     int getValue() const;
 };

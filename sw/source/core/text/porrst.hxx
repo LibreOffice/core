@@ -34,8 +34,8 @@ class SwTmpEndPortion : public SwLinePortion
 {
 public:
             SwTmpEndPortion( const SwLinePortion &rPortion );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    OUTPUT_OPERATOR
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -47,16 +47,16 @@ class SwBreakPortion : public SwLinePortion
 public:
             SwBreakPortion( const SwLinePortion &rPortion );
     // Returns 0 if we have no usable data
-    virtual SwLinePortion *Compress();
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
+    virtual SwLinePortion *Compress() SAL_OVERRIDE;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -83,10 +83,10 @@ public:
     // of rPortion. It is only used for kerning portions for grid mode
     SwKernPortion( const SwLinePortion &rPortion );
 
-    virtual void FormatEOL( SwTxtFormatInfo &rInf );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -100,11 +100,11 @@ class SwArrowPortion : public SwLinePortion
 public:
             SwArrowPortion( const SwLinePortion &rPortion );
             SwArrowPortion( const SwTxtPaintInfo &rInf );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual SwLinePortion *Compress();
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual SwLinePortion *Compress() SAL_OVERRIDE;
     inline bool IsLeft() const { return bLeft; }
     inline const Point& GetPos() const { return aPos; }
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -136,8 +136,8 @@ public:
     inline SwHiddenTextPortion( sal_Int32 nLen )
         { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 };
 
 /*************************************************************************
@@ -160,9 +160,9 @@ public:
         SetWhichPor( POR_CONTROLCHAR ); SetLen( 1 );
     }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo& rInf ) const;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo& rInf ) const SAL_OVERRIDE;
 };
 
 #endif

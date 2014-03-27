@@ -64,10 +64,10 @@ public:
 
     inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
 
-    virtual bool             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     const   OUString& GetName() const { return sName; }
     void    SetName(const OUString& rName) { sName = rName; }
@@ -92,8 +92,8 @@ public:
     void SetMacroEvents (const sal_uInt16 nEvents) { nMacroEvents = nEvents; }
     sal_uInt16 GetMacroEvents() const { return nMacroEvents; }
 
-    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVer ) const;
+    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVer ) const SAL_OVERRIDE;
 
 };
 

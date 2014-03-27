@@ -83,7 +83,7 @@ public:
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
 protected:
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 };
 

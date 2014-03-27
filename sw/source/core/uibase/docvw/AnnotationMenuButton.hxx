@@ -35,12 +35,12 @@ class AnnotationMenuButton : public MenuButton
         ~AnnotationMenuButton();
 
         // overloaded <MenuButton> methods
-        virtual void Select();
+        virtual void Select() SAL_OVERRIDE;
 
         // overloaded <Window> methods
-        virtual void MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void Paint( const Rectangle& rRect );
-        virtual void KeyInput( const KeyEvent& rKeyEvt );
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
 
     private:
         sw::sidebarwindows::SwSidebarWin& mrSidebarWin;

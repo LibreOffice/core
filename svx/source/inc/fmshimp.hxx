@@ -94,8 +94,8 @@ public:
     FmXBoundFormFieldIterator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
 
 protected:
-    virtual bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rElement);
-    virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rContainer) const;
+    virtual bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rElement) SAL_OVERRIDE;
+    virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rContainer) const SAL_OVERRIDE;
 };
 
 class FmFormPage;
@@ -127,7 +127,7 @@ class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
     using ::com::sun::star::beans::XPropertyChangeListener::disposing;
 protected:
     FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex );
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 };
 
 
@@ -259,35 +259,35 @@ public:
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     ~FmXFormShell();
 
 // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // EventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // ::com::sun::star::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // XSelectionChangeListener
-    virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // ::com::sun::star::form::XFormControllerListener
-    virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 // OComponentHelper
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
     void EnableTrackProperties( sal_Bool bEnable) { m_bTrackProperties = bEnable; }
@@ -298,7 +298,7 @@ public:
             void        viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController = sal_True );
 
     // IControllerFeatureInvalidation
-    virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures );
+    virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures ) SAL_OVERRIDE;
 
     void ExecuteTabOrderDialog(         // execute SID_FM_TAB_DIALOG
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxForForm
@@ -489,8 +489,8 @@ private:
         // closes the task-local beamer displaying a grid view for a form
 
     // ConfigItem related stuff
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
-    virtual void Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
+    virtual void Commit() SAL_OVERRIDE;
     void implAdjustConfigCache();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
@@ -565,9 +565,9 @@ public:
 public:
     SearchableControlIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint);
 
-    virtual bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rElement);
-    virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xContainer) const;
-    virtual void Invalidate() { IndexAccessIterator::Invalidate(); m_sCurrentValue = OUString(); }
+    virtual bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rElement) SAL_OVERRIDE;
+    virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xContainer) const SAL_OVERRIDE;
+    virtual void Invalidate() SAL_OVERRIDE { IndexAccessIterator::Invalidate(); m_sCurrentValue = OUString(); }
 };
 
 
@@ -584,7 +584,7 @@ public:
     SVX_DLLPRIVATE virtual ~ControlConversionMenuController();
     SFX_DECL_MENU_CONTROL();
 
-    SVX_DLLPRIVATE virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
+    SVX_DLLPRIVATE virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX

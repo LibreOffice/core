@@ -48,7 +48,7 @@ namespace sdr
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something. Default is to create
             // a standard ViewObjectContact containing the given ObjectContact and *this
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
         public:
             // basic constructor, used from SdrObject.
@@ -61,7 +61,7 @@ namespace sdr
             }
 
             // React on changes of the object of this ViewContact
-            virtual void ActionChanged();
+            virtual void ActionChanged() SAL_OVERRIDE;
 
             // access to ViewInformation3D and ObjectTransformation
             const drawinglayer::geometry::ViewInformation3D& getViewInformation3D(const ::basegfx::B3DRange& rContentRange) const;
@@ -102,7 +102,7 @@ namespace sdr
 
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
         };
     } // end of namespace contact
 } // end of namespace sdr

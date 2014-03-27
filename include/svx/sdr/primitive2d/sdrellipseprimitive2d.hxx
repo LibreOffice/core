@@ -41,7 +41,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrEllipsePrimitive2D(
@@ -53,7 +53,7 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -79,7 +79,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrEllipseSegmentPrimitive2D(
@@ -97,7 +97,7 @@ namespace drawinglayer
             bool getCloseUsingCenter() const { return mbCloseUsingCenter; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()

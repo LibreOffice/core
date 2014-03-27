@@ -63,7 +63,7 @@ namespace sd
         const std::list< SdrObject* >& getList() const { return maShapeList; }
 
     private:
-        virtual void ObjectInDestruction(const SdrObject& rObject);
+        virtual void ObjectInDestruction(const SdrObject& rObject) SAL_OVERRIDE;
 
         typedef std::list< SdrObject* > ListImpl;
         ListImpl maShapeList;

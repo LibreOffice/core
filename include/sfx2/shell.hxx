@@ -313,7 +313,7 @@ inline void SfxShell::SetPool
             static SfxInterface*                GetStaticInterface();       \
             static SfxInterfaceId               GetInterfaceId() {return SfxInterfaceId(nId);} \
             static void                         RegisterInterface(SfxModule* pMod=NULL); \
-            virtual SfxInterface*       GetInterface() const;
+            virtual SfxInterface*       GetInterface() const SAL_OVERRIDE;
 
 #define SFX_IMPL_INTERFACE(Class,SuperClass,NameResId)                      \
                                                                             \

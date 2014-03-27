@@ -30,7 +30,7 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format") {}
 
-    bool mustTestImportOf(const char* filename) const {
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
         // Don't test the first import of these, for some reason those tests fail
         const char* aBlacklist[] = {
             "math-eqarray.rtf",

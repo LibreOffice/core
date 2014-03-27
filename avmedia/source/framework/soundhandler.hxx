@@ -77,16 +77,16 @@ class SoundHandler  :   // interfaces
         virtual ~SoundHandler(                                                                        );
 
         //  XInterface, XTypeProvider, XServiceInfo
-        virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) throw( css::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
-        virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes () throw( css::uno::RuntimeException, std::exception );
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes () throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /* interface XServiceInfo */
-       virtual OUString                                               SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException, std::exception );
-       virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                               sServiceName    ) throw( css::uno::RuntimeException, std::exception );
-       virtual css::uno::Sequence< OUString >                         SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException, std::exception );
+       virtual OUString                                               SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+       virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                               sServiceName    ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+       virtual css::uno::Sequence< OUString >                         SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     /* Helper for XServiceInfo */
        static css::uno::Sequence< OUString >                          SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
        static OUString                                                SAL_CALL impl_getStaticImplementationName   (                                                                               );
@@ -99,19 +99,19 @@ class SoundHandler  :   // interfaces
         //  XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException, std::exception);
+                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         //  XDispatch
         virtual void SAL_CALL dispatch              (   const   css::util::URL&                                     aURL        ,
-                                                        const   css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException, std::exception );
+                                                        const   css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         // not supported !
         virtual void SAL_CALL addStatusListener     (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
-                                                        const   css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) {};
+                                                        const   css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE {};
         virtual void SAL_CALL removeStatusListener  (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
-                                                        const   css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) {};
+                                                        const   css::util::URL&                                     /*aURL*/        ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE {};
 
         //  XExtendedFilterDetection
-        virtual OUString SAL_CALL detect           (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException, std::exception );
+        virtual OUString SAL_CALL detect           (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //  protected methods
     protected:

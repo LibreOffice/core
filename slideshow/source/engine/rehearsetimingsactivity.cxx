@@ -69,8 +69,8 @@ public:
         mrActivityQueue( rActivityQueue )
     {}
 
-    virtual void dispose() {}
-    virtual bool fire()
+    virtual void dispose() SAL_OVERRIDE {}
+    virtual bool fire() SAL_OVERRIDE
     {
         ActivitySharedPtr pActivity( mpActivity.lock() );
         if( !pActivity )
@@ -79,8 +79,8 @@ public:
         return mrActivityQueue.addActivity( pActivity );
     }
 
-    virtual bool isCharged() const { return true; }
-    virtual double getActivationTime( double nCurrentTime ) const
+    virtual bool isCharged() const SAL_OVERRIDE { return true; }
+    virtual double getActivationTime( double nCurrentTime ) const SAL_OVERRIDE
     {
         const double nElapsedTime( maTimer.getElapsedTime() );
 
@@ -118,12 +118,12 @@ public:
     bool hasBeenClicked() const { return mbHasBeenClicked; }
 
     // MouseEventHandler
-    virtual bool handleMousePressed( awt::MouseEvent const & evt );
-    virtual bool handleMouseReleased( awt::MouseEvent const & evt );
-    virtual bool handleMouseEntered( awt::MouseEvent const & evt );
-    virtual bool handleMouseExited( awt::MouseEvent const & evt );
-    virtual bool handleMouseDragged( awt::MouseEvent const & evt );
-    virtual bool handleMouseMoved( awt::MouseEvent const & evt );
+    virtual bool handleMousePressed( awt::MouseEvent const & evt ) SAL_OVERRIDE;
+    virtual bool handleMouseReleased( awt::MouseEvent const & evt ) SAL_OVERRIDE;
+    virtual bool handleMouseEntered( awt::MouseEvent const & evt ) SAL_OVERRIDE;
+    virtual bool handleMouseExited( awt::MouseEvent const & evt ) SAL_OVERRIDE;
+    virtual bool handleMouseDragged( awt::MouseEvent const & evt ) SAL_OVERRIDE;
+    virtual bool handleMouseMoved( awt::MouseEvent const & evt ) SAL_OVERRIDE;
 
 private:
     bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;

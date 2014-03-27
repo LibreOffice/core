@@ -204,16 +204,16 @@ public:
         SelectionFunction& rSelectionFunction);
     virtual ~NormalModeHandler (void);
 
-    virtual SelectionFunction::Mode GetMode (void) const;
-    virtual void Abort (void);
+    virtual SelectionFunction::Mode GetMode (void) const SAL_OVERRIDE;
+    virtual void Abort (void) SAL_OVERRIDE;
 
     void ResetButtonDownLocation (void);
 
 protected:
-    virtual bool ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessMotionEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor);
+    virtual bool ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual bool ProcessMotionEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
 private:
     ::boost::optional<Point> maButtonDownLocation;
@@ -248,9 +248,9 @@ public:
     void Initialize(const sal_uInt32 nEventCode);
 #endif
 
-    virtual SelectionFunction::Mode GetMode (void) const;
-    virtual void Abort (void);
-    virtual void ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor);
+    virtual SelectionFunction::Mode GetMode (void) const SAL_OVERRIDE;
+    virtual void Abort (void) SAL_OVERRIDE;
+    virtual void ProcessEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
     enum SelectionMode { SM_Normal, SM_Add, SM_Toggle };
 
@@ -258,9 +258,9 @@ public:
     void SetSelectionModeFromModifier (const sal_uInt32 nEventCode);
 
 protected:
-    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessMotionEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool HandleUnprocessedEvent (SelectionFunction::EventDescriptor& rDescriptor);
+    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual bool ProcessMotionEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual bool HandleUnprocessedEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
 private:
     SelectionMode meSelectionMode;
@@ -306,12 +306,12 @@ public:
     void Initialize(const Point& rMousePosition, ::Window* pWindow);
 #endif
 
-    virtual SelectionFunction::Mode GetMode (void) const;
-    virtual void Abort (void);
+    virtual SelectionFunction::Mode GetMode (void) const SAL_OVERRIDE;
+    virtual void Abort (void) SAL_OVERRIDE;
 
 protected:
-    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor);
-    virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor);
+    virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
+    virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
 private:
     ::boost::scoped_ptr<DragAndDropContext> mpDragAndDropContext;

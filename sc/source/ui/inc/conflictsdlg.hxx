@@ -185,7 +185,7 @@ public:
                         ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
                         ~ScConflictsDlg();
 
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
     void                UpdateView();
 };
 

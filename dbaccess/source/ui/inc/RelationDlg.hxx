@@ -62,9 +62,9 @@ namespace dbaui
                         sal_Bool bAllowTableSelect = sal_False );
         virtual ~ORelationDialog();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection(){ return m_xConnection; }
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 
-        virtual short Execute();
+        virtual short Execute() SAL_OVERRIDE;
 
         /** getTableMap gives acces to the table window map
             @retrun the table window from the join view
@@ -74,17 +74,17 @@ namespace dbaui
         /** getConnectionData returns the current connection data
             @return the current connectiondata
         */
-        virtual TTableConnectionData::value_type getConnectionData() const;
+        virtual TTableConnectionData::value_type getConnectionData() const SAL_OVERRIDE;
 
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
         */
-        virtual void setValid(sal_Bool _bValid);
+        virtual void setValid(sal_Bool _bValid) SAL_OVERRIDE;
 
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables
         */
-        virtual void notifyConnectionChange();
+        virtual void notifyConnectionChange() SAL_OVERRIDE;
     protected:
         void Init(const TTableConnectionData::value_type& _pConnectionData);
 

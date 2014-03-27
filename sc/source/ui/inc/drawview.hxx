@@ -47,28 +47,28 @@ class ScDrawView: public FmFormView
     void            UpdateBrowser();
 
 protected:
-    virtual void    ModelHasChanged();
+    virtual void    ModelHasChanged() SAL_OVERRIDE;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl() SAL_OVERRIDE;
 
     void ImplClearCalcDropMarker();
 
     // support enhanced text edit for draw objects
-    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
+    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const SAL_OVERRIDE;
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
     virtual         ~ScDrawView();
 
-    virtual void    MarkListHasChanged();
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    MarkListHasChanged() SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual void    DoConnect(SdrOle2Obj* pOleObj);
+    virtual void    DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
 
-    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin );
+    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin ) SAL_OVERRIDE;
 
-    virtual void    DeleteMarked();
+    virtual void    DeleteMarked() SAL_OVERRIDE;
 
     virtual bool    SdrBeginTextEdit(
                       SdrObject* pObj,
@@ -79,9 +79,9 @@ public:
                       OutlinerView* pGivenOutlinerView = 0L,
                       bool bDontDeleteOutliner = false,
                       bool bOnlyOneView = false,
-                      bool bGrabFocus = true);
+                      bool bGrabFocus = true) SAL_OVERRIDE;
 
-    virtual SdrEndTextEditKind SdrEndTextEdit( bool bDontDeleteReally = false );
+    virtual SdrEndTextEditKind SdrEndTextEdit( bool bDontDeleteReally = false ) SAL_OVERRIDE;
 
     void            MarkDropObj( SdrObject* pObj );
 

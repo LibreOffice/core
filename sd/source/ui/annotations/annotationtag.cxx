@@ -101,10 +101,10 @@ class AnnotationDragMove : public SdrDragMove
 {
 public:
     AnnotationDragMove(SdrDragView& rNewView, const rtl::Reference <AnnotationTag >& xTag);
-    virtual bool BeginSdrDrag();
-    virtual bool EndSdrDrag(bool bCopy);
-    virtual void MoveSdrDrag(const Point& rNoSnapPnt);
-    virtual void CancelSdrDrag();
+    virtual bool BeginSdrDrag() SAL_OVERRIDE;
+    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
+    virtual void MoveSdrDrag(const Point& rNoSnapPnt) SAL_OVERRIDE;
+    virtual void CancelSdrDrag() SAL_OVERRIDE;
 
 private:
     rtl::Reference <AnnotationTag > mxTag;
@@ -165,10 +165,10 @@ class AnnotationHdl : public SmartHdl
 public:
     AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
     virtual ~AnnotationHdl();
-    virtual void CreateB2dIAObject();
-    virtual bool IsFocusHdl() const;
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
+    virtual bool IsFocusHdl() const SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const;
-    virtual bool isMarkable() const;
+    virtual bool isMarkable() const SAL_OVERRIDE;
 
 
 private:

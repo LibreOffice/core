@@ -622,8 +622,8 @@ public:
     ~SwZoomBox_Impl();
 
 protected:
-    virtual void    Select();
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void ReleaseFocus();
 

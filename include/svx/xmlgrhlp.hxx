@@ -89,7 +89,7 @@ protected:
                                       SvXMLGraphicHelperMode eCreateMode,
                                       bool bDirect );
 
-    virtual void SAL_CALL       disposing();
+    virtual void SAL_CALL       disposing() SAL_OVERRIDE;
 
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
@@ -104,12 +104,12 @@ public:
 public:
 
     // XGraphicObjectResolver
-    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XBinaryStreamResolver
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL resolveOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxBinaryStream ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL resolveOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxBinaryStream ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

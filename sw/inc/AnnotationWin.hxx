@@ -38,27 +38,27 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwFmtFld* aField );
         virtual ~SwAnnotationWin();
 
-        virtual void    UpdateData();
-        virtual void    SetPostItText();
-        virtual void    Delete();
-        virtual void    GotoPos();
+        virtual void    UpdateData() SAL_OVERRIDE;
+        virtual void    SetPostItText() SAL_OVERRIDE;
+        virtual void    Delete() SAL_OVERRIDE;
+        virtual void    GotoPos() SAL_OVERRIDE;
 
-        virtual OUString GetAuthor();
-        virtual Date    GetDate();
-        virtual Time    GetTime();
+        virtual OUString GetAuthor() SAL_OVERRIDE;
+        virtual Date    GetDate() SAL_OVERRIDE;
+        virtual Time    GetTime() SAL_OVERRIDE;
 
-        virtual sal_uInt32 MoveCaret();
+        virtual sal_uInt32 MoveCaret() SAL_OVERRIDE;
 
-        virtual bool    CalcFollow();
+        virtual bool    CalcFollow() SAL_OVERRIDE;
         void            InitAnswer(OutlinerParaObject* pText);
 
-        virtual bool    IsProtected();
+        virtual bool    IsProtected() SAL_OVERRIDE;
 
     protected:
-        virtual MenuButton* CreateMenuButton();
+        virtual MenuButton* CreateMenuButton() SAL_OVERRIDE;
 
     private:
-        virtual SvxLanguageItem GetLanguage(void);
+        virtual SvxLanguageItem GetLanguage(void) SAL_OVERRIDE;
         sal_uInt32 CountFollowing();
 
         SwFmtFld*       mpFmtFld;

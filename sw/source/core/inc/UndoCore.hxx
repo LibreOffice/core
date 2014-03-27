@@ -127,9 +127,9 @@ public:
                    const bool bResetListAttrs );
     virtual ~SwUndoFmtColl();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     /**
        Returns the rewriter for this undo object.
@@ -144,7 +144,7 @@ public:
 
        @return the rewriter for this undo object
     */
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     SwHistory* GetHistory() { return pHistory; }
 
@@ -162,17 +162,17 @@ class SwUndoSetFlyFmt : public SwUndo, public SwClient
     bool bAnchorChgd;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
-    void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
     void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, sal_Int32 nCntnt );
 
 public:
     SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );
     virtual ~SwUndoSetFlyFmt();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
     void DeRegisterFromFormat( SwFmt& );
 };
 
@@ -183,9 +183,9 @@ class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
 public:
     SwUndoOutlineLeftRight( const SwPaM& rPam, short nOffset );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 };
 
 const int nUndoStringLength = 20;

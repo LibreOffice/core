@@ -44,8 +44,8 @@ public:
     sal_Int16 relation() const;
     sal_Int32 position() const;
  private:
-    virtual void lcl_attribute( Id aName, Value& rVal );
-    virtual void lcl_sprm( Sprm& rSprm );
+    virtual void lcl_attribute( Id aName, Value& rVal ) SAL_OVERRIDE;
+    virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
     sal_Int32 m_nPosition;
@@ -66,8 +66,8 @@ public:
     sal_Int32 getWrapMode( );
 
  private:
-    virtual void lcl_attribute( Id aName, Value& rVal );
-    virtual void lcl_sprm( Sprm& rSprm );
+    virtual void lcl_attribute( Id aName, Value& rVal ) SAL_OVERRIDE;
+    virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
 };
 typedef boost::shared_ptr<WrapHandler> WrapHandlerPtr;
 

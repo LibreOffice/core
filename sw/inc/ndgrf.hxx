@@ -123,7 +123,7 @@ public:
     const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
     const GraphicObject&    GetGrfObj() const   { return maGrfObj; }
     const GraphicObject* GetReplacementGrfObj() const;
-    virtual SwCntntNode *SplitCntntNode( const SwPosition & );
+    virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
 
     /// isolated only way to set GraphicObject to allow more actions when doing so
     void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
@@ -137,7 +137,7 @@ public:
     /// when GraphicObject content changes
     void onGraphicChanged();
 
-    virtual Size GetTwipSize() const;
+    virtual Size GetTwipSize() const SAL_OVERRIDE;
     void SetTwipSize( const Size& rSz );
 
     bool IsTransparent() const;
@@ -162,7 +162,7 @@ public:
     void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
 
     /// in ndcopy.cxx
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
+    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
@@ -180,8 +180,8 @@ public:
     bool IsSelected() const;
 
     /// Communicate to graphic that node is in Undo-range.
-    virtual bool SavePersistentData();
-    virtual bool RestorePersistentData();
+    virtual bool SavePersistentData() SAL_OVERRIDE;
+    virtual bool RestorePersistentData() SAL_OVERRIDE;
 
     /// Query link-data.
     bool IsGrfLink() const                  { return refLink.Is(); }

@@ -87,7 +87,7 @@ namespace dbaui
         inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
 
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
     };
 
     typedef ::std::vector< ::boost::shared_ptr<OTableWindowData> >      TTableWindowData;

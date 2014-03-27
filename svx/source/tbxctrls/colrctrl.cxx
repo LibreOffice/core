@@ -48,9 +48,9 @@ private:
 
 protected:
 
-    virtual void            AddSupportedFormats();
-    virtual bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual bool            WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void            AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool            WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
 
 public:
 

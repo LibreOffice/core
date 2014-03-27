@@ -50,32 +50,32 @@ protected:
     virtual ~SdrPolyEditView();
 
 public:
-    bool IsSetMarkedPointsSmoothPossible() const;
-    SdrPathSmoothKind GetMarkedPointsSmooth() const;
-    void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
+    bool IsSetMarkedPointsSmoothPossible() const SAL_OVERRIDE;
+    SdrPathSmoothKind GetMarkedPointsSmooth() const SAL_OVERRIDE;
+    void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) SAL_OVERRIDE;
 
     // Ein PolySegment kann eine Strecke oder eine Bezierkurve sein.
-    bool IsSetMarkedSegmentsKindPossible() const;
-    SdrPathSegmentKind GetMarkedSegmentsKind() const;
-    void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
+    bool IsSetMarkedSegmentsKindPossible() const SAL_OVERRIDE;
+    SdrPathSegmentKind GetMarkedSegmentsKind() const SAL_OVERRIDE;
+    void SetMarkedSegmentsKind(SdrPathSegmentKind eKind) SAL_OVERRIDE;
 
     // Moeglicherweise ist das Obj hinterher geloescht:
-    void DeleteMarkedPoints();
-    bool IsDeleteMarkedPointsPossible() const;
+    void DeleteMarkedPoints() SAL_OVERRIDE;
+    bool IsDeleteMarkedPointsPossible() const SAL_OVERRIDE;
 
     void MoveMarkedPoints(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy=false);
 
     // Hierbei entstehen eventuell beliebig viele neue Objekte:
-    void RipUpAtMarkedPoints();
-    bool IsRipUpAtMarkedPointsPossible() const;
+    void RipUpAtMarkedPoints() SAL_OVERRIDE;
+    bool IsRipUpAtMarkedPointsPossible() const SAL_OVERRIDE;
 
     // Alle markierten Polylines werden zu Polygonen, alle offenen
     // Bezierkurven zu geschlossenen.
-    void CloseMarkedObjects(bool bToggle=false, bool bOpen=false); // , long nOpenDistance=0);
-    bool IsOpenCloseMarkedObjectsPossible() const;
-    SdrObjClosedKind GetMarkedObjectsClosedState() const;
+    void CloseMarkedObjects(bool bToggle=false, bool bOpen=false) SAL_OVERRIDE; // , long nOpenDistance=0);
+    bool IsOpenCloseMarkedObjectsPossible() const SAL_OVERRIDE;
+    SdrObjClosedKind GetMarkedObjectsClosedState() const SAL_OVERRIDE;
 
     void CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmooth, bool& b1stSegm, bool& bCurve, bool& bSmoothFuz, bool& bSegmFuz, basegfx::B2VectorContinuity& eSmooth );
 };

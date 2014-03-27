@@ -55,7 +55,7 @@ public:
     virtual ~FeatureCommandDispatchBase();
 
     // late initialisation, especially for adding as listener
-    virtual void initialize();
+    virtual void initialize() SAL_OVERRIDE;
 
     virtual bool isFeatureSupported( const OUString& rCommandURL );
 
@@ -63,10 +63,10 @@ protected:
     // XDispatch
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void fireStatusEvent( const OUString& rURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xSingleListener );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xSingleListener ) SAL_OVERRIDE;
 
     // state of a feature
     virtual FeatureState getState( const OUString& rCommand ) = 0;

@@ -55,21 +55,21 @@ class SlideChangeBase : public ViewEventHandler,
 {
 public:
     // NumberAnimation
-    virtual bool operator()( double x );
-    virtual double getUnderlyingValue() const;
+    virtual bool operator()( double x ) SAL_OVERRIDE;
+    virtual double getUnderlyingValue() const SAL_OVERRIDE;
 
     // Animation
     virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& );
+                           const ShapeAttributeLayerSharedPtr& ) SAL_OVERRIDE;
     virtual void start( const AnimatableShapeSharedPtr&,
-                        const ShapeAttributeLayerSharedPtr& );
-    virtual void end();
+                        const ShapeAttributeLayerSharedPtr& ) SAL_OVERRIDE;
+    virtual void end() SAL_OVERRIDE;
 
     // ViewEventHandler
-    virtual void viewAdded( const UnoViewSharedPtr& rView );
-    virtual void viewRemoved( const UnoViewSharedPtr& rView );
-    virtual void viewChanged( const UnoViewSharedPtr& rView );
-    virtual void viewsChanged();
+    virtual void viewAdded( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+    virtual void viewRemoved( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+    virtual void viewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+    virtual void viewsChanged() SAL_OVERRIDE;
 
 protected:
     /** Create a new SlideChanger, for the given leaving and

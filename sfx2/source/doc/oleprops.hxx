@@ -237,8 +237,8 @@ public:
     explicit            SfxOleCodePageProperty();
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
-    virtual void        ImplSave( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
 };
 
 
@@ -260,8 +260,8 @@ public:
     void                SetPropertyName( sal_Int32 nPropId, const OUString& rPropName );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
-    virtual void        ImplSave( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef ::std::map< sal_Int32, OUString > SfxOlePropNameMap;
@@ -339,8 +339,8 @@ public:
     sal_Int32           GetFreePropertyId() const;
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
-    virtual void        ImplSave( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
 
     bool                SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) const;
     void                LoadProperty( SvStream& rStrm, sal_Int32 nPropId );
@@ -390,8 +390,8 @@ public:
     SfxOleSection&      AddSection( const SvGlobalName& rSectionGuid );
 
 private:
-    virtual void        ImplLoad( SvStream& rStrm );
-    virtual void        ImplSave( SvStream& rStrm );
+    virtual void        ImplLoad( SvStream& rStrm ) SAL_OVERRIDE;
+    virtual void        ImplSave( SvStream& rStrm ) SAL_OVERRIDE;
 
     /** Returns the GUID for the specified section. */
     static const SvGlobalName& GetSectionGuid( SfxOleSectionType eSection );

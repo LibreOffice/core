@@ -81,8 +81,8 @@ public:
         : ValueSet(pParent, WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER)
     {
     }
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -162,8 +162,8 @@ class SwColumnPage : public SfxTabPage
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void    ActivatePage(const SfxItemSet& rSet);
-    virtual int     DeactivatePage(SfxItemSet *pSet);
+    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     SwColumnPage(Window *pParent, const SfxItemSet &rSet);
 
@@ -177,8 +177,8 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static sal_uInt16* GetRanges();
 
-    virtual bool    FillItemSet(SfxItemSet &rSet);
-    virtual void    Reset(const SfxItemSet &rSet);
+    virtual bool    FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void    Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
     void SetFrmMode(sal_Bool bMod);
     void SetPageWidth(long nPageWidth);

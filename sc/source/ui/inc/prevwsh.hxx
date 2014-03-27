@@ -64,20 +64,20 @@ private:
     void ExitPreview();
 
 protected:
-    virtual void    Activate(bool bMDI);
-    virtual void    Deactivate(bool bMDI);
-    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize );
+    virtual void    Activate(bool bMDI) SAL_OVERRIDE;
+    virtual void    Deactivate(bool bMDI) SAL_OVERRIDE;
+    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) SAL_OVERRIDE;
 
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
+    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
 
     virtual OUString  GetDescription() const;
 
-    virtual void    WriteUserData(OUString &, bool bBrowse = false);
-    virtual void    ReadUserData(const OUString &, bool bBrowse = false);
+    virtual void    WriteUserData(OUString &, bool bBrowse = false) SAL_OVERRIDE;
+    virtual void    ReadUserData(const OUString &, bool bBrowse = false) SAL_OVERRIDE;
 
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
 
 public:
                     TYPEINFO_VISIBILITY( SC_DLLPUBLIC );
@@ -105,12 +105,12 @@ public:
                     GetSourceData() const       { return aSourceData; }
     sal_uInt8           GetSourceDesignMode() const { return nSourceDesignMode; }
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SfxPrinter*     GetPrinter( bool bCreate = false );
-    virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual bool            HasPrintOptionsPage() const;
-    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
+    virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
+    virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
+    virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
+    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );

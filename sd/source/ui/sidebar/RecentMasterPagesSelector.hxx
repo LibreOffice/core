@@ -38,7 +38,7 @@ public:
 
 protected:
     DECL_LINK(MasterPageListListener, void*);
-    virtual void Fill (ItemList& rItemList);
+    virtual void Fill (ItemList& rItemList) SAL_OVERRIDE;
 
     using sd::sidebar::MasterPagesSelector::Fill;
 
@@ -54,9 +54,9 @@ protected:
     */
     virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
-        const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList);
+        const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList) SAL_OVERRIDE;
 
-    virtual void ProcessPopupMenu (Menu& rMenu);
+    virtual void ProcessPopupMenu (Menu& rMenu) SAL_OVERRIDE;
 
 private:
     RecentMasterPagesSelector (
@@ -67,7 +67,7 @@ private:
         const cssu::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~RecentMasterPagesSelector (void);
 
-    virtual void LateInit (void);
+    virtual void LateInit (void) SAL_OVERRIDE;
 };
 
 } } // end of namespace sd::sidebar

@@ -58,7 +58,7 @@ protected:
                 pDrvdFrm, nFmtWhich )
     {}
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     ///< Already in base class Client.
@@ -164,7 +164,7 @@ public:
     ~SwFlyFrmFmt();
 
     /// Creates the views.
-    virtual void MakeFrms();
+    virtual void MakeFrms() SAL_OVERRIDE;
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
                         const sal_Bool bCalcFrm = sal_False ) const;
@@ -172,9 +172,9 @@ public:
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
                                       const sal_Bool bCalcFrm = sal_False ) const;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
+    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) SAL_OVERRIDE;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
 
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle, bool bBroadcast = false );
@@ -192,7 +192,7 @@ public:
         @return true, if background color is transparent, but not "no fill"
         or a existing background graphic is transparent.
     */
-    virtual bool IsBackgroundTransparent() const;
+    virtual bool IsBackgroundTransparent() const SAL_OVERRIDE;
 
     /** SwFlyFrmFmt::IsBackgroundBrushInherited
 
@@ -262,19 +262,19 @@ public:
 
     /** DrawObjects are removed from the arrays at the layout.
      The DrawObjects are marked as deleted. */
-    virtual void DelFrms();
+    virtual void DelFrms() SAL_OVERRIDE;
 
     /** Register DrawObjects in the arrays at layout.
      Reset delete marks. */
-    virtual void MakeFrms();
+    virtual void MakeFrms() SAL_OVERRIDE;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
+    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) SAL_OVERRIDE;
 
-    virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
-    virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir );
+    virtual SwFrmFmt::tLayoutDir GetLayoutDir() const SAL_OVERRIDE;
+    virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir ) SAL_OVERRIDE;
 
-    virtual sal_Int16 GetPositionLayoutDir() const;
-    virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
+    virtual sal_Int16 GetPositionLayoutDir() const SAL_OVERRIDE;
+    virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir ) SAL_OVERRIDE;
 
     inline bool IsPosAttrSet() const { return mbPosAttrSet; }
     inline void PosAttrSet() { mbPosAttrSet = true; }
@@ -284,7 +284,7 @@ public:
         mbPosAttrSet = false;
     }
 
-    virtual OUString GetDescription() const;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
 };

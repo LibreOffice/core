@@ -32,11 +32,11 @@ class XclExpWindow1 : public XclExpRecord
 public:
     explicit                XclExpWindow1( const XclExpRoot& rRoot );
 
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Writes the contents of the WINDOW1 record. */
-    virtual void            WriteBody( XclExpStream& rStrm );
+    virtual void            WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt16              mnFlags;            /// Option flags.
@@ -54,7 +54,7 @@ public:
 
 private:
     /** Writes the contents of the WINDOW2 record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     Color               maGridColor;        /// Grid color (<=BIFF5).
@@ -77,7 +77,7 @@ private:
     /** Tries to shorten numerator and denominator by the passed value. */
     void                Shorten( sal_uInt16 nFactor );
     /** Writes the contents of the SCL record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt16          mnNum;              /// Numerator of the zoom factor.
@@ -92,11 +92,11 @@ class XclExpPane : public XclExpRecord
 public:
     explicit            XclExpPane( const XclTabViewData& rData );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Writes the contents of the PANE record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt16          mnSplitX;           /// Split X position, or frozen column.
@@ -114,10 +114,10 @@ class XclExpSelection : public XclExpRecord
 public:
     explicit            XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     /** Writes the contents of the SELECTION record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclSelectionData    maSelData;          /// Selection data.
@@ -132,7 +132,7 @@ public:
     /* virtual void        SaveXml( XclExpXmlStream& rStrm ); TODO Fix XML Saving Stream */
 private:
     /** Writes the contents of the SHEETEXT record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     const XclTabViewData&  mrTabViewData;             /// view settings data of current sheet.
@@ -148,8 +148,8 @@ public:
     explicit            XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nScTab );
 
     /** Writes all view settings records to the stream. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Creates selection data for the specified pane. */

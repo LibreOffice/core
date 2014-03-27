@@ -66,7 +66,7 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 };
 
@@ -146,8 +146,8 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
                         ~SvxCharNamePage();
@@ -155,8 +155,8 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual bool        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
@@ -165,7 +165,7 @@ public:
     void                SetPreviewBackgroundToCharacter();
 
     void                DisableControls( sal_uInt16 nDisable );
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 // class SvxCharEffectsPage ----------------------------------------------
@@ -228,20 +228,20 @@ private:
 public:
     using SfxTabPage::DeactivatePage;
 
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual bool        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                DisableControls( sal_uInt16 nDisable );
     void                EnableFlash();
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 // class SvxCharPositionPage ---------------------------------------------
@@ -306,19 +306,19 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    virtual void        ActivatePage( const SfxItemSet& rSet );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        FillUserData();
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        FillUserData() SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 // class SvxCharTwoLinesPage ---------------------------------------------
@@ -349,18 +349,18 @@ public:
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual bool        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CHARDLG_HXX

@@ -44,14 +44,14 @@ namespace rptui
 
         virtual void ImplInitSettings() = 0;
     protected:
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     public:
         OColorListener(Window* _pParent,const OUString& _sColorEntry);
         virtual ~OColorListener();
 
         using Window::Notify;
         // SfxListener
-        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
+        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
 
         /** set the marker as marked or not marked
             @param  _bMark  set the new state of the marker

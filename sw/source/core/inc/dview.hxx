@@ -69,32 +69,32 @@ class SwDrawView : public FmFormView
 
 protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl() SAL_OVERRIDE;
 
     // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
     using FmFormView::CheckSingleSdrObjectHit;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const;
+    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const SAL_OVERRIDE;
 
     // support enhanced text edit for draw objects
-    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
+    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const SAL_OVERRIDE;
 
 public:
     SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
 
     // from base class
-    virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const;
-    virtual SdrObject*   GetMaxToBtmObj(SdrObject* pObj) const;
-    virtual void         MarkListHasChanged();
+    virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const SAL_OVERRIDE;
+    virtual SdrObject*   GetMaxToBtmObj(SdrObject* pObj) const SAL_OVERRIDE;
+    virtual void         MarkListHasChanged() SAL_OVERRIDE;
 
     // #i7672#
     // Overload to resue edit background color in active text edit view (OutlinerView)
-    virtual void ModelHasChanged();
+    virtual void ModelHasChanged() SAL_OVERRIDE;
 
     virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
-                                            sal_uLong nNewPos );
-    virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
-    virtual void MakeVisible( const Rectangle&, Window &rWin );
-    virtual void CheckPossibilities();
+                                            sal_uLong nNewPos ) SAL_OVERRIDE;
+    virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const SAL_OVERRIDE;
+    virtual void MakeVisible( const Rectangle&, Window &rWin ) SAL_OVERRIDE;
+    virtual void CheckPossibilities() SAL_OVERRIDE;
 
     const SwViewImp &Imp() const { return rImp; }
           SwViewImp &Imp()       { return rImp; }
@@ -102,7 +102,7 @@ public:
     // anchor and Xor for dragging
     void ShowDragAnchor();
 
-    virtual void DeleteMarked();
+    virtual void DeleteMarked() SAL_OVERRIDE;
 
     inline void ValidateMarkList() { FlushComeBackTimer(); }
 

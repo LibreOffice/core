@@ -32,7 +32,7 @@ class FanWipe : public ParametricPolyPolygon
 public:
     FanWipe( bool center, bool single = true, bool fanIn = false )
         : m_center(center), m_single(single), m_fanIn(fanIn) {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t );
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 private:
     bool m_center, m_single, m_fanIn;
 };

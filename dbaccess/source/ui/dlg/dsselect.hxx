@@ -58,7 +58,7 @@ public:
     OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}
     void     Select( const OUString& _rEntry ) { m_pDatasource->SelectEntry(_rEntry); }
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
 protected:
     DECL_LINK( ListDblClickHdl, ListBox * );

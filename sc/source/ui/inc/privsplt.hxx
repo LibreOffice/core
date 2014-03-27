@@ -47,9 +47,9 @@ class ScPrivatSplit : public Control
 
 
     protected:
-        virtual void        MouseMove( const MouseEvent& rMEvt );
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt);
+        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     public:
 
@@ -65,8 +65,8 @@ class ScPrivatSplit : public Control
 
         void            MoveSplitTo(Point aPos);
 
-        virtual void    StateChanged( StateChangedType nType );
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         void            SetCtrModifiedHdl( const Link& rLink ) { aCtrModifiedLink = rLink; }
         const Link&     GetCtrModifiedHdl() const { return aCtrModifiedLink; }

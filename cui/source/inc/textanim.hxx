@@ -79,8 +79,8 @@ public:
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
     void         Construct();
 };
@@ -97,7 +97,7 @@ class SvxTextTabDialog : public SfxTabDialog
 private:
     const SdrView*      pView;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
 

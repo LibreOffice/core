@@ -52,13 +52,13 @@ public:
     // CacheContext
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
-        const Bitmap& rPreview);
-    virtual bool IsIdle (void);
-    virtual bool IsVisible (CacheKey aKey);
-    virtual const SdrPage* GetPage (CacheKey aKey);
-    virtual ::boost::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible);
-    virtual sal_Int32 GetPriority (CacheKey aKey);
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel (void);
+        const Bitmap& rPreview) SAL_OVERRIDE;
+    virtual bool IsIdle (void) SAL_OVERRIDE;
+    virtual bool IsVisible (CacheKey aKey) SAL_OVERRIDE;
+    virtual const SdrPage* GetPage (CacheKey aKey) SAL_OVERRIDE;
+    virtual ::boost::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) SAL_OVERRIDE;
+    virtual sal_Int32 GetPriority (CacheKey aKey) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel (void) SAL_OVERRIDE;
 
 private:
     Reference<container::XIndexAccess> mxSlides;

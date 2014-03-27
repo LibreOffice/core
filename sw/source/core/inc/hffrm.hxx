@@ -32,12 +32,12 @@ protected:
 
 public:
     SwHeadFootFrm(SwFrmFmt * pFrm, SwFrm*, sal_uInt16 aType);
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm( SwTwips,
-                             sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+                             sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
     virtual SwTwips ShrinkFrm( SwTwips,
-                               sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+                               sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 };
 
 /// Header in the document layout, inside a page.

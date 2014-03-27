@@ -38,7 +38,7 @@ namespace rptxml
                 const SvXMLExportPropertyMapper& rPropExp,
                 const SvXMLUnitConverter& rUnitConverter,
                 const SvXMLNamespaceMap& rNamespaceMap
-                ) const;
+                ) const SAL_OVERRIDE;
 
         OXMLAutoStylePoolP(const OXMLAutoStylePoolP&);
         void operator =(const OXMLAutoStylePoolP&);

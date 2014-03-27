@@ -62,21 +62,21 @@ namespace dbmm
         MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext );
 
         // XTypeProvider
-        virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception);
+        virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         // helper for factories
         static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
@@ -87,8 +87,8 @@ namespace dbmm
         ~MacroMigrationDialogService();
 
     protected:
-        virtual Dialog* createDialog( Window* _pParent );
-        virtual void destroyDialog();
+        virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;
+        virtual void destroyDialog() SAL_OVERRIDE;
 
     private:
         Reference<XComponentContext>          m_aContext;

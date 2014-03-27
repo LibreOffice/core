@@ -113,8 +113,8 @@ private:
     static unsigned nShellCount;
 
 private:
-    virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
-    virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
+    virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize ) SAL_OVERRIDE;
+    virtual void        OuterResizePixel( const Point &rPos, const Size &rSize ) SAL_OVERRIDE;
     sal_uInt16          InsertWindowInTable (BaseWindow* pNewWin);
     virtual bool        PrepareClose( bool bUI ) SAL_OVERRIDE;
 
@@ -128,24 +128,24 @@ private:
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                const SfxHint& rHint, const TypeId& rHintType );
+                                const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
-    virtual void        Activate(bool bMDI);
-    virtual void        Deactivate(bool bMDI);
+    virtual void        Activate(bool bMDI) SAL_OVERRIDE;
+    virtual void        Deactivate(bool bMDI) SAL_OVERRIDE;
 
-    virtual void        Move();
-    virtual void        ShowCursor( bool bOn = true );
+    virtual void        Move() SAL_OVERRIDE;
+    virtual void        ShowCursor( bool bOn = true ) SAL_OVERRIDE;
 
     // DocumentEventListener
-    virtual void onDocumentCreated( const ScriptDocument& _rDocument );
-    virtual void onDocumentOpened( const ScriptDocument& _rDocument );
-    virtual void onDocumentSave( const ScriptDocument& _rDocument );
-    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
-    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
-    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
-    virtual void onDocumentClosed( const ScriptDocument& _rDocument );
-    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
-    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSave( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -169,15 +169,15 @@ public:
 
     SdrView*            GetCurDlgView() const;
 
-    svl::IUndoManager*  GetUndoManager();
+    svl::IUndoManager*  GetUndoManager() SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
+    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable() SAL_OVERRIDE;
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
-    virtual SfxPrinter*     GetPrinter( bool bCreate );
-    virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual OUString        GetSelectionText( bool bCompleteWords );
-    virtual bool            HasSelection( bool bText ) const;
+    virtual SfxPrinter*     GetPrinter( bool bCreate ) SAL_OVERRIDE;
+    virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
+    virtual OUString        GetSelectionText( bool bCompleteWords ) SAL_OVERRIDE;
+    virtual bool            HasSelection( bool bText ) const SAL_OVERRIDE;
 
     void                GetState( SfxItemSet& );
     void                ExecuteGlobal( SfxRequest& rReq );
@@ -185,7 +185,7 @@ public:
     void                ExecuteBasic( SfxRequest& rReq );
     void                ExecuteDialog( SfxRequest& rReq );
 
-    virtual bool        HasUIFeature( sal_uInt32 nFeature );
+    virtual bool        HasUIFeature( sal_uInt32 nFeature ) SAL_OVERRIDE;
 
     bool                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
@@ -207,7 +207,7 @@ public:
         const OUString& rDestLibName, const OUString& rDlgName );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                        GetCurrentDocument() const;
+                        GetCurrentDocument() const SAL_OVERRIDE;
 
     void UpdateObjectCatalog () { aObjectCatalog.UpdateEntries(); }
 

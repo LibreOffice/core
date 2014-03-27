@@ -43,7 +43,7 @@ public:
 
     DECL_LINK( CheckButtonClickHdl, void * );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 };
 

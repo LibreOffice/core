@@ -94,8 +94,8 @@ protected:
     void                SetFocusRect( const Rectangle* pRect = NULL );      // pRect == NULL -> calculate rectangle in method
     Point               SetActualRPWithoutInvalidate( RECT_POINT eNewRP );  // returns the last point
 
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
@@ -105,13 +105,13 @@ public:
         sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT);
     virtual ~SvxRectCtl();
 
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKeyEvt );
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void        Resize();
-    virtual Size        GetOptimalSize() const;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     void                Reset();
     RECT_POINT          GetActualRP() const;
@@ -124,7 +124,7 @@ public:
     Rectangle           CalculateFocusRectangle( void ) const;
     Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     RECT_POINT          GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& rPixelPoint ) const;
 
@@ -184,10 +184,10 @@ public:
 
     ~SvxPixelCtl();
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void    SetXBitmap( const BitmapEx& rBitmapEx );
 
@@ -206,7 +206,7 @@ public:
     void    Reset();
     SvxPixelCtlAccessible*  m_pAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xAccess;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
     long GetSquares() const { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }
     long GetHeight() const { return aRectSize.getHeight() ; }
@@ -218,9 +218,9 @@ public:
     Point IndexToPoint(long nIndex) const ;
     long GetFoucsPosIndex() const ;
     //Keyboard function for key input and focus handling function
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -379,8 +379,8 @@ public:
     virtual ~SvxPreviewBase();
 
     // change support
-    virtual void StateChanged(StateChangedType nStateChange);
-    virtual void DataChanged(const DataChangedEvent& rDCEvt);
+    virtual void StateChanged(StateChangedType nStateChange) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
 
     // dada read access
     SdrModel& getModel() const { return *mpModel; }
@@ -414,9 +414,9 @@ public:
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 /*************************************************************************
@@ -436,8 +436,8 @@ public:
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void Resize();
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 /*************************************************************************
@@ -463,7 +463,7 @@ public:
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX

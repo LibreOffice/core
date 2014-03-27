@@ -38,15 +38,15 @@ class SwSpellDialogChildWindow
     void            LockFocusNotification(bool bLock);
 
 protected:
-    virtual svx::SpellPortions GetNextWrongSentence(bool bRecheck);
-    virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck);
-    virtual void AddAutoCorrection(const OUString& rOld, const OUString& rNew, LanguageType eLanguage);
-    virtual bool HasAutoCorrection();
-    virtual bool HasGrammarChecking();
-    virtual bool IsGrammarChecking();
-    virtual void SetGrammarChecking(bool bOn);
-    virtual void GetFocus();
-    virtual void LoseFocus();
+    virtual svx::SpellPortions GetNextWrongSentence(bool bRecheck) SAL_OVERRIDE;
+    virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck) SAL_OVERRIDE;
+    virtual void AddAutoCorrection(const OUString& rOld, const OUString& rNew, LanguageType eLanguage) SAL_OVERRIDE;
+    virtual bool HasAutoCorrection() SAL_OVERRIDE;
+    virtual bool HasGrammarChecking() SAL_OVERRIDE;
+    virtual bool IsGrammarChecking() SAL_OVERRIDE;
+    virtual void SetGrammarChecking(bool bOn) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
     SwSpellDialogChildWindow (

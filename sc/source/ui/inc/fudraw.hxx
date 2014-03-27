@@ -35,16 +35,16 @@ class FuDraw : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuDraw();
 
-    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual bool MouseMove(const MouseEvent& rMEvt);
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     // II
     virtual void SelectionHasChanged();

@@ -52,11 +52,11 @@ namespace dbp
 
     protected:
         // TabPage overridables
-        void ActivatePage();
+        void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
@@ -68,7 +68,7 @@ namespace dbp
                         _rxConn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >());
 
         // OControlWizardPage overridables
-        virtual bool    canAdvance() const;
+        virtual bool    canAdvance() const SAL_OVERRIDE;
     };
 
 
@@ -88,7 +88,7 @@ namespace dbp
         DECL_LINK( OnRadioSelected, RadioButton* );
 
         // TabPage overridables
-        void ActivatePage();
+        void ActivatePage() SAL_OVERRIDE;
 
         // own helper
         void    announceControls(
@@ -122,8 +122,8 @@ namespace dbp
         void setDescriptionText(const OUString& _rDesc) { m_aDescription.SetText(_rDesc); }
 
         // OWizardPage overridables
-        virtual void initializePage();
-        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void initializePage() SAL_OVERRIDE;
+        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
         // own overridables
         virtual OUString& getDBFieldSetting() = 0;

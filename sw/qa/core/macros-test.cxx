@@ -57,8 +57,8 @@ public:
 
     void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     //void testStarBasic();
     void testVba();

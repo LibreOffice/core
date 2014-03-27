@@ -38,12 +38,12 @@ public:
 
     const SwFtnFrm* FindFootNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual void    Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual void    Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
-                                 const SwBorderAttrs & ) const;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+                                 const SwBorderAttrs & ) const SAL_OVERRIDE;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
             void    PaintLine( const SwRect &, const SwPageFrm * ) const;
 };
 
@@ -64,17 +64,17 @@ class SwFtnFrm: public SwLayoutFrm
     bool mbUnlockPosOfLowerObjs : 1;
 #ifdef DBG_UTIL
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
 #endif
 
 public:
     SwFtnFrm( SwFrmFmt*, SwFrm*, SwCntntFrm*, SwTxtFtn* );
 
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 
     sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
 

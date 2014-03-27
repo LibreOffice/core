@@ -33,7 +33,7 @@ namespace sdr
         {
         protected:
             // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich);
+            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -46,20 +46,20 @@ namespace sdr
             virtual ~E3dCompoundProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // get itemset
-            virtual const SfxItemSet& GetObjectItemSet() const;
+            virtual const SfxItemSet& GetObjectItemSet() const SAL_OVERRIDE;
 
             // Get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
             // be overloaded e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state
             // SFX_ITEM_DONTCARE which means there were several such items with different
             // values.
-            virtual const SfxItemSet& GetMergedItemSet() const;
+            virtual const SfxItemSet& GetMergedItemSet() const SAL_OVERRIDE;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false) SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

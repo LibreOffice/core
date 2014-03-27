@@ -46,7 +46,7 @@ public:
     void    SetCursorLinks( const Link& rUp, const Link& rDown );
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
 
@@ -100,10 +100,10 @@ public:
                                  ScDocShell* pDocSh, ScAddress aCursorPos );
                     ~ScOptSolverDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual bool    IsRefInputMode() const;
-    virtual void    SetActive();
-    virtual bool    Close();
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
 private:
     FixedText*       m_pFtObjectiveCell;

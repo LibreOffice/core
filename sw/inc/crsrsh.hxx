@@ -301,7 +301,7 @@ protected:
     SAL_DLLPRIVATE void UpdateMarkedListLevel();
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -311,8 +311,8 @@ public:
     virtual ~SwCrsrShell();
 
     // create new cursor and append the old one
-    virtual SwPaM & CreateNewShellCursor();
-    virtual SwPaM & GetCurrentShellCursor();
+    virtual SwPaM & CreateNewShellCursor() SAL_OVERRIDE;
+    virtual SwPaM & GetCurrentShellCursor() SAL_OVERRIDE;
 
     SwPaM * CreateCrsr();
     ///< delete the current cursor and make the following into the current
@@ -403,12 +403,12 @@ public:
      * scrolling is done. The passed Rectangle lays on pixel borders to avoid
      * pixel errors.
      */
-    virtual void VisPortChgd( const SwRect & );
+    virtual void VisPortChgd( const SwRect & ) SAL_OVERRIDE;
 
     /*
      * virtual paint method to make selection visible again after Paint
      */
-    void Paint( const Rectangle & rRect );
+    void Paint( const Rectangle & rRect ) SAL_OVERRIDE;
 
     // Areas
     inline void SetMark();

@@ -517,12 +517,12 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
     const Diagram& mrDgm;
     OUString maName;
 
-    virtual void visit(ConstraintAtom& rAtom);
-    virtual void visit(AlgAtom& rAtom);
-    virtual void visit(ForEachAtom& rAtom);
-    virtual void visit(ConditionAtom& rAtom);
-    virtual void visit(ChooseAtom& rAtom);
-    virtual void visit(LayoutNode& rAtom);
+    virtual void visit(ConstraintAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(AlgAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ForEachAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ConditionAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ChooseAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(LayoutNode& rAtom) SAL_OVERRIDE;
 
 public:
     ShapeLayoutingVisitor(const ShapePtr& rParentShape,
@@ -542,12 +542,12 @@ class ShallowPresNameVisitor : public LayoutAtomVisitor
     size_t mnCnt;
 
     void defaultVisit(LayoutAtom& rAtom);
-    virtual void visit(ConstraintAtom& rAtom);
-    virtual void visit(AlgAtom& rAtom);
-    virtual void visit(ForEachAtom& rAtom);
-    virtual void visit(ConditionAtom& rAtom);
-    virtual void visit(ChooseAtom& rAtom);
-    virtual void visit(LayoutNode& rAtom);
+    virtual void visit(ConstraintAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(AlgAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ForEachAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ConditionAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ChooseAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(LayoutNode& rAtom) SAL_OVERRIDE;
 
 public:
     ShallowPresNameVisitor(const Diagram& rDgm) :

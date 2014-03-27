@@ -75,12 +75,12 @@ class LwpTocSuperLayout : public LwpSuperTableLayout
 public:
     LwpTocSuperLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTocSuperLayout();
-    void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_TOC_SUPERTABLE_LAYOUT;}
-    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False);
+    void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TOC_SUPERTABLE_LAYOUT;}
+    virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_Bool GetRightAlignPageNumber(sal_uInt16 index);
     sal_Bool GetUsePageNumber(sal_uInt16 index);
     sal_uInt16 GetSeparatorType(sal_uInt16 index);
@@ -151,8 +151,8 @@ public:
     };
     LwpTocLevelData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpTocLevelData();
-    void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
+    void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     inline sal_uInt16 GetLevel(void){return m_nLevel;}
     inline sal_Bool GetUseText(void){   return (m_nFlags & USETEXT) ? sal_True : sal_False;}
     inline OUString GetSearchStyle(void){return m_SearchName.str();}
@@ -163,7 +163,7 @@ private:
     LwpAtomHolder m_SearchName;
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 #endif

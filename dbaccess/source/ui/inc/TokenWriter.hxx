@@ -115,7 +115,7 @@ namespace dbaui
         sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
 
     private:
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         void impl_initFromDescriptor( const ::svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 
@@ -139,8 +139,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual sal_Bool Write();
-        virtual sal_Bool Read();
+        virtual sal_Bool Write() SAL_OVERRIDE;
+        virtual sal_Bool Read() SAL_OVERRIDE;
     };
     // HTML Import and Export
     #define SBA_HTML_FONTSIZES 7
@@ -182,8 +182,8 @@ namespace dbaui
             , m_nIndent(0)
         {}
 
-        virtual sal_Bool Write();
-        virtual sal_Bool Read();
+        virtual sal_Bool Write() SAL_OVERRIDE;
+        virtual sal_Bool Read() SAL_OVERRIDE;
 
     };
     // normal RowSet Import and Export
@@ -201,7 +201,7 @@ namespace dbaui
 
         sal_Bool insertNewRow();
     protected:
-        virtual void initialize();
+        virtual void initialize() SAL_OVERRIDE;
 
     public:
         // export data
@@ -217,8 +217,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 
-        virtual sal_Bool Write();
-        virtual sal_Bool Read();
+        virtual sal_Bool Write() SAL_OVERRIDE;
+        virtual sal_Bool Read() SAL_OVERRIDE;
 
     private:
         using ODatabaseImportExport::initialize;

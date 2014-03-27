@@ -275,9 +275,9 @@ class PasswordVerifier : public IDocPasswordVerifier
 public:
     explicit PasswordVerifier( DocumentDecryption& aDecryptor );
 
-    virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData );
+    virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData ) SAL_OVERRIDE;
 
-    virtual DocPasswordVerifierResult verifyEncryptionData( const Sequence<NamedValue>& rEncryptionData );
+    virtual DocPasswordVerifierResult verifyEncryptionData( const Sequence<NamedValue>& rEncryptionData ) SAL_OVERRIDE;
 private:
     DocumentDecryption& mDecryptor;
 };

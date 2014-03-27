@@ -1065,8 +1065,8 @@ struct SwFindParaAttr : public SwFindParas
 
     virtual ~SwFindParaAttr()   { delete pSTxt; }
 
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
-    virtual bool IsReplaceMode() const;
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly ) SAL_OVERRIDE;
+    virtual bool IsReplaceMode() const SAL_OVERRIDE;
 };
 
 int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,

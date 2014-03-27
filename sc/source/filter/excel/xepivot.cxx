@@ -1809,8 +1809,8 @@ class XclExpPivotRecWrapper : public XclExpRecordBase
 {
 public:
     explicit            XclExpPivotRecWrapper( XclExpPivotTableManager& rPTMgr, SCTAB nScTab );
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     XclExpPivotTableManager& mrPTMgr;
     SCTAB               mnScTab;

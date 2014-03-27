@@ -58,7 +58,7 @@ namespace dbaui
         sal_Int32   size() const { return OCharsetDisplay_Base::size(); }
 
     protected:
-        virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
+        virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const SAL_OVERRIDE;
 
     private:
         using OCharsetDisplay_Base::find;

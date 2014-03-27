@@ -39,8 +39,8 @@ class MSOWordCommandConvertor : public MSOCommandConvertor
 
 public:
     MSOWordCommandConvertor();
-    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
-    virtual OUString MSOTCIDToOOCommand( sal_Int16 key );
+    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) SAL_OVERRIDE;
+    virtual OUString MSOTCIDToOOCommand( sal_Int16 key ) SAL_OVERRIDE;
 };
 
 MSOWordCommandConvertor::MSOWordCommandConvertor()

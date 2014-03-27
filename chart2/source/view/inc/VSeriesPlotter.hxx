@@ -158,23 +158,23 @@ public:
 
     // MinimumAndMaximumSupplier
 
-    virtual double getMinimumX();
-    virtual double getMaximumX();
+    virtual double getMinimumX() SAL_OVERRIDE;
+    virtual double getMaximumX() SAL_OVERRIDE;
 
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex );
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex );
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
 
-    virtual double getMinimumZ();
-    virtual double getMaximumZ();
+    virtual double getMinimumZ() SAL_OVERRIDE;
+    virtual double getMaximumZ() SAL_OVERRIDE;
 
-    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex );
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
-    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
-    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
-    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
 
-    virtual long calculateTimeResolutionOnXAxis();
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );
+    virtual long calculateTimeResolutionOnXAxis() SAL_OVERRIDE;
+    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) SAL_OVERRIDE;
 
 
 
@@ -192,10 +192,10 @@ public:
                 ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
-                );
+                ) SAL_OVERRIDE;
 
     virtual LegendSymbolStyle getLegendSymbolStyle();
-    virtual com::sun::star::awt::Size getPreferredLegendKeyAspectRatio();
+    virtual com::sun::star::awt::Size getPreferredLegendKeyAspectRatio() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 

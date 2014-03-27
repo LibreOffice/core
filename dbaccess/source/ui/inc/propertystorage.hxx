@@ -60,8 +60,8 @@ namespace dbaui
         {
         }
 
-        virtual void getPropertyValue( ::com::sun::star::uno::Any& _out_rValue ) const;
-        virtual void setPropertyValue( const ::com::sun::star::uno::Any& _rValue );
+        virtual void getPropertyValue( ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
+        virtual void setPropertyValue( const ::com::sun::star::uno::Any& _rValue ) SAL_OVERRIDE;
 
     private:
         SfxItemSet&     m_rItemSet;

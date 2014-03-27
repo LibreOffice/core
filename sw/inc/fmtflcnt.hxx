@@ -36,8 +36,8 @@ class SwFmtFlyCnt : public SfxPoolItem
 public:
     SwFmtFlyCnt( SwFrmFmt *pFrmFmt );
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     inline SwFrmFmt *GetFrmFmt() const { return pFmt; }
     /// For Undo: delete the FlyFrmFormat "logically"; it is kept in Undo-object.

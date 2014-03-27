@@ -110,7 +110,7 @@ public:
 
     void    ContentToXml(IXFStream *pStrm);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
     XFContentContainer  m_aContents;

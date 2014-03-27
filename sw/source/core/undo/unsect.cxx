@@ -282,8 +282,8 @@ public:
 
     virtual ~SwUndoDelSection();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
 SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
@@ -392,8 +392,8 @@ public:
 
     virtual ~SwUndoUpdateSection();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
 SwUndo *

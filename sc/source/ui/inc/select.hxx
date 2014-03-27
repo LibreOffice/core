@@ -66,13 +66,13 @@ public:
     void            SetAnchor( SCCOL nPosX, SCROW nPosY );
     void            SetAnchorFlag( bool bSet );
 
-    virtual void    BeginDrag();
-    virtual void    CreateAnchor();
-    virtual void    DestroyAnchor();
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false );
-    virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAll();
+    virtual void    BeginDrag() SAL_OVERRIDE;
+    virtual void    CreateAnchor() SAL_OVERRIDE;
+    virtual void    DestroyAnchor() SAL_OVERRIDE;
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false ) SAL_OVERRIDE;
+    virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
+    virtual void    DeselectAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
+    virtual void    DeselectAll() SAL_OVERRIDE;
 
     bool            SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScroll );
 };
@@ -97,13 +97,13 @@ public:
     void            SetColumn( bool bSet );
     void            SetWhich( ScSplitPos eNew );
 
-    virtual void    BeginDrag();
-    virtual void    CreateAnchor();
-    virtual void    DestroyAnchor();
-    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false );
-    virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAtPoint( const Point& rPointPixel );
-    virtual void    DeselectAll();
+    virtual void    BeginDrag() SAL_OVERRIDE;
+    virtual void    CreateAnchor() SAL_OVERRIDE;
+    virtual void    DestroyAnchor() SAL_OVERRIDE;
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, bool bDontSelectAtCursor = false ) SAL_OVERRIDE;
+    virtual bool    IsSelectionAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
+    virtual void    DeselectAtPoint( const Point& rPointPixel ) SAL_OVERRIDE;
+    virtual void    DeselectAll() SAL_OVERRIDE;
 
     void            SetAnchorFlag(bool bSet)    { bAnchor = bSet; }
 };

@@ -53,12 +53,12 @@ public:
         const cssu::Reference<css::accessibility::XAccessibleContext>& rxContext);
     virtual ~Accessible (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XAccessible
     virtual cssu::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     cssu::Reference<css::accessibility::XAccessibleContext> mxContext;

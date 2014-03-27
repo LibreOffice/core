@@ -36,13 +36,13 @@ public:
 
     /** Creates an external data provider that is able to use spreadsheet data. */
     virtual void        createDataProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc ) SAL_OVERRIDE;
 
     /** Creates a data sequence from the passed formula. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
                         createDataSequence(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& rxDataProvider,
-                            const ::oox::drawingml::chart::DataSequenceModel& rDataSeq );
+                            const ::oox::drawingml::chart::DataSequenceModel& rDataSeq ) SAL_OVERRIDE;
 };
 
 

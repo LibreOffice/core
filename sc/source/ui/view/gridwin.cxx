@@ -214,7 +214,7 @@ private:
     ScFilterBoxMode eMode;
 
 protected:
-    virtual void    LoseFocus();
+    virtual void    LoseFocus() SAL_OVERRIDE;
     void            SelectHdl();
 
 public:
@@ -222,8 +222,8 @@ public:
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
                 ~ScFilterListBox();
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual void    Select();
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Select() SAL_OVERRIDE;
 
     SCCOL           GetCol() const          { return nCol; }
     SCROW           GetRow() const          { return nRow; }
@@ -342,7 +342,7 @@ public:
     ScFilterFloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
     virtual ~ScFilterFloatingWindow();
     // required for System FloatingWindows that will not process KeyInput by themselves
-    virtual Window* GetPreferredKeyInputWindow();
+    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
 
 ScFilterFloatingWindow::ScFilterFloatingWindow( Window* pParent, WinBits nStyle ) :
@@ -626,7 +626,7 @@ class AutoFilterAction : public ScMenuFloatingWindow::Action
 public:
     AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
         mpWindow(p), meMode(eMode) {}
-    virtual void execute()
+    virtual void execute() SAL_OVERRIDE
     {
         mpWindow->UpdateAutoFilterFromMenu(meMode);
     }
@@ -639,7 +639,7 @@ class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
 public:
     AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
         mpWindow(p), maPos(rPos) {}
-    virtual void execute()
+    virtual void execute() SAL_OVERRIDE
     {
         mpWindow->RefreshAutoFilterButton(maPos);
     }

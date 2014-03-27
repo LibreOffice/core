@@ -72,12 +72,12 @@ public:
     SdDisplay( ::Window* pWin, SdResId Id );
     ~SdDisplay();
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void    SetBitmapEx( BitmapEx* pBmpEx );
     void    SetScale( const Fraction& rFrac );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 
@@ -95,12 +95,12 @@ public:
     void    AddObj( ::sd::View& rView );
     void    CreateAnimObj( ::sd::View& rView );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 protected:
-    virtual bool    Close();
-    virtual void    Resize();
-    virtual void    FillInfo( SfxChildWinInfo& ) const;
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    FillInfo( SfxChildWinInfo& ) const SAL_OVERRIDE;
 
 private:
     SdDisplay       aCtlDisplay;
@@ -178,7 +178,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-        const SfxPoolItem* pState );
+        const SfxPoolItem* pState ) SAL_OVERRIDE;
 private:
     AnimationWindow* pAnimationWin;
 };

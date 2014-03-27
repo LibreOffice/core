@@ -45,11 +45,11 @@ public:
     virtual ~SdrUndoManager();
 
     /// react depending on edit mode and if no more undo is possible
-    virtual bool Undo();
-    virtual bool Redo();
+    virtual bool Undo() SAL_OVERRIDE;
+    virtual bool Redo() SAL_OVERRIDE;
 
     // #i123350#
-    virtual void Clear();
+    virtual void Clear() SAL_OVERRIDE;
 
     // Call for the view which starts the interactive text edit. Use link to
     // activate (start text edit) and empty link to reset (end text edit). On

@@ -55,7 +55,7 @@ public:
     bool                EqualsBool( bool bValue ) const;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt16          mnTypeFlag;         /// Data type flag.
@@ -100,7 +100,7 @@ public:
     void                WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const;
 
     /** Writes the pivot cache field and all items and other related records. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpPCItem >    XclExpPCItemList;
@@ -153,7 +153,7 @@ private:
     void                WriteSxgroupinfo( XclExpStream& rStrm );
 
     /** Writes the contents of the SXFIELD record for this field. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     const XclExpPivotCache& mrPCache;       /// Parent pivot cache containing this field.
@@ -264,7 +264,7 @@ public:
 
 private:
     /** Writes the SXVI record body describing the pivot table item. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     const XclExpPCItem* mpCacheItem;        /// The referred pivot cache item.
@@ -310,7 +310,7 @@ public:
     void                WriteSxdi( XclExpStream& rStrm, sal_uInt16 nDataInfoIdx ) const;
 
     /** Writes the entire pivot table field. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 
 private:
@@ -362,8 +362,8 @@ public:
     sal_uInt16          GetDataFieldIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const;
 
     /** Writes the entire pivot table. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 
 private:

@@ -169,7 +169,7 @@ public:
     {}
 
     virtual ~ImpItemEdit();
-    virtual void KeyInput(const KeyEvent& rEvt);
+    virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
 };
 
 ImpItemEdit::~ImpItemEdit()

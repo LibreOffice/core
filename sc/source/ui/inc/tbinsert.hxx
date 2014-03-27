@@ -35,11 +35,11 @@ public:
     ScTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     ~ScTbxInsertCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 #endif

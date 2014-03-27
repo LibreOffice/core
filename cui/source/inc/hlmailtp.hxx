@@ -51,10 +51,10 @@ private:
     OUString  CreateAbsoluteURL() const;
 
 protected:
-    virtual void FillDlgFields(const OUString& rStrURL);
+    virtual void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
     virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                                      OUString& aStrIntName, OUString& aStrFrame,
-                                     SvxLinkInsertMode& eMode );
+                                     SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
 
 public:
     SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -62,7 +62,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetInitFocus();
+    virtual void        SetInitFocus() SAL_OVERRIDE;
 };
 
 

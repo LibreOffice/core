@@ -39,7 +39,7 @@ public:
         );
     virtual ~VCartesianGrid();
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 
     static void fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
                     , const ::com::sun::star::uno::Sequence<

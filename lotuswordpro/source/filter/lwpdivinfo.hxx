@@ -95,7 +95,7 @@ public:
     sal_uInt16 GetMaxNumberOfPages();
     LwpAtomHolder* GetExternalName(){return &m_ExternalName;}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     LwpObjectID m_ParentID;
     LwpAtomHolder m_Name;

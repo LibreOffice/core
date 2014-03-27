@@ -160,7 +160,7 @@ private:
             bool const bHidden, bool const bCondition);
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     // rtti
@@ -296,20 +296,20 @@ class SW_DLLPUBLIC SwSectionFmt
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     // Already contained in base class client.
     ~SwSectionFmt();
 
     // Deletes all Frms in aDepend (Frms are recognized via PTR_CAST).
-    virtual void DelFrms();
+    virtual void DelFrms() SAL_OVERRIDE;
 
     // Creates views.
-    virtual void MakeFrms();
+    virtual void MakeFrms() SAL_OVERRIDE;
 
     // Get information from Format.
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;
@@ -341,12 +341,12 @@ public:
             { m_wXTextSection = xTextSection; }
 
     // sfx2::Metadatable
-    virtual ::sfx2::IXmlIdRegistry& GetRegistry();
-    virtual bool IsInClipboard() const;
-    virtual bool IsInUndo() const;
-    virtual bool IsInContent() const;
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry() SAL_OVERRIDE;
+    virtual bool IsInClipboard() const SAL_OVERRIDE;
+    virtual bool IsInUndo() const SAL_OVERRIDE;
+    virtual bool IsInContent() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
 
 };
 

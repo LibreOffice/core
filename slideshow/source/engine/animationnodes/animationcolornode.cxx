@@ -53,26 +53,26 @@ public:
     }
 
     virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& )
+                           const ShapeAttributeLayerSharedPtr& ) SAL_OVERRIDE
     {}
 
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                        const ShapeAttributeLayerSharedPtr& rAttrLayer )
+                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) SAL_OVERRIDE
     {
         mpAnimation->start( rShape, rAttrLayer );
     }
 
-    virtual void end()
+    virtual void end() SAL_OVERRIDE
     {
         mpAnimation->end();
     }
 
-    virtual bool operator()( const HSLColor& rColor )
+    virtual bool operator()( const HSLColor& rColor ) SAL_OVERRIDE
     {
         return (*mpAnimation)( RGBColor( rColor ) );
     }
 
-    virtual HSLColor getUnderlyingValue() const
+    virtual HSLColor getUnderlyingValue() const SAL_OVERRIDE
     {
         return HSLColor( mpAnimation->getUnderlyingValue() );
     }

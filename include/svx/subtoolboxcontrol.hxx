@@ -35,8 +35,8 @@ public:
     SvxSubToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxSubToolBoxControl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 

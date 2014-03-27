@@ -65,7 +65,7 @@ public:
     virtual ~AccessibleChartView();
 
     // ____ WeakComponentHelper (called from XComponent::dispose()) ____
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // ____ lang::XInitialization ____
     // 0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
@@ -77,33 +77,33 @@ public:
     virtual void SAL_CALL initialize(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw (::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ view::XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ________ XEventListener ________
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ________ XAccessibleContext ________
     virtual OUString SAL_CALL getAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ________ XAccessibleComponent ________
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     // ________ AccessibleChartElement ________
-    virtual ::com::sun::star::awt::Point   GetUpperLeftOnScreen() const;
+    virtual ::com::sun::star::awt::Point   GetUpperLeftOnScreen() const SAL_OVERRIDE;
 
 private: // methods
     /** @return the result that m_xWindow->getPosSize() _should_ return.  It

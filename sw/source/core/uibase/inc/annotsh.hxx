@@ -66,7 +66,7 @@ public:
     void            StateSearch(SfxItemSet &);
 
     virtual ::svl::IUndoManager*
-                GetUndoManager();
+                GetUndoManager() SAL_OVERRIDE;
 };
 
 #endif

@@ -311,7 +311,7 @@ public:
     :LwpVirtualPiece(objHdr, pStrm),cNumerics(m_pObjStrm){}
     ~LwpLayoutNumerics(){}
     XFStyle* Convert();
-    virtual void Read();
+    virtual void Read() SAL_OVERRIDE;
 
 protected:
     LwpNumericFormat cNumerics;

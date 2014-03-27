@@ -819,8 +819,8 @@ class SwAssignFieldsControl : public Control
     DECL_LINK(MatchHdl_Impl, ListBox*);
     DECL_LINK(GotFocusHdl_Impl, ListBox*);
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        Command( const CommandEvent& rCEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     void                MakeVisible( sal_Int32 nIndex );
 public:

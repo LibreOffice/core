@@ -69,22 +69,22 @@ public:
 
     void            SetNumType(SvxNumType eNumType);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine; }
     void SetObjectSelectHdl( const Link& aLink) { aObjectSelectLink = aLink; }
 
     void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
-    virtual void    Resize();
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 
 private:
     ScHeaderEditEngine* pEdEngine;
@@ -113,9 +113,9 @@ private:
 
 protected:
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt);
-    virtual void    Click();
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    Click() SAL_OVERRIDE;
 
     virtual void    StartPopup();
 
@@ -131,7 +131,7 @@ public:
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 #endif // SC_TPHFEDIT_HXX

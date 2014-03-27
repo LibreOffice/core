@@ -73,8 +73,8 @@ namespace sdr
             const SdrPage*                                  mpProcessedPage;
 
             // Hierarchy access methods
-            virtual sal_uInt32 GetPaintObjectCount() const;
-            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const;
+            virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
+            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
 
         public:
             // basic constructor/destructor
@@ -85,19 +85,19 @@ namespace sdr
             virtual ~ObjectContactOfObjListPainter();
 
             // Process the whole displaying
-            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
+            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
 
             // VirtualDevice? Default is false
-            virtual bool isOutputToVirtualDevice() const;
+            virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
 
             // recording MetaFile? Default is false
-            virtual bool isOutputToRecordingMetaFile() const;
+            virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
 
             // pdf export? Default is false
-            virtual bool isOutputToPDFFile() const;
+            virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
 
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
-            virtual OutputDevice* TryToGetOutputDevice() const;
+            virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
         };
     } // end of namespace contact
 } // end of namespace sdr
@@ -118,8 +118,8 @@ namespace sdr
             SdrPageWeakRef                                  mxStartPage;
 
             // Hierarchy access methods
-            virtual sal_uInt32 GetPaintObjectCount() const;
-            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const;
+            virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
+            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -133,7 +133,7 @@ namespace sdr
             const SdrPage* GetStartPage() const { return mxStartPage.get(); }
 
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
-            virtual OutputDevice* TryToGetOutputDevice() const;
+            virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
         };
     } // end of namespace contact
 } // end of namespace sdr

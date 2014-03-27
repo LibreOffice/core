@@ -86,7 +86,7 @@ public:
 
     void    SetCountFrameLines(sal_Bool frame = sal_True);
 
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     enumXFLineNumberPos m_ePosition;

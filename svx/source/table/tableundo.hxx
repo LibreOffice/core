@@ -45,12 +45,12 @@ public:
     CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell );
     virtual ~CellUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual bool            Merge( SfxUndoAction *pNextAction );
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
+    virtual bool            Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
 
     void dispose();
-    virtual void ObjectInDestruction(const SdrObject& rObject);
+    virtual void ObjectInDestruction(const SdrObject& rObject) SAL_OVERRIDE;
 
 private:
     struct Data
@@ -88,8 +88,8 @@ public:
     InsertRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aNewRows );
     virtual ~InsertRowUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
 
 private:
     TableModelRef mxTable;
@@ -106,8 +106,8 @@ public:
     RemoveRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aRemovedRows );
     virtual ~RemoveRowUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
 
 private:
     TableModelRef mxTable;
@@ -124,8 +124,8 @@ public:
     InsertColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells );
     virtual ~InsertColUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
 
 private:
     TableModelRef mxTable;
@@ -143,8 +143,8 @@ public:
     RemoveColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells );
     virtual ~RemoveColUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
 
 private:
     TableModelRef mxTable;
@@ -162,9 +162,9 @@ public:
     TableColumnUndo( const TableColumnRef& xCol );
     virtual ~TableColumnUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual bool            Merge( SfxUndoAction *pNextAction );
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
+    virtual bool            Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
 
 private:
     struct Data
@@ -194,9 +194,9 @@ public:
     TableRowUndo( const TableRowRef& xRow );
     virtual ~TableRowUndo();
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual bool            Merge( SfxUndoAction *pNextAction );
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
+    virtual bool            Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
 
 private:
     struct Data
@@ -226,8 +226,8 @@ class TableStyleUndo : public SdrUndoAction
 public:
     TableStyleUndo( const SdrTableObj& rTableObj );
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
 
 private:
     SdrObjectWeakRef mxObjRef;

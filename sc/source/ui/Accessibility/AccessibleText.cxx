@@ -56,10 +56,10 @@ public:
                         ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell);
     virtual             ~ScViewForwarder();
 
-    virtual bool        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual bool        IsValid() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
 
     void                SetInvalid();
 };
@@ -156,10 +156,10 @@ public:
                                                    const EditView* _pEditView);
     virtual             ~ScEditObjectViewForwarder();
 
-    virtual bool        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual bool        IsValid() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
 
     void                SetInvalid();
 };
@@ -255,10 +255,10 @@ public:
                         ScPreviewViewForwarder(ScPreviewShell* pViewShell);
     virtual             ~ScPreviewViewForwarder();
 
-    virtual bool        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual bool        IsValid() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
 
     void                SetInvalid();
 
@@ -386,7 +386,7 @@ public:
                         ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, sal_Bool bHeader);
     virtual             ~ScPreviewHeaderFooterViewForwarder();
 
-    virtual Rectangle   GetVisArea() const;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
 };
 
 ScPreviewHeaderFooterViewForwarder::ScPreviewHeaderFooterViewForwarder(ScPreviewShell* pViewShell, sal_Bool bHeader)
@@ -428,7 +428,7 @@ public:
                             ScAddress aCellPos);
     virtual             ~ScPreviewCellViewForwarder();
 
-    virtual Rectangle   GetVisArea() const;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
 };
 
 ScPreviewCellViewForwarder::ScPreviewCellViewForwarder(ScPreviewShell* pViewShell,
@@ -470,7 +470,7 @@ public:
                             sal_Bool bColHeader);
     virtual             ~ScPreviewHeaderCellViewForwarder();
 
-    virtual Rectangle   GetVisArea() const;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
 };
 
 ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
@@ -514,7 +514,7 @@ public:
                             sal_Bool bNoteMark);
     virtual             ~ScPreviewNoteViewForwarder();
 
-    virtual Rectangle   GetVisArea() const;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
 };
 
 ScPreviewNoteViewForwarder::ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
@@ -556,15 +556,15 @@ public:
                         ScEditViewForwarder(EditView* pEditView, Window* pWin);
     virtual             ~ScEditViewForwarder();
 
-    virtual bool        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual bool        GetSelection( ESelection& rSelection ) const;
-    virtual bool        SetSelection( const ESelection& rSelection );
-    virtual bool        Copy();
-    virtual bool        Cut();
-    virtual bool        Paste();
+    virtual bool        IsValid() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual bool        GetSelection( ESelection& rSelection ) const SAL_OVERRIDE;
+    virtual bool        SetSelection( const ESelection& rSelection ) SAL_OVERRIDE;
+    virtual bool        Copy() SAL_OVERRIDE;
+    virtual bool        Cut() SAL_OVERRIDE;
+    virtual bool        Paste() SAL_OVERRIDE;
 
     void                GrabFocus();
 
@@ -1662,10 +1662,10 @@ class ScCsvViewForwarder : public SvxViewForwarder
 public:
     explicit                    ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox );
 
-    virtual bool                IsValid() const;
-    virtual Rectangle           GetVisArea() const;
-    virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual bool                IsValid() const SAL_OVERRIDE;
+    virtual Rectangle           GetVisArea() const SAL_OVERRIDE;
+    virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
+    virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const SAL_OVERRIDE;
 
     void                        SetInvalid();
 };

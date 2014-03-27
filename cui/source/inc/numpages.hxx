@@ -48,7 +48,7 @@ class SvxNumberingPreview : public Window
     sal_uInt16              nActLevel;
 
     protected:
-        virtual void        Paint( const Rectangle& rRect );
+        virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     public:
         SvxNumberingPreview(Window* pParent, WinBits nWinBits = WB_BORDER);
@@ -113,10 +113,10 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
@@ -149,13 +149,13 @@ class SvxBulletPickTabPage : public SfxTabPage
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetCharFmtName(const OUString& rName){sBulletCharFmtName = rName;}
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 #define NUM_VALUSET_COUNT 16
@@ -192,15 +192,15 @@ class SvxNumPickTabPage : public SfxTabPage
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetCharFmtNames(const OUString& rCharName, const OUString& rBulName)
                             {   sNumCharFmtName = rCharName;
                                 sBulletCharFmtName = rBulName;}
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 
@@ -237,10 +237,10 @@ class SvxBitmapPickTabPage : public SfxTabPage
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
@@ -349,10 +349,10 @@ class SvxNumOptionsTabPage : public SfxTabPage
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetCharFmts(const OUString& rNumName, const OUString& rBulletName)
                         {
@@ -363,7 +363,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     ListBox&            GetCharFmtListBox() {return *m_pCharFmtLB;}
     void                SetModified(sal_Bool bRepaint = sal_True);
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 
     /** Get the numberings provided by the i18n framework (CTL, Asian, ...) and
         add them to the listbox. Extended numbering schemes present in the
@@ -449,17 +449,17 @@ public:
                                const SfxItemSet& rSet);
         ~SvxNumPositionTabPage();
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
     void                SetMetric(FieldUnit eSet);
     void                SetModified(sal_Bool bRepaint = sal_True);
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 #endif

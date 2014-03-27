@@ -52,9 +52,9 @@ public:
 
     virtual ~SwUndoInsSection();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     void SetSectNdPos(sal_uLong const nPos)     { m_nSectionNodePos = nPos; }
     void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);

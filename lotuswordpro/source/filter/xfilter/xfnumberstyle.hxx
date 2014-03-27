@@ -92,11 +92,11 @@ public:
 
     void    SetCurrencySymbol(sal_Bool post, const OUString& symbol, sal_Bool bShowSpace=sal_False);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool Equal(IXFStyle *pStyle);
+    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
     void    ToXml_StartElement(IXFStream *pStrm);

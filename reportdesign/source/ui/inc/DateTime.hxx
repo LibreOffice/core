@@ -84,7 +84,7 @@ public:
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~ODateTimeDialog();
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 };
 
 } // namespace rptui

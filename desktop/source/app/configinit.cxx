@@ -70,7 +70,7 @@ namespace
         // XCurrentContext
         virtual uno::Any SAL_CALL
             getValueByName( OUString const & aName)
-                throw (uno::RuntimeException, std::exception);
+                throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
     uno::Any SAL_CALL
@@ -98,7 +98,7 @@ public:
     // XCurrentContext
     virtual uno::Any SAL_CALL
         getValueByName( OUString const & aName)
-            throw (uno::RuntimeException, std::exception);
+            throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     InteractionHandler  m_xHandler;

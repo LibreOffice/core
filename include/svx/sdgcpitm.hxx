@@ -38,9 +38,9 @@ public:
                                              sal_uInt16 nWhichId = SDRATTR_GRAFCROP ) :
                                 SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, nWhichId ) {}
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
-    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SDGCPITM_HXX

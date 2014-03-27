@@ -74,10 +74,10 @@ public:
     GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
 
     // XEventListener
-    virtual void SAL_CALL notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // lang::XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 private:
     XMLFilterTestDialog* mpDialog;
 };

@@ -74,7 +74,7 @@ class LwpFribPageBreak: public LwpFrib
 public:
     LwpFribPageBreak( LwpPara* pPara );
     ~LwpFribPageBreak();
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void RegisterBreakStyle(LwpPara* pPara);
     void ParseLayout();
     LwpObjectID* GetLayout(){return &m_Layout;}

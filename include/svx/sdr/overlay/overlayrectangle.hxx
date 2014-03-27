@@ -47,7 +47,7 @@ namespace sdr
             bool                            mbOverlayState : 1;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
         public:
             OverlayRectangle(
@@ -72,7 +72,7 @@ namespace sdr
 
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
-            virtual void Trigger(sal_uInt32 nTime);
+            virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
         };
     } // end of namespace overlay
 } // end of namespace sdr

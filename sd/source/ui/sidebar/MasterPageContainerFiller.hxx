@@ -59,13 +59,13 @@ public:
     /** Run the next step of the task.  After HasNextStep() returns false
         this method should ignore further calls.
     */
-    virtual void RunNextStep (void);
+    virtual void RunNextStep (void) SAL_OVERRIDE;
 
     /** Return <TRUE/> when there is at least one more step to execute.
         When the task has been executed completely then <FALSE/> is
         returned.
     */
-    virtual bool HasNextStep (void);
+    virtual bool HasNextStep (void) SAL_OVERRIDE;
 
 private:
     ContainerAdapter& mrContainerAdapter;

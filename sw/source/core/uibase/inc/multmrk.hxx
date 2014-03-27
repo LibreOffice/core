@@ -42,7 +42,7 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
     SwTOXMgr&          rMgr;
     sal_uInt16              nPos;
 
-    void                Apply();
+    void                Apply() SAL_OVERRIDE;
 public:
     SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr &rTOXMgr );
     ~SwMultiTOXMarkDlg();

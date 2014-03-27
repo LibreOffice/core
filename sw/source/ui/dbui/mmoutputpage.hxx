@@ -123,8 +123,8 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
     DECL_LINK(SaveCancelHdl_Impl, void *);
 protected:
-        virtual bool    canAdvance() const;
-        virtual void    ActivatePage();
+        virtual bool    canAdvance() const SAL_OVERRIDE;
+        virtual void    ActivatePage() SAL_OVERRIDE;
 public:
         SwMailMergeOutputPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeOutputPage();
@@ -200,7 +200,7 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     SAL_DLLPRIVATE void        SendMails();
     SAL_DLLPRIVATE void        UpdateTransferStatus();
 
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
 public:
     SwSendMailDialog( Window* pParent, SwMailMergeConfigItem& );

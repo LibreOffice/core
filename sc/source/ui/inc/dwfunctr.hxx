@@ -90,16 +90,16 @@ private:
 
 protected:
 
-    virtual bool    Close();
-    virtual void    Resize();
-    virtual void    Resizing( Size& rSize );
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
     virtual void    SetSize();
-    virtual void    ToggleFloatingMode();
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void    ToggleFloatingMode() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
 
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment,
-                                SfxChildAlignment eAlign);
+                                SfxChildAlignment eAlign) SAL_OVERRIDE;
 
 public:
                     ScFunctionDockWin(  SfxBindings* pBindings,
@@ -110,7 +110,7 @@ public:
                     ~ScFunctionDockWin();
 
     using SfxDockingWindow::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     void            SetSlotIDs( sal_uInt16 nLeft, sal_uInt16 nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }
@@ -118,7 +118,7 @@ public:
     void            InitLRUList();
 
     void            Initialize (SfxChildWinInfo* pInfo);
-    virtual void    FillInfo(SfxChildWinInfo&) const;
+    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 };
 
 #endif

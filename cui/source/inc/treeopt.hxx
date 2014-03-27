@@ -189,7 +189,7 @@ private:
     VectorOfNodes   LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
-    virtual void queue_resize();
+    virtual void queue_resize() SAL_OVERRIDE;
     void SetPaneSize(Window *pPane);
 
 protected:
@@ -200,8 +200,8 @@ protected:
     DECL_LINK( HintHdl_Impl, Timer * );
     void SelectHdl_Impl();
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual short   Execute();
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual short   Execute() SAL_OVERRIDE;
 
 public:
     OfaTreeOptionsDialog( Window* pParent,
@@ -287,8 +287,8 @@ public:
 
     virtual ~ExtensionsTabPage();
 
-    virtual void    ActivatePage();
-    virtual void    DeactivatePage();
+    virtual void    ActivatePage() SAL_OVERRIDE;
+    virtual void    DeactivatePage() SAL_OVERRIDE;
 
     void            ResetPage();
     void            SavePage();

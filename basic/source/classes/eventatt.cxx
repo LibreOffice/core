@@ -155,13 +155,13 @@ public:
 
     // Methods of XAllListener
     virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent)
-        throw( InvocationTargetException, RuntimeException, std::exception );
+        throw( InvocationTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methods of XEventListener
     virtual void SAL_CALL disposing(const EventObject& Source)
-        throw( RuntimeException, std::exception );
+        throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 // Methods XAllListener

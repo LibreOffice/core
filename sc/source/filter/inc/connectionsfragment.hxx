@@ -35,11 +35,11 @@ public:
     explicit            ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) SAL_OVERRIDE;
 
 private:
     Connection&         mrConnection;
@@ -55,11 +55,11 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
 
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
-    virtual void        finalizeImport();
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
+    virtual void        finalizeImport() SAL_OVERRIDE;
 };
 
 

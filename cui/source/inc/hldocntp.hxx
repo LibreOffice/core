@@ -47,10 +47,10 @@ private:
     Image GetImage( sal_uInt16 nId );
 
 protected:
-    void FillDlgFields(const OUString& rStrURL);
+    void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
-                             SvxLinkInsertMode& eMode );
+                             SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
 
 public:
     SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -58,10 +58,10 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual sal_Bool        AskApply ();
-    virtual void        DoApply ();
+    virtual sal_Bool        AskApply () SAL_OVERRIDE;
+    virtual void        DoApply () SAL_OVERRIDE;
 
-    virtual void        SetInitFocus();
+    virtual void        SetInitFocus() SAL_OVERRIDE;
 };
 
 

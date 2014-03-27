@@ -124,9 +124,9 @@ public:
     inline const Link&          GetColTypeHdl() const { return maColTypeHdl; }
 
 protected:
-    virtual void                Resize();
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
-    virtual Size                GetOptimalSize() const;
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual Size                GetOptimalSize() const SAL_OVERRIDE;
 
 private:
     SAL_DLLPRIVATE              DECL_LINK( CsvCmdHdl, ScCsvControl* );
@@ -136,11 +136,11 @@ private:
     // accessibility ----------------------------------------------------------
 public:
     /** Creates and returns the accessible object of this control. */
-    virtual XAccessibleRef      CreateAccessible();
+    virtual XAccessibleRef      CreateAccessible() SAL_OVERRIDE;
 
 protected:
     /** Creates a new accessible object. */
-    virtual ScAccessibleCsvControl* ImplCreateAccessible();
+    virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
 
 

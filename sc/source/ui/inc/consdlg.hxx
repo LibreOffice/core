@@ -43,15 +43,15 @@ public:
                                       const SfxItemSet& rArgSet );
                     ~ScConsolidateDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 
-    virtual bool    IsRefInputMode() const { return true; }
-    virtual void    SetActive();
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE { return true; }
+    virtual void    SetActive() SAL_OVERRIDE;
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
 protected:
-    virtual void    Deactivate();
+    virtual void    Deactivate() SAL_OVERRIDE;
 
 private:
     ListBox*         pLbFunc;

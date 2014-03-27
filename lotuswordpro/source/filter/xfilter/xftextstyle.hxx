@@ -82,11 +82,11 @@ public:
 
     XFFont* GetFont(){ return m_pFont; }
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool    Equal(IXFStyle *pStyle);
+    virtual sal_Bool    Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
-    virtual void        ToXml(IXFStream *strm);
+    virtual void        ToXml(IXFStream *strm) SAL_OVERRIDE;
 
 private:
     XFFont              *m_pFont;

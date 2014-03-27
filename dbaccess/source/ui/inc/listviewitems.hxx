@@ -39,11 +39,11 @@ namespace dbaui
         {
         }
 
-        virtual sal_uInt16 GetType() const;
+        virtual sal_uInt16 GetType() const SAL_OVERRIDE;
 
         virtual void Paint(
-            const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
-        virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData);
+            const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+        virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData) SAL_OVERRIDE;
 
         sal_Bool    isEmphasized() const { return m_bEmphasized; }
         void        emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }

@@ -68,7 +68,7 @@ private:
     SVX_DLLPRIVATE void ImpClearVars();
 
 protected:
-    virtual void SetMarkHandles();
+    virtual void SetMarkHandles() SAL_OVERRIDE;
     void ShowDragObj();
     void HideDragObj();
     bool ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, bool bNewObj, OutputDevice* pOut);
@@ -79,12 +79,12 @@ protected:
     virtual ~SdrDragView();
 
 public:
-    virtual bool IsAction() const;
-    virtual void MovAction(const Point& rPnt);
-    virtual void EndAction();
-    virtual void BckAction();
-    virtual void BrkAction();
-    virtual void TakeActionRect(Rectangle& rRect) const;
+    virtual bool IsAction() const SAL_OVERRIDE;
+    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
+    virtual void EndAction() SAL_OVERRIDE;
+    virtual void BckAction() SAL_OVERRIDE;
+    virtual void BrkAction() SAL_OVERRIDE;
+    virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
     // Spezialimplementation fuer den Writer:
     // TakeDragObjAnchorPos() liefert die Position an der ein Objekt

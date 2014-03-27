@@ -60,7 +60,7 @@ protected:
     virtual ~ScMessagePool();
 public:
 
-    virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
+    virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const SAL_OVERRIDE;
 };
 
 

@@ -122,7 +122,7 @@ public:
     FormulaGroupInterpreterSoftware();
     virtual ~FormulaGroupInterpreterSoftware() {}
 
-    virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat);
+    virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) SAL_OVERRIDE;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,
                                                    ScFormulaCellGroup& rGroup,

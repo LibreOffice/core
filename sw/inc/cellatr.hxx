@@ -36,8 +36,8 @@ public:
                         sal_Bool bAuto = sal_False );
 
     // "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     inline SwTblBoxNumFormat& operator=( const SwTblBoxNumFormat& rAttr )
     {
@@ -60,14 +60,14 @@ public:
     ~SwTblBoxFormula() {};
 
     // "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
                                             { pDefinedIn = (SwModify*)pNew; }
     //  BoxAttribut -> BoxStartNode
-    virtual const SwNode* GetNodeOfFormula() const;
+    virtual const SwNode* GetNodeOfFormula() const SAL_OVERRIDE;
 
           SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
@@ -85,8 +85,8 @@ public:
     SwTblBoxValue( const double aVal );
 
     // "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     inline SwTblBoxValue& operator=( const SwTblBoxValue& rCmp )
     {

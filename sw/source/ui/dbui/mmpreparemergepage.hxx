@@ -44,8 +44,8 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     DECL_LINK(ExcludeHdl_Impl, CheckBox*);
     DECL_LINK(MoveHdl_Impl, void*);
 
-    virtual void        ActivatePage();
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
 public:
     SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);

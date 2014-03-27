@@ -106,7 +106,7 @@ public:
     /**
      * @descr   Output padding properties.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFPadding& p1, XFPadding& p2);
     friend bool operator!=(XFPadding& p1, XFPadding& p2);

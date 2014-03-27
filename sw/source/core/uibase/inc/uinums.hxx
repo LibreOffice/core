@@ -108,7 +108,7 @@ public:
     virtual ~SwChapterNumRules();
 
     virtual void        ApplyNumRules(  const SwNumRulesWithName &rCopy,
-                                            sal_uInt16 nIdx);
+                                            sal_uInt16 nIdx) SAL_OVERRIDE;
 };
 
 // INLINE METHODE --------------------------------------------------------

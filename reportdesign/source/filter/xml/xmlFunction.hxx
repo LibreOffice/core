@@ -50,7 +50,7 @@ namespace rptxml
                     );
         virtual ~OXMLFunction();
 
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
     };
 
 } // namespace rptxml

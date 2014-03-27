@@ -38,13 +38,13 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const OUString& rChars );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
 
-    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
-    virtual void        finalizeImport();
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const SAL_OVERRIDE;
+    virtual void        finalizeImport() SAL_OVERRIDE;
 
 private:
     void                importExternalReference( const AttributeList& rAttribs );

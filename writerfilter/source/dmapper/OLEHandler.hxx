@@ -66,8 +66,8 @@ class OLEHandler : public LoggedProperties
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Interoperability
     virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument,

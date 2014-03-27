@@ -108,7 +108,7 @@ public:
 
     OUString   ToString();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend sal_Bool operator==(XFShadow& s1, XFShadow& s2);
     friend sal_Bool operator!=(XFShadow& s1, XFShadow& s2);

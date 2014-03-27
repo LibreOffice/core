@@ -59,7 +59,7 @@ class SwBreakDlg: public SvxStandardDialog
     void CheckEnable();
 
 protected:
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
 
 public:
     SwBreakDlg( Window *pParent, SwWrtShell &rSh );

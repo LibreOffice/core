@@ -39,16 +39,16 @@ public:
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST,(sal_uInt16)eAdj) {}
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, sal_uInt16 nWhich): SfxEnumItem(nWhich,(sal_uInt16)eAdj) {}
     SdrTextVertAdjustItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_TEXT_VERTADJUST,rIn)  {}
-    virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16            GetValueCount() const; // { return 5; }
+    virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
+    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual sal_uInt16            GetValueCount() const SAL_OVERRIDE; // { return 5; }
             SdrTextVertAdjust GetValue() const      { return (SdrTextVertAdjust)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
 
 
@@ -66,16 +66,16 @@ public:
     TYPEINFO_OVERRIDE();
     SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST,(sal_uInt16)eAdj) {}
     SdrTextHorzAdjustItem(SvStream& rIn)                                 : SfxEnumItem(SDRATTR_TEXT_HORZADJUST,rIn)  {}
-    virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16        GetValueCount() const;
+    virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
+    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual sal_uInt16        GetValueCount() const SAL_OVERRIDE;
             SdrTextHorzAdjust GetValue() const      { return (SdrTextHorzAdjust)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
 
 #endif

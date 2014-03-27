@@ -50,7 +50,7 @@ public:
     void init(SvxThesaurusDialog *pDialog);
 
     // ComboBox
-    virtual void        Modify();
+    virtual void        Modify() SAL_OVERRIDE;
 };
 
 class AlternativesExtraData
@@ -95,8 +95,8 @@ public:
     void            SetExtraData( const SvTreeListEntry *pEntry, const AlternativesExtraData &rData );
     AlternativesExtraData * GetExtraData( const SvTreeListEntry *pEntry );
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 class ReplaceEdit : public Edit
@@ -114,9 +114,9 @@ public:
     void init(Button *pBtn)  { m_pBtn = pBtn; }
 
     // Edit
-    virtual void        Modify();
-    virtual void        SetText( const OUString& rStr );
-    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
+    virtual void        Modify() SAL_OVERRIDE;
+    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void        SetText( const OUString& rStr, const Selection& rNewSelection ) SAL_OVERRIDE;
 };
 
 class SvxThesaurusDialog : public SvxStandardDialog
@@ -156,7 +156,7 @@ public:
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const OUString &rText );
     void    LookUp_Impl();
-    virtual void     Apply();
+    virtual void     Apply() SAL_OVERRIDE;
 
 public:
     SvxThesaurusDialog( Window* pParent,

@@ -56,11 +56,11 @@ protected:
     RulerCtrlItem* pCtrlItem;
     sal_Bool bHorz;
 
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void    MouseMove(const MouseEvent& rMEvt);
-    virtual void    Command(const CommandEvent& rCEvt);
-    virtual void    ExtraDown();
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void    ExtraDown() SAL_OVERRIDE;
 };
 
 } // end of namespace sd

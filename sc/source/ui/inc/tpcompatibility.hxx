@@ -21,9 +21,9 @@ public:
 
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreAttrs);
 
-    virtual bool FillItemSet(SfxItemSet& rCoreAttrs);
-    virtual void Reset(const SfxItemSet& rCoreAttrs);
-    virtual int DeactivatePage(SfxItemSet* pSet = NULL);
+    virtual bool FillItemSet(SfxItemSet& rCoreAttrs) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet& rCoreAttrs) SAL_OVERRIDE;
+    virtual int DeactivatePage(SfxItemSet* pSet = NULL) SAL_OVERRIDE;
 
 private:
     explicit ScTpCompatOptions(Window* pParent, const SfxItemSet& rCoreAttrs);

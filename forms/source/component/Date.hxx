@@ -39,24 +39,24 @@ class ODateModel
     sal_Bool                        m_bDateTimeField;
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ODateModel );
 
     // XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XPropertySet
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception);
+                                        throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     IMPLEMENTATION_NAME(ODateModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // XPropertySet
     using OEditBaseModel::getFastPropertyValue;
@@ -64,30 +64,30 @@ public:
     // OControlModel's property handling
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
-    ) const;
+    ) const SAL_OVERRIDE;
 
 protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
-                            translateDbColumnToControlValue( );
-    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+                            translateDbColumnToControlValue( ) SAL_OVERRIDE;
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( ) const;
+                            translateControlValueToExternalValue( ) const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-                            getSupportedBindingTypes();
+                            getSupportedBindingTypes() SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
-
-    virtual ::com::sun::star::uno::Any
-                            translateControlValueToValidatableValue( ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const;
+                            translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
 
-    virtual void            resetNoBroadcast();
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const SAL_OVERRIDE;
 
-    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            resetNoBroadcast() SAL_OVERRIDE;
+
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
 
 protected:
     DECLARE_XCLONEABLE();
@@ -106,7 +106,7 @@ private:
 class ODateControl: public OBoundControl
 {
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
 public:
     ODateControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
@@ -114,7 +114,7 @@ public:
 
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(ODateControl);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+    virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 };
 
 

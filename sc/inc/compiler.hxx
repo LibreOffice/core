@@ -332,7 +332,7 @@ private:
 
     bool   NextNewToken(bool bInArray = false);
 
-    virtual void SetError(sal_uInt16 nError);
+    virtual void SetError(sal_uInt16 nError) SAL_OVERRIDE;
     sal_Int32 NextSymbol(bool bInArray);
     bool IsValue( const OUString& );
     bool IsOpCode( const OUString&, bool bInArray );
@@ -465,24 +465,24 @@ public:
 
 private:
     // FormulaCompiler
-    virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const;
-    virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
-    virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
-    virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const;
-    virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const;
+    virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const SAL_OVERRIDE;
+    virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const SAL_OVERRIDE;
+    virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const SAL_OVERRIDE;
+    virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const SAL_OVERRIDE;
+    virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const SAL_OVERRIDE;
 
-    virtual bool HandleExternalReference(const formula::FormulaToken& _aToken);
-    virtual bool HandleRange();
-    virtual bool HandleSingleRef();
-    virtual bool HandleDbData();
+    virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) SAL_OVERRIDE;
+    virtual bool HandleRange() SAL_OVERRIDE;
+    virtual bool HandleSingleRef() SAL_OVERRIDE;
+    virtual bool HandleDbData() SAL_OVERRIDE;
 
-    virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef );
-    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const;
-    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const;
-    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const;
-    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP) const;
-    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const;
-    virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
+    virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef ) SAL_OVERRIDE;
+    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const SAL_OVERRIDE;
+    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void LocalizeString( OUString& rName ) const SAL_OVERRIDE;   // modify rName - input: exact name
 
     /// Access the CharTable flags
     inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )

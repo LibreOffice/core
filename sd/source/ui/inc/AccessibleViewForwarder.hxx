@@ -57,7 +57,7 @@ public:
         @return
             Return <true/> if the view forwarder is valid and <false/> else.
      */
-    virtual bool IsValid (void) const;
+    virtual bool IsValid (void) const SAL_OVERRIDE;
 
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
@@ -65,7 +65,7 @@ public:
         @return
             The rectangle of the visible part of the document.
      */
-    virtual Rectangle GetVisibleArea() const;
+    virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
 
     /** Transform the specified point from internal coordinates to an
         absolute screen position.
@@ -77,7 +77,7 @@ public:
             The same point but in screen coordinates relative to the upper
             left corner of the (current) screen.
      */
-    virtual Point LogicToPixel (const Point& rPoint) const;
+    virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
 
     /** Transform the specified size from internal coordinates to a screen
     * position.
@@ -88,7 +88,7 @@ public:
         @return
             The same size but in screen coordinates.
      */
-    virtual Size LogicToPixel (const Size& rSize) const;
+    virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
 
     /** Transform the specified point from absolute screen coordinates to
         internal coordinates.
@@ -100,7 +100,7 @@ public:
         @return
             The same point but in internal coordinates.
      */
-    virtual Point PixelToLogic (const Point& rPoint) const;
+    virtual Point PixelToLogic (const Point& rPoint) const SAL_OVERRIDE;
 
     /** Transform the specified Size from screen coordinates to internal
         coordinates.
@@ -111,7 +111,7 @@ public:
         @return
             The same size but in internal coordinates.
      */
-    virtual Size PixelToLogic (const Size& rSize) const;
+    virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
 protected:
     SdrPaintView* mpView;

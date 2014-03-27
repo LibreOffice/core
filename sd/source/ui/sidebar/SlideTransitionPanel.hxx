@@ -35,12 +35,12 @@ public:
     virtual ~SlideTransitionPanel (void);
 
     // ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
 protected:
     virtual ::Window* CreateWrappedControl (
         ::Window* pParentWindow,
-        ViewShellBase& rViewShellBase);
+        ViewShellBase& rViewShellBase) SAL_OVERRIDE;
 
 private:
     cssu::Reference<css::frame::XFrame> mxFrame;

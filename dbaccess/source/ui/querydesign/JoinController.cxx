@@ -91,12 +91,12 @@ public:
 
     // IAddTableDialogContext
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                    getConnection() const;
-    virtual bool    allowViews() const;
-    virtual bool    allowQueries() const;
-    virtual bool    allowAddition() const;
-    virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName );
-    virtual void    onWindowClosing( const Window* _pWindow );
+                    getConnection() const SAL_OVERRIDE;
+    virtual bool    allowViews() const SAL_OVERRIDE;
+    virtual bool    allowQueries() const SAL_OVERRIDE;
+    virtual bool    allowAddition() const SAL_OVERRIDE;
+    virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName ) SAL_OVERRIDE;
+    virtual void    onWindowClosing( const Window* _pWindow ) SAL_OVERRIDE;
 
 private:
     OJoinTableView* getTableView() const;

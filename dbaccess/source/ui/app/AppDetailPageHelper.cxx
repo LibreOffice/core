@@ -130,10 +130,10 @@ namespace
         DECL_LINK(OnDisableInput, void*);
         void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt);
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
         OTablePreviewWindow( Window* pParent, WinBits nStyle = 0 );
-        virtual bool Notify( NotifyEvent& rNEvt );
+        virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
     OTablePreviewWindow::OTablePreviewWindow(Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {

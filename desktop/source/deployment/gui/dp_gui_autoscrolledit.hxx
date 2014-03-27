@@ -35,7 +35,7 @@ public:
     ~AutoScrollEdit();
 
     using ExtMultiLineEdit::Notify;
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 } // namespace dp_gui

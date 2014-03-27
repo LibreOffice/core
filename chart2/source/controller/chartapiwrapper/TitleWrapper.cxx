@@ -54,11 +54,11 @@ public:
     virtual ~WrappedTitleStringProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException);
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
     virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
 
 protected:
     Reference< uno::XComponentContext > m_xContext;

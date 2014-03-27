@@ -70,16 +70,16 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     OUString                m_sSortAlgorithm;
 
 protected:
-virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
     ~SwAuthorityFieldType();
 
-    virtual SwFieldType* Copy()    const;
+    virtual SwFieldType* Copy()    const SAL_OVERRIDE;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) SAL_OVERRIDE;
 
     inline void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
@@ -146,8 +146,8 @@ class SwAuthorityField : public SwField
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;
 
-    virtual OUString    Expand() const;
-    virtual SwField*    Copy() const;
+    virtual OUString    Expand() const SAL_OVERRIDE;
+    virtual SwField*    Copy() const SAL_OVERRIDE;
 
 public:
     /// For internal use only, in general continue using ExpandField() instead.
@@ -159,15 +159,15 @@ public:
 
     OUString            GetFieldText(ToxAuthorityField eField) const;
 
-    virtual void        SetPar1(const OUString& rStr);
-    virtual SwFieldType* ChgTyp( SwFieldType* );
+    virtual void        SetPar1(const OUString& rStr) SAL_OVERRIDE;
+    virtual SwFieldType* ChgTyp( SwFieldType* ) SAL_OVERRIDE;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) SAL_OVERRIDE;
 
     sal_IntPtr          GetHandle() const       { return m_nHandle; }
 
-    virtual OUString GetDescription() const;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
 // --- inlines -----------------------------------------------------------

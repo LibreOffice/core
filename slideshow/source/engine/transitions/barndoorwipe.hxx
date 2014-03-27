@@ -35,7 +35,7 @@ class BarnDoorWipe : public ParametricPolyPolygon
 public:
     BarnDoorWipe( bool doubled = false )
         : m_unitRect( createUnitRect() ), m_doubled(doubled) {}
-    virtual ::basegfx::B2DPolyPolygon operator()( double x );
+    virtual ::basegfx::B2DPolyPolygon operator()( double x ) SAL_OVERRIDE;
 private:
     const ::basegfx::B2DPolygon m_unitRect;
     const bool m_doubled;

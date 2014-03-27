@@ -288,18 +288,18 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 protected:
     using Window::Resize;
     virtual void    Resize( const Size& rSize );
-    virtual void    PrePaint();
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    KeyInput(const KeyEvent& rKEvt);
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    PrePaint() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
-    virtual void    RequestHelp( const HelpEvent& rEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    RequestHelp( const HelpEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
 public:
     enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
@@ -311,15 +311,15 @@ public:
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();
     void flushOverlayManager();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void            FakeButtonUp();
 

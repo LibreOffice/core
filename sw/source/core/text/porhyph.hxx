@@ -32,13 +32,13 @@ public:
     {
         SetWhichPor( POR_HYPH );
     }
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -55,12 +55,12 @@ public:
         SetWhichPor( POR_HYPHSTR );
     }
 
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -75,20 +75,20 @@ class SwSoftHyphPortion : public SwHyphPortion
 
 public:
     SwSoftHyphPortion();
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    virtual SwLinePortion *Compress();
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual void FormatEOL( SwTxtFormatInfo &rInf );
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual SwLinePortion *Compress() SAL_OVERRIDE;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     inline void SetExpand( const bool bNew ) { bExpand = bNew; }
     bool IsExpand() const { return bExpand; }
 
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -99,8 +99,8 @@ class SwSoftHyphStrPortion : public SwHyphStrPortion
 {
 public:
     SwSoftHyphStrPortion( const OUString &rStr );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    OUTPUT_OPERATOR
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

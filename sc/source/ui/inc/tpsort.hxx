@@ -56,18 +56,18 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 
-    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation);
-    virtual void SetSizePixel(const Size& rAllocation);
-    virtual void SetPosPixel(const Point& rAllocPos);
+    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) SAL_OVERRIDE;
+    virtual void SetSizePixel(const Size& rAllocation) SAL_OVERRIDE;
+    virtual void SetPosPixel(const Point& rAllocPos) SAL_OVERRIDE;
 
 protected:
-    virtual void        ActivatePage    ( const SfxItemSet& rSet );
+    virtual void        ActivatePage    ( const SfxItemSet& rSet ) SAL_OVERRIDE;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = 0) SAL_OVERRIDE;
 
 private:
     OUString            aStrUndefined;
@@ -118,14 +118,14 @@ public:
 #define SfxTabPage ::SfxTabPage
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 
 protected:
-    virtual void        ActivatePage    ( const SfxItemSet& rSet );
+    virtual void        ActivatePage    ( const SfxItemSet& rSet ) SAL_OVERRIDE;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = 0) SAL_OVERRIDE;
 
 private:
 

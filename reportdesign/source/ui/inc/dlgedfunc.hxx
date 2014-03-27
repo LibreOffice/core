@@ -126,9 +126,9 @@ public:
     DlgEdFuncInsert( OReportSection* pParent );
     ~DlgEdFuncInsert();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 };
 
 
@@ -141,9 +141,9 @@ public:
     DlgEdFuncSelect( OReportSection* pParent );
     ~DlgEdFuncSelect();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, sal_Bool bQuickDrag);
 };

@@ -39,29 +39,29 @@ public:
     virtual ~DrawCommandDispatch();
 
     // late initialisation, especially for adding as listener
-    virtual void initialize();
+    virtual void initialize() SAL_OVERRIDE;
 
-    virtual bool isFeatureSupported( const OUString& rCommandURL );
+    virtual bool isFeatureSupported( const OUString& rCommandURL ) SAL_OVERRIDE;
 
     void setAttributes( SdrObject* pObj );
     void setLineEnds( SfxItemSet& rAttr );
 
 protected:
     // WeakComponentImplHelperBase
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // state of a feature
-    virtual FeatureState getState( const OUString& rCommand );
+    virtual FeatureState getState( const OUString& rCommand ) SAL_OVERRIDE;
 
     // execute a feature
-    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
+    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) SAL_OVERRIDE;
 
     // all the features which should be handled by this class
-    virtual void describeSupportedFeatures();
+    virtual void describeSupportedFeatures() SAL_OVERRIDE;
 
 private:
     void setInsertObj( sal_uInt16 eObj );

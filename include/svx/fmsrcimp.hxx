@@ -47,8 +47,8 @@ class FmSearchThread : public ::osl::Thread
     FmSearchEngine*     m_pEngine;
     Link                m_aTerminationHdl;
 
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 public:
     FmSearchThread(FmSearchEngine* pEngine) : m_pEngine(pEngine) { }
@@ -101,10 +101,10 @@ public:
     //  virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
 
     // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void DisConnect();
 
@@ -138,21 +138,21 @@ namespace svxform {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >  m_xText;
     public:
         SimpleTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& _xText);
-        virtual OUString getCurrentText() const;
+        virtual OUString getCurrentText() const SAL_OVERRIDE;
     };
     class ListBoxWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >  m_xBox;
     public:
         ListBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >& _xBox);
-        virtual OUString getCurrentText() const;
+        virtual OUString getCurrentText() const SAL_OVERRIDE;
     };
     class CheckBoxWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >  m_xBox;
     public:
         CheckBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >& _xBox);
-        virtual OUString getCurrentText() const;
+        virtual OUString getCurrentText() const SAL_OVERRIDE;
     };
 }
 

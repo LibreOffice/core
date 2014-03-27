@@ -125,7 +125,7 @@ private:
         the factory working properly this method should not be necessary
         (and may be removed in the future.)
     */
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 } // end of namespace sd

@@ -45,7 +45,7 @@ public:
         Therefore this method always returns <FALSE/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } } // end of namespace sd::framework

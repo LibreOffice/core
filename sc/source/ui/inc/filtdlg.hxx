@@ -59,12 +59,12 @@ public:
                                  const SfxItemSet&  rArgSet );
                     ~ScFilterDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 
-    virtual bool    IsRefInputMode() const;
-    virtual void    SetActive();
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
+    virtual void    SetActive() SAL_OVERRIDE;
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
     void            SliderMoved();
     size_t          GetSliderPos();
     void            RefreshEditRow( size_t nOffset );
@@ -167,12 +167,12 @@ public:
                                         const SfxItemSet&   rArgSet );
                     ~ScSpecialFilterDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 
-    virtual bool    IsRefInputMode() const;
-    virtual void    SetActive();
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
+    virtual void    SetActive() SAL_OVERRIDE;
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
 private:
     ListBox*         pLbFilterArea;

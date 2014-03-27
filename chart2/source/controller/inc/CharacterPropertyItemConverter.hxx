@@ -53,13 +53,13 @@ public:
     virtual ~CharacterPropertyItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
-    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
+    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
+    virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const SAL_OVERRIDE;
 
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >  GetRefSizePropertySet() const;

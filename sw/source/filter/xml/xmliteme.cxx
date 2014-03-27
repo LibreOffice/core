@@ -76,7 +76,7 @@ public:
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap,
-                                    const SfxItemSet *pSet = NULL ) const;
+                                    const SfxItemSet *pSet = NULL ) const SAL_OVERRIDE;
 
     virtual void handleElementItem(
             SvXMLExport& rExport,
@@ -84,7 +84,7 @@ public:
             const SfxPoolItem& rItem,
             const SvXMLUnitConverter& rUnitConverter,
             const SfxItemSet& rSet,
-            sal_uInt16 nFlags ) const;
+            sal_uInt16 nFlags ) const SAL_OVERRIDE;
 
     inline void SetAbsWidth( sal_uInt32 nAbs );
 };

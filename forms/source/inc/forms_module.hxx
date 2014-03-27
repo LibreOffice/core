@@ -205,8 +205,8 @@ namespace FORMS_MODULE_NAMESPACE
     //= OMultiInstanceAutoRegistration or OOneInstanceAutoRegistration
 
     #define DECLARE_SERVICE_REGISTRATION( classname ) \
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
         \
         static  OUString SAL_CALL getImplementationName_Static(); \
         static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(); \

@@ -94,7 +94,7 @@ namespace dbp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
+        virtual void        initializePage() SAL_OVERRIDE;
     };
 
     struct OAccessRegulator;
@@ -151,7 +151,7 @@ namespace dbp
         virtual sal_Bool approveControl(sal_Int16 _nClassId) = 0;
 
         // ModalDialog overridables
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
     private:
         sal_Bool initContext();
@@ -162,7 +162,7 @@ namespace dbp
         void implDetermineShape();
 
         // made private. Not to be used by derived (or external) classes
-        virtual void ActivatePage();
+        virtual void ActivatePage() SAL_OVERRIDE;
     };
 
 

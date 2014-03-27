@@ -97,7 +97,7 @@ public:
 public:
     void    SetDecimalPos(sal_Int32 pos);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
     sal_Int32       m_nDecimalPos;
@@ -122,9 +122,9 @@ public:
 
     void    AddText( const OUString& part );
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     void    SetTruncate(sal_Bool bTrunc);
 

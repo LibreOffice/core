@@ -33,7 +33,19 @@ public:
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~CandleStickChartType();
 
-    APPHELPER_XSERVICEINFO_DECL()
+    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
+    virtual OUString SAL_CALL
+        getImplementationName()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& ServiceName )
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    static OUString getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString >
+        getSupportedServiceNames_Static();
 
     /// establish methods for factory instatiation
     APPHELPER_SERVICE_FACTORY_HELPER( CandleStickChartType )
@@ -43,37 +55,37 @@ protected:
 
     // ____ XChartType ____
     virtual OUString SAL_CALL getChartType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedOptionalRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
+        throw(::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
 
     // ____ OPropertySet ____
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // ____ OPropertySet ____
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception, std::exception);
+        throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } //  namespace chart

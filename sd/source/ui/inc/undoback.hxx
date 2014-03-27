@@ -47,10 +47,10 @@ public:
                                 const SfxItemSet& rItenSet);
     virtual                 ~SdBackgroundObjUndoAction();
 
-    virtual void            Undo();
-    virtual void            Redo();
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
 
-    virtual SdUndoAction*   Clone() const;
+    virtual SdUndoAction*   Clone() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX

@@ -45,9 +45,9 @@ public:
                             Window* pParent ,
                             WinBits nBits );
 
-    virtual void        Resize();
-    virtual void        Resizing( Size& rSize );
-    virtual bool        Close();
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual bool        Close() SAL_OVERRIDE;
 };
 
 #endif

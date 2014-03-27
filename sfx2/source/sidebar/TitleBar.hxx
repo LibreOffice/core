@@ -40,14 +40,14 @@ public:
     void SetTitle (const ::rtl::OUString& rsTitle);
     void SetIcon (const Image& rIcon);
 
-    virtual void Paint (const Rectangle& rUpdateArea);
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual void setPosSizePixel (
         long nX,
         long nY,
         long nWidth,
         long nHeight,
-        sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
+        sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
 
     ToolBox& GetToolBox (void);
     const ToolBox& GetToolBox (void) const;
@@ -62,7 +62,7 @@ protected:
     virtual sidebar::Paint GetBackgroundPaint (void) = 0;
     virtual Color GetTextColor (void) = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
-    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void);
+    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
 
 private:
     Image maIcon;

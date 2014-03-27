@@ -128,8 +128,8 @@ class SwNoteProps: public utl::ConfigItem
             return aNames;
         }
 
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 
 class SwPostItMgr: public SfxListener
@@ -193,7 +193,7 @@ class SwPostItMgr: public SfxListener
             const_iterator begin()  const { return mvPostItFlds.begin(); }
             const_iterator end()    const { return mvPostItFlds.end();  }
 
-            void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+            void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
             void LayoutPostIts();
             bool CalcRects();

@@ -32,7 +32,7 @@ class GalleryButton : public PushButton
 {
 private:
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
 public:
 
@@ -48,8 +48,8 @@ protected:
 
     void            InitSettings();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
 
@@ -101,11 +101,11 @@ private:
     void                    ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew );
 
     // Control
-    virtual void            Resize();
-    virtual void            GetFocus();
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual void            GetFocus() SAL_OVERRIDE;
 
     // SfxListener
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
                             DECL_LINK( ClickNewThemeHdl, void* );
                             DECL_LINK( SelectThemeHdl, void* );

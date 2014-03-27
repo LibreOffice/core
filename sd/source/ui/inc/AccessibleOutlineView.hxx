@@ -54,39 +54,39 @@ public:
 
     /** Complete the initialization begun in the constructor.
     */
-    virtual void Init (void);
+    virtual void Init (void) SAL_OVERRIDE;
 
 
     //=====  IAccessibleViewForwarderListener  ================================
 
     virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder);
+        const IAccessibleViewForwarder* pViewForwarder) SAL_OVERRIDE;
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL
         getAccessibleName(void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //=====  XAccessibleEventBroadcaster  ========================================
 
     virtual void SAL_CALL
         addAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
         removeAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XServiceInfo  ====================================================
 
@@ -94,19 +94,19 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL
         propertyChange (const ::com::sun::star::beans::PropertyChangeEvent& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 protected:
@@ -115,28 +115,28 @@ protected:
     virtual void FireEvent (const ::com::sun::star::accessibility::AccessibleEventObject& aEvent);
 
     // overridden to detect focus changes
-    virtual void Activated (void);
+    virtual void Activated (void) SAL_OVERRIDE;
 
     // overridden to detect focus changes
-    virtual void Deactivated (void);
+    virtual void Deactivated (void) SAL_OVERRIDE;
 
     // declared, but not defined
     AccessibleOutlineView( const AccessibleOutlineView& );
     AccessibleOutlineView& operator= ( const AccessibleOutlineView& );
 
     // This method is called from the component helper base class while disposing.
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString
         CreateAccessibleName ()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Create an accessible description that contains the current
     /// view mode.
     virtual OUString
         CreateAccessibleDescription ()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
 

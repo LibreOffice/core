@@ -25,7 +25,7 @@
 class SW_DLLPUBLIC SwWebView: public SwView
 {
 protected:
-    virtual void    SelectShell();
+    virtual void    SelectShell() SAL_OVERRIDE;
 public:
 
     SFX_DECL_VIEWFACTORY(SwWebView);

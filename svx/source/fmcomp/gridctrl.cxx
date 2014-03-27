@@ -92,10 +92,10 @@ public:
 
 private:
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException, std::exception )
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException, std::exception ) SAL_OVERRIDE
     {
     }
-    virtual void SAL_CALL rowsChanged(const ::com::sun::star::sdb::RowsChangeEvent& i_aEvt) throw ( RuntimeException, std::exception )
+    virtual void SAL_CALL rowsChanged(const ::com::sun::star::sdb::RowsChangeEvent& i_aEvt) throw ( RuntimeException, std::exception ) SAL_OVERRIDE
     {
         if ( i_aEvt.Action == RowChangeAction::UPDATE )
         {
@@ -133,7 +133,7 @@ public:
     GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& xField, sal_uInt16 _nId);
     virtual ~GridFieldValueListener();
 
-    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException );
+    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException ) SAL_OVERRIDE;
 
     void suspend() { ++m_nSuspended; }
     void resume() { --m_nSuspended; }
@@ -198,7 +198,7 @@ public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId = -1);
     virtual ~DisposeListenerGridBridge();
 
-    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) { m_rParent.disposing(_nId, _rEvent); }
+    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) SAL_OVERRIDE { m_rParent.disposing(_nId, _rEvent); }
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
@@ -258,7 +258,7 @@ public:
     void suspend() { ++m_nSuspended; }
     void resume() { --m_nSuspended; }
 
-    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException );
+    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException ) SAL_OVERRIDE;
 };
 
 FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)

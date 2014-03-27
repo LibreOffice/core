@@ -101,11 +101,11 @@ public:
 
 protected:
     virtual sal_uInt16 DetermineInsertPosition (
-        const SdTransferable& rTransferable);
+        const SdTransferable& rTransferable) SAL_OVERRIDE;
 
     virtual sal_uInt16 InsertSlides (
         const SdTransferable& rTransferable,
-        sal_uInt16 nInsertPosition);
+        sal_uInt16 nInsertPosition) SAL_OVERRIDE;
 
 private:
     SlideSorter& mrSlideSorter;

@@ -201,11 +201,11 @@ namespace
         ~DelayedFileDeletion( );
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException, std::exception);
-        virtual void SAL_CALL notifyClosing( const EventObject& _rSource ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL notifyClosing( const EventObject& _rSource ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         void implTakeOwnership( );

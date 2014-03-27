@@ -54,16 +54,16 @@ public:
         const cssu::Reference<css::ui::XSidebar>& rxSidebar);
 
     virtual void DataChanged(
-        const DataChangedEvent& rEvent);
+        const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext aContext);
+        const ::sfx2::sidebar::EnumContext aContext) SAL_OVERRIDE;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) SAL_OVERRIDE;
 
     SfxBindings* GetBindings();
 

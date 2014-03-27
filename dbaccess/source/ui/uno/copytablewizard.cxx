@@ -149,8 +149,8 @@ namespace dbaui
     {
     public:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception);
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static methods
         static Sequence< OUString >  getSupportedServiceNames_Static(void) throw( RuntimeException );
@@ -158,30 +158,30 @@ namespace dbaui
         static Reference< XInterface >      Create( const Reference< XMultiServiceFactory >& );
 
         // XCopyTableWizard
-        virtual ::sal_Int16 SAL_CALL getOperation() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException, std::exception);
-        virtual OUString SAL_CALL getDestinationTableName() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException, std::exception);
-        virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException, std::exception);
-        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException, std::exception);
-        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception);
+        virtual ::sal_Int16 SAL_CALL getOperation() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getDestinationTableName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setDestinationTableName( const OUString& _destinationTableName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Optional< OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setCreatePrimaryKey( const Optional< OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XCopyTableWizard::XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException, std::exception);
-        virtual ::sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::sal_Int16 SAL_CALL execute(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception);
+        virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
     public:
         ::osl::Mutex&   getMutex() { return m_aMutex; }
@@ -192,8 +192,8 @@ namespace dbaui
         ~CopyTableWizard();
 
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog( Window* _pParent );
-        virtual void executedDialog( sal_Int16 _nExecutionResult );
+        virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;
+        virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
 
     private:
         /// ensures our current attribute values are reflected in the dialog

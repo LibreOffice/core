@@ -258,7 +258,7 @@ public:
 
     ///=====  SfxListener  =====================================================
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     ///=====  IAccessibleParent  ===============================================
 
@@ -267,16 +267,16 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException);
+    )   throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     virtual  ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>
         GetAccessibleCaption (const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& xShape)
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
 

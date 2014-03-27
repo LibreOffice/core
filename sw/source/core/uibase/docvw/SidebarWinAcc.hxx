@@ -39,7 +39,7 @@ class SidebarWinAccessible : public VCLXWindow
         virtual ~SidebarWinAccessible();
 
         virtual com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext >
-                CreateAccessibleContext();
+                CreateAccessibleContext() SAL_OVERRIDE;
 
         void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
 

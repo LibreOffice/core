@@ -164,13 +164,13 @@ public:
     SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
     ~SwMailDispatcherListener_Impl();
 
-    virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher);
-    virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher);
-    virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher);
+    virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;
+    virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;
+    virtual void idle(::rtl::Reference<MailDispatcher> xMailDispatcher) SAL_OVERRIDE;
     virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher,
-                uno::Reference< mail::XMailMessage> xMailMessage);
+                uno::Reference< mail::XMailMessage> xMailMessage) SAL_OVERRIDE;
     virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher,
-                uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage);
+                uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) SAL_OVERRIDE;
 
     static void DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage );
 };

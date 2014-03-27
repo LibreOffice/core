@@ -39,28 +39,28 @@ public:
     void clear();
 
     //from base class Window:
-    virtual void PrePaint();
-    virtual void Paint( const Rectangle& rRect );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void MouseMove( const MouseEvent& rMEvt );
-    virtual void Tracking( const TrackingEvent& rTEvt );
-    virtual void MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void Resize();
-    virtual void Activate();
-    virtual void Deactivate();
-    virtual void GetFocus();
-    virtual void LoseFocus();
-    virtual void Command( const CommandEvent& rCEvt );
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void RequestHelp( const HelpEvent& rHEvt );
+    virtual void PrePaint() SAL_OVERRIDE;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     void ForceInvalidate();
-    virtual void Invalidate( sal_uInt16 nFlags = 0 );
-    virtual void Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    virtual void Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 );
+    virtual void Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+    virtual void Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
 private:
     WindowController*    m_pWindowController;

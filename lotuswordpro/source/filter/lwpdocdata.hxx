@@ -179,8 +179,8 @@ private:
     OUString TimeToOUString(LtTm& dt);
 
 public:
-    void Read();
-    void Parse(IXFStream *pOutputStream);
+    void Read() SAL_OVERRIDE;
+    void Parse(IXFStream *pOutputStream) SAL_OVERRIDE;
 };
 #endif
 

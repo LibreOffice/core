@@ -49,11 +49,11 @@ public:
     virtual ~NavigatorWrapper (void);
 
     // Control
-    virtual void Resize (void);
-    virtual void GetFocus (void);
+    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void GetFocus (void) SAL_OVERRIDE;
 
     // From ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
 private:
     ViewShellBase& mrViewShellBase;

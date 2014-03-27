@@ -46,27 +46,27 @@ public:
     //=====  XAccessibleImage  ================================================
 
     OUString SAL_CALL getAccessibleImageDescription (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Int32 SAL_CALL getAccessibleImageHeight (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Int32 SAL_CALL getAccessibleImageWidth (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XInterface  ======================================================
 
     virtual com::sun::star::uno::Any SAL_CALL
         queryInterface (const com::sun::star::uno::Type & rType)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
         acquire (void)
-        throw ();
+        throw () SAL_OVERRIDE;
 
     virtual void SAL_CALL
         release (void)
-        throw ();
+        throw () SAL_OVERRIDE;
 
     //=====  XServiceInfo  ====================================================
 
@@ -74,29 +74,29 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //=====  XTypeProvider  ===================================================
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString
         CreateAccessibleBaseName ()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
         CreateAccessibleDescription ()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
     /** Don't use the default constructor.  Use the public constructor that

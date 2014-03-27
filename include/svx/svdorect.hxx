@@ -48,8 +48,8 @@ private:
     friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
     XPolygon*                   mpXPoly;
 
@@ -61,7 +61,7 @@ protected:
     // Instanz generiert (new) und an mpXPoly zugewiesen werden.
     virtual void RecalcXPoly();
     const XPolygon& GetXPoly() const;
-    virtual void           RestGeoData(const SdrObjGeoData& rGeo);
+    virtual void           RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -79,46 +79,46 @@ public:
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
     virtual ~SdrRectObj();
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const SAL_OVERRIDE;
 
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 
-    virtual SdrRectObj* Clone() const;
-    virtual void RecalcSnapRect();
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
+    virtual SdrRectObj* Clone() const SAL_OVERRIDE;
+    virtual void RecalcSnapRect() SAL_OVERRIDE;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag);
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag) SAL_OVERRIDE;
+    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const SAL_OVERRIDE;
 
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer() const;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual Pointer GetCreatePointer() const SAL_OVERRIDE;
 
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
+    virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
 
-    virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
-    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual bool DoMacro(const SdrObjMacroHitRec& rRec) SAL_OVERRIDE;
+    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
 
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
-    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const SAL_OVERRIDE;
+    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const SAL_OVERRIDE;
 
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SVDORECT_HXX

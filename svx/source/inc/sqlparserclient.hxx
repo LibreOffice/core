@@ -45,7 +45,7 @@ namespace svxform
     protected:
         OSQLParserClient(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-        virtual bool ensureLoaded() const;
+        virtual bool ensureLoaded() const SAL_OVERRIDE;
 
     protected:
         inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(

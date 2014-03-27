@@ -51,10 +51,10 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual void        FillUserData();
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        FillUserData() SAL_OVERRIDE;
+    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     /// Shift-ListBox activation
     void                ShowSelector();
@@ -64,9 +64,9 @@ public:
     void                ShowParaControl(sal_Bool bCharOnly = sal_False);
 
     void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );

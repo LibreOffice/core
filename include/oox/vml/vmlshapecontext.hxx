@@ -48,7 +48,7 @@ public:
                             Drawing& rDrawing );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     Drawing&            mrDrawing;
@@ -65,9 +65,9 @@ public:
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const OUString& rChars );
-    virtual void        onEndElement();
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void        onEndElement() SAL_OVERRIDE;
 
 private:
     ClientData&         mrClientData;
@@ -101,7 +101,7 @@ public:
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     /** Processes the 'style' attribute. */
@@ -125,7 +125,7 @@ public:
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     /** Processes the 'points' attribute. */
@@ -159,7 +159,7 @@ public:
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     ShapeContainer&     mrShapes;
@@ -176,7 +176,7 @@ public:
                             RectangleShape& rShape );
 
     virtual ::oox::core::ContextHandlerRef
-                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+                        onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 
 

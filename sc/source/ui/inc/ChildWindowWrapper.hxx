@@ -59,7 +59,7 @@ public:
         SfxChildWindow::RegisterChildWindow(pModule, pFactory);
     }
 
-    virtual SfxChildWinInfo GetInfo() const
+    virtual SfxChildWinInfo GetInfo() const SAL_OVERRIDE
     {
         SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
         ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );

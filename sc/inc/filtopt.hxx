@@ -36,8 +36,8 @@ class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 public:
             ScFilterOptions();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
-    virtual void    Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Commit() SAL_OVERRIDE;
 
     bool        GetWK3Flag() const          { return bWK3Flag; }
     double      GetExcelColScale() const    { return fExcelColScale; }

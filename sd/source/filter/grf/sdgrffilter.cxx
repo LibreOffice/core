@@ -108,7 +108,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun:
     sal_uInt16 GetErrorCode() const { return nFilterError; };
 
     virtual void SAL_CALL   handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& )
-                                throw( com::sun::star::uno::RuntimeException, std::exception );
+                                throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 SdGRFFilter_ImplInteractionHdl::~SdGRFFilter_ImplInteractionHdl()

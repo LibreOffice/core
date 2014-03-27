@@ -168,20 +168,20 @@ namespace pcr
         */
         void setNotificationMode( NotifcationMode _eMode );
 
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     protected:
         ~PropertyControlContext_Impl();
 
         // XPropertyControlObserver
-        virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         // XPropertyControlContext
-        virtual void SAL_CALL activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // IEventProcessor
-        virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
+        virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) SAL_OVERRIDE;
 
     private:
         /** processes the given event, i.e. notifies it to our IControlContext

@@ -144,13 +144,13 @@ public:
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual Size    GetOptimalSize() const;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    virtual void    RecalcAll();
-    virtual void    selectEntry( const long nPos );
+    virtual void    RecalcAll() SAL_OVERRIDE;
+    virtual void    selectEntry( const long nPos ) SAL_OVERRIDE;
 
     void            enableButtons( bool bEnable );
 };

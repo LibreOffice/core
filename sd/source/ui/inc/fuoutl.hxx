@@ -43,7 +43,7 @@ class FuOutline
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
+    virtual sal_Bool Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
 
 protected:
     FuOutline (

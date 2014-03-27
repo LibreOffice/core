@@ -219,7 +219,7 @@ public:
     /** Called when a new UNO shape has been inserted into the draw page. */
     virtual void        notifyShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) SAL_OVERRIDE;
 };
 
 

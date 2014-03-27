@@ -185,19 +185,19 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper2<
 
         //  XComponent
 
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
         //  XEventListener
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
         // XLayoutManagerEventListener
 
-        virtual void SAL_CALL layoutEvent( const ::com::sun::star::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const ::com::sun::star::uno::Any& aInfo ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL layoutEvent( const ::com::sun::star::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const ::com::sun::star::uno::Any& aInfo ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         sal_Bool                                                                m_bHasFrame;
@@ -334,9 +334,9 @@ class SfxFrameWorkWin_Impl : public SfxWorkWindow
     SfxFrame*           pFrame;
 public:
                         SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
-    virtual void        ArrangeChildren_Impl( sal_Bool bForce = sal_True );
-    virtual void        UpdateObjectBars_Impl();
-    virtual Rectangle   GetTopRect_Impl();
+    virtual void        ArrangeChildren_Impl( sal_Bool bForce = sal_True ) SAL_OVERRIDE;
+    virtual void        UpdateObjectBars_Impl() SAL_OVERRIDE;
+    virtual Rectangle   GetTopRect_Impl() SAL_OVERRIDE;
 };
 
 

@@ -127,7 +127,7 @@ public:
         m_nStartValue = start;
     }
 
-    virtual void ToXml(IXFStream *pStrm)
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE
     {
         IXFAttrList *pAttrList = pStrm->GetAttrList();
 

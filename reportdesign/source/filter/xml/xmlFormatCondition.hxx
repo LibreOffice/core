@@ -40,7 +40,7 @@ namespace rptxml
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition >& _xComponent
                     );
         virtual ~OXMLFormatCondition();
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
     };
 
 } // namespace rptxml

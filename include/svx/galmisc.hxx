@@ -114,7 +114,7 @@ public:
 
     virtual                 ~SgaIMapInfo() {};
 
-    virtual SdrObjUserData* Clone( SdrObject* ) const
+    virtual SdrObjUserData* Clone( SdrObject* ) const SAL_OVERRIDE
                             {
                                 SgaIMapInfo* pInfo = new SgaIMapInfo;
                                 pInfo->aImageMap = aImageMap;
@@ -175,11 +175,11 @@ protected:
     void                            InitData( bool bLazy );
 
     // TransferableHelper
-    virtual void                    AddSupportedFormats();
-    virtual bool                    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual bool                    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void                    DragFinished( sal_Int8 nDropAction );
-    virtual void                    ObjectReleased();
+    virtual void                    AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool                    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool                    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual void                    DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
+    virtual void                    ObjectReleased() SAL_OVERRIDE;
 
     void                            CopyToClipboard( Window* pWindow );
     void                            StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,

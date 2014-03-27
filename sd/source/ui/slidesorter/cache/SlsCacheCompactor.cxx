@@ -46,10 +46,10 @@ public:
         : CacheCompactor(rCache, nMaximalCacheSize)
     {}
 
-    virtual void RequestCompaction (void) { /* Ignored */ };
+    virtual void RequestCompaction (void) SAL_OVERRIDE { /* Ignored */ };
 
 protected:
-    virtual void Run (void) { /* Do nothing */ };
+    virtual void Run (void) SAL_OVERRIDE { /* Do nothing */ };
 };
 
 
@@ -71,7 +71,7 @@ public:
         const ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor);
 
 protected:
-    virtual void Run (void);
+    virtual void Run (void) SAL_OVERRIDE;
 
 private:
     ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>  mpCompressor;

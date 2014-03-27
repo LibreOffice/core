@@ -217,7 +217,7 @@ namespace svx
             const PseudoRubyText::RubyPosition _ePosition );
 
     protected:
-        virtual void    Paint( const Rectangle& _rRect );
+        virtual void    Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
     };
 
 

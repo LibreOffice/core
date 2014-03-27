@@ -58,11 +58,11 @@ public:
     ScXMLSourceDlg(
         SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc);
 
-    virtual bool IsRefInputMode() const;
-    virtual void SetReference(const ScRange& rRange, ScDocument* pDoc);
-    virtual void Deactivate();
-    virtual void SetActive();
-    virtual bool Close();
+    virtual bool IsRefInputMode() const SAL_OVERRIDE;
+    virtual void SetReference(const ScRange& rRange, ScDocument* pDoc) SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
+    virtual void SetActive() SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
 private:
 

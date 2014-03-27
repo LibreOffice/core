@@ -103,22 +103,22 @@ namespace dbaui
         void lateInit();
 
     protected:
-        virtual void Resize();
-        virtual Size GetOptimalSize() const;
-        virtual bool PreNotify(NotifyEvent& rNEvt );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual Size GetOptimalSize() const SAL_OVERRIDE;
+        virtual bool PreNotify(NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-        virtual bool IsTabAllowed(bool bForward) const;
+        virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
 
         virtual void Init(const TTableConnectionData::value_type& _pConnData);
-        virtual void Init() { ORelationControl_Base::Init(); }
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
-        virtual bool SeekRow( long nRow );
-        virtual bool SaveModified();
-        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
+        virtual void Init() SAL_OVERRIDE { ORelationControl_Base::Init(); }
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
+        virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
+        virtual bool SaveModified() SAL_OVERRIDE;
+        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
 
-        virtual void CellModified();
+        virtual void CellModified() SAL_OVERRIDE;
 
         DECL_LINK( AsynchDeactivate, void* );
     private:

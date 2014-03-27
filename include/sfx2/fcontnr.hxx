@@ -49,9 +49,9 @@ class SfxRefItem : public SfxPoolItem
 {
     SvRefBaseRef aRef;
 public:
-    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const
+    virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE
     {   return new SfxRefItem( *this ); }
-    virtual bool             operator==( const SfxPoolItem& rL) const
+    virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
     {   return ((SfxRefItem&)rL).aRef == aRef; }
     SfxRefItem( sal_uInt16 nWhichId, const SvRefBaseRef& rValue ) : SfxPoolItem( nWhichId )
     {   aRef = rValue; }

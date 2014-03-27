@@ -72,7 +72,7 @@ namespace dbaui
         bool                m_bHasMaxRowScan;
 
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
         SpecialSettingsPage(Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
@@ -80,13 +80,13 @@ namespace dbaui
         virtual ~SpecialSettingsPage();
 
         // OGenericAdministrationPage overridables
-        virtual void implInitControls (const SfxItemSet& _rSet, sal_Bool _bSaveValue );
+        virtual void implInitControls (const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
         void    impl_initBooleanSettings();
@@ -108,7 +108,7 @@ namespace dbaui
                     m_aControlDependencies;
 
     public:
-        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -117,13 +117,13 @@ namespace dbaui
         virtual ~GeneratedValuesPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnCheckBoxClick, CheckBox * );

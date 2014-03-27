@@ -44,7 +44,7 @@ namespace svx
         TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList );
 
     protected:
-        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage );
+        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) SAL_OVERRIDE;
     };
 
     class TextControlParaAttribDialog : public SfxTabDialog

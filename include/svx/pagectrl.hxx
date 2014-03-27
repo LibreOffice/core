@@ -71,7 +71,7 @@ private:
     OUString    aRightText;
 
 protected:
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void DrawPage( const Point& rPoint,
                            const bool bSecond,
@@ -154,7 +154,7 @@ public:
 
     void        ResetBackground();
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_PAGECTRL_HXX

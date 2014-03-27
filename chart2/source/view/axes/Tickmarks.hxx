@@ -69,8 +69,8 @@ class PureTickIter : public TickIter
 public:
     PureTickIter( ::std::vector< TickInfo >& rTickInfoVector );
     virtual ~PureTickIter();
-    virtual TickInfo* firstInfo();
-    virtual TickInfo* nextInfo();
+    virtual TickInfo* firstInfo() SAL_OVERRIDE;
+    virtual TickInfo* nextInfo() SAL_OVERRIDE;
 
 private:
     ::std::vector< TickInfo >& m_rTickVector;
@@ -125,7 +125,7 @@ public:
         , bool bIncludeFarAwayDistanceIfSo = false
         , bool bIncludeSpaceBetweenTickAndText = true ) const;
 
-    virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
+    virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const SAL_OVERRIDE;
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;

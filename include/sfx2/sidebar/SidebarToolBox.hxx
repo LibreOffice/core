@@ -48,11 +48,11 @@ public:
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
             ToolBoxItemBits nBits = 0,
             const Size& rRequestedSize = Size(),
-            sal_uInt16 nPos = TOOLBOX_APPEND);
+            sal_uInt16 nPos = TOOLBOX_APPEND) SAL_OVERRIDE;
 
-    virtual void Paint (const Rectangle& rRect);
+    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
 
-    virtual bool Notify (NotifyEvent& rEvent);
+    virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
     cssu::Reference<css::frame::XToolbarController> GetControllerForItemId (
         const sal_uInt16 nItemId) const;

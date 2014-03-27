@@ -20,13 +20,13 @@ public:
     GL3DBarChartDialogController();
     virtual ~GL3DBarChartDialogController();
 
-    virtual bool shouldShow_GL3DResourceGroup() const;
+    virtual bool shouldShow_GL3DResourceGroup() const SAL_OVERRIDE;
 
-    virtual OUString getName();
-    virtual Image getImage();
-    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
+    virtual OUString getName() SAL_OVERRIDE;
+    virtual Image getImage() SAL_OVERRIDE;
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const SAL_OVERRIDE;
 
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter ) SAL_OVERRIDE;
 };
 
 }

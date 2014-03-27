@@ -964,14 +964,14 @@ namespace pcr
         MultiLineEdit   m_aImplEdit;
 
     protected:
-        virtual void    Resize();
+        virtual void    Resize() SAL_OVERRIDE;
 
     public:
                         OMultilineFloatingEdit(Window* _pParen);
         MultiLineEdit*  getEdit() { return &m_aImplEdit; }
 
     protected:
-        virtual bool    PreNotify(NotifyEvent& _rNEvt);
+        virtual bool    PreNotify(NotifyEvent& _rNEvt) SAL_OVERRIDE;
     };
 
 

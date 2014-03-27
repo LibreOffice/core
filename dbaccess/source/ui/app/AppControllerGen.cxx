@@ -111,7 +111,7 @@ public:
     }
 
     // interface XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*Source*/ ) throw( RuntimeException, std::exception )
+    virtual void SAL_CALL disposing( const EventObject& /*Source*/ ) throw( RuntimeException, std::exception ) SAL_OVERRIDE
     {
         m_bClosed = true;
     }

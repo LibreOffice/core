@@ -48,7 +48,7 @@ private:
     friend class                SdrOutliner;
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
     Rectangle                   maSnapRect;
 
@@ -57,7 +57,7 @@ protected:
     sal_Int32 ImpGetLineWdt() const;
 
     /// Detects when a stylesheet is changed
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
     SdrAttrObj();
     virtual ~SdrAttrObj();
@@ -71,9 +71,9 @@ public:
     // Detects if Line != LineNone
     bool HasLine() const;
 
-    virtual const Rectangle& GetSnapRect() const;
+    virtual const Rectangle& GetSnapRect() const SAL_OVERRIDE;
 
-    virtual void SetModel(SdrModel* pNewModel);
+    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 };
 
 

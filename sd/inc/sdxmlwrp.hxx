@@ -42,7 +42,7 @@ public:
     virtual ~SdXMLFilter (void);
 
     sal_Bool        Import( ErrCode& nError );
-    sal_Bool        Export();
+    sal_Bool        Export() SAL_OVERRIDE;
 
 private:
     SdXMLFilterMode meFilterMode;

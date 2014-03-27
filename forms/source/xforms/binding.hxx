@@ -386,20 +386,20 @@ public:
 public:
 
     virtual Sequence_Type_t SAL_CALL getSupportedValueTypes()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsType( const Type_t& aType )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual Any_t SAL_CALL getValue( const Type_t& aType )
         throw( IncompatibleTypesException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setValue( const Any_t& aValue )
         throw( IncompatibleTypesException_t,
                InvalidBindingStateException_t,
                NoSupportException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -408,22 +408,22 @@ public:
 
 
     virtual sal_Int32 SAL_CALL getListEntryCount()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getListEntry( sal_Int32 nPosition )
         throw( IndexOutOfBoundsException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual StringSequence_t SAL_CALL getAllListEntries()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL addListEntryListener( const XListEntryListener_t& )
         throw( NullPointerException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeListEntryListener( const XListEntryListener_t&)
         throw( NullPointerException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -433,21 +433,21 @@ public:
 
     virtual sal_Bool SAL_CALL isValid(
         const Any_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL explainInvalid(
         const Any_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL addValidityConstraintListener(
         const XValidityConstraintListener_t& xListener )
         throw( NullPointerException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeValidityConstraintListener(
         const XValidityConstraintListener_t& xListener )
         throw( NullPointerException_t,
-               RuntimeException_t, std::exception );
+               RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -459,11 +459,11 @@ public:
 
     virtual void SAL_CALL addModifyListener(
         const XModifyListener_t& xListener )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeModifyListener(
         const XModifyListener_t& xListener )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -476,10 +476,10 @@ public:
 public:
 
     virtual OUString SAL_CALL getName()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setName( const OUString& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -490,7 +490,7 @@ public:
 
     virtual void SAL_CALL handleEvent(
         const XEvent_t& xEvent )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -499,7 +499,7 @@ public:
 
 
     virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -507,7 +507,7 @@ public:
 
 
     virtual XCloneable_t SAL_CALL createClone()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 };
 
 

@@ -264,7 +264,7 @@ class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 
 protected:
 
-    virtual uno::Reference < style::XStyle > Create();
+    virtual uno::Reference < style::XStyle > Create() SAL_OVERRIDE;
 
 public:
 
@@ -280,9 +280,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void Finish( bool bOverwrite );
+    virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( SwXMLTextStyleContext_Impl, XMLTextStyleContext );
@@ -440,7 +440,7 @@ protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
-                               const OUString& rValue );
+                               const OUString& rValue ) SAL_OVERRIDE;
 
     const SwXMLImport& GetSwImport() const
             { return (const SwXMLImport&)GetImport(); }
@@ -458,11 +458,11 @@ public:
             sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
-       virtual void CreateAndInsert( sal_Bool bOverwrite );
+       virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
@@ -722,17 +722,17 @@ protected:
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     // HACK
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-        sal_uInt16 nFamily ) const;
+        sal_uInt16 nFamily ) const SAL_OVERRIDE;
 
     virtual uno::Reference < container::XNameContainer >
-        GetStylesContainer( sal_uInt16 nFamily ) const;
-    virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
+        GetStylesContainer( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+    virtual OUString GetServiceName( sal_uInt16 nFamily ) const SAL_OVERRIDE;
     // HACK
 
 public:
@@ -746,9 +746,9 @@ public:
             sal_Bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
-    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
@@ -920,7 +920,7 @@ void SwXMLStylesContext_Impl::EndElement()
 class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
 {
 protected:
-    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
     const SwXMLImport& GetSwImport() const
@@ -935,7 +935,7 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLMasterStylesContext_Impl();
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );

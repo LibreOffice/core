@@ -100,7 +100,7 @@ class OfficeIPCThread : public salhelper::Thread
     virtual ~OfficeIPCThread();
 
     /// Working method which should be overridden
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
 
   public:
     enum Status
@@ -140,21 +140,21 @@ class OfficeIPCThreadController : public ::cppu::WeakImplHelper2<
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 }

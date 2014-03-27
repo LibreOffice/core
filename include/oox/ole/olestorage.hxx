@@ -65,7 +65,7 @@ private:
     void                initStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream );
 
     /** Returns true, if the object represents a valid storage. */
-    virtual bool        implIsStorage() const;
+    virtual bool        implIsStorage() const SAL_OVERRIDE;
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage.
 
@@ -73,24 +73,24 @@ private:
             This function is not implemented for binary OLE storages.
      */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                        implGetXStorage() const;
+                        implGetXStorage() const SAL_OVERRIDE;
 
     /** Returns the names of all elements of this storage. */
-    virtual void        implGetElementNames( ::std::vector< OUString >& orElementNames ) const;
+    virtual void        implGetElementNames( ::std::vector< OUString >& orElementNames ) const SAL_OVERRIDE;
 
     /** Opens and returns the specified sub storage from the storage. */
-    virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreateMissing );
+    virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreateMissing ) SAL_OVERRIDE;
 
     /** Opens and returns the specified input stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implOpenInputStream( const OUString& rElementName );
+                        implOpenInputStream( const OUString& rElementName ) SAL_OVERRIDE;
 
     /** Opens and returns the specified output stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        implOpenOutputStream( const OUString& rElementName );
+                        implOpenOutputStream( const OUString& rElementName ) SAL_OVERRIDE;
 
     /** Commits the current storage. */
-    virtual void        implCommit() const;
+    virtual void        implCommit() const SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

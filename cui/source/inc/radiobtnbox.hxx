@@ -33,9 +33,9 @@ private:
     Point               m_aCurMousePoint;
 
 protected:
-    virtual void        SetTabs();
-    virtual void        MouseButtonUp( const MouseEvent& _rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        SetTabs() SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
 public:
     SvxRadioButtonListBox(SvSimpleTableContainer& rParent, WinBits nBits);

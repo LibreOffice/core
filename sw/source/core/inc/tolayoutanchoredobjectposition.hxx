@@ -41,7 +41,7 @@ namespace objectpositioning
 
             /** calculate position for object
             */
-            virtual void CalcPosition();
+            virtual void CalcPosition() SAL_OVERRIDE;
 
             /** calculated relative position for object
             */

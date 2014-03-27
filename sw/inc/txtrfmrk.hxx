@@ -35,7 +35,7 @@ public:
     SwTxtRefMark( SwFmtRefMark& rAttr,
             sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
 
-    virtual sal_Int32* GetEnd();       // SwTxtAttr
+    virtual sal_Int32* GetEnd() SAL_OVERRIDE;       // SwTxtAttr
 
     // get and set TxtNode pointer
     inline const SwTxtNode& GetTxtNode() const;

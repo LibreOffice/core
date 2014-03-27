@@ -49,9 +49,9 @@ public:
         : Edit(pParent, nStyle)
         , bOnlyNumeric(false)
     {}
-    virtual void KeyInput(const KeyEvent& rKEvent);
-    virtual void Modify();
-    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual void KeyInput(const KeyEvent& rKEvent) SAL_OVERRIDE;
+    virtual void Modify() SAL_OVERRIDE;
+    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
 // class SvxProxyTabPage -------------------------------------------------
@@ -105,8 +105,8 @@ private:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 // #98647# class SvxScriptExecListBox ------------------------------------
@@ -119,7 +119,7 @@ public:
             :ListBox(pParent, rResId) {}
 
 protected:
-    virtual void RequestHelp( const HelpEvent& rHEvt );
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
 // class SvxSecurityTabPage ---------------------------------------------
@@ -170,13 +170,13 @@ private:
     virtual     ~SvxSecurityTabPage();
 
 protected:
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 class MozPluginTabPage : public SfxTabPage
@@ -195,8 +195,8 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 };
 
@@ -220,8 +220,8 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX

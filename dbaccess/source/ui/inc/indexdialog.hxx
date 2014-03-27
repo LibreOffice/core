@@ -69,7 +69,7 @@ namespace dbaui
         }
 
     protected:
-        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
     private:
         using SvTreeListBox::Select;
@@ -113,8 +113,8 @@ namespace dbaui
             );
         virtual ~DbaIndexDialog();
 
-        virtual void StateChanged( StateChangedType nStateChange );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         /** will be called whenthe id of the image list is needed.
             @param  _eBitmapSet
@@ -122,11 +122,11 @@ namespace dbaui
             @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const;
+        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const SAL_OVERRIDE;
 
         /** will be called when the controls need to be resized.
         */
-        virtual void resizeControls(const Size& _rDiff);
+        virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
 
     protected:
         void fillIndexList();

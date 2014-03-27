@@ -78,8 +78,8 @@ public:
 
     ScDocShell& getDocShell();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     /**
      * Basic performance regression test. Pick some actions that *should* take

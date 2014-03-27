@@ -131,9 +131,9 @@ private:
     public:
         DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc);
         virtual ~DataAccessInternal();
-        virtual bool getCurrent(Value& rValue);
-        virtual bool getFirst(Value& rValue);
-        virtual bool getNext(Value& rValue);
+        virtual bool getCurrent(Value& rValue) SAL_OVERRIDE;
+        virtual bool getFirst(Value& rValue) SAL_OVERRIDE;
+        virtual bool getNext(Value& rValue) SAL_OVERRIDE;
 
     private:
         void incBlock();
@@ -159,9 +159,9 @@ private:
     public:
         DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam);
         virtual ~DataAccessMatrix();
-        virtual bool getCurrent(Value& rValue);
-        virtual bool getFirst(Value& rValue);
-        virtual bool getNext(Value& rValue);
+        virtual bool getCurrent(Value& rValue) SAL_OVERRIDE;
+        virtual bool getFirst(Value& rValue) SAL_OVERRIDE;
+        virtual bool getNext(Value& rValue) SAL_OVERRIDE;
 
     private:
         bool isValidQuery(SCROW mnRow, const ScMatrix& rMat) const;

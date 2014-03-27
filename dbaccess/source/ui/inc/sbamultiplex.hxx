@@ -55,8 +55,8 @@ namespace dbaui
     public:
         OSbaWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
 
-        virtual void SAL_CALL acquire() throw() { m_rParent.acquire(); }
-        virtual void SAL_CALL release() throw() { m_rParent.release(); }
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { m_rParent.acquire(); }
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE { m_rParent.release(); }
     };
 
     // declaration of a listener multiplexer class
@@ -71,16 +71,16 @@ namespace dbaui
             ::osl::Mutex& rMutex);                                                          \
         DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject);                                    \
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(                        \
-            const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+            const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
                                                                                             \
         /* ::com::sun::star::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception);  \
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
 
     #define DECLARE_MULTIPLEXER_VOID_METHOD(methodname, eventtype)                          \
-        virtual void SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+        virtual void SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
 
     #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
-        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception);   \
+        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;   \
 
     #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
     /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators */    \
@@ -192,12 +192,12 @@ namespace dbaui
         classname( ::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex );                    \
         DECLARE_UNO3_DEFAULTS(classname, OSbaWeakSubObject);                                    \
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(                        \
-            const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception); \
+            const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
                                                                                             \
         /* ::com::sun::star::lang::XEventListener */                                        \
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception);  \
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
                                                                                             \
-        virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions;             \
+        virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions SAL_OVERRIDE;             \
                                                                                             \
     public:                                                                                 \
         void addInterface(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener);    \

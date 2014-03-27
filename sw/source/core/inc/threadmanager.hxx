@@ -51,8 +51,8 @@ class ThreadManager : public IThreadListenerOwner
         ~ThreadManager();
 
         // --> IThreadListenerOwner
-        virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
-        virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
+        virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef() SAL_OVERRIDE;
+        virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID ) SAL_OVERRIDE;
 
         /** initialization
 

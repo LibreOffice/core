@@ -44,13 +44,13 @@ public:
                   const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent);
 
 // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     inline operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () const
         { return (::com::sun::star::uno::XWeak *)this; }
@@ -192,7 +192,7 @@ public:
 // XTypeProvider helpers
 
 #define DECLARE_IMPLEMENTATION_ID( )    \
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);  \
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;  \
     static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId() \
 
 #define DECLARE_GETTYPES( ) \
@@ -251,9 +251,9 @@ public:
 
 // helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception); \
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(); \
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE; \
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE
 
 #define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname , baseclass1)  \
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception)  \

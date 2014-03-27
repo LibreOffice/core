@@ -51,7 +51,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
 
 private:
-    virtual void        attachMacro( const OUString& rMacroUrl );
+    virtual void        attachMacro( const OUString& rMacroUrl ) SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
@@ -70,7 +70,7 @@ public:
 protected:
     virtual void        finalizeXShape(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) SAL_OVERRIDE;
 
 private:
     OUString     maMacroName;
@@ -115,9 +115,9 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const OUString& rChars );
-    virtual void        onEndElement();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void        onEndElement() SAL_OVERRIDE;
 
 private:
     typedef ::std::auto_ptr< ShapeAnchor > ShapeAnchorRef;
@@ -140,7 +140,7 @@ public:
                             sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle );
 
 private:
-    virtual void        attachMacro( const OUString& rMacroUrl );
+    virtual void        attachMacro( const OUString& rMacroUrl ) SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxCtrlFormIC;
@@ -160,28 +160,28 @@ public:
     const ::oox::vml::ShapeBase* getNoteShape( const ::com::sun::star::table::CellAddress& rPos ) const;
 
     /** Filters cell note shapes. */
-    virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const;
+    virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const SAL_OVERRIDE;
 
     /** Returns additional base names for automatic shape name creation. */
-    virtual OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const;
+    virtual OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const SAL_OVERRIDE;
 
     /** Calculates the shape rectangle from a cell anchor string. */
     virtual bool        convertClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,
-                            const OUString& rShapeAnchor ) const;
+                            const OUString& rShapeAnchor ) const SAL_OVERRIDE;
 
     /** Creates a UNO control shape for legacy drawing controls. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsertClientXShape(
                             const ::oox::vml::ShapeBase& rShape,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const SAL_OVERRIDE;
 
     /** Updates the bounding box covering all shapes of this drawing. */
     virtual void        notifyXShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             const ::com::sun::star::awt::Rectangle& rShapeRect,
-                            const ::oox::vml::ShapeBase& rShape, bool bGroupChild );
+                            const ::oox::vml::ShapeBase& rShape, bool bGroupChild ) SAL_OVERRIDE;
 
 private:
     /** Converts the passed VML textbox text color to an OLE color. */
@@ -215,7 +215,7 @@ public:
                             const OUString& rFragmentPath );
 
 protected:
-    virtual void        finalizeImport();
+    virtual void        finalizeImport() SAL_OVERRIDE;
 };
 
 

@@ -47,8 +47,8 @@ public:
     virtual                 ~SfxPrintOptionsDialog();
 
     bool                    Construct();
-    virtual short           Execute();
-    virtual bool            Notify( NotifyEvent& rNEvt );
+    virtual short           Execute() SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     SfxTabPage*             GetTabPage() const { return pPage; }
     const SfxItemSet&       GetOptions() const { return *pOptions; }

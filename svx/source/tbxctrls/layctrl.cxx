@@ -82,12 +82,12 @@ public:
                                          const Reference< XFrame >& rFrame );
                             ~TableWindow();
 
-    void                    KeyInput( const KeyEvent& rKEvt );
-    virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void            Paint( const Rectangle& );
-    virtual void            PopupModeEnd();
-    virtual SfxPopupWindow* Clone() const;
+    void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void            PopupModeEnd() SAL_OVERRIDE;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
@@ -426,13 +426,13 @@ private:
 public:
                             ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
 
-    void                    KeyInput( const KeyEvent& rKEvt );
-    virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void            Paint( const Rectangle& );
-    virtual void            PopupModeEnd();
-    virtual SfxPopupWindow* Clone() const;
+    void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void            Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void            PopupModeEnd() SAL_OVERRIDE;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 
     sal_uInt16                  GetColCount() const { return (sal_uInt16)nCol; }
 };

@@ -78,7 +78,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class ClientBox:
@@ -137,11 +137,11 @@ public:
                     ClientBox( Window* pParent, WinBits nStyle );
                    ~ClientBox();
 
-    void    MouseButtonDown( const MouseEvent& rMEvt );
-    void    Paint( const Rectangle &rPaintRect );
-    void    Resize();
-    Size    GetOptimalSize() const;
-    bool    Notify( NotifyEvent& rNEvt );
+    void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;
+    void    Resize() SAL_OVERRIDE;
+    Size    GetOptimalSize() const SAL_OVERRIDE;
+    bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }

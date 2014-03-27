@@ -114,9 +114,9 @@ public:
     SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
     // virtual methods for the option dialog
-    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
-    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 protected:
 
@@ -133,7 +133,7 @@ protected:
     */
     OutputDevice*           mpVirtualRefDevice;
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 private:
     SfxFrame* ExecuteNewDocument( SfxRequest& rReq );

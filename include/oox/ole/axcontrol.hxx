@@ -401,8 +401,8 @@ public:
                             sal_uInt32 nDataPartId5, sal_uInt32 nDataPartId6, sal_uInt16 nVersion,
                             bool bCommonPart, bool bComplexPart );
 
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 
 protected:
     virtual void        importControlData( BinaryInputStream& rInStrm ) = 0;
@@ -443,11 +443,11 @@ class ComCtlScrollBarModel : public ComCtlModelBase
 public:
     explicit            ComCtlScrollBarModel( sal_uInt16 nVersion );
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 
 protected:
-    virtual void        importControlData( BinaryInputStream& rInStrm );
+    virtual void        importControlData( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt32          mnScrollBarFlags;   ///< Special flags for scroll bar model.
@@ -466,11 +466,11 @@ class ComCtlProgressBarModel : public ComCtlModelBase
 public:
     explicit            ComCtlProgressBarModel( sal_uInt16 nVersion );
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 
 protected:
-    virtual void        importControlData( BinaryInputStream& rInStrm );
+    virtual void        importControlData( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
 
 private:
     float               mfMin;              ///< Minimum of the value range.
@@ -487,7 +487,7 @@ class OOX_DLLPUBLIC AxControlModelBase : public ControlModelBase
 public:
     explicit            AxControlModelBase();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
 };
 
 
@@ -498,11 +498,11 @@ class OOX_DLLPUBLIC AxFontDataModel : public AxControlModelBase
 public:
     explicit            AxFontDataModel( bool bSupportsAlign = true );
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
 
     /** Returns the font height in points. */
     sal_Int16           getFontHeight() const { return maFontData.getHeightPoints(); }
@@ -522,15 +522,15 @@ class OOX_DLLPUBLIC AxCommandButtonModel : public AxFontDataModel
 public:
     explicit            AxCommandButtonModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      ///< Binary picture stream.
@@ -551,14 +551,14 @@ class OOX_DLLPUBLIC AxLabelModel : public AxFontDataModel
 public:
     explicit            AxLabelModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
 
 public: // direct access needed for legacy VML drawing controls
     OUString     maCaption;          ///< Visible caption of the button.
@@ -579,14 +579,14 @@ class OOX_DLLPUBLIC AxImageModel : public AxControlModelBase
 public:
     explicit            AxImageModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 
 private:
     StreamDataSequence  maPictureData;      ///< Binary picture stream.
@@ -605,9 +605,9 @@ class OOX_DLLPUBLIC AxTabStripModel : public AxFontDataModel
 public:
     explicit            AxTabStripModel();
 
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
 
-    virtual ApiControlType getControlType() const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
 
 public:
     sal_uInt32   mnListIndex;
@@ -626,11 +626,11 @@ class OOX_DLLPUBLIC AxMorphDataModelBase : public AxFontDataModel
 public:
     explicit            AxMorphDataModelBase();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      ///< Binary picture stream.
@@ -663,10 +663,10 @@ class OOX_DLLPUBLIC AxToggleButtonModel : public AxMorphDataModelBase
 public:
     explicit            AxToggleButtonModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -677,10 +677,10 @@ class OOX_DLLPUBLIC AxCheckBoxModel : public AxMorphDataModelBase
 public:
     explicit            AxCheckBoxModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -694,10 +694,10 @@ public:
     /** Returns the group name used to goup several option buttons gogether. */
     const OUString& getGroupName() const { return maGroupName; }
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -708,10 +708,10 @@ class OOX_DLLPUBLIC AxTextBoxModel : public AxMorphDataModelBase
 public:
     explicit            AxTextBoxModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -722,10 +722,10 @@ class OOX_DLLPUBLIC AxNumericFieldModel : public AxMorphDataModelBase
 public:
     explicit            AxNumericFieldModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -736,10 +736,10 @@ class OOX_DLLPUBLIC AxListBoxModel : public AxMorphDataModelBase
 public:
     explicit            AxListBoxModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -750,10 +750,10 @@ class OOX_DLLPUBLIC AxComboBoxModel : public AxMorphDataModelBase
 public:
     explicit            AxComboBoxModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 };
 
 
@@ -764,14 +764,14 @@ class OOX_DLLPUBLIC AxSpinButtonModel : public AxControlModelBase
 public:
     explicit            AxSpinButtonModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 
 public: // direct access needed for legacy VML drawing controls
     sal_uInt32          mnArrowColor;       ///< Button arrow color.
@@ -793,14 +793,14 @@ class OOX_DLLPUBLIC AxScrollBarModel : public AxControlModelBase
 public:
     explicit            AxScrollBarModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
-    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm ) SAL_OVERRIDE;
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) SAL_OVERRIDE;
 
 public: // direct access needed for legacy VML drawing controls
     sal_uInt32          mnArrowColor;       ///< Button arrow color.
@@ -827,12 +827,12 @@ public:
     explicit            AxContainerModelBase( bool bFontSupport = false );
 
     /** Allows to set single properties specified by XML token identifier. */
-    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue ) SAL_OVERRIDE;
     /** Reads the leading structure in the 'f' stream containing the model for
         this control. */
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
     /** Converts font settings if supported. */
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 
     /** Reads the class table structure for embedded controls following the own
         model from the 'f' stream. */
@@ -867,8 +867,8 @@ class OOX_DLLPUBLIC AxFrameModel : public AxContainerModelBase
 public:
     explicit            AxFrameModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 };
 
 class OOX_DLLPUBLIC AxPageModel : public AxContainerModelBase
@@ -876,8 +876,8 @@ class OOX_DLLPUBLIC AxPageModel : public AxContainerModelBase
 public:
     explicit            AxPageModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 };
 
 class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
@@ -885,9 +885,9 @@ class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
 public:
     explicit            AxMultiPageModel();
 
-    virtual ApiControlType getControlType() const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
     virtual bool        importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
     std::vector<sal_uInt32> mnIDs;
     sal_uInt32          mnActiveTab;
     sal_uInt32          mnTabStyle;
@@ -902,8 +902,8 @@ class OOX_DLLPUBLIC AxUserFormModel : public AxContainerModelBase
 public:
     explicit            AxUserFormModel();
 
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual ApiControlType getControlType() const SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 };
 
 class HtmlSelectModel : public AxListBoxModel
@@ -912,15 +912,15 @@ class HtmlSelectModel : public AxListBoxModel
     com::sun::star::uno::Sequence< sal_Int16 > msIndices;
 public:
     HtmlSelectModel();
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
 };
 
 class HtmlTextBoxModel : public AxTextBoxModel
 {
 public:
     explicit            HtmlTextBoxModel();
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) SAL_OVERRIDE;
 };
 
 

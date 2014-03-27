@@ -27,10 +27,10 @@ public:
     ConstFormControl(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // activate function
-    virtual void CreateDefaultObject();
+    virtual void Activate(const sal_uInt16 nSlotId) SAL_OVERRIDE;    // activate function
+    virtual void CreateDefaultObject() SAL_OVERRIDE;
 };
 
 #endif

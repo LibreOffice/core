@@ -264,8 +264,8 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& GetFormIface() const { return m_xForm; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& GetContainer() const { return m_xContainer; }
 
-    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData );
-    virtual FmEntryData* Clone();
+    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData ) SAL_OVERRIDE;
+    virtual FmEntryData* Clone() SAL_OVERRIDE;
 };
 
 
@@ -288,8 +288,8 @@ public:
     virtual ~FmControlData();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
-    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData );
-    virtual FmEntryData* Clone();
+    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData ) SAL_OVERRIDE;
+    virtual FmEntryData* Clone() SAL_OVERRIDE;
 
     void ModelReplaced(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxNew,
@@ -321,16 +321,16 @@ namespace svxform
         OFormComponentObserver( ::svxform::NavigatorTreeModel* pModel );
 
     // XEventListenerListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XContainerListener
 
-        virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         void Lock() { m_nLocks++; }
         void UnLock() { m_nLocks--; }
@@ -404,7 +404,7 @@ namespace svxform
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
         SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
 
-        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     };
 
 
@@ -501,11 +501,11 @@ namespace svxform
         DECL_LINK( OnClipboardAction, void* );
 
     protected:
-        virtual void    Command( const CommandEvent& rEvt );
+        virtual void    Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
 
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     public:
         NavigatorTree(Window* pParent );
@@ -525,13 +525,13 @@ namespace svxform
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
         SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );
 
-        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
         virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
-        virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& );
-        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-        virtual void KeyInput( const KeyEvent& rKEvt );
+        virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& ) SAL_OVERRIDE;
+        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-        virtual void ModelHasRemoved( SvTreeListEntry* _pEntry );
+        virtual void ModelHasRemoved( SvTreeListEntry* _pEntry ) SAL_OVERRIDE;
 
         using SvTreeListBox::Insert;
         using SvTreeListBox::ExecuteDrop;
@@ -567,11 +567,11 @@ namespace svxform
         ::svxform::NavigatorTree* m_pNavigatorTree;
 
     protected:
-        virtual void Resize();
-        virtual bool Close();
-        virtual void GetFocus();
-        virtual Size CalcDockingSize( SfxChildAlignment );
-        virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual bool Close() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual Size CalcDockingSize( SfxChildAlignment ) SAL_OVERRIDE;
+        virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
 
         using SfxDockingWindow::StateChanged;
 
@@ -581,8 +581,8 @@ namespace svxform
         virtual ~NavigatorFrame();
 
         void UpdateContent( FmFormShell* pFormShell );
-        void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-        void FillInfo( SfxChildWinInfo& rInfo ) const;
+        void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+        void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
     };
 
 

@@ -108,9 +108,9 @@ public:
     {}
     virtual ~ImplDdeItem();
 
-    virtual DdeData* Get( sal_uIntPtr );
-    virtual bool     Put( const DdeData* );
-    virtual void     AdviseLoop( bool );
+    virtual DdeData* Get( sal_uIntPtr ) SAL_OVERRIDE;
+    virtual bool     Put( const DdeData* ) SAL_OVERRIDE;
+    virtual void     AdviseLoop( bool ) SAL_OVERRIDE;
 
     void Notify()
     {

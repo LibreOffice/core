@@ -36,13 +36,13 @@ namespace dbaui
         OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext);
 
         // UnoControl
-        virtual OUString GetComponentServiceName();
+        virtual OUString GetComponentServiceName() SAL_OVERRIDE;
 
         // XServiceInfo
         DECLARE_SERVICE_INFO_STATIC();
 
         // ::com::sun::star::awt::XControl
-        virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }   // namespace dbaui
 

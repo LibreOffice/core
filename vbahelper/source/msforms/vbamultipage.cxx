@@ -33,21 +33,21 @@ class PagesImpl : public PagesImpl_Base
     sal_Int32 mnPages;
 public:
     PagesImpl( sal_Int32 nPages ) : mnPages( nPages ) {}
-    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) { return mnPages; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, ::uno::RuntimeException, std::exception)
+    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return mnPages; }
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, ::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( Index < 0 || Index > mnPages )
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( uno::Reference< uno::XInterface >() );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception)
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         // no Pages object yet #FIXME
         //return cppu::UnoType<msforms::XPage>::get();
         return cppu::UnoType<uno::XInterface>::get();
     }
-    virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( mnPages > 0 );
     }

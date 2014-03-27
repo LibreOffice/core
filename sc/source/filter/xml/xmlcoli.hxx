@@ -46,9 +46,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLTableColsContext : public SvXMLImportContext
@@ -77,9 +77,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 #endif

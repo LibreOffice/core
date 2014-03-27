@@ -47,7 +47,7 @@ class SwFrmDlg : public SfxTabDialog
     sal_uInt16 m_nMacroId;
     sal_uInt16 m_nBorderId;
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
     SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,

@@ -45,7 +45,7 @@ private:
 
 protected:
     virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
 public:
     ShadowPrimitive(
@@ -63,7 +63,7 @@ public:
     const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
     ShadowState getShadowState() const { return maShadowState; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
     DeclPrimitive2DIDBlock()
 };

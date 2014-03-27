@@ -129,7 +129,7 @@ protected:
 public:
     SwTxtAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
-    virtual sal_Int32* GetEnd();
+    virtual sal_Int32* GetEnd() SAL_OVERRIDE;
 };
 
 // --------------- Inline Implementations ------------------------

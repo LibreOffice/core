@@ -134,7 +134,7 @@ public:
     void setSubControl( PropertySubControl* pSubControl );
     PropertySubControl* getSubControl() const { return mpSubControl; }
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
 private:
     PropertySubControl* mpSubControl;

@@ -33,7 +33,7 @@ public:
     ~SvxVertCTLTextTbxCtrl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
     void    SetVert(bool bSet) {bCheckVertical = bSet;}
 
 };

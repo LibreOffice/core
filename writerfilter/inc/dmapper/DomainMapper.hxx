@@ -87,11 +87,11 @@ public:
     virtual ~DomainMapper();
 
     // Stream
-    virtual void markLastParagraphInSection();
+    virtual void markLastParagraphInSection() SAL_OVERRIDE;
 
     // BinaryObj
     virtual void data(const sal_uInt8* buf, size_t len,
-                      writerfilter::Reference<Properties>::Pointer_t ref);
+                      writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
     void sprmWithProps( Sprm& sprm, ::boost::shared_ptr<PropertyMap> pContext );
 
@@ -134,31 +134,31 @@ public:
 
 private:
     // Stream
-    virtual void lcl_startSectionGroup();
-    virtual void lcl_endSectionGroup();
-    virtual void lcl_startParagraphGroup();
-    virtual void lcl_endParagraphGroup();
-    virtual void lcl_startCharacterGroup();
-    virtual void lcl_endCharacterGroup();
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
-    virtual void lcl_endShape( );
+    virtual void lcl_startSectionGroup() SAL_OVERRIDE;
+    virtual void lcl_endSectionGroup() SAL_OVERRIDE;
+    virtual void lcl_startParagraphGroup() SAL_OVERRIDE;
+    virtual void lcl_endParagraphGroup() SAL_OVERRIDE;
+    virtual void lcl_startCharacterGroup() SAL_OVERRIDE;
+    virtual void lcl_endCharacterGroup() SAL_OVERRIDE;
+    virtual void lcl_startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape ) SAL_OVERRIDE;
+    virtual void lcl_endShape( ) SAL_OVERRIDE;
 
-    virtual void lcl_text(const sal_uInt8 * data, size_t len);
-    virtual void lcl_utext(const sal_uInt8 * data, size_t len);
+    virtual void lcl_text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
+    virtual void lcl_utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
     virtual void lcl_positivePercentage(const OUString& rText) SAL_OVERRIDE;
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref);
+                           writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref);
-    virtual void lcl_info(const string & info);
+                               ::writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
+    virtual void lcl_info(const string & info) SAL_OVERRIDE;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
     void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight);

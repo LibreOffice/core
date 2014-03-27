@@ -43,8 +43,8 @@ public:
     SwLabelConfig();
     virtual ~SwLabelConfig();
 
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     void    FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr);
     const std::vector<OUString>& GetManufacturers() const {return m_aManufacturers;}

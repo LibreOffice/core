@@ -60,8 +60,8 @@ namespace pcr
         );
 
         // IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
         /// retrieves the underlying UNO component
         inline const ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >&

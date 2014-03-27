@@ -43,7 +43,7 @@ public:
 private:
     sal_uInt16          nCurId;
 
-    virtual void    Select();
+    virtual void    Select() SAL_OVERRIDE;
 };
 
 

@@ -36,9 +36,9 @@ class SvxFontSubstCheckListBox : public SvSimpleTable
     using SvTreeListBox::SetCheckButtonState;
 
     protected:
-        virtual void    SetTabs();
-        virtual void    KeyInput( const KeyEvent& rKEvt );
-        virtual void    Resize();
+        virtual void    SetTabs() SAL_OVERRIDE;
+        virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void    Resize() SAL_OVERRIDE;
 
     public:
         SvxFontSubstCheckListBox(SvSimpleTableContainer& rParent, WinBits nBits)
@@ -96,8 +96,8 @@ class SvxFontSubstTabPage : public SfxTabPage
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 

@@ -39,8 +39,8 @@ protected:
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     sal_uInt16      nActiveCategoryRID;
 
-    virtual bool    Close();
-    virtual void    GetFocus();
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
 
     void            ApplyImageLists( sal_uInt16 nCategoryRID );
 
@@ -57,8 +57,8 @@ public:
     ~SmToolBoxWindow();
 
     // Window
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent &rEvt );
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent &rEvt ) SAL_OVERRIDE;
 
     void        AdjustPosSize( bool bSetPos );
     void        SetCategory(sal_uInt16 nCategory);

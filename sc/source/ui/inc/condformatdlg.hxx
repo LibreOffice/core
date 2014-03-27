@@ -73,8 +73,8 @@ public:
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 
-    virtual Size GetOptimalSize() const;
-    virtual void Resize();
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     ScConditionalFormat* GetConditionalFormat() const;
     void RecalcAll();
@@ -107,7 +107,7 @@ private:
     DECL_LINK( EdRangeModifyHdl, Edit* );
 protected:
 
-    virtual void RefInputDone( bool bForced = false );
+    virtual void RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 
 public:
@@ -117,10 +117,10 @@ public:
 
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
 
-    virtual void SetReference(const ScRange&, ScDocument*);
-    virtual bool IsRefInputMode() const;
-    virtual void SetActive();
-    virtual bool IsTableLocked() const;
+    virtual void SetReference(const ScRange&, ScDocument*) SAL_OVERRIDE;
+    virtual bool IsRefInputMode() const SAL_OVERRIDE;
+    virtual void SetActive() SAL_OVERRIDE;
+    virtual bool IsTableLocked() const SAL_OVERRIDE;
 
     void InvalidateRefData();
 

@@ -467,32 +467,32 @@ public:
     ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName );
     // XNameContainer
 
-    virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException, std::exception)
+    virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         throw RuntimeException("ReadOnly container", Reference< XInterface >() );
 
     }
-    virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+    virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         throw RuntimeException("ReadOnly container", Reference< XInterface >() );
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+    virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE
     {
         throw RuntimeException("ReadOnly container", Reference< XInterface >() );
 
     }
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception);
-    virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException, std::exception);
+    virtual Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception)
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return getCppuType(static_cast< const OUString * >(0) ); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
@@ -556,7 +556,7 @@ public:
     { m_xNameContainer = new ReadOnlyEventsNameContainer( eventMethods, sCodeName ); }
 
     // XScriptEventSupplier
-    virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) throw (RuntimeException, std::exception){ return m_xNameContainer; }
+    virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE { return m_xNameContainer; }
 private:
     Reference< container::XNameContainer > m_xNameContainer;
 };
@@ -576,25 +576,25 @@ class EventListener : public EventListener_BASE
 public:
     EventListener( const Reference< XComponentContext >& rxContext );
     // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     using cppu::OPropertySetHelper::disposing;
 
     // XScriptListener
-    virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException, std::exception);
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException, std::exception);
+    virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception);
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception);
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) SAL_OVERRIDE;
     // XInterface
     DECLARE_XINTERFACE()
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
         {
@@ -622,10 +622,10 @@ public:
 
 protected:
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  );
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  ) SAL_OVERRIDE;
 
     // OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const;
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const SAL_OVERRIDE;
 
 private:
 #if ASYNC
@@ -1024,8 +1024,8 @@ public:
     VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext );
 
     // XVBAToOOEventDescGen
-    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception);
-    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
     Reference< XComponentContext > m_xContext;
 

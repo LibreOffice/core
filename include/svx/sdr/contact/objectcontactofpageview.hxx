@@ -59,75 +59,75 @@ namespace sdr
             // got invalidated by an ActionCanged() call. An active view needs to remember
             // this and take action on it. Default implementation directly calls back
             // triggerLazyInvalidate() which promptly handles the request
-            virtual void setLazyInvalidate(ViewObjectContact& rVOC);
+            virtual void setLazyInvalidate(ViewObjectContact& rVOC) SAL_OVERRIDE;
 
             // call this to support evtl. preparations for repaint
-            virtual void PrepareProcessDisplay();
+            virtual void PrepareProcessDisplay() SAL_OVERRIDE;
 
             // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
-            virtual void Timeout();
+            virtual void Timeout() SAL_OVERRIDE;
 
             // Process the whole displaying
-            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
+            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
 
             // test if visualizing of entered groups is switched on at all
-            virtual bool DoVisualizeEnteredGroup() const;
+            virtual bool DoVisualizeEnteredGroup() const SAL_OVERRIDE;
 
             // get active group's (the entered group) ViewContact
-            virtual const ViewContact* getActiveViewContact() const;
+            virtual const ViewContact* getActiveViewContact() const SAL_OVERRIDE;
 
             // Invalidate given rectangle at the window/output which is represented by
             // this ObjectContact.
-            virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const;
+            virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const SAL_OVERRIDE;
 
             // Get info if given Rectangle is visible in this view
-            virtual bool IsAreaVisible(const basegfx::B2DRange& rRange) const;
+            virtual bool IsAreaVisible(const basegfx::B2DRange& rRange) const SAL_OVERRIDE;
 
             // Get info about the need to visualize GluePoints. The default
             // is that it is not necessary.
-            virtual bool AreGluePointsVisible() const;
+            virtual bool AreGluePointsVisible() const SAL_OVERRIDE;
 
             // check if text animation is allowed.
-            virtual bool IsTextAnimationAllowed() const;
+            virtual bool IsTextAnimationAllowed() const SAL_OVERRIDE;
 
             // check if graphic animation is allowed.
-            virtual bool IsGraphicAnimationAllowed() const;
+            virtual bool IsGraphicAnimationAllowed() const SAL_OVERRIDE;
 
             // check if asynchronious graphis loading is allowed. Default is sal_False.
-            virtual bool IsAsynchronGraphicsLoadingAllowed() const;
+            virtual bool IsAsynchronGraphicsLoadingAllowed() const SAL_OVERRIDE;
 
             // check if buffering of MasterPages is allowed. Default is sal_False.
-            virtual bool IsMasterPageBufferingAllowed() const;
+            virtual bool IsMasterPageBufferingAllowed() const SAL_OVERRIDE;
 
             // print? Default is false
-            virtual bool isOutputToPrinter() const;
+            virtual bool isOutputToPrinter() const SAL_OVERRIDE;
 
             // window? Default is true
-            virtual bool isOutputToWindow() const;
+            virtual bool isOutputToWindow() const SAL_OVERRIDE;
 
             // VirtualDevice? Default is false
-            virtual bool isOutputToVirtualDevice() const;
+            virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
 
             // recording MetaFile? Default is false
-            virtual bool isOutputToRecordingMetaFile() const;
+            virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
 
             // pdf export? Default is false
-            virtual bool isOutputToPDFFile() const;
+            virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
 
             // gray display mode
-            virtual bool isDrawModeGray() const;
+            virtual bool isDrawModeGray() const SAL_OVERRIDE;
 
             // gray display mode
-            virtual bool isDrawModeBlackWhite() const;
+            virtual bool isDrawModeBlackWhite() const SAL_OVERRIDE;
 
             // high contrast display mode
-            virtual bool isDrawModeHighContrast() const;
+            virtual bool isDrawModeHighContrast() const SAL_OVERRIDE;
 
             // overloaded access to SdrPageView
-            virtual SdrPageView* TryToGetSdrPageView() const;
+            virtual SdrPageView* TryToGetSdrPageView() const SAL_OVERRIDE;
 
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
-            virtual OutputDevice* TryToGetOutputDevice() const;
+            virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
 
             /** sets all UNO controls which are associated with this ObjectContact to
                 design or alive mode.

@@ -86,15 +86,15 @@ public:
     AutoLayout GetSelectedAutoLayout (void);
 
     // From ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
     // From ::Window
-    virtual void Paint (const Rectangle& rRect);
-    virtual void Resize (void);
+    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Resize (void) SAL_OVERRIDE;
 
     /** Show a context menu when the right mouse button is pressed.
     */
-    virtual void MouseButtonDown (const MouseEvent& rEvent);
+    virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
 
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemple this set according to the current
@@ -103,20 +103,20 @@ public:
     void InvalidateContent (void);
 
     // DragSourceHelper
-    virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel);
+    virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel) SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8 AcceptDrop (const AcceptDropEvent& rEvent);
-    virtual sal_Int8 ExecuteDrop (const ExecuteDropEvent& rEvent);
+    virtual sal_Int8 AcceptDrop (const AcceptDropEvent& rEvent) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop (const ExecuteDropEvent& rEvent) SAL_OVERRIDE;
 
     /** The context menu is requested over this Command() method.
     */
-    virtual void Command (const CommandEvent& rEvent);
+    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 
     /** Call Fill() when switching to or from high contrast mode so that the
         correct set of icons is displayed.
     */
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     using Window::GetWindow;
     using ValueSet::StartDrag;

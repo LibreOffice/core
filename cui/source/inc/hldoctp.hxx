@@ -62,12 +62,12 @@ private:
     EPathType GetPathType ( const OUString& rStrPath );
 
 protected:
-    void FillDlgFields(const OUString& rStrURL);
+    void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,
-                             SvxLinkInsertMode& eMode );
-    virtual sal_Bool   ShouldOpenMarkWnd () {return mbMarkWndOpen;}
-    virtual void   SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
+                             SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
+    virtual sal_Bool   ShouldOpenMarkWnd () SAL_OVERRIDE {return mbMarkWndOpen;}
+    virtual void   SetMarkWndShouldOpen (sal_Bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
     OUString GetCurrentURL    ();
 
 public:
@@ -76,9 +76,9 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( const OUString& aStrMark );
+    virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
 
-    virtual void        SetInitFocus();
+    virtual void        SetInitFocus() SAL_OVERRIDE;
 };
 
 

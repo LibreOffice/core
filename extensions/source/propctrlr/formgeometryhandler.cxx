@@ -161,21 +161,21 @@ namespace pcr
         }
 
         // XInterface
-        virtual void SAL_CALL acquire(  ) throw ()
+        virtual void SAL_CALL acquire(  ) throw () SAL_OVERRIDE
         {
             m_rParent.acquire();
         }
 
-        virtual void SAL_CALL release(  ) throw ()
+        virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE
         {
             m_rParent.release();
         }
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& _event ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& _event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& _event ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& _event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~ShapeGeometryChangeNotifier()
@@ -222,22 +222,22 @@ namespace pcr
 
     protected:
         // XPropertyHandler overriables
-        virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception);
-        virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception);
-        virtual LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void                        SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void                        SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual Sequence< OUString > SAL_CALL getActuatingProperties( ) throw (RuntimeException, std::exception);
-        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException, std::exception);
+        virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                        SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                        SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Sequence< OUString > SAL_CALL getActuatingProperties( ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHandler overridables
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // PropertyHandler overridables
-        virtual Sequence< Property >        SAL_CALL doDescribeSupportedProperties() const;
+        virtual Sequence< Property >        SAL_CALL doDescribeSupportedProperties() const SAL_OVERRIDE;
 
     protected:
-        virtual void onNewComponent();
+        virtual void onNewComponent() SAL_OVERRIDE;
 
     private:
         bool    impl_haveTextAnchorType_nothrow() const;

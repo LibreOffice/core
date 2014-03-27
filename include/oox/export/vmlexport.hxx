@@ -89,7 +89,7 @@ public:
     sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const sal_Bool bOOxmlExport = false );
-    virtual void  AddSdrObjectVMLObject( const SdrObject& rObj);
+    virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) SAL_OVERRIDE;
     static bool IsWaterMarkShape(const OUString& rStr);
 protected:
     /// Add an attribute to the generated <v:shape/> element.
@@ -110,17 +110,17 @@ protected:
     ///
     /// The parameter is just what we got from StartShape().
     virtual void        EndShape( sal_Int32 nShapeElement );
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
 
-    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
-    virtual void CloseContainer();
+    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 ) SAL_OVERRIDE;
+    virtual void CloseContainer() SAL_OVERRIDE;
 
-    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 );
-    virtual void LeaveGroup();
+    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 ) SAL_OVERRIDE;
+    virtual void LeaveGroup() SAL_OVERRIDE;
 
-    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 );
+    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 ) SAL_OVERRIDE;
 
 private:
     /// Create an OString representing the id from a numerical id.

@@ -125,12 +125,12 @@ public:
 
     bool isValid() const;
 
-    virtual void getValue(long nCol, ScDPItemData &rData, short& rNumType) const;
-    virtual OUString getColumnLabel(long nCol) const;
-    virtual long getColumnCount() const;
-    virtual bool first();
-    virtual bool next();
-    virtual void finish();
+    virtual void getValue(long nCol, ScDPItemData &rData, short& rNumType) const SAL_OVERRIDE;
+    virtual OUString getColumnLabel(long nCol) const SAL_OVERRIDE;
+    virtual long getColumnCount() const SAL_OVERRIDE;
+    virtual bool first() SAL_OVERRIDE;
+    virtual bool next() SAL_OVERRIDE;
+    virtual void finish() SAL_OVERRIDE;
 };
 
 DBConnector::DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate) :

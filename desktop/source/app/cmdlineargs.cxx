@@ -82,9 +82,9 @@ public:
 
     virtual ~ExtCommandLineSupplier() {}
 
-    virtual boost::optional< OUString > getCwdUrl() { return m_cwdUrl; }
+    virtual boost::optional< OUString > getCwdUrl() SAL_OVERRIDE { return m_cwdUrl; }
 
-    virtual bool next(OUString * argument) {
+    virtual bool next(OUString * argument) SAL_OVERRIDE {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_count) {
             rtl_getAppCommandArg(m_index++, &argument->pData);

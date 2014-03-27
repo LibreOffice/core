@@ -82,7 +82,7 @@ namespace sdr
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -152,7 +152,7 @@ namespace drawinglayer
 
         protected:
             /// method which is to be used to implement the local decomposition of a 2D primitive
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             SwVirtFlyDrawObjPrimitive(
@@ -164,12 +164,12 @@ namespace drawinglayer
             {
             }
 
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             // overloaded to allow callbacks to wrap_DoPaintObject
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             // data read access
             const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
@@ -261,7 +261,7 @@ namespace sdr
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
 
         public:
             /// basic constructor, used from SdrObject.

@@ -28,7 +28,7 @@ namespace dbaui
     class OWizHTMLExtend : public OWizTypeSelect
     {
     protected:
-        virtual SvParser*   createReader(sal_Int32 _nRows);
+        virtual SvParser*   createReader(sal_Int32 _nRows) SAL_OVERRIDE;
     public:
         OWizHTMLExtend(Window* pParent, SvStream& _rStream)
             : OWizTypeSelect( pParent, &_rStream )
@@ -43,7 +43,7 @@ namespace dbaui
     class OWizRTFExtend : public OWizTypeSelect
     {
     protected:
-        virtual SvParser* createReader(sal_Int32 _nRows);
+        virtual SvParser* createReader(sal_Int32 _nRows) SAL_OVERRIDE;
     public:
         OWizRTFExtend(Window* pParent,SvStream& _rStream)
             : OWizTypeSelect( pParent, &_rStream )
@@ -59,7 +59,7 @@ namespace dbaui
     class OWizNormalExtend : public OWizTypeSelect
     {
     protected:
-        virtual SvParser* createReader(sal_Int32 _nRows);
+        virtual SvParser* createReader(sal_Int32 _nRows) SAL_OVERRIDE;
     public:
         OWizNormalExtend(Window* pParent);
     };

@@ -64,30 +64,30 @@ namespace frm
         DECLARE_DEFAULT_DTOR( OReferenceValueComponent );
 
         // OPropertySet and friends
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                    throw (::com::sun::star::uno::Exception, std::exception);
+                    throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
                     ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
-                    throw (::com::sun::star::lang::IllegalArgumentException);
+                    throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void describeFixedProperties(
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
-        ) const;
+        ) const SAL_OVERRIDE;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-                                getSupportedBindingTypes();
+                                getSupportedBindingTypes() SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any
-                                translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
+                                translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any
-                                translateControlValueToExternalValue( ) const;
+                                translateControlValueToExternalValue( ) const SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Any
-                                translateControlValueToValidatableValue( ) const;
+                                translateControlValueToValidatableValue( ) const SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Any
-                                getDefaultForReset() const;
+                                getDefaultForReset() const SAL_OVERRIDE;
     };
 
 

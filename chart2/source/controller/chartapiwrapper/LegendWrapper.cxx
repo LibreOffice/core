@@ -60,13 +60,13 @@ public:
     virtual ~WrappedLegendAlignmentProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException);
+                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
 
 protected:
-    virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const;
-    virtual Any convertOuterToInnerValue( const Any& rOuterValue ) const;
+    virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const SAL_OVERRIDE;
+    virtual Any convertOuterToInnerValue( const Any& rOuterValue ) const SAL_OVERRIDE;
 };
 
 WrappedLegendAlignmentProperty::WrappedLegendAlignmentProperty()

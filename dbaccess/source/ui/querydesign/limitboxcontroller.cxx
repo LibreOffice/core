@@ -34,7 +34,7 @@ class LimitBoxImpl: public LimitBox
         LimitBoxImpl( Window* pParent, LimitBoxController* pCtrl );
         virtual ~LimitBoxImpl();
 
-        virtual bool Notify( NotifyEvent& rNEvt );
+        virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
         LimitBoxController* m_pControl;

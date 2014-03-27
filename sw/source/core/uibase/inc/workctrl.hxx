@@ -65,13 +65,13 @@ public:
     SwTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SwTbxInsertCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
@@ -86,11 +86,11 @@ public:
     SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTbxAutoTextCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     DECL_LINK(PopupHdl, PopupMenu*);
 };
@@ -107,19 +107,19 @@ public:
     SwTbxFieldCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTbxFieldCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     DECL_LINK(PopupHdl, PopupMenu*);
 };
 
 class SwScrollNaviToolBox : public ToolBox
 {
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     public:
         SwScrollNaviToolBox(Window* pParent, WinBits nWinStyle ) :
@@ -141,7 +141,7 @@ class SwScrollNaviPopup : public SfxPopupWindow
 
 protected:
         DECL_LINK(SelectHdl, ToolBox*);
-        virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
         SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window *pParent );
@@ -149,7 +149,7 @@ public:
 
     static OUString         GetQuickHelpText(sal_Bool bNext);
 
-    virtual SfxPopupWindow* Clone() const;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
     void                GrabFocus(){aToolBox.GrabFocus();}
 };
 
@@ -162,7 +162,7 @@ class SwHlpImageButton : public ImageButton
         SwHlpImageButton(Window* pParent, const ResId& rResId, sal_Bool bUpBtn) :
             ImageButton(pParent, rResId), bUp(bUpBtn){}
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
 };
 
@@ -176,9 +176,9 @@ public:
 
     virtual void            StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual Window*         CreateItemWindow( Window *pParent );
+    virtual Window*         CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 #endif
 

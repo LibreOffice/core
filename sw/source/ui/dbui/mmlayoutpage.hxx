@@ -79,8 +79,8 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
                             bool bExample);
     static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample);
 
-    virtual void        ActivatePage();
-    virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason);
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) SAL_OVERRIDE;
 public:
         SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeLayoutPage();

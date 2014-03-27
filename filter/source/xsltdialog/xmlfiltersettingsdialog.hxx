@@ -44,14 +44,14 @@ private:
     HeaderBar* m_pHeaderBar;
     XMLFilterListBox* m_pFocusCtrl;
 protected:
-    virtual void setAllocation(const Size &rAllocation);
+    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 public:
     SvxPathControl(Window* pParent);
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
     ~SvxPathControl();
 
-    virtual bool Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 
@@ -77,7 +77,7 @@ public:
 
     void changeEntry( const filter_info_impl* pInfo );
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 
@@ -92,7 +92,7 @@ public:
     DECL_LINK(SelectionChangedHdl_Impl, void * );
     DECL_LINK(DoubleClickHdl_Impl, void * );
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     void    onNew();
     void    onEdit();
@@ -104,7 +104,7 @@ public:
 
     void    updateStates();
 
-    virtual bool Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     bool    isClosable();
 

@@ -82,7 +82,7 @@ private:
     const ::std::vector<Representative> maRepresentatives;
     typedef ::std::vector<boost::function<void(sal_uInt8)> > CallbackContainer;
 
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

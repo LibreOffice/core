@@ -210,15 +210,15 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateParaContents_Impl(long lDiff, UpdateType = MOVE_ALL);
 
 protected:
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    Click();
-    virtual long    StartDrag();
-    virtual void    Drag();
-    virtual void    EndDrag();
-    virtual void    ExtraDown();
-    virtual void    MouseMove( const MouseEvent& rMEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    Click() SAL_OVERRIDE;
+    virtual long    StartDrag() SAL_OVERRIDE;
+    virtual void    Drag() SAL_OVERRIDE;
+    virtual void    EndDrag() SAL_OVERRIDE;
+    virtual void    ExtraDown() SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     virtual void    Update();
 

@@ -120,8 +120,8 @@ namespace frm
 
     protected:
         // Window overridables
-        virtual void        Resize();
-        virtual void        StateChanged( StateChangedType nType );
+        virtual void        Resize() SAL_OVERRIDE;
+        virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
         /// ctor implementation
         void implInit( );
@@ -172,8 +172,8 @@ namespace frm
 
     protected:
         // Window overridables
-        virtual void LoseFocus();
-        virtual void KeyInput( const KeyEvent& rKeyEvent );
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
 
     private:
         void FirePosition( sal_Bool _bForce );

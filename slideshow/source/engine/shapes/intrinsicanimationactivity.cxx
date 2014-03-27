@@ -74,12 +74,12 @@ namespace slideshow
                                         ::std::size_t                   nNumLoops,
                                         CycleMode                       eCycleMode );
 
-            virtual void dispose();
-            virtual double calcTimeLag() const;
-            virtual bool perform();
-            virtual bool isActive() const;
-            virtual void dequeued();
-            virtual void end();
+            virtual void dispose() SAL_OVERRIDE;
+            virtual double calcTimeLag() const SAL_OVERRIDE;
+            virtual bool perform() SAL_OVERRIDE;
+            virtual bool isActive() const SAL_OVERRIDE;
+            virtual void dequeued() SAL_OVERRIDE;
+            virtual void end() SAL_OVERRIDE;
 
             bool enableAnimations();
 
@@ -108,8 +108,8 @@ namespace slideshow
 
         private:
 
-            virtual bool enableAnimations() { return mrActivity.enableAnimations(); }
-            virtual bool disableAnimations() { mrActivity.end(); return true; }
+            virtual bool enableAnimations() SAL_OVERRIDE { return mrActivity.enableAnimations(); }
+            virtual bool disableAnimations() SAL_OVERRIDE { mrActivity.end(); return true; }
 
             IntrinsicAnimationActivity& mrActivity;
         };

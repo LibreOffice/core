@@ -99,18 +99,18 @@ namespace rptui
         virtual ~ConditionalFormattingDialog();
 
         // Dialog overridables
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
         // IConditionalFormatAction overridables
-        virtual void addCondition( size_t _nAddAfterIndex );
-        virtual void deleteCondition( size_t _nCondIndex );
-        virtual void applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor );
-        virtual void moveConditionUp( size_t _nCondIndex );
-        virtual void moveConditionDown( size_t _nCondIndex );
-        virtual OUString getDataField() const;
+        virtual void addCondition( size_t _nAddAfterIndex ) SAL_OVERRIDE;
+        virtual void deleteCondition( size_t _nCondIndex ) SAL_OVERRIDE;
+        virtual void applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor ) SAL_OVERRIDE;
+        virtual void moveConditionUp( size_t _nCondIndex ) SAL_OVERRIDE;
+        virtual void moveConditionDown( size_t _nCondIndex ) SAL_OVERRIDE;
+        virtual OUString getDataField() const SAL_OVERRIDE;
 
     protected:
-        virtual bool        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnScroll, ScrollBar* );

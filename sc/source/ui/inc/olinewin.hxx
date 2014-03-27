@@ -212,20 +212,20 @@ private:
     void                        ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd );
 
 protected:
-    virtual void                Paint( const Rectangle& rRect );
+    virtual void                Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual void                Resize();
-    virtual void                GetFocus();
-    virtual void                LoseFocus();
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual void                GetFocus() SAL_OVERRIDE;
+    virtual void                LoseFocus() SAL_OVERRIDE;
 
-    virtual void                MouseMove( const MouseEvent& rMEvt );
-    virtual void                MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void                MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void                MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void                KeyInput( const KeyEvent& rKEvt );
+    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
 public:
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 

@@ -56,17 +56,17 @@ public:
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 protected:
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     virtual css::uno::Any GetPropertyValue (
-        const OUString& rsPropertyName);
+        const OUString& rsPropertyName) SAL_OVERRIDE;
     virtual css::uno::Any SetPropertyValue (
         const OUString& rsPropertyName,
-        const css::uno::Any& rValue);
+        const css::uno::Any& rValue) SAL_OVERRIDE;
 
 private:
     class Implementation;

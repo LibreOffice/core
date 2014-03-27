@@ -73,7 +73,7 @@ friend class SwDropCapsPict;
      SwDropCapsPage(Window *pParent, const SfxItemSet &rSet);
     ~SwDropCapsPage();
 
-    virtual int     DeactivatePage(SfxItemSet *pSet);
+    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     void    FillSet( SfxItemSet &rSet );
 
     DECL_LINK(ClickHdl, void *);
@@ -89,8 +89,8 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static sal_uInt16* GetRanges();
 
-    virtual bool FillItemSet(      SfxItemSet &rSet);
-    virtual void Reset      (const SfxItemSet &rSet);
+    virtual bool FillItemSet(      SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset      (const SfxItemSet &rSet) SAL_OVERRIDE;
 
     void    SetFormat(sal_Bool bSet){bFormat = bSet;}
 protected:

@@ -84,9 +84,9 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
     DECL_LINK(GreetingSelectHdl_Impl, void *);
     DECL_LINK(AssignHdl_Impl, PushButton*);
 
-    virtual void        UpdatePreview();
-    virtual void        ActivatePage();
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+    virtual void        UpdatePreview() SAL_OVERRIDE;
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 public:
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeGreetingsPage();

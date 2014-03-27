@@ -76,7 +76,7 @@ class LwpFribNote: public LwpFrib
 public:
     LwpFribNote(LwpPara* pPara );
     ~LwpFribNote(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
 private:
@@ -92,14 +92,14 @@ class LwpNoteLayout: public LwpFrameLayout
 public:
     LwpNoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_NOTE_LAYOUT;}
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_NOTE_LAYOUT;}
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     sal_uInt32 GetTime(){ return m_nTime;}
     OUString GetAuthor();
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpVirtualLayout* GetTextLayout();
 
 private:
@@ -116,12 +116,12 @@ class LwpNoteHeaderLayout: public LwpFrameLayout
 public:
     LwpNoteHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteHeaderLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_NOTEHEADER_LAYOUT;}
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_NOTEHEADER_LAYOUT;}
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -133,12 +133,12 @@ class LwpNoteTextLayout: public LwpFrameLayout
 public:
     LwpNoteTextLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteTextLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_NOTETEXT_LAYOUT;}
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_NOTETEXT_LAYOUT;}
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -150,12 +150,12 @@ class LwpViewportLayout: public LwpPlacableLayout
 public:
     LwpViewportLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpViewportLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_VIEWPORT_LAYOUT;}
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_VIEWPORT_LAYOUT;}
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 #endif

@@ -94,7 +94,7 @@ public:
     /**
      * @descr   output column style as an xml node.
      */
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFColumn& c1, XFColumn& c2);
     friend bool operator!=(XFColumn& c1, XFColumn& c2);
@@ -121,7 +121,7 @@ public:
     void    SetColor(XFColor& color);
     void    SetVerticalAlign(enumXFAlignType align);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFColumnSep& sep1, XFColumnSep& sep2);
     friend bool operator!=(XFColumnSep& sep1, XFColumnSep& sep2);

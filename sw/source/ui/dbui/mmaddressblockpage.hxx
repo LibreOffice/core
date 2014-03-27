@@ -73,9 +73,9 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
 
     void                EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective);
 
-    virtual void        ActivatePage();
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-    virtual bool        canAdvance() const;
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+    virtual bool        canAdvance() const SAL_OVERRIDE;
 
 public:
     SwMailMergeAddressBlockPage(SwMailMergeWizard* _pParent);
@@ -125,7 +125,7 @@ public:
 
     void SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 };
 
 #define MOVE_ITEM_LEFT           1
@@ -143,20 +143,20 @@ class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
     using VclMultiLineEdit::SetText;
 
 protected:
-    bool            PreNotify( NotifyEvent& rNEvt );
+    bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     AddressMultiLineEdit(Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
     ~AddressMultiLineEdit();
 
     void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual Size    GetOptimalSize() const;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
-    void            SetText( const OUString& rStr );
+    void            SetText( const OUString& rStr ) SAL_OVERRIDE;
     OUString        GetAddress();
 
     void            InsertNewEntry( const OUString& rStr );
@@ -176,8 +176,8 @@ class SwRestrictedComboBox : public ComboBox
     OUString sForbiddenChars;
 
 protected:
-    virtual void KeyInput( const KeyEvent& );
-    virtual void        Modify();
+    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
+    virtual void        Modify() SAL_OVERRIDE;
 public:
     SwRestrictedComboBox(Window* pParent, WinBits nStyle = 0)
         : ComboBox( pParent, nStyle )

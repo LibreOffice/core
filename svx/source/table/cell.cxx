@@ -109,8 +109,8 @@ public:
     virtual ~CellTextProvider();
 
 private:
-    virtual sal_Int32 getTextCount() const;
-    virtual SdrText* getText(sal_Int32 nIndex) const;
+    virtual sal_Int32 getTextCount() const SAL_OVERRIDE;
+    virtual SdrText* getText(sal_Int32 nIndex) const SAL_OVERRIDE;
 
 private:
     const sdr::table::CellRef m_xCell;
@@ -147,9 +147,9 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+            SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
-            const svx::ITextProvider& getTextProvider() const;
+            const svx::ITextProvider& getTextProvider() const SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -162,15 +162,15 @@ namespace sdr
             ~CellProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            BaseProperties& Clone(SdrObject& rObj) const;
+            BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
-            void ForceDefaultAttributes();
+            void ForceDefaultAttributes() SAL_OVERRIDE;
 
-            void ItemSetChanged(const SfxItemSet& rSet);
+            void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
-            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
+            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) SAL_OVERRIDE;
 
-            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
 
             sdr::table::CellRef mxCell;
 

@@ -144,11 +144,11 @@ private:
     }
     ScVbaBorder(); // no impl
 protected:
-    virtual OUString getServiceImplName()
+    virtual OUString getServiceImplName() SAL_OVERRIDE
     {
         return OUString("ScVbaBorder");
     }
-    virtual css::uno::Sequence<OUString> getServiceNames()
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE
     {
         static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
@@ -162,14 +162,14 @@ public:
     ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
 
     // XBorder
-    uno::Any SAL_CALL getColor() throw (uno::RuntimeException, std::exception)
+    uno::Any SAL_CALL getColor() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
             return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) );
         throw uno::RuntimeException("No Implementation available", uno::Reference< uno::XInterface >() );
     }
-    void SAL_CALL setColor( const uno::Any& _color ) throw (uno::RuntimeException, std::exception)
+    void SAL_CALL setColor( const uno::Any& _color ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         sal_Int32 nColor = 0;
         _color >>= nColor;
@@ -183,7 +183,7 @@ public:
             throw uno::RuntimeException("No Implementation available", uno::Reference< uno::XInterface >() );
     }
 
-    uno::Any SAL_CALL getColorIndex() throw (uno::RuntimeException, std::exception)
+    uno::Any SAL_CALL getColorIndex() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         sal_Int32 nColor = 0;
         XLRGBToOORGB( getColor() ) >>= nColor;
@@ -203,7 +203,7 @@ public:
         return uno::makeAny(nIndex);
     }
 
-    void SAL_CALL setColorIndex( const uno::Any& _colorindex ) throw (uno::RuntimeException, std::exception)
+    void SAL_CALL setColorIndex( const uno::Any& _colorindex ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         sal_Int32 nColor = 0;
         _colorindex >>= nColor;
@@ -211,7 +211,7 @@ public:
             nColor = 1;
         setColor( OORGBToXLRGB( m_Palette.getPalette()->getByIndex( --nColor )  ) );
     }
-    uno::Any SAL_CALL getWeight() throw (uno::RuntimeException, std::exception)
+    uno::Any SAL_CALL getWeight() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
@@ -233,7 +233,7 @@ public:
         }
         throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
     }
-    void SAL_CALL setWeight( const uno::Any& _weight ) throw (uno::RuntimeException, std::exception)
+    void SAL_CALL setWeight( const uno::Any& _weight ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         sal_Int32 nWeight = 0;
         _weight >>= nWeight;
@@ -263,12 +263,12 @@ public:
                     throw uno::RuntimeException("Method failed", uno::Reference< uno::XInterface >() );
     }
 
-    uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException, std::exception)
+    uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         // always return xlContinuous;
         return uno::makeAny( XlLineStyle::xlContinuous );
     }
-    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException, std::exception)
+    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         // Urk no choice but to silently ignore we don't support this attribute
         // #TODO would be nice to support the excel line styles
@@ -322,11 +322,11 @@ public:
     {
     }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception)
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return sizeof( supportedIndexTable ) / sizeof( supportedIndexTable[0] );
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
 
         sal_Int32 nIndex = getTableIndex( Index );
@@ -337,11 +337,11 @@ public:
         }
         throw lang::IndexOutOfBoundsException();
     }
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception)
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return  cppu::UnoType<excel::XBorder>::get();
     }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return sal_True;
     }
@@ -359,12 +359,12 @@ class RangeBorderEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     RangeBorderEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( nIndex < m_xIndexAccess->getCount() )
             return m_xIndexAccess->getByIndex( nIndex++ );

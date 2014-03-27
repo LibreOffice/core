@@ -90,7 +90,7 @@ private:
 public:
                         LotusToSc( SvStream& aStr, rtl_TextEncoding eSrc, bool b );
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
-                                    const FORMULA_TYPE eFT = FT_CellFormula );
+                                    const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
     void                Reset( const ScAddress& rEingPos );
     inline void         SetWK3( void );

@@ -42,8 +42,8 @@ public:
                             MediaToolBoxControl_Impl( Window& rParent, MediaToolBoxControl& rControl );
                             ~MediaToolBoxControl_Impl();
 
-    void                    update();
-    void                    execute( const MediaItem& rItem );
+    void                    update() SAL_OVERRIDE;
+    void                    execute( const MediaItem& rItem ) SAL_OVERRIDE;
 
 private:
 

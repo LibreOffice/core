@@ -56,8 +56,8 @@ private:
 
 protected:
     SdrView*        pView;
-    virtual void Resize();
-    virtual bool Close();
+    virtual void Resize() SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
     typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
 

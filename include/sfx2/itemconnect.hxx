@@ -261,11 +261,11 @@ public:
 
 protected:
     /** Actions according to current flags for the control. */
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet );
+    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
     /** Resets the control according to the item contents. */
-    virtual void        Reset( const SfxItemSet& rItemSet );
+    virtual void        Reset( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
     /** Fills the item set according to the control's state. */
-    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
+    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
 
     ItemWrapperType     maItemWrp;
     ControlWrapperRef   mxCtrlWrp;
@@ -290,9 +290,9 @@ public:
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
 protected:
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet );
-    virtual void        Reset( const SfxItemSet& rItemSet );
-    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
+    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
 
 private:
     sal_uInt16              mnSlot;
@@ -449,9 +449,9 @@ public:
     void                AddConnection( ItemConnectionBase* pConnection );
 
 protected:
-    virtual void        ApplyFlags( const SfxItemSet& rItemSet );
-    virtual void        Reset( const SfxItemSet& rItemSet );
-    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
+    virtual void        ApplyFlags( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) SAL_OVERRIDE;
 
 private:
     std::auto_ptr< ItemConnectionArrayImpl > mxImpl;

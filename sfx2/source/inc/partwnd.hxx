@@ -52,7 +52,7 @@ public:
     SFX_DECL_CHILDWINDOW(SfxPartChildWnd_Impl);
                             ~SfxPartChildWnd_Impl();
 
-    virtual bool            QueryClose();
+    virtual bool            QueryClose() SAL_OVERRIDE;
 };
 
 // class SfxExplorerDockWnd_Impl -----------------------------------------
@@ -60,8 +60,8 @@ public:
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
 protected:
-    virtual void            Resize();
-    virtual bool            Notify( NotifyEvent& rNEvt );
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
                             SfxPartDockWnd_Impl( SfxBindings* pBindings,
@@ -71,7 +71,7 @@ public:
 
                             ~SfxPartDockWnd_Impl();
     sal_Bool                    QueryClose();
-    virtual void            FillInfo(SfxChildWinInfo&) const;
+    virtual void            FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();
 };
 

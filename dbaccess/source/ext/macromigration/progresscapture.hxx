@@ -45,11 +45,11 @@ namespace dbmm
         void    dispose();
 
         // XStatusIndicator
-        virtual void SAL_CALL start( const OUString& Text, ::sal_Int32 Range ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL end(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL setText( const OUString& Text ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL setValue( ::sal_Int32 Value ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL start( const OUString& Text, ::sal_Int32 Range ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL end(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setText( const OUString& Text ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setValue( ::sal_Int32 Value ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~ProgressCapture();

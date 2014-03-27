@@ -83,11 +83,11 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
  private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
 };
 typedef boost::shared_ptr< SettingsTable >          SettingsTablePtr;

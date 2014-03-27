@@ -127,7 +127,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     sal_Bool bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 public:
     SwModify();
@@ -152,7 +152,7 @@ public:
     const SwClient* GetDepends() const  { return pRoot; }
 
     // get information about attribute
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     void LockModify()                   { bModifyLocked = true;  }
     void UnlockModify()                 { bModifyLocked = false; }
@@ -184,10 +184,10 @@ public:
     SwClient* GetToTell() { return pToTell; }
 
     /** get Client information */
-    virtual bool GetInfo( SfxPoolItem & ) const;
+    virtual bool GetInfo( SfxPoolItem & ) const SAL_OVERRIDE;
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 class SwClientIter

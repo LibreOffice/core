@@ -288,9 +288,9 @@ public:
     explicit            XclImpChEscherFormat( const XclImpRoot& rRoot );
 
     /** Reads the CHESCHERFORMAT record (complex fill data) (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHESCHERFORMAT group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
@@ -321,7 +321,7 @@ public:
     explicit            XclImpChFrameBase( const XclChFormatInfo& rFmtInfo );
 
     /** Reads a frame formatting record (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Returns true, if the line format is set to automatic. */
     inline bool         IsAutoLine() const { return !mxLineFmt || mxLineFmt->IsAuto(); }
@@ -371,7 +371,7 @@ public:
                             XclChObjectType eObjType );
 
     /** Reads the CHFRAME record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Sets formatting from BIFF3-BIFF5 OBJ record, if own formatting is invisible. */
     void                UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData );
@@ -493,16 +493,16 @@ public:
     explicit            XclImpChText( const XclImpChRoot& rRoot );
 
     /** Reads the CHTEXT record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHTEXT group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Returns the leading font index for the text object. */
-    virtual sal_uInt16  GetFontIndex() const;
+    virtual sal_uInt16  GetFontIndex() const SAL_OVERRIDE;
     /** Returns the leading font color for the text object. */
-    virtual Color       GetFontColor() const;
+    virtual Color       GetFontColor() const SAL_OVERRIDE;
     /** Returns the rotation value for the text object. */
-    virtual sal_uInt16  GetRotation() const;
+    virtual sal_uInt16  GetRotation() const SAL_OVERRIDE;
 
     /** Sets explicit string data for this text object. */
     void                SetString( const OUString& rString );
@@ -666,9 +666,9 @@ public:
     explicit            XclImpChDataFormat( const XclImpChRoot& rRoot );
 
     /** Reads the CHDATAFORMAT record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHDATAFORMAT group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Sets this object to the specified data point position. */
     void                SetPointPos( const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx );
@@ -805,9 +805,9 @@ public:
     explicit            XclImpChSeries( const XclImpChRoot& rRoot, sal_uInt16 nSeriesIdx );
 
     /** Reads the CHSERIES record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHSERIES group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Sets a data point or series format (CHDATAFORMAT group) for this series. */
     void                SetDataFormat( const XclImpChDataFormatRef& xDataFmt );
@@ -962,9 +962,9 @@ public:
     explicit            XclImpChLegend( const XclImpChRoot& rRoot );
 
     /** Reads the CHLEGEND record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHLEGEND group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Final processing after reading the entire chart. */
     void                Finalize();
 
@@ -993,7 +993,7 @@ public:
     explicit            XclImpChDropBar( sal_uInt16 nDropBar );
 
     /** Reads the CHDROPBAR record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
 
     /** Converts and writes the contained frame data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
@@ -1028,9 +1028,9 @@ public:
     explicit            XclImpChTypeGroup( const XclImpChRoot& rRoot );
 
     /** Reads the CHTYPEGROUP record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHTYPEGROUP group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Final processing after reading the entire chart. */
     void                Finalize();
 
@@ -1211,18 +1211,18 @@ public:
     explicit            XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxisType = EXC_CHAXIS_NONE );
 
     /** Reads the CHAXIS record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHAXIS group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Final processing after reading the entire chart. */
     void                Finalize();
 
     /** Returns the font index for the axis labels. */
-    virtual sal_uInt16  GetFontIndex() const;
+    virtual sal_uInt16  GetFontIndex() const SAL_OVERRIDE;
     /** Returns the font color for the axis labels. */
-    virtual Color       GetFontColor() const;
+    virtual Color       GetFontColor() const SAL_OVERRIDE;
     /** Returns the rotation value for axis labels. */
-    virtual sal_uInt16  GetRotation() const;
+    virtual sal_uInt16  GetRotation() const SAL_OVERRIDE;
 
     /** Returns the type of this axis. */
     inline sal_uInt16   GetAxisType() const { return maData.mnType; }
@@ -1284,9 +1284,9 @@ public:
     explicit            XclImpChAxesSet( const XclImpChRoot& rRoot, sal_uInt16 nAxesSetId );
 
     /** Reads the CHAXESSET record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHAXESSET group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Final processing after reading the entire chart. */
     void                Finalize();
 
@@ -1368,9 +1368,9 @@ public:
     virtual             ~XclImpChChart();
 
     /** Reads the CHCHART record (called by base class). */
-    virtual void        ReadHeaderRecord( XclImpStream& rStrm );
+    virtual void        ReadHeaderRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a record from the CHCHART group (called by base class). */
-    virtual void        ReadSubRecord( XclImpStream& rStrm );
+    virtual void        ReadSubRecord( XclImpStream& rStrm ) SAL_OVERRIDE;
     /** Reads a CHDEFAULTTEXT group (default text formats). */
     void                ReadChDefaultText( XclImpStream& rStrm );
     /** Reads a CHDATAFORMAT group describing a series format or a data point format. */
@@ -1453,9 +1453,9 @@ public:
                             const Rectangle& rChartRect );
 
     /** Calculate the resulting rectangle of the passed anchor. */
-    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
+    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const SAL_OVERRIDE;
     /** Called whenever an object has been inserted into the draw page. */
-    virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj );
+    virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj ) SAL_OVERRIDE;
 
 private:
     Rectangle           maChartRect;        /// Position and size of the chart shape in 1/100 mm.

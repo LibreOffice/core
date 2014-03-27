@@ -34,8 +34,8 @@ public:
                 sal_uInt16          nRscId );
 
 protected:
-    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
-    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
+    virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
 
 private:
     sal_uInt16 nDlgRsc;

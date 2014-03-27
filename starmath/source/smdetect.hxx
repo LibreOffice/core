@@ -62,7 +62,7 @@ public:
 
     // XExtendedFilterDetect
 
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException, std::exception );
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif

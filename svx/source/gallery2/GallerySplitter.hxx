@@ -31,7 +31,7 @@ public:
     virtual ~GallerySplitter (void);
 
 protected:
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     ::boost::function<void(void)> maDataChangeFunctor;

@@ -45,8 +45,8 @@ public:
     virtual ~SwFmtFtn();
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     OUString   GetNumStr() const { return m_aNumber; }
     sal_uInt16 GetNumber() const { return m_nNumber; }

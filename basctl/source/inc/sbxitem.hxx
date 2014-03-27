@@ -48,8 +48,8 @@ public:
     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
 
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const;
-    virtual bool operator==(const SfxPoolItem&) const;
+    virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const SAL_OVERRIDE;
+    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
 
     ScriptDocument const& GetDocument () const { return m_aDocument; }
     OUString const& GetLibName () const { return m_aLibName; }

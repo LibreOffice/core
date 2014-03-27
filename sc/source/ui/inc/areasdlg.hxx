@@ -38,14 +38,14 @@ public:
                     ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent );
                     ~ScPrintAreasDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual void    AddRefEntry();
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual void    AddRefEntry() SAL_OVERRIDE;
 
-    virtual bool    IsTableLocked() const;
+    virtual bool    IsTableLocked() const SAL_OVERRIDE;
 
-    virtual void    SetActive();
-    virtual void    Deactivate();
-    virtual bool    Close();
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual void    Deactivate() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
 private:
     ListBox*                 pLbPrintArea;

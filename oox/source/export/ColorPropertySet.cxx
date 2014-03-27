@@ -43,9 +43,9 @@ public:
 
 protected:
     // ____ XPropertySetInfo ____
-    virtual Sequence< Property > SAL_CALL getProperties()                throw (RuntimeException, std::exception);
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )  throw (RuntimeException, std::exception);
+    virtual Sequence< Property > SAL_CALL getProperties()                throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )  throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     OUString m_aColorPropName;

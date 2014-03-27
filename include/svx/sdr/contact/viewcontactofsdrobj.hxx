@@ -51,7 +51,7 @@ namespace sdr
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
         public:
             // access to SdrObject
@@ -65,26 +65,26 @@ namespace sdr
             virtual ~ViewContactOfSdrObj();
 
             // Access to possible sub-hierarchy
-            virtual sal_uInt32 GetObjectCount() const;
-            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
-            virtual ViewContact* GetParentContact() const;
+            virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
+            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+            virtual ViewContact* GetParentContact() const SAL_OVERRIDE;
 
             // React on changes of the object of this ViewContact
-            virtual void ActionChanged();
+            virtual void ActionChanged() SAL_OVERRIDE;
 
             // overload for acessing the SdrObject
-            virtual SdrObject* TryToGetSdrObject() const;
+            virtual SdrObject* TryToGetSdrObject() const SAL_OVERRIDE;
 
 
             // primitive stuff
 
             // add Gluepoints (if available)
-            virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const SAL_OVERRIDE;
 
             // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
             // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
             // for 3D scenes
-            virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const SAL_OVERRIDE;
         };
     } // end of namespace contact
 } // end of namespace sdr

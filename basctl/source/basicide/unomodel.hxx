@@ -35,31 +35,31 @@ public:
     virtual ~SIDEModel();
 
     //XInterface
-    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL acquire(  ) throw();
-    virtual void SAL_CALL release(  ) throw();
+    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE;
+    virtual void SAL_CALL release(  ) throw() SAL_OVERRIDE;
 
     //XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     // XStorable2
     virtual void SAL_CALL storeSelf( const  ::com::sun::star::uno::Sequence< css::beans::PropertyValue >& )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) { notImplemented(); }
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { notImplemented(); }
     //  XStorable
-    virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL storeAsURL(   const   OUString& sURL,
         const   ::com::sun::star::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
-        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL storeToURL(   const   OUString& sURL,
         const   ::com::sun::star::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
-        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
     static OUString getImplementationName_Static();

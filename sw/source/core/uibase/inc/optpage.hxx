@@ -76,8 +76,8 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 };
 
@@ -125,12 +125,12 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     void                SetFax( const std::vector<OUString>& );
     void                SelectFax( const OUString& );
     void                SetPreview(sal_Bool bPrev);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 
 };
 
@@ -197,11 +197,11 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 class SwTableOptionsTabPage : public SfxTabPage
@@ -239,11 +239,11 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void SetWrtShell(SwWrtShell* pSh) {pWrtShell = pSh;}
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 
 };
 
@@ -285,11 +285,11 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void    SetWrtShell( SwWrtShell * pSh ) { m_pWrtShell = pSh; }
-    virtual void        PageCreated( SfxAllItemSet aSet );
+    virtual void        PageCreated( SfxAllItemSet aSet ) SAL_OVERRIDE;
 };
 
 /*-----------------------------------------------------------------------
@@ -316,12 +316,12 @@ class SwMarkPreview : public Window
     using OutputDevice::DrawRect;
     void            DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
 
-    void            Paint(const Rectangle&);
+    void            Paint(const Rectangle&) SAL_OVERRIDE;
     void            PaintPage(const Rectangle &rRect);
     void            InitColors( void );
 
 protected:
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
                     SwMarkPreview(Window* pParent, WinBits nWinBits);
@@ -329,7 +329,7 @@ public:
 
     inline void     SetColor(const Color& rCol) { m_aMarkCol = rCol; }
     inline void     SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
-    virtual Size    GetOptimalSize() const;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
 /*-----------------------------------------------------------------------
@@ -369,8 +369,8 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 /*-------------------------------------------------------
@@ -388,8 +388,8 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 private:
     CheckBox* m_pTest1CBox;
@@ -431,8 +431,8 @@ public:
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool FillItemSet( SfxItemSet& rSet );
-    virtual void Reset( const SfxItemSet& rSet );
+    virtual bool FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 #endif

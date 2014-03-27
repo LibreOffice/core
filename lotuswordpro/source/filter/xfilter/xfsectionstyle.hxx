@@ -84,9 +84,9 @@ public:
 
     void    SetColumns(XFColumns *pColumns);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     double      m_fMarginLeft;

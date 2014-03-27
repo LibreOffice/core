@@ -88,8 +88,8 @@ public:
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
 
-    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
-    virtual bool                Is3DRef() const;    // reference with 3D flag set
+    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual bool                Is3DRef() const SAL_OVERRIDE;    // reference with 3D flag set
 
 #if DEBUG_FORMULA_COMPILER
     virtual void Dump() const;
@@ -129,10 +129,10 @@ public:
                                     ScToken( formula::svSingleRef, e ), aSingleRef( r ) {}
                                 ScSingleRefToken( const ScSingleRefToken& r ) :
                                     ScToken( r ), aSingleRef( r.aSingleRef ) {}
-    virtual const ScSingleRefData&    GetSingleRef() const;
-    virtual ScSingleRefData&      GetSingleRef();
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScSingleRefToken(*this); }
+    virtual const ScSingleRefData&    GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData&      GetSingleRef() SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScSingleRefToken(*this); }
 
 #if DEBUG_FORMULA_COMPILER
     virtual void Dump() const;
@@ -155,14 +155,14 @@ public:
                                 }
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
                                     ScToken( r ), aDoubleRef( r.aDoubleRef ) {}
-    virtual const ScSingleRefData&    GetSingleRef() const;
-    virtual ScSingleRefData&      GetSingleRef();
-    virtual const ScComplexRefData& GetDoubleRef() const;
-    virtual ScComplexRefData&       GetDoubleRef();
-    virtual const ScSingleRefData&    GetSingleRef2() const;
-    virtual ScSingleRefData&      GetSingleRef2();
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScDoubleRefToken(*this); }
+    virtual const ScSingleRefData&    GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData&      GetSingleRef() SAL_OVERRIDE;
+    virtual const ScComplexRefData& GetDoubleRef() const SAL_OVERRIDE;
+    virtual ScComplexRefData&       GetDoubleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData&    GetSingleRef2() const SAL_OVERRIDE;
+    virtual ScSingleRefData&      GetSingleRef2() SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScDoubleRefToken(*this); }
 
 #if DEBUG_FORMULA_COMPILER
     virtual void Dump() const;
@@ -178,10 +178,10 @@ public:
     ScMatrixToken( const ScMatrixRef& p );
     ScMatrixToken( const ScMatrixToken& r );
 
-    virtual const ScMatrix*     GetMatrix() const;
-    virtual ScMatrix*           GetMatrix();
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScMatrixToken(*this); }
+    virtual const ScMatrix*     GetMatrix() const SAL_OVERRIDE;
+    virtual ScMatrix*           GetMatrix() SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScMatrixToken(*this); }
 };
 
 /**
@@ -198,13 +198,13 @@ public:
     ScMatrixRangeToken( const sc::RangeMatrix& rMat );
     ScMatrixRangeToken( const ScMatrixRangeToken& r );
 
-    virtual sal_uInt8 GetByte() const;
-    virtual const ScMatrix* GetMatrix() const;
-    virtual ScMatrix* GetMatrix();
-    virtual const ScComplexRefData& GetDoubleRef() const;
-    virtual ScComplexRefData& GetDoubleRef();
-    virtual bool operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken* Clone() const;
+    virtual sal_uInt8 GetByte() const SAL_OVERRIDE;
+    virtual const ScMatrix* GetMatrix() const SAL_OVERRIDE;
+    virtual ScMatrix* GetMatrix() SAL_OVERRIDE;
+    virtual const ScComplexRefData& GetDoubleRef() const SAL_OVERRIDE;
+    virtual ScComplexRefData& GetDoubleRef() SAL_OVERRIDE;
+    virtual bool operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken* Clone() const SAL_OVERRIDE;
 };
 
 class ScExternalSingleRefToken : public ScToken
@@ -219,12 +219,12 @@ public:
     ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
     virtual ~ScExternalSingleRefToken();
 
-    virtual sal_uInt16                  GetIndex() const;
-    virtual svl::SharedString GetString() const;
-    virtual const ScSingleRefData&  GetSingleRef() const;
-    virtual ScSingleRefData&          GetSingleRef();
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScExternalSingleRefToken(*this); }
+    virtual sal_uInt16                  GetIndex() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual const ScSingleRefData&  GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData&          GetSingleRef() SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalSingleRefToken(*this); }
 };
 
 
@@ -240,16 +240,16 @@ public:
     ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
     virtual ~ScExternalDoubleRefToken();
 
-    virtual sal_uInt16                 GetIndex() const;
-    virtual svl::SharedString GetString() const;
-    virtual const ScSingleRefData& GetSingleRef() const;
-    virtual ScSingleRefData&       GetSingleRef();
-    virtual const ScSingleRefData& GetSingleRef2() const;
-    virtual ScSingleRefData&       GetSingleRef2();
-    virtual const ScComplexRefData&    GetDoubleRef() const;
-    virtual ScComplexRefData&      GetDoubleRef();
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
+    virtual sal_uInt16                 GetIndex() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual const ScSingleRefData& GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData&       GetSingleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData& GetSingleRef2() const SAL_OVERRIDE;
+    virtual ScSingleRefData&       GetSingleRef2() SAL_OVERRIDE;
+    virtual const ScComplexRefData&    GetDoubleRef() const SAL_OVERRIDE;
+    virtual ScComplexRefData&      GetDoubleRef() SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalDoubleRefToken(*this); }
 };
 
 class ScExternalNameToken : public ScToken
@@ -263,10 +263,10 @@ public:
     ScExternalNameToken( const ScExternalNameToken& r );
     virtual ~ScExternalNameToken();
 
-    virtual sal_uInt16              GetIndex() const;
-    virtual svl::SharedString GetString() const;
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScExternalNameToken(*this); }
+    virtual sal_uInt16              GetIndex() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalNameToken(*this); }
 };
 
 
@@ -282,9 +282,9 @@ public:
                                 ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
                                     ScToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
     virtual                     ~ScJumpMatrixToken();
-    virtual ScJumpMatrix*       GetJumpMatrix() const;
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScJumpMatrixToken(*this); }
+    virtual ScJumpMatrix*       GetJumpMatrix() const SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScJumpMatrixToken(*this); }
 };
 
 
@@ -299,10 +299,10 @@ public:
                                     ScToken( formula::svRefList ) {}
                                 ScRefListToken( const ScRefListToken & r ) :
                                     ScToken( r ), aRefList( r.aRefList ) {}
-    virtual const ScRefList*    GetRefList() const;
-    virtual       ScRefList*    GetRefList();
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScRefListToken(*this); }
+    virtual const ScRefList*    GetRefList() const SAL_OVERRIDE;
+    virtual       ScRefList*    GetRefList() SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScRefListToken(*this); }
 };
 
 
@@ -321,10 +321,10 @@ public:
                                     bDisplayedAsString( r.bDisplayedAsString ) {}
             bool                IsInherited() const { return bInherited; }
             bool                IsDisplayedAsString() const { return bDisplayedAsString; }
-    virtual double              GetDouble() const;
-    virtual svl::SharedString GetString() const;
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScEmptyCellToken(*this); }
+    virtual double              GetDouble() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScEmptyCellToken(*this); }
 };
 
 
@@ -333,7 +333,7 @@ class SC_DLLPUBLIC ScMatrixCellResultToken : public ScToken
 {
     // No non-const access implemented, silence down unxsols4 complaining about
     // the public GetMatrix() hiding the one from ScToken.
-    virtual ScMatrix*           GetMatrix();
+    virtual ScMatrix*           GetMatrix() SAL_OVERRIDE;
 
 protected:
     ScConstMatrixRef xMatrix;
@@ -341,11 +341,11 @@ protected:
 public:
     ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
-    virtual double              GetDouble() const;
-    virtual svl::SharedString GetString() const;
-    virtual const ScMatrix*     GetMatrix() const;
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const;
+    virtual double              GetDouble() const SAL_OVERRIDE;
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual const ScMatrix*     GetMatrix() const SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE;
     formula::StackVar           GetUpperLeftType() const
                                     {
                                         return xUpperLeft ?
@@ -369,8 +369,8 @@ public:
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR );
     ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r );
 
-    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken*       Clone() const { return new ScMatrixFormulaCellToken(*this); }
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScMatrixFormulaCellToken(*this); }
             void                SetMatColsRows( SCCOL nC, SCROW nR )
                                     {
                                         nRows = nR;
@@ -422,11 +422,11 @@ public:
         maFormula( rFormula ) {}
 
     const OUString& GetFormula() const  { return maFormula; }
-    virtual double GetDouble() const;
+    virtual double GetDouble() const SAL_OVERRIDE;
 
-    virtual svl::SharedString GetString() const;
-    virtual bool operator==( const formula::FormulaToken& rToken ) const;
-    virtual FormulaToken* Clone() const { return new ScHybridCellToken(*this); }
+    virtual svl::SharedString GetString() const SAL_OVERRIDE;
+    virtual bool operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken* Clone() const SAL_OVERRIDE { return new ScHybridCellToken(*this); }
 };
 
 // Simplify argument passing to RefUpdate methods with ScSingleRefToken or

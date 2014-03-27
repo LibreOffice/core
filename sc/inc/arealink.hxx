@@ -50,11 +50,11 @@ public:
                     const OUString& rArea, const ScRange& rDest, sal_uLong nRefresh );
     virtual ~ScAreaLink();
 
-    virtual void Closed();
+    virtual void Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
-    virtual void    Edit( Window*, const Link& rEndEditHdl );
+    virtual void    Edit( Window*, const Link& rEndEditHdl ) SAL_OVERRIDE;
 
     bool    Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                     const OUString& rNewArea, sal_uLong nNewRefresh );

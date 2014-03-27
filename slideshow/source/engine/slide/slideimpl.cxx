@@ -119,36 +119,36 @@ public:
     // Slide interface
 
 
-    virtual bool prefetch();
-    virtual bool show( bool );
-    virtual void hide();
+    virtual bool prefetch() SAL_OVERRIDE;
+    virtual bool show( bool ) SAL_OVERRIDE;
+    virtual void hide() SAL_OVERRIDE;
 
-    virtual basegfx::B2ISize getSlideSize() const;
-    virtual uno::Reference<drawing::XDrawPage > getXDrawPage() const;
-    virtual uno::Reference<animations::XAnimationNode> getXAnimationNode() const;
-    virtual PolyPolygonVector getPolygons();
-    virtual void drawPolygons() const;
-    virtual bool isPaintOverlayActive() const;
-    virtual void enablePaintOverlay();
-    virtual void disablePaintOverlay();
-    virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth );
+    virtual basegfx::B2ISize getSlideSize() const SAL_OVERRIDE;
+    virtual uno::Reference<drawing::XDrawPage > getXDrawPage() const SAL_OVERRIDE;
+    virtual uno::Reference<animations::XAnimationNode> getXAnimationNode() const SAL_OVERRIDE;
+    virtual PolyPolygonVector getPolygons() SAL_OVERRIDE;
+    virtual void drawPolygons() const SAL_OVERRIDE;
+    virtual bool isPaintOverlayActive() const SAL_OVERRIDE;
+    virtual void enablePaintOverlay() SAL_OVERRIDE;
+    virtual void disablePaintOverlay() SAL_OVERRIDE;
+    virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth ) SAL_OVERRIDE;
 
 
     // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
     // but on canvas-independent basegfx bitmaps
-    virtual SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const;
+    virtual SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const SAL_OVERRIDE;
 
 
 private:
     // ViewEventHandler
-    virtual void viewAdded( const UnoViewSharedPtr& rView );
-    virtual void viewRemoved( const UnoViewSharedPtr& rView );
-    virtual void viewChanged( const UnoViewSharedPtr& rView );
-    virtual void viewsChanged();
+    virtual void viewAdded( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+    virtual void viewRemoved( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+    virtual void viewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+    virtual void viewsChanged() SAL_OVERRIDE;
 
     // CursorManager
-    virtual bool requestCursor( sal_Int16 nCursorShape );
-    virtual void resetCursor();
+    virtual bool requestCursor( sal_Int16 nCursorShape ) SAL_OVERRIDE;
+    virtual void resetCursor() SAL_OVERRIDE;
 
     void activatePaintOverlay();
     void deactivatePaintOverlay();

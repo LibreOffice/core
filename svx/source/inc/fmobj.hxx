@@ -65,17 +65,17 @@ public:
 
 public:
     virtual ~FmFormObj();
-    virtual void SetPage(SdrPage* pNewPage);
+    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
 
-    virtual sal_uInt32 GetObjInventor() const;
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void NbcReformatText();
+    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual void NbcReformatText() SAL_OVERRIDE;
 
-    virtual FmFormObj* Clone() const;
+    virtual FmFormObj* Clone() const SAL_OVERRIDE;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     FmFormObj& operator= (const FmFormObj& rObj);
 
-    virtual void SetModel(SdrModel* pNewModel);
+    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 
     virtual void clonedFrom(const FmFormObj* _pSource);
 
@@ -92,15 +92,15 @@ public:
     static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
     static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
 
-    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
+    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel ) SAL_OVERRIDE;
 
 protected:
-    virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
-    virtual void        BrkCreate( SdrDragStat& rStat );
+    virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) SAL_OVERRIDE;
+    virtual void        BrkCreate( SdrDragStat& rStat ) SAL_OVERRIDE;
 
     // #i70852# overload Layer interface to force to FormColtrol layer
-    virtual SdrLayerID GetLayer() const;
-    virtual void NbcSetLayer(SdrLayerID nLayer);
+    virtual SdrLayerID GetLayer() const SAL_OVERRIDE;
+    virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
 
 private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from

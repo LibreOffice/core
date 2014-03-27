@@ -37,7 +37,7 @@ class SelectionListBox : public ListBox
 {
     bool            bCallAddSelection;
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     SelectionListBox(Window* pParent, WinBits nStyle);
@@ -87,7 +87,7 @@ class SwFldVarPage : public SwFldPage
     sal_Int32           FillFormatLB(sal_uInt16 nTypeId);
 
 protected:
-    virtual sal_uInt16      GetGroup();
+    virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
                         SwFldVarPage(Window* pParent, const SfxItemSet& rSet);
@@ -96,10 +96,10 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
-    virtual void        FillUserData();
+    virtual void        FillUserData() SAL_OVERRIDE;
 };
 
 #endif

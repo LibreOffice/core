@@ -17,10 +17,10 @@ class RecentDocsViewItem : public ThumbnailViewItem
 public:
     RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
         const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId);
-    virtual void setEditTitle (bool edit, bool bChangeFocus = true);
+    virtual void setEditTitle (bool edit, bool bChangeFocus = true) SAL_OVERRIDE;
 
     /// Text to be used for the tooltip.
-    virtual OUString getHelpText() const;
+    virtual OUString getHelpText() const SAL_OVERRIDE;
 
     OUString maURL;
 

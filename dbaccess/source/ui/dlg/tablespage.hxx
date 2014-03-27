@@ -51,12 +51,12 @@ namespace dbaui
         OTableSubscriptionDialog* m_pTablesDlg;
 
     public:
-        virtual bool            FillItemSet(SfxItemSet& _rCoreAttrs);
-        virtual int             DeactivatePage(SfxItemSet* _pSet);
+        virtual bool            FillItemSet(SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
+        virtual int             DeactivatePage(SfxItemSet* _pSet) SAL_OVERRIDE;
         using OGenericAdministrationPage::DeactivatePage;
 
-        virtual void            StateChanged( StateChangedType nStateChange );
-        virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         /** will be called when the controls need to be resized.
         */
@@ -66,8 +66,8 @@ namespace dbaui
         virtual ~OTableSubscriptionPage();
 
     protected:
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
         DECL_LINK( OnTreeEntryChecked, Control* );
@@ -88,7 +88,7 @@ namespace dbaui
         /// (un)check all entries
         void CheckAll( sal_Bool bCheck = sal_True );
 
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
 
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...

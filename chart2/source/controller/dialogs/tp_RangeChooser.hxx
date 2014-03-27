@@ -51,19 +51,19 @@ public:
 virtual ~RangeChooserTabPage();
 
     //RangeSelectionListenerParent
-    virtual void listeningFinished( const OUString & rNewRange );
-    virtual void disposingRangeSelection();
+    virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
+    virtual void disposingRangeSelection() SAL_OVERRIDE;
 
     void commitPage();
 
 protected: //methods
 
     //OWizardPage
-    virtual void ActivatePage();
-    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual void ActivatePage() SAL_OVERRIDE;
+    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
 
     //TabPage
-    virtual void DeactivatePage();
+    virtual void DeactivatePage() SAL_OVERRIDE;
 
     void initControlsFromModel();
     void changeDialogModelAccordingToControls();

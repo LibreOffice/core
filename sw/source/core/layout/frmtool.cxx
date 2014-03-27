@@ -3169,7 +3169,7 @@ class SwFrmHolder : private SfxListener
 {
     SwFrm* pFrm;
     bool bSet;
-    virtual void Notify(  SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify(  SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 public:
     SwFrmHolder() : pFrm(0), bSet(false) {}
     void SetFrm( SwFrm* pHold );

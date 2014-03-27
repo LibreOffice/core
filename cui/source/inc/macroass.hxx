@@ -64,16 +64,16 @@ public:
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
 
     virtual void                ScriptChanged();
-    virtual void                PageCreated (SfxAllItemSet aSet);
+    virtual void                PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
     using TabPage::ActivatePage; // FIXME WTF is this nonsense?
-    virtual void                ActivatePage( const SfxItemSet& );
+    virtual void                ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     void                        LaunchFillGroup();
 
     // --------- inherit from the base -------------
-    virtual bool                FillItemSet( SfxItemSet& rSet );
-    virtual void                Reset( const SfxItemSet& rSet );
+    virtual bool                FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void                Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
-    bool                        IsReadOnly() const;
+    bool                        IsReadOnly() const SAL_OVERRIDE;
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const

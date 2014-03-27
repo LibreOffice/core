@@ -169,17 +169,17 @@ private:
 
 private:
                                     ORptExport();
-    virtual void                    SetBodyAttributes();
+    virtual void                    SetBodyAttributes() SAL_OVERRIDE;
 protected:
 
-    virtual void                    _ExportStyles( bool bUsed );
-    virtual void                    _ExportAutoStyles();
-    virtual void                    _ExportContent();
-    virtual void                    _ExportMasterStyles();
-    virtual void                    _ExportFontDecls();
-    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
-    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool();
-    virtual XMLShapeExport*         CreateShapeExport();
+    virtual void                    _ExportStyles( bool bUsed ) SAL_OVERRIDE;
+    virtual void                    _ExportAutoStyles() SAL_OVERRIDE;
+    virtual void                    _ExportContent() SAL_OVERRIDE;
+    virtual void                    _ExportMasterStyles() SAL_OVERRIDE;
+    virtual void                    _ExportFontDecls() SAL_OVERRIDE;
+    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
+    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() SAL_OVERRIDE;
+    virtual XMLShapeExport*         CreateShapeExport() SAL_OVERRIDE;
 
     virtual                 ~ORptExport(){};
 public:
@@ -192,7 +192,7 @@ public:
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 

@@ -42,18 +42,18 @@ public:
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const;
-    SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const;
+    SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const SAL_OVERRIDE;
+    SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const SAL_OVERRIDE;
 
     sal_Int16 GetVertOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
@@ -77,15 +77,15 @@ public:
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     sal_Int16 GetHoriOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }

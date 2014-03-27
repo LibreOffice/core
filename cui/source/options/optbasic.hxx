@@ -41,9 +41,9 @@ public:
     ~SvxBasicIDEOptionsPage();
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rSet );
-    virtual bool FillItemSet( SfxItemSet& rSet );
-    virtual void Reset( const SfxItemSet& rSet );
-    virtual void FillUserData();
+    virtual bool FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void FillUserData() SAL_OVERRIDE;
 };
 
 

@@ -43,8 +43,8 @@ class SwNavigationPI;
 
 class SwNavHelpToolBox : public SwHelpToolBox
 {
-    virtual void    MouseButtonDown(const MouseEvent &rEvt);
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
@@ -130,11 +130,11 @@ class SwNavigationPI : public Window,
 protected:
 
     virtual         sal_Bool Close();
-    virtual         void Resize();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual         void Resize() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // release ObjectShellLock early enough for app end
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     NumEditAction&  GetPageEdit();
     sal_Bool            ToggleTree();
@@ -152,7 +152,7 @@ public:
     void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, bool bWithCilds);
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                            const SfxPoolItem* pState );
+                                            const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);

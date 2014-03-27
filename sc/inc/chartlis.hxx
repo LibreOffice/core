@@ -46,7 +46,7 @@ public:
     public:
         ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc);
         virtual ~ExternalRefListener();
-        virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
+        virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) SAL_OVERRIDE;
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
         ::boost::unordered_set<sal_uInt16>& getAllFileIds();
@@ -92,7 +92,7 @@ public:
 
     bool            IsUno() const   { return (pUnoData != NULL); }
 
-    virtual void Notify( const SfxHint& rHint );
+    virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,

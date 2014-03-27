@@ -139,8 +139,8 @@ public:
     inline bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
 
     // Summarize the internal lines to calculate the (external) size
@@ -154,9 +154,9 @@ public:
         { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 class SwDoubleLinePortion : public SwMultiPortion
@@ -190,8 +190,8 @@ public:
     inline sal_Int32 GetBlank1() const { return nBlank1; }
     inline sal_Int32 GetBlank2() const { return nBlank2; }
 
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
-    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const SAL_OVERRIDE;
 };
 
 class SwRubyPortion : public SwMultiPortion
@@ -234,9 +234,9 @@ public:
     // Get number of blanks for justified alignment
     sal_Int32 GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
     // Manipulate the spacing array at pCurr
-    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const SAL_OVERRIDE;
 };
 
 // For cursor travelling in multiportions

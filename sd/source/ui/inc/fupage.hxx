@@ -36,10 +36,10 @@ class FuPage
     TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-    virtual void DoExecute( SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
     const SfxItemSet* ExecuteDialog( Window* pParent );
 

@@ -84,12 +84,12 @@ public:
     LwpSuperTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTable();
 
-    virtual void Parse(IXFStream* pOutputStream);
+    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     //Added by  for XFConvert refactor, 03/31/2005
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     //End of Add
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 /**
  * @brief
@@ -118,7 +118,7 @@ public:
     LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTable();
 
-    virtual void Parse(IXFStream* pOutputStream);
+    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
     double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);}
     LwpObjectID * GetDefaultCellStyle() {return &m_DefaultCellStyle;}
@@ -126,7 +126,7 @@ public:
     sal_uInt16 GetColumn() {return m_nColumn;}
     LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));}
     sal_Bool IsNumberDown();
-    virtual sal_Bool IsTable(){ return sal_True;}
+    virtual sal_Bool IsTable() SAL_OVERRIDE { return sal_True;}
     LwpSuperTableLayout* GetSuperTableLayout();
 protected:
     LwpDLVListHeadTail m_RowCache;
@@ -148,7 +148,7 @@ protected:
 
     LwpObjectID     m_Layout;
     LwpObjectID     m_DefaultCellStyle; // gCVirtualLayout
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -161,9 +161,9 @@ public:
     LwpTableHeading(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableHeading();
 
-    virtual void Parse(IXFStream* pOutputStream);
+    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 
 };
 class LwpParallelColumns : public LwpTable
@@ -172,7 +172,7 @@ public:
     LwpParallelColumns(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpParallelColumns();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpObjectID     cDefaultLeftColumnStyle;
     LwpObjectID cDefaultRightColumnStyle;
 };
@@ -183,7 +183,7 @@ public:
     LwpGlossary(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpGlossary();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_uInt16 GetNumIndexRows(void);
 };
 

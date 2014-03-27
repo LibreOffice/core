@@ -31,11 +31,11 @@ class ScAnnontationObj : public CalcUnoApiTest, apitest::XSheetAnnotation
 public:
     ScAnnontationObj();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
-    virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< sheet::XSheetAnnotation> getAnnotation(table::CellAddress&);
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
+    virtual uno::Reference< sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScAnnontationObj);
     CPPUNIT_TEST(testGetPosition);

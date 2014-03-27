@@ -20,7 +20,7 @@ public:
     GL3DBarChart( const css::uno::Reference<css::chart2::XChartType>& xChartTypeModel );
     virtual ~GL3DBarChart();
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 };
 
 }

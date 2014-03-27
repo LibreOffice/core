@@ -38,8 +38,8 @@ public:
     {
     }
     void setColSizes();
-    virtual void Resize();
-    virtual void KeyInput(const KeyEvent& rKeyEvent);
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKeyEvent) SAL_OVERRIDE;
 };
 
 class SfxVersionTableDtor;

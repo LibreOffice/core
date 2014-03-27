@@ -45,7 +45,7 @@ public:
     {
         m_sWidestAccessString = getWidestTime(*ScGlobal::pLocaleData);
     }
-    virtual void Resize()
+    virtual void Resize() SAL_OVERRIDE
     {
         SvSimpleTable::Resize();
         if (isInitialLayout(this))

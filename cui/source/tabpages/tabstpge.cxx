@@ -52,7 +52,7 @@ public:
     {
     }
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void SetTabulatorTabPage(SvxTabulatorTabPage* pPage) { mpPage = pPage; }
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }

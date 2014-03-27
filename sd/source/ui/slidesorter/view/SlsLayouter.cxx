@@ -232,18 +232,18 @@ public:
         const ::boost::shared_ptr<view::Theme>& rpTheme);
     VerticalImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation (void) const;
+    virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
-        InsertPosition& rPosition) const;
+        InsertPosition& rPosition) const SAL_OVERRIDE;
 
 protected:
-    virtual void CalculateRowAndColumnCount (const Size& rWindowSize);
-    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize);
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize) const;
+        const Size& rPreviewModelSize) const SAL_OVERRIDE;
 };
 
 
@@ -255,18 +255,18 @@ class HorizontalImplementation : public Layouter::Implementation
 public:
     HorizontalImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation (void) const;
+    virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
-        InsertPosition& rPosition) const;
+        InsertPosition& rPosition) const SAL_OVERRIDE;
 
 protected:
-    virtual void CalculateRowAndColumnCount (const Size& rWindowSize);
-    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize);
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize) const;
+        const Size& rPreviewModelSize) const SAL_OVERRIDE;
 };
 
 
@@ -282,18 +282,18 @@ public:
         const ::boost::shared_ptr<view::Theme>& rpTheme);
     GridImplementation (const Implementation& rImplementation);
 
-    virtual Layouter::Orientation GetOrientation (void) const;
+    virtual Layouter::Orientation GetOrientation (void) const SAL_OVERRIDE;
 
     void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
-        InsertPosition& rPosition) const;
+        InsertPosition& rPosition) const SAL_OVERRIDE;
 
 protected:
-    virtual void CalculateRowAndColumnCount (const Size& rWindowSize);
-    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize);
+    virtual void CalculateRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
+    virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) SAL_OVERRIDE;
     virtual Size CalculateTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize) const;
+        const Size& rPreviewModelSize) const SAL_OVERRIDE;
 };
 
 

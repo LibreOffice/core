@@ -136,14 +136,14 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     SwTransferable&                 operator=( const SwTransferable& );
 
 protected:
-    virtual void        AddSupportedFormats();
-    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor );
+    virtual void        AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
     virtual bool        WriteObject( SotStorageStreamRef& rxOStm,
                                         void* pUserObject,
                                         sal_uInt32 nUserObjectId,
-                                        const css::datatransfer::DataFlavor& rFlavor );
-    virtual void        DragFinished( sal_Int8 nDropAction );
-    virtual void        ObjectReleased();
+                                        const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
+    virtual void        ObjectReleased() SAL_OVERRIDE;
 
     using TransferableHelper::StartDrag;
 
@@ -205,7 +205,7 @@ public:
     void    Invalidate() {pWrtShell = 0;}
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception );
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif

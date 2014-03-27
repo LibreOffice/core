@@ -117,18 +117,18 @@ public:
     virtual css::uno::Reference< ov::excel::XHyperlink > SAL_CALL Add(
         const css::uno::Any& rAnchor, const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
         const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay )
-            throw (css::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // ScVbaCollectionBase
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource );
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) SAL_OVERRIDE;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE

@@ -43,7 +43,7 @@ private:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState );
+                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 public:
     SvxBmpMaskSelectItem( sal_uInt16 nId, SvxBmpMask& rMask,
@@ -120,7 +120,7 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 
     Image               maImgPipette;
 
-    virtual bool        Close();
+    virtual bool        Close() SAL_OVERRIDE;
 
 #ifdef BMPMASK_PRIVATE
 
@@ -164,7 +164,7 @@ public:
 
     void                onSelect( MaskSet* pSet );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void ApplyStyle();
 
 private:

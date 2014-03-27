@@ -426,10 +426,10 @@ namespace sdr { namespace contact {
 
         virtual ~SdrPageViewAccess() {}
 
-        virtual bool    isDesignMode() const;
+        virtual bool    isDesignMode() const SAL_OVERRIDE;
         virtual Reference< XControlContainer >
-                        getControlContainer( const OutputDevice& _rDevice ) const;
-        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
+                        getControlContainer( const OutputDevice& _rDevice ) const SAL_OVERRIDE;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const SAL_OVERRIDE;
     };
 
 
@@ -471,10 +471,10 @@ namespace sdr { namespace contact {
 
         virtual ~InvisibleControlViewAccess() {}
 
-        virtual bool    isDesignMode() const;
+        virtual bool    isDesignMode() const SAL_OVERRIDE;
         virtual Reference< XControlContainer >
-                        getControlContainer( const OutputDevice& _rDevice ) const;
-        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
+                        getControlContainer( const OutputDevice& _rDevice ) const SAL_OVERRIDE;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const SAL_OVERRIDE;
     };
 
 
@@ -521,10 +521,10 @@ namespace sdr { namespace contact {
 
         virtual ~DummyPageViewAccess() {}
 
-        virtual bool    isDesignMode() const;
+        virtual bool    isDesignMode() const SAL_OVERRIDE;
         virtual Reference< XControlContainer >
-                        getControlContainer( const OutputDevice& _rDevice ) const;
-        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const;
+                        getControlContainer( const OutputDevice& _rDevice ) const SAL_OVERRIDE;
+        virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const SAL_OVERRIDE;
     };
 
 
@@ -683,24 +683,24 @@ namespace sdr { namespace contact {
         ~ViewObjectContactOfUnoControl_Impl();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const WindowEvent& e ) throw(RuntimeException, std::exception);
-        virtual void SAL_CALL windowMoved( const WindowEvent& e ) throw(RuntimeException, std::exception);
-        virtual void SAL_CALL windowShown( const EventObject& e ) throw(RuntimeException, std::exception);
-        virtual void SAL_CALL windowHidden( const EventObject& e ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL windowResized( const WindowEvent& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowMoved( const WindowEvent& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowShown( const EventObject& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL windowHidden( const EventObject& e ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException, std::exception);
+        virtual void SAL_CALL propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XModeChangeListener
-        virtual void SAL_CALL modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         /** retrieves the SdrPageView which our associated SdrPageViewWindow belongs to
@@ -866,17 +866,17 @@ namespace sdr { namespace contact {
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
             get2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const;
+            ) const SAL_OVERRIDE;
 
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
             create2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const;
+            ) const SAL_OVERRIDE;
 
         virtual ::basegfx::B2DRange
             getB2DRange(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const;
+            ) const SAL_OVERRIDE;
 
     public:
         explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
@@ -886,7 +886,7 @@ namespace sdr { namespace contact {
             getTransformation( m_pVOCImpl->getViewContact(), m_aTransformation );
         }
 
-        virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+        virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
         // declare unique ID for this primitive class
         DeclPrimitive2DIDBlock()

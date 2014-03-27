@@ -47,10 +47,10 @@ public:
     SvxXConnectionPreview( Window* pParent, WinBits nStyle);
     virtual ~SvxXConnectionPreview();
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
     sal_uInt16   GetLineDeltaAnz();
@@ -58,7 +58,7 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 

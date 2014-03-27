@@ -119,7 +119,7 @@ private:
     DECL_LINK( ScopeChangedHdl, void* );
 
 protected:
-    virtual void    RefInputDone( bool bForced = false );
+    virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -127,11 +127,11 @@ public:
                                const ScAddress& aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap = NULL );
     virtual         ~ScNameDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual bool    IsRefInputMode() const;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
 
-    virtual void    SetActive();
-    virtual bool    Close();
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
     void GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap);
     void SetEntry(const OUString& rName, const OUString& rScope);

@@ -79,16 +79,16 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE void                  RemoveLink();
 
     /// Catch hint for DocInfo.
-    SAL_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SAL_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     /// FileIO
-    SAL_DLLPRIVATE virtual bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    SAL_DLLPRIVATE virtual bool Load( SfxMedium& rMedium );
-    SAL_DLLPRIVATE virtual bool LoadFrom( SfxMedium& rMedium );
-    SAL_DLLPRIVATE virtual bool ConvertFrom( SfxMedium &rMedium );
-    SAL_DLLPRIVATE virtual bool ConvertTo( SfxMedium &rMedium );
-    SAL_DLLPRIVATE virtual bool SaveAs( SfxMedium& rMedium );
-    SAL_DLLPRIVATE virtual bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SAL_DLLPRIVATE virtual bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool Load( SfxMedium& rMedium ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool LoadFrom( SfxMedium& rMedium ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool ConvertFrom( SfxMedium &rMedium ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool ConvertTo( SfxMedium &rMedium ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool SaveAs( SfxMedium& rMedium ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
 
     SAL_DLLPRIVATE virtual bool     PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
@@ -98,9 +98,9 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     /// Make DocInfo known to the Doc.
     SAL_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
-                                    Window *pParent, const SfxItemSet &);
+                                    Window *pParent, const SfxItemSet &) SAL_OVERRIDE;
     /// OLE-stuff
-    SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16);
+    SAL_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16) SAL_OVERRIDE;
 
     /// Methods for StyleSheets
 
@@ -141,7 +141,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
 protected:
     /// override to update text fields
-    virtual void                DoFlushDocInfo();
+    virtual void                DoFlushDocInfo() SAL_OVERRIDE;
 
 public:
     using SotObject::GetInterface;
@@ -165,15 +165,15 @@ public:
     DECL_LINK( Ole2ModifiedHdl, void * );
 
     /// OLE-stuff.
-    virtual void      SetVisArea( const Rectangle &rRect );
-    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
-    virtual Printer  *GetDocumentPrinter();
-    virtual OutputDevice* GetDocumentRefDev();
-    virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter );
-    virtual sal_uLong     GetMiscStatus() const;
+    virtual void      SetVisArea( const Rectangle &rRect ) SAL_OVERRIDE;
+    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const SAL_OVERRIDE;
+    virtual Printer  *GetDocumentPrinter() SAL_OVERRIDE;
+    virtual OutputDevice* GetDocumentRefDev() SAL_OVERRIDE;
+    virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter ) SAL_OVERRIDE;
+    virtual sal_uLong     GetMiscStatus() const SAL_OVERRIDE;
 
-    virtual void            PrepareReload();
-    virtual void            SetModified( bool = true );
+    virtual void            PrepareReload() SAL_OVERRIDE;
+    virtual void            SetModified( bool = true ) SAL_OVERRIDE;
 
     /// Dispatcher
     void                    Execute(SfxRequest &);
@@ -195,10 +195,10 @@ public:
     void                    UpdateChildWindows();
 
     /// global IO.
-    virtual bool            Save();
+    virtual bool            Save() SAL_OVERRIDE;
 
     /// For Style PI.
-    virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
+    virtual SfxStyleSheetBasePool*  GetStyleSheetPool() SAL_OVERRIDE;
 
     /// Set View for actions via Shell.
     void          SetView(SwView* pVw);
@@ -219,11 +219,11 @@ public:
                             SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
 
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
-                             ::com::sun::star::uno::Any & rValue );
+                             ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
-                             const ::com::sun::star::uno::Any & rValue );
-    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
-    virtual void ReconnectDdeLink(SfxObjectShell& rServer);
+                             const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
+    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) SAL_OVERRIDE;
+    virtual void ReconnectDdeLink(SfxObjectShell& rServer) SAL_OVERRIDE;
 
     virtual void FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
@@ -231,9 +231,9 @@ public:
                                    OUString * pLongUserName,
                                    OUString * pUserName,
                                    sal_Int32 nFileFormat,
-                                   bool bTemplate = false ) const;
+                                   bool bTemplate = false ) const SAL_OVERRIDE;
 
-    virtual void LoadStyles( SfxObjectShell& rSource );
+    virtual void LoadStyles( SfxObjectShell& rSource ) SAL_OVERRIDE;
 
     void _LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrentDocument );
 
@@ -253,7 +253,7 @@ public:
     void LoadingFinished();
 
     /// Cancel transfer (called from SFX).
-    virtual void CancelTransfers();
+    virtual void CancelTransfers() SAL_OVERRIDE;
 
     /// Re-read Doc from Html-source.
     void    ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView );
@@ -267,15 +267,15 @@ public:
     void InvalidateModel();
     void ReactivateModel();
 
-    virtual ::com::sun::star::uno::Sequence< OUString >  GetEventNames();
+    virtual ::com::sun::star::uno::Sequence< OUString >  GetEventNames() SAL_OVERRIDE;
 
     /// #i20883# Digital Signatures and Encryption
-    virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
+    virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates ) SAL_OVERRIDE;
 
     /** #i42634# Overwrites SfxObjectShell::UpdateLinks
      This new function is necessary to trigger update of links in docs
      read by the binary filter: */
-    virtual void UpdateLinks();
+    virtual void UpdateLinks() SAL_OVERRIDE;
 
     virtual void setDocAccTitle( const OUString& rTitle );
     virtual const OUString getDocAccTitle() const;
@@ -287,15 +287,15 @@ public:
     SAL_DLLPRIVATE sal_Bool IsTemplate() { return bIsATemplate; }
     SAL_DLLPRIVATE void SetIsTemplate( bool bValue ) { bIsATemplate = bValue; }
 
-    virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
+    virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const SAL_OVERRIDE;
 
     /** passwword protection for Writer (derived from SfxObjectShell)
      see also:    FN_REDLINE_ON, FN_REDLINE_ON */
-    virtual bool    IsChangeRecording() const;
-    virtual bool    HasChangeRecordProtection() const;
-    virtual void    SetChangeRecording( bool bActivate );
-    virtual bool    SetProtectionPassword( const OUString &rPassword );
-    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
+    virtual bool    IsChangeRecording() const SAL_OVERRIDE;
+    virtual bool    HasChangeRecordProtection() const SAL_OVERRIDE;
+    virtual void    SetChangeRecording( bool bActivate ) SAL_OVERRIDE;
+    virtual bool    SetProtectionPassword( const OUString &rPassword ) SAL_OVERRIDE;
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash ) SAL_OVERRIDE;
 };
 
 /** Find the right DocShell and create a new one:

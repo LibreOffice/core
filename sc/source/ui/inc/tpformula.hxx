@@ -35,9 +35,9 @@ public:
 
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreSet);
 
-    virtual bool FillItemSet(SfxItemSet& rCoreSet);
-    virtual void Reset( const SfxItemSet& rCoreSet );
-    virtual int DeactivatePage(SfxItemSet* pSet = NULL);
+    virtual bool FillItemSet(SfxItemSet& rCoreSet) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet& rCoreSet ) SAL_OVERRIDE;
+    virtual int DeactivatePage(SfxItemSet* pSet = NULL) SAL_OVERRIDE;
 
 private:
     explicit ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreSet);

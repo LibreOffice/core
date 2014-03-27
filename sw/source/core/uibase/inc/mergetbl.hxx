@@ -30,7 +30,7 @@ class SwMergeTblDlg : public SvxStandardDialog
 
     sal_Bool&    m_rMergePrev;
 protected:
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
 
 public:
     SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev );

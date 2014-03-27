@@ -71,16 +71,16 @@ namespace dbaui
 
         void Draw3DBorder( const Rectangle& rRect );
         // OContainerListener
-        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        virtual void    Resize();
-        virtual void    Paint( const Rectangle& rRect );
-        virtual void    MouseMove( const MouseEvent& rEvt );
-        virtual void    MouseButtonDown( const MouseEvent& rEvt );
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void    Resize() SAL_OVERRIDE;
+        virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
+        virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         virtual OTableWindowListBox*    CreateListBox();
             // called at FIRST Init
@@ -132,9 +132,9 @@ namespace dbaui
         OJoinTableView*             getTableView();
         const OJoinTableView*       getTableView() const;
         OJoinDesignView*            getDesignView();
-        void                        SetPosPixel( const Point& rNewPos );
-        void                        SetSizePixel( const Size& rNewSize );
-        void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
+        void                        SetPosPixel( const Point& rNewPos ) SAL_OVERRIDE;
+        void                        SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
+        void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
 
         OUString                    getTitle() const;
         void                        SetBoldTitle( sal_Bool bBold );
@@ -174,13 +174,13 @@ namespace dbaui
         Rectangle getSizingRect(const Point& _rPos,const Size& _rOutputSize) const;
 
         // window override
-        virtual void                StateChanged( StateChangedType nStateChange );
-        virtual void                GetFocus();
-        virtual bool                PreNotify( NotifyEvent& rNEvt );
-        virtual void                Command(const CommandEvent& rEvt);
+        virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void                GetFocus() SAL_OVERRIDE;
+        virtual bool                PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void                Command(const CommandEvent& rEvt) SAL_OVERRIDE;
 
         // Accessibility
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         // do I have connections to the outside?
         sal_Bool ExistsAConn() const;

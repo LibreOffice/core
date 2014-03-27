@@ -30,7 +30,7 @@ class SwASCWriter : public Writer
 {
     OUString m_sLineEnd;
 
-    virtual sal_uLong WriteStream();
+    virtual sal_uLong WriteStream() SAL_OVERRIDE;
 
 public:
     SwASCWriter( const OUString& rFilterName );

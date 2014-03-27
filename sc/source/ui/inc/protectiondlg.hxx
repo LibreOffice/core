@@ -36,7 +36,7 @@ public:
     explicit ScTableProtectionDlg(Window* pParent);
     virtual ~ScTableProtectionDlg();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     void SetDialogData(const ScTableProtection& rData);
 

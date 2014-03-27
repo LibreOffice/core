@@ -54,21 +54,21 @@ public:
     explicit LoggedStream(TagLogger::Pointer_t pLogger, const string & sPrefix);
     virtual ~LoggedStream();
 
-    void startSectionGroup();
-    void endSectionGroup();
-    void startParagraphGroup();
-    void endParagraphGroup();
-    void startCharacterGroup();
-    void endCharacterGroup();
-    void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    void endShape();
-    void text(const sal_uInt8 * data, size_t len);
-    void utext(const sal_uInt8 * data, size_t len);
-    void positivePercentage(const OUString& rText);
-    void props(writerfilter::Reference<Properties>::Pointer_t ref);
-    void table(Id name, writerfilter::Reference<Table>::Pointer_t ref);
-    void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref);
-    void info(const string & info);
+    void startSectionGroup() SAL_OVERRIDE;
+    void endSectionGroup() SAL_OVERRIDE;
+    void startParagraphGroup() SAL_OVERRIDE;
+    void endParagraphGroup() SAL_OVERRIDE;
+    void startCharacterGroup() SAL_OVERRIDE;
+    void endCharacterGroup() SAL_OVERRIDE;
+    void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) SAL_OVERRIDE;
+    void endShape() SAL_OVERRIDE;
+    void text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
+    void utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
+    void positivePercentage(const OUString& rText) SAL_OVERRIDE;
+    void props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
+    void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
+    void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
+    void info(const string & info) SAL_OVERRIDE;
 
 protected:
     virtual void lcl_startSectionGroup() = 0;
@@ -98,8 +98,8 @@ public:
     explicit LoggedProperties(TagLogger::Pointer_t pLogger, const string & sPrefix);
     virtual ~LoggedProperties();
 
-    void attribute(Id name, Value & val);
-    void sprm(Sprm & sprm);
+    void attribute(Id name, Value & val) SAL_OVERRIDE;
+    void sprm(Sprm & sprm) SAL_OVERRIDE;
 
 protected:
     virtual void lcl_attribute(Id name, Value & val) = 0;
@@ -116,7 +116,7 @@ public:
     explicit LoggedTable(TagLogger::Pointer_t pLogger, const string & sPrefix);
     virtual ~LoggedTable();
 
-    void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
 protected:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;

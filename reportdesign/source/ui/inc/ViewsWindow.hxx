@@ -142,20 +142,20 @@ namespace rptui
         OViewsWindow(OViewsWindow&);
         void operator =(OViewsWindow&);
     protected:
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
         // windows overload
-        virtual void MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-        virtual void Paint( const Rectangle& rRect );
-        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
     public:
         OViewsWindow(
             OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
 
         // windows overload
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
         void resize(const OSectionWindow& _rSectionWindow);
 
@@ -256,8 +256,8 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
-        virtual void markSection(const sal_uInt16 _nPos);
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
         /** align all marked objects in all sections
         */

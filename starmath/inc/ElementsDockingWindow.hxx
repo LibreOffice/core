@@ -59,7 +59,7 @@ class SmElementSeparator : public SmElement
 public:
     SmElementSeparator();
 
-    virtual bool isSeparator()
+    virtual bool isSeparator() SAL_OVERRIDE
     {
         return true;
     }
@@ -80,9 +80,9 @@ class SmElementsControl : public Control
 
     Link aSelectHdlLink;
 
-    virtual void Paint(const Rectangle&);
-    virtual void MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void MouseMove( const MouseEvent& rMEvt );
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     typedef boost::shared_ptr<SmElement>    SmElementPointer;
     typedef std::vector< SmElementPointer > SmElementList;
@@ -122,7 +122,7 @@ class SmElementsDockingWindow : public SfxDockingWindow
     SmElementsControl   maElementsControl;
     ListBox             maElementListBox;
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
     SmViewShell* GetView();
 
     DECL_LINK(SelectClickHdl, SmElement*);
@@ -135,8 +135,8 @@ public:
                              Window* pParent );
     ~SmElementsDockingWindow();
 
-    virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode);
-    virtual void ToggleFloatingMode();
+    virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) SAL_OVERRIDE;
+    virtual void ToggleFloatingMode() SAL_OVERRIDE;
 };
 
 class SmElementsDockingWindowWrapper : public SfxChildWindow

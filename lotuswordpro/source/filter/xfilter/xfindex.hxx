@@ -89,7 +89,7 @@ public:
     /**
      * @descr   Set style.
      */
-    void    SetStyleName(const OUString& style);
+    void    SetStyleName(const OUString& style) SAL_OVERRIDE;
     /**
      * @descr   Add a entry in the template.
      */
@@ -109,7 +109,7 @@ public:
      * @descr   clear all index template parts.
      */
     void    Clear();
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     /**
@@ -165,7 +165,7 @@ public:
      */
     void    SetSeparator(sal_Bool sep);
 
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     void AddTocSource(sal_uInt16 nLevel, const OUString& sStyleName);
 

@@ -57,7 +57,7 @@ namespace pcr
         );
 
         // Dialog overridables
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
     private:
         void    initialize( );

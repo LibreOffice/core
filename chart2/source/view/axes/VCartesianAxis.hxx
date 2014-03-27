@@ -37,21 +37,21 @@ public:
 
     virtual ~VCartesianAxis();
 
-    virtual void createMaximumLabels();
-    virtual void createLabels();
-    virtual void updatePositions();
+    virtual void createMaximumLabels() SAL_OVERRIDE;
+    virtual void createLabels() SAL_OVERRIDE;
+    virtual void updatePositions() SAL_OVERRIDE;
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 
-    virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
-    virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
+    virtual sal_Int32 estimateMaximumAutoMainIncrementCount() SAL_OVERRIDE;
+    virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) SAL_OVERRIDE;
     void createAllTickInfosFromComplexCategories( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos, bool bShiftedPosition );
 
     TickIter* createLabelTickIterator( sal_Int32 nTextLevel );
     TickIter* createMaximumLabelTickIterator( sal_Int32 nTextLevel );
     sal_Int32 getTextLevelCount() const;
 
-    virtual TickFactory* createTickFactory();
+    virtual TickFactory* createTickFactory() SAL_OVERRIDE;
 
     double      getLogicValueWhereMainLineCrossesOtherAxis() const;
     double      getLogicValueWhereLabelLineCrossesOtherAxis() const;

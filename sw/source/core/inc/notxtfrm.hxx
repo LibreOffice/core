@@ -36,22 +36,22 @@ class SwNoTxtFrm: public SwCntntFrm
 
     void InitCtor();
 
-    void Format ( const SwBorderAttrs *pAttrs = 0 );
+    void Format ( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
     void PaintPicture( OutputDevice*, const SwRect& ) const;
 protected:
-    virtual void MakeAll();
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 public:
     SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
     ~SwNoTxtFrm();
 
     virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
+                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
-                              SwCrsrMoveState* = 0) const;
+                              SwCrsrMoveState* = 0) const SAL_OVERRIDE;
     virtual bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                     SwCrsrMoveState* = 0, bool bTestBackground = false) const;
+                     SwCrsrMoveState* = 0, bool bTestBackground = false) const SAL_OVERRIDE;
 
     const Size &GetGrfSize() const  { return GetSize(); }
     void GetGrfArea( SwRect &rRect, SwRect * = 0, bool bMirror = true ) const;

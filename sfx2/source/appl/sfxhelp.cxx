@@ -81,7 +81,7 @@ class NoHelpErrorBox : public ErrorBox
 public:
     NoHelpErrorBox( Window* _pParent );
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
 NoHelpErrorBox::NoHelpErrorBox( Window* _pParent ) :

@@ -166,11 +166,11 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     void                            SetModified() {bModified = true;}
 
 protected:
-    virtual bool                    SeekRow( long nRow );
-    virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
-    virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
-    virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
-    virtual bool                    SaveModified();
+    virtual bool                    SeekRow( long nRow ) SAL_OVERRIDE;
+    virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const SAL_OVERRIDE;
+    virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
+    virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
+    virtual bool                    SaveModified() SAL_OVERRIDE;
 
     std::vector<long>               GetOptimalColWidths() const;
 
@@ -179,11 +179,11 @@ public:
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
 
-    bool                            IsModified()const;
+    bool                            IsModified()const SAL_OVERRIDE;
 
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const;
-    virtual void                    Resize();
-    virtual Size                    GetOptimalSize() const;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const SAL_OVERRIDE;
+    virtual void                    Resize() SAL_OVERRIDE;
+    virtual Size                    GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class SwAutoMarkDlg_Impl : public ModalDialog
@@ -554,9 +554,9 @@ class SwIndexTreeLB : public SvSimpleTable
 {
 public:
     SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits = 0);
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void Resize();
-    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) SAL_OVERRIDE;
     void setColSizes();
 };
 
@@ -1501,8 +1501,8 @@ public:
     {
     }
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     bool    IsNextControl() const {return bNextControl;}
     void SetPrevNextLink( const Link& rLink )   {aPrevNextControlLink = rLink;}
@@ -1586,8 +1586,8 @@ public:
     {
     }
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void RequestHelp( const HelpEvent& rHEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     bool IsNextControl() const          {return bNextControl;}
     void SetPrevNextLink(const Link& rLink) {aPrevNextControlLink = rLink;}

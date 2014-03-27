@@ -47,7 +47,7 @@ public:
     {
     }
 
-    virtual void KeyInput( const KeyEvent& rKEvent );
+    virtual void KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
 };
 
 struct GlosBibUserData
@@ -70,7 +70,7 @@ public:
     {
     }
 
-    virtual void RequestHelp( const HelpEvent& rHEvt );
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
@@ -95,7 +95,7 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     sal_Bool            IsDeleteAllowed(const OUString &rGroup);
 
 protected:
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
     DECL_LINK( SelectHdl, SvTabListBox* );
     DECL_LINK(NewHdl, void *);
     DECL_LINK( DeleteHdl, Button*  );

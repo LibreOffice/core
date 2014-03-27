@@ -32,13 +32,13 @@ public:
 
     virtual ~OOXMLProperty();
 
-    virtual sal_uInt32 getId() const = 0;
-    virtual Value::Pointer_t getValue() = 0;
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() = 0;
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream() = 0;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps() = 0;
-    virtual string getName() const = 0;
-    virtual string toString() const = 0;
+    virtual sal_uInt32 getId() const SAL_OVERRIDE = 0;
+    virtual Value::Pointer_t getValue() SAL_OVERRIDE = 0;
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE = 0;
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE = 0;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE = 0;
+    virtual string getName() const SAL_OVERRIDE = 0;
+    virtual string toString() const SAL_OVERRIDE = 0;
     virtual void resolve(Properties & rProperties) = 0;
 
     virtual Sprm * clone() = 0;
@@ -51,8 +51,8 @@ public:
 
     virtual ~OOXMLPropertySet();
 
-    virtual void resolve(Properties & rHandler) = 0;
-    virtual string getType() const = 0;
+    virtual void resolve(Properties & rHandler) SAL_OVERRIDE = 0;
+    virtual string getType() const SAL_OVERRIDE = 0;
     virtual void add(OOXMLProperty::Pointer_t pProperty) = 0;
     virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) = 0;
     virtual OOXMLPropertySet * clone() const = 0;
@@ -66,7 +66,7 @@ class OOXMLTable : public writerfilter::Reference<Table>
 public:
     virtual ~OOXMLTable();
 
-    virtual void resolve(Table & rTable) = 0;
+    virtual void resolve(Table & rTable) SAL_OVERRIDE = 0;
     virtual OOXMLTable * clone() const = 0;
 };
 }}

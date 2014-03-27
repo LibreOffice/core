@@ -36,7 +36,7 @@ namespace svxform
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;
 
     protected:
-        virtual bool ensureLoaded() const;
+        virtual bool ensureLoaded() const SAL_OVERRIDE;
 
     public:
         ODataAccessCharsetHelper( );

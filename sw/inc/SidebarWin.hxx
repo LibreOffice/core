@@ -174,16 +174,16 @@ class SwSidebarWin : public Window
         void SetLanguage(const SvxLanguageItem aNewItem);
 
         void ChangeSidebarItem( SwSidebarItem& rSidebarItem );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     protected:
-        virtual void    DataChanged( const DataChangedEvent& aEvent);
-        virtual void    LoseFocus();
-        virtual void    Paint( const Rectangle& rRect);
-        virtual void    GetFocus();
+        virtual void    DataChanged( const DataChangedEvent& aEvent) SAL_OVERRIDE;
+        virtual void    LoseFocus() SAL_OVERRIDE;
+        virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void    GetFocus() SAL_OVERRIDE;
         virtual MenuButton* CreateMenuButton() = 0;
 
-        void        SetSizePixel( const Size& rNewSize );
+        void        SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         SfxItemSet  DefaultItem();
 
         DECL_LINK(ModifyHdl, void*);

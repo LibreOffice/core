@@ -76,7 +76,7 @@ public:
     void SetLastTime(const OUString& lstime);
     void SetEditTime(const OUString& edtime);
 
-    virtual void ToXml(IXFStream *pStream);
+    virtual void ToXml(IXFStream *pStream) SAL_OVERRIDE;
 private:
     OUString   m_strGenerator;
     OUString   m_strTitle;

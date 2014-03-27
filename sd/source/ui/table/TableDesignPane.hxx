@@ -59,8 +59,8 @@ private:
     bool m_bModal;
 public:
     TableValueSet(Window *pParent, WinBits nStyle);
-    virtual void Resize();
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void updateSettings();
     void setModal(bool bModal) { m_bModal = bModal; }
 };
@@ -134,7 +134,7 @@ public:
         , aImpl(this, rBase, true)
     {
     }
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 }

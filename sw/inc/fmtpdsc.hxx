@@ -46,8 +46,8 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
     SwModify* pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (CntntNode/Format). */
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) SAL_OVERRIDE;
 
 public:
     SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
@@ -58,15 +58,15 @@ public:
     TYPEINFO_OVERRIDE();
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
           SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
     const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }

@@ -93,7 +93,7 @@ namespace dbaccess
     // FilterCreator
     struct FilterCreator : public TokenComposer
     {
-        virtual void appendNonEmptyToNonEmpty( const OUString& lhs )
+        virtual void appendNonEmptyToNonEmpty( const OUString& lhs ) SAL_OVERRIDE
         {
             m_aBuffer.insert( 0, (sal_Unicode)' ' );
             m_aBuffer.insert( 0, (sal_Unicode)'(' );
@@ -106,7 +106,7 @@ namespace dbaccess
     // FilterCreator
     struct OrderCreator : public TokenComposer
     {
-        virtual void appendNonEmptyToNonEmpty( const OUString& lhs )
+        virtual void appendNonEmptyToNonEmpty( const OUString& lhs ) SAL_OVERRIDE
         {
             m_aBuffer.appendAscii( ", " );
             m_aBuffer.append( lhs );

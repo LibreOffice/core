@@ -59,32 +59,32 @@ public:
 
     virtual ~OutlineViewShell (void);
 
-    virtual void Shutdown (void);
+    virtual void Shutdown (void) SAL_OVERRIDE;
 
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin);
+    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) SAL_OVERRIDE;
 
     /** Arrange and resize the GUI elements like rulers, sliders, and
         buttons as well as the actual document view according to the size of
         the enclosing window and current sizes of buttons, rulers, and
         sliders.
     */
-    virtual void ArrangeGUIElements (void);
+    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
 
     virtual bool PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
-    virtual long VirtHScrollHdl(ScrollBar* pHScroll);
-    virtual long VirtVScrollHdl(ScrollBar* pVHScroll);
+    virtual long VirtHScrollHdl(ScrollBar* pHScroll) SAL_OVERRIDE;
+    virtual long VirtVScrollHdl(ScrollBar* pVHScroll) SAL_OVERRIDE;
 
     virtual void AddWindow(::sd::Window* pWin);
     virtual void RemoveWindow(::sd::Window* pWin);
 
-    virtual void Activate( bool IsMDIActivate );
-    virtual void Deactivate( bool IsMDIActivate );
+    virtual void Activate( bool IsMDIActivate ) SAL_OVERRIDE;
+    virtual void Deactivate( bool IsMDIActivate ) SAL_OVERRIDE;
 
-    virtual SdPage* GetActualPage();
+    virtual SdPage* GetActualPage() SAL_OVERRIDE;
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const;
+    virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
 
     void ExecCtrl(SfxRequest &rReq);
     void GetCtrlState(SfxItemSet &rSet);
@@ -100,27 +100,27 @@ public:
     void FuPermanent(SfxRequest &rReq);
     void FuSupport(SfxRequest &rReq);
 
-    virtual void SetZoom(long nZoom);
-    virtual void SetZoomRect(const Rectangle& rZoomRect);
+    virtual void SetZoom(long nZoom) SAL_OVERRIDE;
+    virtual void SetZoomRect(const Rectangle& rZoomRect) SAL_OVERRIDE;
     virtual OUString GetSelectionText( bool bCompleteWords = false );
     virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
 
     void Execute(SfxRequest& rReq);
 
-    virtual void ReadFrameViewData(FrameView* pView);
-    virtual void WriteFrameViewData();
+    virtual void ReadFrameViewData(FrameView* pView) SAL_OVERRIDE;
+    virtual void WriteFrameViewData() SAL_OVERRIDE;
 
-    virtual void Command( const CommandEvent& rCEvt, ::sd::Window* pWin );
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
-    virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
+    virtual void Command( const CommandEvent& rCEvt, ::sd::Window* pWin ) SAL_OVERRIDE;
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) SAL_OVERRIDE;
 
     sal_uLong   Read(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
 
-    virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
-    virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
+    virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False ) SAL_OVERRIDE;
+    virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False ) SAL_OVERRIDE;
 
     /** this method is called when the visible area of the view from this viewshell is changed */
-    virtual void VisAreaChanged(const Rectangle& rRect);
+    virtual void VisAreaChanged(const Rectangle& rRect) SAL_OVERRIDE;
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -131,15 +131,15 @@ public:
    */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow);
+        CreateAccessibleDocumentView (::sd::Window* pWindow) SAL_OVERRIDE;
 
     OUString m_StrOldPageName;
 
     /** Update the preview to show the specified page.
     */
-    virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False);
+    virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
 
     /** Make the given page the new current page.  This method
         notifies the controller and adapts the selection of the

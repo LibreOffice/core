@@ -1137,7 +1137,7 @@ class PickerThread_Impl : public ::osl::Thread
 {
     uno::Reference < XFilePicker > mxPicker;
     ::osl::Mutex            maMutex;
-    virtual void SAL_CALL   run();
+    virtual void SAL_CALL   run() SAL_OVERRIDE;
     sal_Int16               mnRet;
 public:
                             PickerThread_Impl( const uno::Reference < XFilePicker >& rPicker )

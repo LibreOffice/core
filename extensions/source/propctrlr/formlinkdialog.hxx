@@ -86,7 +86,7 @@ namespace pcr
         ~FormLinkDialog( );
 
         // Dialog overridables
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnSuggest,          void*         );

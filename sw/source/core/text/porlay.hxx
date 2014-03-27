@@ -103,8 +103,8 @@ private:
 
 public:
     // From SwLinePortion
-    virtual SwLinePortion *Insert( SwLinePortion *pPortion );
-    virtual SwLinePortion *Append( SwLinePortion *pPortion );
+    virtual SwLinePortion *Insert( SwLinePortion *pPortion ) SAL_OVERRIDE;
+    virtual SwLinePortion *Append( SwLinePortion *pPortion ) SAL_OVERRIDE;
     inline SwLinePortion *GetFirstPortion() const;
 
     // Flags
@@ -165,7 +165,7 @@ public:
         { return _GetHangingMargin(); }
 
     // For special treatment for empty lines
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Stuff for justified alignment
     inline bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
@@ -229,7 +229,7 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = NULL,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwLineLayout)
 };
 
@@ -341,7 +341,7 @@ public:
     void dumpAsXml( xmlTextWriter* writer, SwTxtFrm* pTxtFrm );
 #endif
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)
 };
 

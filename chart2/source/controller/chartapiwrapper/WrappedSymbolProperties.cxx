@@ -67,13 +67,13 @@ namespace wrapper
 class WrappedSymbolTypeProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
 public:
-    virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const;
+    virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const SAL_OVERRIDE;
 
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                            throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+                            throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException);
+                        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE;
 
     explicit WrappedSymbolTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                         tSeriesOrDiagramPropertyType ePropertyType );
@@ -83,8 +83,8 @@ public:
 class WrappedSymbolBitmapURLProperty : public WrappedSeriesOrDiagramProperty< OUString >
 {
 public:
-    virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewGraphicURL ) const;
+    virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewGraphicURL ) const SAL_OVERRIDE;
 
     explicit WrappedSymbolBitmapURLProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                              tSeriesOrDiagramPropertyType ePropertyType );
@@ -94,10 +94,10 @@ public:
 class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Size >
 {
 public:
-    virtual awt::Size getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const awt::Size& aNewSize ) const;
+    virtual awt::Size getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const awt::Size& aNewSize ) const SAL_OVERRIDE;
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException);
+                        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE;
 
     explicit WrappedSymbolSizeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                         tSeriesOrDiagramPropertyType ePropertyType );
@@ -107,10 +107,10 @@ public:
 class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< sal_Bool >
 {
 public:
-    virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& bDrawLines ) const;
+    virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const SAL_OVERRIDE;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& bDrawLines ) const SAL_OVERRIDE;
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException);
+                        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE;
 
     explicit WrappedSymbolAndLinesProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );

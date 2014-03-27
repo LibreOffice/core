@@ -66,7 +66,7 @@ class SlideSorterView
       public ::boost::noncopyable
 {
 public:
-    TYPEINFO ();
+    TYPEINFO_OVERRIDE();
 
     /** Create a new view for the slide sorter.
         @param rViewShell
@@ -104,7 +104,7 @@ public:
 
     view::Layouter& GetLayouter (void);
 
-    virtual void ModelHasChanged (void);
+    virtual void ModelHasChanged (void) SAL_OVERRIDE;
 
     /** This method is typically called before a model change takes place.
         All references to model data are released.  PostModelChange() has to
@@ -131,12 +131,12 @@ public:
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
         const Region& rPaintArea,
-        sdr::contact::ViewObjectContactRedirector* pRedirector = NULL);
+        sdr::contact::ViewObjectContactRedirector* pRedirector = NULL) SAL_OVERRIDE;
     void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea);
 
     virtual void ConfigurationChanged (
         utl::ConfigurationBroadcaster* pBroadcaster,
-        sal_uInt32 nHint);
+        sal_uInt32 nHint) SAL_OVERRIDE;
 
     void HandleDataChangeEvent (void);
 
@@ -233,10 +233,10 @@ public:
 
     ToolTip& GetToolTip (void) const;
 
-    virtual void DragFinished (sal_Int8 nDropAction);
+    virtual void DragFinished (sal_Int8 nDropAction) SAL_OVERRIDE;
 
 protected:
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
     SlideSorter& mrSlideSorter;

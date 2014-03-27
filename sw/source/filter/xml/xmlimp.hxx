@@ -100,11 +100,11 @@ protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual XMLTextImportHelper* CreateTextImport();
+    virtual XMLTextImportHelper* CreateTextImport() SAL_OVERRIDE;
 
-    virtual XMLShapeImportHelper* CreateShapeImport();
+    virtual XMLShapeImportHelper* CreateShapeImport() SAL_OVERRIDE;
 
 public:
     SwXMLImport(
@@ -117,16 +117,16 @@ public:
     virtual void SAL_CALL startDocument()
         throw (::com::sun::star::xml::sax::SAXException,
                ::com::sun::star::uno::RuntimeException,
-               std::exception);
+               std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void                    InsertStyles( sal_Bool bAuto );
     void                    FinishStyles();
@@ -176,18 +176,18 @@ public:
                              OUString *pParent=0 ) const;
 
     virtual void SetStatistics(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) SAL_OVERRIDE;
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
     virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
-                    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings);
+                    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings) SAL_OVERRIDE;
 
     SvStorage *GetPackage() { return &xPackage; }
 
     void SetProgressValue( sal_Int32 nValue );
 
     // initialize XForms
-    virtual void initXForms();
+    virtual void initXForms() SAL_OVERRIDE;
 
     // get the document properties, but only if they actually need importing
     ::com::sun::star::uno::Reference<

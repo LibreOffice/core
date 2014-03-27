@@ -116,7 +116,7 @@ namespace sdr
             SVX_DLLPUBLIC virtual ~Scheduler();
 
             // From baseclass Timer, the timeout call
-            SVX_DLLPUBLIC virtual void Timeout();
+            SVX_DLLPUBLIC virtual void Timeout() SAL_OVERRIDE;
 
             // get time
             sal_uInt32 GetTime();

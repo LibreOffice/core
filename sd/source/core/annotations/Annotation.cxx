@@ -59,30 +59,30 @@ public:
     SdrModel* GetModel() { return (mpPage != 0) ? mpPage->GetModel() : 0; }
 
     // XInterface:
-    virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL acquire() throw () { ::cppu::WeakComponentImplHelper1< XAnnotation >::acquire(); }
-    virtual void SAL_CALL release() throw () { ::cppu::WeakComponentImplHelper1< XAnnotation >::release(); }
+    virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE { ::cppu::WeakComponentImplHelper1< XAnnotation >::acquire(); }
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE { ::cppu::WeakComponentImplHelper1< XAnnotation >::release(); }
 
     // ::com::sun::star::beans::XPropertySet:
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const Any & aValue) throw (RuntimeException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, std::exception);
-    virtual Any SAL_CALL getPropertyValue(const OUString & PropertyName) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception);
-    virtual void SAL_CALL addPropertyChangeListener(const OUString & aPropertyName, const Reference< XPropertyChangeListener > & xListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception);
-    virtual void SAL_CALL removePropertyChangeListener(const OUString & aPropertyName, const Reference< XPropertyChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception);
-    virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception);
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception);
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const Any & aValue) throw (RuntimeException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, std::exception) SAL_OVERRIDE;
+    virtual Any SAL_CALL getPropertyValue(const OUString & PropertyName) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString & aPropertyName, const Reference< XPropertyChangeListener > & xListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString & aPropertyName, const Reference< XPropertyChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::office::XAnnotation:
-    virtual ::com::sun::star::uno::Any SAL_CALL getAnchor() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual RealPoint2D SAL_CALL getPosition() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL setPosition(const RealPoint2D & the_value) throw (RuntimeException, std::exception);
-    virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setSize( const ::com::sun::star::geometry::RealSize2D& _size ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getAuthor() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL setAuthor(const OUString & the_value) throw (RuntimeException, std::exception);
-    virtual util::DateTime SAL_CALL getDateTime() throw (RuntimeException, std::exception);
-    virtual void SAL_CALL setDateTime(const util::DateTime & the_value) throw (RuntimeException, std::exception);
-    virtual Reference< XText > SAL_CALL getTextRange() throw (RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL getAnchor() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual RealPoint2D SAL_CALL getPosition() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPosition(const RealPoint2D & the_value) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSize( const ::com::sun::star::geometry::RealSize2D& _size ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getAuthor() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setAuthor(const OUString & the_value) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual util::DateTime SAL_CALL getDateTime() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setDateTime(const util::DateTime & the_value) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual Reference< XText > SAL_CALL getTextRange() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     Annotation(const Annotation &); // not defined
@@ -96,7 +96,7 @@ private:
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes
     // disposed, do it here.
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     SdPage* mpPage;
     Reference< XComponentContext > m_xContext;
@@ -113,8 +113,8 @@ class UndoInsertOrRemoveAnnotation : public SdrUndoAction
 public:
     UndoInsertOrRemoveAnnotation( Annotation& rAnnotation, bool bInsert );
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 
 protected:
     rtl::Reference< Annotation > mxAnnotation;
@@ -151,8 +151,8 @@ class UndoAnnotation : public SdrUndoAction
 public:
     UndoAnnotation( Annotation& rAnnotation );
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 
 protected:
     rtl::Reference< Annotation > mxAnnotation;

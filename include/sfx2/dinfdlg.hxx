@@ -170,10 +170,10 @@ public:
                         GetCmisProperties() const;
 
     void        SetCmisProperties(::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty > cmisProps );
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -219,8 +219,8 @@ private:
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
@@ -242,8 +242,8 @@ private:
 protected:
     SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool            FillItemSet( SfxItemSet& );
-    virtual void            Reset( const SfxItemSet& );
+    virtual bool            FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void            Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& );
@@ -256,7 +256,7 @@ class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
 private:
     sal_uInt16 m_nDocInfoId;
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) SAL_OVERRIDE;
 
 public:
     SfxDocumentInfoDialog( Window* pParent, const SfxItemSet& );
@@ -326,7 +326,7 @@ class CustomPropertiesDurationField : public Edit
     CustomPropertyLine*             m_pLine;
     com::sun::star::util::Duration  m_aDuration;
 protected:
-    virtual void    RequestHelp(const HelpEvent& rEvt);
+    virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
     CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
     ~CustomPropertiesDurationField();
@@ -368,7 +368,7 @@ private:
 public:
     CustomPropertiesYesNoButton( Window* pParent, const ResId& rResId );
 
-    virtual void    Resize();
+    virtual void    Resize() SAL_OVERRIDE;
 
     inline void     CheckYes() { m_aYesButton.Check(); }
     inline void     CheckNo() { m_aNoButton.Check(); }
@@ -489,7 +489,7 @@ public:
                     GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
     void    Init(VclBuilderContainer& rParent);
-    virtual void setAllocation(const Size &rAllocation);
+    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 };
 
 // class SfxCustomPropertiesPage -----------------------------------------
@@ -506,9 +506,9 @@ private:
 protected:
     SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
@@ -628,9 +628,9 @@ private:
 protected:
     SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );

@@ -84,10 +84,10 @@ namespace slideshow
             void setPlaybackLoop( bool bLoop );
 
             // PauseEventHandler:
-            virtual bool handlePause( bool bPauseShow );
+            virtual bool handlePause( bool bPauseShow ) SAL_OVERRIDE;
 
             // Disposable
-            virtual void dispose();
+            virtual void dispose() SAL_OVERRIDE;
 
         private:
             SoundPlayer(

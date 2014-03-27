@@ -29,8 +29,8 @@ class TrackChangesHandler : public LoggedProperties
     RedlineParamsPtr     m_pRedlineParams;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
     TrackChangesHandler( sal_Int32 nToken );

@@ -58,9 +58,9 @@ private:
     /// bitfield
     void                    InitSettings();
 
-    virtual bool        Close();
-    virtual void            Resize();
-    virtual void            GetFocus();
+    virtual bool        Close() SAL_OVERRIDE;
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual void            GetFocus() SAL_OVERRIDE;
 
                             DECL_LINK( SplitHdl, void* );
 

@@ -52,14 +52,14 @@ public:
     void collectShapes() throw (css::uno::RuntimeException);
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // ScVbaCollectionBase
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource );
-    virtual css::uno::Any getItemByStringIndex( const OUString& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) SAL_OVERRIDE;
+    virtual css::uno::Any getItemByStringIndex( const OUString& rIndex ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 protected:
     ScVbaObjectContainerRef mxContainer;
@@ -82,7 +82,7 @@ public:
         const css::uno::Any& rLeft,
         const css::uno::Any& rTop,
         const css::uno::Any& rWidth,
-        const css::uno::Any& rHeight ) throw (css::uno::RuntimeException, std::exception);
+        const css::uno::Any& rHeight ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

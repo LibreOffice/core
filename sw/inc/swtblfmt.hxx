@@ -78,7 +78,7 @@ protected:
     {}
 
    // For recognition of changes (especially TableBoxAttribute).
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.

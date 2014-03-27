@@ -35,36 +35,36 @@ namespace sdr
 
         protected:
             // create a new itemset
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
             // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const SAL_OVERRIDE;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet);
+            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
             // react on Item change
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) SAL_OVERRIDE;
 
             // Called after ItemChange() is done for all items. Allows local reactions on
             // specific item changes
-            virtual void PostItemChange(const sal_uInt16 nWhich);
+            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
 
             // clear single item
-            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0);
+            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
 
             // clear single item direct, do not do any notifies or things like that.
             // Also supports complete deleteion of items when default parameter 0 is used.
-            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0);
+            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
 
         public:
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes();
+            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
 
             // basic constructor
             explicit CustomShapeProperties(SdrObject& rObj);
@@ -76,10 +76,10 @@ namespace sdr
             virtual ~CustomShapeProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // This is the notifyer from SfxListener
-            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

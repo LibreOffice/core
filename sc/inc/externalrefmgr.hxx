@@ -62,10 +62,10 @@ public:
     ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter);
     virtual ~ScExternalRefLink();
 
-    virtual void Closed();
+    virtual void Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue);
-    virtual void Edit(Window* pParent, const Link& rEndEditHdl);
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue) SAL_OVERRIDE;
+    virtual void Edit(Window* pParent, const Link& rEndEditHdl) SAL_OVERRIDE;
 
     void SetDoReferesh(bool b);
 
@@ -428,7 +428,7 @@ public:
     explicit ScExternalRefManager(ScDocument* pDoc);
     virtual ~ScExternalRefManager();
 
-    virtual OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const;
+    virtual OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const SAL_OVERRIDE;
 
     /**
      * Get a cache table instance for specified table and table index.  Unlike
@@ -679,7 +679,7 @@ public:
      */
     bool isFileLoadable(const OUString& rFile) const;
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     /**
      * If we still contain unsaved files we should warn the user before saving

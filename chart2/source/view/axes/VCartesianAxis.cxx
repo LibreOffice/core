@@ -208,8 +208,8 @@ public:
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine );
 
-    virtual TickInfo*   firstInfo();
-    virtual TickInfo*   nextInfo();
+    virtual TickInfo*   firstInfo() SAL_OVERRIDE;
+    virtual TickInfo*   nextInfo() SAL_OVERRIDE;
 
 private: //methods
     LabelIterator();
@@ -380,8 +380,8 @@ public:
             , sal_Int32 nLongestLabelIndex );
     virtual ~MaxLabelTickIter();
 
-    virtual TickInfo* firstInfo();
-    virtual TickInfo* nextInfo();
+    virtual TickInfo* firstInfo() SAL_OVERRIDE;
+    virtual TickInfo* nextInfo() SAL_OVERRIDE;
 
 private:
     ::std::vector< TickInfo >& m_rTickInfoVector;

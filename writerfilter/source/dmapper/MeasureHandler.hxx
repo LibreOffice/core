@@ -41,8 +41,8 @@ class MeasureHandler : public LoggedProperties
     std::vector<beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
     MeasureHandler();

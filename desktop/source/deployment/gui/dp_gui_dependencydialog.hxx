@@ -44,7 +44,7 @@ private:
     DependencyDialog(DependencyDialog &); // not defined
     void operator =(DependencyDialog &); // not defined
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
     FixedText m_text;
     ListBox m_list;

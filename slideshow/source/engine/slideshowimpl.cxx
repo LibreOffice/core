@@ -279,58 +279,58 @@ public:
 
 private:
     // XSlideShow:
-    virtual sal_Bool SAL_CALL nextEffect() throw (uno::RuntimeException, std::exception);
-    virtual sal_Bool SAL_CALL previousEffect() throw (uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL nextEffect() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL previousEffect() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL startShapeActivity(
         uno::Reference<drawing::XShape> const& xShape )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL stopShapeActivity(
         uno::Reference<drawing::XShape> const& xShape )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL pause( sal_Bool bPauseShow )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Reference<drawing::XDrawPage> SAL_CALL getCurrentSlide()
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL displaySlide(
         uno::Reference<drawing::XDrawPage> const& xSlide,
         uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
         uno::Reference<animations::XAnimationNode> const& xRootNode,
         uno::Sequence<beans::PropertyValue> const& rProperties )
-        throw (uno::RuntimeException, std::exception);
-    virtual void SAL_CALL registerUserPaintPolygons( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xDocFactory ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL registerUserPaintPolygons( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xDocFactory ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL setProperty(
-        beans::PropertyValue const& rProperty ) throw (uno::RuntimeException, std::exception);
+        beans::PropertyValue const& rProperty ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL addView(
         uno::Reference<presentation::XSlideShowView> const& xView )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL removeView(
         uno::Reference<presentation::XSlideShowView> const& xView )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL update( double & nNextTimeout )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addSlideShowListener(
         uno::Reference<presentation::XSlideShowListener> const& xListener )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeSlideShowListener(
         uno::Reference<presentation::XSlideShowListener> const& xListener )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addShapeEventListener(
         uno::Reference<presentation::XShapeEventListener> const& xListener,
         uno::Reference<drawing::XShape> const& xShape )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeShapeEventListener(
         uno::Reference<presentation::XShapeEventListener> const& xListener,
         uno::Reference<drawing::XShape> const& xShape )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setShapeCursor(
         uno::Reference<drawing::XShape> const& xShape, sal_Int16 nPointerShape )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // CursorManager
 
 
-    virtual bool requestCursor( sal_Int16 nCursorShape );
-    virtual void resetCursor();
+    virtual bool requestCursor( sal_Int16 nCursorShape ) SAL_OVERRIDE;
+    virtual void resetCursor() SAL_OVERRIDE;
 
     /** This is somewhat similar to displaySlide when called for the current
         slide.  It has been simplified to take advantage of that no slide
@@ -341,7 +341,7 @@ private:
 
 protected:
     // WeakComponentImplHelperBase
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     bool isDisposed() const
     {
@@ -523,7 +523,7 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     {}
 
     // EventHandler
-    virtual bool handleEvent()
+    virtual bool handleEvent() SAL_OVERRIDE
     {
         // DON't call notifySlideAnimationsEnded()
         // directly, but queue an event. handleEvent()
@@ -541,20 +541,20 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     }
 
     // ViewRepaintHandler
-    virtual void viewClobbered( const UnoViewSharedPtr& rView )
+    virtual void viewClobbered( const UnoViewSharedPtr& rView ) SAL_OVERRIDE
     {
         // given view needs repaint, request update
         mrScreenUpdater.notifyUpdate(rView, true);
     }
 
     // HyperlinkHandler
-    virtual bool handleHyperlink( OUString const& rLink )
+    virtual bool handleHyperlink( OUString const& rLink ) SAL_OVERRIDE
     {
         return mrShow.notifyHyperLinkClicked(rLink);
     }
 
     // AnimationEventHandler
-    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
+    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) SAL_OVERRIDE
     {
         return mrShow.handleAnimationEvent(rNode);
     }

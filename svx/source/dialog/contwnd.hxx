@@ -37,12 +37,12 @@ class ContourWindow : public GraphCtrl
 
 protected:
 
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void        MouseMove(const MouseEvent& rMEvt);
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void        SdrObjCreated( const SdrObject& rObj );
-    virtual void        InitSdrModel();
-    virtual void        Paint( const Rectangle& rRect );
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;
+    virtual void        InitSdrModel() SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void                CreatePolyPolygon();
 

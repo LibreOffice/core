@@ -70,7 +70,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
     void init(sal_uInt16 nType);
     ~SvxNumValueSet();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     void            SetHTMLMode(bool bSet) {bHTMLMode = bSet;}
     void            SetNumberingSettings(
@@ -108,7 +108,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     SvxBmpNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
     ~SvxBmpNumValueSet();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
 };
 

@@ -35,7 +35,7 @@ public:
     FourBoxWipe( bool cornersOut ) : m_cornersOut(cornersOut),
                                      m_unitRect( createUnitRect() )
         {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t );
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 private:
     const bool m_cornersOut;
     const ::basegfx::B2DPolygon m_unitRect;

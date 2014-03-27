@@ -35,8 +35,8 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextShadowXValItem(long nVal = 0);
                             XFormTextShadowXValItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
 };
 
 /*************************************************************************
@@ -51,8 +51,8 @@ public:
                             TYPEINFO_OVERRIDE();
                             XFormTextShadowYValItem(long nVal = 0);
                             XFormTextShadowYValItem(SvStream& rIn);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
 };
 
 #endif

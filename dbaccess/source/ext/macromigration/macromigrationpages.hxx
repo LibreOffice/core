@@ -94,9 +94,9 @@ namespace dbmm
 
     protected:
         // IWizardPageController overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnLocationModified, Edit* );
@@ -116,13 +116,13 @@ namespace dbmm
 
     protected:
         // IMigrationProgress
-        virtual void    startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _bRange );
-        virtual void    setObjectProgressText( const OUString& _rText );
-        virtual void    setObjectProgressValue( const sal_uInt32 _nValue );
-        virtual void    endObject();
-        virtual void    start( const sal_uInt32 _nOverallRange );
-        virtual void    setOverallProgressText( const OUString& _rText );
-        virtual void    setOverallProgressValue( const sal_uInt32 _nValue );
+        virtual void    startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _bRange ) SAL_OVERRIDE;
+        virtual void    setObjectProgressText( const OUString& _rText ) SAL_OVERRIDE;
+        virtual void    setObjectProgressValue( const sal_uInt32 _nValue ) SAL_OVERRIDE;
+        virtual void    endObject() SAL_OVERRIDE;
+        virtual void    start( const sal_uInt32 _nOverallRange ) SAL_OVERRIDE;
+        virtual void    setOverallProgressText( const OUString& _rText ) SAL_OVERRIDE;
+        virtual void    setOverallProgressValue( const sal_uInt32 _nValue ) SAL_OVERRIDE;
 
     private:
         FixedText           m_aObjectCount;

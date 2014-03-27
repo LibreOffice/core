@@ -32,19 +32,19 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
             // test changeability for a single item
-            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const SAL_OVERRIDE;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0);
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) SAL_OVERRIDE;
 
             // Called after ItemChange() is done for all items.
-            virtual void PostItemChange(const sal_uInt16 nWhich);
+            virtual void PostItemChange(const sal_uInt16 nWhich) SAL_OVERRIDE;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet);
+            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -57,59 +57,59 @@ namespace sdr
             virtual ~GroupProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // get itemset
-            virtual const SfxItemSet& GetObjectItemSet() const;
+            virtual const SfxItemSet& GetObjectItemSet() const SAL_OVERRIDE;
 
             // get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
             // be overloaded e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state
             // SFX_ITEM_DONTCARE which means there were several such items with different
             // values.
-            virtual const SfxItemSet& GetMergedItemSet() const;
+            virtual const SfxItemSet& GetMergedItemSet() const SAL_OVERRIDE;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false) SAL_OVERRIDE;
 
             // set single item
-            virtual void SetObjectItem(const SfxPoolItem& rItem);
+            virtual void SetObjectItem(const SfxPoolItem& rItem) SAL_OVERRIDE;
 
             // set single item direct, do not do any notifies or things like that
-            virtual void SetObjectItemDirect(const SfxPoolItem& rItem);
+            virtual void SetObjectItemDirect(const SfxPoolItem& rItem) SAL_OVERRIDE;
 
             // clear single item
-            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0);
+            virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
 
             // clear single item direct, do not do any notifies or things like that.
             // Also supports complete deleteion of items when default parameter 0 is used.
-            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0);
+            virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
 
             // Set a single item, iterate over hierarchies if necessary.
-            virtual void SetMergedItem(const SfxPoolItem& rItem);
+            virtual void SetMergedItem(const SfxPoolItem& rItem) SAL_OVERRIDE;
 
             // Clear a single item, iterate over hierarchies if necessary.
-            virtual void ClearMergedItem(const sal_uInt16 nWhich = 0);
+            virtual void ClearMergedItem(const sal_uInt16 nWhich = 0) SAL_OVERRIDE;
 
             // set complete item set
-            virtual void SetObjectItemSet(const SfxItemSet& rSet);
+            virtual void SetObjectItemSet(const SfxItemSet& rSet) SAL_OVERRIDE;
 
             // set a new StyleSheet
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
 
             // get the local StyleSheet
-            virtual SfxStyleSheet* GetStyleSheet() const;
+            virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes();
+            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L) SAL_OVERRIDE;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
-            virtual void ForceStyleToHardAttributes();
+            virtual void ForceStyleToHardAttributes() SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

@@ -509,9 +509,9 @@ class FormulaGroupInterpreterOpenCLMissing : public FormulaGroupInterpreter
 public:
     FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreterOpenCLMissing() {}
-    virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
+    virtual ScMatrixRef inverseMatrix(const ScMatrix&) SAL_OVERRIDE { return ScMatrixRef(); }
     virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScFormulaCellGroup&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
-    virtual bool interpret(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&,  ScTokenArray&) { return false; }
+    virtual bool interpret(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&,  ScTokenArray&) SAL_OVERRIDE { return false; }
 };
 
 static void SAL_CALL thisModule() {}

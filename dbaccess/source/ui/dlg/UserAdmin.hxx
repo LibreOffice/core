@@ -71,13 +71,13 @@ public:
     OUString GetUser();
 
     // must be overloaded by subclasses, but it isn't pure virtual
-    virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+    virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
 
     // <method>OGenericAdministrationPage::fillControls</method>
-    virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+    virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     // <method>OGenericAdministrationPage::fillWindows</method>
-    virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+    virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX

@@ -34,8 +34,8 @@ public:
     LineWidthControl (Window* pParent, LinePropertyPanel& rPanel);
     virtual ~LineWidthControl (void);
 
-    virtual void GetFocus();
-    virtual void Paint(const Rectangle& rect);
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void Paint(const Rectangle& rect) SAL_OVERRIDE;
 
     void SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit);
     bool IsCloseByEdit();

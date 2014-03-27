@@ -33,10 +33,10 @@ class SwUndoFlyStrAttr : public SwUndo
                           const OUString& sNewStr );
         virtual ~SwUndoFlyStrAttr();
 
-        virtual void UndoImpl( ::sw::UndoRedoContext & );
-        virtual void RedoImpl( ::sw::UndoRedoContext & );
+        virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+        virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-        virtual SwRewriter GetRewriter() const;
+        virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     private:
         SwFlyFrmFmt& mrFlyFrmFmt;

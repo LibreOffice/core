@@ -36,7 +36,7 @@ class SwRangeRedline;
 class SwPopup : public PopupMenu
 {
     sal_uInt16          nCurId;
-    virtual void    Select(){nCurId = GetCurItemId();}
+    virtual void    Select() SAL_OVERRIDE {nCurId = GetCurItemId();}
 
 public:
     SwPopup() :
@@ -96,7 +96,7 @@ public:
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
-    virtual sal_Bool    IsProtect() const;
+    virtual sal_Bool    IsProtect() const SAL_OVERRIDE;
     const OUString&     GetURL()            { return sURL; }
     const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
 };
@@ -128,7 +128,7 @@ public:
 
     const SwFmtFld* GetPostIt()     { return pFld; }
     SwRangeRedline* GetRedline() { return pRedline; }
-    virtual sal_Bool    IsProtect()     const;
+    virtual sal_Bool    IsProtect()     const SAL_OVERRIDE;
     bool            IsPostIt()      {return mbPostIt; }
 };
 

@@ -68,7 +68,7 @@ private:
                                             sal_Bool bRecursive );
 
     virtual                     ~SearchThread();
-    virtual void                execute();
+    virtual void                execute() SAL_OVERRIDE;
 
 public:
 
@@ -96,8 +96,8 @@ public:
 
                         DECL_LINK( CleanUpHdl, void* );
 
-    virtual short       Execute();
-    virtual void        StartExecuteModal( const Link& rEndDialogHdl );
+    virtual short       Execute() SAL_OVERRIDE;
+    virtual void        StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
     void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
 };
@@ -111,7 +111,7 @@ private:
     TokenList_impl&             mrTakenList;
 
     virtual                     ~TakeThread();
-    virtual void                execute();
+    virtual void                execute() SAL_OVERRIDE;
 
 public:
 
@@ -141,8 +141,8 @@ public:
     DECL_LINK( CleanUpHdl, void* );
 
     void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
-    virtual short       Execute();
-    virtual void        StartExecuteModal( const Link& rEndDialogHdl );
+    virtual short       Execute() SAL_OVERRIDE;
+    virtual void        StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
 };
 
 class ActualizeProgress : public ModalDialog
@@ -162,7 +162,7 @@ public:
                         ActualizeProgress( Window* pWindow, GalleryTheme* pThm );
                         ~ActualizeProgress() {};
 
-    virtual short       Execute();
+    virtual short       Execute() SAL_OVERRIDE;
 };
 
 class TitleDialog : public ModalDialog
@@ -195,7 +195,7 @@ class GalleryThemeProperties : public SfxTabDialog
     sal_uInt16 m_nGeneralPageId;
     sal_uInt16 m_nFilesPageId;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
 
 public:
     GalleryThemeProperties(Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet);
@@ -213,8 +213,8 @@ private:
     FixedText*          m_pFtMSShowChangeDate;
     ExchangeData*       pData;
 
-    virtual void        Reset( const SfxItemSet& ) {}
-    virtual bool        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE {}
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
 
 
 public:
@@ -262,8 +262,8 @@ class TPGalleryThemeProperties : public SfxTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-    virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
-    virtual bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return true; }
+    virtual void        Reset( const SfxItemSet& /*rSet*/ ) SAL_OVERRIDE {}
+    virtual bool        FillItemSet( SfxItemSet& /*rSet*/ ) SAL_OVERRIDE { return true; }
     OUString     addExtension( const OUString&, const OUString& );
     void                FillFilterList();
 

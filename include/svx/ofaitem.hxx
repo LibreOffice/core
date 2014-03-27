@@ -34,8 +34,8 @@ public:
                              OfaPtrItem( sal_uInt16 nWhich, void *pPtr );
                              OfaPtrItem( const OfaPtrItem& );
 
-    virtual bool             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     void*                    GetValue() const { return pPtr; }
     void                     SetValue( void* pNewPtr ) { pPtr = pNewPtr; }
@@ -55,11 +55,11 @@ public:
     OfaRefItem( const OfaRefItem& rItem )
         : SfxPoolItem( rItem.Which() ), mxRef( rItem.mxRef )
     {}
-    virtual bool operator==( const SfxPoolItem& rItem ) const
+    virtual bool operator==( const SfxPoolItem& rItem ) const SAL_OVERRIDE
     {
         return mxRef == ((OfaRefItem<reference_type> &)rItem).mxRef;
     }
-    virtual SfxPoolItem*Clone( SfxItemPool* /*pPool = 0*/ ) const
+    virtual SfxPoolItem*Clone( SfxItemPool* /*pPool = 0*/ ) const SAL_OVERRIDE
     {
         return new OfaRefItem( *this );
     }

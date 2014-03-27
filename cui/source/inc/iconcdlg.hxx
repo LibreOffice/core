@@ -119,8 +119,8 @@ public :
     virtual sal_Bool        IsReadOnly() const;
     virtual sal_Bool    QueryClose();
 
-    void                StateChanged( StateChangedType nType );
-    void                DataChanged( const DataChangedEvent& rDCEvt );
+    void                StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 class IconChoiceDialog : public ModalDialog
@@ -192,8 +192,8 @@ public :
                        const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
     ~IconChoiceDialog ();
 
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
 
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
@@ -217,7 +217,7 @@ public :
     const HelpButton&   GetHelpButton() const { return aHelpBtn; }
     HelpButton&         GetHelpButton() { return aHelpBtn; }
 
-    short               Execute();
+    short               Execute() SAL_OVERRIDE;
     void                Start( sal_Bool bShow = sal_True );
     sal_Bool            QueryClose();
 

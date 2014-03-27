@@ -60,7 +60,7 @@ public:
     virtual ~SlideTransitionPane();
 
     // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     void onSelectionChanged();
     void onChangeCurrentPage();

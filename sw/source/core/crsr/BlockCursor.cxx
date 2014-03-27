@@ -35,12 +35,12 @@ class SwBlockCursor : public IBlockCursor
 public:
     SwBlockCursor( const SwCrsrShell& rCrsrSh, const SwPosition &rPos ) :
         aCursor( rCrsrSh, rPos ), pStartPt(0), pEndPt(0) {}
-    virtual SwShellCrsr& getShellCrsr();
-    virtual void setStartPoint( const Point &rPt );
-    virtual void setEndPoint( const Point &rPt );
-    virtual const Point* getStartPoint() const;
-    virtual const Point* getEndPoint() const;
-    virtual void clearPoints();
+    virtual SwShellCrsr& getShellCrsr() SAL_OVERRIDE;
+    virtual void setStartPoint( const Point &rPt ) SAL_OVERRIDE;
+    virtual void setEndPoint( const Point &rPt ) SAL_OVERRIDE;
+    virtual const Point* getStartPoint() const SAL_OVERRIDE;
+    virtual const Point* getEndPoint() const SAL_OVERRIDE;
+    virtual void clearPoints() SAL_OVERRIDE;
     virtual ~SwBlockCursor();
 };
 

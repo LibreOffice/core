@@ -69,8 +69,8 @@ public:
 
 protected:
     // TransferableHelper overridables
-    virtual void        AddSupportedFormats();
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void        AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
 private:
     TSectionElements    m_aCopyElements;
 };

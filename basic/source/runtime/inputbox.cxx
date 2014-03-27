@@ -45,7 +45,7 @@ class SvRTLInputBox : public ModalDialog
 public:
     SvRTLInputBox( Window* pParent, const OUString& rPrompt, const OUString& rTitle,
         const OUString& rDefault, long nXTwips = -1, long nYTwips = -1 );
-    OUString GetText() const { return aText; }
+    OUString GetText() const SAL_OVERRIDE { return aText; }
 };
 
 SvRTLInputBox::SvRTLInputBox( Window* pParent, const OUString& rPrompt,

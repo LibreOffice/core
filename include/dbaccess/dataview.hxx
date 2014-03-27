@@ -53,9 +53,9 @@ namespace dbaui
         // initialize will be called when after the controller finished his initialize method
         virtual void initialize(){}
         // window overridables
-        virtual bool PreNotify( NotifyEvent& rNEvt );
-        virtual void StateChanged( StateChangedType nStateChange );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         inline IController& getCommandController() const { return m_rController; }
 
@@ -66,12 +66,12 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
         void attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
     protected:
         // window overridables
-        virtual void Paint( const Rectangle& _rRect );
+        virtual void Paint( const Rectangle& _rRect ) SAL_OVERRIDE;
 
         /// re-arrange all controls, including the toolbox, it's separator, and the "real view"
         virtual void resizeAll( const Rectangle& _rPlayground );

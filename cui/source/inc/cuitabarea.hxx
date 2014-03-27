@@ -67,10 +67,10 @@ private:
     sal_Int32           mnPos;
     sal_Bool            mbAreaTP;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 protected:
-    virtual short       Ok();
+    virtual short       Ok() SAL_OVERRIDE;
     DECL_LINK( CancelHdlImpl, void * );
     void                SavePalettes();
 
@@ -168,15 +168,15 @@ public:
     static SfxTabPage* Create(Window*, const SfxItemSet&);
     static sal_uInt16* GetRanges();
 
-    virtual bool FillItemSet(SfxItemSet&);
-    virtual void Reset(const SfxItemSet&);
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet);
-    virtual void PointChanged(Window* pWindow, RECT_POINT eRP);
+    virtual bool FillItemSet(SfxItemSet&) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet&) SAL_OVERRIDE;
+    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int  DeactivatePage(SfxItemSet* pSet) SAL_OVERRIDE;
+    virtual void PointChanged(Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
 
     void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
     void SetDlgType(sal_uInt16 nInType) { nDlgType = nInType; }
-    virtual void PageCreated (SfxAllItemSet aSet);
+    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -280,11 +280,11 @@ public:
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetGradientList( XGradientListRef pGrdLst)
@@ -297,7 +297,7 @@ public:
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetPos( sal_uInt16 nInPos ) { nPos = nInPos; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet);
+    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
@@ -345,18 +345,18 @@ public:
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
-    virtual void PageCreated (SfxAllItemSet aSet);
+    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
     void    DisablePage( sal_Bool bIn ) { bDisable = bIn; }
 };
 
@@ -423,11 +423,11 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetGradientList( XGradientListRef pGrdLst)
@@ -499,13 +499,13 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetHatchingList( XHatchListRef pHtchLst)
@@ -519,7 +519,7 @@ public:
     void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -585,13 +585,13 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
@@ -612,7 +612,7 @@ public:
             Return a label control that provides a name for the specified
             control.
     */
-    virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
+    virtual Window* GetParentLabeledBy( const Window* pLabeled ) const SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -720,11 +720,11 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
     virtual XPropertyListRef GetPropertyList( XPropertyListType t );
     virtual void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
@@ -741,7 +741,7 @@ public:
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
-    virtual void FillUserData();
+    virtual void FillUserData() SAL_OVERRIDE;
 
     virtual bool IsModified()
     {

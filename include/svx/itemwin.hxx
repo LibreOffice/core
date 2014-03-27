@@ -54,10 +54,10 @@ public:
     void FillControl();
 
 protected:
-    virtual void    Select();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 };
 
@@ -86,10 +86,10 @@ public:
     void            Update( const XLineColorItem* pItem );
 
 protected:
-    virtual void    Select();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 };
 
@@ -108,13 +108,13 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
     void            ReleaseFocus_Impl();
 
 protected:
-    virtual void    Modify();
-    virtual void    Down();
-    virtual void    Up();       // just to be sure
+    virtual void    Modify() SAL_OVERRIDE;
+    virtual void    Down() SAL_OVERRIDE;
+    virtual void    Up() SAL_OVERRIDE;       // just to be sure
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SvxMetricField( Window* pParent,
@@ -139,8 +139,8 @@ public:
     bool            IsRelease() { return bRelease;}
 
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 private:
     sal_uInt16      nCurPos;
@@ -161,9 +161,9 @@ public:
     bool            IsRelease() { return bRelease;}
 
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    Select();
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    Select() SAL_OVERRIDE;
 
 private:
     sal_uInt16      nCurPos;

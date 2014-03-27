@@ -49,15 +49,15 @@ namespace dbmm
 
     protected:
         // OWizardMachine overridables
-        virtual void            enterState( WizardState _nState );
-        virtual bool            prepareLeaveCurrentState( CommitPageReason _eReason );
-        virtual bool            leaveState( WizardState _nState );
-        virtual WizardState     determineNextState( WizardState _nCurrentState ) const;
-        virtual bool            onFinish();
+        virtual void            enterState( WizardState _nState ) SAL_OVERRIDE;
+        virtual bool            prepareLeaveCurrentState( CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool            leaveState( WizardState _nState ) SAL_OVERRIDE;
+        virtual WizardState     determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
+        virtual bool            onFinish() SAL_OVERRIDE;
 
         // Dialog overridables
-        virtual bool    Close();
-        virtual short   Execute();
+        virtual bool    Close() SAL_OVERRIDE;
+        virtual short   Execute() SAL_OVERRIDE;
 
     private:
         void    impl_showCloseDocsError( bool _bShow );

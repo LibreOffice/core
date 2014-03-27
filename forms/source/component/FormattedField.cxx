@@ -89,8 +89,8 @@ protected:
     StandardFormatsSupplier(const Reference< XComponentContext >& _rxFactory,LanguageType _eSysLanguage);
     ~StandardFormatsSupplier();
 protected:
-    virtual bool    queryTermination() const;
-    virtual void    notifyTermination();
+    virtual bool    queryTermination() const SAL_OVERRIDE;
+    virtual void    notifyTermination() SAL_OVERRIDE;
 };
 WeakReference< XNumberFormatsSupplier > StandardFormatsSupplier::s_xDefaultFormatsSupplier;
 StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XComponentContext > & _rxContext,LanguageType _eSysLanguage)

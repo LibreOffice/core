@@ -41,9 +41,9 @@ protected:
 
     using               SequenceRecordObjectBase::construct;
 
-    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
-    virtual void        implWriteExtHeader();
-    virtual void        implDumpRecordBody();
+    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
+    virtual void        implWriteExtHeader() SAL_OVERRIDE;
+    virtual void        implDumpRecordBody() SAL_OVERRIDE;
     virtual void        implDumpClientAnchor();
 
 private:

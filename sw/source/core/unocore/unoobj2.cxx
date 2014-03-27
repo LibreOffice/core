@@ -480,7 +480,7 @@ public:
                 uno::RuntimeException);
 protected:
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -750,7 +750,7 @@ public:
 
 protected:
     // SwClient
-    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -1547,7 +1547,7 @@ public:
 
 protected:
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -1730,7 +1730,7 @@ public:
 
 protected:
     // SwClient
-    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 struct InvalidFrameDepend {

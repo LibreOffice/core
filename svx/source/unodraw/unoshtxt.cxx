@@ -128,7 +128,7 @@ public:
     void SAL_CALL acquire();
     void SAL_CALL release();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     SvxEditSource*          Clone() const;
     SvxTextForwarder*       GetTextForwarder();
@@ -152,7 +152,7 @@ public:
 
     DECL_LINK( NotifyHdl, EENotify* );
 
-    virtual void ObjectInDestruction(const SdrObject& rObject);
+    virtual void ObjectInDestruction(const SdrObject& rObject) SAL_OVERRIDE;
 
     void ChangeModel( SdrModel* pNewModel );
 

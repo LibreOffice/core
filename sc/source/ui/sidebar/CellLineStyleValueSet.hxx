@@ -38,7 +38,7 @@ public:
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 };
 
 } } // end of namespace svx::sidebar

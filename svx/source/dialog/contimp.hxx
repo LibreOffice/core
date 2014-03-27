@@ -51,8 +51,8 @@ class SvxSuperContourDlg : public SvxContourDlg
     sal_Bool                bGraphicLinked;
     ImageList           maImageList;
 
-    virtual void        Resize();
-    virtual bool        Close();
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual bool        Close() SAL_OVERRIDE;
 
                         DECL_LINK( Tbx1ClickHdl, ToolBox* );
                         DECL_LINK( MousePosHdl, ContourWindow* );
@@ -96,7 +96,7 @@ public:
 
     /** virtual method from Window is used to detect change in high contrast display mode
         to switch the toolbox images */
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 };
 

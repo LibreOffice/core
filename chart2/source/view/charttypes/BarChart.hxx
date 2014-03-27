@@ -35,11 +35,11 @@ public:
             , sal_Int32 nDimensionCount );
     virtual ~BarChart();
 
-    virtual void createShapes();
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
+    virtual void createShapes() SAL_OVERRIDE;
+    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
-    virtual bool keepAspectRatio() const;
+    virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const SAL_OVERRIDE;
+    virtual bool keepAspectRatio() const SAL_OVERRIDE;
 
 private: //methods
     //no default constructor
@@ -62,7 +62,7 @@ private: //methods
                         , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
                         , BarPositionHelper* pPosHelper ) const;
 
-    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
+    virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const SAL_OVERRIDE;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 
     void adaptOverlapAndGapwidthForGroupBarsPerAxis();
 

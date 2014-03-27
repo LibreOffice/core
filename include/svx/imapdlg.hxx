@@ -66,7 +66,7 @@ class SvxIMapDlgItem : public SfxControllerItem
 protected:
 
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                               const SfxPoolItem* pState );
+                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 
 public:
@@ -98,8 +98,8 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     void*               pCheckObj;
     SvxIMapDlgItem      aIMapItem;
 
-    virtual void        Resize();
-    virtual bool    Close();
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
     DECL_LINK( TbxClickHdl, ToolBox* );
     DECL_LINK( InfoHdl, IMapWindow* );
@@ -136,9 +136,9 @@ public:
     void                UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );
 
-    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void ApplyImageList();
 };
 

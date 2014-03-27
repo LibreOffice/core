@@ -46,31 +46,31 @@ public:
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
-                ) throw (::com::sun::star::uno::RuntimeException );
+                ) throw (::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
+    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix ) SAL_OVERRIDE;
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) SAL_OVERRIDE;
 
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException);
+                throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual void initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
-                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
+                  , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) SAL_OVERRIDE;
 
-    virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
+    virtual sal_Int32 estimateMaximumAutoMainIncrementCount() SAL_OVERRIDE;
 
-    virtual void createMaximumLabels();
-    virtual void createLabels();
-    virtual void updatePositions();
+    virtual void createMaximumLabels() SAL_OVERRIDE;
+    virtual void createLabels() SAL_OVERRIDE;
+    virtual void updatePositions() SAL_OVERRIDE;
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 
 protected: //methods
-    virtual bool prepareShapeCreation();
+    virtual bool prepareShapeCreation() SAL_OVERRIDE;
 
 private: //member
     boost::scoped_ptr<VCartesianAxis>  m_apAxisWithLabels;

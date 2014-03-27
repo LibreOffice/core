@@ -65,9 +65,9 @@ public:
     */
     void ShowPanel (const Panel& rPanel);
 
-    virtual void Paint (const Rectangle& rUpdateArea);
-    virtual void DataChanged (const DataChangedEvent& rEvent);
-    virtual bool Notify (NotifyEvent& rEvent);
+    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
     void PrintWindowTree();
     static void PrintWindowSubTree (Window* pRoot, int nIndentation);
@@ -79,7 +79,7 @@ public:
     public:
         ScrollContainerWindow (Window* pParentWindow);
         virtual ~ScrollContainerWindow (void);
-        virtual void Paint (const Rectangle& rUpdateArea);
+        virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
         void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
     private:
         ::std::vector<sal_Int32> maSeparators;

@@ -32,8 +32,8 @@ namespace dbaui
         OQueryTabWinShowUndoAct(OQueryTableView* pOwner);
         ~OQueryTabWinShowUndoAct();
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     };
 
     // OQueryTabWinDelUndoAct - undo class to delete a TabWins
@@ -44,8 +44,8 @@ namespace dbaui
         OQueryTabWinDelUndoAct(OQueryTableView* pOwner);
         ~OQueryTabWinDelUndoAct();
 
-        virtual void    Undo();
-        virtual void    Redo();
+        virtual void    Undo() SAL_OVERRIDE;
+        virtual void    Redo() SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINSHOWUNDOACT_HXX

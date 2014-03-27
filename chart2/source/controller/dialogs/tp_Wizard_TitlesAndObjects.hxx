@@ -45,9 +45,9 @@ public:
                 , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext );
 
-    virtual void        initializePage();
-    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason );
-    virtual bool        canAdvance() const;
+    virtual void        initializePage() SAL_OVERRIDE;
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
+    virtual bool        canAdvance() const SAL_OVERRIDE;
 
 protected:
     void commitToModel();

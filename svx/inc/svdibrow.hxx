@@ -56,15 +56,15 @@ private:
     void ImpRestoreWhich();
 
 protected:
-    virtual long GetRowCount() const;
-    virtual bool SeekRow(long nRow);
-    virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const;
-    virtual void DoubleClick(const BrowserMouseEvent&);
-    virtual void KeyInput(const KeyEvent& rEvt);
-    virtual void Select();
+    virtual long GetRowCount() const SAL_OVERRIDE;
+    virtual bool SeekRow(long nRow) SAL_OVERRIDE;
+    virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const SAL_OVERRIDE;
+    virtual void DoubleClick(const BrowserMouseEvent&) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
+    virtual void Select() SAL_OVERRIDE;
     virtual void SetDirty(); // is called for example in mode switches
-    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
-    virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
+    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) SAL_OVERRIDE;
+    virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) SAL_OVERRIDE;
 public:
     _SdrItemBrowserControl(Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
     virtual ~_SdrItemBrowserControl();
@@ -84,7 +84,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const SAL_OVERRIDE;
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
@@ -102,8 +102,8 @@ class _SdrItemBrowserWindow: public FloatingWindow {
 public:
     _SdrItemBrowserWindow(Window* pParent, WinBits nBits=WB_STDSIZEABLEDOCKWIN);
     virtual ~_SdrItemBrowserWindow();
-    virtual void Resize();
-    virtual void GetFocus();
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
     void Clear()                                            { aBrowse.Clear(); }
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse.SetAttributes(pAttr,p2ndSet); }
     void SetFloatingMode(bool /*bOn*/) {}

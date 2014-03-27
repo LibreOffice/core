@@ -54,11 +54,11 @@ namespace offapp
         static SfxTabPage*  Create(Window* _pParent, const SfxItemSet& _rAttrSet);
 
     protected:
-        virtual bool        Notify( NotifyEvent& _rNEvt );
+        virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
-        virtual bool        FillItemSet(SfxItemSet& _rSet);
-        virtual void        Reset(const SfxItemSet& _rSet);
-        virtual void        ActivatePage( const SfxItemSet& _rSet);
+        virtual bool        FillItemSet(SfxItemSet& _rSet) SAL_OVERRIDE;
+        virtual void        Reset(const SfxItemSet& _rSet) SAL_OVERRIDE;
+        virtual void        ActivatePage( const SfxItemSet& _rSet) SAL_OVERRIDE;
 
     protected:
         DECL_LINK( OnEnabledDisabled, const CheckBox* );

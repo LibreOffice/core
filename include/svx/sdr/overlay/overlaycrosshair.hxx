@@ -32,14 +32,14 @@ namespace sdr
         {
         protected:
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
         public:
             explicit OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos);
             virtual ~OverlayCrosshairStriped();
 
             // react on stripe definition change
-            virtual void stripeDefinitionHasChanged();
+            virtual void stripeDefinitionHasChanged() SAL_OVERRIDE;
         };
     } // end of namespace overlay
 } // end of namespace sdr

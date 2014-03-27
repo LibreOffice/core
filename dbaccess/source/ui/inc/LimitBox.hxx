@@ -26,12 +26,12 @@ class LimitBox: public NumericBox
         LimitBox( Window* pParent, WinBits nStyle );
         virtual ~LimitBox();
 
-        virtual OUString    CreateFieldText( sal_Int64 nValue ) const;
+        virtual OUString    CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
 
-        virtual void        Reformat();
-        virtual void        ReformatAll();
+        virtual void        Reformat() SAL_OVERRIDE;
+        virtual void        ReformatAll() SAL_OVERRIDE;
 
-        virtual Size        GetOptimalSize() const;
+        virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     private:
         void LoadDefaultLimits();

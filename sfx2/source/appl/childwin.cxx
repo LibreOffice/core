@@ -67,7 +67,7 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
             ,   m_pData ( pData  )
         {}
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > xSelfHold( this );
 

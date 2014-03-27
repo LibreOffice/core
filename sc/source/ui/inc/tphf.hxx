@@ -31,8 +31,8 @@ class ScHFPage : public SvxHFPage
 public:
     virtual         ~ScHFPage();
 
-    virtual void    Reset( const SfxItemSet& rSet );
-    virtual bool    FillItemSet( SfxItemSet& rOutSet );
+    virtual void    Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool    FillItemSet( SfxItemSet& rOutSet ) SAL_OVERRIDE;
 
     void            SetPageStyle( const OUString& rName )    { aStrPageStyle = rName; }
     void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
@@ -42,10 +42,10 @@ protected:
                               const SfxItemSet& rSet,
                               sal_uInt16 nSetId );
 
-    virtual void    ActivatePage();
-    virtual void    DeactivatePage();
-    virtual void    ActivatePage( const SfxItemSet& rSet );
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void    ActivatePage() SAL_OVERRIDE;
+    virtual void    DeactivatePage() SAL_OVERRIDE;
+    virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
     PushButton*         m_pBtnEdit;

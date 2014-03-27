@@ -71,19 +71,19 @@ namespace sdr
                 bool bRefreshWithPreRendering = false);
 
             // complete redraw
-            virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const;
+            virtual void completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice = 0L) const SAL_OVERRIDE;
 
             // flush. Do buffered updates.
-            virtual void flush();
+            virtual void flush() SAL_OVERRIDE;
 
             // #i68597# part of content gets copied, react on it
-            virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize);
+            virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize) SAL_OVERRIDE;
 
             // restore part of background. Implemented form buffered versions only.
-            virtual void restoreBackground(const Region& rRegion) const;
+            virtual void restoreBackground(const Region& rRegion) const SAL_OVERRIDE;
 
             // invalidate the given range at local OutputDevice
-            virtual void invalidateRange(const basegfx::B2DRange& rRange);
+            virtual void invalidateRange(const basegfx::B2DRange& rRange) SAL_OVERRIDE;
 
             // access to RefreshWithPreRendering Flag
             bool DoRefreshWithPreRendering() const { return mbRefreshWithPreRendering; }

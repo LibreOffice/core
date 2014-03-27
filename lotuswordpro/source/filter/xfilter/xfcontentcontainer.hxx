@@ -120,11 +120,11 @@ public:
     /**
      * @descr   return the content type.
      */
-    virtual enumXFContent   GetContentType();
+    virtual enumXFContent   GetContentType() SAL_OVERRIDE;
     /**
      * @descr   Output to OOo model or local file.
      */
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     std::vector<IXFContent*>    m_aContents;

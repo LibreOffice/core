@@ -129,8 +129,8 @@ protected:
 public:
     SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
     virtual ~SwDoGetCapitalSize() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
-    virtual void Do();
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
+    virtual void Do() SAL_OVERRIDE;
     const Size &GetSize() const { return aTxtSize; }
 };
 
@@ -190,8 +190,8 @@ public:
         ,   m_nBreak( -1 )
         { }
     virtual ~SwDoGetCapitalBreak() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
-    virtual void Do();
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
+    virtual void Do() SAL_OVERRIDE;
     sal_Int32 getBreak() const { return m_nBreak; }
 };
 
@@ -273,8 +273,8 @@ public:
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
         { }
     virtual ~SwDoDrawCapital() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
-    virtual void Do();
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
+    virtual void Do() SAL_OVERRIDE;
     void DrawSpace( Point &rPos );
 };
 
@@ -369,8 +369,8 @@ public:
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual ~SwDoCapitalCrsrOfst() {}
-    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
-    virtual void Do();
+    virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
+    virtual void Do() SAL_OVERRIDE;
 
     void DrawSpace( const Point &rPos );
     inline sal_Int32 GetCrsr(){ return nCrsr; }
@@ -446,7 +446,7 @@ class SwDoDrawStretchCapital : public SwDoDrawCapital
     const sal_uInt16 nCapWidth;
     const sal_uInt16 nOrgWidth;
 public:
-    virtual void Do();
+    virtual void Do() SAL_OVERRIDE;
 
     SwDoDrawStretchCapital( SwDrawTextInfo &rInfo, const sal_uInt16 nCapitalWidth )
             : SwDoDrawCapital( rInfo ),

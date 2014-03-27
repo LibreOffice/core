@@ -31,7 +31,7 @@ class ShapeParagraphDialog : public SfxTabDialog
 public:
     ShapeParagraphDialog(Window* pParent, const SfxItemSet* pAttr);
 private:
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
     sal_uInt16 m_nTabPageId;
 };
 

@@ -49,19 +49,19 @@ public:
             XFillBitmapItem( const XFillBitmapItem& rItem );
             XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer = 0 );
 
-    virtual bool            operator==( const SfxPoolItem& rItem ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
-    virtual SvStream&       Store( SvStream& rOut, sal_uInt16 nItemVersion  ) const;
-    virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    virtual bool            operator==( const SfxPoolItem& rItem ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
+    virtual SvStream&       Store( SvStream& rOut, sal_uInt16 nItemVersion  ) const SAL_OVERRIDE;
+    virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     const GraphicObject& GetGraphicObject() const;
     void SetGraphicObject(const GraphicObject& rGraphicObject);

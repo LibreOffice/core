@@ -59,9 +59,9 @@ public:
     Svx3DPreviewControl(Window* pParent, WinBits nStyle = 0);
     ~Svx3DPreviewControl();
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void Resize();
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     void Reset();
     virtual void SetObjectType(sal_uInt16 nType);
@@ -114,12 +114,12 @@ public:
     Svx3DLightControl(Window* pParent, WinBits nStyle = 0);
     ~Svx3DLightControl();
 
-    virtual void Paint(const Rectangle& rRect);
-    virtual void MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void Tracking( const TrackingEvent& rTEvt );
-    virtual void Resize();
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
-    virtual void SetObjectType(sal_uInt16 nType);
+    virtual void SetObjectType(sal_uInt16 nType) SAL_OVERRIDE;
 
     // register user callback
     void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
@@ -140,7 +140,7 @@ public:
     void GetRotation(double& rRotX, double& rRotY, double& rRotZ);
 
     void SelectLight(sal_uInt32 nLightNumber);
-    virtual void Set3DAttributes(const SfxItemSet& rAttr);
+    virtual void Set3DAttributes(const SfxItemSet& rAttr) SAL_OVERRIDE;
     sal_uInt32 GetSelectedLight() { return maSelectedLight; }
 
     // light data access
@@ -170,7 +170,7 @@ public:
     ~SvxLightCtl3D();
 
     // react to size changes
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
     void NewLayout();
 
     // check the selection for validity
@@ -183,11 +183,11 @@ public:
     void SetUserInteractiveChangeCallback(Link aNew) { maUserInteractiveChangeCallback = aNew; }
     void SetUserSelectionChangeCallback(Link aNew) { maUserSelectionChangeCallback = aNew; }
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void GetFocus();
-    virtual void LoseFocus();
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
 protected:
 

@@ -37,7 +37,7 @@ class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 protected:
     virtual ~SwHyperlinkEventDescriptor();
 public:
@@ -71,12 +71,12 @@ public:
     ~SwFrameEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
-    virtual void setMacroItem(const SvxMacroItem& rItem);
-    virtual const SvxMacroItem& getMacroItem();
-    virtual sal_uInt16 getMacroItemWhich() const;
+    virtual void setMacroItem(const SvxMacroItem& rItem) SAL_OVERRIDE;
+    virtual const SvxMacroItem& getMacroItem() SAL_OVERRIDE;
+    virtual sal_uInt16 getMacroItemWhich() const SAL_OVERRIDE;
 };
 
 class SwFrameStyleEventDescriptor : public SvEventDescriptor
@@ -91,12 +91,12 @@ public:
     ~SwFrameStyleEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
-    virtual void setMacroItem(const SvxMacroItem& rItem);
-    virtual const SvxMacroItem& getMacroItem();
-    virtual sal_uInt16 getMacroItemWhich() const;
+    virtual void setMacroItem(const SvxMacroItem& rItem) SAL_OVERRIDE;
+    virtual const SvxMacroItem& getMacroItem() SAL_OVERRIDE;
+    virtual sal_uInt16 getMacroItemWhich() const SAL_OVERRIDE;
 };
 
 #endif

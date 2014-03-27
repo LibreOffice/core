@@ -36,12 +36,12 @@ public:
     virtual void createVAxisList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier
             , const ::com::sun::star::awt::Size& rFontReferenceSize
-            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
+            , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) SAL_OVERRIDE;
 
-    virtual void initVAxisInList();
-    virtual void updateScalesAndIncrementsOnAxes();
+    virtual void initVAxisInList() SAL_OVERRIDE;
+    virtual void updateScalesAndIncrementsOnAxes() SAL_OVERRIDE;
 
-    virtual void createGridShapes();
+    virtual void createGridShapes() SAL_OVERRIDE;
 
 private:
     VCartesianCoordinateSystem();

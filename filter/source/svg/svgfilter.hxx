@@ -129,11 +129,11 @@ public:
 
 protected:
 
-    virtual void            _ExportStyles( bool /* bUsed */ ) {}
-    virtual void            _ExportAutoStyles() {}
-    virtual void            _ExportContent() {}
-    virtual void            _ExportMasterStyles() {}
-    virtual sal_uInt32        exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
+    virtual void            _ExportStyles( bool /* bUsed */ ) SAL_OVERRIDE {}
+    virtual void            _ExportAutoStyles() SAL_OVERRIDE {}
+    virtual void            _ExportContent() SAL_OVERRIDE {}
+    virtual void            _ExportMasterStyles() SAL_OVERRIDE {}
+    virtual sal_uInt32        exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) SAL_OVERRIDE { return 0; }
 
 private:
 
@@ -315,17 +315,17 @@ private:
 protected:
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception);
+    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception);
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException, std::exception);
+    virtual OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
 

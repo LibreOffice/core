@@ -31,8 +31,8 @@ class FilterOptionsContinuation : public comphelper::OInteraction< ::com::sun::s
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties;
 
 public:
-    virtual void SAL_CALL setFilterOptions( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProp ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getFilterOptions(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setFilterOptions( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProp ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getFilterOptions(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class RequestFilterOptions : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
@@ -59,12 +59,12 @@ public:
     }
 
     virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
             > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif

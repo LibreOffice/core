@@ -41,7 +41,7 @@ public:
     osl::Condition maCompilationDoneCondition;
 
 protected:
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
 
 private:
     osl::Mutex maQueueMutex;

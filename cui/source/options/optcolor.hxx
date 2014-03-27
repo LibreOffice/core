@@ -52,11 +52,11 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
-    virtual int         DeactivatePage( SfxItemSet* pSet );
-    virtual void        FillUserData();
+    virtual int         DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void        FillUserData() SAL_OVERRIDE;
 
 };
 

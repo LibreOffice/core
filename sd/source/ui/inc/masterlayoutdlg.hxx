@@ -55,7 +55,7 @@ private:
 public:
     MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 }

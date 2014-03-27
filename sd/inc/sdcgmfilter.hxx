@@ -33,7 +33,7 @@ public:
     virtual ~SdCGMFilter (void);
 
     sal_Bool        Import();
-    sal_Bool        Export();
+    sal_Bool        Export() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_INC_SDCGMFILTER_HXX

@@ -63,8 +63,8 @@ class SmPrintOptionsTabPage : public SfxTabPage
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 
-    virtual bool    FillItemSet(SfxItemSet& rSet);
-    virtual void    Reset(const SfxItemSet& rSet);
+    virtual bool    FillItemSet(SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual void    Reset(const SfxItemSet& rSet) SAL_OVERRIDE;
 
 public:
     static SfxTabPage* Create(Window *pWindow, const SfxItemSet &rSet);
@@ -76,14 +76,14 @@ public:
 
 class SmShowFont : public Window
 {
-    virtual void Paint(const Rectangle&);
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
 
 public:
     SmShowFont(Window *pParent, WinBits nStyle)
         : Window(pParent, nStyle)
     {
     }
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
     void SetFont(const Font& rFont);
 };
 
@@ -103,7 +103,7 @@ class SmFontDialog : public ModalDialog
 
     void            InitColor_Impl();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
@@ -228,7 +228,7 @@ public:
     void WriteTo (SmFormat &rFormat) /*const*/;
 
     // Window
-    virtual void    DataChanged( const DataChangedEvent &rEvt );
+    virtual void    DataChanged( const DataChangedEvent &rEvt ) SAL_OVERRIDE;
 };
 
 
@@ -267,11 +267,11 @@ class SmShowSymbolSetWindow : public Control
     void SetScrollBarRange();
     Point OffsetPoint(const Point &rPoint) const;
 
-    virtual void    Paint(const Rectangle&);
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    KeyInput(const KeyEvent& rKEvt);
-    virtual void    Resize();
-    virtual Size    GetOptimalSize() const;
+    virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     DECL_LINK( ScrollHdl, ScrollBar* );
 public:
@@ -309,9 +309,9 @@ class SmShowSymbol : public Control
 {
     Link  aDblClickHdlLink;
 
-    virtual void    Paint(const Rectangle&);
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    Resize();
+    virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 
     void setFontSize(Font &rFont) const;
 
@@ -357,7 +357,7 @@ class SmSymbolDialog : public ModalDialog
     const SmSym    *GetSymbol() const;
     void            InitColor_Impl();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
@@ -372,7 +372,7 @@ public:
 
 class SmShowChar : public Control
 {
-    virtual void    Paint(const Rectangle&);
+    virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
 
 public:
     SmShowChar(Window *pParent, const ResId& rResId)
@@ -462,7 +462,7 @@ class SmSymDefineDialog : public ModalDialog
 
     void            InitColor_Impl();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr, bool bFreeRes = true);
@@ -471,7 +471,7 @@ public:
     using OutputDevice::SetFont;
 
     // Dialog
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
     bool SelectOldSymbolSet(const OUString &rSymbolSetName)
     {

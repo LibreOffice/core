@@ -71,9 +71,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     void SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const sal_Bool bDisplay);
     void SetErrorMessage(const OUString& sTitle, const OUString& sMessage, const OUString& sMessageType, const sal_Bool bDisplay);
@@ -105,9 +105,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLErrorMessageContext : public SvXMLImportContext
@@ -136,9 +136,9 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 class ScXMLErrorMacroContext : public SvXMLImportContext
@@ -164,8 +164,8 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual void EndElement();
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
 };
 
 

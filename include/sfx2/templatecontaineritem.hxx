@@ -28,11 +28,11 @@ public:
     virtual ~TemplateContainerItem ();
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
-                        const ThumbnailItemAttributes *pAttrs);
+                        const ThumbnailItemAttributes *pAttrs) SAL_OVERRIDE;
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLength,
-                                         const ThumbnailItemAttributes *pAttrs);
+                                         const ThumbnailItemAttributes *pAttrs) SAL_OVERRIDE;
 
     bool HasMissingPreview( );
 

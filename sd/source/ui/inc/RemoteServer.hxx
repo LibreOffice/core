@@ -85,7 +85,7 @@ namespace sd
 
             ::std::vector<ClientInfoInternal*> mAvailableClients;
 
-            void execute();
+            void execute() SAL_OVERRIDE;
     };
 }
 

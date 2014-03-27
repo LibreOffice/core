@@ -19,88 +19,88 @@ class OpDmax: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dmax"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dmax"; }
 };
 
 class OpDmin: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dmin"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dmin"; }
 };
 
 class OpDproduct: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dproduct"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dproduct"; }
 };
 
 class OpDaverage: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Daverage"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Daverage"; }
 };
 
 class OpDstdev: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dstdev"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dstdev"; }
 };
 
 class OpDstdevp: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dstdevp"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dstdevp"; }
 };
 
 class OpDsum: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dsum"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dsum"; }
 };
 
 class OpDvar: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dvar"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dvar"; }
 };
 
 class OpDvarp: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dvarp"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dvarp"; }
 };
 
 class OpDcount: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dcount"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dcount"; }
 };
 
 class OpDcount2: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-             const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Dcount2"; }
+             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Dcount2"; }
 };
 
 

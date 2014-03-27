@@ -126,13 +126,13 @@ public:
 
     /** Flushes and closes the output stream. Does also close the wrapped UNO
         output stream if bAutoClose has been set to true in the constructor. */
-    void                close();
+    void                close() SAL_OVERRIDE;
 
     /** Writes the passed data sequence. */
-    virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 );
+    virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 ) SAL_OVERRIDE;
 
     /** Write nBytes bytes from the (preallocated!) buffer pMem. */
-    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
 
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
@@ -170,10 +170,10 @@ public:
     explicit            SequenceOutputStream( StreamDataSequence& rData );
 
     /** Writes the passed data sequence. */
-    virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 );
+    virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 ) SAL_OVERRIDE;
 
     /** Write nBytes bytes from the (preallocated!) buffer pMem. */
-    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
+    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
 
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >

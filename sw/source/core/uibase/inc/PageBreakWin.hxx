@@ -36,19 +36,19 @@ public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
     ~SwPageBreakWin( );
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void Select( );
-    virtual void MouseMove( const MouseEvent& rMEvt );
-    virtual void Activate( );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Select( ) SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Activate( ) SAL_OVERRIDE;
 
     void UpdatePosition( const Point* pEvtPt = NULL );
 
-    virtual void ShowAll( bool bShow );
-    virtual bool Contains( const Point &rDocPt ) const;
+    virtual void ShowAll( bool bShow ) SAL_OVERRIDE;
+    virtual bool Contains( const Point &rDocPt ) const SAL_OVERRIDE;
 
     const SwPageFrm* GetPageFrame( );
 
-    void SetReadonly( bool bReadonly );
+    void SetReadonly( bool bReadonly ) SAL_OVERRIDE;
 
     void Fade( bool bFadeIn );
 

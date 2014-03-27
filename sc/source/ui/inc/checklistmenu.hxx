@@ -48,13 +48,13 @@ public:
     explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
-    virtual void PopupModeEnd();
-    virtual void MouseMove(const MouseEvent& rMEvt);
-    virtual void MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void KeyInput(const KeyEvent& rKEvt);
-    virtual void Paint(const Rectangle& rRect);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual void PopupModeEnd() SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void addMenuItem(const OUString& rText, bool bEnabled, Action* pAction);
     void addSeparator();
@@ -204,7 +204,7 @@ class ScCheckListBox : public SvTreeListBox
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
     void         ExpandChildren( SvTreeListEntry* pParent );
-    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 /**
  * This class implements a popup window for field button, for quick access
@@ -238,11 +238,11 @@ public:
     explicit ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc);
     virtual ~ScCheckListMenuWindow();
 
-    virtual void MouseMove(const MouseEvent& rMEvt);
-    virtual bool Notify(NotifyEvent& rNEvt);
-    virtual void Paint(const Rectangle& rRect);
-    virtual Window* GetPreferredKeyInputWindow();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
@@ -271,7 +271,7 @@ public:
     void setPopupEndAction(Action* p);
 
 protected:
-    virtual void handlePopupEnd();
+    virtual void handlePopupEnd() SAL_OVERRIDE;
 
 private:
     struct Member
@@ -291,7 +291,7 @@ private:
     public:
         CancelButton(ScCheckListMenuWindow* pParent);
 
-        virtual void Click();
+        virtual void Click() SAL_OVERRIDE;
 
     private:
         ScCheckListMenuWindow* mpParent;

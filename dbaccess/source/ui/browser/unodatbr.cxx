@@ -1108,7 +1108,7 @@ namespace
 
         virtual ~FilterByEntryDataId() {}
 
-        virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const;
+        virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const SAL_OVERRIDE;
     };
 
     bool FilterByEntryDataId::includeEntry( SvTreeListEntry* _pEntry ) const

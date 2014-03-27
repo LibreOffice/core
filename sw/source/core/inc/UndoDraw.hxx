@@ -42,10 +42,10 @@ public:
 
     virtual ~SwSdrUndo();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    virtual OUString GetComment() const;
+    virtual OUString GetComment() const SAL_OVERRIDE;
 };
 
 class SwUndoDrawGroup : public SwUndo
@@ -59,8 +59,8 @@ public:
 
     virtual ~SwUndoDrawGroup();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, SdrObject* );
     void SetGroupFmt( SwDrawFrmFmt* );
@@ -88,8 +88,8 @@ public:
 
     virtual ~SwUndoDrawUnGroup();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     void AddObj( sal_uInt16 nPos, SwDrawFrmFmt* );
 };
@@ -104,8 +104,8 @@ public:
 
     virtual ~SwUndoDrawUnGroupConnectToLayout();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
                        SdrObject* pDrawObject );
@@ -123,8 +123,8 @@ public:
 
     virtual ~SwUndoDrawDelete();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, const SdrMark& );
 };

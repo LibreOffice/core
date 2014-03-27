@@ -64,12 +64,12 @@ namespace dbaui
         sal_Bool ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
         void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt);
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
         OPreviewWindow(Window* _pParent);
 
         // window overloads
-        virtual void Paint(const Rectangle& rRect);
+        virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };
@@ -171,8 +171,8 @@ namespace dbaui
         virtual ~OAppDetailPageHelper();
 
         // window overloads
-        virtual void Resize();
-        virtual void KeyInput( const KeyEvent& rKEvt );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
         sal_Bool isCutAllowed();
         sal_Bool isCopyAllowed();
@@ -354,7 +354,7 @@ namespace dbaui
                             sal_Bool _bTable);
 
     protected:
-        void DataChanged( const DataChangedEvent& rDCEvt );
+        void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILPAGEHELPER_HXX

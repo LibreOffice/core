@@ -57,7 +57,7 @@ namespace sdr
             SdrGrafObj& getSdrGrafObj();
 
             // This method is responsible for creating the graphical visualisation data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
 
         public:
             ViewObjectContactOfGraphic(ObjectContact& rObjectContact, ViewContact& rViewContact);

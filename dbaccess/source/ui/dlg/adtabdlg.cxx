@@ -76,13 +76,13 @@ public:
     virtual ~TableListFacade();
 
 private:
-    virtual void    updateTableObjectList( bool _bAllowViews );
-    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const;
-    virtual bool    isLeafSelected() const;
+    virtual void    updateTableObjectList( bool _bAllowViews ) SAL_OVERRIDE;
+    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const SAL_OVERRIDE;
+    virtual bool    isLeafSelected() const SAL_OVERRIDE;
     // OContainerListener
-    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 TableListFacade::~TableListFacade()
@@ -237,13 +237,13 @@ public:
     virtual ~QueryListFacade();
 
 private:
-    virtual void    updateTableObjectList( bool _bAllowViews );
-    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const;
-    virtual bool    isLeafSelected() const;
+    virtual void    updateTableObjectList( bool _bAllowViews ) SAL_OVERRIDE;
+    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const SAL_OVERRIDE;
+    virtual bool    isLeafSelected() const SAL_OVERRIDE;
     // OContainerListener
-    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 QueryListFacade::~QueryListFacade()

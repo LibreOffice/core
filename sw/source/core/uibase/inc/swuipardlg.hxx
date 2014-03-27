@@ -35,7 +35,7 @@ class SwParaDlg: public SfxTabDialog
     sal_uInt16 m_nParaBckGrnd;
     sal_uInt16 m_nParaBorder;
 
-    void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 
 public:
     SwParaDlg(  Window *pParent,

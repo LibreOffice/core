@@ -95,9 +95,9 @@ namespace svx
         static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
         static sal_uInt16*      GetRanges();
 
-        virtual bool        FillItemSet( SfxItemSet& rSet );
-        virtual void        Reset( const SfxItemSet& rSet );
-        virtual void        FillUserData();
+        virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+        virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+        virtual void        FillUserData() SAL_OVERRIDE;
     };
 
 
@@ -131,7 +131,7 @@ namespace svx
         DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rAttr );
         ~DatabaseRegistrationDialog();
 
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
     };
 
 

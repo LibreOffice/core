@@ -100,11 +100,11 @@ public:
         const ::com::sun::star::uno::Any maTreeListBoxData;
         SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
-        SAL_DLLPRIVATE virtual void      AddSupportedFormats();
-        SAL_DLLPRIVATE virtual bool      GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        SAL_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction );
+        SAL_DLLPRIVATE virtual void      AddSupportedFormats() SAL_OVERRIDE;
+        SAL_DLLPRIVATE virtual bool      GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+        SAL_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 
-        SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     };
 
     friend class SdPageObjsTLB::SdPageObjsTransferable;
@@ -139,13 +139,13 @@ protected:
     OUString                maSelectionEntryText;
 
     // DragSourceHelper
-    virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
-    virtual void            RequestingChildren( SvTreeListEntry* pParent );
+    virtual void            RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
     void                    DoDrag();
     void                    OnDragFinished( sal_uInt8 nDropAction );
@@ -177,11 +177,11 @@ protected:
         SvTreeListEntry*  pTarget,
         SvTreeListEntry*  pEntry,
         SvTreeListEntry*& rpNewParent,
-        sal_uLong&        rNewChildPos);
+        sal_uLong&        rNewChildPos) SAL_OVERRIDE;
 
     using Window::GetDropTarget;
-    virtual SvTreeListEntry* GetDropTarget (const Point& rLocation);
-    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&,SvLBoxButtonKind);
+    virtual SvTreeListEntry* GetDropTarget (const Point& rLocation) SAL_OVERRIDE;
+    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&,SvLBoxButtonKind) SAL_OVERRIDE;
 
 public:
 
@@ -191,10 +191,10 @@ public:
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
     OUString          getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool isAltText) const;
-    OUString          GetEntryAltText( SvTreeListEntry* pEntry ) const;
-    OUString          GetEntryLongDescription( SvTreeListEntry* pEntry ) const;
-    virtual void            SelectHdl();
-    virtual void            KeyInput( const KeyEvent& rKEvt );
+    OUString          GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
+    OUString          GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
+    virtual void            SelectHdl() SAL_OVERRIDE;
+    virtual void            KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
     SfxViewFrame*           GetViewFrame() const { return mpFrame; }

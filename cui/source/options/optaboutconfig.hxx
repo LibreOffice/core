@@ -35,8 +35,8 @@ public:
         , bNumericOnly(false)
     {}
 
-    virtual void KeyInput( const KeyEvent& rKeyEvent );
-    virtual Size GetOptimalSize() const;
+    virtual void KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
     //void setBehaviour( bool bNumeric, int nLengthLimit);
 };
 
@@ -65,7 +65,7 @@ public:
    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, sal_Bool bUpdate );
    virtual bool FillItemSet( /* SfxItemSet& rSet*/ );
 
-   virtual Size GetOptimalSize() const;
+   virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class CuiAboutConfigValueDialog : public ModalDialog

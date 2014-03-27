@@ -29,8 +29,8 @@ class ScAddInCfg : public utl::ConfigItem
 public:
             ScAddInCfg();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
-    virtual void    Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
+    virtual void    Commit() SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
             GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)

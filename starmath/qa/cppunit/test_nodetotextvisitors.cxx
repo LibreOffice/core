@@ -29,8 +29,8 @@ class Test : public test::BootstrapFixture {
 
 public:
     // init
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     // tests
     void SimpleUnaryOp();

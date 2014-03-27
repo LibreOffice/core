@@ -51,9 +51,9 @@ public:
     ~SvxLineStyleToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
     void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -69,8 +69,8 @@ public:
     ~SvxLineWidthToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -86,9 +86,9 @@ public:
     ~SvxLineColorToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
     void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -116,16 +116,16 @@ private:
     void            implInit();
 
 protected:
-    virtual void    Resizing( Size& rSize );
-    virtual void    Resize();
-    virtual bool    Close();
-    virtual void    PopupModeEnd();
+    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual void    PopupModeEnd() SAL_OVERRIDE;
 
     /** This function is called when the window gets the focus.  It grabs
         the focus to the line ends value set so that it can be controlled with
         the keyboard.
     */
-    virtual void GetFocus (void);
+    virtual void GetFocus (void) SAL_OVERRIDE;
 
 public:
     SvxLineEndWindow( sal_uInt16 nId,
@@ -140,8 +140,8 @@ public:
     void            StartSelection();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-    virtual SfxPopupWindow* Clone() const;
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
 
 
@@ -156,9 +156,9 @@ public:
     ~SvxLineEndToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 

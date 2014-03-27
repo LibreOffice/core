@@ -420,8 +420,8 @@ public:
     bool IsVirtualObjectBundling() const { return bBundleVirtObj; }
 
     // von der SdrMarkView ueberladen fuer den internen gebrauch
-    virtual void MarkListHasChanged();
-    virtual void ModelHasChanged();
+    virtual void MarkListHasChanged() SAL_OVERRIDE;
+    virtual void ModelHasChanged() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SVDEDTV_HXX

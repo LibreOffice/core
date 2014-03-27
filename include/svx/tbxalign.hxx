@@ -26,13 +26,13 @@
 class SVX_DLLPUBLIC SvxTbxCtlAlign: public SfxToolBoxControl
 {
 public:
-    virtual sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 
             SFX_DECL_TOOLBOX_CONTROL();
 

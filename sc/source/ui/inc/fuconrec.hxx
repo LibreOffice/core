@@ -31,16 +31,16 @@ class FuConstRectangle : public FuConstruct
 
     virtual ~FuConstRectangle();
                                        // Mouse- & Key-Events
-    virtual bool KeyInput(const KeyEvent& rKEvt);
-    virtual bool MouseMove(const MouseEvent& rMEvt);
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
     // Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) SAL_OVERRIDE;
 };
 
 

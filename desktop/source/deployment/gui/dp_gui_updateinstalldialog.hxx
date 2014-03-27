@@ -62,8 +62,8 @@ public:
 
     ~UpdateInstallDialog();
 
-    bool Close();
-    virtual short Execute();
+    bool Close() SAL_OVERRIDE;
+    virtual short Execute() SAL_OVERRIDE;
 
 private:
     UpdateInstallDialog(UpdateInstallDialog &); // not defined

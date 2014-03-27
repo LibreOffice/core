@@ -107,7 +107,7 @@ class LwpFribFootnote: public LwpFrib
 public:
     LwpFribFootnote(LwpPara* pPara );
     ~LwpFribFootnote(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
     LwpFootnote* GetFootnote();
@@ -128,10 +128,10 @@ class LwpFootnote : public LwpOrderedObject
 public:
     LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFootnote();
-    void RegisterStyle();
-    void XFConvert(XFContentContainer * pCont);
+    void RegisterStyle() SAL_OVERRIDE;
+    void XFConvert(XFContentContainer * pCont) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     sal_uInt16 m_nType;
     sal_uInt16 m_nRow;
@@ -157,7 +157,7 @@ public:
     LwpFootnoteTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFootnoteTable(){}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -246,9 +246,9 @@ class LwpFootnoteOptions : public LwpObject
 public:
     LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFootnoteOptions();
-    void RegisterStyle();
+    void RegisterStyle() SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     void RegisterFootnoteStyle();
     void RegisterEndnoteStyle();
 private:

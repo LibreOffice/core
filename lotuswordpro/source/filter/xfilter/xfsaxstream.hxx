@@ -99,32 +99,32 @@ public:
     /**
      * @descr   Start document callback.
      */
-    virtual void            StartDocument();
+    virtual void            StartDocument() SAL_OVERRIDE;
 
     /**
      * @descr   End document callback.
      */
-    virtual void            EndDocument();
+    virtual void            EndDocument() SAL_OVERRIDE;
 
     /**
      * @descr   Start output element.
      */
-    virtual void            StartElement(const OUString& oustr);
+    virtual void            StartElement(const OUString& oustr) SAL_OVERRIDE;
 
     /**
      * @descr   End output element.
      */
-    virtual void            EndElement(const OUString& oustr);
+    virtual void            EndElement(const OUString& oustr) SAL_OVERRIDE;
 
     /**
      * @descr   Output Character section.
      */
-    virtual void            Characters(const OUString& oustr);
+    virtual void            Characters(const OUString& oustr) SAL_OVERRIDE;
 
     /**
      * @descr   Get the attribute list interface.
      */
-    virtual IXFAttrList*    GetAttrList();
+    virtual IXFAttrList*    GetAttrList() SAL_OVERRIDE;
 
 public:
     Reference<XDocumentHandler> m_aHandler;

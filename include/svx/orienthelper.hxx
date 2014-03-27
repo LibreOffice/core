@@ -100,11 +100,11 @@ class SVX_DLLPUBLIC OrientStackedWrapper : public sfx::SingleControlWrapper< Ori
 public:
     explicit            OrientStackedWrapper( OrientationHelper& rOrientHlp );
 
-    virtual bool        IsControlDontKnow() const;
-    virtual void        SetControlDontKnow( bool bSet );
+    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
+    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
 
-    virtual bool        GetControlValue() const;
-    virtual void        SetControlValue( bool bValue );
+    virtual bool        GetControlValue() const SAL_OVERRIDE;
+    virtual void        SetControlValue( bool bValue ) SAL_OVERRIDE;
 };
 
 

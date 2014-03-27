@@ -60,8 +60,8 @@ public:
 
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( const char* pDir, const char* pName );
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
 protected:
     Reference< lang::XComponent > mxComponent;

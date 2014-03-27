@@ -52,8 +52,8 @@ public:
     com::sun::star::uno::Reference< com::sun::star::xforms::XModel > getModel();
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XNode > getContextNode();
 
-    virtual com::sun::star::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL initialize(const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aSequence) throw (com::sun::star::uno::RuntimeException, std::exception);
+    virtual com::sun::star::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize(const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aSequence) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

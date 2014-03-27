@@ -133,7 +133,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual void onEndElement()
+        virtual void onEndElement() SAL_OVERRIDE
             {
                 sal_Int32 aElement = getCurrentElement();
                 if( aElement == PPT_TOKEN( audio ) )
@@ -146,7 +146,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -198,7 +198,7 @@ namespace oox { namespace ppt {
 
             }
 
-            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -244,7 +244,7 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual void onEndElement()
+        virtual void onEndElement() SAL_OVERRIDE
             {
                 if( isCurrentElement( PPT_TOKEN( cmd ) ) )
                 {
@@ -317,7 +317,7 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -360,7 +360,7 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -398,7 +398,7 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -435,7 +435,7 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual void onEndElement()
+        virtual void onEndElement() SAL_OVERRIDE
             {
                 //xParentNode
                 if( isCurrentElement( mnElement ) )
@@ -454,7 +454,7 @@ namespace oox { namespace ppt {
             }
 
 
-            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -600,7 +600,7 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -642,7 +642,7 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual void onEndElement()
+        virtual void onEndElement() SAL_OVERRIDE
             {
                 if( isCurrentElement( mnElement ) )
                 {
@@ -661,7 +661,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -742,7 +742,7 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -802,7 +802,7 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {
@@ -888,7 +888,7 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE
             {
                 switch ( aElementToken )
                 {

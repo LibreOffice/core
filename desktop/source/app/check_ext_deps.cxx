@@ -82,21 +82,21 @@ public:
 
     // XCommandEnvironment
     virtual uno::Reference<task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (uno::RuntimeException, std::exception);
+    getInteractionHandler() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Reference<ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (uno::RuntimeException, std::exception);
+    SAL_CALL getProgressHandler() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
         uno::Reference<task::XInteractionRequest > const & xRequest )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XProgressHandler
     virtual void SAL_CALL push( uno::Any const & Status )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL update( uno::Any const & Status )
-        throw (uno::RuntimeException, std::exception);
-    virtual void SAL_CALL pop() throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL pop() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

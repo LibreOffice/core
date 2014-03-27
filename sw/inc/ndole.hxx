@@ -100,19 +100,19 @@ public:
           SwOLEObj& GetOLEObj()       { return aOLEObj; }
     ~SwOLENode();
 
-    virtual SwCntntNode *SplitCntntNode( const SwPosition & );
+    virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
 
     /// Is in ndcopy.cxx.
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
+    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
 
-    virtual Size GetTwipSize() const;
+    virtual Size GetTwipSize() const SAL_OVERRIDE;
 
     const Graphic* GetGraphic();
 
     void GetNewReplacement();
 
-    virtual bool SavePersistentData();
-    virtual bool RestorePersistentData();
+    virtual bool SavePersistentData() SAL_OVERRIDE;
+    virtual bool RestorePersistentData() SAL_OVERRIDE;
 
     sal_Bool IsInGlobalDocSection() const;
     sal_Bool IsOLEObjectDeleted() const;

@@ -39,22 +39,22 @@ public:
     virtual ~SwVbaTableOfContents();
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getLowerHeadingLevel() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (css::uno::RuntimeException, std::exception);
-    virtual ::sal_Int32 SAL_CALL getTabLeader() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setTabLeader( ::sal_Int32 _tableader ) throw (css::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL getUseFields() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException, std::exception);
-    virtual ::sal_Bool SAL_CALL getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException, std::exception);
+    virtual ::sal_Int32 SAL_CALL getLowerHeadingLevel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getTabLeader() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTabLeader( ::sal_Int32 _tableader ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL getUseFields() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Bool SAL_CALL getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL Update(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Update(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBATABLEOFCONTENTS_HXX
 

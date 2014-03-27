@@ -66,10 +66,10 @@ class OComponentEventThread
 protected:
 
     // XThread
-    virtual void SAL_CALL run();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
     virtual void SAL_CALL kill();
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
     // The following method is called to duplicate the Event while respecting it's type.
     virtual ::com::sun::star::lang::EventObject* cloneEvent(const ::com::sun::star::lang::EventObject* _pEvt) const = 0;
@@ -88,7 +88,7 @@ public:
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread();
@@ -98,7 +98,7 @@ public:
                    sal_Bool bFlag = sal_False );
 
     // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 /* resolve ambiguity : both OWeakObject and OObject have these memory operators */
     void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }

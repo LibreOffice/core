@@ -88,7 +88,7 @@ namespace
             m_pShell  (pShell)
         {}
 
-        virtual void Update( Graphic& aGraphic )
+        virtual void Update( Graphic& aGraphic ) SAL_OVERRIDE
         {
             m_pShell->ReRead(OUString(), OUString(), (const Graphic*) &aGraphic);
         }

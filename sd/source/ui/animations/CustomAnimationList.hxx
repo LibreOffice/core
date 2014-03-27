@@ -66,19 +66,19 @@ public:
     void onSelectionChanged( ::com::sun::star::uno::Any aSelection );
 
     // overrides
-    virtual void    SelectHdl();
-    virtual bool    DoubleClickHdl();
+    virtual void    SelectHdl() SAL_OVERRIDE;
+    virtual bool    DoubleClickHdl() SAL_OVERRIDE;
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
+    virtual PopupMenu* CreateContextMenu( void ) SAL_OVERRIDE;
+    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-    virtual void    SetTabs();
+    virtual void    SetTabs() SAL_OVERRIDE;
 
-    virtual void notify_change();
+    virtual void notify_change() SAL_OVERRIDE;
 
     const Image& getImage( sal_uInt16 nId );
 

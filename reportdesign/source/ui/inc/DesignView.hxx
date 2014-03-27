@@ -90,9 +90,9 @@ namespace rptui
         void operator =(ODesignView&);
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
         // return the Rectangle where I can paint myself
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     public:
         ODesignView(Window* pParent,
@@ -101,14 +101,14 @@ namespace rptui
         virtual ~ODesignView();
 
         // window overloads
-        virtual void MouseButtonDown( const MouseEvent& rMEvt );
-        virtual bool PreNotify( NotifyEvent& rNEvt );
-        virtual void GetFocus();
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
 
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly);
 
-        virtual void initialize();
+        virtual void initialize() SAL_OVERRIDE;
 
         inline OReportController&   getController() const { return m_rReportController; }
 
@@ -214,9 +214,9 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > getCurrentControlModel() const;
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
-        virtual void markSection(const sal_uInt16 _nPos);
+        virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
         /** fills the positions of all collapsed sections.
         *

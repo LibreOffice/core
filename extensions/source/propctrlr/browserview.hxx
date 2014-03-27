@@ -42,9 +42,9 @@ namespace pcr
         Link                    m_aPageActivationHandler;
 
     protected:
-        virtual void Resize();
-        virtual void GetFocus();
-        virtual bool Notify( NotifyEvent& _rNEvt );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual bool Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
     public:
         OPropertyBrowserView( Window* pParent, WinBits nBits = 0);

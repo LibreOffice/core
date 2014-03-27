@@ -37,22 +37,22 @@ namespace sw {
                 const OUString& rPrefix);
 
             // getters
-            virtual SwPosition& GetOtherMarkPos() const;
-            virtual SwPosition& GetMarkStart() const
+            virtual SwPosition& GetOtherMarkPos() const SAL_OVERRIDE;
+            virtual SwPosition& GetMarkStart() const SAL_OVERRIDE
                 { return *m_pPos1; }
-            virtual SwPosition& GetMarkEnd() const
+            virtual SwPosition& GetMarkEnd() const SAL_OVERRIDE
                 { return *m_pPos1; }
-            virtual bool IsExpanded() const
+            virtual bool IsExpanded() const SAL_OVERRIDE
                 { return false; }
 
-            virtual void SetMarkPos(const SwPosition& rNewPos);
-            virtual void SetOtherMarkPos(const SwPosition&)
+            virtual void SetMarkPos(const SwPosition& rNewPos) SAL_OVERRIDE;
+            virtual void SetOtherMarkPos(const SwPosition&) SAL_OVERRIDE
             {
                 OSL_PRECOND(false,
                     "<CrossRefBookmark::SetOtherMarkPos(..)>"
                     " - misusage of CrossRefBookmark: other bookmark position isn't allowed to be set." );
             }
-            virtual void ClearOtherMarkPos()
+            virtual void ClearOtherMarkPos() SAL_OVERRIDE
             {
                 OSL_PRECOND(false,
                     "<SwCrossRefBookmark::ClearOtherMarkPos(..)>"

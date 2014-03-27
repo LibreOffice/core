@@ -61,36 +61,36 @@ public:
     virtual ~FormulaDialog();
 
     // IFormulaEditorHelper
-    virtual void notifyChange();
-    virtual void fill();
-    virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult);
-    virtual void doClose(bool _bOk);
-    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
-    virtual void showReference(const OUString& _sFormula);
-    virtual void dispatch(bool _bOK, bool _bMatrixChecked);
-    virtual void setDispatcherLock( bool bLock );
-    virtual void setReferenceInput(const formula::FormEditData* _pData);
-    virtual void deleteFormData();
-    virtual void clear();
-    virtual void switchBack();
-    virtual formula::FormEditData* getFormEditData() const;
-    virtual void setCurrentFormula(const OUString& _sReplacement);
-    virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd);
-    virtual void getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const;
-    virtual OUString getCurrentFormula() const;
+    virtual void notifyChange() SAL_OVERRIDE;
+    virtual void fill() SAL_OVERRIDE;
+    virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult) SAL_OVERRIDE;
+    virtual void doClose(bool _bOk) SAL_OVERRIDE;
+    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) SAL_OVERRIDE;
+    virtual void showReference(const OUString& _sFormula) SAL_OVERRIDE;
+    virtual void dispatch(bool _bOK, bool _bMatrixChecked) SAL_OVERRIDE;
+    virtual void setDispatcherLock( bool bLock ) SAL_OVERRIDE;
+    virtual void setReferenceInput(const formula::FormEditData* _pData) SAL_OVERRIDE;
+    virtual void deleteFormData() SAL_OVERRIDE;
+    virtual void clear() SAL_OVERRIDE;
+    virtual void switchBack() SAL_OVERRIDE;
+    virtual formula::FormEditData* getFormEditData() const SAL_OVERRIDE;
+    virtual void setCurrentFormula(const OUString& _sReplacement) SAL_OVERRIDE;
+    virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd) SAL_OVERRIDE;
+    virtual void getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const SAL_OVERRIDE;
+    virtual OUString getCurrentFormula() const SAL_OVERRIDE;
 
-    virtual formula::IFunctionManager* getFunctionManager();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
-    virtual ::com::sun::star::table::CellAddress getReferencePosition() const;
+    virtual formula::IFunctionManager* getFunctionManager() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const SAL_OVERRIDE;
+    virtual ::com::sun::star::table::CellAddress getReferencePosition() const SAL_OVERRIDE;
 
-    virtual ::std::auto_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList);
+    virtual ::std::auto_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) SAL_OVERRIDE;
 
     // IControlReferenceHandler
-    virtual void ShowReference(const OUString& _sRef);
-    virtual void HideReference( bool bDoneRefMode = true );
-    virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    virtual void ShowReference(const OUString& _sRef) SAL_OVERRIDE;
+    virtual void HideReference( bool bDoneRefMode = true ) SAL_OVERRIDE;
+    virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
+    virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
 
 protected:
     void         HighlightFunctionParas(const OUString& aFormula);

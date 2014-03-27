@@ -51,13 +51,13 @@ class SlideRenderer
 public:
     explicit SlideRenderer (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~SlideRenderer (void);
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XSlideRenderer
@@ -66,19 +66,19 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL createPreviewForCanvas (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::awt::Size SAL_CALL calculatePreviewSize (
         double nSlideAspectRatio,
         const css::awt::Size& rMaximumPreviewPixelSize)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     PreviewRenderer maPreviewRenderer;

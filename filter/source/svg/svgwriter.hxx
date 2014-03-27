@@ -415,7 +415,7 @@ public:
 
     // XSVGWriter
     virtual void SAL_CALL write( const Reference<XDocumentHandler>& rxDocHandler,
-        const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception );
+        const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 #endif

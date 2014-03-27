@@ -172,7 +172,7 @@ class FieldDeletionModify : public SwModify
     public:
         FieldDeletionModify(AbstractFldInputDlg* pInputFieldDlg) : mpInputFieldDlg(pInputFieldDlg) {}
 
-        void Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
+        void Modify( const SfxPoolItem* pOld, const SfxPoolItem *) SAL_OVERRIDE
         {
             // Input fields have been deleted: better to close the dialog
             if (pOld->Which() == RES_FIELD_DELETED)

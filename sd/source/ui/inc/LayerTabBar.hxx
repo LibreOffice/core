@@ -60,21 +60,21 @@ protected:
     DrawViewShell* pDrViewSh;
 
     // TabBar
-    virtual void        Select();
-    virtual void        DoubleClick();
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void        Select() SAL_OVERRIDE;
+    virtual void        DoubleClick() SAL_OVERRIDE;
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void        Command(const CommandEvent& rCEvt);
+    virtual void        Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
 
-    virtual long        StartRenaming();
-    virtual long        AllowRenaming();
-    virtual void        EndRenaming();
+    virtual long        StartRenaming() SAL_OVERRIDE;
+    virtual long        AllowRenaming() SAL_OVERRIDE;
+    virtual void        EndRenaming() SAL_OVERRIDE;
 
-    virtual void        ActivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 };
 
 } // end of namespace sd

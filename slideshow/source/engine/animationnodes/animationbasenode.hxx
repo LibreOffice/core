@@ -49,7 +49,7 @@ public:
 #endif
 
 protected:
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimate> const& getXAnimateNode() const
@@ -61,13 +61,13 @@ protected:
     AttributableShapeSharedPtr          getShape() const;
 
 private:
-    virtual bool hasPendingAnimation() const;
+    virtual bool hasPendingAnimation() const SAL_OVERRIDE;
 
 private: // state transition callbacks
-    virtual bool init_st();
-    virtual bool resolve_st();
-    virtual void activate_st();
-    virtual void deactivate_st( NodeState eDestState );
+    virtual bool init_st() SAL_OVERRIDE;
+    virtual bool resolve_st() SAL_OVERRIDE;
+    virtual void activate_st() SAL_OVERRIDE;
+    virtual void deactivate_st( NodeState eDestState ) SAL_OVERRIDE;
     virtual AnimationActivitySharedPtr createActivity() const = 0;
 
 private:

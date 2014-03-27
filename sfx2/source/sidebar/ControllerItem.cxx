@@ -60,20 +60,20 @@ namespace
         virtual ~FrameActionListener (void)
         {
         }
-        virtual void SAL_CALL disposing (void)
+        virtual void SAL_CALL disposing (void) SAL_OVERRIDE
         {
             if (mxFrame.is())
                 mxFrame->removeFrameActionListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (cssu::RuntimeException, std::exception)
+            throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)rEvent;
             mrControllerItem.ResetFrame();
             mxFrame = NULL;
         }
         virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
-            throw (cssu::RuntimeException, std::exception)
+            throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE
         {
             if (rEvent.Action == frame::FrameAction_CONTEXT_CHANGED)
                 mrControllerItem.NotifyFrameContextChange();

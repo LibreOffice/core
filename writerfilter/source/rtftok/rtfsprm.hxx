@@ -83,14 +83,14 @@ namespace writerfilter {
             public:
                 RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
                 virtual ~RTFSprm() {}
-                virtual sal_uInt32 getId() const;
-                virtual Value::Pointer_t getValue();
-                virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
-                virtual writerfilter::Reference<Stream>::Pointer_t getStream();
-                virtual writerfilter::Reference<Properties>::Pointer_t getProps();
-                virtual Kind getKind();
-                virtual std::string getName() const;
-                virtual std::string toString() const;
+                virtual sal_uInt32 getId() const SAL_OVERRIDE;
+                virtual Value::Pointer_t getValue() SAL_OVERRIDE;
+                virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+                virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
+                virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
+                virtual Kind getKind() SAL_OVERRIDE;
+                virtual std::string getName() const SAL_OVERRIDE;
+                virtual std::string toString() const SAL_OVERRIDE;
             private:
                 Id m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;

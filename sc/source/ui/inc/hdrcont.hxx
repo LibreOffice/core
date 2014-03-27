@@ -69,14 +69,14 @@ private:
 protected:
                     // Overloaded by Window
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Tracking( const TrackingEvent& rTEvt );
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
                     // new methods
 
@@ -98,7 +98,7 @@ protected:
     virtual OUString  GetDragHelp( long nVal );
 
     virtual void    DrawInvert( long nDragPos );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
 public:
             ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,

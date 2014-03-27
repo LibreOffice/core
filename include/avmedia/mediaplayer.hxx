@@ -52,8 +52,8 @@ public:
 
 private:
 
-    virtual void            Resize();
-    virtual void            ToggleFloatingMode();
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual void            ToggleFloatingMode() SAL_OVERRIDE;
 
     MediaWindow*            mpMediaWindow;
     Size                    maLastSize;

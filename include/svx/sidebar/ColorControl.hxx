@@ -68,7 +68,7 @@ public:
         const ResId* pNoColorStringResId);
     virtual ~ColorControl (void);
 
-    void GetFocus (void);
+    void GetFocus (void) SAL_OVERRIDE;
     void SetCurColorSelect (
         const Color aCol,
         const bool bAvl);

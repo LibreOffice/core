@@ -74,7 +74,7 @@ public:
 
     void    SetTargetFrame(const OUString& frame="_self");
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     OUString   m_strHRef;

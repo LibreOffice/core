@@ -134,12 +134,12 @@ struct lcl_AllOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool /*bDataInColumns*/ )
+    virtual bool setsCategories( bool /*bDataInColumns*/ ) SAL_OVERRIDE
     {
         return true;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( !xDataAccess.is() )
             return;
@@ -181,7 +181,7 @@ struct lcl_DataOperator : public lcl_Operator
     {
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
             xDataAccess->setData( lcl_getNANInsteadDBL_MIN( m_rData ) );
@@ -201,13 +201,13 @@ struct lcl_RowDescriptionsOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool bDataInColumns )
+    virtual bool setsCategories( bool bDataInColumns ) SAL_OVERRIDE
     {
         m_bDataInColumns = bDataInColumns;
         return bDataInColumns;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
         {
@@ -233,13 +233,13 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool bDataInColumns )
+    virtual bool setsCategories( bool bDataInColumns ) SAL_OVERRIDE
     {
         m_bDataInColumns = bDataInColumns;
         return bDataInColumns;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
         {
@@ -262,12 +262,12 @@ struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool bDataInColumns )
+    virtual bool setsCategories( bool bDataInColumns ) SAL_OVERRIDE
     {
         return bDataInColumns;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
             xDataAccess->setAnyRowDescriptions( m_rAnyRowDescriptions );
@@ -287,13 +287,13 @@ struct lcl_ColumnDescriptionsOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool bDataInColumns )
+    virtual bool setsCategories( bool bDataInColumns ) SAL_OVERRIDE
     {
         m_bDataInColumns = bDataInColumns;
         return !bDataInColumns;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
         {
@@ -319,13 +319,13 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool bDataInColumns )
+    virtual bool setsCategories( bool bDataInColumns ) SAL_OVERRIDE
     {
         m_bDataInColumns = bDataInColumns;
         return !bDataInColumns;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
         {
@@ -348,12 +348,12 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool bDataInColumns )
+    virtual bool setsCategories( bool bDataInColumns ) SAL_OVERRIDE
     {
         return bDataInColumns;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         if( xDataAccess.is() )
             xDataAccess->setAnyColumnDescriptions( m_rAnyColumnDescriptions );
@@ -370,12 +370,12 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
     {
     }
 
-    virtual bool setsCategories( bool /*bDataInColumns*/ )
+    virtual bool setsCategories( bool /*bDataInColumns*/ ) SAL_OVERRIDE
     {
         return true;
     }
 
-    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) SAL_OVERRIDE
     {
         Reference< XDateCategories > xDateCategories( xDataAccess, uno::UNO_QUERY );
         if( xDateCategories.is() )

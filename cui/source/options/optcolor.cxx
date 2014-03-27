@@ -266,11 +266,11 @@ private:
     void SetAppearance();
 
 private:
-    virtual void Command (CommandEvent const& rCEvt);
-    virtual void DataChanged (DataChangedEvent const& rDCEvt);
+    virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 
-    virtual Size calculateRequisition() const;
-    virtual void setAllocation(const Size &rAllocation);
+    virtual Size calculateRequisition() const SAL_OVERRIDE;
+    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 
     bool IsGroupVisible (Group) const;
 };
@@ -838,9 +838,9 @@ class ColorConfigCtrl_Impl : public VclVBox
     DECL_LINK(ColorHdl, ColorListBox*);
     DECL_LINK(ControlFocusHdl, Control*);
 
-    virtual bool PreNotify (NotifyEvent& rNEvt);
-    virtual void Command (CommandEvent const& rCEvt);
-    virtual void DataChanged (DataChangedEvent const& rDCEvt);
+    virtual bool PreNotify (NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 public:
     ColorConfigCtrl_Impl(Window* pParent);
     ~ColorConfigCtrl_Impl();

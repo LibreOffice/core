@@ -46,23 +46,23 @@ public:
     SVX_DLLPRIVATE virtual ~SvxTableController();
 
     // from sdr::SelectionController
-    SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, Window* pWin);
-    SVX_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, Window* pWin);
+    SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual bool DeleteMarked();
+    SVX_DLLPRIVATE virtual bool DeleteMarked() SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual void onSelectionHasChanged();
+    SVX_DLLPRIVATE virtual void onSelectionHasChanged() SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual void GetState( SfxItemSet& rSet );
-    SVX_DLLPRIVATE virtual void Execute( SfxRequest& rReq );
+    SVX_DLLPRIVATE virtual void GetState( SfxItemSet& rSet ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void Execute( SfxRequest& rReq ) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const;
-    SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
+    SVX_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr ) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  );
-    SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats ) SAL_OVERRIDE;
 
     // slots
     SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = 0 );
@@ -86,11 +86,11 @@ public:
       */
     SVX_DLLPRIVATE void FillCommonBorderAttrFromSelectedCells(SvxBoxItem& rBox, SvxBoxInfoItem& rBoxInfo) const;
 
-    SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
-    SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
+    SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual bool GetMarkedObjModel( SdrPage* pNewPage );
-    SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel );
+    SVX_DLLPRIVATE virtual bool GetMarkedObjModel( SdrPage* pNewPage ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) SAL_OVERRIDE;
 
     SVX_DLLPRIVATE bool hasSelectedCells() const { return mbCellSelectionMode || mpView->IsTextEdit(); }
 

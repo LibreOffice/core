@@ -42,7 +42,7 @@ public:
                     ScSimpleUndo( ScDocShell* pDocSh );
     virtual         ~ScSimpleUndo();
 
-    virtual bool    Merge( SfxUndoAction *pNextAction );
+    virtual bool    Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
 
 protected:
     ScDocShell*     pDocShell;
@@ -177,16 +177,16 @@ public:
     SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo; }
     void                    ForgetWrappedUndo();
 
-    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction);
+    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction) SAL_OVERRIDE;
 
-    virtual void            Undo();
-    virtual void            Redo();
-    virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual bool            CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual bool            Merge( SfxUndoAction *pNextAction );
-    virtual OUString        GetComment() const;
-    virtual OUString        GetRepeatComment(SfxRepeatTarget&) const;
-    virtual sal_uInt16      GetId() const;
+    virtual void            Undo() SAL_OVERRIDE;
+    virtual void            Redo() SAL_OVERRIDE;
+    virtual void            Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
+    virtual bool            CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
+    virtual bool            Merge( SfxUndoAction *pNextAction ) SAL_OVERRIDE;
+    virtual OUString        GetComment() const SAL_OVERRIDE;
+    virtual OUString        GetRepeatComment(SfxRepeatTarget&) const SAL_OVERRIDE;
+    virtual sal_uInt16      GetId() const SAL_OVERRIDE;
 };
 
 

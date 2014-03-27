@@ -161,10 +161,10 @@ public:
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 
-    virtual void    Insert(const Font &rFont);
+    virtual void    Insert(const Font &rFont) SAL_OVERRIDE;
     using   Window::Update;
-    virtual void    Update(const Font &rFont, const Font &rNewFont);
-    virtual void    Remove(const Font &rFont);
+    virtual void    Update(const Font &rFont, const Font &rNewFont) SAL_OVERRIDE;
+    virtual void    Remove(const Font &rFont) SAL_OVERRIDE;
 };
 
 #endif

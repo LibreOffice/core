@@ -30,8 +30,8 @@ class SVX_DLLPUBLIC SvxClipboardFmtItem : public SfxPoolItem
     SvxClipboardFmtItem_Impl* pImpl;
 protected:
 
-    virtual bool             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -39,8 +39,8 @@ public:
     SvxClipboardFmtItem( const SvxClipboardFmtItem& );
     virtual ~SvxClipboardFmtItem();
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     void AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos = USHRT_MAX );
     void AddClipbrdFormat( sal_uIntPtr nId, const OUString& rName,

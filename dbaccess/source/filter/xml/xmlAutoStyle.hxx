@@ -37,7 +37,7 @@ namespace dbaxml
                 const SvXMLExportPropertyMapper& rPropExp,
                 const SvXMLUnitConverter& rUnitConverter,
                 const SvXMLNamespaceMap& rNamespaceMap
-                ) const;
+                ) const SAL_OVERRIDE;
 
     public:
         OXMLAutoStylePoolP(ODBExport& rXMLExport);

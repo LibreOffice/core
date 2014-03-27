@@ -67,8 +67,8 @@ namespace
     {
         sal_Int16 m_nODF;
     public:
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
         SaveODFItem();
         //See group ODF in Common.xcs
         bool isLessODF1_2()

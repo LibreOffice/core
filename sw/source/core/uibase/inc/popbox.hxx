@@ -32,10 +32,10 @@ class SwHelpToolBox: public ToolBox, public DropTargetHelper
     using ToolBox::DoubleClick;
 
 protected:
-    virtual void MouseButtonDown(const MouseEvent &rEvt);
+    virtual void MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
     virtual long DoubleClick(ToolBox *);
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
 public:
     SwHelpToolBox(SwNavigationPI* pParent, const ResId &);

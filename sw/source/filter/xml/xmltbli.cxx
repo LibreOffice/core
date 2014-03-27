@@ -436,8 +436,8 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual void EndElement();
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 };
@@ -844,7 +844,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 };
@@ -901,9 +901,9 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    virtual void EndElement();
+    virtual void EndElement() SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 };
@@ -1022,7 +1022,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 };
@@ -1082,7 +1082,7 @@ public:
     ~SwXMLDDETableContext_Impl();
 
     virtual void StartElement(
-        const Reference<xml::sax::XAttributeList> & xAttrList);
+        const Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
     OUString& GetConnectionName()   { return sConnectionName; }
     OUString& GetDDEApplication()   { return sDDEApplication; }

@@ -548,7 +548,7 @@ public:
     bool    getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill );
     void    setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet );
 
-    virtual void insertTableProperties( const PropertyMap* );
+    virtual void insertTableProperties( const PropertyMap* ) SAL_OVERRIDE;
 };
 typedef boost::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
 } //namespace dmapper

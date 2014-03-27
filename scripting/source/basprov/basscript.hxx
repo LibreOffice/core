@@ -62,10 +62,10 @@ namespace basprov
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_caller;
     protected:
         // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  );
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  ) SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const SAL_OVERRIDE;
 
     public:
         BasicScriptImpl(
@@ -94,13 +94,13 @@ namespace basprov
             throw (
                     ::com::sun::star::script::provider::ScriptFrameworkErrorException,
                     ::com::sun::star::reflection::InvocationTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception );
+                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // SfxListener
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     };
 
 

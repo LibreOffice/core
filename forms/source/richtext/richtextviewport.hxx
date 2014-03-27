@@ -48,13 +48,13 @@ namespace frm
         bool    GetHideInactiveSelection() const;
 
     protected:
-        virtual void        Paint( const Rectangle& rRect );
-        virtual void        GetFocus();
-        virtual void        LoseFocus();
-        virtual void        KeyInput( const KeyEvent& _rKEvt );
-        virtual void        MouseMove( const MouseEvent& _rMEvt );
-        virtual void        MouseButtonDown( const MouseEvent& _rMEvt );
-        virtual void        MouseButtonUp( const MouseEvent& _rMEvt );
+        virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void        GetFocus() SAL_OVERRIDE;
+        virtual void        LoseFocus() SAL_OVERRIDE;
+        virtual void        KeyInput( const KeyEvent& _rKEvt ) SAL_OVERRIDE;
+        virtual void        MouseMove( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonDown( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonUp( const MouseEvent& _rMEvt ) SAL_OVERRIDE;
 
     private:
         inline void implInvalidateAttributes() const

@@ -52,7 +52,7 @@ class SwChangeDBDlg: public SvxStandardDialog
     DECL_LINK(ButtonHdl, void *);
     DECL_LINK(AddDBHdl, void *);
 
-    virtual void    Apply();
+    virtual void    Apply() SAL_OVERRIDE;
     void            UpdateFlds();
     void            FillDBPopup();
     SvTreeListEntry*    Insert(const OUString& rDBName);

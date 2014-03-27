@@ -53,10 +53,10 @@ class SfxQueryStatus_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusL
         SfxItemState QueryState( SfxPoolItem*& pPoolItem );
 
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         SfxQueryStatus_Impl( const SfxQueryStatus& );

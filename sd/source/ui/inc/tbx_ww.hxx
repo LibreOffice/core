@@ -35,10 +35,10 @@ public:
             SdTbxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
             ~SdTbxControl() {}
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
+                                const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_TBX_WW_HXX

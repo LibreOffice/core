@@ -52,9 +52,9 @@ public:
                       OUString *pOptName ) throw();
 
     // methods without content:
-    virtual void _ExportAutoStyles();
-    virtual void _ExportMasterStyles();
-    virtual void _ExportContent();
+    virtual void _ExportAutoStyles() SAL_OVERRIDE;
+    virtual void _ExportMasterStyles() SAL_OVERRIDE;
+    virtual void _ExportContent() SAL_OVERRIDE;
 
 private:
     bool exportTable() throw();

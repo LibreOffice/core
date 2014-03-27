@@ -68,9 +68,9 @@ private:
 
 protected:
     void                    ExpandTree( SvTreeListEntry* pRootEntry );
-    virtual void            RequestingChildren( SvTreeListEntry* pParent );
-    virtual void            ExpandedHdl();
-    virtual bool            ExpandingHdl();
+    virtual void            RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
+    virtual void            ExpandedHdl() SAL_OVERRIDE;
+    virtual bool            ExpandingHdl() SAL_OVERRIDE;
 public:
     void                    Init( const OUString& language );
     void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
@@ -180,7 +180,7 @@ public:
                     SvxScriptOrgDialog( Window* pParent, const OUString& language );
                     ~SvxScriptOrgDialog();
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 
 };
 
@@ -199,7 +199,7 @@ public:
 
     ~SvxScriptErrorDialog();
 
-    short           Execute();
+    short           Execute() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX

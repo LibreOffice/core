@@ -45,8 +45,8 @@ public:
 
     SfxMacroInfoItem( const SfxMacroInfoItem& );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     OUString                  GetComment() const
                                 { return aCommentText; }
     void                    SetComment( const OUString& r )

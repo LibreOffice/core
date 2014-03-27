@@ -29,7 +29,7 @@ class SwGlosDocShell : public SwDocShell
     using SotObject::GetInterface;
 
 protected:
-    virtual bool Save();
+    virtual bool Save() SAL_OVERRIDE;
 
 public:
 
@@ -59,7 +59,7 @@ class SwWebGlosDocShell : public SwWebDocShell
     using SotObject::GetInterface;
 
 protected:
-    virtual bool Save();
+    virtual bool Save() SAL_OVERRIDE;
 
 public:
 

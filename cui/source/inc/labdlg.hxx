@@ -78,13 +78,13 @@ public:
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet & ) SAL_OVERRIDE;
     void                Construct();
     void                SetView( const SdrView* pSdrView )
                             { pView = pSdrView; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void FillValueSet();
 };
 
@@ -101,7 +101,7 @@ private:
 
     Link                aValidateLink;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
     SvxCaptionTabDialog(Window* pParent, const SdrView* pView,

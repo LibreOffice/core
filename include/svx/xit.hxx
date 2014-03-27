@@ -52,10 +52,10 @@ public:
             NameOrIndex(const NameOrIndex& rNameOrIndex);
            ~NameOrIndex() {};
 
-    virtual bool         operator==(const SfxPoolItem& rItem) const;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
+    virtual bool         operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
             OUString     GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }

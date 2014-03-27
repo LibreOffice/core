@@ -72,14 +72,14 @@ class Desktop : public Application
 
                                 Desktop();
                                 ~Desktop();
-        virtual int             Main( );
-        virtual void            Init();
-        virtual void            InitFinished();
-        virtual void            DeInit();
-        virtual bool        QueryExit();
-        virtual sal_uInt16      Exception(sal_uInt16 nError);
-        virtual void            OverrideSystemSettings( AllSettings& rSettings );
-        virtual void            AppEvent( const ApplicationEvent& rAppEvent );
+        virtual int             Main( ) SAL_OVERRIDE;
+        virtual void            Init() SAL_OVERRIDE;
+        virtual void            InitFinished() SAL_OVERRIDE;
+        virtual void            DeInit() SAL_OVERRIDE;
+        virtual bool        QueryExit() SAL_OVERRIDE;
+        virtual sal_uInt16      Exception(sal_uInt16 nError) SAL_OVERRIDE;
+        virtual void            OverrideSystemSettings( AllSettings& rSettings ) SAL_OVERRIDE;
+        virtual void            AppEvent( const ApplicationEvent& rAppEvent ) SAL_OVERRIDE;
 
         DECL_LINK( OpenClients_Impl, void* );
 

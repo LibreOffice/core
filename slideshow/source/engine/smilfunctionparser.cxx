@@ -209,12 +209,12 @@ namespace slideshow
                     {
                     }
 
-                    virtual double operator()( double t ) const
+                    virtual double operator()( double t ) const SAL_OVERRIDE
                     {
                         return maFunctor( (*mpArg)(t) );
                     }
 
-                    virtual bool isConstant() const
+                    virtual bool isConstant() const SAL_OVERRIDE
                     {
                         return mpArg->isConstant();
                     }

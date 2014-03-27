@@ -161,7 +161,7 @@ public:
     // accessibility ----------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        CreateAccessible();
+                        CreateAccessible() SAL_OVERRIDE;
 
     /** Returns the accessibility child object of the specified frame border (if enabled). */
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -180,14 +180,14 @@ public:
 
 
 protected:
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void        Resize();
-    virtual Size        GetOptimalSize() const;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
 private:
     std::auto_ptr< FrameSelectorImpl > mxImpl;

@@ -263,12 +263,12 @@ public:
 
     // IAccessibleViewForwarder
 
-    virtual bool IsValid() const;
-    virtual Rectangle GetVisibleArea() const;
-    virtual Point LogicToPixel (const Point& rPoint) const;
-    virtual Size LogicToPixel (const Size& rSize) const;
-    virtual Point PixelToLogic (const Point& rPoint) const;
-    virtual Size PixelToLogic (const Size& rSize) const;
+    virtual bool IsValid() const SAL_OVERRIDE;
+    virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
+    virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
+    virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
+    virtual Point PixelToLogic (const Point& rPoint) const SAL_OVERRIDE;
+    virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
     // IAccessibleParent
     virtual bool ReplaceChild (
@@ -276,13 +276,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException);
+    )   throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >   GetAccessibleCaption (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape)
-    throw (::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview
@@ -312,7 +312,7 @@ private:
     void GetMapMode( const Point& _rPoint,
                      MapMode&     _orMapMode ) const;
 public:
-    virtual bool IsDocumentSelAll();
+    virtual bool IsDocumentSelAll() SAL_OVERRIDE;
 
     ::com::sun::star::uno::WeakReference < ::com::sun::star::accessibility::XAccessible >
         GetCursorContext() const { return mxCursorContext; }

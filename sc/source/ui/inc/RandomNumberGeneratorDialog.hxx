@@ -29,9 +29,9 @@ public:
 
     virtual ~ScRandomNumberGeneratorDialog();
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual void        SetActive();
-    virtual bool    Close();
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual void        SetActive() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
 private:
     // Widgets

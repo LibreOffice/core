@@ -40,17 +40,17 @@ namespace sdr
         protected:
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
             // create graphical visualisation data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
         public:
             // basic constructor, used from SdrObject.
             explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
             virtual ~ViewContactOfPageObj();
 
             // #WIP# React on changes of the object of this ViewContact
-            virtual void ActionChanged();
+            virtual void ActionChanged() SAL_OVERRIDE;
 
             // access to SdrObject
             SdrPageObj& GetPageObj() const

@@ -46,11 +46,11 @@ namespace oox { namespace ppt {
         ~CommonBehaviorContext( )
             throw( );
 
-        virtual void onEndElement();
+        virtual void onEndElement() SAL_OVERRIDE;
 
-        virtual void onCharacters( const OUString& aChars );
+        virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
     private:
         bool              mbInAttrList;

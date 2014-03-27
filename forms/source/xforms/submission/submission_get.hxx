@@ -30,7 +30,7 @@ private:
     CSS::uno::Reference< CSS::uno::XComponentContext > m_xContext;
 public:
     CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler);
+    virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler) SAL_OVERRIDE;
 
 };
 #endif

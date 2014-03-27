@@ -107,10 +107,10 @@ private:
     class ProgressInfo;
     boost::scoped_ptr<ProgressInfo> pProgress;
 
-    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+    virtual void DataChanged(DataChangedEvent const & rDCEvt) SAL_OVERRIDE;
 
     using           Window::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     void            ImpDoHighlight( sal_uLong nLineOff );
     void            ImplSetFont();
@@ -121,7 +121,7 @@ private:
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(sal_Bool bCreate = true);
+    GetComponentInterface(sal_Bool bCreate = true) SAL_OVERRIDE;
     CodeCompleteDataCache aCodeCompleteCache;
     boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
@@ -134,15 +134,15 @@ private:
     TextSelection GetLastHighlightPortionTextSelection();
 
 protected:
-    virtual void    Paint( const Rectangle& );
-    virtual void    Resize();
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    LoseFocus();
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     void            DoSyntaxHighlight( sal_uLong nPara );
     OUString        GetWordAtCursor();
@@ -183,16 +183,16 @@ private:
     BreakPointList  aBreakPointList;
     bool            bErrorMarker;
 
-    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+    virtual void DataChanged(DataChangedEvent const & rDCEvt) SAL_OVERRIDE;
 
     void setBackgroundColor(Color aColor);
 
 protected:
-    virtual void    Paint( const Rectangle& );
+    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
     void            ShowMarker( bool bShow );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     bool            SyncYOffset();
 
@@ -214,8 +214,8 @@ class WatchTreeListBox : public SvHeaderTabListBox
     OUString aEditingRes;
 
 protected:
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) SAL_OVERRIDE;
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
     bool            ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUString& rResult );
     SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );
@@ -224,11 +224,11 @@ public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
     ~WatchTreeListBox();
 
-    void            RequestingChildren( SvTreeListEntry * pParent );
+    void            RequestingChildren( SvTreeListEntry * pParent ) SAL_OVERRIDE;
     void            UpdateWatches( bool bBasicStopped = false );
 
     using           SvTabListBox::SetTabs;
-    virtual void    SetTabs();
+    virtual void    SetTabs() SAL_OVERRIDE;
 };
 
 
@@ -243,8 +243,8 @@ private:
     HeaderBar           aHeaderBar;
 
 protected:
-    virtual void    Resize();
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     DECL_LINK( ButtonHdl, ImageButton * );
     DECL_LINK(TreeListHdl, void *);
@@ -271,8 +271,8 @@ private:
     OUString        aStackStr;
 
 protected:
-    virtual void    Resize();
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
                     StackWindow (Layout* pParent);
@@ -290,10 +290,10 @@ private:
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
 
-    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+    virtual void DataChanged(DataChangedEvent const & rDCEvt) SAL_OVERRIDE;
 
 protected:
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
     DECL_LINK( ScrollHdl, ScrollBar * );
 
 public:
@@ -328,11 +328,11 @@ private:
     sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
     SbModuleRef         XModule();
 protected:
-    virtual void    Resize();
-    virtual void    GetFocus();
-    virtual void    Paint( const Rectangle& );
-    virtual void    DoInit();
-    virtual void    DoScroll( ScrollBar* pCurScrollBar );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    DoInit() SAL_OVERRIDE;
+    virtual void    DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
 
 public:
                     TYPEINFO_OVERRIDE();
@@ -341,21 +341,21 @@ public:
 
                     ~ModulWindow();
 
-    virtual void    ExecuteCommand (SfxRequest& rReq);
-    virtual void    ExecuteGlobal (SfxRequest& rReq);
-    virtual void    GetState( SfxItemSet& );
-    virtual void    StoreData();
-    virtual void    UpdateData();
-    virtual bool    CanClose();
+    virtual void    ExecuteCommand (SfxRequest& rReq) SAL_OVERRIDE;
+    virtual void    ExecuteGlobal (SfxRequest& rReq) SAL_OVERRIDE;
+    virtual void    GetState( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void    StoreData() SAL_OVERRIDE;
+    virtual void    UpdateData() SAL_OVERRIDE;
+    virtual bool    CanClose() SAL_OVERRIDE;
     // return number of pages to be printed
-    virtual sal_Int32 countPages( Printer* pPrinter );
+    virtual sal_Int32 countPages( Printer* pPrinter ) SAL_OVERRIDE;
     // print page
-    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
-    virtual OUString  GetTitle();
-    virtual EntryDescriptor CreateEntryDescriptor();
-    virtual bool    AllowUndo();
-    virtual void    SetReadOnly (bool bReadOnly);
-    virtual bool    IsReadOnly();
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) SAL_OVERRIDE;
+    virtual OUString  GetTitle() SAL_OVERRIDE;
+    virtual EntryDescriptor CreateEntryDescriptor() SAL_OVERRIDE;
+    virtual bool    AllowUndo() SAL_OVERRIDE;
+    virtual void    SetReadOnly (bool bReadOnly) SAL_OVERRIDE;
+    virtual bool    IsReadOnly() SAL_OVERRIDE;
 
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
@@ -390,14 +390,14 @@ public:
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
-    virtual bool    IsModified ();
-    virtual bool    IsPasteAllowed ();
+    virtual bool    IsModified () SAL_OVERRIDE;
+    virtual bool    IsPasteAllowed () SAL_OVERRIDE;
 
     void            FrameWindowMoved();
     void            ShowCursor( bool bOn );
 
-    virtual sal_uInt16  GetSearchOptions();
-    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);
+    virtual sal_uInt16  GetSearchOptions() SAL_OVERRIDE;
+    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false) SAL_OVERRIDE;
 
     EditorWindow&       GetEditorWindow()       { return aXEditorWindow.GetEdtWindow(); }
     BreakPointWindow&   GetBreakPointWindow()   { return aXEditorWindow.GetBrkWindow(); }
@@ -408,22 +408,22 @@ public:
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }
     ModulWindowLayout&  GetLayout ()            { return rLayout; }
 
-    virtual void        BasicStarted();
-    virtual void        BasicStopped();
+    virtual void        BasicStarted() SAL_OVERRIDE;
+    virtual void        BasicStopped() SAL_OVERRIDE;
 
     virtual ::svl::IUndoManager*
-                        GetUndoManager();
+                        GetUndoManager() SAL_OVERRIDE;
 
     const OUString&         GetModule() const { return m_aModule; }
     void                    SetModule( const OUString& aModule ) { m_aModule = aModule; }
 
-    virtual void Activating ();
-    virtual void Deactivating ();
+    virtual void Activating () SAL_OVERRIDE;
+    virtual void Deactivating () SAL_OVERRIDE;
 
-    virtual void OnNewDocument ();
-    virtual char const* GetHid () const;
-    virtual ItemType GetType () const;
-    virtual bool HasActiveEditor () const;
+    virtual void OnNewDocument () SAL_OVERRIDE;
+    virtual char const* GetHid () const SAL_OVERRIDE;
+    virtual ItemType GetType () const SAL_OVERRIDE;
+    virtual bool HasActiveEditor () const SAL_OVERRIDE;
 
     void UpdateModule ();
 };
@@ -434,10 +434,10 @@ public:
     ModulWindowLayout (Window* pParent, ObjectCatalog&);
 public:
     // Layout:
-    virtual void Activating (BaseWindow&);
-    virtual void Deactivating ();
-    virtual void GetState (SfxItemSet&, unsigned nWhich);
-    virtual void UpdateDebug (bool bBasicStopped);
+    virtual void Activating (BaseWindow&) SAL_OVERRIDE;
+    virtual void Deactivating () SAL_OVERRIDE;
+    virtual void GetState (SfxItemSet&, unsigned nWhich) SAL_OVERRIDE;
+    virtual void UpdateDebug (bool bBasicStopped) SAL_OVERRIDE;
 public:
     void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
@@ -445,9 +445,9 @@ public:
 
 protected:
     // Window:
-    virtual void Paint (const Rectangle& rRect);
+    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
     // Layout:
-    virtual void OnFirstSize (long nWidth, long nHeight);
+    virtual void OnFirstSize (long nWidth, long nHeight) SAL_OVERRIDE;
 
 private:
     // main child window
@@ -457,7 +457,7 @@ private:
     StackWindow aStackWindow;
     ObjectCatalog& rObjectCatalog;
 private:
-    virtual void DataChanged (DataChangedEvent const& rDCEvt);
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 private:
     // SyntaxColors -- stores Basic syntax highlighting colors
     class SyntaxColors : public utl::ConfigurationListener
@@ -472,7 +472,7 @@ private:
         Color GetColor (TokenTypes eType) const { return aColors[eType]; }
 
     private:
-        virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32);
+        virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, sal_uInt32) SAL_OVERRIDE;
         void NewConfig (bool bFirst);
 
     private:
@@ -509,7 +509,7 @@ public:
     DECL_LINK(ImplSelectHdl, void*);
 
 protected:
-    virtual void KeyInput( const KeyEvent& rKeyEvt );
+    virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
 };
 
 class CodeCompleteWindow: public Window

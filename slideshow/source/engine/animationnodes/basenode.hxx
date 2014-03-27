@@ -109,21 +109,21 @@ public:
         { return mpParent; }
 
     // Disposable:
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
     // AnimationNode:
-    virtual bool init();
-    virtual bool resolve();
-    virtual bool activate();
-    virtual void deactivate();
-    virtual void end();
+    virtual bool init() SAL_OVERRIDE;
+    virtual bool resolve() SAL_OVERRIDE;
+    virtual bool activate() SAL_OVERRIDE;
+    virtual void deactivate() SAL_OVERRIDE;
+    virtual void end() SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const;
-    virtual NodeState getState() const;
+        ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const SAL_OVERRIDE;
+    virtual NodeState getState() const SAL_OVERRIDE;
     virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee );
+        const AnimationNodeSharedPtr& rNotifee ) SAL_OVERRIDE;
     // nop:
-    virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
+    virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier ) SAL_OVERRIDE;
 
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 

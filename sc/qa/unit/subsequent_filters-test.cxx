@@ -79,10 +79,10 @@ public:
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion);
+        unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     //ods, xls, xlsx filter tests
     void testBasicCellContentODS();

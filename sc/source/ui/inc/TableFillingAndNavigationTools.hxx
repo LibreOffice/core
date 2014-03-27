@@ -135,11 +135,11 @@ protected:
 public:
     DataRangeByColumnIterator(ScRange aInputRange);
 
-    virtual bool hasNext();
-    virtual void next();
-    virtual ScRange get();
-    virtual void reset();
-    virtual DataCellIterator iterateCells();
+    virtual bool hasNext() SAL_OVERRIDE;
+    virtual void next() SAL_OVERRIDE;
+    virtual ScRange get() SAL_OVERRIDE;
+    virtual void reset() SAL_OVERRIDE;
+    virtual DataCellIterator iterateCells() SAL_OVERRIDE;
 };
 
 class DataRangeByRowIterator : public DataRangeIterator
@@ -150,11 +150,11 @@ protected:
 public:
     DataRangeByRowIterator(ScRange aInputRange);
 
-    virtual bool hasNext();
-    virtual void next();
-    virtual ScRange get();
-    virtual void reset();
-    virtual DataCellIterator iterateCells();
+    virtual bool hasNext() SAL_OVERRIDE;
+    virtual void next() SAL_OVERRIDE;
+    virtual ScRange get() SAL_OVERRIDE;
+    virtual void reset() SAL_OVERRIDE;
+    virtual DataCellIterator iterateCells() SAL_OVERRIDE;
 };
 
 #endif

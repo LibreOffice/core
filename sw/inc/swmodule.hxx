@@ -108,9 +108,9 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     sal_Bool                bEmbeddedLoadSave : 1;
 
     // Catch hint for DocInfo.
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
 protected:
     // Envelopes, labels.
@@ -212,9 +212,9 @@ public:
     SwFldUpdateFlags GetFldUpdateFlags( sal_Bool bWeb ) const;
 
     // Virtual methods for options dialog.
-    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
-    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     // Pool is created here and set at SfxShell.
     void    InitAttrPool();

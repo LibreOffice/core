@@ -30,11 +30,11 @@ class ScVbaImage : public ImageImpl_BASE
 {
 public:
     ScVbaImage( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
-    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAIMAGE_HXX
 

@@ -33,10 +33,10 @@ private:
     SdrModel*       pModel;
     SdrGrafObj*     pGrafEdit;
 
-    virtual void    ObjectAreaChanged();
-    virtual void    RequestNewObjectArea( Rectangle& );
-    virtual void    ViewChanged();
-    virtual void    MakeVisible();
+    virtual void    ObjectAreaChanged() SAL_OVERRIDE;
+    virtual void    RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
+    virtual void    ViewChanged() SAL_OVERRIDE;
+    virtual void    MakeVisible() SAL_OVERRIDE;
 
 public:
                     ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );

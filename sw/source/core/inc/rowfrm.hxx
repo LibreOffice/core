@@ -29,10 +29,10 @@ class SwBorderAttrs;
 /// SwRowFrm is one table row in the document layout.
 class SwRowFrm: public SwLayoutFrm
 {
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
 
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
@@ -46,14 +46,14 @@ class SwRowFrm: public SwLayoutFrm
     bool mbIsRowSpanLine;
 
 protected:
-    virtual void MakeAll();
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
     ~SwRowFrm();
 
-    virtual void Cut();
+    virtual void Cut() SAL_OVERRIDE;
 
     //Zum Anmelden der Flys nachdem eine Zeile erzeugt _und_ eingefuegt wurde.
     //Muss vom Erzeuger gerufen werden, denn erst nach dem Konstruieren wird

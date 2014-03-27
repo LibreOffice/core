@@ -70,9 +70,9 @@ public:
         sal_Bool bCalledByTblCpy = sal_False );
     virtual ~SwUndoDelete();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
     /**
        Returns rewriter for this undo object.
 
@@ -84,7 +84,7 @@ public:
 
        @return rewriter for this undo object
     */
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     sal_Bool CanGrouping( SwDoc*, const SwPaM& );
 

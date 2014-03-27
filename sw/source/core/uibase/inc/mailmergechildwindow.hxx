@@ -33,7 +33,7 @@ public:
     SwMailMergeChildWin(SfxBindings*, SfxChildWindow*, Window *pParent);
     ~SwMailMergeChildWin();
 
-    virtual void    FillInfo(SfxChildWinInfo&) const;
+    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 };
 
 class SwMailMergeChildWindow : public SfxChildWindow

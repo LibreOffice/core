@@ -53,11 +53,11 @@ namespace slideshow
                 Number of full repeats already performed
             */
             virtual void perform( sal_uInt32 nFrame, sal_uInt32 nRepeatCount ) const = 0;
-            virtual void dispose();
-            virtual bool perform();
+            virtual void dispose() SAL_OVERRIDE;
+            virtual bool perform() SAL_OVERRIDE;
 
         protected:
-            virtual void startAnimation();
+            virtual void startAnimation() SAL_OVERRIDE;
 
             sal_uInt32 calcFrameIndex( sal_uInt32       nCurrCalls,
                                        ::std::size_t    nVectorSize ) const;

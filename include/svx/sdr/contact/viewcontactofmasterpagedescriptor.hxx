@@ -44,10 +44,10 @@ namespace sdr
             sdr::MasterPageDescriptor&                      mrMasterPageDescriptor;
 
             // Create a Object-Specific ViewObjectContact
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
             // This method is responsible for creating the graphical visualisation data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -63,9 +63,9 @@ namespace sdr
             }
 
             // Access to possible sub-hierarchy and parent
-            virtual sal_uInt32 GetObjectCount() const;
-            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
-            virtual ViewContact* GetParentContact() const;
+            virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
+            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+            virtual ViewContact* GetParentContact() const SAL_OVERRIDE;
         };
     } // end of namespace contact
 } // end of namespace sdr

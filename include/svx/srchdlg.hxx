@@ -121,10 +121,10 @@ public:
     SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     ~SvxSearchDialog();
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
     // Window
-    virtual void    Activate();
+    virtual void    Activate() SAL_OVERRIDE;
 
     const SearchAttrItemList*   GetSearchItemList() const
                                     { return pSearchList; }
@@ -143,7 +143,7 @@ public:
     void SetSrchFlag( bool bSuccess = false ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-        GetComponentInterface( sal_Bool bCreate );
+        GetComponentInterface( sal_Bool bCreate ) SAL_OVERRIDE;
 
     void            SetSaveToModule(bool b);
 

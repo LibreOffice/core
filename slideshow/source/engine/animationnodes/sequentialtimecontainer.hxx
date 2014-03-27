@@ -44,11 +44,11 @@ public:
 #endif
 
 protected:
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    virtual void activate_st();
-    virtual void notifyDeactivating( AnimationNodeSharedPtr const& rNotifier );
+    virtual void activate_st() SAL_OVERRIDE;
+    virtual void notifyDeactivating( AnimationNodeSharedPtr const& rNotifier ) SAL_OVERRIDE;
 
     void skipEffect( AnimationNodeSharedPtr const& pChildNode );
     void rewindEffect( AnimationNodeSharedPtr const& pChildNode );

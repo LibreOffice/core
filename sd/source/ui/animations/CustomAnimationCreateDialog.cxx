@@ -75,7 +75,7 @@ public:
     CategoryListBox( Window* pParent );
     ~CategoryListBox();
 
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
 
@@ -84,7 +84,7 @@ public:
     DECL_LINK(implDoubleClickHdl, void *);
 
 private:
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     Link            maDoubleClickHdl;
 };

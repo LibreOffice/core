@@ -140,9 +140,9 @@ friend class SfxSplitWindow;
                             aTimer.Stop();
                         }
 
-    virtual void        MouseMove( const MouseEvent& );
-    virtual void        AutoHide();
-    virtual void        FadeIn();
+    virtual void        MouseMove( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void        AutoHide() SAL_OVERRIDE;
+    virtual void        FadeIn() SAL_OVERRIDE;
     void                Actualize();
 };
 

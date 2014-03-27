@@ -85,7 +85,7 @@ namespace
         {
         }
 
-        virtual Image getImage() const
+        virtual Image getImage() const SAL_OVERRIDE
         {
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
@@ -103,7 +103,7 @@ namespace
         {
         }
 
-        virtual OUString  getLabel() const
+        virtual OUString  getLabel() const SAL_OVERRIDE
         {
             return m_label;
         }

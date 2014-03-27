@@ -55,26 +55,26 @@ public:
 
     virtual ~SvxTextEditSource();
 
-    virtual SvxEditSource*          Clone() const;
-    virtual SvxTextForwarder*       GetTextForwarder();
-    virtual SvxViewForwarder*      GetViewForwarder();
+    virtual SvxEditSource*          Clone() const SAL_OVERRIDE;
+    virtual SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder*      GetViewForwarder() SAL_OVERRIDE;
     virtual SvxEditViewForwarder*  GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
-    virtual void                    UpdateData();
+    virtual void                    UpdateData() SAL_OVERRIDE;
 
-    virtual void addRange( SvxUnoTextRangeBase* pNewRange );
-    virtual void removeRange( SvxUnoTextRangeBase* pOldRange );
-    virtual const SvxUnoTextRangeBaseList& getRanges() const;
+    virtual void addRange( SvxUnoTextRangeBase* pNewRange ) SAL_OVERRIDE;
+    virtual void removeRange( SvxUnoTextRangeBase* pOldRange ) SAL_OVERRIDE;
+    virtual const SvxUnoTextRangeBaseList& getRanges() const SAL_OVERRIDE;
 
-    virtual SfxBroadcaster&         GetBroadcaster() const;
+    virtual SfxBroadcaster&         GetBroadcaster() const SAL_OVERRIDE;
 
     void lock();
     void unlock();
 
     // the SvxViewForwarder interface
-    virtual bool        IsValid() const;
-    virtual Rectangle   GetVisArea() const;
-    virtual Point       LogicToPixel( const Point&, const MapMode& ) const;
-    virtual Point       PixelToLogic( const Point&, const MapMode& ) const;
+    virtual bool        IsValid() const SAL_OVERRIDE;
+    virtual Rectangle   GetVisArea() const SAL_OVERRIDE;
+    virtual Point       LogicToPixel( const Point&, const MapMode& ) const SAL_OVERRIDE;
+    virtual Point       PixelToLogic( const Point&, const MapMode& ) const SAL_OVERRIDE;
 
     void ChangeModel( SdrModel* pNewModel );
 

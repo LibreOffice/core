@@ -1286,7 +1286,7 @@ namespace
         {
         }
 
-        virtual bool    includeObject( const SdrObject& i_rObject ) const
+        virtual bool    includeObject( const SdrObject& i_rObject ) const SAL_OVERRIDE
         {
             return m_pPV && m_pPV->GetView().IsObjMarkable( const_cast< SdrObject* >( &i_rObject ), m_pPV );
         }

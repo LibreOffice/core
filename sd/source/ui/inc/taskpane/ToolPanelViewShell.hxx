@@ -76,10 +76,10 @@ public:
     virtual void KeyInput (const KeyEvent& rEvent);
     using sd::ViewShell::KeyInput;
 
-    virtual SdPage* GetActualPage (void);
-    virtual SdPage* getCurrentPage (void) const;
+    virtual SdPage* GetActualPage (void) SAL_OVERRIDE;
+    virtual SdPage* getCurrentPage (void) const SAL_OVERRIDE;
 
-    virtual void ArrangeGUIElements (void);
+    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
 
     TaskPaneShellManager& GetSubShellManager (void) const;
 
@@ -102,13 +102,13 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow);
+        CreateAccessibleDocumentView (::sd::Window* pWindow) SAL_OVERRIDE;
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
 
     /** Relocate all toplevel controls to the given parent window.
     */
-    virtual bool RelocateToParentWindow (::Window* pParentWindow);
+    virtual bool RelocateToParentWindow (::Window* pParentWindow) SAL_OVERRIDE;
 
     /// returns <TRUE/> if and only if the given window is the panel anchor window of our ToolPanelDeck
     bool    IsPanelAnchorWindow( const ::Window& i_rWindow ) const;

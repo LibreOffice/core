@@ -93,7 +93,7 @@ public:
 
     XFTable*    GetOwnerTable();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     void        RemoveCell(sal_Int32 cell);
 

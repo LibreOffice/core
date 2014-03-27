@@ -97,7 +97,7 @@ public:
         const OUString& rItemText2,
         const OUString* pItemHelpText );
 
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
 private:
     struct ValueSetWithTextItem
@@ -132,7 +132,7 @@ class SVX_DLLPUBLIC SvxNumValueSet2 : public ValueSet
         SvxNumValueSet2( Window* pParent, const ResId& rResId);
         ~SvxNumValueSet2();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
 
     void            SetNumberingSettings(
@@ -149,7 +149,7 @@ class SVX_DLLPUBLIC SvxNumValueSet3 : public ValueSet
         SvxNumValueSet3( Window* pParent, const ResId& rResId);
         ~SvxNumValueSet3();
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
 };
 

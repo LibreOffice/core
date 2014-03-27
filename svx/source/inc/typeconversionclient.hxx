@@ -35,7 +35,7 @@ namespace svxform
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >
                 m_xTypeConversion;
-        virtual bool ensureLoaded() const;
+        virtual bool ensureLoaded() const SAL_OVERRIDE;
 
     public:
         OTypeConversionClient();

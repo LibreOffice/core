@@ -71,14 +71,14 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~BasicPaneFactory (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XResourceFactory
@@ -86,26 +86,26 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XResource>
         SAL_CALL createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId)
-        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, std::exception);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
         releaseResource (
             const css::uno::Reference<css::drawing::framework::XResource>& rxPane)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

@@ -44,7 +44,7 @@ public:
 private:
     sal_uInt16          nCurId;
 
-    virtual void    Select();
+    virtual void    Select() SAL_OVERRIDE;
 };
 
 BookmarkPopup_Impl::BookmarkPopup_Impl() :

@@ -51,9 +51,9 @@ namespace dbaui
         OQueryContainerWindow(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
         ~OQueryContainerWindow();
 
-        virtual void Construct();
+        virtual void Construct() SAL_OVERRIDE;
 
-        virtual bool        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
         // show the beamer
         void    showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
@@ -83,21 +83,21 @@ namespace dbaui
         OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
         void setStatement( const OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 
-        void    initialize()                                                { m_pViewSwitch->initialize(); }
+        void    initialize() SAL_OVERRIDE                                                { m_pViewSwitch->initialize(); }
         void    SaveUIConfig()                                              { m_pViewSwitch->SaveUIConfig(); }
         bool    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { return m_pViewSwitch->reset( _pErrorInfo ); }
 
         bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void    forceInitialView();
 
-        virtual void GetFocus();
+        virtual void GetFocus() SAL_OVERRIDE;
 
     protected:
         // re-arrange the controls belonging to the document itself
-        virtual void resizeAll( const Rectangle& _rPlayground );
+        virtual void resizeAll( const Rectangle& _rPlayground ) SAL_OVERRIDE;
 
         // arrange dericed classes controls in the rectangle given
-        virtual void resizeDocumentView(Rectangle& _rPlayground);
+        virtual void resizeDocumentView(Rectangle& _rPlayground) SAL_OVERRIDE;
     };
     // end of temp classes
 

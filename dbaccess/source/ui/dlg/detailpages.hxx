@@ -67,7 +67,7 @@ namespace dbaui
         sal_uInt32          m_nControlFlags;
 
     public:
-        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
         OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
     protected:
@@ -76,20 +76,20 @@ namespace dbaui
         virtual ~OCommonBehaviourTabPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     };
 
     // ODbaseDetailsPage
     class ODbaseDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
         ODbaseDetailsPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
     private:
@@ -106,9 +106,9 @@ namespace dbaui
         virtual ~ODbaseDetailsPage();
 
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnButtonClicked, Button * );
@@ -128,13 +128,13 @@ namespace dbaui
     class OOdbcDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
         OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
         FixedLine           m_aFL_1;
         CheckBox            m_aUseCatalog;
@@ -144,13 +144,13 @@ namespace dbaui
     class OUserDriverDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
         OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
         FixedText           m_aFTHostname;
         Edit                m_aEDHostname;
@@ -178,10 +178,10 @@ namespace dbaui
 
     protected:
 
-        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
@@ -220,23 +220,23 @@ namespace dbaui
         CheckBox            m_aPasswordRequired;
 
     protected:
-        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     };
 
     // OOdbcDetailsPage
     class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
         FixedLine           m_aFL_1;
         FixedText           m_aBaseDN;
@@ -266,7 +266,7 @@ namespace dbaui
     class OTextDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
         OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
@@ -278,11 +278,11 @@ namespace dbaui
         OUString      m_aTextNone;
     protected:
         virtual ~OTextDetailsPage();
-        virtual sal_Bool prepareLeave();
+        virtual sal_Bool prepareLeave() SAL_OVERRIDE;
 
-        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
     };

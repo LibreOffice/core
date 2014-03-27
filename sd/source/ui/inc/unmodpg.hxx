@@ -51,10 +51,10 @@ public:
         sal_Bool                    bTheNewBckgrndObjsVisible);
 
     virtual ~ModifyPageUndoAction();
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment() const;
+    virtual OUString GetComment() const SAL_OVERRIDE;
 };
 
 
@@ -66,10 +66,10 @@ public:
         const OUString& rOldLayoutName,
         const OUString& rNewLayoutName);
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 
-    virtual OUString GetComment() const;
+    virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
     OUString maOldName;

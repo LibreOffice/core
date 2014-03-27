@@ -205,12 +205,12 @@ class CustomAnimationListEntryItem : public SvLBoxString
 public:
                     CustomAnimationListEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationListEntryItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    SvLBoxItem*     Create() const SAL_OVERRIDE;
+    void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
 
     virtual void Paint(
-        const Point&, SvTreeListBox& rDev, const SvViewDataEntry* pView,const SvTreeListEntry* pEntry);
+        const Point&, SvTreeListBox& rDev, const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 private:
     CustomAnimationList* mpParent;
     OUString        maDescription;
@@ -358,11 +358,11 @@ public:
                     CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     virtual sal_uInt16  IsA();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    SvLBoxItem*     Create() const SAL_OVERRIDE;
+    void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
 private:
     OUString        maDescription;

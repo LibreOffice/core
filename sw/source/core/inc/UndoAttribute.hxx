@@ -52,9 +52,9 @@ public:
 
     virtual ~SwUndoAttr();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     void SaveRedlineData( const SwPaM& rPam, sal_Bool bInsCntnt );
 
@@ -75,9 +75,9 @@ public:
 
     virtual ~SwUndoResetAttr();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     void SetAttrs( const std::set<sal_uInt16> &rAttrs );
 
@@ -121,11 +121,11 @@ public:
 
     virtual ~SwUndoFmtAttr();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     void PutAttr( const SfxPoolItem& rItem );
     SwFmt* GetFmt( SwDoc& rDoc );   // checks if it is still in the Doc!
@@ -139,8 +139,8 @@ class SwUndoFmtResetAttr : public SwUndo
                             const sal_uInt16 nWhichId );
         ~SwUndoFmtResetAttr();
 
-        virtual void UndoImpl( ::sw::UndoRedoContext & );
-        virtual void RedoImpl( ::sw::UndoRedoContext & );
+        virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+        virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     private:
         // format at which a certain attribute is reset.
@@ -161,9 +161,9 @@ class SwUndoDontExpandFmt : public SwUndo
 public:
     SwUndoDontExpandFmt( const SwPosition& rPos );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 };
 
 // helper class to receive changed attribute sets
@@ -177,7 +177,7 @@ class SwUndoFmtAttrHelper : public SwClient
 public:
     SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSaveDrawPt = true );
 
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
     SwUndoFmtAttr* GetUndo() const  { return m_pUndo.get(); }
     // release the undo object (so it is not deleted here), and return it
@@ -196,9 +196,9 @@ public:
 
     virtual ~SwUndoMoveLeftMargin();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
@@ -217,8 +217,8 @@ public:
 
     virtual ~SwUndoDefaultAttr();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
 class SwUndoChangeFootNote : public SwUndo, private SwUndRng
@@ -235,9 +235,9 @@ public:
                           sal_uInt16 nNum, bool bIsEndNote );
     virtual ~SwUndoChangeFootNote();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     SwHistory& GetHistory() { return *m_pHistory; }
 };
@@ -253,8 +253,8 @@ public:
 
     virtual ~SwUndoFootNoteInfo();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
 class SwUndoEndNoteInfo : public SwUndo
@@ -268,8 +268,8 @@ public:
 
     virtual ~SwUndoEndNoteInfo();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOATTRIBUTE_HXX

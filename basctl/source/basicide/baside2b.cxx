@@ -196,14 +196,14 @@ public:
 private:
     virtual ~ChangesListener() {}
 
-    virtual void SAL_CALL disposing(lang::EventObject const &) throw (RuntimeException, std::exception)
+    virtual void SAL_CALL disposing(lang::EventObject const &) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         osl::MutexGuard g(editor_.mutex_);
         editor_.notifier_.clear();
     }
 
     virtual void SAL_CALL propertiesChange(
-        Sequence< beans::PropertyChangeEvent > const &) throw (RuntimeException, std::exception)
+        Sequence< beans::PropertyChangeEvent > const &) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         SolarMutexGuard g;
         editor_.ImplSetFont();

@@ -25,8 +25,8 @@ class LatentStyleHandler
     std::vector<beans::PropertyValue> m_aAttributes;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value& val);
-    virtual void lcl_sprm(Sprm& sprm);
+    virtual void lcl_attribute(Id Name, Value& val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm& sprm) SAL_OVERRIDE;
 
 public:
     LatentStyleHandler();

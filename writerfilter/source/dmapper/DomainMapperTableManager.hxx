@@ -69,7 +69,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
-    virtual void clearData();
+    virtual void clearData() SAL_OVERRIDE;
 
 public:
 
@@ -80,13 +80,13 @@ public:
     // but in the provided properties map.
     inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
 
-    virtual bool sprm(Sprm & rSprm);
+    virtual bool sprm(Sprm & rSprm) SAL_OVERRIDE;
 
-    virtual void startLevel( );
-    virtual void endLevel( );
+    virtual void startLevel( ) SAL_OVERRIDE;
+    virtual void endLevel( ) SAL_OVERRIDE;
 
-    virtual void endOfCellAction();
-    virtual void endOfRowAction();
+    virtual void endOfCellAction() SAL_OVERRIDE;
+    virtual void endOfRowAction() SAL_OVERRIDE;
 
     IntVectorPtr getCurrentGrid( );
     IntVectorPtr getCurrentSpans( );
@@ -95,7 +95,7 @@ public:
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
 
-    inline virtual void cellProps(TablePropertyMapPtr pProps)
+    inline virtual void cellProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -103,7 +103,7 @@ public:
            DomainMapperTableManager_Base_t::cellProps( pProps );
     };
 
-    inline virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
+    inline virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -111,7 +111,7 @@ public:
            DomainMapperTableManager_Base_t::cellPropsByCell( i, pProps );
     };
 
-    inline virtual void insertRowProps(TablePropertyMapPtr pProps)
+    inline virtual void insertRowProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -119,7 +119,7 @@ public:
            DomainMapperTableManager_Base_t::insertRowProps( pProps );
     };
 
-    inline virtual void insertTableProps(TablePropertyMapPtr pProps)
+    inline virtual void insertTableProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);

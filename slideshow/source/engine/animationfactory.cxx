@@ -93,11 +93,11 @@ namespace slideshow
                 // Animation interface
 
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& )
+                                       const ShapeAttributeLayerSharedPtr& ) SAL_OVERRIDE
                 {}
 
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                                    const ShapeAttributeLayerSharedPtr& rAttrLayer )
+                                    const ShapeAttributeLayerSharedPtr& rAttrLayer ) SAL_OVERRIDE
                 {
                     OSL_ENSURE( !mpShape,
                                 "TupleAnimation::start(): Shape already set" );
@@ -121,7 +121,7 @@ namespace slideshow
                     }
                 }
 
-                virtual void end() { end_(); }
+                virtual void end() SAL_OVERRIDE { end_(); }
                 void end_()
                 {
                     if( mbAnimationStarted )
@@ -139,7 +139,7 @@ namespace slideshow
                 // PairAnimation interface
 
 
-                virtual bool operator()( const ::basegfx::B2DTuple& rValue )
+                virtual bool operator()( const ::basegfx::B2DTuple& rValue ) SAL_OVERRIDE
                 {
                     ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "TupleAnimation::operator(): Invalid ShapeAttributeLayer" );
@@ -160,7 +160,7 @@ namespace slideshow
                     return true;
                 }
 
-                virtual ::basegfx::B2DTuple getUnderlyingValue() const
+                virtual ::basegfx::B2DTuple getUnderlyingValue() const SAL_OVERRIDE
                 {
                     ENSURE_OR_THROW( mpAttrLayer,
                                       "TupleAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
@@ -247,11 +247,11 @@ namespace slideshow
                 // Animation interface
 
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& )
+                                       const ShapeAttributeLayerSharedPtr& ) SAL_OVERRIDE
                 {}
 
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                                    const ShapeAttributeLayerSharedPtr& rAttrLayer )
+                                    const ShapeAttributeLayerSharedPtr& rAttrLayer ) SAL_OVERRIDE
                 {
                     OSL_ENSURE( !mpShape,
                                 "PathAnimation::start(): Shape already set" );
@@ -284,7 +284,7 @@ namespace slideshow
                     }
                 }
 
-                virtual void end() { end_(); }
+                virtual void end() SAL_OVERRIDE { end_(); }
                 void end_()
                 {
                     if( mbAnimationStarted )
@@ -302,7 +302,7 @@ namespace slideshow
                 // NumberAnimation interface
 
 
-                virtual bool operator()( double nValue )
+                virtual bool operator()( double nValue ) SAL_OVERRIDE
                 {
                     ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "PathAnimation::operator(): Invalid ShapeAttributeLayer" );
@@ -331,7 +331,7 @@ namespace slideshow
                     return true;
                 }
 
-                virtual double getUnderlyingValue() const
+                virtual double getUnderlyingValue() const SAL_OVERRIDE
                 {
                     ENSURE_OR_THROW( mpAttrLayer,
                                       "PathAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );

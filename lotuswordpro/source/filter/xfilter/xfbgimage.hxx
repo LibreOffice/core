@@ -101,9 +101,9 @@ public:
      * @descr   decide whether there has been a style that is the same as this object.
      *          If it use base64 stream, i'll simply return sal_False because it's too slow to compare two base64 stream.
      */
-    virtual sal_Bool Equal(IXFStyle *pStyle);
+    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFBGImage& img1, XFBGImage& img2);
     friend bool operator!=(XFBGImage& img1, XFBGImage& img2);

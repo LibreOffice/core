@@ -72,12 +72,12 @@ public:
                                 const TransferableObjectDescriptor& rDesc );
     virtual ~ScDrawTransferObj();
 
-    virtual void        AddSupportedFormats();
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void        AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
     virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void        ObjectReleased();
-    virtual void        DragFinished( sal_Int8 nDropAction );
+                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual void        ObjectReleased() SAL_OVERRIDE;
+    virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 
     SdrModel*           GetModel()  { return pModel; }
 
@@ -95,7 +95,7 @@ public:
     sal_uInt32          GetSourceDocID() const      { return nSourceDocID; }
 
     static ScDrawTransferObj* GetOwnClipboard( Window* pUIWin );
-    virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception );
+    virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }

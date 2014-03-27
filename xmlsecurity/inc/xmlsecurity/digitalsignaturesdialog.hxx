@@ -127,7 +127,7 @@ public:
     void    SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream );
 
                 // Execute the dialog...
-    short       Execute();
+    short       Execute() SAL_OVERRIDE;
 
                 // Did signatures change?
     sal_Bool    SignaturesChanged() const { return mbSignaturesChanged; }

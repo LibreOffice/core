@@ -75,16 +75,16 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xSource,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >& aSeriesToReUse )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::chart2::InterpretedData SAL_CALL reinterpretDataSeries(
         const ::com::sun::star::chart2::InterpretedData& aInterpretedData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isDataCompatible(
         const ::com::sun::star::chart2::InterpretedData& aInterpretedData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL mergeInterpretedData(
         const ::com::sun::star::chart2::InterpretedData& aInterpretedData )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;

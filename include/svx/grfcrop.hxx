@@ -37,18 +37,18 @@ public:
     virtual ~SvxGrfCrop();
 
     // "pure virtual methods" from SfxPoolItem
-    virtual bool                operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const;
-    virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const;
+    virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             sal_uInt8 nMemberId = 0 ) const;
+                             sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                           sal_uInt8 nMemberId = 0 );
+                           sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     void SetLeft( sal_Int32 nVal )      { nLeft = nVal; }
     void SetRight( sal_Int32 nVal )     { nRight = nVal; }

@@ -38,13 +38,13 @@ namespace sdr
 
         protected:
             // create a new itemset
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0);
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) SAL_OVERRIDE;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet);
+            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
             /// Get the TextProvider related to our SdrObject
             virtual const svx::ITextProvider& getTextProvider() const;
@@ -60,28 +60,28 @@ namespace sdr
             virtual ~TextProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes();
+            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
-            virtual void ForceStyleToHardAttributes();
+            virtual void ForceStyleToHardAttributes() SAL_OVERRIDE;
 
             // This is the notifyer from SfxListener
-            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
             // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
             // ItemChange(), PostItemChange() and ItemSetChanged() calls.
             void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
 
             // #i101556# versioning support
-            virtual sal_uInt32 getVersion() const;
+            virtual sal_uInt32 getVersion() const SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

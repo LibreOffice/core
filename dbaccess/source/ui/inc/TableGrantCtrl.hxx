@@ -68,7 +68,7 @@ public:
     void setTablesSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >& _xTablesSup);
     void setComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
-    virtual void Init();
+    virtual void Init() SAL_OVERRIDE;
 
     // IAccessibleTableProvider
     /** Creates the accessible object of a data table cell.
@@ -77,22 +77,22 @@ public:
         @return  The XAccessible interface of the specified cell. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >
-    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
+    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
 
 protected:
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
-    virtual bool PreNotify(NotifyEvent& rNEvt );
+    virtual bool PreNotify(NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual bool IsTabAllowed(bool bForward) const;
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
-    virtual bool SeekRow( long nRow );
-    virtual bool SaveModified();
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
+    virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
+    virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
+    virtual bool SaveModified() SAL_OVERRIDE;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
 
-    virtual void CellModified();
+    virtual void CellModified() SAL_OVERRIDE;
 
 private:
     DECL_LINK( AsynchActivate, void* );

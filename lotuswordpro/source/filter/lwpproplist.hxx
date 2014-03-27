@@ -74,7 +74,7 @@ class LwpPropListElement : public LwpDLVList
 public:
     LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpPropListElement(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_Bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
     LwpAtomHolder GetValue(){return m_Value;}

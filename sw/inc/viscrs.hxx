@@ -127,7 +127,7 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    virtual void FillRects();   // For Table- und normal cursors.
+    virtual void FillRects() SAL_OVERRIDE;   // For Table- und normal cursors.
 
     void Show();            // Update and display all selections.
     void Hide();            // Hide all selections.
@@ -142,19 +142,19 @@ public:
     const Point& GetEndPos() const  { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
           Point& GetEndPos()        { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
 
-    virtual void SetMark();
+    virtual void SetMark() SAL_OVERRIDE;
 
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
+    virtual SwCursor* Create( SwPaM* pRing = 0 ) const SAL_OVERRIDE;
 
-    virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
+    virtual short MaxReplaceArived() SAL_OVERRIDE; //returns RET_YES/RET_CANCEL/RET_NO
+    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
 
     bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
 
     // true: Cursor can be set to this position.
-    virtual bool IsAtValidPos( bool bPoint = true ) const;
+    virtual bool IsAtValidPos( bool bPoint = true ) const SAL_OVERRIDE;
 
-    virtual bool IsReadOnlyAvailable() const;
+    virtual bool IsReadOnlyAvailable() const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
 };
@@ -172,19 +172,19 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual void FillRects();   // For table and normal cursor.
+    virtual void FillRects() SAL_OVERRIDE;   // For table and normal cursor.
 
     // Check if SPoint is within table SSelection.
     bool IsInside( const Point& rPt ) const;
 
-    virtual void SetMark();
-    virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
+    virtual void SetMark() SAL_OVERRIDE;
+    virtual SwCursor* Create( SwPaM* pRing = 0 ) const SAL_OVERRIDE;
 
-    virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
+    virtual short MaxReplaceArived() SAL_OVERRIDE; //returns RET_YES/RET_CANCEL/RET_NO
+    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
 
     // true: Cursor can be set to this position.
-    virtual bool IsAtValidPos( bool bPoint = true ) const;
+    virtual bool IsAtValidPos( bool bPoint = true ) const SAL_OVERRIDE;
 
 };
 

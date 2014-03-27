@@ -94,14 +94,14 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Paint( const Rectangle& i_rArea );
-        virtual void Resize();
-        virtual void StateChanged( StateChangedType i_nType );
-        virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent );
-        virtual void SetText( const OUString& i_rText );
+        virtual void Paint( const Rectangle& i_rArea ) SAL_OVERRIDE;
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType i_nType ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) SAL_OVERRIDE;
+        virtual void SetText( const OUString& i_rText ) SAL_OVERRIDE;
 
         // DockingWindow overridables
-        void EndDocking( const Rectangle& rRect, bool bFloatMode );
+        void EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
 
         // own overridables
         virtual void onLayoutDone();

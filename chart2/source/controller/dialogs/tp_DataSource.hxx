@@ -70,13 +70,13 @@ public:
 
 protected:
     // OWizardPage
-    virtual void ActivatePage();
-    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual void ActivatePage() SAL_OVERRIDE;
+    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;
 
     //TabPage
-    virtual void DeactivatePage();
+    virtual void DeactivatePage() SAL_OVERRIDE;
 
-    virtual void        initializePage();
+    virtual void        initializePage() SAL_OVERRIDE;
 
     DECL_LINK( SeriesSelectionChangedHdl, void* );
     DECL_LINK( RoleSelectionChangedHdl, void* );
@@ -91,8 +91,8 @@ protected:
     DECL_LINK( AddMappingHdl, void* );
 
     // ____ RangeSelectionListenerParent ____
-    virtual void listeningFinished( const OUString & rNewRange );
-    virtual void disposingRangeSelection();
+    virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
+    virtual void disposingRangeSelection() SAL_OVERRIDE;
 
     void updateControlState();
 

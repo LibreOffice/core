@@ -77,8 +77,8 @@ public:
     SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
     SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
 
-    virtual void AddWindowToPaintView(OutputDevice* pWin);
-    virtual void DeleteWindowFromPaintView(OutputDevice* pWin);
+    virtual void AddWindowToPaintView(OutputDevice* pWin) SAL_OVERRIDE;
+    virtual void DeleteWindowFromPaintView(OutputDevice* pWin) SAL_OVERRIDE;
 
     OutlinerView*   GetViewByWindow (::Window* pWin) const;
     SdrOutliner*    GetOutliner() { return(&mrOutliner) ; }
@@ -115,14 +115,14 @@ public:
 
     sal_Bool          PrepareClose(sal_Bool bUI = sal_True);
 
-    virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
-    virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
+    virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const SAL_OVERRIDE;
+    virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False) SAL_OVERRIDE;
 
     void               FillOutliner();
     void               SetLinks();
     void               ResetLinks() const;
 
-    SfxStyleSheet*     GetStyleSheet() const;
+    SfxStyleSheet*     GetStyleSheet() const SAL_OVERRIDE;
 
     void               SetSelectedPages();
 
@@ -131,17 +131,17 @@ public:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND) SAL_OVERRIDE;
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND) SAL_OVERRIDE;
 
 
     // Re-implement GetScriptType for this view to get correct results
-    virtual sal_uInt16 GetScriptType() const;
+    virtual sal_uInt16 GetScriptType() const SAL_OVERRIDE;
 
     /** After this method has been called with <TRUE/> following changes of
         the current page are ignored in that the corresponding text is not
@@ -158,8 +158,8 @@ public:
     void UpdateParagraph( sal_Int32 nPara );
 
 protected:
-    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
-    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos ) SAL_OVERRIDE;
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos ) SAL_OVERRIDE;
 
 private:
     /** call this method before you do anything that can modify the outliner

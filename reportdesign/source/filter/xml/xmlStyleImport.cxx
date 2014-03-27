@@ -61,7 +61,7 @@ public:
             ::std::vector< XMLPropertyState >& /*rProperties*/,
             const OUString& /*rValue*/,
             const SvXMLUnitConverter& /*rUnitConverter*/,
-            const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
+            const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const SAL_OVERRIDE
     {
         // nothing to do here
         return true;

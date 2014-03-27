@@ -38,8 +38,8 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
 protected:
-    virtual bool    FillItemSet(      SfxItemSet &rSet);
-    virtual void    Reset      (const SfxItemSet &rSet);
+    virtual bool    FillItemSet(      SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void    Reset      (const SfxItemSet &rSet) SAL_OVERRIDE;
 
     DECL_LINK(UpdateHdl, void *);
 

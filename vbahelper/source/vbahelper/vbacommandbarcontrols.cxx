@@ -30,13 +30,13 @@ class CommandBarControlEnumeration : public CommandBarControlEnumeration_BASE
     sal_Int32 m_nCurrentPosition;
 public:
     CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException, std::exception )
+    virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         if( m_nCurrentPosition < m_pCommandBarControls->getCount() )
             return sal_True;
         return sal_False;
     }
-    virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+    virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         if( hasMoreElements() )
         {
@@ -254,14 +254,14 @@ class VbaDummyIndexAccess : public ::cppu::WeakImplHelper1< container::XIndexAcc
 public:
     inline VbaDummyIndexAccess() {}
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception)
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return 0; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
         { throw lang::IndexOutOfBoundsException(); }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception)
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return cppu::UnoType<XCommandBarControl>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return false; }
 };
 

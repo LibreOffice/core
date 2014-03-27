@@ -31,7 +31,7 @@ class SW_DLLPUBLIC NumEditAction: public NumericField
 
 protected:
     virtual void Action();
-    virtual bool Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     NumEditAction( Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}
@@ -47,8 +47,8 @@ class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
     OUString sForbiddenChars;
 protected:
-    virtual void KeyInput( const KeyEvent& );
-    virtual void        Modify();
+    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
+    virtual void        Modify() SAL_OVERRIDE;
 
 public:
     NoSpaceEdit( Window* pParent );
@@ -81,7 +81,7 @@ public:
     ReturnActionEdit(Window* pParent, WinBits nStyle)
         : Edit(pParent, nStyle){}
     ~ReturnActionEdit();
-    virtual void KeyInput( const KeyEvent& );
+    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
 
     void SetReturnActionLink(const Link& rLink)
             { aReturnActionLink = rLink;}

@@ -57,11 +57,11 @@ public:
     virtual ~DataSourceDialog();
 
     // from Dialog (base of TabDialog)
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     // TabPageNotifiable
-    virtual void setInvalidPage( TabPage * pTabPage );
-    virtual void setValidPage( TabPage * pTabPage );
+    virtual void setInvalidPage( TabPage * pTabPage ) SAL_OVERRIDE;
+    virtual void setValidPage( TabPage * pTabPage ) SAL_OVERRIDE;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >

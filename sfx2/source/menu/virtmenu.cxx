@@ -67,7 +67,7 @@ class SfxMenuImageControl_Impl : public SfxControllerItem
     sal_Bool                bIsMirrored;
 
 protected:
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 public:
                         SfxMenuImageControl_Impl( sal_uInt16 nSlotId, SfxBindings& rBindings, SfxVirtualMenu* pVMenu )
                             : SfxControllerItem( nSlotId, rBindings )

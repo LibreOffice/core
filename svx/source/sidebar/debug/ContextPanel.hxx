@@ -37,7 +37,7 @@ public:
     virtual ~ContextPanel (void);
 
     // From IContextChangeReceiverInterface
-    virtual void HandleContextChange (const ::sfx2::sidebar::EnumContext aContext);
+    virtual void HandleContextChange (const ::sfx2::sidebar::EnumContext aContext) SAL_OVERRIDE;
 
 private:
     FixedText maApplicationName;

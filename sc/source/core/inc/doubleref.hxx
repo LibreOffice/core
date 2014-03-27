@@ -98,9 +98,9 @@ public:
 
     const ScRange& getRange() const;
 
-    virtual SCCOL getColSize() const;
-    virtual SCROW getRowSize() const;
-    virtual SCSIZE getVisibleDataCellCount() const;
+    virtual SCCOL getColSize() const SAL_OVERRIDE;
+    virtual SCROW getRowSize() const SAL_OVERRIDE;
+    virtual SCSIZE getVisibleDataCellCount() const SAL_OVERRIDE;
 
     /**
      * Get a string value of a specified cell position.  Note that the
@@ -110,9 +110,9 @@ public:
      * @param nCol column position (0 to column size-1)
      * @param nRow row position (0 to row size-1)
      */
-    virtual OUString getString(SCCOL nCol, SCROW nRow) const;
+    virtual OUString getString(SCCOL nCol, SCROW nRow) const SAL_OVERRIDE;
 
-    virtual SCCOL getFirstFieldColumn() const;
+    virtual SCCOL getFirstFieldColumn() const SAL_OVERRIDE;
     /**
      * Get a <i>0-based</i> column index that corresponds with the passed field
      * index.  Note that the field index passed as the 1st parameter is
@@ -122,10 +122,10 @@ public:
      *
      * @return 0-based column index
      */
-    virtual SCCOL findFieldColumn(SCCOL nIndex) const;
-    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
-    virtual bool isRangeEqual(const ScRange& rRange) const;
+    virtual SCCOL findFieldColumn(SCCOL nIndex) const SAL_OVERRIDE;
+    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const SAL_OVERRIDE;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const SAL_OVERRIDE;
+    virtual bool isRangeEqual(const ScRange& rRange) const SAL_OVERRIDE;
 
 private:
     ScRange maRange;
@@ -139,9 +139,9 @@ public:
     explicit ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat);
     virtual ~ScDBExternalRange();
 
-    virtual SCCOL getColSize() const;
-    virtual SCROW getRowSize() const;
-    virtual SCSIZE getVisibleDataCellCount() const;
+    virtual SCCOL getColSize() const SAL_OVERRIDE;
+    virtual SCROW getRowSize() const SAL_OVERRIDE;
+    virtual SCSIZE getVisibleDataCellCount() const SAL_OVERRIDE;
 
     /**
      * Get a string value of a specified cell position.  Note that the
@@ -151,9 +151,9 @@ public:
      * @param nCol column position (0 to column size-1)
      * @param nRow row position (0 to row size-1)
      */
-    virtual OUString getString(SCCOL nCol, SCROW nRow) const;
+    virtual OUString getString(SCCOL nCol, SCROW nRow) const SAL_OVERRIDE;
 
-    virtual SCCOL getFirstFieldColumn() const;
+    virtual SCCOL getFirstFieldColumn() const SAL_OVERRIDE;
 
     /**
      * Get a <i>0-based</i> column index that corresponds with the passed field
@@ -164,10 +164,10 @@ public:
      *
      * @return 0-based column index
      */
-    virtual SCCOL findFieldColumn(SCCOL nIndex) const;
-    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
-    virtual bool isRangeEqual(const ScRange& rRange) const;
+    virtual SCCOL findFieldColumn(SCCOL nIndex) const SAL_OVERRIDE;
+    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const SAL_OVERRIDE;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const SAL_OVERRIDE;
+    virtual bool isRangeEqual(const ScRange& rRange) const SAL_OVERRIDE;
 
 private:
     const ScMatrixRef mpMatrix;

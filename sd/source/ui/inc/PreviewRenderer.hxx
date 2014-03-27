@@ -125,7 +125,7 @@ public:
         int nWidth);
 
 protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
     ::std::auto_ptr<VirtualDevice> mpPreviewDevice;

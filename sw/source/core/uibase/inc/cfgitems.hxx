@@ -68,8 +68,8 @@ public:
                                 SwDocDisplayItem( const SwViewOption& rVOpt,
                                                                 sal_uInt16 nWhich );
 
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool                operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
@@ -104,8 +104,8 @@ public:
                             SwElemItem(const SwElemItem& rElemItem);
                             SwElemItem(const SwViewOption& rVOpt, sal_uInt16 nWhich);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     void                    operator=( const SwElemItem& );
 
     void                    FillViewOptions( SwViewOption& rVOpt) const;
@@ -127,9 +127,9 @@ public:
     SwAddPrinterItem( sal_uInt16 nWhich, const SwPrintData& rPrtData );
     SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem);
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
-    virtual bool         operator==( const SfxPoolItem& ) const;
+    virtual bool         operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
     const OUString &GetFax() const              { return sFaxName; }
     void          SetFax( const OUString& rFax) { sFaxName = rFax; }
@@ -171,8 +171,8 @@ public:
     SwShadowCursorItem( const SwShadowCursorItem& rElemItem );
     SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 nWhich );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     void                    operator=( const SwShadowCursorItem& );
 
     void FillViewOptions( SwViewOption& rVOpt) const;
@@ -210,8 +210,8 @@ public:
                                             SfxPoolItem(_nWhich){};
                             SwTestItem( const SwTestItem& pTestItem);
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
 };
 #endif

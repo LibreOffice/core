@@ -67,7 +67,7 @@ public:
     SwSequenceOptionDialog( Window *pParent, SwView &rV,
                             const OUString& rSeqFldType );
     virtual ~SwSequenceOptionDialog();
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
 
     bool IsApplyBorderAndShadow( void ) { return m_pApplyBorderAndShadowCB->IsChecked(); }
     void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }

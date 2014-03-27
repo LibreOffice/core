@@ -40,15 +40,15 @@ public:
         WinBits nBits);
     virtual ~SidebarDockingWindow (void);
 
-    virtual bool Close (void);
+    virtual bool Close (void) SAL_OVERRIDE;
 
 protected:
     // Window overridables
-    virtual void GetFocus (void);
+    virtual void GetFocus (void) SAL_OVERRIDE;
 
     virtual SfxChildAlignment CheckAlignment (
         SfxChildAlignment eCurrentAlignment,
-        SfxChildAlignment eRequestedAlignment);
+        SfxChildAlignment eRequestedAlignment) SAL_OVERRIDE;
 
 private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;

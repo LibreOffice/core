@@ -52,7 +52,7 @@ namespace pcr
         void            MoveSelection( long nRelPos );
 
     protected:
-        virtual void    ModelHasMoved(SvTreeListEntry* pSource );
+        virtual void    ModelHasMoved(SvTreeListEntry* pSource ) SAL_OVERRIDE;
 
     private:
         using SvTreeListBox::MoveSelection;

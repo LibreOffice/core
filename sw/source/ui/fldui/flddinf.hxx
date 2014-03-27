@@ -56,7 +56,7 @@ class SwFldDokInfPage : public SwFldPage
     sal_Int32               FillSelectionLB(sal_uInt16 nSubTypeId);
 
 protected:
-    virtual sal_uInt16      GetGroup();
+    virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
                         SwFldDokInfPage(Window* pWindow, const SfxItemSet& rSet);
@@ -65,10 +65,10 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
-    virtual void        FillUserData();
+    virtual void        FillUserData() SAL_OVERRIDE;
 };
 
 #endif

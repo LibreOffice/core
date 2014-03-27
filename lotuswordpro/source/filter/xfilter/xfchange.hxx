@@ -75,7 +75,7 @@ class XFChangeList : public XFContentContainer
 public:
     XFChangeList(){}
     ~XFChangeList(){}
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 class XFChangeRegion : public XFContentContainer
@@ -83,7 +83,7 @@ class XFChangeRegion : public XFContentContainer
 public:
     XFChangeRegion(){}
     ~XFChangeRegion(){}
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
     void SetEditor(const OUString& sEditor){m_sEditor=sEditor;}
@@ -97,7 +97,7 @@ class XFChangeInsert : public XFChangeRegion
 public:
     XFChangeInsert(){}
     ~XFChangeInsert(){}
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 class XFChangeDelete : public XFChangeRegion
@@ -105,7 +105,7 @@ class XFChangeDelete : public XFChangeRegion
 public:
     XFChangeDelete(){}
     ~XFChangeDelete(){}
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 class XFChange : public XFContent
@@ -113,7 +113,7 @@ class XFChange : public XFContent
 public:
     XFChange(){}
     ~XFChange(){}
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
 private:
@@ -125,7 +125,7 @@ class XFChangeStart : public XFContent
 public:
     XFChangeStart(){}
     ~XFChangeStart(){}
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
 private:
@@ -137,7 +137,7 @@ class XFChangeEnd : public XFContent
 public:
     XFChangeEnd(){}
     ~XFChangeEnd(){}
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
 private:

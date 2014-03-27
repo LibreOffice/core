@@ -78,8 +78,8 @@ public:
     PresLayoutPreview( ::Window* pParent );
     ~PresLayoutPreview();
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual Size GetOptimalSize() const;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void init( SdPage* pMaster );
     void update( HeaderFooterSettings& rSettings );

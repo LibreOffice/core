@@ -89,9 +89,9 @@ class NoBitmapCompression
     class DummyReplacement;
 public:
     virtual ~NoBitmapCompression() {}
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
-    virtual bool IsLossless (void) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const SAL_OVERRIDE;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
+    virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
 
 
@@ -107,9 +107,9 @@ class CompressionByDeletion
 {
 public:
     virtual ~CompressionByDeletion() {}
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
-    virtual bool IsLossless (void) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const SAL_OVERRIDE;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
+    virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
 
 
@@ -127,11 +127,11 @@ class ResolutionReduction
     static const sal_Int32 mnWidth = 100;
 public:
     virtual ~ResolutionReduction() {}
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const SAL_OVERRIDE;
     /** Scale the replacement bitmap up to the original size.
     */
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
-    virtual bool IsLossless (void) const;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
+    virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
 
 
@@ -146,9 +146,9 @@ class PngCompression
     class PngReplacement;
 public:
     virtual ~PngCompression() {}
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const;
-    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
-    virtual bool IsLossless (void) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const SAL_OVERRIDE;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const SAL_OVERRIDE;
+    virtual bool IsLossless (void) const SAL_OVERRIDE;
 };
 
 

@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 /// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
 class SwRTFReader : public Reader
 {
-    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &,const OUString &);
+    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &,const OUString &) SAL_OVERRIDE;
 };
 
 sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString &)

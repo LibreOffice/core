@@ -49,8 +49,8 @@ private:
     uno::Reference<frame::XComponentLoader> xLoader;
     uno::Reference<lang::XComponent> xComponent;
 public:
-    virtual void Init();
-    virtual int Main();
+    virtual void Init() SAL_OVERRIDE;
+    virtual int Main() SAL_OVERRIDE;
     void Open(OUString & aFileUrl);
 };
 

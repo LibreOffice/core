@@ -57,14 +57,14 @@ namespace pcr
         }
 
         // XTabControllerModel
-        virtual void SAL_CALL setControlModels(const Sequence< Reference< XControlModel > >& rModels) throw( RuntimeException, std::exception ) {m_aModels = rModels;}
-        virtual Sequence< Reference< XControlModel > > SAL_CALL getControlModels(void) throw( RuntimeException, std::exception ) {return m_aModels;}
-        virtual void SAL_CALL setGroup(const Sequence< Reference< XControlModel > >& /*Group*/, const OUString& /*GroupName*/) throw( RuntimeException, std::exception ) {}
-        virtual sal_Int32 SAL_CALL getGroupCount(void) throw( RuntimeException, std::exception ) {return 0;}
-        virtual void SAL_CALL getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, OUString& /*Name*/) throw( RuntimeException, std::exception ) {}
-        virtual void SAL_CALL getGroupByName(const OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) throw( RuntimeException, std::exception ) {}
-        virtual sal_Bool SAL_CALL getGroupControl(void) throw( RuntimeException, std::exception ){return sal_False;} ;
-        virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException, std::exception ){};
+        virtual void SAL_CALL setControlModels(const Sequence< Reference< XControlModel > >& rModels) throw( RuntimeException, std::exception ) SAL_OVERRIDE {m_aModels = rModels;}
+        virtual Sequence< Reference< XControlModel > > SAL_CALL getControlModels(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE {return m_aModels;}
+        virtual void SAL_CALL setGroup(const Sequence< Reference< XControlModel > >& /*Group*/, const OUString& /*GroupName*/) throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
+        virtual sal_Int32 SAL_CALL getGroupCount(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE {return 0;}
+        virtual void SAL_CALL getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< XControlModel > >& /*Group*/, OUString& /*Name*/) throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
+        virtual void SAL_CALL getGroupByName(const OUString& /*Name*/, Sequence< Reference< XControlModel > >& /*Group*/) throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
+        virtual sal_Bool SAL_CALL getGroupControl(void) throw( RuntimeException, std::exception ) SAL_OVERRIDE {return sal_False;} ;
+        virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException, std::exception ) SAL_OVERRIDE {};
     };
 
 

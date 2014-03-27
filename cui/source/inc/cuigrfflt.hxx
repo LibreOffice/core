@@ -42,9 +42,9 @@ private:
     double    mfScaleX;
     double    mfScaleY;
 
-    virtual void Paint(const Rectangle& rRect);
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void ScaleImageToFit();
 
@@ -103,7 +103,7 @@ public:
 
     GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius);
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
 };
 
@@ -123,7 +123,7 @@ public:
     GraphicFilterMosaic(Window* pParent, const Graphic& rGraphic,
         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges);
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     long            GetTileWidth() const { return static_cast<long>(mpMtrWidth->GetValue()); }
     long            GetTileHeight() const { return static_cast<long>(mpMtrHeight->GetValue()); }
     sal_Bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
@@ -144,7 +144,7 @@ public:
     GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
                                            sal_uInt8 nGreyThreshold, sal_Bool bInvert );
 
-    virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt8           GetGreyThreshold() const { return( (sal_uInt8) FRound( mpMtrThreshold->GetValue() * 2.55 ) ); }
     sal_Bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
 };
@@ -160,7 +160,7 @@ private:
 public:
     GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
                         sal_uInt16 nSepiaPercent );
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt16 GetSepiaPercent() const
     {
         return sal::static_int_cast< sal_uInt16 >(mpMtrSepia->GetValue());
@@ -179,7 +179,7 @@ public:
     GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
                          sal_uInt16 nPosterColorCount );
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt16      GetPosterColorCount() const { return( (sal_uInt16) mpNumPoster->GetValue() ); }
 };
 
@@ -191,8 +191,8 @@ class EmbossControl : public SvxRectCtl
 {
 private:
     Link            maModifyHdl;
-    virtual void    MouseButtonDown( const MouseEvent& rEvt );
-    virtual Size    GetOptimalSize() const;
+    virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 public:
     EmbossControl(Window* pParent)
         : SvxRectCtl(pParent) {}
@@ -208,7 +208,7 @@ public:
     GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
                          RECT_POINT eLightSource );
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     RECT_POINT      GetLightSource() const { return mpCtlLight->GetActualRP(); }
 };
 

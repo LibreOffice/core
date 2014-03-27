@@ -61,13 +61,13 @@ public:
         SfxBindings* pBindings);
 
     virtual void DataChanged(
-        const DataChangedEvent& rEvent);
+        const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) SAL_OVERRIDE;
 
     SfxBindings* GetBindings();
 

@@ -42,13 +42,13 @@ public:
     virtual ~PowerPointImport();
 
     // from FilterBase
-    virtual bool importDocument() throw();
-    virtual bool exportDocument() throw();
+    virtual bool importDocument() throw() SAL_OVERRIDE;
+    virtual bool exportDocument() throw() SAL_OVERRIDE;
 
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
-    virtual ::oox::vml::Drawing* getVmlDrawing();
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
-    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
+    virtual ::oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
+    virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
 
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
     std::map< OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
@@ -57,7 +57,7 @@ public:
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence<   ::com::sun::star::beans::PropertyValue >& rDescriptor )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
@@ -66,9 +66,9 @@ public:
 #endif
 
 private:
-    virtual GraphicHelper* implCreateGraphicHelper() const;
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual OUString implGetImplementationName() const;
+    virtual GraphicHelper* implCreateGraphicHelper() const SAL_OVERRIDE;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
+    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
 
 private:
     OUString                                       maTableStyleListPath;

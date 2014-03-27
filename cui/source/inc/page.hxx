@@ -173,16 +173,16 @@ class SvxPageDescPage : public SfxTabPage
     SvxPageDescPage( Window* pParent, const SfxItemSet& rSet );
 
 protected:
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rOutSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual void        FillUserData();
+    virtual bool        FillItemSet( SfxItemSet& rOutSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        FillUserData() SAL_OVERRIDE;
 
     virtual ~SvxPageDescPage();
 
@@ -191,7 +191,7 @@ public:
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
     void                SetCollectionList(const std::vector<OUString> &aList);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_PAGE_HXX

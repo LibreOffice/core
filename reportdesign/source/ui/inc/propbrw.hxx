@@ -66,8 +66,8 @@ private:
     void operator =(PropBrw&);
 protected:
 
-    virtual void Resize();
-    virtual bool Close();
+    virtual void Resize() SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >
         CreateCompPropSet(const SdrMarkList& rMarkList);
@@ -91,7 +91,7 @@ public:
             ,ODesignView*  _pDesignView);
     virtual ~PropBrw();
 
-    virtual void LoseFocus();
+    virtual void LoseFocus() SAL_OVERRIDE;
 
     void    Update( OSectionView* m_pView );
     void    Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);

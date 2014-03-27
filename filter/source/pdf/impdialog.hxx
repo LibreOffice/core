@@ -179,8 +179,8 @@ public:
 
 protected:
     virtual void                PageCreated( sal_uInt16 _nId,
-                                             SfxTabPage& _rPage );
-    virtual short               Ok();
+                                             SfxTabPage& _rPage ) SAL_OVERRIDE;
+    virtual short               Ok() SAL_OVERRIDE;
 };
 
 //class tab page general

@@ -71,14 +71,14 @@ public:
         , pDialog(pD)
         , nModifier(0)
     {}
-    virtual void     MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual void     MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     using SvTreeListBox::ExecuteDrop;
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     sal_uInt16           GetModifier() const { return nModifier; }
 
-    virtual bool     Notify( NotifyEvent& rNEvt );
+    virtual bool     Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 typedef std::vector<OUString> ExpandedEntries_t;
@@ -98,15 +98,15 @@ private:
     OUString                        aStyle;
 
 protected:
-    virtual void    Command( const CommandEvent& rMEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual bool    DoubleClickHdl();
-    virtual bool    ExpandingHdl();
-    virtual void    ExpandedHdl();
+    virtual void    Command( const CommandEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    DoubleClickHdl() SAL_OVERRIDE;
+    virtual bool    ExpandingHdl() SAL_OVERRIDE;
+    virtual void    ExpandedHdl() SAL_OVERRIDE;
     virtual sal_Bool    NotifyMoving(SvTreeListEntry*  pTarget,
                                      SvTreeListEntry*  pEntry,
                                      SvTreeListEntry*& rpNewParent,
-                                     sal_uIntPtr&        rNewChildPos);
+                                     sal_uIntPtr&        rNewChildPos) SAL_OVERRIDE;
 public:
     StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
 
@@ -117,7 +117,7 @@ public:
     const OUString& GetStyle() const { return aStyle; }
     void            MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
 
-    virtual PopupMenu* CreateContextMenu( void );
+    virtual PopupMenu* CreateContextMenu( void ) SAL_OVERRIDE;
 };
 
 // class SfxActionListBox ------------------------------------------------
@@ -128,7 +128,7 @@ protected:
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
 
-    virtual PopupMenu*  CreateContextMenu( void );
+    virtual PopupMenu*  CreateContextMenu( void ) SAL_OVERRIDE;
 };
 
 // class SfxCommonTemplateDialog_Impl ------------------------------------
@@ -146,8 +146,8 @@ private:
     public:
         ISfxTemplateCommon_Impl( SfxCommonTemplateDialog_Impl* pDialogP ) : pDialog( pDialogP ) {}
         virtual ~ISfxTemplateCommon_Impl() {}
-        virtual SfxStyleFamily GetActualFamily() const { return pDialog->GetActualFamily(); }
-        virtual OUString GetSelectedEntry() const { return pDialog->GetSelectedEntry(); }
+        virtual SfxStyleFamily GetActualFamily() const SAL_OVERRIDE { return pDialog->GetActualFamily(); }
+        virtual OUString GetSelectedEntry() const SAL_OVERRIDE { return pDialog->GetSelectedEntry(); }
     };
 
     ISfxTemplateCommon_Impl     aISfxTemplateCommon;
@@ -262,7 +262,7 @@ protected:
     // information of the ith Family in the pStyleFamilies.
     sal_uInt16              StyleNrToInfoOffset( sal_uInt16 i );
 
-    void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     void                FamilySelect( sal_uInt16 nId );
     void                SetFamily( sal_uInt16 nId );
@@ -317,8 +317,8 @@ class DropToolBox_Impl : public ToolBox, public DropTargetHelper
 {
     SfxTemplateDialog_Impl&     rParent;
 protected:
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 public:
     DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
     ~DropToolBox_Impl();
@@ -345,15 +345,15 @@ private:
 
 protected:
     virtual void    Command( const CommandEvent& rMEvt );
-    virtual void    EnableEdit( sal_Bool = sal_True );
-    virtual void    EnableItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True );
-    virtual void    CheckItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True );
-    virtual sal_Bool    IsCheckedItem( sal_uInt16 nMesId );
-    virtual void    LoadedFamilies();
-    virtual void    InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten );
-    virtual void    EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnabled = sal_True );
-    virtual void    ClearFamilyList();
-    virtual void    ReplaceUpdateButtonByMenu();
+    virtual void    EnableEdit( sal_Bool = sal_True ) SAL_OVERRIDE;
+    virtual void    EnableItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True ) SAL_OVERRIDE;
+    virtual void    CheckItem( sal_uInt16 nMesId, sal_Bool bCheck = sal_True ) SAL_OVERRIDE;
+    virtual sal_Bool    IsCheckedItem( sal_uInt16 nMesId ) SAL_OVERRIDE;
+    virtual void    LoadedFamilies() SAL_OVERRIDE;
+    virtual void    InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) SAL_OVERRIDE;
+    virtual void    EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnabled = sal_True ) SAL_OVERRIDE;
+    virtual void    ClearFamilyList() SAL_OVERRIDE;
+    virtual void    ReplaceUpdateButtonByMenu() SAL_OVERRIDE;
 
     void            Resize();
     Size            GetMinOutputSizePixel();

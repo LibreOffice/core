@@ -53,7 +53,7 @@ public:
         sal_uLong nObjCount);
     virtual ~BreakDlg();
 
-    short Execute();
+    short Execute() SAL_OVERRIDE;
 
 private:
     FixedText*      m_pFiObjInfo;

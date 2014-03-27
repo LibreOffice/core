@@ -39,7 +39,7 @@ private:
 
     const SfxObjectShell&   rDocShell;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
 

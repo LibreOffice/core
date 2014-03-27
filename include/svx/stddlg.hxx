@@ -31,7 +31,7 @@ public:
     SvxStandardDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     ~SvxStandardDialog();
 
-    short           Execute();
+    short           Execute() SAL_OVERRIDE;
 
 protected:
     virtual void    Apply() = 0;    // pure virtual!!!

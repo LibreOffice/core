@@ -191,7 +191,7 @@ public:
     void RemoveFocus (void);
 
     virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder);
+        const IAccessibleViewForwarder* pViewForwarder) SAL_OVERRIDE;
 
 protected:
     ChildrenManagerImpl* mpImpl;

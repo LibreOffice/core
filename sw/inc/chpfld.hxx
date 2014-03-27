@@ -41,7 +41,7 @@ class SwChapterFieldType : public SwFieldType
 public:
     SwChapterFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 
 };
 
@@ -54,8 +54,8 @@ class SW_DLLPUBLIC SwChapterField : public SwField
     OUString sPre;
     OUString sPost;
 
-    virtual OUString Expand() const;
-    virtual SwField* Copy() const;
+    virtual OUString Expand() const SAL_OVERRIDE;
+    virtual SwField* Copy() const SAL_OVERRIDE;
 
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
@@ -71,8 +71,8 @@ public:
 
     inline OUString      GetNumber() const;
     inline OUString      GetTitle() const;
-    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }

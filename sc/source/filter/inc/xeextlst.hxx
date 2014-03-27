@@ -41,7 +41,7 @@ class XclExpExtCfvo : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rPos, bool bFirst );
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     ScColorScaleEntryType meType;
@@ -73,7 +73,7 @@ class XclExpExtDataBar : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos );
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     databar::ScAxisPosition meAxisPosition;
@@ -91,7 +91,7 @@ class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId );
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpExtDataBarRef maDataBar;
@@ -105,7 +105,7 @@ class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExp
 {
 public:
     explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId );
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpExtCfRuleRef maCfRule;
@@ -118,9 +118,9 @@ class XclExpExtCondFormat : public XclExpExt
 {
 public:
     XclExpExtCondFormat( const XclExpRoot& rRoot );
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
-    virtual XclExpExtType GetType() { return XclExpExtDataBarType; }
+    virtual XclExpExtType GetType() SAL_OVERRIDE { return XclExpExtDataBarType; }
 
     void AddRecord( XclExpExtConditionalFormattingRef aFormat );
 
@@ -132,7 +132,7 @@ class XclExtLst : public XclExpRecordBase, public XclExpRoot
 {
 public:
     explicit XclExtLst( const XclExpRoot& rRoot);
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
     void AddRecord( XclExpExtRef aEntry );
 

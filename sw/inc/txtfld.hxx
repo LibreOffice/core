@@ -81,11 +81,11 @@ public:
 
     virtual ~SwTxtInputFld();
 
-    virtual sal_Int32* GetEnd();
+    virtual sal_Int32* GetEnd() SAL_OVERRIDE;
 
     void LockNotifyContentChange();
     void UnlockNotifyContentChange();
-    virtual void NotifyContentChange( SwFmtFld& rFmtFld );
+    virtual void NotifyContentChange( SwFmtFld& rFmtFld ) SAL_OVERRIDE;
 
     void UpdateTextNodeContent( const OUString& rNewContent );
 

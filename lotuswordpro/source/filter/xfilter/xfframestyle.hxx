@@ -148,9 +148,9 @@ public:
 
     void SetTransparency(sal_Int16 nTransparency);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
     enumXFWrap  m_eWrap;

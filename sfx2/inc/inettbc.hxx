@@ -53,8 +53,8 @@ public:
                             SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     virtual                 ~SfxURLToolBoxControl_Impl();
 
-    virtual Window*         CreateItemWindow( Window* pParent );
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window*         CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 #endif

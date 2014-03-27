@@ -144,8 +144,8 @@ public:
         public:
             AbsolutePos(Window* pParent, WinBits nStyle = 0);
 
-            virtual void KeyInput(const KeyEvent& rEvt);
-            virtual void LoseFocus();
+            virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
+            virtual void LoseFocus() SAL_OVERRIDE;
         };
 
         friend class NavigationBar::AbsolutePos;
@@ -192,9 +192,9 @@ public:
         sal_uInt16 GetDefaultWidth() const {return m_nDefaultWidth;}
 
     protected:
-        virtual void Resize();
-        virtual void Paint(const Rectangle& rRect);
-        virtual void StateChanged( StateChangedType nType );
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
     private:
         DECL_LINK(OnClick, Button*);
@@ -299,34 +299,34 @@ protected:
     bool                m_bUpdating : 1;            // are any updates being executed right now?
 
 protected:
-    virtual bool SeekRow(long nRow);
-    virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
-    virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const;
-    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
-    virtual RowStatus GetRowStatus(long nRow) const;
-    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
-    virtual void CursorMoved();
-    virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
-    virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
-    virtual void Command(const CommandEvent& rEvt);
-    virtual bool PreNotify(NotifyEvent& rEvt);
-    virtual void KeyInput(const KeyEvent& rEvt);
-    virtual void StateChanged( StateChangedType nType );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void Select();
+    virtual bool SeekRow(long nRow) SAL_OVERRIDE;
+    virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows) SAL_OVERRIDE;
+    virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const SAL_OVERRIDE;
+    virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const SAL_OVERRIDE;
+    virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
+    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
+    virtual void CursorMoved() SAL_OVERRIDE;
+    virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY) SAL_OVERRIDE;
+    virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
+    virtual bool PreNotify(NotifyEvent& rEvt) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void Select() SAL_OVERRIDE;
 
-    virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol);
+    virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
 
-    virtual void CellModified();
-    virtual bool SaveModified();
-    virtual bool IsModified() const;
+    virtual void CellModified() SAL_OVERRIDE;
+    virtual bool SaveModified() SAL_OVERRIDE;
+    virtual bool IsModified() const SAL_OVERRIDE;
 
-    virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1);
+    virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1) SAL_OVERRIDE;
     virtual void RemoveColumn(sal_uInt16 nId);
     virtual DbGridColumn* CreateColumn(sal_uInt16 nId) const;
-    virtual void ColumnMoved(sal_uInt16 nId);
-    virtual bool SaveRow();
-    virtual bool IsTabAllowed(bool bForward) const;
+    virtual void ColumnMoved(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual bool SaveRow() SAL_OVERRIDE;
+    virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
 
     /// hide a column
     virtual void    HideColumn(sal_uInt16 nId);
@@ -359,7 +359,7 @@ protected:
     virtual void onColumnChange();
 
     // DragSourceHelper overridables
-    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     void    executeRowContextMenu( long _nRow, const Point& _rPreferredPos );
 
@@ -371,9 +371,9 @@ public:
 
     virtual ~DbGridControl();
 
-    virtual void Init();
+    virtual void Init() SAL_OVERRIDE;
     virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) = 0;
-    virtual void RemoveRows();
+    virtual void RemoveRows() SAL_OVERRIDE;
 
     /** GetCellText returns the text at the given position
         @param  _nRow
@@ -383,7 +383,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const SAL_OVERRIDE;
 
     void RemoveRows(bool bNewCursor);
 
@@ -395,7 +395,7 @@ public:
     // the options can restrict but not extend the update abilities
     virtual void setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& rCursor,
         sal_uInt16 nOpts = OPT_INSERT | OPT_UPDATE | OPT_DELETE);
-    virtual void Dispatch(sal_uInt16 nId);
+    virtual void Dispatch(sal_uInt16 nId) SAL_OVERRIDE;
 
     CursorWrapper* getDataSource() const {return m_pDataCursor;}
     const DbGridColumns& GetColumns() const {return m_aColumns;}
@@ -528,7 +528,7 @@ public:
         @return
             The count of additional controls of the control area.
     */
-    virtual sal_Int32 GetAccessibleControlCount() const;
+    virtual sal_Int32 GetAccessibleControlCount() const SAL_OVERRIDE;
 
     /** Creates the accessible object of an additional control.
         @param _nIndex
@@ -538,7 +538,7 @@ public:
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >
-    CreateAccessibleControl( sal_Int32 _nIndex );
+    CreateAccessibleControl( sal_Int32 _nIndex ) SAL_OVERRIDE;
 
     // IAccessibleTableProvider
     /** Creates the accessible object of a data table cell.
@@ -547,7 +547,7 @@ public:
         @return  The XAccessible interface of the specified cell. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >
-    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
+    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) SAL_OVERRIDE;
 
 protected:
     void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
@@ -585,7 +585,7 @@ protected:
         // calls AdjustRows or AdjustDataSource, synchron if the caller is running in the solar thread, else asynchron
 
 protected:
-    virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
+    virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
     void Construct();
     void ImplInitWindow( const InitWindowFacet _eInitWhat );
     DECL_LINK(OnDelete, void*);

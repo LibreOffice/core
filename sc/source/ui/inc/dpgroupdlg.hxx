@@ -69,8 +69,8 @@ public:
     virtual ~ScDPNumGroupEditHelper() {}
 
 private:
-    virtual bool        ImplGetValue( double& rfValue ) const;
-    virtual void        ImplSetValue( double fValue );
+    virtual bool        ImplGetValue( double& rfValue ) const SAL_OVERRIDE;
+    virtual void        ImplSetValue( double fValue ) SAL_OVERRIDE;
 
 private:
     ScDoubleField*      mpEdValue;
@@ -88,8 +88,8 @@ public:
     virtual ~ScDPDateGroupEditHelper() {}
 
 private:
-    virtual bool        ImplGetValue( double& rfValue ) const;
-    virtual void        ImplSetValue( double fValue );
+    virtual bool        ImplGetValue( double& rfValue ) const SAL_OVERRIDE;
+    virtual void        ImplSetValue( double fValue ) SAL_OVERRIDE;
 
 private:
     DateField*          mpEdValue;

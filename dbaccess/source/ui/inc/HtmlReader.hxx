@@ -38,10 +38,10 @@ namespace dbaui
         sal_Bool            m_bSDNum;
 
     protected:
-        virtual void        NextToken( int nToken ); // base class
-        virtual sal_Bool    CreateTable(int nToken);
+        virtual void        NextToken( int nToken ) SAL_OVERRIDE; // base class
+        virtual sal_Bool    CreateTable(int nToken) SAL_OVERRIDE;
         virtual TypeSelectionPageFactory
-                            getTypeSelectionPageFactory();
+                            getTypeSelectionPageFactory() SAL_OVERRIDE;
 
         void                TableDataOn(SvxCellHorJustify& eVal);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
@@ -67,8 +67,8 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual SvParserState CallParser();// base class
-        virtual void release();
+        virtual SvParserState CallParser() SAL_OVERRIDE;// base class
+        virtual void release() SAL_OVERRIDE;
         ///< @attention recovers only valid data if 1. CTOR has been used
     };
 

@@ -50,8 +50,8 @@ namespace avmedia
 
         protected:
 
-            void    update();
-            void    execute( const MediaItem& rItem );
+            void    update() SAL_OVERRIDE;
+            void    execute( const MediaItem& rItem ) SAL_OVERRIDE;
         };
 
 
@@ -67,12 +67,12 @@ namespace avmedia
 
         protected:
 
-            virtual void    MouseMove( const MouseEvent& rMEvt );
-            virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-            virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-            virtual void    KeyInput( const KeyEvent& rKEvt );
-            virtual void    KeyUp( const KeyEvent& rKEvt );
-            virtual void    Command( const CommandEvent& rCEvt );
+            virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+            virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+            virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
         };
 
         // ------------------.
@@ -113,23 +113,23 @@ namespace avmedia
         private:
 
             // Window
-            virtual void    MouseMove( const MouseEvent& rMEvt );
-            virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-            virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-            virtual void    KeyInput( const KeyEvent& rKEvt );
-            virtual void    KeyUp( const KeyEvent& rKEvt );
-            virtual void    Command( const CommandEvent& rCEvt );
-            virtual void    Resize();
-            virtual void    StateChanged( StateChangedType );
-            virtual void    Paint( const Rectangle& ); // const
-            virtual void    GetFocus();
+            virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+            virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+            virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+            virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+            virtual void    Resize() SAL_OVERRIDE;
+            virtual void    StateChanged( StateChangedType ) SAL_OVERRIDE;
+            virtual void    Paint( const Rectangle& ) SAL_OVERRIDE; // const
+            virtual void    GetFocus() SAL_OVERRIDE;
 
             // DropTargetHelper
-            virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-            virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+            virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+            virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
             // DragSourceHelper
-            virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+            virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
             bool    setZoom( ::com::sun::star::media::ZoomLevel eLevel );
             ::com::sun::star::media::ZoomLevel getZoom() const;

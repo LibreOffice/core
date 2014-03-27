@@ -85,7 +85,7 @@ class SwDateTimeFieldType : public SwValueFieldType
 public:
         SwDateTimeFieldType(SwDoc* pDoc);
 
-        virtual SwFieldType*    Copy() const;
+        virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
@@ -93,20 +93,20 @@ class SW_DLLPUBLIC SwDateTimeField : public SwValueField
         sal_uInt16              nSubType;
         long                nOffset;    // Offset in minutes.
 
-        virtual OUString    Expand() const;
-        virtual SwField*    Copy() const;
+        virtual OUString    Expand() const SAL_OVERRIDE;
+        virtual SwField*    Copy() const SAL_OVERRIDE;
 
 public:
         SwDateTimeField(SwDateTimeFieldType* pType, sal_uInt16 nSubType = DATEFLD,
                     sal_uLong nFmt = 0, sal_uInt16 nLng = 0);
 
-        virtual sal_uInt16          GetSubType() const;
-        virtual void            SetSubType(sal_uInt16 nSub);
+        virtual sal_uInt16          GetSubType() const SAL_OVERRIDE;
+        virtual void            SetSubType(sal_uInt16 nSub) SAL_OVERRIDE;
 
-        virtual double          GetValue() const;
+        virtual double          GetValue() const SAL_OVERRIDE;
 
-        virtual void            SetPar2(const OUString& rStr);
-        virtual OUString   GetPar2() const;
+        virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
+        virtual OUString   GetPar2() const SAL_OVERRIDE;
 
         inline sal_Bool             IsDate() const
                                 { return (nSubType & DATEFLD) != 0; }
@@ -119,8 +119,8 @@ public:
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
-        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
+        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const SAL_OVERRIDE;
+        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_INC_FLDDAT_HXX

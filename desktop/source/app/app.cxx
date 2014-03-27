@@ -1956,7 +1956,7 @@ class ExitTimer : public Timer
         SetTimeout(500);
         Start();
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         exit(42);
     }

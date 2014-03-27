@@ -107,57 +107,57 @@ public:
 
     virtual OUString SAL_CALL
         getResourceURL (void)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::util::URL SAL_CALL
         getFullResourceURL (void)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
         hasAnchor (void)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<
         css::drawing::framework::XResourceId> SAL_CALL
         getAnchor (void)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence<OUString> SAL_CALL
         getAnchorURLs (void)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL
         getResourceTypePrefix (void)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Int16 SAL_CALL
         compareTo (const css::uno::Reference<
             css::drawing::framework::XResourceId>& rxResourceId)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
         isBoundTo (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxResourceId,
             css::drawing::framework::AnchorBindingMode eMode)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL
         isBoundToURL (
             const OUString& rsAnchorURL,
             css::drawing::framework::AnchorBindingMode eMode)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<
         css::drawing::framework::XResourceId> SAL_CALL
         clone (void)
-        throw(css::uno::RuntimeException, std::exception);
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //===== XInitialization ===================================================
 
     void SAL_CALL initialize (
         const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     /** The set of URLs that consist of the resource URL at index 0 and the

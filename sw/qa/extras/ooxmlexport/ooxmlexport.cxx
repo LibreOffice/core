@@ -61,7 +61,7 @@ protected:
     /**
      * Blacklist handling
      */
-    bool mustTestImportOf(const char* filename) const {
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
         const char* aBlacklist[] = {
             "math-escape.docx",
             "math-mso2k7.docx",

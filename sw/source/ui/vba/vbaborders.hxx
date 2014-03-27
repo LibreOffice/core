@@ -31,24 +31,24 @@ class VbaPalette;
 class SwVbaBorders : public SwVbaBorders_BASE
 {
     // XEnumerationAccess
-    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
     SwVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, VbaPalette& rPalette );
     virtual ~SwVbaBorders() {}
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // SwVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL getShadow() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setShadow( sal_Bool _shadow ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL getShadow() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setShadow( sal_Bool _shadow ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBABORDERS_HXX

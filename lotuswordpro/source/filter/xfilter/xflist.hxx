@@ -90,7 +90,7 @@ public:
     /**
      * @descr   Output list object.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     virtual void    StartList(IXFStream *pStrm, sal_Bool bContinueNumber = sal_False);
 

@@ -97,13 +97,13 @@ public:
     virtual ~SwAccessiblePortionData();
 
     // SwPortionHandler methods
-    virtual void Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0);
-    virtual void Special(sal_uInt16 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0);
-    virtual void LineBreak(KSHORT nWidth);
-    virtual void Skip(sal_uInt16 nLength);
-    virtual void Finish();
+    virtual void Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) SAL_OVERRIDE;
+    virtual void Special(sal_uInt16 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) SAL_OVERRIDE;
+    virtual void LineBreak(KSHORT nWidth) SAL_OVERRIDE;
+    virtual void Skip(sal_uInt16 nLength) SAL_OVERRIDE;
+    virtual void Finish() SAL_OVERRIDE;
 
-    virtual void SetAttrFieldType( sal_uInt16 nAttrFldType );
+    virtual void SetAttrFieldType( sal_uInt16 nAttrFldType ) SAL_OVERRIDE;
     sal_Bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
     sal_Bool IsIndexInFootnode(sal_Int32 nIndex);
     sal_Bool IsInGrayPortion( sal_Int32 nPos );

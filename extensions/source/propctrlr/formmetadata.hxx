@@ -45,13 +45,13 @@ namespace pcr
 
     public:
         // IPropertyInfoService
-        virtual sal_Int32                      getPropertyId(const OUString& _rName) const;
-        virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const;
-        virtual OString                        getPropertyHelpId(sal_Int32 _nId) const;
-        virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const;
-        virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const;
-        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const;
-        virtual OUString                       getPropertyName( sal_Int32 _nPropId );
+        virtual sal_Int32                      getPropertyId(const OUString& _rName) const SAL_OVERRIDE;
+        virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const SAL_OVERRIDE;
+        virtual OString                        getPropertyHelpId(sal_Int32 _nId) const SAL_OVERRIDE;
+        virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const SAL_OVERRIDE;
+        virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const SAL_OVERRIDE;
+        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const SAL_OVERRIDE;
+        virtual OUString                       getPropertyName( sal_Int32 _nPropId ) SAL_OVERRIDE;
 
         virtual sal_Bool                isComposeable( const OUString& _rPropertyName ) const;
 
@@ -92,13 +92,13 @@ namespace pcr
     protected:
         // IPropertyEnumRepresentation implementqation
         virtual ::std::vector< OUString >
-                                    SAL_CALL getDescriptions() const;
-        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const;
-        virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const;
+                                    SAL_CALL getDescriptions() const SAL_OVERRIDE;
+        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
+        virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const SAL_OVERRIDE;
 
         // IReference implementqation
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     private:
         DefaultEnumRepresentation();                                                // never implemented

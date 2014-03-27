@@ -48,7 +48,7 @@ public:
 
     virtual ScAccessibleTextData* Clone() const = 0;
 
-    virtual void        Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ ) {}
+    virtual void        Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ ) SAL_OVERRIDE {}
 
     virtual SvxTextForwarder* GetTextForwarder() = 0;
     virtual SvxViewForwarder* GetViewForwarder() = 0;
@@ -77,11 +77,11 @@ public:
                             const ScAddress& rP)
                             : ScCellTextData(pDocShellP, rP) {}
     virtual             ~ScAccessibleCellBaseTextData() {}
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) { ScCellTextData::Notify(rBC, rHint); }
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE { ScCellTextData::Notify(rBC, rHint); }
 
-    virtual void                UpdateData() { ScCellTextData::UpdateData(); }
-    virtual void                SetDoUpdate(bool bValue) { ScCellTextData::SetDoUpdate(bValue); }
-    virtual bool                IsDirty() const { return ScCellTextData::IsDirty(); }
+    virtual void                UpdateData() SAL_OVERRIDE { ScCellTextData::UpdateData(); }
+    virtual void                SetDoUpdate(bool bValue) SAL_OVERRIDE { ScCellTextData::SetDoUpdate(bValue); }
+    virtual bool                IsDirty() const SAL_OVERRIDE { return ScCellTextData::IsDirty(); }
 };
 
 
@@ -96,17 +96,17 @@ public:
                             const ScAddress& rP, ScSplitPos eSplitPos, ScAccessibleCell* pAccCell);
     virtual             ~ScAccessibleCellTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
-    virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText);
+    virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText) SAL_OVERRIDE;
 private:
     ScViewForwarder* mpViewForwarder;
     ScEditViewForwarder* mpEditViewForwarder;
@@ -131,17 +131,17 @@ public:
     ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, bool isClone = false);
     virtual             ~ScAccessibleEditObjectTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
-    virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(bool /* bValue */) {  }
-    virtual bool                IsDirty() const { return false; }
+    virtual void                UpdateData() SAL_OVERRIDE {  }
+    virtual void                SetDoUpdate(bool /* bValue */) SAL_OVERRIDE {  }
+    virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
@@ -163,10 +163,10 @@ public:
                         ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin);
     virtual             ~ScAccessibleEditLineTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
     void Dispose();
     void TextChanged();
@@ -188,13 +188,13 @@ public:
                             const ScAddress& rP);
     virtual             ~ScAccessiblePreviewCellTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) SAL_OVERRIDE { return NULL; }
 
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -217,13 +217,13 @@ public:
                             const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader);
     virtual             ~ScAccessiblePreviewHeaderCellTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) SAL_OVERRIDE { return NULL; }
 
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -249,17 +249,17 @@ public:
                             const EditTextObject* pEditObj, bool bHeader, SvxAdjust eAdjust);
     virtual             ~ScAccessibleHeaderTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) SAL_OVERRIDE { return NULL; }
 
-    virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(bool /* bValue */) {  }
-    virtual bool                IsDirty() const { return false; }
+    virtual void                UpdateData() SAL_OVERRIDE {  }
+    virtual void                SetDoUpdate(bool /* bValue */) SAL_OVERRIDE {  }
+    virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -282,17 +282,17 @@ public:
                             const OUString& sText, const ScAddress& aCellPos, bool bMarkNote);
     virtual             ~ScAccessibleNoteTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder* GetTextForwarder();
-    virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) { return NULL; }
+    virtual SvxTextForwarder* GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) SAL_OVERRIDE { return NULL; }
 
-    virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(bool /* bValue */) {  }
-    virtual bool            IsDirty() const { return false; }
+    virtual void                UpdateData() SAL_OVERRIDE {  }
+    virtual void                SetDoUpdate(bool /* bValue */) SAL_OVERRIDE {  }
+    virtual bool            IsDirty() const SAL_OVERRIDE { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -331,17 +331,17 @@ public:
                                     const Size& rCellSize );
     virtual                     ~ScAccessibleCsvTextData();
 
-    virtual ScAccessibleTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const SAL_OVERRIDE;
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual SvxViewForwarder*   GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate );
+    virtual SvxTextForwarder*   GetTextForwarder() SAL_OVERRIDE;
+    virtual SvxViewForwarder*   GetViewForwarder() SAL_OVERRIDE;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
-    virtual void                UpdateData() {}
-    virtual void                SetDoUpdate( bool /* bValue */ ) {}
-    virtual bool                IsDirty() const { return false; }
+    virtual void                UpdateData() SAL_OVERRIDE {}
+    virtual void                SetDoUpdate( bool /* bValue */ ) SAL_OVERRIDE {}
+    virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 };
 
 

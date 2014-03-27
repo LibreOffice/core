@@ -38,7 +38,7 @@ public:
 
     void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
 
-    virtual sal_Bool isAnythingToDraw();
+    virtual sal_Bool isAnythingToDraw() SAL_OVERRIDE;
 
     virtual ~VPolarAxis();
 

@@ -90,11 +90,11 @@ public:
     void Hide ();
 
 protected:
-    virtual bool Docking( const Point& rPos, Rectangle& rRect );
-    virtual void     EndDocking( const Rectangle& rRect, bool bFloatMode );
-    virtual void     ToggleFloatingMode();
-    virtual bool PrepareToggleFloatingMode();
-    virtual void     StartDocking();
+    virtual bool Docking( const Point& rPos, Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void     EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
+    virtual void     ToggleFloatingMode() SAL_OVERRIDE;
+    virtual bool PrepareToggleFloatingMode() SAL_OVERRIDE;
+    virtual void     StartDocking() SAL_OVERRIDE;
 
 private:
     // the position and the size of the floating window
@@ -119,11 +119,11 @@ private:
 class TabBar : public ::TabBar
 {
 protected:
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual long    AllowRenaming();
-    virtual void    EndRenaming();
+    virtual long    AllowRenaming() SAL_OVERRIDE;
+    virtual void    EndRenaming() SAL_OVERRIDE;
 
 public:
     TabBar (Window* pParent);
@@ -181,7 +181,7 @@ public:
     virtual void    ExecuteCommand (SfxRequest&);
     virtual void    ExecuteGlobal (SfxRequest&);
     virtual void    GetState (SfxItemSet&) = 0;
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     virtual void    StoreData();
     virtual void    UpdateData();

@@ -540,11 +540,11 @@ class VmlCommentExporter : public VMLExport
 public:
                         VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, Rectangle &aFrom, Rectangle &aTo );
 protected:
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect ) SAL_OVERRIDE;
     using VMLExport::StartShape;
-    virtual sal_Int32   StartShape();
+    virtual sal_Int32   StartShape() SAL_OVERRIDE;
     using VMLExport::EndShape;
-    virtual void        EndShape( sal_Int32 nShapeElement );
+    virtual void        EndShape( sal_Int32 nShapeElement ) SAL_OVERRIDE;
 };
 
 

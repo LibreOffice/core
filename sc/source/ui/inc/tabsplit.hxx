@@ -32,10 +32,10 @@ private:
     bool            bFixed;
 
 protected:
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Splitting( Point& rSplitPos );
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Splitting( Point& rSplitPos ) SAL_OVERRIDE;
 
 public:
                     ScTabSplitter( Window* pParent, WinBits nWinStyle,
@@ -43,7 +43,7 @@ public:
                     ~ScTabSplitter();
 
     void            SetFixed(bool bSet);
-    virtual void    Paint( const Rectangle& rPaintRect );
+    virtual void    Paint( const Rectangle& rPaintRect ) SAL_OVERRIDE;
 };
 
 

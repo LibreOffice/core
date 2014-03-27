@@ -115,11 +115,11 @@ private:
 
 public:
     //inline sal_uInt8* GetBuffer(){return m_DataBuffer;}
-    void Read();
+    void Read() SAL_OVERRIDE;
     //Added by  for XFConvert refactor, 03/31/2005
-    virtual void XFConvert (XFContentContainer* pCont);
+    virtual void XFConvert (XFContentContainer* pCont) SAL_OVERRIDE;
     //End of Add
-    void RegisterStyle();
+    void RegisterStyle() SAL_OVERRIDE;
 
     // add by , 03/25/2005
     void CreateDrawObjects();
@@ -128,7 +128,7 @@ public:
     sal_uInt32 GetRawGrafData(sal_uInt8*& pGrafData);
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }
-    void GetGrafOrgSize(double& rWidth, double& rHeight);
+    void GetGrafOrgSize(double& rWidth, double& rHeight) SAL_OVERRIDE;
     // end add
 
     OUString GetWatermarkName(){ return m_WatermarkName;}

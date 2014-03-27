@@ -52,9 +52,9 @@ public:
                         ExcelToSc( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                 bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
+                                 bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
@@ -129,16 +129,16 @@ public:
                         ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                           const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
+                                           const OUString& rUrl, const ::std::vector<OUString>& rTabNames ) SAL_OVERRIDE;
 
     static inline bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
 
-    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
+    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen ) SAL_OVERRIDE;
 };
 
 

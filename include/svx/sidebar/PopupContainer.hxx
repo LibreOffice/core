@@ -36,7 +36,7 @@ public:
     PopupContainer (Window* pParent);
     virtual ~PopupContainer (void);
 
-    virtual bool Notify (NotifyEvent& rNEvt);
+    virtual bool Notify (NotifyEvent& rNEvt) SAL_OVERRIDE;
 };
 
 

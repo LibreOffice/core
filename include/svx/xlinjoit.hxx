@@ -36,17 +36,17 @@ public:
                             XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint = com::sun::star::drawing::LineJoint_ROUND );
                             XLineJointItem( SvStream& rIn );
 
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const SAL_OVERRIDE;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const;
+                                    OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    virtual sal_uInt16                 GetValueCount() const;
+    virtual sal_uInt16                 GetValueCount() const SAL_OVERRIDE;
     com::sun::star::drawing::LineJoint GetValue() const { return (com::sun::star::drawing::LineJoint) SfxEnumItem::GetValue(); }
 };
 

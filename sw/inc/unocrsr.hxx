@@ -34,8 +34,8 @@ public:
 protected:
 
     virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
-        sal_Bool & io_rbLeft, sal_Bool bVisualAllowed, sal_Bool bInsertCrsr);
-    virtual void DoSetBidiLevelUpDown();
+        sal_Bool & io_rbLeft, sal_Bool bVisualAllowed, sal_Bool bInsertCrsr) SAL_OVERRIDE;
+    virtual void DoSetBidiLevelUpDown() SAL_OVERRIDE;
 
 public:
 
@@ -44,19 +44,19 @@ public:
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
 
-    virtual bool IsReadOnlyAvailable() const;
+    virtual bool IsReadOnlyAvailable() const SAL_OVERRIDE;
 
     sal_Bool IsRemainInSection() const          { return bRemainInSection; }
     void SetRemainInSection( sal_Bool bFlag )   { bRemainInSection = bFlag; }
 
-    virtual sal_Bool IsSkipOverProtectSections() const
+    virtual sal_Bool IsSkipOverProtectSections() const SAL_OVERRIDE
                                     { return bSkipOverProtectSections; }
     void SetSkipOverProtectSections( sal_Bool bFlag )
                                     { bSkipOverProtectSections = bFlag; }
 
-    virtual sal_Bool IsSkipOverHiddenSections() const
+    virtual sal_Bool IsSkipOverHiddenSections() const SAL_OVERRIDE
                                     { return bSkipOverHiddenSections; }
     void SetSkipOverHiddenSections( sal_Bool bFlag )
                                     { bSkipOverHiddenSections = bFlag; }
@@ -85,9 +85,9 @@ public:
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
 
-    virtual SwUnoTableCrsr * Clone() const;
+    virtual SwUnoTableCrsr * Clone() const SAL_OVERRIDE;
 
     void MakeBoxSels();
 

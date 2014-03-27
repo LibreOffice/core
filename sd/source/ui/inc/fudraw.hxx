@@ -37,14 +37,14 @@ class FuDraw
 public:
     TYPEINFO_OVERRIDE();
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
     virtual void ForcePointer(const MouseEvent* pMEvt = NULL);
 
@@ -61,7 +61,7 @@ public:
 
         @returns true if a active function was aborted
     */
-    virtual bool cancel();
+    virtual bool cancel() SAL_OVERRIDE;
 
 protected:
     FuDraw (ViewShell* pViewSh,

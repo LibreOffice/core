@@ -150,10 +150,10 @@ public:
     LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     ~LwpPara();
 public:
-    void Read();
-    void RegisterStyle();
-    void Parse(IXFStream* pOutputStream);
-    void XFConvert(XFContentContainer* pCont);
+    void Read() SAL_OVERRIDE;
+    void RegisterStyle() SAL_OVERRIDE;
+    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     void Release();
 
     LwpPara* GetParent();

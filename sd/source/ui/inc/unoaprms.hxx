@@ -132,8 +132,8 @@ public:
             { nOldPresOrder = nTheOldPresOrder; nNewPresOrder = nTheNewPresOrder; }
 
     virtual ~SdAnimationPrmsUndoAction();
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNOAPRMS_HXX

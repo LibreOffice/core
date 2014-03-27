@@ -36,7 +36,7 @@ class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandard
     long                mnMaxVertical;
     long                mnMaxHorizontal;
 protected:
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
 
 public:
     SvxSplitTableDlg(Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
@@ -44,11 +44,11 @@ public:
 
     DECL_LINK( ClickHdl, Button * );
 
-    virtual bool IsHorizontal() const;
-    virtual bool IsProportional() const;
-    virtual long GetCount() const;
+    virtual bool IsHorizontal() const SAL_OVERRIDE;
+    virtual bool IsProportional() const SAL_OVERRIDE;
+    virtual long GetCount() const SAL_OVERRIDE;
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 #endif

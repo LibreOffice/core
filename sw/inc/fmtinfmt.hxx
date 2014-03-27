@@ -51,18 +51,18 @@ public:
     TYPEINFO_OVERRIDE();
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper* pIntl = 0 ) const;
+                                    const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     const SwTxtINetFmt* GetTxtINetFmt() const
     {

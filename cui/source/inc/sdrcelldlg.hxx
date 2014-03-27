@@ -43,7 +43,7 @@ protected:
 public:
     SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel );
 
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 };
 

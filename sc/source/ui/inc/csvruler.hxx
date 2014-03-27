@@ -68,7 +68,7 @@ public:
     virtual void                setPosSizePixel(
                                     long nX, long nY,
                                     long nWidth, long nHeight,
-                                    sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                    sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
 
     /** Apply current layout data to the ruler. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );
@@ -124,16 +124,16 @@ private:
 
     // event handling ---------------------------------------------------------
 protected:
-    virtual void                Resize();
-    virtual void                GetFocus();
-    virtual void                LoseFocus();
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual void                GetFocus() SAL_OVERRIDE;
+    virtual void                LoseFocus() SAL_OVERRIDE;
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void                MouseMove( const MouseEvent& rMEvt );
-    virtual void                Tracking( const TrackingEvent& rTEvt );
+    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void                MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void                Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
-    virtual void                KeyInput( const KeyEvent& rKEvt );
+    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
 private:
     /** Starts tracking at the specified position. */
@@ -146,7 +146,7 @@ private:
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( const Rectangle& );
+    virtual void                Paint( const Rectangle& ) SAL_OVERRIDE;
 
 public:
     /** Redraws the entire ruler. */
@@ -181,7 +181,7 @@ private:
     // accessibility ----------------------------------------------------------
 protected:
     /** Creates a new accessible object. */
-    virtual ScAccessibleCsvControl* ImplCreateAccessible();
+    virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
 
 

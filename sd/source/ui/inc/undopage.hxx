@@ -101,8 +101,8 @@ public:
         {}
     virtual ~SdPageFormatUndoAction();
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -130,8 +130,8 @@ public:
         {}
     virtual ~SdPageLRUndoAction();
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 };
 
 /************************************************************************/
@@ -159,8 +159,8 @@ public:
         {}
     virtual ~SdPageULUndoAction();
 
-    virtual void Undo();
-    virtual void Redo();
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
 };
 
 

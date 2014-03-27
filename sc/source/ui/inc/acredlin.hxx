@@ -213,10 +213,10 @@ public:
 
     void            ReInit(ScViewData* ptrViewData);
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void            Initialize (SfxChildWinInfo* pInfo);
-    virtual void    FillInfo(SfxChildWinInfo&) const;
+    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 
 };
 

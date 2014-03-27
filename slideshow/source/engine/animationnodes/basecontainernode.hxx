@@ -47,17 +47,17 @@ public:
 
 protected:
     // overrides from BaseNode
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    virtual bool init_st();
+    virtual bool init_st() SAL_OVERRIDE;
     virtual bool init_children();
-    virtual void deactivate_st( NodeState eDestState );
-    virtual bool hasPendingAnimation() const;
+    virtual void deactivate_st( NodeState eDestState ) SAL_OVERRIDE;
+    virtual bool hasPendingAnimation() const SAL_OVERRIDE;
     // force to be implemented by derived class:
-    virtual void activate_st() = 0;
+    virtual void activate_st() SAL_OVERRIDE = 0;
     virtual void notifyDeactivating(
-        AnimationNodeSharedPtr const& rNotifier ) = 0;
+        AnimationNodeSharedPtr const& rNotifier ) SAL_OVERRIDE = 0;
 
 protected:
     bool isDurationIndefinite() const { return mbDurationIndefinite; }

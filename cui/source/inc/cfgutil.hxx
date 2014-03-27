@@ -108,7 +108,7 @@ class SfxConfigFunctionListBox : public SvTreeListBox
     SfxStylesInfo_Impl*  pStylesInfo;
 
     DECL_LINK( TimerHdl, Timer* );
-    virtual void  MouseMove( const MouseEvent& rMEvt );
+    virtual void  MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:
     SfxConfigFunctionListBox(Window*, WinBits nStyle);
@@ -159,7 +159,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
     SfxStylesInfo_Impl* pStylesInfo;
 
 protected:
-    virtual void        RequestingChildren( SvTreeListEntry *pEntry);
+    virtual void        RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
     virtual sal_Bool        Expand( SvTreeListEntry* pParent );
 
 public:

@@ -70,7 +70,7 @@ namespace dbaui
 
     private:
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
     };
 
     // RowsetFilterDialog
@@ -89,12 +89,12 @@ namespace dbaui
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
-        );
+        ) SAL_OVERRIDE;
 
         // OGenericUnoDialog overridables
-        virtual void executedDialog( sal_Int16 _nExecutionResult );
+        virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     };
 
@@ -114,12 +114,12 @@ namespace dbaui
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns
-        );
+        ) SAL_OVERRIDE;
 
         // OGenericUnoDialog overridables
-        virtual void executedDialog( sal_Int16 _nExecutionResult );
+        virtual void executedDialog( sal_Int16 _nExecutionResult ) SAL_OVERRIDE;
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception);
+            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 }   // namespace dbaui

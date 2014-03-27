@@ -107,9 +107,9 @@ public:
     PresetPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl );
     ~PresetPropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& rPresetId );
-    virtual Control* getControl();
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId ) SAL_OVERRIDE;
+    virtual Control* getControl() SAL_OVERRIDE;
 
 private:
     std::map< sal_uInt16, OUString > maPropertyValues;
@@ -194,9 +194,9 @@ public:
     ColorPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     ~ColorPropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  );
-    virtual Control* getControl();
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
+    virtual Control* getControl() SAL_OVERRIDE;
 
 private:
     ColorListBox* mpControl;
@@ -278,10 +278,10 @@ public:
     FontPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~FontPropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  );
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
 
-    virtual Control* getControl();
+    virtual Control* getControl() SAL_OVERRIDE;
 
 private:
     FontNameBox* mpControl;
@@ -363,8 +363,8 @@ public:
     DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
     ~DropdownMenuBox();
 
-    void Resize();
-    bool PreNotify( NotifyEvent& rNEvt );
+    void Resize() SAL_OVERRIDE;
+    bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void SetMenuSelectHdl( const Link& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
@@ -447,10 +447,10 @@ public:
     CharHeightPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     virtual ~CharHeightPropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& );
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
 
-    virtual Control* getControl();
+    virtual Control* getControl() SAL_OVERRIDE;
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
 
@@ -538,10 +538,10 @@ public:
     TransparencyPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     ~TransparencyPropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  );
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
 
-    virtual Control* getControl();
+    virtual Control* getControl() SAL_OVERRIDE;
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
     DECL_LINK(implModifyHdl, void *);
@@ -660,10 +660,10 @@ public:
     RotationPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     ~RotationPropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& );
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
 
-    virtual Control* getControl();
+    virtual Control* getControl() SAL_OVERRIDE;
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
     DECL_LINK(implModifyHdl, void *);
@@ -801,10 +801,10 @@ public:
     ScalePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     ~ScalePropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& );
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
 
-    virtual Control* getControl();
+    virtual Control* getControl() SAL_OVERRIDE;
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
     DECL_LINK(implModifyHdl, void *);
@@ -980,10 +980,10 @@ public:
     FontStylePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
     ~FontStylePropertyBox();
 
-    virtual Any getValue();
-    virtual void setValue( const Any& rValue, const OUString& );
+    virtual Any getValue() SAL_OVERRIDE;
+    virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
 
-    virtual Control* getControl();
+    virtual Control* getControl() SAL_OVERRIDE;
 
     DECL_LINK( implMenuSelectHdl, MenuButton* );
 

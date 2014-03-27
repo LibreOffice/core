@@ -32,12 +32,12 @@ class ScEditFieldObj_Cell : public CalcUnoApiTest, apitest::XTextField, apitest:
 public:
     ScEditFieldObj_Cell();
 
-    virtual void setUp();
-    virtual void tearDown();
-    virtual uno::Reference<uno::XInterface> init();
-    virtual uno::Reference<text::XTextContent> getTextContent();
-    virtual uno::Reference<text::XTextRange> getTextRange();
-    virtual bool isAttachSupported() { return true; }
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+    virtual uno::Reference<uno::XInterface> init() SAL_OVERRIDE;
+    virtual uno::Reference<text::XTextContent> getTextContent() SAL_OVERRIDE;
+    virtual uno::Reference<text::XTextRange> getTextRange() SAL_OVERRIDE;
+    virtual bool isAttachSupported() SAL_OVERRIDE { return true; }
 
     void testEditFieldProperties();
 

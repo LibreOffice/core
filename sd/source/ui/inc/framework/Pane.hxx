@@ -79,7 +79,7 @@ public:
         throw ();
     virtual ~Pane (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
 
@@ -96,46 +96,46 @@ public:
     */
     virtual cssu::Reference<css::awt::XWindow>
         SAL_CALL getWindow (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual cssu::Reference<css::rendering::XCanvas>
         SAL_CALL getCanvas (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //----- XPane2 -------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL isVisible (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setAccessible (
         const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
         SAL_CALL getResourceId (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** For the typical pane it makes no sense to be dislayed without a
         view.  Therefore this default implementation returns always <TRUE/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException, std::exception);
+        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 protected:

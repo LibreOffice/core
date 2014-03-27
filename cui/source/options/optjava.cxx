@@ -120,7 +120,7 @@ public:
         aStaticTabs[4] = aStaticTabs[3] + nVersionWidth;
         SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
     }
-    virtual void Resize()
+    virtual void Resize() SAL_OVERRIDE
     {
         svx::SvxRadioButtonListBox::Resize();
         setColSizes();

@@ -41,8 +41,8 @@ public:
     SwDDEFieldType* GetDDEFldType();
     inline const SwDDEFieldType* GetDDEFldType() const;
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual void SwClientNotify( const SwModify&, const SfxHint& );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify&, const SfxHint& ) SAL_OVERRIDE;
 };
 
 // ----------- Inlines -----------------------------

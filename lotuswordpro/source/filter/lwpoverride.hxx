@@ -111,9 +111,9 @@ class LwpTextLanguageOverride : public LwpOverride
 public:
     LwpTextLanguageOverride() : m_nLanguage(0) {}
 
-    virtual LwpTextLanguageOverride* clone() const;
+    virtual LwpTextLanguageOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
 protected:
     LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther);
@@ -130,9 +130,9 @@ class LwpTextAttributeOverride : public LwpOverride
 public:
     LwpTextAttributeOverride() : m_nHideLevels(0), m_nBaseLineOffset(0) {}
 
-    virtual LwpTextAttributeOverride* clone() const;
+    virtual LwpTextAttributeOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     inline sal_uInt16 GetHideLevels() const;
 
@@ -162,9 +162,9 @@ class LwpKinsokuOptsOverride : public LwpOverride
 public:
     LwpKinsokuOptsOverride() : m_nLevels(0) {}
 
-    virtual LwpKinsokuOptsOverride* clone() const;
+    virtual LwpKinsokuOptsOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
 protected:
     LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther);
@@ -181,9 +181,9 @@ class LwpBulletOverride : public LwpOverride
 public:
     LwpBulletOverride() {m_bIsNull = sal_True;}
 
-    virtual LwpBulletOverride* clone() const;
+    virtual LwpBulletOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     inline LwpObjectID GetSilverBullet() const;
 
@@ -281,9 +281,9 @@ class LwpAlignmentOverride : public LwpOverride
 public:
     LwpAlignmentOverride() : m_nAlignType(ALIGN_LEFT), m_nPosition(0), m_nAlignChar(0){}
 
-    virtual LwpAlignmentOverride* clone() const;
+    virtual LwpAlignmentOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     enum AlignType
     {
@@ -325,9 +325,9 @@ class LwpSpacingCommonOverride : public LwpOverride
 public:
     LwpSpacingCommonOverride() : m_nSpacingType(SPACING_NONE), m_nAmount(0), m_nMultiple(65536){}
 
-    virtual LwpSpacingCommonOverride* clone() const;
+    virtual LwpSpacingCommonOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     enum SpacingType
     {
@@ -370,9 +370,9 @@ public:
     LwpSpacingOverride();
     virtual ~LwpSpacingOverride();
 
-    virtual LwpSpacingOverride* clone() const;
+    virtual LwpSpacingOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     void Override(LwpSpacingOverride* other);
 
@@ -399,9 +399,9 @@ class LwpIndentOverride : public LwpOverride
 public:
     LwpIndentOverride() : m_nAll(0), m_nFirst(0), m_nRest(0), m_nRight(0) {}
 
-    virtual LwpIndentOverride* clone() const;
+    virtual LwpIndentOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
     enum
     {
@@ -480,9 +480,9 @@ public:
 
     virtual ~LwpAmikakeOverride();
 
-    virtual LwpAmikakeOverride* clone() const;
+    virtual LwpAmikakeOverride* clone() const SAL_OVERRIDE;
 
-    void Read(LwpObjectStream* pStrm);
+    void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
     enum
     {
         AMIKAKE_NONE        = 0,

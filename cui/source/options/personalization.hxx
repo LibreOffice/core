@@ -32,10 +32,10 @@ public:
     static SfxTabPage* Create( Window *pParent, const SfxItemSet &rSet );
 
     /// Apply the settings ([OK] button).
-    virtual bool FillItemSet( SfxItemSet &rSet );
+    virtual bool FillItemSet( SfxItemSet &rSet ) SAL_OVERRIDE;
 
     /// Reset to default settings ([Revert] button).
-    virtual void Reset( const SfxItemSet &rSet );
+    virtual void Reset( const SfxItemSet &rSet ) SAL_OVERRIDE;
 
 private:
     /// Handle the Persona selection

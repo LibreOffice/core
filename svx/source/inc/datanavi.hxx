@@ -125,11 +125,11 @@ namespace svxform
         DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId );
         ~DataTreeListBox();
 
-        virtual PopupMenu*      CreateContextMenu( void );
-        virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry );
-        virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
-        virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual PopupMenu*      CreateContextMenu( void ) SAL_OVERRIDE;
+        virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) SAL_OVERRIDE;
+        virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
         void                    DeleteAndClear();
         void                    RemoveEntry( SvTreeListEntry* _pEntry );
@@ -267,13 +267,13 @@ namespace svxform
         bool                        RemoveEntry();
 
     protected:
-        virtual bool                Notify( NotifyEvent& rNEvt );
+        virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     public:
         XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
         ~XFormsPage();
 
-        virtual void                Resize();
+        virtual void                Resize() SAL_OVERRIDE;
 
         inline bool                 HasModel() const { return m_bHasModel; }
         OUString                    SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
@@ -353,7 +353,7 @@ namespace svxform
         sal_uInt16                      GetNewPageId() const;
 
     protected:
-        virtual void                Resize();
+        virtual void                Resize() SAL_OVERRIDE;
 
     public:
         DataNavigatorWindow( Window* pParent, SfxBindings* pBindings );
@@ -377,11 +377,11 @@ namespace svxform
         DataNavigatorWindow         m_aDataWin;
 
     protected:
-        virtual void                Resize();
-        virtual bool            Close();
-        virtual void                GetFocus();
-        virtual Size                CalcDockingSize( SfxChildAlignment );
-        virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+        virtual void                Resize() SAL_OVERRIDE;
+        virtual bool            Close() SAL_OVERRIDE;
+        virtual void                GetFocus() SAL_OVERRIDE;
+        virtual Size                CalcDockingSize( SfxChildAlignment ) SAL_OVERRIDE;
+        virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
 
     public:
         DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, Window* pParent );
@@ -392,7 +392,7 @@ namespace svxform
 
         void                        Update( FmFormShell* pFormShell );
         void                        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                                  const SfxPoolItem* pState );
+                                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
     };
 
 

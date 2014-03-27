@@ -48,7 +48,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
     virtual ~OReportPage();
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 public:
     TYPEINFO_OVERRIDE();
 
@@ -57,11 +57,11 @@ public:
                 ,bool bMasterPage = false );
 
 
-    virtual SdrPage* Clone() const;
+    virtual SdrPage* Clone() const SAL_OVERRIDE;
     using SdrPage::Clone;
 
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason);
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
+    virtual void NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
 
     /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component

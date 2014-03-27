@@ -35,12 +35,12 @@ public:
     TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
 inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(sal_Bool bInP) const

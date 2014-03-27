@@ -208,7 +208,7 @@ public:
 
     virtual                 ~ImportExcel( void );
 
-    virtual FltError        Read( void );
+    virtual FltError        Read( void ) SAL_OVERRIDE;
 };
 
 #endif

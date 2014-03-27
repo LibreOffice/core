@@ -62,9 +62,9 @@ protected:
     DlgEdObj(const OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
     using SfxListener::StartListening;
     void StartListening();
@@ -89,19 +89,19 @@ public:
     TYPEINFO_OVERRIDE();
 
     virtual ~DlgEdObj();
-    virtual void SetPage(SdrPage* pNewPage);
+    virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
 
     virtual void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     virtual DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual sal_uInt32 GetObjInventor() const;
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
 
-    virtual DlgEdObj*   Clone() const;                                          // not working yet
+    virtual DlgEdObj*   Clone() const SAL_OVERRIDE;                                          // not working yet
     virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support
-    virtual SdrObject* getFullDragClone() const;
+    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
 
     bool supportsService( OUString const & serviceName ) const;
     virtual OUString GetDefaultName() const;
@@ -128,7 +128,7 @@ public:
     virtual void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual void SetLayer(SdrLayerID nLayer);
+    virtual void SetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
     bool MakeDataAware( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 };
 
@@ -152,9 +152,9 @@ private:
     explicit DlgEdForm (DlgEditor&);
 
 protected:
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -167,12 +167,12 @@ public:
     virtual void RemoveChild( DlgEdObj* pDlgEdObj );
     virtual std::vector<DlgEdObj*> const& GetChildren() const { return pChildren; }
 
-    virtual void UpdateStep();
+    virtual void UpdateStep() SAL_OVERRIDE;
 
-    virtual void SetRectFromProps();
-    virtual void SetPropsFromRect();
+    virtual void SetRectFromProps() SAL_OVERRIDE;
+    virtual void SetPropsFromRect() SAL_OVERRIDE;
 
-    virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
+    virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) SAL_OVERRIDE;
 
     virtual void UpdateTabIndices();
     virtual void UpdateTabOrder();

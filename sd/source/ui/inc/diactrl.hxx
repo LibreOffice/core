@@ -38,7 +38,7 @@ class SdPagesField : public SvxMetricField
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 protected:
-    virtual void    Modify();
+    virtual void    Modify() SAL_OVERRIDE;
 
 public:
                     SdPagesField( Window* pParent,
@@ -57,8 +57,8 @@ class SdTbxCtlDiaPages : public SfxToolBoxControl
 {
 public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 
     SFX_DECL_TOOLBOX_CONTROL();
 

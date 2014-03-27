@@ -51,14 +51,14 @@ namespace dbaui
         void ImplInitSettings();
     protected:
         // Window
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     public:
         OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
         virtual ~OAppBorderWindow();
 
         // window overloads
-        virtual void GetFocus();
-        virtual void Resize();
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void Resize() SAL_OVERRIDE;
 
         OApplicationView*       getView() const;
         OApplicationSwapWindow* getPanel() const;
@@ -89,13 +89,13 @@ namespace dbaui
     protected:
 
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
 
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
         // Window
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     public:
         OApplicationView(   Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
@@ -111,20 +111,20 @@ namespace dbaui
         void    setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
 
         // window overloads
-        virtual bool PreNotify( NotifyEvent& rNEvt );
-        virtual void GetFocus();
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
 
         inline IApplicationController&                  getAppController() const { return m_rAppController; }
         inline const ::com::sun::star::lang::Locale&    getLocale() const { return m_aLocale;}
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed();
-        virtual sal_Bool isCopyAllowed();
-        virtual sal_Bool isPasteAllowed();
-        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
-        virtual void copy();
-        virtual void cut();
-        virtual void paste();
+        virtual sal_Bool isCutAllowed() SAL_OVERRIDE;
+        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE;
+        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE;
+        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        virtual void copy() SAL_OVERRIDE;
+        virtual void cut() SAL_OVERRIDE;
+        virtual void paste() SAL_OVERRIDE;
 
         /// get the left panel
         inline OApplicationSwapWindow*  getPanel()      const { return m_pWin->getPanel(); }

@@ -34,12 +34,12 @@ public:
 
     void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void Select( );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Select( ) SAL_OVERRIDE;
 
-    virtual void ShowAll( bool bShow );
-    virtual bool Contains( const Point &rDocPt ) const;
+    virtual void ShowAll( bool bShow ) SAL_OVERRIDE;
+    virtual bool Contains( const Point &rDocPt ) const SAL_OVERRIDE;
 
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );
@@ -47,7 +47,7 @@ public:
 
     void ExecuteCommand(sal_uInt16 nSlot);
 
-    void SetReadonly( bool bReadonly );
+    void SetReadonly( bool bReadonly ) SAL_OVERRIDE;
 
 private:
     DECL_LINK( FadeHandler, void * );

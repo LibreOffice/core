@@ -328,13 +328,13 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     sal_Bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
     void    LaunchOLEObj( long nVerb = 0 );             // start server
-    virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
+    virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset ) SAL_OVERRIDE;
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0,
-                                  const bool bNoTxtFrmPrtAreaChanged = false );
+                                  const bool bNoTxtFrmPrtAreaChanged = false ) SAL_OVERRIDE;
     virtual void ConnectObj( svt::EmbeddedObjectRef&  xIPObj, const SwRect &rPrt,
-                             const SwRect &rFrm );
+                             const SwRect &rFrm ) SAL_OVERRIDE;
 
     // styles and formats
 
@@ -394,7 +394,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, OString* pWindowState = 0);
 
     //"Handler" for changes at DrawView - for controls.
-    virtual void DrawSelChanged( );
+    virtual void DrawSelChanged( ) SAL_OVERRIDE;
 
     // jump to bookmark and set the "selctions-flags" correctly again
     sal_Bool GotoMark( const ::sw::mark::IMark* const pMark );
@@ -435,8 +435,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const sal_uInt16 nAction );
 
-    virtual void ApplyViewOptions( const SwViewOption &rOpt );
-    virtual void SetReadonlyOption( sal_Bool bSet );
+    virtual void ApplyViewOptions( const SwViewOption &rOpt ) SAL_OVERRIDE;
+    virtual void SetReadonlyOption( sal_Bool bSet ) SAL_OVERRIDE;
 
     // automatic update of styles
     void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);
@@ -471,7 +471,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
-    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );
+    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) SAL_OVERRIDE;
 
 private:
 

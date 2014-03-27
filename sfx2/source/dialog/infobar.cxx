@@ -34,7 +34,7 @@ namespace
 
             ~SfxCloseButton( ) { }
 
-            virtual void Paint( const Rectangle& rRect );
+            virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     };
 
     void SfxCloseButton::Paint( const Rectangle& )

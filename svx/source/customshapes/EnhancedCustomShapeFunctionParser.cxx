@@ -101,19 +101,19 @@ public:
         maValue( rValue )
     {
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
         return maValue;
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return true;
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return FUNC_CONST;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
         Fraction aFract( maValue );
@@ -150,20 +150,20 @@ public:
 
     {
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
         OSL_TRACE("  $%d --> %f (angle: %f)", mnIndex, mrCustoShape.GetAdjustValueAsDouble( mnIndex ), 180.0*mrCustoShape.GetAdjustValueAsDouble( mnIndex )/10800000.0);
         return mrCustoShape.GetAdjustValueAsDouble( mnIndex );
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return false;
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return ENUM_FUNC_ADJUSTMENT;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::ADJUSTMENT;
@@ -184,19 +184,19 @@ public:
         , mrCustoShape( rCustoShape )
     {
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
         return mrCustoShape.GetEquationValueAsDouble( mnIndex );
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return false;
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return ENUM_FUNC_EQUATION;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -241,7 +241,7 @@ public:
         }
         return rCustoShape.GetEnumFunc( eF );
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
 #if OSL_DEBUG_LEVEL > 1
         const char *funcName;
@@ -268,15 +268,15 @@ public:
 
         return getValue( mrCustoShape, meFunct );
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return false;
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
 
@@ -344,19 +344,19 @@ public:
         }
         return fRet;
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
         return getValue( meFunct, mpArg );
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return mpArg->isConstant();
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
@@ -515,19 +515,19 @@ public:
         }
         return fRet;
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
         return getValue( meFunct, mpFirstArg, mpSecondArg );
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return mpFirstArg->isConstant() && mpSecondArg->isConstant();
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
@@ -722,22 +722,22 @@ public:
         mpThirdArg(  rThirdArg )
     {
     }
-    virtual bool isConstant() const
+    virtual bool isConstant() const SAL_OVERRIDE
     {
         return
             mpFirstArg->isConstant() &&
             mpSecondArg->isConstant() &&
             mpThirdArg->isConstant();
     }
-    virtual double operator()() const
+    virtual double operator()() const SAL_OVERRIDE
     {
         return (*mpFirstArg)() > 0 ? (*mpSecondArg)() : (*mpThirdArg)();
     }
-    virtual ExpressionFunct getType() const
+    virtual ExpressionFunct getType() const SAL_OVERRIDE
     {
         return TERNARY_FUNC_IF;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /*pOptionalArg*/, sal_uInt32 nFlags ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;

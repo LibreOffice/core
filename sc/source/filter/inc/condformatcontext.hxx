@@ -35,8 +35,8 @@ class ColorScaleContext : public WorksheetContextBase
 public:
     explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     CondFormatRuleRef mxRule;
@@ -47,8 +47,8 @@ class DataBarContext : public WorksheetContextBase
 public:
     explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     CondFormatRuleRef mxRule;
@@ -59,8 +59,8 @@ class IconSetContext : public WorksheetContextBase
 public:
     explicit IconSetContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
 
-    virtual oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void onStartElement( const AttributeList& rAttribs );
+    virtual oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
 private:
     CondFormatRuleRef mxRule;
 };
@@ -71,14 +71,14 @@ public:
     explicit            CondFormatContext( WorksheetFragmentBase& rFragment );
 
 protected:
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const OUString& rChars );
-    virtual void        onEndElement();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void        onEndElement() SAL_OVERRIDE;
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
-    virtual void        onEndRecord();
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        onEndRecord() SAL_OVERRIDE;
 
 private:
     CondFormatRef       mxCondFmt;

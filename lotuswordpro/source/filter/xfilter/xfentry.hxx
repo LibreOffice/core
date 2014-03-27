@@ -107,7 +107,7 @@ public:
      */
     void    SetOutlineLevel(sal_Int32 level);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     enumXFEntry     m_eType;

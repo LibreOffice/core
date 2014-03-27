@@ -54,8 +54,8 @@ public:
     void NotifyChange( ScAutoFormatData* pNewData );
 
 protected:
-    virtual void Paint(const Rectangle& rRect);
-    virtual void Resize();
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
 private:
     ScAutoFormatData*       pCurData;

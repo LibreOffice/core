@@ -33,12 +33,12 @@ public:
     TYPEINFO_OVERRIDE();
     SdrCaptionTypeItem(SdrCaptionType eStyle=SDRCAPT_TYPE3): SfxEnumItem(SDRATTR_CAPTIONTYPE,sal::static_int_cast< sal_uInt16 >(eStyle)) {}
     SdrCaptionTypeItem(SvStream& rIn)                      : SfxEnumItem(SDRATTR_CAPTIONTYPE,rIn)    {}
-    virtual SfxPoolItem*    Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16          GetValueCount() const; // { return 4; }
+    virtual SfxPoolItem*    Clone(SfxItemPool* pPool=NULL) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE; // { return 4; }
             SdrCaptionType  GetValue() const      { return (SdrCaptionType)SfxEnumItem::GetValue(); }
-    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
 };
 
 #endif

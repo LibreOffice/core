@@ -30,7 +30,7 @@ public:
     // this method is called form the destructor of the referenced page.
     // do all necessary action to forget the page. It is not necessary to call
     // RemovePageUser(), that is done form the destructor.
-    virtual void PageInDestruction(const SdrPage& rPage);
+    virtual void PageInDestruction(const SdrPage& rPage) SAL_OVERRIDE;
 
 private:
     // #111111#
@@ -38,8 +38,8 @@ private:
     SdrPage*                                mpShownPage;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -52,15 +52,15 @@ public:
     void SetReferencedPage(SdrPage* pNewPage);
 
     // #i96598#
-    virtual void SetBoundRectDirty();
+    virtual void SetBoundRectDirty() SAL_OVERRIDE;
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual SdrPageObj* Clone() const;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+    virtual SdrPageObj* Clone() const SAL_OVERRIDE;
     SdrPageObj& operator=(const SdrPageObj& rObj);
 
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 };
 
 

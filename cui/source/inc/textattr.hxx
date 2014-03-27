@@ -80,14 +80,14 @@ public:
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet & );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated(SfxAllItemSet aSet);
+    virtual void PageCreated(SfxAllItemSet aSet) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_TEXTATTR_HXX

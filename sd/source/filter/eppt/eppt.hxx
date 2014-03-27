@@ -223,11 +223,11 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         void                ImplCreateHeaderFooterStrings( SvStream& rOut,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         void                ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
-        virtual sal_Bool        ImplCreateDocument();
+        virtual sal_Bool        ImplCreateDocument() SAL_OVERRIDE;
         sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
         sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
             const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
-        virtual sal_Bool        ImplCreateMainNotes();
+        virtual sal_Bool        ImplCreateMainNotes() SAL_OVERRIDE;
         sal_Bool            ImplCreateNotes( sal_uInt32 nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );
   void              ImplWriteVBA();
@@ -267,9 +267,9 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_Bool                            ImplCloseDocument();        // we write the font, hyper and sound list
 
         virtual void        ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterID, sal_uInt16 nMode,
-                                            sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );
-        virtual void        ImplWriteNotes( sal_uInt32 nPageNum );
-        virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );
+                                            sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
+        virtual void        ImplWriteNotes( sal_uInt32 nPageNum ) SAL_OVERRIDE;
+        virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
 
     public:
                                 PPTWriter( SvStorageRef& rSvStorage,
@@ -281,8 +281,8 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
         sal_Bool                IsValid() const { return mbStatus; };
 
-        virtual void        exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& );
-        virtual void        exportPPTPost( );
+        virtual void        exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& ) SAL_OVERRIDE;
+        virtual void        exportPPTPost( ) SAL_OVERRIDE;
 };
 
 #endif

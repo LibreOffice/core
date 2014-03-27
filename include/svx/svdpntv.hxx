@@ -235,7 +235,7 @@ protected:
 protected:
     void AppendPaintWindow(SdrPaintWindow& rNew);
     SdrPaintWindow* RemovePaintWindow(SdrPaintWindow& rOld);
-    void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 );
+    void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
 public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }
@@ -266,7 +266,7 @@ public:
     bool ImpIsGlueVisible() { return bGlueVisible || bGlueVisible2 || bGlueVisible3 || bGlueVisible4; }
 protected:
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
     void GlueInvalidate() const;
 
     void ShowEncirclement(OutputDevice* pOut);

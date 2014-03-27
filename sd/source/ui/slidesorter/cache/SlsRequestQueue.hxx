@@ -103,7 +103,7 @@ public:
     /** Ensure we don't hand out a page deleted before anyone got a
         chance to process it
     */
-    virtual void PageInDestruction(const SdrPage& rPage);
+    virtual void PageInDestruction(const SdrPage& rPage) SAL_OVERRIDE;
 
 private:
     ::osl::Mutex maMutex;

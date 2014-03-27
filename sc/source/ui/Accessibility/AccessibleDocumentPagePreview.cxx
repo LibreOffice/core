@@ -517,12 +517,12 @@ public:
 
     ///=====  IAccessibleViewForwarder  ========================================
 
-    virtual bool IsValid (void) const;
-    virtual Rectangle GetVisibleArea() const;
-    virtual Point LogicToPixel (const Point& rPoint) const;
-    virtual Size LogicToPixel (const Size& rSize) const;
-    virtual Point PixelToLogic (const Point& rPoint) const;
-    virtual Size PixelToLogic (const Size& rSize) const;
+    virtual bool IsValid (void) const SAL_OVERRIDE;
+    virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
+    virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
+    virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
+    virtual Point PixelToLogic (const Point& rPoint) const SAL_OVERRIDE;
+    virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
 private:
     ScPreviewShell*                     mpViewShell;
@@ -688,7 +688,7 @@ public:
 
     ///=====  SfxListener  =====================================================
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     ///=====  IAccessibleParent  ==============================================
 
@@ -697,7 +697,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException);
+    )   throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     ///=====  Internal  ========================================================
 

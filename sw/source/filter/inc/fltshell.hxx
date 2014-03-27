@@ -211,8 +211,8 @@ public:
     virtual ~SwFltAnchor();
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
+    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
     void SetFrmFmt(SwFrmFmt * _pFrmFmt);
     const SwFrmFmt* GetFrmFmt() const;
           SwFrmFmt* GetFrmFmt();
@@ -225,7 +225,7 @@ class SwFltAnchorClient : public SwClient
 public:
     SwFltAnchorClient(SwFltAnchor * pFltAnchor);
 
-    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew);
+    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
@@ -263,8 +263,8 @@ public:
         nAutorNoPrev(   rCpy.nAutorNoPrev )
         {}
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem& rItem) const;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
+    virtual bool operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
@@ -285,8 +285,8 @@ public:
     SwFltBookmark( const SwFltBookmark& );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
+    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
 
     long GetHandle() const              { return mnHandle; }
     const OUString& GetName() const       { return maName; }
@@ -307,8 +307,8 @@ public:
     SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
     SwFltTOX(const SwFltTOX&);
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
+    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
     SwTOXBase* GetBase()            { return pTOXBase; }
     sal_uInt16 GetCols() const          { return nCols; }
     void SetHadBreakItem(    sal_Bool bVal ) { bHadBreakItem    = bVal; }
@@ -325,8 +325,8 @@ public:
     SwFltSection( SwSectionData *const pSect );
     SwFltSection( const SwFltSection& );
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
+    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
+    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
     SwSectionData * GetSectionData()    { return m_pSection; }
 };
 // Der WWEndStack verhaelt sich wie der WWControlStck, nur dass die Attribute
@@ -421,32 +421,32 @@ public:
     void SetReadNoTable()           { bReadNoTbl = sal_True; }
     sal_Bool IsTableWidthSet() const    { return 0 != nTableWidth; }
 
-    virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
+    virtual SwFltOutBase& operator << (const SfxPoolItem& rItem) SAL_OVERRIDE;
 
-    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
-    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
+    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
+    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
 
     sal_Bool IsInTable();
-    virtual const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich);
-    virtual bool BeginTable();
-    virtual void NextTableCell();
-    virtual void NextTableRow();
-    virtual void SetTableWidth(SwTwips nW);
-    virtual void SetTableOrient(sal_Int16 eOri);
-    virtual void SetCellWidth(SwTwips nWidth, sal_uInt16 nCell);
-    virtual void SetCellHeight(SwTwips nH);
-    virtual void SetCellBorder(const SvxBoxItem& rFmtBox, sal_uInt16 nCell);
-    virtual void SetCellSpace(sal_uInt16 nSp);
-    virtual void DeleteCell(sal_uInt16 nCell);
-    virtual void EndTable();
+    virtual const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
+    virtual bool BeginTable() SAL_OVERRIDE;
+    virtual void NextTableCell() SAL_OVERRIDE;
+    virtual void NextTableRow() SAL_OVERRIDE;
+    virtual void SetTableWidth(SwTwips nW) SAL_OVERRIDE;
+    virtual void SetTableOrient(sal_Int16 eOri) SAL_OVERRIDE;
+    virtual void SetCellWidth(SwTwips nWidth, sal_uInt16 nCell) SAL_OVERRIDE;
+    virtual void SetCellHeight(SwTwips nH) SAL_OVERRIDE;
+    virtual void SetCellBorder(const SvxBoxItem& rFmtBox, sal_uInt16 nCell) SAL_OVERRIDE;
+    virtual void SetCellSpace(sal_uInt16 nSp) SAL_OVERRIDE;
+    virtual void DeleteCell(sal_uInt16 nCell) SAL_OVERRIDE;
+    virtual void EndTable() SAL_OVERRIDE;
 
     SwFrmFmt* MakeFly( RndStdIds eAnchor, SfxItemSet* pSet );
-    virtual bool IsInFly();
-    virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr);
-    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
+    virtual bool IsInFly() SAL_OVERRIDE;
+    virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr) SAL_OVERRIDE;
+    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
     virtual bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
-                               const SfxItemSet* pMoreAttrs = 0 );
-    virtual void EndFly();
+                               const SfxItemSet* pMoreAttrs = 0 ) SAL_OVERRIDE;
+    virtual void EndFly() SAL_OVERRIDE;
 };
 
 class SwFltFormatCollection : public SwFltOutBase
@@ -473,17 +473,17 @@ public:
     void SetHasFly()                { bHasFly = true; }
     SfxItemSet* GetpFlyAttrs()      { return pFlyAttrs; }
 
-    virtual SwFltOutBase& operator << (const SfxPoolItem& rItem);
-    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
-    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
+    virtual SwFltOutBase& operator << (const SfxPoolItem& rItem) SAL_OVERRIDE;
+    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
+    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
 
-    virtual bool IsInFly();
-    virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr);
-    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
+    virtual bool IsInFly() SAL_OVERRIDE;
+    virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr) SAL_OVERRIDE;
+    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
     virtual bool BeginFly( RndStdIds eAnchor, sal_Bool bAbsolutePos,
-                               const SfxItemSet* pMoreAttrs = 0 );
+                               const SfxItemSet* pMoreAttrs = 0 ) SAL_OVERRIDE;
     bool BeginStyleFly( SwFltOutDoc* pOutDoc );
-    virtual void EndFly();
+    virtual void EndFly() SAL_OVERRIDE;
 };
 
 // dies nun ist die zauberhafteklasse: intention: alle eins nach dem

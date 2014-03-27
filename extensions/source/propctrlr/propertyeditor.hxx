@@ -67,8 +67,8 @@ namespace pcr
         ::std::map< sal_uInt16, HiddenPage >    m_aHiddenPages;
 
     protected:
-        void                        Resize();
-        void                        GetFocus();
+        void                        Resize() SAL_OVERRIDE;
+        void                        GetFocus() SAL_OVERRIDE;
 
     public:
                                     OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);

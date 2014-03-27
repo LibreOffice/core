@@ -38,8 +38,8 @@ public:
                         ~LibBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 /** base class for list boxes which need to update their content according to the list
@@ -57,15 +57,15 @@ protected:
 
 private:
     // DocumentEventListener
-    virtual void onDocumentCreated( const ScriptDocument& _rDocument );
-    virtual void onDocumentOpened( const ScriptDocument& _rDocument );
-    virtual void onDocumentSave( const ScriptDocument& _rDocument );
-    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
-    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
-    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
-    virtual void onDocumentClosed( const ScriptDocument& _rDocument );
-    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
-    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSave( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) SAL_OVERRIDE;
 
 private:
     DocumentEventNotifier m_aNotifier;
@@ -88,11 +88,11 @@ private:
     void            NotifyIDE();
 
     // DocListenerBox
-    virtual void    FillBox();
+    virtual void    FillBox() SAL_OVERRIDE;
 
 protected:
-    virtual void    Select();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
                     LibBox( Window* pParent,
@@ -111,8 +111,8 @@ public:
                         LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                         ~LanguageBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 class LanguageBox : public DocListenerBox
@@ -128,11 +128,11 @@ private:
     void            SetLanguage();
 
     // DocListenerBox
-    virtual void    FillBox();
+    virtual void    FillBox() SAL_OVERRIDE;
 
 protected:
-    virtual void    Select();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     LanguageBox( Window* pParent );

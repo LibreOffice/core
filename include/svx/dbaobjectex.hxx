@@ -62,8 +62,8 @@ namespace svx
 
     protected:
         // TransferableHelper overridables
-        virtual void        AddSupportedFormats();
-        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
 
         static sal_uInt32   getDescriptorFormatId(bool _bExtractForm);
     };

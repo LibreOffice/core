@@ -88,7 +88,7 @@ class SFX2_DLLPUBLIC SfxStatusForwarder: public SfxControllerItem
 
 protected:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 public:
                             SfxStatusForwarder( sal_uInt16 nSlotId,

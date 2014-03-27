@@ -28,7 +28,7 @@ struct SwDocStat;
 
 class SwWordCountFloatDlg : public SfxModelessDialog
 {
-    virtual void    Activate();
+    virtual void    Activate() SAL_OVERRIDE;
     void SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
     void showCJK(bool bShowCJK);
 

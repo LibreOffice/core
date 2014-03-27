@@ -154,13 +154,13 @@ public:
     virtual ~LwpDrawGroup() {}
 
 protected:
-    virtual void Read() {}
-    virtual OUString RegisterStyle()
+    virtual void Read() SAL_OVERRIDE {}
+    virtual OUString RegisterStyle() SAL_OVERRIDE
     {
         return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) { return NULL; }
-    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) { return NULL; }
+    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) SAL_OVERRIDE { return NULL; }
+    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) SAL_OVERRIDE { return NULL; }
 };
 
 /**
@@ -177,10 +177,10 @@ public:
     virtual ~LwpDrawLine() {}
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
 /**
@@ -198,10 +198,10 @@ public:
     virtual ~LwpDrawPolyLine();
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
  /**
@@ -219,10 +219,10 @@ public:
     virtual ~LwpDrawPolygon();
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
 /**
@@ -239,10 +239,10 @@ public:
     virtual ~LwpDrawRectangle(){}
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 
 private:
     XFFrame* CreateRoundedRect(const OUString& rStyleName);
@@ -262,10 +262,10 @@ public:
     virtual ~LwpDrawEllipse(){}
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
 /**
@@ -283,10 +283,10 @@ public:
     virtual ~LwpDrawArc() {}
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
 /**
@@ -306,10 +306,10 @@ public:
     static void SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec);
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
 /**
@@ -331,10 +331,10 @@ public:
     virtual ~LwpDrawTextArt();
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 
 /**
@@ -348,13 +348,13 @@ public:
     virtual ~LwpDrawMetafile() {}
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle()
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE
     {
         return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/){return NULL;}
-    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/){return NULL;}
+    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) SAL_OVERRIDE {return NULL;}
+    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) SAL_OVERRIDE {return NULL;}
 };
 
 /**
@@ -371,10 +371,10 @@ public:
     virtual ~LwpDrawBitmap();
 
 protected:
-    virtual void Read();
-    virtual OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
+    virtual void Read() SAL_OVERRIDE;
+    virtual OUString RegisterStyle() SAL_OVERRIDE;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) SAL_OVERRIDE;
 };
 #endif
 

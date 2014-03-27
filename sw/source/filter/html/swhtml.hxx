@@ -879,13 +879,13 @@ public:         // used in tables
 
 protected:
     // Executed for each token recognized by CallParser
-    virtual void NextToken( int nToken );
+    virtual void NextToken( int nToken ) SAL_OVERRIDE;
     virtual ~SwHTMLParser();
 
     // If the document is removed, remove the parser as well
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
-    virtual void AddMetaUserDefined( OUString const & i_rMetaName );
+    virtual void AddMetaUserDefined( OUString const & i_rMetaName ) SAL_OVERRIDE;
 
 public:
 
@@ -896,16 +896,16 @@ public:
                     SfxMedium* pMed = 0, sal_Bool bReadUTF8 = sal_False,
                     sal_Bool bIgnoreHTMLComments = sal_False );
 
-    virtual SvParserState CallParser();
+    virtual SvParserState CallParser() SAL_OVERRIDE;
 
     sal_uInt16 ToTwips( sal_uInt16 nPixel ) const;
 
     // for reading asynchronously from SvStream
-    virtual void Continue( int nToken );
+    virtual void Continue( int nToken ) SAL_OVERRIDE;
 
     virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::document::XDocumentProperties>&,
-            SvKeyValueIterator* );
+            SvKeyValueIterator* ) SAL_OVERRIDE;
 };
 
 struct SwPendingStackData

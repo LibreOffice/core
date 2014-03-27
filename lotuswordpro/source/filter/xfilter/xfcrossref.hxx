@@ -73,7 +73,7 @@ public:
     ~XFCrossRefStart();
     void SetRefType(sal_uInt8 nType);
     void SetMarkName(const OUString& sName);
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 private:
     enum{
         CROSSREF_INVALID = 0,
@@ -100,7 +100,7 @@ class XFCrossRefEnd : public XFContent
 public:
     XFCrossRefEnd();
     ~XFCrossRefEnd();
-    void ToXml(IXFStream *pStrm);
+    void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 #endif

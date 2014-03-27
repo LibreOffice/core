@@ -199,7 +199,7 @@ public:
 
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue > > GetPropertyValues( );
+            com::sun::star::beans::PropertyValue > > GetPropertyValues( ) SAL_OVERRIDE;
 
     void CreateNumberingRules(
             DomainMapper& rDMapper,
@@ -237,11 +237,11 @@ private:
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
 
     // Properties
-    virtual void lcl_attribute( Id nName, Value & rVal );
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute( Id nName, Value & rVal ) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
 public:
 

@@ -2971,12 +2971,12 @@ namespace pcr
                     throw NullPointerException();
             }
 
-            virtual oslInterlockedCount SAL_CALL acquire()
+            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
             {
                 return osl_atomic_increment( &m_refCount );
             }
 
-            virtual oslInterlockedCount SAL_CALL release()
+            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
             {
                 if ( 0 == osl_atomic_decrement( &m_refCount ) )
                 {
@@ -3002,13 +3002,13 @@ namespace pcr
             FormSQLCommandUI( const Reference< XPropertySet >& _rxForm );
 
             // ISQLCommandAdapter
-            virtual OUString getSQLCommand() const;
-            virtual sal_Bool        getEscapeProcessing() const;
-            virtual void            setSQLCommand( const OUString& _rCommand ) const;
-            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const;
+            virtual OUString getSQLCommand() const SAL_OVERRIDE;
+            virtual sal_Bool        getEscapeProcessing() const SAL_OVERRIDE;
+            virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
+            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const SAL_OVERRIDE;
 
             // ISQLCommandPropertyUI
-            virtual OUString*    getPropertiesToDisable();
+            virtual OUString*    getPropertiesToDisable() SAL_OVERRIDE;
         };
 
 
@@ -3069,13 +3069,13 @@ namespace pcr
             ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo );
 
             // ISQLCommandAdapter
-            virtual OUString getSQLCommand() const;
-            virtual sal_Bool        getEscapeProcessing() const;
-            virtual void            setSQLCommand( const OUString& _rCommand ) const;
-            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const;
+            virtual OUString getSQLCommand() const SAL_OVERRIDE;
+            virtual sal_Bool        getEscapeProcessing() const SAL_OVERRIDE;
+            virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
+            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const SAL_OVERRIDE;
 
             // ISQLCommandPropertyUI
-            virtual OUString*    getPropertiesToDisable();
+            virtual OUString*    getPropertiesToDisable() SAL_OVERRIDE;
         private:
             mutable bool    m_bPropertyValueIsList;
         };

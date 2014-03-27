@@ -91,7 +91,7 @@ class SvxDictEdit : public Edit
     void            SetSpaces(sal_Bool bSet)
                                 {bSpaces = bSet;}
 
-    virtual void    KeyInput( const KeyEvent& rKEvent );
+    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
 };
 
 // class SvxEditDictionaryDialog -----------------------------------------

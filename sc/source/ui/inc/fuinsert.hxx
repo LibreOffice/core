@@ -30,8 +30,8 @@ class FuInsertGraphic : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic();
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 };
 
 class FuInsertOLE : public FuPoor
@@ -40,8 +40,8 @@ class FuInsertOLE : public FuPoor
     FuInsertOLE( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 };
 
 class FuInsertChart : public FuPoor
@@ -50,8 +50,8 @@ class FuInsertChart : public FuPoor
     FuInsertChart( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 };
 
 class FuInsertChartFromFile : public FuPoor
@@ -60,8 +60,8 @@ class FuInsertChartFromFile : public FuPoor
     FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL);
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 };
 
 class FuInsertMedia : public FuPoor
@@ -71,8 +71,8 @@ class FuInsertMedia : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertMedia();
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 };
 
 #endif      // _SD_FUINSERT_HXX

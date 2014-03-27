@@ -44,7 +44,7 @@ namespace slideshow
             {
             }
 
-            virtual bool fire()
+            virtual bool fire() SAL_OVERRIDE
             {
                 if( mpEvent && isCharged() )
                 {
@@ -57,7 +57,7 @@ namespace slideshow
                 return false;
             }
 
-            virtual bool isCharged() const
+            virtual bool isCharged() const SAL_OVERRIDE
             {
                 // pass on to wrappee - this ensures that we return
                 // false on isCharged(), even if the other event has
@@ -65,14 +65,14 @@ namespace slideshow
                 return !mpEvent ? false : mpEvent->isCharged();
             }
 
-            virtual double getActivationTime( double nCurrentTime ) const
+            virtual double getActivationTime( double nCurrentTime ) const SAL_OVERRIDE
             {
                 // enforce _our_ timeout to our clients (this
                 // overrides any timeout possibly set at the wrappee!)
                 return nCurrentTime + mnTimeout;
             }
 
-            virtual void dispose()
+            virtual void dispose() SAL_OVERRIDE
             {
                 mpEvent.reset();
             }

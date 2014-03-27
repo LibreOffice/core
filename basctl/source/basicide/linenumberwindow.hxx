@@ -24,10 +24,10 @@ private:
     int m_nWidth;
     long m_nCurYOffset;
     int m_nBaseWidth;
-    virtual void DataChanged (DataChangedEvent const& rDCEvt);
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 
 protected:
-    virtual void Paint( const Rectangle& );
+    virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
 
 public:
     LineNumberWindow (Window* pParent, ModulWindow* pModulWin);

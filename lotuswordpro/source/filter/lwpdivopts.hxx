@@ -110,7 +110,7 @@ public:
     LwpDivisionOptions(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     ~LwpDivisionOptions();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     LwpHyphenOptions m_HyphOpts;
     sal_uInt16 m_nOptionFlag;

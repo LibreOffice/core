@@ -140,13 +140,13 @@ struct WW8LFOInfo;
 
 class WW8Reader : public StgReader
 {
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
     sal_uLong OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuffSize );
 public:
-    virtual int GetReaderType();
+    virtual int GetReaderType() SAL_OVERRIDE;
 
-    virtual sal_Bool HasGlossaries() const;
-    virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const;
+    virtual sal_Bool HasGlossaries() const SAL_OVERRIDE;
+    virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const SAL_OVERRIDE;
 };
 
 class SwWW8ImplReader;
@@ -333,13 +333,13 @@ private:
         const SwTxtNode &rTxtNode);
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry& rEntry);
+        SwFltStackEntry& rEntry) SAL_OVERRIDE;
 
-    virtual sal_Int32 GetCurrAttrCP() const;
-    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const;
+    virtual sal_Int32 GetCurrAttrCP() const SAL_OVERRIDE;
+    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const SAL_OVERRIDE;
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
-    virtual void ClearParaEndPosition();
-    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd);
+    virtual void ClearParaEndPosition() SAL_OVERRIDE;
+    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd) SAL_OVERRIDE;
 
 public:
     SwWW8FltControlStack(SwDoc* pDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
@@ -349,7 +349,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False);
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False) SAL_OVERRIDE;
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -433,7 +433,7 @@ public:
     std::set<OUString, SwWW8::ltstr> aReferencedTOCBookmarks;
 protected:
     virtual void SetAttrInDoc( const SwPosition& rTmpPos,
-                               SwFltStackEntry& rEntry );
+                               SwFltStackEntry& rEntry ) SAL_OVERRIDE;
 };
 
 class SwWW8FltRefStack : public SwFltEndStack
@@ -452,7 +452,7 @@ public:
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry& rEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry& rEntry);
+        SwFltStackEntry& rEntry) SAL_OVERRIDE;
 private:
     //No copying
     SwWW8FltRefStack(const SwWW8FltRefStack&);
@@ -477,7 +477,7 @@ public:
     SwMacroInfo();
     virtual ~SwMacroInfo();
 
-    virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const SAL_OVERRIDE;
 
     void SetHlink( const OUString& rHlink ) { maHlink = rHlink; }
     const OUString& GetHlink() const { return maHlink; }
@@ -663,7 +663,7 @@ public:
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz);
+        com::sun::star::awt::Size &rSz) SAL_OVERRIDE;
 };
 
 class WW8FormulaListBox : public WW8FormulaControl
@@ -680,7 +680,7 @@ public:
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz);
+        com::sun::star::awt::Size &rSz) SAL_OVERRIDE;
 };
 
 class WW8FormulaEditBox : public WW8FormulaControl
@@ -696,7 +696,7 @@ public:
         com::sun::star::lang::XMultiServiceFactory> & /* rServiceFactory */,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> & /* rFComp */,
-        com::sun::star::awt::Size & /* rSz */) { return sal_False; }
+        com::sun::star::awt::Size & /* rSz */) SAL_OVERRIDE { return sal_False; }
 };
 
 class SwMSConvertControls: public oox::ole::MSConvertOCXControls
@@ -708,7 +708,7 @@ public:
         com::sun::star::form::XFormComponent >& rFComp,
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape > *pShape, bool bFloatingCtrl);
+        com::sun::star::drawing::XShape > *pShape, bool bFloatingCtrl) SAL_OVERRIDE;
     bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
     virtual sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
@@ -728,8 +728,8 @@ private:
     std::map<sal_uInt32,OString> aOldEscherBlipCache;
 
     virtual sal_Bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
-        SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
-    virtual sal_Bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const;
+        SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const SAL_OVERRIDE;
+    virtual sal_Bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const SAL_OVERRIDE;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( long nOLEId,
@@ -737,7 +737,7 @@ private:
                                   const Rectangle& rBoundRect,
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
-                                  sal_Int64 nAspect ) const;
+                                  sal_Int64 nAspect ) const SAL_OVERRIDE;
 
     //No copying
     SwMSDffManager(const SwMSDffManager&);
@@ -750,7 +750,7 @@ public:
     void DisableFallbackStream();
     void EnableFallbackStream();
 protected:
-    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
+    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) SAL_OVERRIDE;
 };
 
 class wwSection

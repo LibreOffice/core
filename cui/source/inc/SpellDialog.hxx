@@ -72,16 +72,16 @@ private:
 
     SpellDialog*    GetSpellDialog() const {return (SpellDialog*)GetParentDialog();}
 protected:
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     SentenceEditWindow_Impl(Window* pParent, WinBits nBits);
     ~SentenceEditWindow_Impl();
 
-    void            SetModifyHdl(const Link& rLink) { m_aModifyLink = rLink;}
+    void            SetModifyHdl(const Link& rLink) SAL_OVERRIDE { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
-    void            SetText( const OUString& rStr );
+    void            SetText( const OUString& rStr ) SAL_OVERRIDE;
 
     bool            MarkNextError( bool bIgnoreCurrentError, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> );
     void            ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
@@ -210,7 +210,7 @@ private:
     void            SetTitle_Impl(LanguageType nLang);
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     OUString getReplacementString() const;
 
@@ -222,7 +222,7 @@ public:
     ~SpellDialog();
 
     void            SetLanguage( sal_uInt16 nLang );
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
     void            InvalidateDialog();
 };

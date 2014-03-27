@@ -47,7 +47,7 @@ public:
             ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
             ~ScInsertTableDlg();
 
-    virtual short   Execute();      // overloaded to set parent dialog
+    virtual short   Execute() SAL_OVERRIDE;      // overloaded to set parent dialog
 
     sal_Bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
     sal_Bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }

@@ -38,7 +38,7 @@ namespace svx
         void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
         void setColWidths();
         void Resort( bool bForced );
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
     };
 
 

@@ -194,13 +194,13 @@ public:
     void SetMasterPagePaintCaching(bool bOn);
     bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
 
-    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
 
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
     bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll=false) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr=false) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }

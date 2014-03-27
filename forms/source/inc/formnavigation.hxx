@@ -88,22 +88,22 @@ namespace frm
         void SAL_CALL dispose(  ) throw( ::com::sun::star::uno::RuntimeException );
 
         // XDispatchProviderInterception
-        virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& State ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& State ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // IFeatureDispatcher
-        virtual void            dispatch( sal_Int16 _nFeatureId ) const;
-        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
-        virtual bool            isEnabled( sal_Int16 _nFeatureId ) const;
-        virtual bool            getBooleanState( sal_Int16 _nFeatureId ) const;
-        virtual OUString getStringState( sal_Int16 _nFeatureId ) const;
-        virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const;
+        virtual void            dispatch( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
+        virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamName, const ::com::sun::star::uno::Any& _rParamValue ) const SAL_OVERRIDE;
+        virtual bool            isEnabled( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
+        virtual bool            getBooleanState( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
+        virtual OUString getStringState( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
+        virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
 
         // own overridables
         /** is called when the interceptors have.

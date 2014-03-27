@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 protected:
     virtual void DrawPage( const Point& rPoint,
                            const bool bSecond,
-                           const bool bEnabled );
+                           const bool bEnabled ) SAL_OVERRIDE;
 public:
     SwPageGridExample(Window* pPar) :
                                 SwPageExample(pPar),
@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwColExample : public SwPageExample
 protected:
     virtual void DrawPage( const Point& rPoint,
                            const bool bSecond,
-                           const bool bEnabled );
+                           const bool bEnabled ) SAL_OVERRIDE;
 
 public:
     SwColExample(Window* pPar)
@@ -94,14 +94,14 @@ private:
     SwFmtCol    m_aCols;
 
 protected:
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
     SwColumnOnlyExample(Window*);
 
     void        SetColumns(const SwFmtCol& rCol);
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_INC_COLEX_HXX

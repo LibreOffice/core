@@ -24,10 +24,10 @@ namespace sc_apitest {
 class ScNamedRangesObj : public CalcUnoApiTest, apitest::XNamedRanges
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
-    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet);
+    virtual uno::Reference< uno::XInterface > init(sal_Int32 nSheet) SAL_OVERRIDE;
 
     ScNamedRangesObj();
 

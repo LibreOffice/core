@@ -37,8 +37,8 @@ class SwWrtShell;
 
 class SwFldInputDlg: public SvxStandardDialog
 {
-    virtual void    Apply();
-    virtual void    StateChanged( StateChangedType );
+    virtual void    Apply() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType ) SAL_OVERRIDE;
 
     SwWrtShell&       rSh;
     SwInputField*     pInpFld;

@@ -32,30 +32,30 @@ class SwNodeIndex;
 class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
-    virtual int SetStrmStgPtr();
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
-    virtual OUString GetTemplateName() const;
+    virtual int SetStrmStgPtr() SAL_OVERRIDE;
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
+    virtual OUString GetTemplateName() const SAL_OVERRIDE;
 public:
     HTMLReader();
 };
 
 class WW1Reader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
 };
 
 class XMLReader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
 public:
-    virtual int GetReaderType();
+    virtual int GetReaderType() SAL_OVERRIDE;
 
     XMLReader();
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
     virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<OUString*>& rStrings ) const;
+                                   std::vector<OUString*>& rStrings ) const SAL_OVERRIDE;
 };
 
 // die speziellen Writer

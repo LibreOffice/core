@@ -33,7 +33,7 @@ class SfxTemplateControllerItem: public SfxControllerItem {
                                 SfxTemplateControllerItem*);
 
 protected:
-    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 public:
     SfxTemplateControllerItem( sal_uInt16 nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);

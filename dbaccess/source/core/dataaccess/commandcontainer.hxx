@@ -56,18 +56,18 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSingleServiceFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual ~OCommandContainer();
 
     // ODefinitionContainer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(const OUString& _rName);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(const OUString& _rName) SAL_OVERRIDE;
 
 protected:
     // OContentHelper overridables
-    virtual OUString determineContentType() const;
+    virtual OUString determineContentType() const SAL_OVERRIDE;
 };
 
 }   // namespace dbaccess

@@ -127,13 +127,13 @@ public:
         const InsertPosition& rInsertPosition,
         const controller::Animator::AnimationMode eAnimationMode);
 
-    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun> pRun);
-    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun);
+    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun> pRun) SAL_OVERRIDE;
+    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun) SAL_OVERRIDE;
 
-    virtual model::SlideSorterModel& GetModel (void) const { return mrModel; }
-    virtual view::SlideSorterView& GetView (void) const { return mrView; }
-    virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) { return mpAnimator; }
-    virtual SharedSdWindow GetContentWindow (void) { return mrSlideSorter.GetContentWindow(); }
+    virtual model::SlideSorterModel& GetModel (void) const SAL_OVERRIDE { return mrModel; }
+    virtual view::SlideSorterView& GetView (void) const SAL_OVERRIDE { return mrView; }
+    virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) SAL_OVERRIDE { return mpAnimator; }
+    virtual SharedSdWindow GetContentWindow (void) SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
 
 private:
     model::SlideSorterModel& mrModel;

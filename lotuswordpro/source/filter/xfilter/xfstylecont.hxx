@@ -117,7 +117,7 @@ public:
     /**
      * @descr   Output all style.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFStyleContainer& b1, XFStyleContainer& b2);
     friend bool operator!=(XFStyleContainer& b1, XFStyleContainer& b2);

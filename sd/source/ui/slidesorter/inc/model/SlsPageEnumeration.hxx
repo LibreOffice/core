@@ -82,7 +82,7 @@ public:
     /** Create and return an exact copy of the called object.
     */
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void);
+    virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
@@ -90,19 +90,19 @@ public:
     /** Return <TRUE/> when the enumeration has more elements, i.e. it is
         save to call GetNextElement() at least one more time.
     */
-    virtual bool HasMoreElements (void) const;
+    virtual bool HasMoreElements (void) const SAL_OVERRIDE;
 
     /** Return the next element of the enumeration.  Call the
         HasMoreElements() before to make sure that there exists at least one
         more element.  Calling this method with HasMoreElements() returning
         <FALSE/> is an error.
     */
-    virtual SharedPageDescriptor GetNextElement (void);
+    virtual SharedPageDescriptor GetNextElement (void) SAL_OVERRIDE;
 
     /** Rewind the enumeration so that the next call to GetNextElement()
         will return its first element.
     */
-    virtual void Rewind (void);
+    virtual void Rewind (void) SAL_OVERRIDE;
 
 private:
     /// Implementation object.

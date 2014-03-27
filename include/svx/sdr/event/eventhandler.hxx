@@ -117,7 +117,7 @@ namespace sdr
             virtual ~TimerEventHandler();
 
             // The timer when it is triggered; from class Timer
-            virtual void Timeout();
+            virtual void Timeout() SAL_OVERRIDE;
 
             // reset the timer
             void Restart();

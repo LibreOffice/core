@@ -56,7 +56,7 @@ class CancelJobsThread : public osl::Thread
         css::uno::Reference< css::util::XCancellable > getNextJob();
 
         bool stopped() const;
-        virtual void SAL_CALL run();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
         mutable osl::Mutex maMutex;
 
         std::list< css::uno::Reference< css::util::XCancellable > > maJobs;
@@ -161,8 +161,8 @@ class TerminateOfficeThread : public osl::Thread
         void StopOfficeTermination();
 
     private:
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL onTerminated();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
+        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
         bool OfficeTerminationStopped();
         void PerformOfficeTermination();
 

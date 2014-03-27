@@ -34,17 +34,17 @@ public:
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }
 
-    virtual SdrPage* AllocPage(bool bMasterPage);
+    virtual SdrPage* AllocPage(bool bMasterPage) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
+                ::com::sun::star::embed::XStorage> GetDocumentStorage() const SAL_OVERRIDE;
 
     /// For saving of rectangles as control-replacement for versions < 5.0.
-    virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
+    virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const SAL_OVERRIDE;
 
 protected:
     /// overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
 };
 
 #endif

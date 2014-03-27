@@ -37,7 +37,7 @@ public:
     EmptyPanel (::Window* pParent);
     virtual ~EmptyPanel (void);
 
-    virtual void Resize (void);
+    virtual void Resize (void) SAL_OVERRIDE;
 
 private:
     FixedText maMessageControl;

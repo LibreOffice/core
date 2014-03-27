@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
 
     // Creates for all derivations an AttrSet with ranges for frame- and
     // graphics-attributes (only called by SwCntntNode).
-    virtual void NewAttrSet( SwAttrPool& );
+    virtual void NewAttrSet( SwAttrPool& ) SAL_OVERRIDE;
 
     SwNoTxtNode( const SwNoTxtNode& );              // Not allowed.
     SwNoTxtNode &operator=( const SwNoTxtNode& );   // Not allowed.
@@ -51,7 +51,7 @@ protected:
 public:
     ~SwNoTxtNode();
 
-    virtual SwCntntFrm *MakeFrm( SwFrm* );
+    virtual SwCntntFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
 
     inline SwGrfFmtColl *GetGrfColl() const { return (SwGrfFmtColl*)GetRegisteredIn(); }
 

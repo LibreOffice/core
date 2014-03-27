@@ -94,7 +94,7 @@ public:
 
     void    SetMessageFrom(const OUString& message);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
     OUString   m_strBodyStyle;

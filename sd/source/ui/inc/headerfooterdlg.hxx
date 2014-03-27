@@ -74,7 +74,7 @@ public:
     void Apply();
     void Cancel();
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 }

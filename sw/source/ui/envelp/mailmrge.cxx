@@ -97,8 +97,8 @@ public:
     SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg);
     ~SwXSelChgLstnr_Impl();
 
-    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :

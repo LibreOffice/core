@@ -256,8 +256,8 @@ public:
     MailMergeCfg_Impl();
     virtual ~MailMergeCfg_Impl();
 
-    virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
+    virtual void    Commit() SAL_OVERRIDE;
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
 

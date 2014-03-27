@@ -24,7 +24,7 @@ public:
     /**
      * Blacklist handling
      */
-    bool mustTestImportOf(const char* filename) const {
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
         // Only test import of .odt document
         return OString(filename).endsWith(".odt");
     }

@@ -40,9 +40,9 @@ namespace dbaxml
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
 
         /** pushes a new TableFilterPattern to the list of patterns
             @param  _sTableFilterPattern

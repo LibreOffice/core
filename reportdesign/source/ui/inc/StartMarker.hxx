@@ -44,7 +44,7 @@ namespace rptui
         void changeImage();
         void initDefaultNodeImages();
         void setColor();
-        virtual void ImplInitSettings();
+        virtual void ImplInitSettings() SAL_OVERRIDE;
         OStartMarker(OStartMarker&);
         void operator =(OStartMarker&);
     public:
@@ -52,12 +52,12 @@ namespace rptui
         virtual ~OStartMarker();
 
         // SfxListener
-        virtual void    Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
+        virtual void    Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
         // window overloads
-        virtual void    Paint( const Rectangle& rRect );
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void    Resize();
-        virtual void    RequestHelp( const HelpEvent& rHEvt );
+        virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void    Resize() SAL_OVERRIDE;
+        virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
         using Window::Notify;
 
         void            setTitle(const OUString& _sTitle);
@@ -67,7 +67,7 @@ namespace rptui
         */
         void            showRuler(sal_Bool _bShow);
 
-        virtual void    setCollapsed(sal_Bool _bCollapsed);
+        virtual void    setCollapsed(sal_Bool _bCollapsed) SAL_OVERRIDE;
 
         /** zoom the ruler and view windows
         */

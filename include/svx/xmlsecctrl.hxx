@@ -41,9 +41,9 @@ public:
     XmlSecStatusBarControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& _rStb );
     ~XmlSecStatusBarControl();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void    Paint( const UserDrawEvent& rEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 };
 
 #endif

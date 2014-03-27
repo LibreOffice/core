@@ -156,7 +156,7 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
             const OUString& _rObjectName
-        );
+        ) SAL_OVERRIDE;
 
     public:
         QueryDesigner(
@@ -175,13 +175,13 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
             const OUString& _rObjectName
-        );
+        ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
             const ::com::sun::star::uno::Any& _rDataSource,
             const OUString& _rObjectName,
             const ::comphelper::NamedValueCollection& i_rCreationArgs
-        );
+        ) SAL_OVERRIDE;
 
     public:
         TableDesigner(
@@ -214,7 +214,7 @@ namespace dbaui
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
             const OUString& _rQualifiedName
-        );
+        ) SAL_OVERRIDE;
 
     public:
         ResultSetBrowser(

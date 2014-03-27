@@ -52,7 +52,7 @@ namespace sdr
         protected:
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
         public:
             // basic constructor, used from E3dObject.
@@ -86,7 +86,7 @@ namespace sdr
             // This method is responsible for creating the graphical visualisation data derived ONLY from
             // the model data. The default implementation will try to create a 3D to 2D embedding (will work
             // when scene is known) which can then be used for 2D processing concerning ranges
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
 
         public:
             // access to the local primitive without the object's local 3D transform. This is e.g. needed

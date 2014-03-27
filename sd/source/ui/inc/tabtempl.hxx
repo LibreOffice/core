@@ -67,8 +67,8 @@ private:
     sal_uInt16 m_nTabId;
     sal_uInt16 m_nAsianTypoId;
 
-    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
 
 public:
     SdTabTemplateDlg(Window* pParent,

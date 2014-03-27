@@ -33,8 +33,10 @@ class SwPortionHandler;
 // The portions output operators are virtual methods of the portion.
 #ifdef DBG_UTIL
 #define OUTPUT_OPERATOR  virtual SvStream & operator<<( SvStream & aOs ) const;
+#define OUTPUT_OPERATOR_OVERRIDE virtual SvStream & operator<<( SvStream & aOs ) const SAL_OVERRIDE;
 #else
 #define OUTPUT_OPERATOR
+#define OUTPUT_OPERATOR_OVERRIDE
 #endif
 
 // Portion groups

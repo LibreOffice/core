@@ -86,7 +86,7 @@ public:
     /**
      * @descr   Output image.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     OUString m_strImageFile;

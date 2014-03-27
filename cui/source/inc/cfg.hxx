@@ -66,7 +66,7 @@ private:
 public:
     SvxConfigDialog( Window*, const SfxItemSet* );
 
-    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 };
 
@@ -138,7 +138,7 @@ public:
     com::sun::star::uno::Sequence
         < com::sun::star::beans::PropertyValue > m_aSeparatorSeq;
 
-    Image GetImage( const OUString& rCommandURL );
+    Image GetImage( const OUString& rCommandURL ) SAL_OVERRIDE;
 
     virtual bool HasURL( const OUString& aURL ) = 0;
     virtual bool HasSettings() = 0;
@@ -201,12 +201,12 @@ public:
     ~MenuSaveInData();
 
     /// methods inherited from SaveInData
-    SvxEntries*         GetEntries();
-    void                SetEntries( SvxEntries* );
-    bool                HasURL( const OUString& URL ) { (void)URL; return false; }
-    bool                HasSettings() { return m_xMenuSettings.is(); }
-    void                Reset();
-    bool                Apply();
+    SvxEntries*         GetEntries() SAL_OVERRIDE;
+    void                SetEntries( SvxEntries* ) SAL_OVERRIDE;
+    bool                HasURL( const OUString& URL ) SAL_OVERRIDE { (void)URL; return false; }
+    bool                HasSettings() SAL_OVERRIDE { return m_xMenuSettings.is(); }
+    void                Reset() SAL_OVERRIDE;
+    bool                Apply() SAL_OVERRIDE;
 };
 
 class SvxConfigEntry
@@ -324,22 +324,22 @@ public:
     SvxMenuEntriesListBox(Window*, SvxConfigPage*);
     ~SvxMenuEntriesListBox();
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
 
-    virtual bool        NotifyAcceptDrop( SvTreeListEntry* pEntry );
+    virtual bool        NotifyAcceptDrop( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
     virtual sal_Bool        NotifyMoving( SvTreeListEntry*, SvTreeListEntry*,
-                                      SvTreeListEntry*&, sal_uLong& );
+                                      SvTreeListEntry*&, sal_uLong& ) SAL_OVERRIDE;
 
     virtual sal_Bool        NotifyCopying( SvTreeListEntry*, SvTreeListEntry*,
-                                       SvTreeListEntry*&, sal_uLong&);
+                                       SvTreeListEntry*&, sal_uLong&) SAL_OVERRIDE;
 
     virtual DragDropMode    NotifyStartDrag(
-        TransferDataContainer&, SvTreeListEntry* );
+        TransferDataContainer&, SvTreeListEntry* ) SAL_OVERRIDE;
 
-    virtual void        DragFinished( sal_Int8 );
+    virtual void        DragFinished( sal_Int8 ) SAL_OVERRIDE;
 
-    void                KeyInput( const KeyEvent& rKeyEvent );
+    void                KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
 };
 
 class SvxConfigPage : public SfxTabPage
@@ -436,8 +436,8 @@ public:
     bool            MoveEntryData(  SvTreeListEntry* pSourceEntry,
                                     SvTreeListEntry* pTargetEntry );
 
-    bool            FillItemSet( SfxItemSet& );
-    void            Reset( const SfxItemSet& );
+    bool            FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    void            Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
     virtual bool    DeleteSelectedContent() = 0;
     virtual void    DeleteSelectedTopLevel() = 0;
@@ -474,11 +474,11 @@ private:
     DECL_LINK( AddCommandsHdl, Button * );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
 
-    void            Init();
-    void            UpdateButtonStates();
-    short           QueryReset();
-    bool            DeleteSelectedContent();
-    void            DeleteSelectedTopLevel();
+    void            Init() SAL_OVERRIDE;
+    void            UpdateButtonStates() SAL_OVERRIDE;
+    short           QueryReset() SAL_OVERRIDE;
+    bool            DeleteSelectedContent() SAL_OVERRIDE;
+    void            DeleteSelectedTopLevel() SAL_OVERRIDE;
 
 public:
     SvxMenuConfigPage( Window *pParent, const SfxItemSet& rItemSet );
@@ -490,7 +490,7 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
-        bool docConfig );
+        bool docConfig ) SAL_OVERRIDE;
 };
 
 class SvxMainMenuOrganizerDialog : public ModalDialog
@@ -534,8 +534,8 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
 
 protected:
 
-    virtual void    CheckButtonHdl();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    CheckButtonHdl() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void            BuildCheckBoxButtonImages( SvLBoxButtonData* );
     Image           GetSizedImage(
         VirtualDevice& aDev, const Size& aNewSize, const Image& aImage );
@@ -554,12 +554,12 @@ public:
         { return m_aCheckBoxImageSizePixel; }
 
     virtual sal_Bool    NotifyMoving(
-        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& );
+        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& ) SAL_OVERRIDE;
 
     virtual sal_Bool    NotifyCopying(
-        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&);
+        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&) SAL_OVERRIDE;
 
-    void            KeyInput( const KeyEvent& rKeyEvent );
+    void            KeyInput( const KeyEvent& rKeyEvent ) SAL_OVERRIDE;
 };
 
 class SvxToolbarConfigPage : public SvxConfigPage
@@ -575,11 +575,11 @@ private:
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
     DECL_LINK( MoveHdl, Button * );
 
-    void            UpdateButtonStates();
-    short           QueryReset();
-    void            Init();
-    bool            DeleteSelectedContent();
-    void            DeleteSelectedTopLevel();
+    void            UpdateButtonStates() SAL_OVERRIDE;
+    short           QueryReset() SAL_OVERRIDE;
+    void            Init() SAL_OVERRIDE;
+    bool            DeleteSelectedContent() SAL_OVERRIDE;
+    void            DeleteSelectedTopLevel() SAL_OVERRIDE;
 
 public:
     SvxToolbarConfigPage( Window *pParent, const SfxItemSet& rItemSet );
@@ -589,7 +589,7 @@ public:
                                              bool bFront = false,
                                              bool bAllowDuplicates = true );
 
-    void            MoveEntry( bool bMoveUp );
+    void            MoveEntry( bool bMoveUp ) SAL_OVERRIDE;
 
     SaveInData*     CreateSaveInData(
         const ::com::sun::star::uno::Reference <
@@ -597,7 +597,7 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const OUString& aModuleId,
-        bool docConfig );
+        bool docConfig ) SAL_OVERRIDE;
 };
 
 class ToolbarSaveInData : public SaveInData
@@ -651,12 +651,12 @@ public:
             < ::com::sun::star::frame::XFrame > xFrame,
         const OUString& rResourceURL, sal_Int32 nStyle );
 
-    SvxEntries*     GetEntries();
-    void            SetEntries( SvxEntries* );
-    bool            HasSettings();
-    bool            HasURL( const OUString& rURL );
-    void            Reset();
-    bool            Apply();
+    SvxEntries*     GetEntries() SAL_OVERRIDE;
+    void            SetEntries( SvxEntries* ) SAL_OVERRIDE;
+    bool            HasSettings() SAL_OVERRIDE;
+    bool            HasURL( const OUString& rURL ) SAL_OVERRIDE;
+    void            Reset() SAL_OVERRIDE;
+    bool            Apply() SAL_OVERRIDE;
 };
 
 class SvxNewToolbarDialog : public ModalDialog

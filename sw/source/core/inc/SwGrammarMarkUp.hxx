@@ -42,8 +42,8 @@ public:
     SwGrammarMarkUp( const SwGrammarMarkUp* );
 
     virtual ~SwGrammarMarkUp();
-    virtual SwWrongList* Clone();
-    virtual void CopyFrom( const SwWrongList& rCopy );
+    virtual SwWrongList* Clone() SAL_OVERRIDE;
+    virtual void CopyFrom( const SwWrongList& rCopy ) SAL_OVERRIDE;
 
     /* SwWrongList::Move() + handling of maSentence */
     void MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff );

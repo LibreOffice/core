@@ -63,8 +63,8 @@ private:
     friend class sdr::properties::E3dSceneProperties;
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
     // transformations
     B3dCamera                   aCameraSet;
@@ -75,12 +75,12 @@ protected:
     // Flag to determine if only selected objects should be drawn
     bool                        bDrawOnlySelected       : 1;
 
-    virtual void NewObjectInserted(const E3dObject* p3DObj);
-    virtual void StructureChanged();
+    virtual void NewObjectInserted(const E3dObject* p3DObj) SAL_OVERRIDE;
+    virtual void StructureChanged() SAL_OVERRIDE;
 
     void RebuildLists();
 
-    virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint);
+    virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint) SAL_OVERRIDE;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
@@ -93,12 +93,12 @@ public:
     E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();
 
-    virtual void SetBoundRectDirty();
+    virtual void SetBoundRectDirty() SAL_OVERRIDE;
 
     // access to cleanup of depth mapper
     void Cleanup3DDepthMapper() { ImpCleanup3DDepthMapper(); }
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
 
@@ -187,51 +187,51 @@ public:
     // set flag to draw only selected
     void SetDrawOnlySelected(bool bNew) { bDrawOnlySelected = bNew; }
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
-    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
 
-    virtual void    NbcSetSnapRect(const Rectangle& rRect);
-    virtual void    NbcMove(const Size& rSize);
+    virtual void    NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void    NbcMove(const Size& rSize) SAL_OVERRIDE;
     virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
-                                                 const Fraction& rYFact);
-    virtual void    RecalcSnapRect();
+                                                 const Fraction& rYFact) SAL_OVERRIDE;
+    virtual void    RecalcSnapRect() SAL_OVERRIDE;
 
-    virtual E3dScene* GetScene() const;
+    virtual E3dScene* GetScene() const SAL_OVERRIDE;
     void SetCamera(const Camera3D& rNewCamera);
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual E3dScene* Clone() const;
+    virtual E3dScene* Clone() const SAL_OVERRIDE;
     E3dScene& operator=(const E3dScene&);
 
-    virtual SdrObjGeoData *NewGeoData() const;
-    virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void          RestGeoData(const SdrObjGeoData& rGeo);
+    virtual SdrObjGeoData *NewGeoData() const SAL_OVERRIDE;
+    virtual void          SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
+    virtual void          RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
-    virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix);
-    virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
+    virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix) SAL_OVERRIDE;
+    virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix) SAL_OVERRIDE;
 
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
+    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
     void RotateScene(const Point& rRef, long nWink, double sn, double cs);
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 
     // get transformations
     B3dCamera& GetCameraSet() { return aCameraSet; }
 
     // break up
-    virtual bool IsBreakObjPossible();
+    virtual bool IsBreakObjPossible() SAL_OVERRIDE;
 
     // polygon which is built during creation
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
 
     // create moves
-    virtual bool BegCreate(SdrDragStat& rStat);
-    virtual bool MovCreate(SdrDragStat& rStat); // true=Xor muss repainted werden
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual bool BckCreate(SdrDragStat& rStat);
-    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE; // true=Xor muss repainted werden
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual bool BckCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual void BrkCreate(SdrDragStat& rStat) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SCENE3D_HXX

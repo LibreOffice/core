@@ -37,7 +37,7 @@ public:
     RandomWipe( sal_Int32 nElements,
                 bool randomBars /* true: generates a horizontal random bar wipe,
                                    false: generates a dissolve wipe */ );
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t );
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 private:
     ::boost::scoped_array< ::basegfx::B2DPoint > m_positions;
     sal_Int32 m_nElements;

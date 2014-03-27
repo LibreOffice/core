@@ -137,11 +137,11 @@ public:
 
     /** Implementation of the AsynchronousTask interface method.
     */
-    virtual void RunNextStep (void);
+    virtual void RunNextStep (void) SAL_OVERRIDE;
 
     /** Implementation of the AsynchronousTask interface method.
     */
-    virtual bool HasNextStep (void);
+    virtual bool HasNextStep (void) SAL_OVERRIDE;
 
     /** Return the TemplateDir object that was last added to
         mpTemplateDirectory.

@@ -42,10 +42,10 @@ public:
 #endif
 
 protected:
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const;
+    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimateMotion >  mxPathMotionNode;

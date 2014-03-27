@@ -76,7 +76,7 @@ public:
 public:
     void    SetLabel(sal_Unicode label);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     OUString   m_strID;

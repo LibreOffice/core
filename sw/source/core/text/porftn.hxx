@@ -40,16 +40,16 @@ public:
                   KSHORT nOrig = KSHRT_MAX );
     KSHORT& Orig() { return nOrigHeight; }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
 
     const SwTxtFtn* GetTxtFtn() const { return pFtn; };
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -63,7 +63,7 @@ public:
          : SwNumberPortion( rExpand, pFntL, true, false, 0, false )
          { SetWhichPor( POR_FTNNUM ); }
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -75,21 +75,21 @@ class SwQuoVadisPortion : public SwFldPortion
     OUString   aErgo;
 public:
     SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
 
     void SetNumber( const OUString& rStr ) { aErgo = rStr; }
     const OUString GetQuoTxt() const { return aExpand; }
     const OUString &GetContTxt() const { return aErgo; }
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -100,12 +100,12 @@ class SwErgoSumPortion : public SwFldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
-    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
-    OUTPUT_OPERATOR
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

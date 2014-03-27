@@ -76,9 +76,9 @@ public:
 
 public:
     //Interface ISaxAttributeList:
-    virtual void    AddAttribute(const OUString& name, const OUString& value);
+    virtual void    AddAttribute(const OUString& name, const OUString& value) SAL_OVERRIDE;
 
-    virtual void    Clear();
+    virtual void    Clear() SAL_OVERRIDE;
 
     Reference<XAttributeList>   GetAttributeList() const;
 

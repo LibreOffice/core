@@ -55,7 +55,7 @@ public:
     explicit            XclExpStringRec( const XclExpRoot& rRoot, const OUString& rResult );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpStringRef     mxResult;
@@ -113,12 +113,12 @@ public:
     explicit            XclExpArray( XclTokenArrayRef xTokArr, const ScRange& rScRange );
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
-    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const SAL_OVERRIDE;
     /** Returns true, if the array formula contains volatile functions. */
-    virtual bool        IsVolatile() const;
+    virtual bool        IsVolatile() const SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
@@ -163,12 +163,12 @@ public:
     void                ExtendRange( const ScAddress& rScPos );
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
-    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const SAL_OVERRIDE;
     /** Returns true, if the shared formula contains volatile functions. */
-    virtual bool        IsVolatile() const;
+    virtual bool        IsVolatile() const SAL_OVERRIDE;
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclTokenArrayRef    mxTokArr;       /// The token array of a shared formula.
@@ -227,18 +227,18 @@ public:
     void                Finalize();
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
-    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const SAL_OVERRIDE;
     /** Returns true, if the multiple operations range is volatile. */
-    virtual bool        IsVolatile() const;
+    virtual bool        IsVolatile() const SAL_OVERRIDE;
     /** Writes the record if it is valid. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Returns true, if the passed cell position can be appended to this record. */
     bool                IsAppendable( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
 
     /** Writes the contents of the TABLEOP record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt16          mnLastAppXclCol;/// Column index of last appended cell.
@@ -335,15 +335,15 @@ class XclExpSingleCellBase : public XclExpCellBase
 {
 public:
     /** Returns the last column, which is equal to the first column for single cells. */
-    virtual sal_uInt16  GetLastXclCol() const;
+    virtual sal_uInt16  GetLastXclCol() const SAL_OVERRIDE;
     /** Return the XF identifier of the cell. */
-    virtual sal_uInt32  GetFirstXFId() const;
+    virtual sal_uInt32  GetFirstXFId() const SAL_OVERRIDE;
     /** Returns true, if this record does not contain at least one valid cell. */
-    virtual bool        IsEmpty() const;
+    virtual bool        IsEmpty() const SAL_OVERRIDE;
     /** Converts the XF identifier into the Excel XF index. */
-    virtual void        ConvertXFIndexes( const XclExpRoot& rRoot );
+    virtual void        ConvertXFIndexes( const XclExpRoot& rRoot ) SAL_OVERRIDE;
     /** Writes cell address, XF index, and calls WriteContents() for each cell. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 protected:
     explicit            XclExpSingleCellBase( sal_uInt16 nRecId, sal_Size nContSize,
@@ -361,7 +361,7 @@ protected:
 
 private:
     /** Writes cell address, XF index, and calls WriteContents() for each cell. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
     /** Derived classes write the contents of the specified cell (without XF index). */
     virtual void        WriteContents( XclExpStream& rStrm ) = 0;
 
@@ -382,9 +382,9 @@ public:
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             double fValue );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
-    virtual void        WriteContents( XclExpStream& rStrm );
+    virtual void        WriteContents( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     double              mfValue;        /// The cell value.
@@ -402,9 +402,9 @@ public:
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             bool bValue );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
-    virtual void        WriteContents( XclExpStream& rStrm );
+    virtual void        WriteContents( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     bool                mbValue;        /// The cell value.
@@ -435,15 +435,15 @@ public:
                             const EditTextObject* pEditText, XclExpHyperlinkHelper& rHlinkHelper );
 
     /** Returns true if the cell contains multi-line text. */
-    virtual bool        IsMultiLineText() const;
+    virtual bool        IsMultiLineText() const SAL_OVERRIDE;
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     /** Initializes the record contents. Called from constructors. */
     void                Init( const XclExpRoot& rRoot,
                             const ScPatternAttr* pPattern, XclExpStringRef xText );
 
-    virtual void        WriteContents( XclExpStream& rStrm );
+    virtual void        WriteContents( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpStringRef     mxText;         /// The cell text.
@@ -469,11 +469,11 @@ public:
                             XclExpTableopBuffer& rTableopBfr );
 
     /** Writes the FORMULA record and additional records related to the formula. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    virtual void        WriteContents( XclExpStream& rStrm );
+    virtual void        WriteContents( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     ScFormulaCell&      mrScFmlaCell;   /// The Calc formula cell.
@@ -499,18 +499,18 @@ class XclExpMultiCellBase : public XclExpCellBase
 {
 public:
     /** Returns the column index of the last cell this record describes. */
-    virtual sal_uInt16  GetLastXclCol() const;
+    virtual sal_uInt16  GetLastXclCol() const SAL_OVERRIDE;
     /** Return the XF identifier of the first contained cell. */
-    virtual sal_uInt32  GetFirstXFId() const;
+    virtual sal_uInt32  GetFirstXFId() const SAL_OVERRIDE;
     /** Returns true, if this record does not contain at least one valid cell. */
-    virtual bool        IsEmpty() const;
+    virtual bool        IsEmpty() const SAL_OVERRIDE;
 
     /** Convert all XF identifiers into the Excel XF indexes. */
-    virtual void        ConvertXFIndexes( const XclExpRoot& rRoot );
+    virtual void        ConvertXFIndexes( const XclExpRoot& rRoot ) SAL_OVERRIDE;
     /** Writes the record, calls WriteContents() for each contained cell.
         @descr  May write several records, if unused XF indexes are contained. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 protected:
     explicit            XclExpMultiCellBase( sal_uInt16 nRecId, sal_uInt16 nMulRecId,
@@ -569,16 +569,16 @@ public:
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId );
 
     /** Tries to merge the contents of the passed cell to own data. */
-    virtual bool        TryMerge( const XclExpCellBase& rCell );
+    virtual bool        TryMerge( const XclExpCellBase& rCell ) SAL_OVERRIDE;
     /** Inserts the Excel XF index(es) into the passed vector. */
-    virtual void        GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const;
+    virtual void        GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const SAL_OVERRIDE;
     /** Tries to remove unused Excel XF index(es). */
-    virtual void        RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes );
+    virtual void        RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes ) SAL_OVERRIDE;
 
 private:
     /** Writes the remaining contents of the specified cell (without XF index). */
-    virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol );
-    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol );
+    virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol ) SAL_OVERRIDE;
+    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol ) SAL_OVERRIDE;
 };
 
 
@@ -594,12 +594,12 @@ public:
                             sal_Int32 nRkValue );
 
     /** Tries to merge the contents of the passed cell to own data. */
-    virtual bool        TryMerge( const XclExpCellBase& rCell );
+    virtual bool        TryMerge( const XclExpCellBase& rCell ) SAL_OVERRIDE;
 
 private:
     /** Writes the remaining contents of the specified cell (without XF index). */
-    virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol );
-    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol );
+    virtual void        WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol ) SAL_OVERRIDE;
+    virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol ) SAL_OVERRIDE;
 
 private:
     ScfInt32Vec         maRkValues;     /// The cell values.
@@ -681,7 +681,7 @@ public:
     explicit            XclExpGuts( const XclExpRoot& rRoot );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt16          mnColLevels;    /// Number of visible column outline levels.
@@ -703,10 +703,10 @@ public:
                             sal_uInt16 nFirstUsedXclCol, sal_uInt32 nFirstUsedXclRow,
                             sal_uInt16 nFirstFreeXclCol, sal_uInt32 nFirstFreeXclRow );
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     /** Writes the contents of the DIMENSIONS record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     sal_uInt32          mnFirstUsedXclRow;  /// First used row.
@@ -775,11 +775,11 @@ public:
     /** Returns true, if the column has default format and width. */
     bool                IsDefault( const XclExpDefcolwidth& rDefColWidth ) const;
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Writes the contents of this COLINFO record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpXFId          maXFId;             /// The XF identifier for column default format.
@@ -812,8 +812,8 @@ public:
     void                Finalize( ScfUInt16Vec& rXFIndexes );
 
     /** Writes all COLINFO records of this buffer. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpColinfo >   XclExpColinfoList;
@@ -856,7 +856,7 @@ public:
     XclExpDefaultRowData& GetDefaultData() { return maDefData; }
 private:
     /** Writes the contents of the record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpDefaultRowData maDefData;         /// Record data.
@@ -924,8 +924,8 @@ public:
     void                WriteCellList( XclExpStream& rStrm );
 
     /** Writes the ROW record if the row is not disabled (see DisableIfDefault() function). */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
     inline sal_uInt32   GetXclRowRpt() const { return mnXclRowRpt; }
     inline void         SetXclRowRpt( sal_uInt32 nRpt ){ mnXclRowRpt = nRpt; }
@@ -936,7 +936,7 @@ private:
     void                InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase );
 
     /** Writes the contents of the ROW record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpCellBase > XclExpCellList;
@@ -978,8 +978,8 @@ public:
     void                Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes );
 
     /** Writes the DIMENSIONS record, all ROW records and all cell records. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
     XclExpDimensions*   GetDimensions();
 
@@ -1045,8 +1045,8 @@ public:
             EXC_ID_MERGEDCELLS, EXC_ID_HLINK, EXC_ID_DVAL. */
     XclExpRecordRef     CreateRecord( sal_uInt16 nRecId ) const;
     /** Saves the entire cell table. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;

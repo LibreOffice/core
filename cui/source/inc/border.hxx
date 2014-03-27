@@ -47,14 +47,14 @@ public:
                                 const SfxItemSet& rAttrSet);
     static sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rCoreAttrs );
-    virtual void        Reset( const SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& rCoreAttrs ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
     void                HideShadowControls();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     SvxBorderTabPage( Window* pParent, const SfxItemSet& rCoreAttrs );

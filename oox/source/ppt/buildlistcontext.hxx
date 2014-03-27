@@ -34,9 +34,9 @@ namespace oox { namespace ppt {
 
         ~BuildListContext( );
 
-        virtual void onEndElement();
+        virtual void onEndElement() SAL_OVERRIDE;
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
     private:
         bool              mbInBldGraphic;
         bool              mbBuildAsOne;

@@ -74,16 +74,16 @@ namespace dbaui
 
     protected:
         // SfxTabPage overridables
-        virtual void Reset( const SfxItemSet& _rCoreAttrs );
+        virtual void Reset( const SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue );
+        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
         void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();
@@ -105,10 +105,10 @@ namespace dbaui
         OGeneralPageDialog( Window* pParent, const SfxItemSet& _rItems );
 
     protected:
-        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue );
-        virtual void setParentTitle( const OUString& _sURLPrefix );
+        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
+        virtual void setParentTitle( const OUString& _sURLPrefix ) SAL_OVERRIDE;
     };
 
     // OGeneralPageWizard
@@ -170,13 +170,13 @@ namespace dbaui
         DocumentDescriptor      GetSelectedDocument() const;
 
     protected:
-        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual bool FillItemSet( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
 
-        virtual void GetFocus();
+        virtual void GetFocus() SAL_OVERRIDE;
 
-        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue );
-        virtual OUString getDatasourceName( const SfxItemSet& _rSet );
-        virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
+        virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue ) SAL_OVERRIDE;
+        virtual OUString getDatasourceName( const SfxItemSet& _rSet ) SAL_OVERRIDE;
+        virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName ) SAL_OVERRIDE;
 
         ::std::vector< OUString>
                             m_aEmbeddedURLPrefixes;

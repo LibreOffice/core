@@ -57,9 +57,9 @@ public:
     virtual ~SwBaseLink();
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
-    virtual void Closed();
+    virtual void Closed() SAL_OVERRIDE;
 
     virtual const SwNode* GetAnchor() const;
 

@@ -40,19 +40,19 @@ public:
     QuickDiagrammingImport( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     // from FilterBase
-    virtual bool importDocument() throw();
-    virtual bool exportDocument() throw();
+    virtual bool importDocument() throw() SAL_OVERRIDE;
+    virtual bool exportDocument() throw() SAL_OVERRIDE;
 
-    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
     virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
 
-    virtual oox::vml::Drawing* getVmlDrawing();
-    virtual oox::drawingml::chart::ChartConverter* getChartConverter();
+    virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
 
 private:
-    virtual OUString implGetImplementationName() const;
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
+    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
 };
 
 } }

@@ -52,12 +52,12 @@ namespace frm
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual void    invalidateFeatureState_Broadcast();
+        virtual void    invalidateFeatureState_Broadcast() SAL_OVERRIDE;
         virtual ::com::sun::star::frame::FeatureStateEvent
-                        buildStatusEvent() const;
+                        buildStatusEvent() const SAL_OVERRIDE;
 
     protected:
         /** determines whether our functionality is currently available
@@ -82,10 +82,10 @@ namespace frm
         ~OPasteClipboardDispatcher();
 
         // OClipboardDispatcher
-        virtual sal_Bool    implIsEnabled( ) const;
+        virtual sal_Bool    implIsEnabled( ) const SAL_OVERRIDE;
 
         // ORichTextFeatureDispatcher
-        virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
+        virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnClipboardChanged, TransferableDataHelper* );

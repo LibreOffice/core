@@ -48,17 +48,17 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
             SVX_DLLPUBLIC ~SdrCustomShapeAdjustmentItem();
 
-            virtual bool                operator==( const SfxPoolItem& ) const;
+            virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
-                                            OUString &rText, const IntlWrapper * = 0) const;
-            virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const;
-            virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const;
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;
-            virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
+                                            OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
+            virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const SAL_OVERRIDE;
+            virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const SAL_OVERRIDE;
+            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;
+            virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
 
-            virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-            virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+            virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+            virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
             sal_uInt32                          GetCount() const { return aAdjustmentValueList.size(); };
             SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;

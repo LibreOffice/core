@@ -16,7 +16,7 @@
 class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject
 {
 public:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact()
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE
     {
         return new sdr::contact::ViewContactOfOpenGLObj(*this);
     }

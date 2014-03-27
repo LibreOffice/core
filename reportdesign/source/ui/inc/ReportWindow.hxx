@@ -61,9 +61,9 @@ namespace rptui
         OReportWindow(OReportWindow&);
         void operator =(OReportWindow&);
     protected:
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
         // OPropertyChangeListener
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     public:
         OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView);
         virtual ~OReportWindow();
@@ -72,7 +72,7 @@ namespace rptui
         */
         void initialize();
         // WINDOW overloads
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
         inline ODesignView*         getReportView() const { return m_pView; }
         inline OScrollWindowHelper* getScrollWindow() const { return m_pParent; }
@@ -182,9 +182,9 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
-        virtual void markSection(const sal_uInt16 _nPos);
+        virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
 
         /** fills the positions of all collapsed sections.

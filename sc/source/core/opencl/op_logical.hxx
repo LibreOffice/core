@@ -19,30 +19,30 @@ class OpAnd: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "And"; }
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "And"; }
 };
 
 class OpOr: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Or"; }
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Or"; }
 };
 class OpNot: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Not"; }
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Not"; }
 };
 class OpXor: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments);
-    virtual std::string BinFuncName(void) const { return "Xor"; }
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Xor"; }
 };
 
 }}

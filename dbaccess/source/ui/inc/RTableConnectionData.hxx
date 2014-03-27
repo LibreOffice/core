@@ -49,8 +49,8 @@ namespace dbaui
         sal_Bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
     protected:
-        virtual OConnectionLineDataRef CreateLineDataObj();
-        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
+        virtual OConnectionLineDataRef CreateLineDataObj() SAL_OVERRIDE;
+        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData ) SAL_OVERRIDE;
 
         ORelationTableConnectionData& operator=( const ORelationTableConnectionData& rConnData );
     public:
@@ -61,14 +61,14 @@ namespace dbaui
                                       const OUString& rConnName = OUString() );
         virtual ~ORelationTableConnectionData();
 
-        virtual void CopyFrom(const OTableConnectionData& rSource);
-        virtual OTableConnectionData* NewInstance() const { return new ORelationTableConnectionData(); }
+        virtual void CopyFrom(const OTableConnectionData& rSource) SAL_OVERRIDE;
+        virtual OTableConnectionData* NewInstance() const SAL_OVERRIDE { return new ORelationTableConnectionData(); }
 
         /** Update create a new relation
 
             @return true if successful
         */
-        virtual sal_Bool Update();
+        virtual sal_Bool Update() SAL_OVERRIDE;
 
         void        SetCardinality();
         inline void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }

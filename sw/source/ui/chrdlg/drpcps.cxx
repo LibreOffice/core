@@ -93,7 +93,7 @@ class SwDropCapsPict : public Control
     Size            maTextSize;
     Reference< css::i18n::XBreakIterator >   xBreak;
 
-    virtual void    Paint(const Rectangle &rRect);
+    virtual void    Paint(const Rectangle &rRect) SAL_OVERRIDE;
     void            CheckScript( void );
     Size            CalcTextSize( void );
     inline void     InitPrinter( void );
@@ -122,10 +122,10 @@ public:
 
     void UpdatePaintSettings( void );       // also invalidates control!
 
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void SetText( const OUString& rT );
+    void SetText( const OUString& rT ) SAL_OVERRIDE;
     void SetLines( sal_uInt8 nL );
     void SetDistance( sal_uInt16 nD );
     void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );

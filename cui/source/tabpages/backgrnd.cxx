@@ -187,9 +187,9 @@ public:
     void            NotifyChange( const Bitmap* pBitmap );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void    Resize();
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 
 private:
 

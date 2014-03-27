@@ -39,16 +39,16 @@ class SidebarTxtControl : public Control
         SwPostItMgr& mrPostItMgr;
 
     protected:
-        virtual void    Paint( const Rectangle& rRect);
-        virtual void    KeyInput( const KeyEvent& rKeyEvt );
-        virtual void    MouseMove( const MouseEvent& rMEvt );
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void    Command( const CommandEvent& rCEvt );
-        virtual void    LoseFocus();
-        virtual void    RequestHelp(const HelpEvent &rEvt);
-        virtual OUString GetSurroundingText() const;
-        virtual Selection GetSurroundingTextSelection() const;
+        virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+        virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+        virtual void    LoseFocus() SAL_OVERRIDE;
+        virtual void    RequestHelp(const HelpEvent &rEvt) SAL_OVERRIDE;
+        virtual OUString GetSurroundingText() const SAL_OVERRIDE;
+        virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
 
         DECL_LINK( Select, Menu* );
 
@@ -59,13 +59,13 @@ class SidebarTxtControl : public Control
                            SwPostItMgr& rPostItMgr );
         ~SidebarTxtControl();
 
-        virtual void GetFocus();
+        virtual void GetFocus() SAL_OVERRIDE;
 
         OutlinerView* GetTextView() const;
 
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
 } } // end of namespace sw::sidebarwindows

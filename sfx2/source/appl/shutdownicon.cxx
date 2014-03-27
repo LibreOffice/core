@@ -87,8 +87,8 @@ extern "C" { static void SAL_CALL thisModule() {} }
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
 {
 public:
-    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception );
-    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception );
+    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )
@@ -219,7 +219,7 @@ public:
         *pModule = NULL;
         Start();
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         delete m_pModule;
         delete this;
@@ -235,7 +235,7 @@ public:
         m_xDesktop = xDesktop;
         Start();
     }
-    virtual void Timeout()
+    virtual void Timeout() SAL_OVERRIDE
     {
         m_xDesktop->terminate();
         delete this;

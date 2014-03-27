@@ -62,12 +62,12 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState );
-        virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
-        virtual void                enterState( WizardState _nState );
-        virtual bool                onFinish();
+        virtual ::svt::OWizardPage* createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual WizardState         determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
+        virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
+        virtual bool                onFinish() SAL_OVERRIDE;
 
-        virtual sal_Bool approveControl(sal_Int16 _nClassId);
+        virtual sal_Bool approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
 
     protected:
         void createRadios();
@@ -104,12 +104,12 @@ namespace dbp
 
     protected:
         // TabPage overridables
-        void ActivatePage();
+        void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
         DECL_LINK( OnMoveEntry, PushButton* );
         DECL_LINK( OnEntrySelected, ListBox* );
@@ -135,8 +135,8 @@ namespace dbp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
@@ -163,11 +163,11 @@ namespace dbp
 
     protected:
         // TabPage overridables
-        void ActivatePage();
+        void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
         void implTraveledOptions();
 
@@ -186,7 +186,7 @@ namespace dbp
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
 
         // ODBFieldPage overridables
-        virtual OUString& getDBFieldSetting();
+        virtual OUString& getDBFieldSetting() SAL_OVERRIDE;
     };
 
 
@@ -205,12 +205,12 @@ namespace dbp
 
     protected:
         // TabPage overridables
-        void ActivatePage();
+        void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
     };
 
 

@@ -119,7 +119,7 @@ private:
     LwpObjectID m_STXInfo;
 
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     void ReadPlug();
     void ParseDocContent(IXFStream* pOutputStream);
     void RegisterTextStyles();
@@ -133,8 +133,8 @@ protected:
     void RegisterDefaultParaStyles();
 
 public:
-    void Parse(IXFStream* pOutputStream);
-    void RegisterStyle();
+    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    void RegisterStyle() SAL_OVERRIDE;
 
     inline sal_Bool IsChildDoc();
     inline sal_Bool HonorProtection();
@@ -230,10 +230,10 @@ public:
 private:
     LwpObjectID m_Doc;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 public:
-    void RegisterStyle();
-    void Parse(IXFStream* pOutputStream);
+    void RegisterStyle() SAL_OVERRIDE;
+    void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
 };
 
 #endif

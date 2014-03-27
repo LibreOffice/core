@@ -125,7 +125,7 @@ class LwpFormulaConst:public LwpFormulaArg
 {
 public:
     LwpFormulaConst( double dVal);
-    virtual OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 private:
     double m_dVal;
 };
@@ -134,7 +134,7 @@ class LwpFormulaText:public LwpFormulaArg
 {
 public:
     LwpFormulaText( const OUString& aText);
-    virtual OUString ToString(LwpTableLayout* /*pCellsMap*/){return m_aText;}
+    virtual OUString ToString(LwpTableLayout* /*pCellsMap*/) SAL_OVERRIDE {return m_aText;}
 private:
     OUString m_aText;
 };
@@ -147,7 +147,7 @@ public:
     sal_Int16 GetCol(){return m_aCol;}
     sal_Int16 GetRow(){return m_aRow;}
 
-    virtual OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 private:
     sal_Int16 m_aCol;
     sal_Int16 m_aRow;
@@ -158,7 +158,7 @@ class LwpFormulaCellRangeAddr:public LwpFormulaArg
 public:
     LwpFormulaCellRangeAddr(sal_Int16 aStartCol, sal_Int16 aStartRow, sal_Int16 aEndCol, sal_Int16 aEndRow);
 
-    virtual OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 private:
     sal_Int16 m_aStartCol;
     sal_Int16 m_aStartRow;
@@ -174,8 +174,8 @@ public:
 
     void AddArg(LwpFormulaArg* pArg);
 
-    virtual OUString ToString(LwpTableLayout* pCellsMap);
-    OUString ToArgString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
+    OUString ToArgString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 
 protected:
     vector<LwpFormulaArg*> m_aArgs;
@@ -186,14 +186,14 @@ class LwpFormulaOp : public LwpFormulaFunc
 {
 public:
     LwpFormulaOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
-    virtual OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 };
 
 class LwpFormulaUnaryOp : public LwpFormulaFunc
 {
 public:
     LwpFormulaUnaryOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
-    virtual OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 };
 
 class LwpFormulaInfo : public LwpCellList
@@ -201,12 +201,12 @@ class LwpFormulaInfo : public LwpCellList
 public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFormulaInfo();
-    sal_Bool IsFormula(){return sal_True;}
+    sal_Bool IsFormula() SAL_OVERRIDE {return sal_True;}
     void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
     OUString Convert(LwpTableLayout* pCellsMap);
-    void Convert(XFCell * pCell, LwpTableLayout* pCellsMap);
+    void Convert(XFCell * pCell, LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_Bool ReadCellID();
     sal_Bool ReadText();
     sal_Bool ReadCellRange();

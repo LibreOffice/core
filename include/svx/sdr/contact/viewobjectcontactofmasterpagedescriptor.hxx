@@ -44,8 +44,8 @@ namespace sdr
             // access to MasterPageDescriptor
             sdr::MasterPageDescriptor& GetMasterPageDescriptor() const;
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
-            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
         };
     } // end of namespace contact
 } // end of namespace sdr

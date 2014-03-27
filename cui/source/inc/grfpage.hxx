@@ -35,9 +35,9 @@ class SvxCropExample : public Window
 public:
     SvxCropExample( Window* pPar, WinBits nStyle );
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void SetTopLeft( const Point& rNew )    { aTopLeft = rNew; }
     void SetTop( long nVal )                { aTopLeft.X() = nVal; }
@@ -107,15 +107,15 @@ class SvxGrfCropPage : public SfxTabPage
     void            CalcZoom();
     void            CalcMinMaxBorder();
     void            GraphicHasChanged(sal_Bool bFound);
-    virtual void    ActivatePage(const SfxItemSet& rSet);
+    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
 
     Size            GetGrfOrigSize( const Graphic& ) const;
 public:
     static SfxTabPage *Create( Window *pParent, const SfxItemSet &rSet );
 
-    virtual bool FillItemSet( SfxItemSet &rSet );
-    virtual void Reset( const SfxItemSet &rSet );
-    virtual int DeactivatePage( SfxItemSet *pSet );
+    virtual bool FillItemSet( SfxItemSet &rSet ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet &rSet ) SAL_OVERRIDE;
+    virtual int DeactivatePage( SfxItemSet *pSet ) SAL_OVERRIDE;
 };
 
 

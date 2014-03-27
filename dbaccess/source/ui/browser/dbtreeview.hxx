@@ -34,7 +34,7 @@ namespace dbaui
         DBTreeListBox*  m_pTreeListBox;
     protected:
         // window overridables
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
     public:
 
         DBTreeView( Window* pParent,
@@ -55,7 +55,7 @@ namespace dbaui
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
 
-        virtual void GetFocus();
+        virtual void GetFocus() SAL_OVERRIDE;
     };
 }
 

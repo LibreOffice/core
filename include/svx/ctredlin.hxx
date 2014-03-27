@@ -76,9 +76,9 @@ public:
                     ~SvLBoxColorString();
 
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
-    SvLBoxItem*     Create() const;
+    SvLBoxItem*     Create() const SAL_OVERRIDE;
 };
 
 class SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
@@ -105,8 +105,8 @@ private:
 
 protected:
 
-    virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*);
-    virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
+    virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*) SAL_OVERRIDE;
+    virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
 
 
 
@@ -143,7 +143,7 @@ public:
                                 SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
 
 
-    virtual SvTreeListEntry* CreateEntry() const;
+    virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
 
     void            SetColCompareHdl(const Link& rLink ) { aColCompareLink = rLink; }
     const Link&     GetColCompareHdl() const { return aColCompareLink; }
@@ -204,7 +204,7 @@ protected:
 public:
                     SvxTPFilter( Window * pParent);
 
-    virtual void    DeactivatePage();
+    virtual void    DeactivatePage() SAL_OVERRIDE;
     void            SetRedlinTable(SvxRedlinTable*);
 
     Date            GetFirstDate() const;
@@ -352,8 +352,8 @@ public:
     void            SetUndoClickHdl( const Link& rLink ) { UndoClickLk = rLink; }
     const Link&     GetUndoAllClickHdl() const { return UndoClickLk; }
 
-    virtual void    ActivatePage();
-    virtual void    DeactivatePage();
+    virtual void    ActivatePage() SAL_OVERRIDE;
+    virtual void    DeactivatePage() SAL_OVERRIDE;
 };
 
 

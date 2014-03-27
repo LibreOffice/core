@@ -51,7 +51,7 @@ namespace drawinglayer
             double                                  mfRotation;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             OverlayBitmapExPrimitive(
@@ -71,7 +71,7 @@ namespace drawinglayer
             double getRotation() const { return mfRotation; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
             DeclPrimitive2DIDBlock()
         };
@@ -96,7 +96,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             OverlayCrosshairPrimitive(
@@ -112,7 +112,7 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
             DeclPrimitive2DIDBlock()
         };
@@ -144,7 +144,7 @@ namespace drawinglayer
             double                          mfRotation;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             OverlayRectanglePrimitive(
@@ -164,7 +164,7 @@ namespace drawinglayer
             double getRotation() const { return mfRotation; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
             DeclPrimitive2DIDBlock()
         };
@@ -200,7 +200,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             OverlayHelplineStripedPrimitive(
@@ -218,7 +218,7 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
             DeclPrimitive2DIDBlock()
         };
@@ -245,7 +245,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
             OverlayRollingRectanglePrimitive(
@@ -261,7 +261,7 @@ namespace drawinglayer
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
             // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
             DeclPrimitive2DIDBlock()
         };

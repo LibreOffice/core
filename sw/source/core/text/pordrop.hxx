@@ -90,11 +90,11 @@ public:
                    const KSHORT nDistance );
     virtual ~SwDropPortion();
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
             void PaintDrop( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
 
     inline MSHORT GetLines() const { return nLines; }
     inline KSHORT GetDistance() const { return nDistance; }
@@ -111,7 +111,7 @@ public:
 
     static void DeleteDropCapCache();
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

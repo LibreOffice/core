@@ -38,14 +38,14 @@ public:
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.
     // virtual Point GetOffset() const;
-    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum );
+    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum ) SAL_OVERRIDE;
 
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
-                                    const Rectangle *pRect) const;
+                                    const Rectangle *pRect) const SAL_OVERRIDE;
 
     sal_Bool RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_INC_DPAGE_HXX

@@ -220,8 +220,8 @@ public:
     virtual             ~ContextHandler2();
 
     // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() throw() { ContextHandler::acquire(); }
-    virtual void SAL_CALL release() throw() { ContextHandler::release(); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { ContextHandler::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { ContextHandler::release(); }
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
@@ -230,38 +230,38 @@ public:
                             sal_Int32 nElement,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
                             throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL SAL_OVERRIDE;
 
     virtual void SAL_CALL startFastElement(
                             sal_Int32 nElement,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
                             throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL SAL_OVERRIDE;
 
     virtual void SAL_CALL characters( const OUString& rChars )
                             throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL SAL_OVERRIDE;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement )
                             throw(  ::com::sun::star::xml::sax::SAXException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL;
+                                    ::com::sun::star::uno::RuntimeException, std::exception ) SAL_FINAL SAL_OVERRIDE;
 
     // oox.core.ContextHandler interface --------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        endRecord( sal_Int32 nRecId );
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        endRecord( sal_Int32 nRecId ) SAL_OVERRIDE;
 
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const OUString& rChars );
-    virtual void        onEndElement();
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void        onEndElement() SAL_OVERRIDE;
 
-    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
-    virtual void        onStartRecord( SequenceInputStream& rStrm );
-    virtual void        onEndRecord();
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        onStartRecord( SequenceInputStream& rStrm ) SAL_OVERRIDE;
+    virtual void        onEndRecord() SAL_OVERRIDE;
 };
 
 

@@ -76,7 +76,7 @@ public:
     void    Invalidate();
 protected:
     // SwClient
-    virtual void    Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void    Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 };
 
@@ -537,15 +537,15 @@ private:
     SwXMeta & m_rMeta;
 
     virtual void PrepareForAttach(uno::Reference< text::XTextRange > & xRange,
-            const SwPaM & rPam);
+            const SwPaM & rPam) SAL_OVERRIDE;
 
     virtual bool CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
-        throw (lang::IllegalArgumentException, uno::RuntimeException);
+        throw (lang::IllegalArgumentException, uno::RuntimeException) SAL_OVERRIDE;
 
 protected:
-    virtual const SwStartNode *GetStartNode() const;
+    virtual const SwStartNode *GetStartNode() const SAL_OVERRIDE;
     virtual uno::Reference< text::XTextCursor >
-        CreateCursor() throw (uno::RuntimeException);
+        CreateCursor() throw (uno::RuntimeException) SAL_OVERRIDE;
 
 public:
     SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta);
@@ -554,22 +554,22 @@ public:
     void Invalidate() { SwXText::Invalidate(); };
 
     // XInterface
-    virtual void SAL_CALL acquire() throw()
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE
         { OSL_FAIL("ERROR: SwXMetaText::acquire"); }
-    virtual void SAL_CALL release() throw()
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE
         { OSL_FAIL("ERROR: SwXMetaText::release"); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL
-        getImplementationId() throw (uno::RuntimeException, std::exception);
+        getImplementationId() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XText
     virtual uno::Reference< text::XTextCursor >  SAL_CALL
-        createTextCursor() throw (uno::RuntimeException, std::exception);
+        createTextCursor() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Reference< text::XTextCursor >  SAL_CALL
         createTextCursorByRange(
             const uno::Reference< text::XTextRange > & xTextPosition)
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     SwXMeta & GetXMeta() { return m_rMeta; }
 
@@ -690,7 +690,7 @@ public:
     inline const ::sw::MetaField * GetMetaField() const;
 protected:
     // SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 };
 

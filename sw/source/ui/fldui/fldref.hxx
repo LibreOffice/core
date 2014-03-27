@@ -74,7 +74,7 @@ class SwFldRefPage : public SwFldPage
     sal_Int32  GetSavedSelectedPos() const;
 
 protected:
-    virtual sal_uInt16      GetGroup();
+    virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
                         SwFldRefPage(Window* pParent, const SfxItemSet& rSet);
@@ -83,10 +83,10 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
-    virtual void        FillUserData();
+    virtual void        FillUserData() SAL_OVERRIDE;
 };
 
 #endif

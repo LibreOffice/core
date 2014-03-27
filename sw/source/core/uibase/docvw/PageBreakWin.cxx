@@ -61,7 +61,7 @@ namespace
                 SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
 
-            virtual void MouseMove( const MouseEvent& rMEvt );
+            virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     };
 
     void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )

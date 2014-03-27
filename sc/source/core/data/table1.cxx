@@ -129,7 +129,7 @@ struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
         mpTab(pTab)
     {}
 
-    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight)
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) SAL_OVERRIDE
     {
         mpTab->SetRowHeightOnly(nStartRow, nEndRow, nHeight);
         return false;
@@ -148,7 +148,7 @@ struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
         mnPPTY(nPPTY)
     {}
 
-    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight)
+    virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) SAL_OVERRIDE
     {
         return mpTab->SetRowHeightRange(nStartRow, nEndRow, nHeight, mnPPTX, mnPPTY);
     }

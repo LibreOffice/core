@@ -98,14 +98,14 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
         SwAttrSetChg *pa = 0,
         SwAttrSetChg *pb = 0 );
 
-    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat );
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) SAL_OVERRIDE;
 
 protected:
-    virtual void MakeAll();
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
         // only changes the Framesize, not the PrtArea size
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
 
 public:
     SwTabFrm( SwTable &, SwFrm* );  // calling Regist Flys always after creation _and_pasting!
@@ -121,16 +121,16 @@ public:
     inline       SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual bool GetInfo( SfxPoolItem &rHnt ) const;
+    virtual bool GetInfo( SfxPoolItem &rHnt ) const SAL_OVERRIDE;
     virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
-    virtual void CheckDirection( bool bVert );
+                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
+    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, bool bNotify = true );
+                          const void *pVoid = 0, bool bNotify = true ) SAL_OVERRIDE;
 
                  SwCntntFrm *FindLastCntnt();
     inline const SwCntntFrm *FindLastCntnt() const;
@@ -215,7 +215,7 @@ public:
 
     sal_uInt16 GetBottomLineSize() const;
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };

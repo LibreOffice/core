@@ -79,32 +79,32 @@ namespace dbaui
         DECLARE_SERVICE_INFO_STATIC( );
         DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(Exception, std::exception);
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException);
-        virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(Exception, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
         // Overrides to resolve inheritance ambiguity
-        virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
-        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::uno::RuntimeException, std::exception)
+        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { return ODatabaseAdministrationDialog::getPropertyValue(p1); }
-        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::addPropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::removePropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::addVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::removeVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL setTitle(const OUString& p1) throw (css::uno::RuntimeException, std::exception)
+        virtual void SAL_CALL setTitle(const OUString& p1) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { ODatabaseAdministrationDialog::setTitle(p1); }
-        virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException, std::exception)
+        virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { return ODatabaseAdministrationDialog::execute(); }
 
     protected:
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog( Window* _pParent );
-        virtual void implInitialize( const com::sun::star::uno::Any& _rValue );
+        virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;
+        virtual void implInitialize( const com::sun::star::uno::Any& _rValue ) SAL_OVERRIDE;
     protected:
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };

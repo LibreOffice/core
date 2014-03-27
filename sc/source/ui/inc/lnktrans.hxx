@@ -35,10 +35,10 @@ public:
 
     void                SetLinkURL( const OUString& rURL, const OUString& rText );
 
-    virtual void        AddSupportedFormats();
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void        ObjectReleased();
-    virtual void        DragFinished( sal_Int8 nDropAction );
+    virtual void        AddSupportedFormats() SAL_OVERRIDE;
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual void        ObjectReleased() SAL_OVERRIDE;
+    virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 };
 
 #endif

@@ -31,7 +31,7 @@ class SdParagraphDlg : public SfxTabDialog
     sal_uInt16      m_nParaStd;
 
 private:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
                     SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr );

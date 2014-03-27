@@ -70,7 +70,7 @@ public:
                     HtmlErrorContext(Window *pWin=0);
                     ~HtmlErrorContext() {};
 
-    virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr );
+    virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr ) SAL_OVERRIDE;
 
     void            SetContext( sal_uInt16 nResId, const OUString& rURL );
     void            SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 );

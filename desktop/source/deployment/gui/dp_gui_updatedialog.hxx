@@ -86,9 +86,9 @@ public:
 
     ~UpdateDialog();
 
-    virtual bool Close();
+    virtual bool Close() SAL_OVERRIDE;
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,
@@ -120,9 +120,9 @@ private:
         CheckListBox(UpdateDialog::CheckListBox &); // not defined
         void operator =(UpdateDialog::CheckListBox &); // not defined
 
-        virtual void MouseButtonDown(MouseEvent const & event);
-        virtual void MouseButtonUp(MouseEvent const & event);
-        virtual void KeyInput(KeyEvent const & event);
+        virtual void MouseButtonDown(MouseEvent const & event) SAL_OVERRIDE;
+        virtual void MouseButtonUp(MouseEvent const & event) SAL_OVERRIDE;
+        virtual void KeyInput(KeyEvent const & event) SAL_OVERRIDE;
 
         void handlePopupMenu( const Point &rPos );
 

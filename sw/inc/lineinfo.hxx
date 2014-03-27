@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation
     sal_Bool                bRestartEachPage;   /**< Restart counting at the first paragraph of each page
                                                     (even on follows when paragraphs are splitted) */
 protected:
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     SwLineNumberInfo();

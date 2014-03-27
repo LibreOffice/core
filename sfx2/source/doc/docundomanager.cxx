@@ -97,8 +97,8 @@ namespace sfx2
               SfxObjectShell* getObjectShell()       { return rAntiImpl.getBaseModel().GetObjectShell(); }
 
         // IUndoManagerImplementation
-        virtual ::svl::IUndoManager&        getImplUndoManager();
-        virtual Reference< XUndoManager >   getThis();
+        virtual ::svl::IUndoManager&        getImplUndoManager() SAL_OVERRIDE;
+        virtual Reference< XUndoManager >   getThis() SAL_OVERRIDE;
 
         void disposing()
         {
@@ -174,12 +174,12 @@ namespace sfx2
 
         virtual ~SolarMutexFacade() {}
 
-        virtual void acquire()
+        virtual void acquire() SAL_OVERRIDE
         {
             Application::GetSolarMutex().acquire();
         }
 
-        virtual void release()
+        virtual void release() SAL_OVERRIDE
         {
             Application::GetSolarMutex().release();
         }
@@ -202,12 +202,12 @@ namespace sfx2
         {
         }
 
-        virtual void clear()
+        virtual void clear() SAL_OVERRIDE
         {
             m_guard.clear();
         }
 
-        virtual ::framework::IMutex& getGuardedMutex()
+        virtual ::framework::IMutex& getGuardedMutex() SAL_OVERRIDE
         {
             // note that this means that we *know* that SfxModelGuard also locks the SolarMutex (nothing more, nothing less).
             // If this ever changes, we need to adjust this code here, too.

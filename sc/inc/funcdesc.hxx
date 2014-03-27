@@ -64,49 +64,49 @@ public:
       @param _rArgumens
       Vector, which the indices are written to
     */
-    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const ;
+    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const SAL_OVERRIDE ;
 
     /**
       Returns the category of the function
 
       @return    the category of the function
     */
-    virtual const formula::IFunctionCategory* getCategory() const ;
+    virtual const formula::IFunctionCategory* getCategory() const SAL_OVERRIDE ;
 
     /**
       Returns the description of the function
 
       @return    the description of the function, or an empty OUString if there is no description
     */
-    virtual OUString getDescription() const ;
+    virtual OUString getDescription() const SAL_OVERRIDE ;
 
     /**
       Returns the function signature with parameters from the passed string array.
 
       @return    function signature with parameters
     */
-    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const ;
+    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const SAL_OVERRIDE ;
 
     /**
       Returns the name of the function
 
       @return    the name of the function, or an empty OUString if there is no name
     */
-    virtual OUString getFunctionName() const ;
+    virtual OUString getFunctionName() const SAL_OVERRIDE ;
 
     /**
       Returns the help id of the function
 
       @return   help id of the function
     */
-    virtual OString getHelpId() const ;
+    virtual OString getHelpId() const SAL_OVERRIDE ;
 
     /**
       Returns number of arguments
 
       @return   help id of the function
     */
-    virtual sal_uInt32 getParameterCount() const ;
+    virtual sal_uInt32 getParameterCount() const SAL_OVERRIDE ;
 
     /**
       Returns description of parameter at given position
@@ -116,7 +116,7 @@ public:
 
       @return   OUString description of the parameter
     */
-    virtual OUString getParameterDescription(sal_uInt32 _nPos) const ;
+    virtual OUString getParameterDescription(sal_uInt32 _nPos) const SAL_OVERRIDE ;
 
     /**
       Returns name of parameter at given position
@@ -126,7 +126,7 @@ public:
 
       @return   OUString name of the parameter
     */
-    virtual OUString getParameterName(sal_uInt32 _nPos) const ;
+    virtual OUString getParameterName(sal_uInt32 _nPos) const SAL_OVERRIDE ;
 
     /**
       Returns list of all parameter names
@@ -140,7 +140,7 @@ public:
 
       @return   OUString of the form "FUNCTIONNAME( parameter list )"
     */
-    virtual OUString getSignature() const ;
+    virtual OUString getSignature() const SAL_OVERRIDE ;
 
     /**
       Returns the number of non-suppressed arguments
@@ -153,14 +153,14 @@ public:
       @return    number of non-suppressed arguments
     */
     sal_uInt16  GetSuppressedArgCount() const;
-    virtual sal_Int32 getSuppressedArgumentCount() const ;
+    virtual sal_Int32 getSuppressedArgumentCount() const SAL_OVERRIDE ;
 
     /**
       Requests function data from AddInCollection
 
       Logs error message on failure for debugging purposes
     */
-    virtual void initArgumentInfo()  const;
+    virtual void initArgumentInfo()  const SAL_OVERRIDE;
 
     /**
       Returns true if parameter at given position is optional
@@ -170,7 +170,7 @@ public:
 
       @return   true if optional, false if not optional
     */
-    virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
+    virtual bool isParameterOptional(sal_uInt32 _nPos) const SAL_OVERRIDE ;
 
     /**
       Compares functions by name, respecting special characters
@@ -261,8 +261,8 @@ public:
     /**
       @return count of functions in this category
     */
-    virtual sal_uInt32 getCount() const;
-    virtual const formula::IFunctionManager* getFunctionManager() const;
+    virtual sal_uInt32 getCount() const SAL_OVERRIDE;
+    virtual const formula::IFunctionManager* getFunctionManager() const SAL_OVERRIDE;
 
     /**
       Gives the _nPos'th function in this category.
@@ -272,13 +272,13 @@ public:
 
       @return function at the _nPos postion in this category, null if _nPos out of bounds.
     */
-    virtual const formula::IFunctionDescription* getFunction(sal_uInt32 _nPos) const;
+    virtual const formula::IFunctionDescription* getFunction(sal_uInt32 _nPos) const SAL_OVERRIDE;
 
     /**
       @return index number of this category.
     */
-    virtual sal_uInt32 getNumber() const;
-    virtual OUString getName() const;
+    virtual sal_uInt32 getNumber() const SAL_OVERRIDE;
+    virtual OUString getName() const SAL_OVERRIDE;
 
 private:
     ScFunctionMgr* m_pMgr; /**< function manager for this category */
@@ -358,7 +358,7 @@ public:
     /**
       @return number of categories, not counting the cumulative category ('All')
     */
-    virtual sal_uInt32 getCount() const;
+    virtual sal_uInt32 getCount() const SAL_OVERRIDE;
 
     /**
       Returns a category.
@@ -370,7 +370,7 @@ public:
 
       @return pointer to an IFunctionCategory object, null if nPos out of bounds.
     */
-    virtual const formula::IFunctionCategory* getCategory(sal_uInt32 nPos) const;
+    virtual const formula::IFunctionCategory* getCategory(sal_uInt32 nPos) const SAL_OVERRIDE;
 
     /**
       Appends the last recently used functions.
@@ -380,12 +380,12 @@ public:
       @param _rLastRUFunctions
       a vector of pointer to IFunctionDescription, by reference.
     */
-    virtual void fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
+    virtual void fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const SAL_OVERRIDE;
 
     /**
       Implemented because of inheritance \see ScFunctionMgr::Get(const OUString&) const
     */
-    virtual const formula::IFunctionDescription* getFunctionByName(const OUString& _sFunctionName) const;
+    virtual const formula::IFunctionDescription* getFunctionByName(const OUString& _sFunctionName) const SAL_OVERRIDE;
 
     /**
       Maps Etoken to character
@@ -397,7 +397,7 @@ public:
 
       @return character
     */
-    virtual sal_Unicode getSingleToken(const formula::IFunctionManager::EToken _eToken) const;
+    virtual sal_Unicode getSingleToken(const formula::IFunctionManager::EToken _eToken) const SAL_OVERRIDE;
 
 private:
     ScFunctionList* pFuncList; /**< list of all calc functions */

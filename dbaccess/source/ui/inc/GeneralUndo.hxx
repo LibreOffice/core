@@ -38,7 +38,7 @@ namespace dbaui
         TYPEINFO_OVERRIDE();
         OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = OUString(ModuleRes(nCommentID)); }
 
-        virtual OUString GetComment() const { return m_strComment; }
+        virtual OUString GetComment() const SAL_OVERRIDE { return m_strComment; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_GENERALUNDO_HXX

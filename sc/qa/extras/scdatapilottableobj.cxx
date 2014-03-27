@@ -32,11 +32,11 @@ class ScDataPilotTableObj : public CalcUnoApiTest, apitest::XDataPilotDescriptor
 public:
     ScDataPilotTableObj();
 
-    virtual void setUp();
-    virtual void tearDown();
-    virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< uno::XInterface > initDP2();
-    virtual uno::Reference< uno::XInterface > getSheets();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > initDP2() SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > getSheets() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
     CPPUNIT_TEST(testRefresh);

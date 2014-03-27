@@ -32,7 +32,7 @@ public:
     ~SwModalRedlineAcceptDlg();
 
     void            AcceptAll( sal_Bool bAccept );
-    virtual void    Activate();
+    virtual void    Activate() SAL_OVERRIDE;
 };
 
 #endif

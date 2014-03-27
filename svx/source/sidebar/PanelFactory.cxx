@@ -76,7 +76,7 @@ public:
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException, std::exception);
+            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 PanelFactory::PanelFactory (void)

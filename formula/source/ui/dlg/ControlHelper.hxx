@@ -34,7 +34,7 @@ public:
     void    SetValue( const OUString& rStrVal );
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     OUString    aStrValue;
@@ -55,10 +55,10 @@ private:
 
 protected:
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    SelectionChanged();
-    virtual void    Resize();
-    virtual void    GetFocus();
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
 
 
 public:
@@ -86,7 +86,7 @@ public:
                   ScrollBar& rArgSlider, sal_uInt16 nArgCount );
 
 protected:
-    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
 private:
     ArgEdit*    pEdPrev;

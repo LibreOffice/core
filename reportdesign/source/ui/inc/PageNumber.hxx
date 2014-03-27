@@ -60,7 +60,7 @@ public:
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog();
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 };
 
 } // namespace rptui

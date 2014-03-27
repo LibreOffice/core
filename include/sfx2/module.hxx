@@ -85,7 +85,7 @@ public:
     virtual SfxTabPage*         CreateTabPage( sal_uInt16 nId,
                                                Window* pParent,
                                                const SfxItemSet& rSet );
-    virtual void                Invalidate(sal_uInt16 nId = 0);
+    virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;
 
     /*virtual*/ bool            IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const;
 

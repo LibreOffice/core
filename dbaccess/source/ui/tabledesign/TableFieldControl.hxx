@@ -30,20 +30,20 @@ namespace dbaui
     {
         OTableEditorCtrl*   GetCtrl() const;
     protected:
-        virtual void        ActivateAggregate( EControlType eType );
-        virtual void        DeactivateAggregate( EControlType eType );
+        virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
+        virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
         // are to be implemented by the derived classes
-        virtual void        CellModified(long nRow, sal_uInt16 nColId );
-        virtual sal_Bool        IsReadOnly();
-        virtual void        SetModified(sal_Bool bModified);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const;
+        virtual void        CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
+        virtual sal_Bool        IsReadOnly() SAL_OVERRIDE;
+        virtual void        SetModified(sal_Bool bModified) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const SAL_OVERRIDE;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const;
+        virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
 
-        virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos);
-        virtual const OTypeInfoMap*             getTypeInfo() const;
-        virtual sal_Bool                        isAutoIncrementValueEnabled() const;
-        virtual OUString                 getAutoIncrementValue() const;
+        virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
+        virtual const OTypeInfoMap*             getTypeInfo() const SAL_OVERRIDE;
+        virtual sal_Bool                        isAutoIncrementValueEnabled() const SAL_OVERRIDE;
+        virtual OUString                 getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:
         OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
@@ -51,8 +51,8 @@ namespace dbaui
         OUString BoolStringPersistent(const OUString& rUIString) const { return OFieldDescControl::BoolStringPersistent(rUIString); }
         OUString BoolStringUI(const OUString& rPersistentString) const { return OFieldDescControl::BoolStringUI(rPersistentString); }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX

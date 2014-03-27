@@ -86,7 +86,7 @@ public:
     /**
      * @descr   Output line object.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     XFPoint m_aPoint1;

@@ -410,18 +410,18 @@ public:
     static const DummyCopySource& Instance();
 
     // ICopyTableSourceObject overridables
-    virtual OUString     getQualifiedObjectName() const;
-    virtual bool                isView() const;
-    virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
-    virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+    virtual OUString     getQualifiedObjectName() const SAL_OVERRIDE;
+    virtual bool                isView() const SAL_OVERRIDE;
+    virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
+    virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString >
-                                getColumnNames() const;
+                                getColumnNames() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString >
-                                getPrimaryKeyColumnNames() const;
-    virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const;
-    virtual OUString     getSelectStatement() const;
+                                getPrimaryKeyColumnNames() const SAL_OVERRIDE;
+    virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const SAL_OVERRIDE;
+    virtual OUString     getSelectStatement() const SAL_OVERRIDE;
     virtual ::utl::SharedUNOComponent< XPreparedStatement >
-                                getPreparedSelectStatement() const;
+                                getPreparedSelectStatement() const SAL_OVERRIDE;
 };
 
 const DummyCopySource& DummyCopySource::Instance()

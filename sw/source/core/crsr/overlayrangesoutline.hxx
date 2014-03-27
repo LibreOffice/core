@@ -34,7 +34,7 @@ namespace sw
             std::vector< basegfx::B2DRange > maRanges;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
         public:
             OverlayRangesOutline(

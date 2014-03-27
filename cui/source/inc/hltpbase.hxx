@@ -58,13 +58,13 @@ public:
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
 protected:
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
-    virtual bool        Notify( NotifyEvent& rNEvt );
-    virtual void        Select();
-    virtual void        Modify();
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        Select() SAL_OVERRIDE;
+    virtual void        Modify() SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE );
@@ -140,18 +140,18 @@ public:
     virtual void DoApply ();
     virtual void SetInitFocus();
     virtual void SetMarkStr ( const OUString& aStrMark );
-    virtual void Reset( const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void ActivatePage( const SfxItemSet& rItemSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void ActivatePage( const SfxItemSet& rItemSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     sal_Bool IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
     sal_Bool MoveToExtraWnd ( Point aNewPos, sal_Bool bDisConnectDlg = sal_False );
 
-    virtual void        ActivatePage();
-    virtual void        DeactivatePage();
-    virtual sal_Bool    QueryClose();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual void        DeactivatePage() SAL_OVERRIDE;
+    virtual sal_Bool    QueryClose() SAL_OVERRIDE;
 
 protected:
     virtual sal_Bool ShouldOpenMarkWnd();

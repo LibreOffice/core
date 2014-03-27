@@ -95,7 +95,7 @@ private:
 
 protected:
 
-    virtual void    Modify();
+    virtual void    Modify() SAL_OVERRIDE;
 
 public:
 
@@ -249,7 +249,7 @@ private:
 
 protected:
 
-    virtual void            GetFocus();
+    virtual void            GetFocus() SAL_OVERRIDE;
 
 public:
 
@@ -257,7 +257,7 @@ public:
                             ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
-    void                    SetText( const OUString& rStr ) { maField.SetText( rStr ); }
+    void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField.SetText( rStr ); }
 };
 
 ImplGrafControl::ImplGrafControl(
@@ -316,9 +316,9 @@ private:
     sal_uInt16              mnCurPos;
     Reference< XFrame > mxFrame;
 
-    virtual void    Select();
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     void            ImplReleaseFocus();
 
 public:

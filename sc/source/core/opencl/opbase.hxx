@@ -200,27 +200,27 @@ public:
 
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
-    virtual void GenDecl(std::stringstream &ss) const;
+    virtual void GenDecl(std::stringstream &ss) const SAL_OVERRIDE;
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl(std::stringstream &ss) const;
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const SAL_OVERRIDE;
 
     /// When referenced in a sliding window function
-    virtual std::string GenSlidingWindowDeclRef(bool=false) const;
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const SAL_OVERRIDE;
 
     /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel, int, int, cl_program);
+    virtual size_t Marshal(cl_kernel, int, int, cl_program) SAL_OVERRIDE;
 
     virtual ~VectorRef();
 
-    virtual void GenSlidingWindowFunction(std::stringstream &) {}
+    virtual void GenSlidingWindowFunction(std::stringstream &) SAL_OVERRIDE {}
     const std::string &GetSymName(void) const { return mSymName; }
-    virtual size_t GetWindowSize(void) const;
-    virtual std::string DumpOpName(void) const { return std::string(""); }
+    virtual size_t GetWindowSize(void) const SAL_OVERRIDE;
+    virtual std::string DumpOpName(void) const SAL_OVERRIDE { return std::string(""); }
     virtual void DumpInlineFun(std::set<std::string>& ,
-        std::set<std::string>& ) const {}
+        std::set<std::string>& ) const SAL_OVERRIDE {}
     const std::string& GetName(void) const { return mSymName; }
     virtual cl_mem GetCLBuffer(void) const { return mpClmem; }
-    virtual bool NeedParallelReduction(void) const { return false; }
+    virtual bool NeedParallelReduction(void) const SAL_OVERRIDE { return false; }
 
 protected:
     // Used by marshaling
@@ -261,9 +261,9 @@ class Normal: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string &sSymName, SubArguments &vSubArguments);
-    virtual bool takeString() const { return false; }
-    virtual bool takeNumeric() const { return true; }
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual bool takeString() const SAL_OVERRIDE { return false; }
+    virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
 };
 
 class CheckVariables:public Normal

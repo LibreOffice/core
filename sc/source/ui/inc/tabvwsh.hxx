@@ -200,35 +200,35 @@ private:
     DECL_LINK( FormControlActivated, void* );
 
 protected:
-    virtual void    Activate(bool bMDI);
-    virtual void    Deactivate(bool bMDI);
+    virtual void    Activate(bool bMDI) SAL_OVERRIDE;
+    virtual void    Deactivate(bool bMDI) SAL_OVERRIDE;
     virtual bool    PrepareClose( bool bUI = true ) SAL_OVERRIDE;
 
-    virtual void    ShowCursor(bool bOn);
+    virtual void    ShowCursor(bool bOn) SAL_OVERRIDE;
 
-    virtual void    Move();     // Benachrichtigung
+    virtual void    Move() SAL_OVERRIDE;     // Benachrichtigung
 
-    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize );     // alt
+    virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize ) SAL_OVERRIDE;     // alt
 
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );       // neu
-    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;       // neu
+    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
+    virtual void    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY ) SAL_OVERRIDE;
 
-    virtual void    QueryObjAreaPixel( Rectangle& rRect ) const;
+    virtual void    QueryObjAreaPixel( Rectangle& rRect ) const SAL_OVERRIDE;
 
-    virtual OUString GetSelectionText( bool bWholeWord );
-    virtual bool     HasSelection( bool bText ) const;
+    virtual OUString GetSelectionText( bool bWholeWord ) SAL_OVERRIDE;
+    virtual bool     HasSelection( bool bText ) const SAL_OVERRIDE;
     virtual OUString GetDescription() const;
 
-    virtual void    WriteUserData(OUString &, bool bBrowse = false);
-    virtual void    ReadUserData(const OUString &, bool bBrowse = false);
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void    WriteUserData(OUString &, bool bBrowse = false) SAL_OVERRIDE;
+    virtual void    ReadUserData(const OUString &, bool bBrowse = false) SAL_OVERRIDE;
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) SAL_OVERRIDE;
 
-    virtual void    UIDeactivated( SfxInPlaceClient* pClient );
+    virtual void    UIDeactivated( SfxInPlaceClient* pClient ) SAL_OVERRIDE;
 
-    virtual bool    KeyInput( const KeyEvent &rKeyEvent );
-    virtual SdrView* GetDrawView() const;
+    virtual bool    KeyInput( const KeyEvent &rKeyEvent ) SAL_OVERRIDE;
+    virtual SdrView* GetDrawView() const SAL_OVERRIDE;
 
 public:
                     TYPEINFO_VISIBILITY(SC_DLLPUBLIC);
@@ -329,7 +329,7 @@ public:
 
     ObjectSelectionType GetCurObjectSelectionType();
 
-    virtual ErrCode DoVerb(long nVerb);
+    virtual ErrCode DoVerb(long nVerb) SAL_OVERRIDE;
 
 
     void            StopEditShell();
@@ -345,17 +345,17 @@ public:
 
     void            SetEditChartName(const OUString& aStr){aEditChartName=aStr;}
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     ScNavigatorSettings*    GetNavigatorSettings();
 
     // Drucken:
-    virtual SfxPrinter*     GetPrinter( bool bCreate = false );
+    virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter,
-                                          sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
+                                          sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false ) SAL_OVERRIDE;
 
-    virtual bool            HasPrintOptionsPage() const;
-    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
+    virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
+    virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     void            ConnectObject( SdrOle2Obj* pObj );
     bool            ActivateObject( SdrOle2Obj* pObj, long nVerb );

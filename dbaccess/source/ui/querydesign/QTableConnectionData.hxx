@@ -38,8 +38,8 @@ namespace dbaui
 
     protected:
         // for creation and duplication of lines of own type
-        virtual OConnectionLineDataRef CreateLineDataObj();
-        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
+        virtual OConnectionLineDataRef CreateLineDataObj() SAL_OVERRIDE;
+        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData ) SAL_OVERRIDE;
 
         OQueryTableConnectionData& operator=( const OQueryTableConnectionData& rConnData );
     public:
@@ -49,15 +49,15 @@ namespace dbaui
             const OUString& rConnName=OUString());
         virtual ~OQueryTableConnectionData();
 
-        virtual void CopyFrom(const OTableConnectionData& rSource);
-        virtual OTableConnectionData* NewInstance() const;
+        virtual void CopyFrom(const OTableConnectionData& rSource) SAL_OVERRIDE;
+        virtual OTableConnectionData* NewInstance() const SAL_OVERRIDE;
 
 
         /** Update create a new connection
 
             @return true if successful
         */
-        virtual sal_Bool Update();
+        virtual sal_Bool Update() SAL_OVERRIDE;
 
         OUString GetAliasName(EConnectionSide nWhich) const;
 

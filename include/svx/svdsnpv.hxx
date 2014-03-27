@@ -91,12 +91,12 @@ protected:
     virtual ~SdrSnapView();
 
 public:
-    virtual bool IsAction() const;
-    virtual void MovAction(const Point& rPnt);
-    virtual void EndAction();
-    virtual void BckAction();
-    virtual void BrkAction(); // f.abg.Klassen Actions z,B, Draggen abbrechen.
-    virtual void TakeActionRect(Rectangle& rRect) const;
+    virtual bool IsAction() const SAL_OVERRIDE;
+    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
+    virtual void EndAction() SAL_OVERRIDE;
+    virtual void BckAction() SAL_OVERRIDE;
+    virtual void BrkAction() SAL_OVERRIDE; // f.abg.Klassen Actions z,B, Draggen abbrechen.
+    virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
     void SetSnapGridWidth(const Fraction& rX, const Fraction& rY) { aSnapWdtX=rX; aSnapWdtY=rY; }
     const Fraction& GetSnapGridWidthX() const { return aSnapWdtX; }

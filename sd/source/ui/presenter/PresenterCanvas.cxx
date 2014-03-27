@@ -91,38 +91,38 @@ public:
         const css::geometry::RealSize2D& rSpriteSize);
     virtual ~PresenterCustomSprite (void);
     virtual void SAL_CALL disposing (void)
-        throw (RuntimeException);
+        throw (RuntimeException) SAL_OVERRIDE;
 
     // XSprite
 
     virtual void SAL_CALL setAlpha (double nAlpha)
-        throw (lang::IllegalArgumentException,RuntimeException, std::exception);
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL move (const geometry::RealPoint2D& rNewPos,
         const rendering::ViewState& rViewState,
         const rendering::RenderState& rRenderState)
-        throw (lang::IllegalArgumentException,RuntimeException, std::exception);
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL transform (const geometry::AffineMatrix2D& rTransformation)
-        throw (lang::IllegalArgumentException,RuntimeException, std::exception);
+        throw (lang::IllegalArgumentException,RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL clip (const Reference<rendering::XPolyPolygon2D>& rClip)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setPriority (double nPriority)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL show (void)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL hide (void)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XCustomSprite
 
     virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas (void)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     rtl::Reference<PresenterCanvas> mpCanvas;

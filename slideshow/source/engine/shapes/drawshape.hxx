@@ -119,7 +119,7 @@ namespace slideshow
                 const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const;
+                ::com::sun::star::drawing::XShape > getXShape() const SAL_OVERRIDE;
 
             virtual ~DrawShape();
 
@@ -128,68 +128,68 @@ namespace slideshow
 
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
-                                       bool                         bRedrawLayer );
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer );
-            virtual bool clearAllViewLayers();
+                                       bool                         bRedrawLayer ) SAL_OVERRIDE;
+            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) SAL_OVERRIDE;
+            virtual bool clearAllViewLayers() SAL_OVERRIDE;
 
             // attribute methods
 
 
-            virtual ShapeAttributeLayerSharedPtr createAttributeLayer();
-            virtual bool revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer );
-            virtual ShapeAttributeLayerSharedPtr getTopmostAttributeLayer() const;
-            virtual void setVisibility( bool bVisible );
-            virtual ::basegfx::B2DRectangle getBounds() const;
-            virtual ::basegfx::B2DRectangle getDomBounds() const;
-            virtual ::basegfx::B2DRectangle getUpdateArea() const;
-            virtual bool isVisible() const;
-            virtual double getPriority() const;
+            virtual ShapeAttributeLayerSharedPtr createAttributeLayer() SAL_OVERRIDE;
+            virtual bool revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer ) SAL_OVERRIDE;
+            virtual ShapeAttributeLayerSharedPtr getTopmostAttributeLayer() const SAL_OVERRIDE;
+            virtual void setVisibility( bool bVisible ) SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getBounds() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getDomBounds() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getUpdateArea() const SAL_OVERRIDE;
+            virtual bool isVisible() const SAL_OVERRIDE;
+            virtual double getPriority() const SAL_OVERRIDE;
 
 
             // animation methods
 
 
-            virtual void enterAnimationMode();
-            virtual void leaveAnimationMode();
-            virtual bool isBackgroundDetached() const;
+            virtual void enterAnimationMode() SAL_OVERRIDE;
+            virtual void leaveAnimationMode() SAL_OVERRIDE;
+            virtual bool isBackgroundDetached() const SAL_OVERRIDE;
 
             // render methods
 
 
-            virtual bool update() const;
-            virtual bool render() const;
-            virtual bool isContentChanged() const;
+            virtual bool update() const SAL_OVERRIDE;
+            virtual bool render() const SAL_OVERRIDE;
+            virtual bool isContentChanged() const SAL_OVERRIDE;
 
             // Sub item specialities
 
 
-            virtual const DocTreeNodeSupplier&  getTreeNodeSupplier() const;
-            virtual DocTreeNodeSupplier&        getTreeNodeSupplier();
+            virtual const DocTreeNodeSupplier&  getTreeNodeSupplier() const SAL_OVERRIDE;
+            virtual DocTreeNodeSupplier&        getTreeNodeSupplier() SAL_OVERRIDE;
 
-            virtual DocTreeNode                 getSubsetNode() const;
-            virtual AttributableShapeSharedPtr  getSubset( const DocTreeNode& rTreeNode ) const;
+            virtual DocTreeNode                 getSubsetNode() const SAL_OVERRIDE;
+            virtual AttributableShapeSharedPtr  getSubset( const DocTreeNode& rTreeNode ) const SAL_OVERRIDE;
             virtual bool                        createSubset( AttributableShapeSharedPtr&   o_rSubset,
-                                                              const DocTreeNode&            rTreeNode );
-            virtual bool                        revokeSubset( const AttributableShapeSharedPtr& rShape );
+                                                              const DocTreeNode&            rTreeNode ) SAL_OVERRIDE;
+            virtual bool                        revokeSubset( const AttributableShapeSharedPtr& rShape ) SAL_OVERRIDE;
 
 
             // DocTreeNodeSupplier methods
 
 
-            virtual sal_Int32   getNumberOfTreeNodes        ( DocTreeNode::NodeType eNodeType ) const; // throw ShapeLoadFailedException;
+            virtual sal_Int32   getNumberOfTreeNodes        ( DocTreeNode::NodeType eNodeType ) const SAL_OVERRIDE; // throw ShapeLoadFailedException;
             virtual DocTreeNode getTreeNode                 ( sal_Int32             nNodeIndex,
-                                                              DocTreeNode::NodeType eNodeType ) const; // throw ShapeLoadFailedException;
+                                                              DocTreeNode::NodeType eNodeType ) const SAL_OVERRIDE; // throw ShapeLoadFailedException;
             virtual sal_Int32   getNumberOfSubsetTreeNodes  ( const DocTreeNode&    rParentNode,
-                                                              DocTreeNode::NodeType eNodeType ) const; // throw ShapeLoadFailedException;
+                                                              DocTreeNode::NodeType eNodeType ) const SAL_OVERRIDE; // throw ShapeLoadFailedException;
             virtual DocTreeNode getSubsetTreeNode           ( const DocTreeNode&    rParentNode,
                                                               sal_Int32             nNodeIndex,
-                                                              DocTreeNode::NodeType eNodeType ) const; // throw ShapeLoadFailedException;
+                                                              DocTreeNode::NodeType eNodeType ) const SAL_OVERRIDE; // throw ShapeLoadFailedException;
 
             // HyperlinkArea methods
 
 
-            virtual HyperlinkRegions getHyperlinkRegions() const;
-            virtual double getHyperlinkPriority() const;
+            virtual HyperlinkRegions getHyperlinkRegions() const SAL_OVERRIDE;
+            virtual double getHyperlinkPriority() const SAL_OVERRIDE;
 
 
             // intrinsic animation methods

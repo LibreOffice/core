@@ -89,7 +89,7 @@ public:
 
     void    SetColorMode(enumXFColorMode mode);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     sal_Int32   m_nBrightness;

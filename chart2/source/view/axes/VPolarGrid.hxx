@@ -42,7 +42,7 @@ public:
         );
     virtual ~VPolarGrid();
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 
     void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
 

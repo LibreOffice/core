@@ -125,7 +125,7 @@ public:
 
 protected:
 
-    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState);
+    virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;

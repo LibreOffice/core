@@ -64,14 +64,14 @@ namespace dbaui
         sal_Bool                        m_bReallyScrolled : 1;
 
     protected:
-        virtual void LoseFocus();
-        virtual void GetFocus();
-        virtual void NotifyScrolled();
-        virtual void NotifyEndScroll();
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void NotifyScrolled() SAL_OVERRIDE;
+        virtual void NotifyEndScroll() SAL_OVERRIDE;
 
-        virtual bool PreNotify(NotifyEvent& rNEvt);
+        virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
-        virtual void dragFinished( );
+        virtual void dragFinished( ) SAL_OVERRIDE;
 
 
 
@@ -80,12 +80,12 @@ namespace dbaui
         virtual ~OTableWindowListBox();
 
         // DnD stuff
-        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
         // window
-        virtual void Command(const CommandEvent& rEvt);
+        virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
         SvTreeListEntry* GetEntryFromText( const OUString& rEntryText );

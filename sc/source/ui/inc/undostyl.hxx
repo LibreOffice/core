@@ -67,12 +67,12 @@ public:
                                         const ScStyleSaveData& rNew );
     virtual         ~ScUndoModifyStyle();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
 
-    virtual OUString GetComment() const;
+    virtual OUString GetComment() const SAL_OVERRIDE;
 };
 
 class ScUndoApplyPageStyle: public ScSimpleUndo
@@ -84,12 +84,12 @@ public:
 
     void            AddSheetAction( SCTAB nTab, const OUString& rOld );
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Undo() SAL_OVERRIDE;
+    virtual void    Redo() SAL_OVERRIDE;
+    virtual void    Repeat(SfxRepeatTarget& rTarget) SAL_OVERRIDE;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const SAL_OVERRIDE;
 
-    virtual OUString GetComment() const;
+    virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
     struct ApplyStyleEntry

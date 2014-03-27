@@ -135,27 +135,27 @@ public:
     }
 
     // WeakComponentImplHelperBase::disposing
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
     virtual void SAL_CALL disposing( const lang::EventObject& Source )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMouseListener implementation
     virtual void SAL_CALL mousePressed( const awt::MouseEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL mouseReleased( const awt::MouseEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL mouseEntered( const awt::MouseEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL mouseExited( const awt::MouseEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMouseMotionListener implementation
     virtual void SAL_CALL mouseDragged( const awt::MouseEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL mouseMoved( const awt::MouseEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     EventQueue*           mpEventQueue;

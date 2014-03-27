@@ -79,7 +79,7 @@ public:
         , m_nType(0)
         {}
     ~LwpFribCHBlock(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpCHBlkMarker* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
@@ -94,12 +94,12 @@ class LwpFribBookMark : public LwpFrib
 public:
     LwpFribBookMark( LwpPara* pPara );
     ~LwpFribBookMark(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpObjectID GetMarkerID(){return m_objMarker;}
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
-    void RegisterStyle(LwpFoundry* pFoundry);
+    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
 private:
     sal_uInt8 m_nType;
     LwpObjectID m_objMarker;
@@ -112,12 +112,12 @@ class LwpFribField : public LwpFrib
 public:
     LwpFribField( LwpPara* pPara );
     ~LwpFribField(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpFieldMark* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
-    void RegisterStyle(LwpFoundry* pFoundry);
+    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
     enum{
         SUBFIELD_INVALID = 0,
         SUBFIELD_DATETIME = 1,
@@ -153,12 +153,12 @@ class LwpFribRubyMarker : public LwpFrib
 public:
     LwpFribRubyMarker( LwpPara* pPara );
     ~LwpFribRubyMarker(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpRubyMarker* GetMarker();
     sal_uInt8 GetType(){return m_nType;}
     enum{MARKER_START=1,MARKER_END,MARKER_NONE};
     void XFConvert(XFContentContainer* pXFPara);
-    void RegisterStyle(LwpFoundry* pFoundry);
+    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
 private:
     sal_uInt8 m_nType;
     LwpObjectID m_objMarker;

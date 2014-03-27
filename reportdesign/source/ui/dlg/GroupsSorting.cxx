@@ -104,11 +104,11 @@ public:
     virtual ~OFieldExpressionControl();
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     // XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void        fillColumns(const uno::Reference< container::XNameAccess>& _xColumns);
     void        lateInit();
@@ -130,26 +130,26 @@ public:
     */
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,sal_Bool _bSelect = sal_True);
 
-    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
     using OFieldExpressionControl_Base::GetRowCount;
 protected:
-    virtual bool IsTabAllowed(bool bForward) const;
+    virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
 
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
-    virtual bool SeekRow( long nRow );
-    virtual bool SaveModified();
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
-    virtual RowStatus GetRowStatus(long nRow) const;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const SAL_OVERRIDE;
+    virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
+    virtual bool SaveModified() SAL_OVERRIDE;
+    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const SAL_OVERRIDE;
+    virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
 
-    virtual void KeyInput(const KeyEvent& rEvt);
-    virtual void Command( const CommandEvent& rEvt );
+    virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
 
     // D&D
-    virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-    virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
-    virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
+    virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     using BrowseBox::AcceptDrop;
     using BrowseBox::ExecuteDrop;

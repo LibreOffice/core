@@ -41,8 +41,8 @@ namespace dbaccess
         SettingsImport();
 
         // IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
         // own overriables
         virtual ::rtl::Reference< SettingsImport >  nextState(
@@ -86,7 +86,7 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        );
+        ) SAL_OVERRIDE;
 
     private:
         ~IgnoringSettingsImport()
@@ -103,7 +103,7 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        );
+        ) SAL_OVERRIDE;
 
     protected:
         ~OfficeSettingsImport();
@@ -126,8 +126,8 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        );
-        virtual void endElement();
+        ) SAL_OVERRIDE;
+        virtual void endElement() SAL_OVERRIDE;
 
     protected:
         // own overridables
@@ -152,11 +152,11 @@ namespace dbaccess
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
-        );
+        ) SAL_OVERRIDE;
 
     protected:
         // ConfigItemImport overridables
-        virtual void getItemValue( ::com::sun::star::uno::Any& o_rValue ) const;
+        virtual void getItemValue( ::com::sun::star::uno::Any& o_rValue ) const SAL_OVERRIDE;
 
     private:
         /// the settings represented by our child elements

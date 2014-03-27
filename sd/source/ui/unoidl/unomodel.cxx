@@ -119,9 +119,9 @@ public:
     ~SdUnoForbiddenCharsTable();
 
     // SfxListener
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () SAL_OVERRIDE;
 protected:
-    virtual void onChange();
+    virtual void onChange() SAL_OVERRIDE;
 
 private:
     SdrModel*   mpModel;
@@ -1533,7 +1533,7 @@ public:
     // different, overload the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
-        const sdr::contact::DisplayInfo& rDisplayInfo);
+        const sdr::contact::DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
 };
 
 ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData )

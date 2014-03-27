@@ -37,12 +37,12 @@ public:
 
 
     virtual OUString            GetValueText(sal_uInt16 nVal) const;
-    virtual sal_uInt16              GetValueCount() const
+    virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE
                                     {return((sal_uInt16)SVX_SNAP_DRAW_TEXT);}
 
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*        Create( SvStream& rStream, sal_uInt16 nVer ) const;
+    virtual SfxPoolItem*        Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
 
     inline SvxDrawToolItem& operator=(const  SvxDrawToolItem&
                                                         rDrawTool)

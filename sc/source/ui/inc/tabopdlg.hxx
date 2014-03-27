@@ -50,11 +50,11 @@ public:
                                 const ScRefAddress& rCursorPos );
                     ~ScTabOpDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual bool    IsRefInputMode() const { return true; }
-    virtual void    SetActive();
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE { return true; }
+    virtual void    SetActive() SAL_OVERRIDE;
 
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
 private:
     FixedText* m_pFtFormulaRange;

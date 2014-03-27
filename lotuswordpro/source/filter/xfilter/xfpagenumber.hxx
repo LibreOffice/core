@@ -73,7 +73,7 @@ class XFPageNumber : public XFContent
 public:
     void    SetNumFmt(const OUString& fmt);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     XFNumFmt    m_aNumFmt;

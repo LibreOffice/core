@@ -53,7 +53,7 @@ private:
 
 protected:
     virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
 public:
     AnchorPrimitive( const basegfx::B2DPolygon& rTriangle,
@@ -85,7 +85,7 @@ public:
     bool getShadow() const { return mbShadow; }
     bool getLineSolid() const { return mbLineSolid; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
 
     DeclPrimitive2DIDBlock()
 };

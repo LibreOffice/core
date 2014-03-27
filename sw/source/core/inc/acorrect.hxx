@@ -57,15 +57,15 @@ public:
     SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, sal_Unicode cIns = 0 );
     ~SwAutoCorrDoc();
 
-    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd );
-    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt );
-    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt );
-    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt );
+    virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
+    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;
+    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) SAL_OVERRIDE;
 
     virtual bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
-                            SfxPoolItem& );
+                            SfxPoolItem& ) SAL_OVERRIDE;
 
-    virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL );
+    virtual bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) SAL_OVERRIDE;
 
     // return text of a previous paragraph
     // If it does not exist or if there is nothing before, return blank.
@@ -76,15 +76,15 @@ public:
 
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
-                                  OUString* pPara );
+                                  OUString* pPara ) SAL_OVERRIDE;
 
     // Will be called after swapping characters by the functions
     //  - FnCptlSttWrd and
     //  - FnCptlSttSntnc.
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
-                                    const OUString& rExceptWord, sal_Unicode cChar );
-    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara ) const;
+                                    const OUString& rExceptWord, sal_Unicode cChar ) SAL_OVERRIDE;
+    virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara ) const SAL_OVERRIDE;
 };
 
 class SwAutoCorrExceptWord

@@ -56,8 +56,8 @@ private:
     friend class                SdrTextObj; // for ImpRecalcTail() during AutoGrow
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 private:
     Polygon                     aTailPoly;  // the whole tail polygon
@@ -80,9 +80,9 @@ public:
     SdrCaptionObj(const Rectangle& rRect, const Point& rTail);
     virtual ~SdrCaptionObj();
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrCaptionObj* Clone() const;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual SdrCaptionObj* Clone() const SAL_OVERRIDE;
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
@@ -91,54 +91,54 @@ public:
     // for calc: fixed note tail position.
     void SetFixedTail() { mbFixedTail = true; }
 
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual void SetModel(SdrModel* pNewModel);
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
+    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag);
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag) SAL_OVERRIDE;
+    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const SAL_OVERRIDE;
 
-    virtual bool BegCreate(SdrDragStat& rStat);
-    virtual bool MovCreate(SdrDragStat& rStat);
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual bool BckCreate(SdrDragStat& rStat);
-    virtual void BrkCreate(SdrDragStat& rStat);
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer() const;
+    virtual bool BegCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual bool BckCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual void BrkCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual Pointer GetCreatePointer() const SAL_OVERRIDE;
 
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
-    virtual void NbcSetRelativePos(const Point& rPnt);
-    virtual Point GetRelativePos() const;
-    virtual void NbcSetAnchorPos(const Point& rPnt);
-    virtual const Point& GetAnchorPos() const;
+    virtual void NbcSetRelativePos(const Point& rPnt) SAL_OVERRIDE;
+    virtual Point GetRelativePos() const SAL_OVERRIDE;
+    virtual void NbcSetAnchorPos(const Point& rPnt) SAL_OVERRIDE;
+    virtual const Point& GetAnchorPos() const SAL_OVERRIDE;
 
-    virtual void RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect() const;
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual const Rectangle& GetLogicRect() const;
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
+    virtual void RecalcSnapRect() SAL_OVERRIDE;
+    virtual const Rectangle& GetSnapRect() const SAL_OVERRIDE;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual const Rectangle& GetLogicRect() const SAL_OVERRIDE;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
 
-    virtual sal_uInt32 GetSnapPointCount() const;
-    virtual Point GetSnapPoint(sal_uInt32 i) const;
+    virtual sal_uInt32 GetSnapPointCount() const SAL_OVERRIDE;
+    virtual Point GetSnapPoint(sal_uInt32 i) const SAL_OVERRIDE;
 
 protected:
-    virtual SdrObjGeoData* NewGeoData() const;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo);
+    virtual SdrObjGeoData* NewGeoData() const SAL_OVERRIDE;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);
@@ -146,7 +146,7 @@ public:
 
     // #i32599#
     // Add own implementation for TRSetBaseGeometry to handle TailPos over changes
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) SAL_OVERRIDE;
 
     inline const Point& GetFixedTailPos() const  {return maFixedTailPos;}
 

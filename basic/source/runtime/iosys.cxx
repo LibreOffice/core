@@ -313,11 +313,11 @@ class OslStream : public SvStream
 public:
                         OslStream( const OUString& rName, short nStrmMode );
                        ~OslStream();
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void        FlushData();
-    virtual void        SetSize( sal_uIntPtr nSize );
+    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos ) SAL_OVERRIDE;
+    virtual void        FlushData() SAL_OVERRIDE;
+    virtual void        SetSize( sal_uIntPtr nSize ) SAL_OVERRIDE;
 };
 
 OslStream::OslStream( const OUString& rName, short nStrmMode )
@@ -407,11 +407,11 @@ public:
                         UCBStream( Reference< XInputStream > & xIS );
                         UCBStream( Reference< XStream > & xS );
                        ~UCBStream();
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void        FlushData();
-    virtual void        SetSize( sal_uIntPtr nSize );
+    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos ) SAL_OVERRIDE;
+    virtual void        FlushData() SAL_OVERRIDE;
+    virtual void        SetSize( sal_uIntPtr nSize ) SAL_OVERRIDE;
 };
 
 UCBStream::UCBStream( Reference< XInputStream > & rStm )

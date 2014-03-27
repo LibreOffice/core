@@ -34,8 +34,8 @@ public:
     SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController );
     ~SvxFmAbsRecWin();
 
-    virtual void KeyInput( const KeyEvent& rKeyEvt );
-    virtual void LoseFocus();
+    virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
 protected:
     virtual void FirePosition( sal_Bool _bForce );
@@ -53,7 +53,7 @@ public:
     ~SvxFmConfigWin();
 
     void            Update();
-    virtual void    PopupModeEnd();
+    virtual void    PopupModeEnd() SAL_OVERRIDE;
 };
 
 
@@ -72,11 +72,11 @@ public:
     SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlConfig() {}
 
-    virtual void                Select( sal_uInt16 nModifier );
+    virtual void                Select( sal_uInt16 nModifier ) SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 
@@ -89,10 +89,10 @@ public:
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlAbsRec();
 
-    virtual Window* CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 
@@ -104,7 +104,7 @@ public:
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecText();
 
-    virtual Window* CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
 };
 
 
@@ -116,7 +116,7 @@ public:
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecFromText();
 
-    virtual Window* CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
 };
 
 
@@ -130,9 +130,9 @@ public:
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecTotal();
 
-    virtual Window* CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 

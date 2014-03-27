@@ -60,10 +60,10 @@ public:
 
                     // overloaded by SvBaseLink:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
                     // overloaded by SvtBroadcaster:
-    virtual void    ListenersGone();
+    virtual void    ListenersGone() SAL_OVERRIDE;
 
                     // for interpreter:
 

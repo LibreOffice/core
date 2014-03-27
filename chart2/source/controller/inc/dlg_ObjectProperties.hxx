@@ -116,7 +116,7 @@ private:
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 
     Link m_aOriginalOKClickHdl;
     DECL_LINK( OKPressed, void * );

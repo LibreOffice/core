@@ -39,12 +39,12 @@ public:
     virtual ~SwVbaRevision();
 
     // Methods
-    virtual void SAL_CALL Accept(  ) throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL Reject(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL Accept(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL Reject(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAREVISION_HXX
 

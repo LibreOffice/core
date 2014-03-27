@@ -67,10 +67,10 @@ public:
     LwpBackgroundOverride(){}
     virtual ~LwpBackgroundOverride(){}
 
-    virtual LwpBackgroundOverride* clone() const;
+    virtual LwpBackgroundOverride* clone() const SAL_OVERRIDE;
 
 public:
-    virtual void Read(LwpObjectStream *pStrm)
+    virtual void Read(LwpObjectStream *pStrm) SAL_OVERRIDE
     {
         if (pStrm->QuickReadBool())
         {

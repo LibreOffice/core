@@ -49,7 +49,7 @@ public:
     virtual ~DocumentChartTypeTemplateProvider();
 
     // ____ ChartTypeTemplateProvider ____
-    virtual Reference< chart2::XChartTypeTemplate > getCurrentTemplate() const;
+    virtual Reference< chart2::XChartTypeTemplate > getCurrentTemplate() const SAL_OVERRIDE;
 
 private:
     Reference< chart2::XChartTypeTemplate > m_xTemplate;

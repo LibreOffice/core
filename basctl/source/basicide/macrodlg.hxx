@@ -96,7 +96,7 @@ public:
     void                DeleteMacro();
     SbMethod*           CreateMacro();
 
-    virtual short       Execute();
+    virtual short       Execute() SAL_OVERRIDE;
 
     void                SetMode (Mode);
     Mode                GetMode () const { return nMode; }

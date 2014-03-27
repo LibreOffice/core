@@ -35,7 +35,7 @@ public:
     void                SetDocument( ScDocument* pDocument );
     ScDocument*         GetDocument() const { return pDoc; }
 
-    virtual void        Remove( SfxStyleSheetBase* pStyle );
+    virtual void        Remove( SfxStyleSheetBase* pStyle ) SAL_OVERRIDE;
 
     void                SetActualStyleSheet ( SfxStyleSheetBase* pActStyleSheet )
                                 { pActualStyleSheet = pActStyleSheet; }
@@ -63,8 +63,8 @@ protected:
 
     virtual SfxStyleSheetBase* Create( const OUString&  rName,
                                        SfxStyleFamily   eFamily,
-                                       sal_uInt16       nMask);
-    virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle );
+                                       sal_uInt16       nMask) SAL_OVERRIDE;
+    virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle ) SAL_OVERRIDE;
 
 private:
     SfxStyleSheetBase*  pActualStyleSheet;

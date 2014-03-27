@@ -2225,7 +2225,6 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
 #ifndef DISABLE_DYNLOADING
 
-#define RETURN_ERROR { return eERR_INTERN; }
 class ScFormatFilterMissing : public ScFormatFilterPlugin {
   public:
     ScFormatFilterMissing()
@@ -2233,27 +2232,27 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
       OSL_FAIL("Missing file filters");
     }
     virtual ~ScFormatFilterMissing() {}
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) RETURN_ERROR
-    virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) RETURN_ERROR
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) RETURN_ERROR
-    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) RETURN_ERROR
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) SAL_OVERRIDE { return eERR_INTERN; }
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
-                 const rtl_TextEncoding, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) RETURN_ERROR
-    virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) RETURN_ERROR
+                 const rtl_TextEncoding, sal_uInt32 ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) SAL_OVERRIDE { return eERR_INTERN; }
 
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) { return NULL; }
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) { return NULL; }
-    virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) { return OUString(); }
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) SAL_OVERRIDE { return NULL; }
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) SAL_OVERRIDE { return NULL; }
+    virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) SAL_OVERRIDE { return OUString(); }
 
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) RETURN_ERROR
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding, sal_uInt32 ) RETURN_ERROR
+    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding, sal_uInt32 ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding, sal_uInt32 ) SAL_OVERRIDE { return eERR_INTERN; }
     virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const rtl_TextEncoding, bool,
-                  const OUString&, OUString& ) RETURN_ERROR
-    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) RETURN_ERROR
+                  const OUString&, OUString& ) SAL_OVERRIDE { return eERR_INTERN; }
+    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) SAL_OVERRIDE { return eERR_INTERN; }
 
-    virtual ScOrcusFilters* GetOrcusFilters() { return NULL; }
+    virtual ScOrcusFilters* GetOrcusFilters() SAL_OVERRIDE { return NULL; }
 };
 
 extern "C" { static void SAL_CALL thisModule() {} }

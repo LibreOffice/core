@@ -47,17 +47,17 @@ public:
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
-    virtual bool        SetParent        ( const OUString& rParentName );
-    virtual SfxItemSet& GetItemSet       ();
-    virtual bool        IsUsed           () const;
-    virtual bool        HasFollowSupport () const;
-    virtual bool        HasParentSupport () const;
+    virtual bool        SetParent        ( const OUString& rParentName ) SAL_OVERRIDE;
+    virtual SfxItemSet& GetItemSet       () SAL_OVERRIDE;
+    virtual bool        IsUsed           () const SAL_OVERRIDE;
+    virtual bool        HasFollowSupport () const SAL_OVERRIDE;
+    virtual bool        HasParentSupport () const SAL_OVERRIDE;
 
-    virtual const OUString& GetName() const;
-    virtual const OUString& GetParent() const;
-    virtual const OUString& GetFollow() const;
+    virtual const OUString& GetName() const SAL_OVERRIDE;
+    virtual const OUString& GetParent() const SAL_OVERRIDE;
+    virtual const OUString& GetFollow() const SAL_OVERRIDE;
 
-    virtual bool SetName( const OUString& );
+    virtual bool SetName( const OUString& ) SAL_OVERRIDE;
 
             void                SetUsage( ScStyleSheet::Usage eUse ) const
                                     { eUsage = eUse; }
@@ -72,7 +72,7 @@ protected:
                               SfxStyleFamily    eFamily,
                               sal_uInt16        nMask );
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 #endif     // SC_STLSHEET_HXX

@@ -163,8 +163,8 @@ public:
     SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
-    virtual void Closed();
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
+    virtual void Closed() SAL_OVERRIDE;
 
     sal_Bool WriteData( SvStream& rStrm );
 

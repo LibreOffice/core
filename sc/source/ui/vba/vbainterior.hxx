@@ -61,20 +61,20 @@ public:
 
         virtual ~ScVbaInterior(){}
 
-    virtual css::uno::Any SAL_CALL getColor() throw (css::uno::RuntimeException, std::exception) ;
-    virtual void SAL_CALL setColor( const css::uno::Any& _color ) throw (css::uno::RuntimeException, std::exception) ;
+    virtual css::uno::Any SAL_CALL getColor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL setColor( const css::uno::Any& _color ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
-    virtual css::uno::Any SAL_CALL getColorIndex() throw ( css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) throw ( css::uno::RuntimeException, std::exception );
-    virtual css::uno::Any SAL_CALL getPattern() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setPattern( const css::uno::Any& _pattern ) throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Any SAL_CALL getPatternColor() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setPatternColor( const css::uno::Any& _patterncolor ) throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Any SAL_CALL getPatternColorIndex() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Any SAL_CALL getColorIndex() throw ( css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getPattern() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPattern( const css::uno::Any& _pattern ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getPatternColor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPatternColor( const css::uno::Any& _patterncolor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getPatternColorIndex() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif
 

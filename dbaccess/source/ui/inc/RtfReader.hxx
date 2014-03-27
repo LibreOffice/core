@@ -31,10 +31,10 @@ namespace dbaui
         ::std::vector<sal_Int32>    m_vecColor;
 
     protected:
-        virtual sal_Bool        CreateTable(int nToken);
-        virtual void            NextToken( int nToken ); // base class
+        virtual sal_Bool        CreateTable(int nToken) SAL_OVERRIDE;
+        virtual void            NextToken( int nToken ) SAL_OVERRIDE; // base class
         virtual TypeSelectionPageFactory
-                                getTypeSelectionPageFactory();
+                                getTypeSelectionPageFactory() SAL_OVERRIDE;
 
         ~ORTFReader();
 
@@ -55,10 +55,10 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual SvParserState   CallParser();// base class
+        virtual SvParserState   CallParser() SAL_OVERRIDE;// base class
         /// @note Only recovers correct data if 2. CTOR has been used.
         ///       Otherwise, the SbaColumnList will be returned without changes
-        virtual void            release();
+        virtual void            release() SAL_OVERRIDE;
     };
 
     SV_DECL_IMPL_REF( ORTFReader );

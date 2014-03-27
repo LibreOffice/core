@@ -73,21 +73,21 @@ public:
     /**
      * @short:  return the content type.
      */
-    virtual enumXFContent   GetContentType(){ return enumXFContentUnknown; }
+    virtual enumXFContent   GetContentType() SAL_OVERRIDE { return enumXFContentUnknown; }
 
     /**
      * @short:  All content except XFTextContent can have a style.
      */
-    virtual void    SetStyleName(const OUString& style){m_strStyleName = style;}
+    virtual void    SetStyleName(const OUString& style) SAL_OVERRIDE {m_strStyleName = style;}
 
     /**
      * @short:  return the style name.
      */
-    virtual OUString   GetStyleName(){return m_strStyleName;}
+    virtual OUString   GetStyleName() SAL_OVERRIDE {return m_strStyleName;}
 
     /**
      */
-    virtual IXFContent*     Clone(){return NULL;}
+    virtual IXFContent*     Clone() SAL_OVERRIDE {return NULL;}
 
 protected:
     OUString   m_strStyleName;

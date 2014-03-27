@@ -45,21 +45,21 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
                     sal_Bool bTstMove,
                     const bool bObjsInNewUpper );
 
-    virtual void MakeAll();
+    virtual void MakeAll() SAL_OVERRIDE;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
-    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool& );
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool& ) SAL_OVERRIDE;
 
     const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 
 protected:
     sal_Bool MakePrtArea( const SwBorderAttrs & );
 
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
 
     SwCntntFrm( SwCntntNode * const, SwFrm* );
 
@@ -67,8 +67,8 @@ public:
     virtual ~SwCntntFrm();
     TYPEINFO_OVERRIDE(); // already in base class
 
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
     inline const SwCntntNode *GetNode() const;
     inline       SwCntntNode *GetNode();

@@ -39,7 +39,7 @@ public:
     void                SetDocShell(ScDocShell* pSds)           { pScDocShell=pSds;}
 
 
-    virtual void            SaveValues();
+    virtual void            SaveValues() SAL_OVERRIDE;
 
 private:
                         ScFormEditData( const ScFormEditData& );

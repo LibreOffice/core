@@ -71,12 +71,12 @@ private:
     void   RefreshMarkWindow();
 
 protected:
-    virtual void FillDlgFields(const OUString& rStrURL);
+    virtual void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
     virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                                      OUString& aStrIntName, OUString& aStrFrame,
-                                     SvxLinkInsertMode& eMode );
-    virtual sal_Bool ShouldOpenMarkWnd () {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
-    virtual void SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
+                                     SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
+    virtual sal_Bool ShouldOpenMarkWnd () SAL_OVERRIDE {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
+    virtual void SetMarkWndShouldOpen (sal_Bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
 
 public:
     SvxHyperlinkInternetTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -84,9 +84,9 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( const OUString& aStrMark );
+    virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
 
-    virtual void        SetInitFocus();
+    virtual void        SetInitFocus() SAL_OVERRIDE;
 };
 
 

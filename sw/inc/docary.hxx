@@ -63,8 +63,8 @@ public:
 class SwGrfFmtColls : public std::vector<SwGrfFmtColl*>, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwGrfFmtColl* pFmt) const;
     /// free's any remaining child objects
     virtual ~SwGrfFmtColls() {}
@@ -77,8 +77,8 @@ class SAL_DLLPUBLIC_TEMPLATE SwFrmFmts_Base : public std::vector<SwFrmFmt*> {};
 class SW_DLLPUBLIC SwFrmFmts : public SwFrmFmts_Base, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
     bool Contains(const SwFrmFmt* pFmt) const;
     /// free's any remaining child objects
@@ -88,8 +88,8 @@ public:
 class SwCharFmts : public std::vector<SwCharFmt*>, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
     bool Contains(const SwCharFmt* pFmt) const;
     void dumpAsXml(xmlTextWriterPtr w);
@@ -100,8 +100,8 @@ public:
 class SwTxtFmtColls : public std::vector<SwTxtFmtColl*>, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
     void dumpAsXml(xmlTextWriterPtr w);
     virtual ~SwTxtFmtColls() {}
@@ -111,8 +111,8 @@ public:
 class SW_DLLPUBLIC SwSectionFmts : public std::vector<SwSectionFmt*>, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwSectionFmt* pFmt) const;
     bool Contains(const SwSectionFmt* pFmt) const;
     /// free's any remaining child objects

@@ -138,8 +138,8 @@ namespace sdr
 
             void InsertEvent(sdr::animation::Event* pNew) { Scheduler::InsertEvent(pNew); }
 
-            virtual oslInterlockedCount SAL_CALL acquire();
-            virtual oslInterlockedCount SAL_CALL release();
+            virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+            virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
         };
     } // end of namespace overlay
 } // end of namespace sdr

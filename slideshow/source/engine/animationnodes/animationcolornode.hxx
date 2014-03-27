@@ -42,7 +42,7 @@ public:
 #endif
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const;
+    virtual AnimationActivitySharedPtr createActivity() const SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimateColor > mxColorNode;

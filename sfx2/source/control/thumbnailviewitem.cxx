@@ -57,8 +57,8 @@ class ResizableMultiLineEdit : public VclMultiLineEdit
 
         void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
 
-        virtual bool PreNotify(NotifyEvent& rNEvt);
-        virtual void Modify();
+        virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+        virtual void Modify() SAL_OVERRIDE;
 };
 
 ResizableMultiLineEdit::ResizableMultiLineEdit (Window* pParent, ThumbnailViewItem* pItem) :

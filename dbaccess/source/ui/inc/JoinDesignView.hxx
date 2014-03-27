@@ -47,9 +47,9 @@ namespace dbaui
         virtual void setReadOnly(sal_Bool _bReadOnly);
         // set the statement for representation
         /// late construction
-        virtual void Construct();
-        virtual void initialize();
-        virtual void KeyInput( const KeyEvent& rEvt );
+        virtual void Construct() SAL_OVERRIDE;
+        virtual void initialize() SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
 
         virtual void SaveTabWinUIConfig(OTableWindow* pWin);
         OJoinController& getController() const { return m_rController; }
@@ -59,7 +59,7 @@ namespace dbaui
         OScrollWindowHelper* getScrollHelper() const { return m_pScrollWindow; }
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
         DECL_LINK( SplitHdl, void* );
     };
 }

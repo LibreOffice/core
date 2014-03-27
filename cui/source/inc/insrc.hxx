@@ -44,10 +44,10 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
 public:
     SvxInsRowColDlg( Window* pParent, bool bCol, const OString& sHelpId );
 
-    virtual short Execute(void);
+    virtual short Execute(void) SAL_OVERRIDE;
 
-    virtual bool isInsertBefore() const;
-    virtual sal_uInt16 getInsertCount() const;
+    virtual bool isInsertBefore() const SAL_OVERRIDE;
+    virtual sal_uInt16 getInsertCount() const SAL_OVERRIDE;
 };
 
 #endif

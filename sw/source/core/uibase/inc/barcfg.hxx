@@ -30,8 +30,8 @@ public:
     SwToolbarConfigItem( bool bWeb );
     ~SwToolbarConfigItem();
 
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     void        SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId );
 };

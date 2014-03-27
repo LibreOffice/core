@@ -53,10 +53,10 @@ private:
     sal_Int32           nPosLineEndLb;
     sal_Bool            mbAreaTP;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 protected:
-    virtual short       Ok();
+    virtual short       Ok() SAL_OVERRIDE;
     DECL_LINK( CancelHdlImpl, void * );
     void                SavePalettes();
 
@@ -208,15 +208,15 @@ public:
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     static  sal_uInt16*    GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet& );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
-    virtual void FillUserData();
+    virtual void FillUserData() SAL_OVERRIDE;
 
     void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
@@ -232,8 +232,8 @@ public:
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
-    virtual void PageCreated (SfxAllItemSet aSet);
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void PageCreated (SfxAllItemSet aSet) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 /*************************************************************************/
@@ -304,11 +304,11 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
@@ -319,7 +319,7 @@ public:
 
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 /*************************************************************************/
@@ -374,11 +374,11 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
     void    SetLineEndList( XLineEndListRef pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
@@ -390,8 +390,8 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void Resize();
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX

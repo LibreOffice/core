@@ -57,16 +57,16 @@ protected:
     virtual SfxChildAlignment
                         CheckAlignment(SfxChildAlignment,SfxChildAlignment);
 
-    virtual void        Resize();
-    virtual bool        PrepareToggleFloatingMode();
-    virtual void        ToggleFloatingMode();
-    virtual void        StartDocking();
-    virtual bool        Docking( const Point& rPos, Rectangle& rRect );
-    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode );
-    virtual void        Resizing( Size& rSize );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual bool        Close();
-    virtual void        Move();
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual bool        PrepareToggleFloatingMode() SAL_OVERRIDE;
+    virtual void        ToggleFloatingMode() SAL_OVERRIDE;
+    virtual void        StartDocking() SAL_OVERRIDE;
+    virtual bool        Docking( const Point& rPos, Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
+    virtual void        Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual bool        Close() SAL_OVERRIDE;
+    virtual void        Move() SAL_OVERRIDE;
 
     SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()    { return pMgr; }
 
@@ -83,7 +83,7 @@ public:
 
     void                Initialize (SfxChildWinInfo* pInfo);
     virtual void        FillInfo(SfxChildWinInfo&) const;
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     void                SetDockingRects(const Rectangle& rOuter, const Rectangle& rInner)
                             { aInnerRect = rInner; aOuterRect = rOuter; }
@@ -98,7 +98,7 @@ public:
 
     void                SetMinOutputSizePixel( const Size& rSize );
     Size                GetMinOutputSizePixel() const;
-    virtual bool        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        FadeIn( bool );
     void                AutoShow( bool bShow = true );
     DECL_LINK(TimerHdl, void *);

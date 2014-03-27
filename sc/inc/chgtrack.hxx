@@ -426,12 +426,12 @@ class ScChangeActionIns : public ScChangeAction
                                 ScChangeActionIns( const ScRange& rRange );
     virtual                     ~ScChangeActionIns();
 
-    virtual void                AddContent( ScChangeActionContent* ) {}
-    virtual void                DeleteCellEntries() {}
+    virtual void                AddContent( ScChangeActionContent* ) SAL_OVERRIDE {}
+    virtual void                DeleteCellEntries() SAL_OVERRIDE {}
 
-    virtual bool Reject(ScDocument* pDoc);
+    virtual bool Reject(ScDocument* pDoc) SAL_OVERRIDE;
 
-    virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
+    virtual const ScChangeTrack*    GetChangeTrack() const SAL_OVERRIDE { return 0; }
 
 public:
     ScChangeActionIns(const sal_uLong nActionNumber,
@@ -444,7 +444,7 @@ public:
             const ScChangeActionType eType); // only to use in the XML import
 
     virtual void GetDescription(
-        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const;
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const SAL_OVERRIDE;
 };
 
 //  ScChangeActionDel
@@ -514,19 +514,19 @@ class ScChangeActionDel : public ScChangeAction
 
     ScChangeActionIns*  GetCutOffInsert() { return pCutOff; }
 
-    virtual void                AddContent( ScChangeActionContent* );
-    virtual void                DeleteCellEntries();
+    virtual void                AddContent( ScChangeActionContent* ) SAL_OVERRIDE;
+    virtual void                DeleteCellEntries() SAL_OVERRIDE;
 
             void                UndoCutOffMoves();
             void                UndoCutOffInsert();
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz ) SAL_OVERRIDE;
 
-    virtual bool Reject(ScDocument* pDoc);
+    virtual bool Reject(ScDocument* pDoc) SAL_OVERRIDE;
 
-    virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
+    virtual const ScChangeTrack*    GetChangeTrack() const SAL_OVERRIDE { return pTrack; }
 
 public:
     ScChangeActionDel(
@@ -561,7 +561,7 @@ public:
     short               GetCutOffCount() const { return nCutOff; }
 
     virtual void GetDescription(
-        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const SAL_OVERRIDE;
 
     void                SetCutOffInsert( ScChangeActionIns* p, short n )
                             { pCutOff = p; nCutOff = n; }   // only to use in the XML import
@@ -596,8 +596,8 @@ class ScChangeActionMove : public ScChangeAction
         {}
     virtual ~ScChangeActionMove();
 
-    virtual void                AddContent( ScChangeActionContent* );
-    virtual void                DeleteCellEntries();
+    virtual void                AddContent( ScChangeActionContent* ) SAL_OVERRIDE;
+    virtual void                DeleteCellEntries() SAL_OVERRIDE;
 
             ScBigRange&         GetFromRange() { return aFromRange; }
 
@@ -608,11 +608,11 @@ class ScChangeActionMove : public ScChangeAction
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz ) SAL_OVERRIDE;
 
-    virtual bool Reject(ScDocument* pDoc);
+    virtual bool Reject(ScDocument* pDoc) SAL_OVERRIDE;
 
-    virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
+    virtual const ScChangeTrack*    GetChangeTrack() const SAL_OVERRIDE { return pTrack; }
 
 protected:
     using ScChangeAction::GetRefString;
@@ -636,10 +636,10 @@ public:
 
     virtual void GetDescription(
         OUString& rStr, ScDocument* pDoc, bool bSplitRange = false,
-        bool bWarning = true ) const;
+        bool bWarning = true ) const SAL_OVERRIDE;
 
     virtual void GetRefString(
-        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
+        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const SAL_OVERRIDE;
 };
 
 //  ScChangeActionContent
@@ -715,16 +715,16 @@ class ScChangeActionContent : public ScChangeAction
 
     void GetFormulaString( OUString& rStr, const ScFormulaCell* pCell ) const;
 
-    virtual void                AddContent( ScChangeActionContent* ) {}
-    virtual void                DeleteCellEntries() {}
+    virtual void                AddContent( ScChangeActionContent* ) SAL_OVERRIDE {}
+    virtual void                DeleteCellEntries() SAL_OVERRIDE {}
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz ) SAL_OVERRIDE;
 
-    virtual bool Reject(ScDocument* pDoc);
+    virtual bool Reject(ScDocument* pDoc) SAL_OVERRIDE;
 
-    virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
+    virtual const ScChangeTrack*    GetChangeTrack() const SAL_OVERRIDE { return 0; }
 
     // pRejectActions!=NULL: reject actions get
     // stacked, no SetNewValue, no Append
@@ -762,8 +762,8 @@ public:
     ScChangeActionContent*  GetTopContent() const;
     bool IsTopContent() const { return pNextContent == NULL; }
 
-    virtual ScChangeActionLinkEntry*    GetDeletedIn() const;
-    virtual ScChangeActionLinkEntry**   GetDeletedInAddress();
+    virtual ScChangeActionLinkEntry*    GetDeletedIn() const SAL_OVERRIDE;
+    virtual ScChangeActionLinkEntry**   GetDeletedInAddress() SAL_OVERRIDE;
 
     void                PutOldValueToDoc( ScDocument*,
                             SCsCOL nDx, SCsROW nDy ) const;
@@ -802,10 +802,10 @@ public:
     SC_DLLPUBLIC const ScCellValue& GetOldCell() const;
     SC_DLLPUBLIC const ScCellValue& GetNewCell() const;
     virtual void GetDescription(
-        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const SAL_OVERRIDE;
 
     virtual void GetRefString(
-        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
+        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const SAL_OVERRIDE;
 
     static ScChangeActionContentCellType GetContentCellType( const ScCellValue& rCell );
     static ScChangeActionContentCellType GetContentCellType( const ScRefCellValue& rIter );
@@ -829,12 +829,12 @@ class ScChangeActionReject : public ScChangeAction
         SetState( SC_CAS_ACCEPTED );
     }
 
-    virtual void AddContent( ScChangeActionContent* ) {}
-    virtual void DeleteCellEntries() {}
+    virtual void AddContent( ScChangeActionContent* ) SAL_OVERRIDE {}
+    virtual void DeleteCellEntries() SAL_OVERRIDE {}
 
-    virtual bool Reject(ScDocument* pDoc);
+    virtual bool Reject(ScDocument* pDoc) SAL_OVERRIDE;
 
-    virtual const ScChangeTrack* GetChangeTrack() const { return 0; }
+    virtual const ScChangeTrack* GetChangeTrack() const SAL_OVERRIDE { return 0; }
 
 public:
     ScChangeActionReject(const sal_uLong nActionNumber,
@@ -1010,7 +1010,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     bool Reject( ScChangeAction*, ScChangeActionMap*, bool bRecursion );
 
             void                ClearMsgQueue();
-    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
 public:
 

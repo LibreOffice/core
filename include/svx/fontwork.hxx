@@ -60,7 +60,7 @@ class SvxFontWorkControllerItem : public SfxControllerItem
 
 protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState);
+                              const SfxPoolItem* pState) SAL_OVERRIDE;
 
 public:
     SvxFontWorkControllerItem(sal_uInt16 nId, SvxFontWorkDialog&, SfxBindings&);
@@ -147,13 +147,13 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void ApplyImageList();
 
  protected:
     virtual void    Zoom();
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment eActAlign,
-                                              SfxChildAlignment eAlign );
+                                              SfxChildAlignment eAlign ) SAL_OVERRIDE;
 
  public:
     SvxFontWorkDialog(  SfxBindings *pBindinx,

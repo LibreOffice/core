@@ -42,20 +42,20 @@ public:
         throw (css::uno::RuntimeException);
 
     // XWindowBase
-    virtual sal_Int32 SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) ;
-    virtual void SAL_CALL setHeight( sal_Int32 _height ) throw (css::uno::RuntimeException, std::exception) ;
-    virtual sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) ;
-    virtual void SAL_CALL setLeft( sal_Int32 _left ) throw (css::uno::RuntimeException, std::exception) ;
-    virtual sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) ;
-    virtual void SAL_CALL setTop( sal_Int32 _top ) throw (css::uno::RuntimeException, std::exception) ;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception);
-    virtual sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) ;
-    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception) ;
+    virtual sal_Int32 SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL setHeight( sal_Int32 _height ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL setLeft( sal_Int32 _left ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL setTop( sal_Int32 _top ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 
 protected:
     css::uno::Reference< css::frame::XController > getController() throw (css::uno::RuntimeException);

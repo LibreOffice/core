@@ -79,7 +79,7 @@ private:
 #endif
 
 protected:
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 #ifndef _SFX_HXX
     SAL_DLLPRIVATE void KillDispatcher_Impl();
@@ -135,8 +135,8 @@ public:
     void                    ToTop();
     void                    Enable( bool bEnable );
     virtual bool            Close();
-    virtual void            Activate( bool bUI );
-    virtual void            Deactivate( bool bUI );
+    virtual void            Activate( bool bUI ) SAL_OVERRIDE;
+    virtual void            Deactivate( bool bUI ) SAL_OVERRIDE;
 
     // DDE-Interface
     virtual long            DdeExecute( const OUString& rCmd );
@@ -157,7 +157,7 @@ public:
     SAL_DLLPRIVATE virtual const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
     SAL_DLLPRIVATE virtual void InvalidateBorderImpl( const SfxViewShell *pSh );
 
-    virtual SfxObjectShell* GetObjectShell();
+    virtual SfxObjectShell* GetObjectShell() SAL_OVERRIDE;
     sal_uInt16                  GetCurViewId() const;
     SfxFrame&               GetFrame() const;
     SfxViewFrame*           GetTopViewFrame() const;
@@ -303,9 +303,9 @@ public:
                                 pFrame( pViewFrame)
                             {}
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual OUString        GetValueText() const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     SfxViewFrame*           GetFrame() const
                             { return pFrame; }
@@ -323,10 +323,10 @@ public:
 
                             SfxVerbListItem( sal_uInt16 nWhichId, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& );
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbList() const { return aVerbs; }
 };
 

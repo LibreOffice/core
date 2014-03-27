@@ -83,7 +83,7 @@ public:
                     Invalidate();
                 }
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 
@@ -96,9 +96,9 @@ class MaskSet : public ValueSet
 public:
     MaskSet( SvxBmpMask* pParent, const ResId& rId );
 
-    virtual void    Select();
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void GetFocus();
+    virtual void    Select() SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
     void onEditColor();
 };

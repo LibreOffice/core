@@ -90,11 +90,11 @@ namespace drawinglayer
             const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // own get2DDecomposition to take aspect of decomposition with or without spell checker
             // into account
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
@@ -119,7 +119,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrContourTextPrimitive2D(
@@ -133,10 +133,10 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -161,7 +161,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrPathTextPrimitive2D(
@@ -175,10 +175,10 @@ namespace drawinglayer
             const attribute::SdrFormTextAttribute& getSdrFormTextAttribute() const { return maSdrFormTextAttribute; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -211,7 +211,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrBlockTextPrimitive2D(
@@ -237,10 +237,10 @@ namespace drawinglayer
             bool getClipOnBounds() const { return mbClipOnBounds; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -265,7 +265,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrStretchTextPrimitive2D(
@@ -279,10 +279,10 @@ namespace drawinglayer
             bool isFixedCellHeight() const { return mbFixedCellHeight; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -306,7 +306,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
 
         public:
             SdrAutoFitTextPrimitive2D(
@@ -320,10 +320,10 @@ namespace drawinglayer
             bool getWordWrap() const { return mbWordWrap; }
 
             // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
+            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()

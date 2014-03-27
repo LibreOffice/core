@@ -81,7 +81,7 @@ namespace sdr { namespace contact {
 
         /** React on changes of the object of this ViewContact
         */
-        virtual void ActionChanged();
+        virtual void ActionChanged() SAL_OVERRIDE;
 
         /** to be called when any aspect of the control which requires view updates changed
         */
@@ -92,10 +92,10 @@ namespace sdr { namespace contact {
         ~ViewObjectContactOfUnoControl();
 
         // support for Primitive2D
-        virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
+        virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
 
         // visibility check
-        virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const;
+        virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const SAL_OVERRIDE;
         /// to be called when any aspect of the control which requires view updates changed
         void impl_onControlChangedOrModified();
 
@@ -119,7 +119,7 @@ namespace sdr { namespace contact {
         UnoControlPrintOrPreviewContact( const UnoControlPrintOrPreviewContact& );            // never implemented
         UnoControlPrintOrPreviewContact& operator=( const UnoControlPrintOrPreviewContact& ); // never implemented
 
-        virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const;
+        virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const SAL_OVERRIDE;
     };
 
 

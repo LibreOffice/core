@@ -79,17 +79,17 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
         { return m_pEdFilepath->GetText(); }
     sal_Bool IsLinked() const
         { return m_pCbFilelink->IsChecked(); }
-    sal_Bool IsCreateNew() const
+    sal_Bool IsCreateNew() const SAL_OVERRIDE
         { return m_pRbNewObject->IsChecked(); }
 
 public:
     SvInsertOleDlg( Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers = NULL );
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) SAL_OVERRIDE;
 };
 
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
@@ -109,7 +109,7 @@ public:
     SvInsertPlugInDialog(Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
     ~SvInsertPlugInDialog();
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
@@ -143,7 +143,7 @@ public:
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
     SfxInsertFloatingFrameDialog( Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_INSDLG_HXX

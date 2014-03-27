@@ -48,21 +48,21 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
 protected:
     virtual void exportStyleContent(
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle );
+                ::com::sun::star::style::XStyle > & rStyle ) SAL_OVERRIDE;
 
     virtual void _collectTextEmbeddedAutoStyles(
         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropSet );
+            ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
     virtual void _exportTextEmbedded(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+            ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo ) SAL_OVERRIDE;
 
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bProgress );
+        sal_Bool bAutoStyles, sal_Bool bProgress ) SAL_OVERRIDE;
 
 public:
     SwXMLTextParagraphExport(
@@ -73,7 +73,7 @@ public:
     virtual void setTextEmbeddedGraphicURL(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
-        OUString& rStreamName ) const;
+        OUString& rStreamName ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTE_HXX

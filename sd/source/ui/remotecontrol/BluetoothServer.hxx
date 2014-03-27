@@ -49,7 +49,7 @@ namespace sd
         struct Impl;
         boost::scoped_ptr<Impl> mpImpl;
 #endif
-        virtual void SAL_CALL run();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
 
         void cleanupCommunicators();
         std::vector<Communicator*>* mpCommunicators;

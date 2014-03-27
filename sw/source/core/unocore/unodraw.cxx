@@ -382,13 +382,13 @@ namespace
             SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
 
             //XEnumeration
-            virtual sal_Bool SAL_CALL hasMoreElements(void) throw(uno::RuntimeException, std::exception);
-            virtual uno::Any SAL_CALL nextElement(void) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception);
+            virtual sal_Bool SAL_CALL hasMoreElements(void) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual uno::Any SAL_CALL nextElement(void) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             //XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(void) throw(uno::RuntimeException, std::exception);
-            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException, std::exception);
-            virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(void) throw(uno::RuntimeException, std::exception);
+            virtual OUString SAL_CALL getImplementationName(void) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(void) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

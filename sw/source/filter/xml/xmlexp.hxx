@@ -88,16 +88,16 @@ class SwXMLExport : public SvXMLExport
                            SwXMLTableInfo_Impl& rTblInfo,
                            sal_uInt16 nHeaderRows = 0 );
 
-    virtual void _ExportMeta();
-    virtual void _ExportFontDecls();
-    virtual void _ExportStyles( bool bUsed );
-    virtual void _ExportAutoStyles();
-    virtual void _ExportMasterStyles();
-    virtual void SetBodyAttributes();
-    virtual void _ExportContent();
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-    virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
+    virtual void _ExportMeta() SAL_OVERRIDE;
+    virtual void _ExportFontDecls() SAL_OVERRIDE;
+    virtual void _ExportStyles( bool bUsed ) SAL_OVERRIDE;
+    virtual void _ExportAutoStyles() SAL_OVERRIDE;
+    virtual void _ExportMasterStyles() SAL_OVERRIDE;
+    virtual void SetBodyAttributes() SAL_OVERRIDE;
+    virtual void _ExportContent() SAL_OVERRIDE;
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
+    virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings ) SAL_OVERRIDE;
 
     // string constants for table cell export
     const OUString sNumberFormat;
@@ -109,11 +109,11 @@ private:
     void DeleteTableLines();
 protected:
 
-    virtual XMLTextParagraphExport* CreateTextParagraphExport();
-    virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
-    virtual XMLPageExport* CreatePageExport();
-    virtual XMLShapeExport* CreateShapeExport();
-    virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
+    virtual XMLTextParagraphExport* CreateTextParagraphExport() SAL_OVERRIDE;
+    virtual SvXMLAutoStylePoolP* CreateAutoStylePool() SAL_OVERRIDE;
+    virtual XMLPageExport* CreatePageExport() SAL_OVERRIDE;
+    virtual XMLShapeExport* CreateShapeExport() SAL_OVERRIDE;
+    virtual XMLFontAutoStylePool* CreateFontAutoStylePool() SAL_OVERRIDE;
 
 public:
     SwXMLExport(
@@ -122,7 +122,7 @@ public:
 
     virtual ~SwXMLExport();
 
-    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
+    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) SAL_OVERRIDE;
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
 
@@ -141,7 +141,7 @@ public:
 
     // XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     const SwDoc* getDoc() const;
     SwDoc* getDoc();

@@ -547,8 +547,8 @@ private:
 private:
     // finalize token sequence ------------------------------------------------
 
-    virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const;
-    virtual OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
+    virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const SAL_OVERRIDE;
+    virtual OUString resolveDefinedName( sal_Int32 nTokenIndex ) const SAL_OVERRIDE;
 
 protected:
     const sal_Int32     mnMaxApiCol;                /// Maximum column index in own document.
@@ -1246,12 +1246,12 @@ public:
 
     virtual ApiTokenSequence importOoxFormula(
                             const CellAddress& rBaseAddr,
-                            const OUString& rFormulaString );
+                            const OUString& rFormulaString ) SAL_OVERRIDE;
 
     virtual ApiTokenSequence importBiff12Formula(
                             const CellAddress& rBaseAddr,
                             FormulaType eType,
-                            SequenceInputStream& rStrm );
+                            SequenceInputStream& rStrm ) SAL_OVERRIDE;
 
 private:
     // import token contents and create API formula token ---------------------
@@ -1852,7 +1852,7 @@ public:
     virtual ApiTokenSequence importBiffFormula(
                             const CellAddress& rBaseAddr,
                             FormulaType eType,
-                            BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize );
+                            BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) SAL_OVERRIDE;
 
 private:
     // import token contents and create API formula token ---------------------

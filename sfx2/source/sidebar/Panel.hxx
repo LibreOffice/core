@@ -63,10 +63,10 @@ public:
     bool HasIdPredicate (const ::rtl::OUString& rsId) const;
     const ::rtl::OUString& GetId (void) const;
 
-    virtual void Paint (const Rectangle& rUpdateArea);
-    virtual void Resize (void);
-    virtual void DataChanged (const DataChangedEvent& rEvent);
-    virtual void Activate (void);
+    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual void Activate (void) SAL_OVERRIDE;
 
 private:
     const ::rtl::OUString msPanelId;

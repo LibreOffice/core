@@ -45,10 +45,10 @@ public:
         ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
         ActivitiesQueue & rActivityQueue );
 
-    virtual void dispose();
-    virtual bool fire();
-    virtual bool isCharged() const;
-    virtual double getActivationTime( double nCurrentTime ) const;
+    virtual void dispose() SAL_OVERRIDE;
+    virtual bool fire() SAL_OVERRIDE;
+    virtual bool isCharged() const SAL_OVERRIDE;
+    virtual double getActivationTime( double nCurrentTime ) const SAL_OVERRIDE;
 
     /// Start the internal timer
     void start();

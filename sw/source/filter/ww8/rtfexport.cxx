@@ -1210,7 +1210,7 @@ class SwRTFWriter : public Writer
     public:
         SwRTFWriter( const OUString& rFilterName, const OUString& rBaseURL );
         virtual ~SwRTFWriter();
-               virtual sal_uLong WriteStream();
+               virtual sal_uLong WriteStream() SAL_OVERRIDE;
 };
 
 SwRTFWriter::SwRTFWriter( const OUString& rFltName, const OUString & rBaseURL )

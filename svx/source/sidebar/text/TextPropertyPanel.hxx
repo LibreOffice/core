@@ -52,7 +52,7 @@ public:
         SfxBindings* pBindings,
         const ::sfx2::sidebar::EnumContext& rContext);
 
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     ::sfx2::sidebar::ControllerItem& GetSpaceController();
     long GetSelFontSize();
@@ -62,14 +62,14 @@ public:
 
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext aContext);
+        const ::sfx2::sidebar::EnumContext aContext) SAL_OVERRIDE;
 
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) SAL_OVERRIDE;
 
 private:
     //ui controls

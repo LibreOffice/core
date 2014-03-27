@@ -68,7 +68,7 @@ namespace frm
         }
 
         // ICommandDescriptionProvider
-        virtual OUString getCommandDescription( const OUString& _rCommandURL ) const;
+        virtual OUString getCommandDescription( const OUString& _rCommandURL ) const SAL_OVERRIDE;
 
     private:
         void    impl_init_nothrow( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument );

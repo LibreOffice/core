@@ -40,7 +40,7 @@ private:
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                          bool bChildrenOnDemand,
                                          sal_uIntPtr nPos, void* pUserData,
-                                         SvLBoxButtonKind eButtonKind );
+                                         SvLBoxButtonKind eButtonKind ) SAL_OVERRIDE;
 
 public:
     SvxCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
@@ -68,8 +68,8 @@ public:
     void*           SetEntryData        ( sal_uLong  nPos, void* pNewData );
     void*           GetEntryData        ( sal_uLong  nPos ) const;
 
-    virtual void    MouseButtonDown     ( const MouseEvent& rMEvt );
-    virtual void    KeyInput            ( const KeyEvent& rKEvt );
+    virtual void    MouseButtonDown     ( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput            ( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
 

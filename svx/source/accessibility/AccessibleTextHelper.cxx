@@ -189,7 +189,7 @@ namespace accessibility
 
         void ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast );
 
-        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
         int getNotifierClientId() const { return mnNotifierClientId; }
 

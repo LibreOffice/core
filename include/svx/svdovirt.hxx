@@ -36,20 +36,20 @@
 class SVX_DLLPUBLIC SdrVirtObj : public SdrObject
 {
 public:
-    virtual sdr::properties::BaseProperties& GetProperties() const;
+    virtual sdr::properties::BaseProperties& GetProperties() const SAL_OVERRIDE;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
     SdrObject&                  rRefObj; // Referenziertes Zeichenobjekt
     Rectangle                   aSnapRect;
 
 protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
-    virtual SdrObjGeoData* NewGeoData() const;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo);
+    virtual SdrObjGeoData* NewGeoData() const SAL_OVERRIDE;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -57,93 +57,93 @@ public:
     virtual ~SdrVirtObj();
     virtual SdrObject& ReferencedObj();
     virtual const SdrObject& GetReferencedObj() const;
-    virtual void NbcSetAnchorPos(const Point& rAnchorPos);
-    virtual void SetModel(SdrModel* pNewModel);
+    virtual void NbcSetAnchorPos(const Point& rAnchorPos) SAL_OVERRIDE;
+    virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 
-    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual sal_uInt32 GetObjInventor() const;
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObjList* GetSubList() const;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual SdrObjList* GetSubList() const SAL_OVERRIDE;
 
-    virtual const Rectangle& GetCurrentBoundRect() const;
-    virtual const Rectangle& GetLastBoundRect() const;
-    virtual void RecalcBoundRect();
-    virtual void SetChanged();
-    virtual SdrVirtObj* Clone() const;
+    virtual const Rectangle& GetCurrentBoundRect() const SAL_OVERRIDE;
+    virtual const Rectangle& GetLastBoundRect() const SAL_OVERRIDE;
+    virtual void RecalcBoundRect() SAL_OVERRIDE;
+    virtual void SetChanged() SAL_OVERRIDE;
+    virtual SdrVirtObj* Clone() const SAL_OVERRIDE;
     SdrVirtObj& operator=(const SdrVirtObj& rObj);
 
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
-    virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
-    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
+    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
+    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const SAL_OVERRIDE;
+    virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const SAL_OVERRIDE;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const SAL_OVERRIDE;
 
     // special drag methods
-    virtual bool hasSpecialDrag() const;
-    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
-    virtual bool applySpecialDrag(SdrDragStat& rDrag);
-    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const;
-    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
+    virtual bool hasSpecialDrag() const SAL_OVERRIDE;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag) SAL_OVERRIDE;
+    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
 
     // FullDrag support
-    virtual bool supportsFullDrag() const;
-    virtual SdrObject* getFullDragClone() const;
+    virtual bool supportsFullDrag() const SAL_OVERRIDE;
+    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
 
-    virtual bool BegCreate(SdrDragStat& rStat);
-    virtual bool MovCreate(SdrDragStat& rStat);
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual bool BckCreate(SdrDragStat& rStat);
-    virtual void BrkCreate(SdrDragStat& rStat);
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    virtual bool BegCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual bool MovCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
+    virtual bool BckCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual void BrkCreate(SdrDragStat& rStat) SAL_OVERRIDE;
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
 
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
+    virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
 
-    virtual void Move(const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
-    virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear);
+    virtual void Move(const Size& rSiz) SAL_OVERRIDE;
+    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
+    virtual void Rotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void Mirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
+    virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
 
-    virtual void RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect() const;
-    virtual void SetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
+    virtual void RecalcSnapRect() SAL_OVERRIDE;
+    virtual const Rectangle& GetSnapRect() const SAL_OVERRIDE;
+    virtual void SetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
 
-    virtual const Rectangle& GetLogicRect() const;
-    virtual void SetLogicRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
+    virtual const Rectangle& GetLogicRect() const SAL_OVERRIDE;
+    virtual void SetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
 
-    virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(bool bVertical = false) const;
+    virtual long GetRotateAngle() const SAL_OVERRIDE;
+    virtual long GetShearAngle(bool bVertical = false) const SAL_OVERRIDE;
 
-    virtual sal_uInt32 GetSnapPointCount() const;
-    virtual Point GetSnapPoint(sal_uInt32 i) const;
+    virtual sal_uInt32 GetSnapPointCount() const SAL_OVERRIDE;
+    virtual Point GetSnapPoint(sal_uInt32 i) const SAL_OVERRIDE;
 
-    virtual bool IsPolyObj() const;
-    virtual sal_uInt32 GetPointCount() const;
-    virtual Point GetPoint(sal_uInt32 i) const;
-    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
+    virtual bool IsPolyObj() const SAL_OVERRIDE;
+    virtual sal_uInt32 GetPointCount() const SAL_OVERRIDE;
+    virtual Point GetPoint(sal_uInt32 i) const SAL_OVERRIDE;
+    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) SAL_OVERRIDE;
 
-    virtual SdrObjGeoData* GetGeoData() const;
-    virtual void SetGeoData(const SdrObjGeoData& rGeo);
+    virtual SdrObjGeoData* GetGeoData() const SAL_OVERRIDE;
+    virtual void SetGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
-    virtual void NbcReformatText();
-    virtual void ReformatText();
+    virtual void NbcReformatText() SAL_OVERRIDE;
+    virtual void ReformatText() SAL_OVERRIDE;
 
-    virtual bool HasMacro() const;
-    virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
-    virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
-    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
-    virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
-    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual bool HasMacro() const SAL_OVERRIDE;
+    virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
+    virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
+    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
+    virtual bool DoMacro (const SdrObjMacroHitRec& rRec) SAL_OVERRIDE;
+    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
 
     // OD 30.06.2003 #108784# - virtual <GetOffset()> returns Point(0,0)
     // #i73248# for default SdrVirtObj, offset is aAnchor, not (0,0)

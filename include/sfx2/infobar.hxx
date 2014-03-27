@@ -53,8 +53,8 @@ class SfxInfoBarWindow : public Window
         ~SfxInfoBarWindow( );
 
         virtual const OUString& getId() const { return m_sId; }
-        virtual void Paint( const Rectangle& );
-        virtual void Resize( );
+        virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
+        virtual void Resize( ) SAL_OVERRIDE;
 
     private:
         DECL_LINK( CloseHandler, void* );
@@ -74,7 +74,7 @@ class SfxInfoBarContainerWindow : public Window
         SfxInfoBarWindow* getInfoBar( const OUString& sId );
         void removeInfoBar( SfxInfoBarWindow* pInfoBar );
 
-        virtual void Resize( );
+        virtual void Resize( ) SAL_OVERRIDE;
 };
 
 

@@ -51,8 +51,8 @@ class PptEscherEx : public EscherEx
                 PptEscherEx( SvStream& rOut, const OUString& );
                 ~PptEscherEx();
 
-        void    OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance = 0 );
-        void    CloseContainer();
+        void    OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance = 0 ) SAL_OVERRIDE;
+        void    CloseContainer() SAL_OVERRIDE;
 
         sal_uInt32 EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData );
 

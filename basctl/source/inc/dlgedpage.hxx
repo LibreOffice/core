@@ -44,12 +44,12 @@ public:
     virtual ~DlgEdPage();
 
     using SdrPage::Clone;
-    virtual SdrPage* Clone() const;
+    virtual SdrPage* Clone() const SAL_OVERRIDE;
 
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual SdrObject* SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum);
+    virtual SdrObject* SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum) SAL_OVERRIDE;
 };
 
 } // namespace basctl

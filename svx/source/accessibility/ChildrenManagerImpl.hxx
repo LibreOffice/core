@@ -246,21 +246,21 @@ public:
 
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //=====  document::XEventListener  ========================================
 
     virtual void SAL_CALL
         notifyEvent (const ::com::sun::star::document::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //=====  view::XSelectionChangeListener  ==================================
 
     virtual void  SAL_CALL
         selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //=====  IAccessibleViewForwarderListener  ================================
@@ -277,7 +277,7 @@ public:
             The modified view forwarder.  Use this one from now on.
     */
     virtual void ViewForwarderChanged (ChangeType aChangeType,
-        const IAccessibleViewForwarder* pViewForwarder);
+        const IAccessibleViewForwarder* pViewForwarder) SAL_OVERRIDE;
 
     //=====  IAccessibleParent  ===============================================
 
@@ -295,17 +295,17 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException);
+    )   throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     // Add the impl method for IAccessibleParent interface
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>
         GetAccessibleCaption (const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& xShape)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 protected:
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.
@@ -359,7 +359,7 @@ protected:
     /** This method is called from the component helper base class while
         disposing.
     */
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     void impl_dispose (void);
 

@@ -56,7 +56,7 @@ private:
     sal_uInt16          nAnchorCtrls;
     Link                aValidateLink;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 public:
 
@@ -151,18 +151,18 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
 
-    virtual void FillUserData();
+    virtual void FillUserData() SAL_OVERRIDE;
 
     void        DisableResize();
     void        DisableProtect();
@@ -206,13 +206,13 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
@@ -250,13 +250,13 @@ public:
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();
 
-    virtual bool FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
+    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+    virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

@@ -55,7 +55,7 @@ namespace rptui
     public:
         ConditionField( Condition* pParent, const ResId& rResId );
         virtual ~ConditionField();
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
     };
 
 
@@ -102,11 +102,11 @@ namespace rptui
             @param  _eBitmapSet
                 <svtools/imgdef.hxx>
         */
-        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const;
+        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const SAL_OVERRIDE;
 
         /** will be called when the controls need to be resized.
         */
-        virtual void resizeControls(const Size& _rDiff);
+        virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
 
         /** sets the props at the control
             @param  _xCondition the source
@@ -140,11 +140,11 @@ namespace rptui
         inline ::rptui::OReportController& getController() const { return m_rController; }
 
     protected:
-        virtual void StateChanged( StateChangedType nStateChange );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
-        virtual void Paint( const Rectangle& rRect );
-        virtual void Resize();
-        virtual void GetFocus();
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
 
     private:
         void    impl_layoutAll();

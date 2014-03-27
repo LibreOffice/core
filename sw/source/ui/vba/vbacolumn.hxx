@@ -40,15 +40,15 @@ public:
     virtual ~SwVbaColumn();
 
     // Methods
-    virtual sal_Int32 SAL_CALL getWidth() throw ( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception);
+    virtual sal_Int32 SAL_CALL getWidth() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static void SelectColumn( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual OUString getServiceImplName();
-    virtual css::uno::Sequence<OUString> getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBACOLUMN_HXX
 

@@ -37,37 +37,37 @@ namespace dbaui
         ::rtl::Reference< comphelper::OContainerListenerAdapter> m_pContainerListener;
         bool m_bInRemove;
 
-        virtual void ConnDoubleClicked( OTableConnection* pConnection );
-        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool bNewTable = sal_False);
+        virtual void ConnDoubleClicked( OTableConnection* pConnection ) SAL_OVERRIDE;
+        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool bNewTable = sal_False) SAL_OVERRIDE;
 
-        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
+        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) SAL_OVERRIDE;
 
         /** determines whether the classes Init method should accept a query
             name, or only table names */
-        virtual bool    allowQueries() const;
+        virtual bool    allowQueries() const SAL_OVERRIDE;
 
         // OContainerListener
-        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     public:
         ORelationTableView( Window* pParent, ORelationDesignView* pView );
         virtual ~ORelationTableView();
 
-        virtual void RemoveTabWin( OTableWindow* pTabWin );
-        virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
-        virtual bool RemoveConnection(OTableConnection* pConn,sal_Bool _bDelete);
+        virtual void RemoveTabWin( OTableWindow* pTabWin ) SAL_OVERRIDE;
+        virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;
+        virtual bool RemoveConnection(OTableConnection* pConn,sal_Bool _bDelete) SAL_OVERRIDE;
 
-        virtual void ReSync();
+        virtual void ReSync() SAL_OVERRIDE;
 
         /// Creates a dialogue for a completely new relation.
         void AddNewRelation();
 
         /// used by AddTabDlg to check if tables can be added
-        virtual sal_Bool IsAddAllowed();
+        virtual sal_Bool IsAddAllowed() SAL_OVERRIDE;
 
-        virtual void lookForUiActivities();
+        virtual void lookForUiActivities() SAL_OVERRIDE;
     };
 }
 #endif

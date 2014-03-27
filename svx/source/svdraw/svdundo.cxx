@@ -685,7 +685,7 @@ public:
     ~ObjListListener();
 
 private:
-    virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
     SdrUndoObjList& m_rThat;

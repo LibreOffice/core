@@ -31,7 +31,7 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(SwFldDlgWrapper);
 
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
     void ShowReferencePage();
 };
 
@@ -48,7 +48,7 @@ public:
 
     SFX_DECL_CHILDWINDOW(SwFldDataOnlyDlgWrapper);
 
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
 };
 
 #endif

@@ -44,15 +44,15 @@ public:
                     ~SvxShowText();
 
     void            SetFont( const Font& rFont );
-    void            SetText( const OUString& rText );
+    void            SetText( const OUString& rText ) SAL_OVERRIDE;
     void            SetCentered(bool bCenter) { mbCenter = bCenter; }
 
-    virtual void    Resize();
+    virtual void    Resize() SAL_OVERRIDE;
 
-    virtual Size    GetOptimalSize() const;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
 protected:
-    virtual void    Paint( const Rectangle& );
+    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
 
 private:
     long            mnY;
@@ -110,7 +110,7 @@ public:
 
     OUString        GetCharacters() const;
 
-    virtual short   Execute();
+    virtual short   Execute() SAL_OVERRIDE;
 };
 
 #endif

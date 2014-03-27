@@ -99,7 +99,7 @@ public:
 
     ScValidationData* Clone() const     // real copy
                     { return new ScValidationData( GetDocument(), *this ); }
-    ScValidationData* Clone(ScDocument* pNew) const
+    ScValidationData* Clone(ScDocument* pNew) const SAL_OVERRIDE
                     { return new ScValidationData( pNew, *this ); }
 
     void            ResetInput();

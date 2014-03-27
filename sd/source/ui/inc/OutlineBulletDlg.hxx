@@ -42,7 +42,7 @@ public:
     const SfxItemSet* GetOutputItemSet() const;
 
 protected:
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 private:
     using SfxTabDialog::GetOutputItemSet;

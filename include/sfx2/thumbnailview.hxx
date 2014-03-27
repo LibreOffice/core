@@ -184,7 +184,7 @@ public:
 
     virtual ~ThumbnailView ();
 
-    virtual void        MouseMove( const MouseEvent& rMEvt );
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void AppendItem (ThumbnailViewItem *pItem);
 
@@ -239,7 +239,7 @@ public:
 
     void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
@@ -247,25 +247,25 @@ public:
 
 protected:
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void Command( const CommandEvent& rCEvt );
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual void GetFocus();
+    virtual void GetFocus() SAL_OVERRIDE;
 
-    virtual void LoseFocus();
+    virtual void LoseFocus() SAL_OVERRIDE;
 
-    virtual void StateChanged( StateChangedType nStateChange );
+    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
 protected:
 

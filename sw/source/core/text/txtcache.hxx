@@ -46,7 +46,7 @@ class SwTxtLineAccess : public SwCacheAccess
 {
 
 protected:
-    virtual SwCacheObj *NewObj();
+    virtual SwCacheObj *NewObj() SAL_OVERRIDE;
 
 public:
     SwTxtLineAccess( const SwTxtFrm *pOwner );
@@ -55,7 +55,7 @@ public:
 
     inline SwTxtLine &GetTxtLine();
 
-    virtual bool IsAvailable() const;
+    virtual bool IsAvailable() const SAL_OVERRIDE;
 };
 
 inline SwTxtLine &SwTxtLineAccess::GetTxtLine()

@@ -122,7 +122,7 @@ public:
 
                     ~SfxTabDialogController();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 SfxTabDialogController::~SfxTabDialogController()

@@ -89,7 +89,7 @@ public:
 private:
     virtual ~Thread();
 
-    virtual void execute();
+    virtual void execute() SAL_OVERRIDE;
     void downloadExtensions();
     void download(OUString const & aUrls, UpdateData & aUpdatData);
     void installExtensions();
@@ -129,21 +129,21 @@ public:
 
     // XCommandEnvironment
     virtual cssu::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (cssu::RuntimeException, std::exception);
+    getInteractionHandler() throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual cssu::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (cssu::RuntimeException, std::exception);
+    SAL_CALL getProgressHandler() throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
         cssu::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XProgressHandler
     virtual void SAL_CALL push( cssu::Any const & Status )
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL update( cssu::Any const & Status )
-        throw (cssu::RuntimeException, std::exception);
-    virtual void SAL_CALL pop() throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL pop() throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

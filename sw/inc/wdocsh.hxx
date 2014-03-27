@@ -44,7 +44,7 @@ public:
                                    OUString * pLongUserName,
                                    OUString * pUserName,
                                    sal_Int32 nFileFormat,
-                                   bool bTemplate = false ) const;
+                                   bool bTemplate = false ) const SAL_OVERRIDE;
     sal_uInt16      GetSourcePara()const
                             {return nSourcePara;}
     void        SetSourcePara(sal_uInt16 nSet) {nSourcePara = nSet;}

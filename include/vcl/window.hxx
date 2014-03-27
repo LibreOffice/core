@@ -595,7 +595,7 @@ public:
     OutputDevice const* GetOutDev() const { return mpOutputDevice; };
     OutputDevice*       GetOutDev()       { return mpOutputDevice; };
 
-    virtual void        EnableRTL ( bool bEnable = true );
+    virtual void        EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );

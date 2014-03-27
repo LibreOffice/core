@@ -51,16 +51,16 @@ public:
         ViewShellBase& rViewShellBase);
     virtual ~PanelBase (void);
 
-    virtual void Resize (void);
+    virtual void Resize (void) SAL_OVERRIDE;
 
     // IDisposable
-    virtual void Dispose (void);
+    virtual void Dispose (void) SAL_OVERRIDE;
 
     // ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
     // ISidebarReceiver
-    virtual void SetSidebar (const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+    virtual void SetSidebar (const cssu::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (

@@ -148,9 +148,9 @@ private:
     void operator =(OGroupsSortingDialog&);
 protected:
     // window
-    virtual void    Resize();
+    virtual void    Resize() SAL_OVERRIDE;
     // OPropertyChangeListener
-    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 public:
     OGroupsSortingDialog( Window* pParent
                         ,sal_Bool _bReadOnly
@@ -170,16 +170,16 @@ public:
             @param  _rDiff
                 Contains the difference of the old and new toolbox size.
         */
-        virtual void resizeControls(const Size& _rDiff);
+        virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
 
         /** will be called when the image list is needed.
             @param  _eSymbolsSize
                 <svtools/imgdef.hxx>
         */
-    virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const;
+    virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const SAL_OVERRIDE;
 
     // ImageListProvider interface
-    virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException ));
+    virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException )) SAL_OVERRIDE;
 
 };
 

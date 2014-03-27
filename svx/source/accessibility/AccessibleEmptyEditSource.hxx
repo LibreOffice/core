@@ -53,20 +53,20 @@ namespace accessibility
         ~AccessibleEmptyEditSource();
 
         // from the SvxEditSource interface
-        SvxTextForwarder*       GetTextForwarder();
-        SvxViewForwarder*       GetViewForwarder();
+        SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE;
+        SvxViewForwarder*       GetViewForwarder() SAL_OVERRIDE;
 
-        SvxEditSource*          Clone() const;
+        SvxEditSource*          Clone() const SAL_OVERRIDE;
 
         // this method internally switches from empty to proxy mode,
         // creating an SvxTextEditSource for the functionality.
         SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) SAL_OVERRIDE;
 
-        void                    UpdateData();
-        SfxBroadcaster&         GetBroadcaster() const;
+        void                    UpdateData() SAL_OVERRIDE;
+        SfxBroadcaster&         GetBroadcaster() const SAL_OVERRIDE;
 
         // from the SfxListener interface
-        void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     private:
         void Switch2ProxyEditSource();

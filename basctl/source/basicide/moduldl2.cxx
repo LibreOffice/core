@@ -85,7 +85,7 @@ class DummyInteractionHandler  : public HandlerImpl_BASE
 public:
     DummyInteractionHandler( const Reference< task::XInteractionHandler2 >& xHandler ) : m_xHandler( xHandler ){}
 
-    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( m_xHandler.is() )
         {
@@ -116,7 +116,7 @@ public:
     LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
@@ -1122,9 +1122,9 @@ public:
 
     // Methods
     virtual Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 Reference< task::XInteractionHandler > OLibCommandEnvironment::getInteractionHandler()

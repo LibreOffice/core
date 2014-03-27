@@ -119,8 +119,8 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
     Sequence<PropertyValues>&       GetRubyValues() {return aRubyValues;}
     void                            AssertOneEntry();
 
-    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

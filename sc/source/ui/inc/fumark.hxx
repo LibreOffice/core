@@ -39,17 +39,17 @@ class FuMarkRect : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuMarkRect();
 
-    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Activate() SAL_OVERRIDE;
+    virtual void Deactivate() SAL_OVERRIDE;
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual bool MouseMove(const MouseEvent& rMEvt);
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_uInt8 Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
 };
 
 

@@ -237,15 +237,15 @@ public:
 
     virtual                             ~SfxFrameDescriptorItem();
 
-    virtual bool                        operator ==( const SfxPoolItem& ) const;
+    virtual bool                        operator ==( const SfxPoolItem& ) const SAL_OVERRIDE;
     SfxFrameDescriptorItem&             operator =( const SfxFrameDescriptorItem & );
 
     virtual SfxItemPresentation         GetPresentation( SfxItemPresentation ePres,
                                             SfxMapUnit eCoreMetric,
                                             SfxMapUnit ePresMetric,
-                                            OUString &rText, const IntlWrapper * = 0 ) const;
+                                            OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*                Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*                Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     const SfxFrameProperties&           GetProperties() const
                                         { return aProperties; }

@@ -29,20 +29,20 @@ namespace dbaui
         OTableWindow* m_pTabWin;
 
     protected:
-        virtual void Command(const CommandEvent& rEvt);
+        virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
         //  virtual void Paint( const Rectangle& rRect );
-        virtual void MouseButtonDown( const MouseEvent& rEvt );
-        virtual void KeyInput( const KeyEvent& rEvt );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+        virtual void MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
+        virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
+        virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     public:
         OTableWindowTitle( OTableWindow* pParent );
         virtual ~OTableWindowTitle();
-        virtual void LoseFocus();
-        virtual void GetFocus();
-        virtual void RequestHelp( const HelpEvent& rHEvt );
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
         // window override
-        virtual void StateChanged( StateChangedType nStateChange );
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWTITLE_HXX

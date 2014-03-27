@@ -67,20 +67,20 @@ public:
 
     void            RestartShow( sal_Int32 nPageIndexToRestart );
 
-    virtual void    Move();
-    virtual void    Resize();
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    Move() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
-    virtual void    KeyInput(const KeyEvent& rKEvt);
-    virtual void    MouseMove(const MouseEvent& rMEvt);
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    Paint(const Rectangle& rRect);
+    virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void    MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    Paint(const Rectangle& rRect) SAL_OVERRIDE;
     //Overload the sd::Window's CreateAccessible to create a different accessible object
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessible (void);
+        CreateAccessible (void) SAL_OVERRIDE;
 
     void            TerminateShow();
     void            RestartShow();

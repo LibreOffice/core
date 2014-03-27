@@ -39,21 +39,21 @@ public:
     virtual ~XMLCodeNameProvider();
 
     virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception );
+        throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception );
+        throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static void set( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& xNameAccess, ScDocument *pDoc );
 };

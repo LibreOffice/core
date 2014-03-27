@@ -75,10 +75,10 @@ namespace dbaui
                                     const ::comphelper::UStringMixEqual& _aCase);
 
     public:
-        virtual void            Reset ( );
-        virtual void            ActivatePage();
-        virtual sal_Bool        LeavePage();
-        virtual OUString        GetTitle() const ;
+        virtual void            Reset ( ) SAL_OVERRIDE;
+        virtual void            ActivatePage() SAL_OVERRIDE;
+        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OWizColumnSelect(Window* pParent);
         virtual ~OWizColumnSelect();

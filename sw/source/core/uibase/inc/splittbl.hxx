@@ -36,7 +36,7 @@ class SwSplitTblDlg : public SvxStandardDialog
     sal_uInt16          m_nSplit;
 
 protected:
-    virtual void Apply();
+    virtual void Apply() SAL_OVERRIDE;
 
 public:
     SwSplitTblDlg( Window *pParent, SwWrtShell &rSh );

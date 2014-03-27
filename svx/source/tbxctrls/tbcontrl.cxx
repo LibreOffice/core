@@ -137,12 +137,12 @@ public:
     void            SetFamily( SfxStyleFamily eNewFamily );
     inline bool IsVisible() { return bVisible; }
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
     inline void     RemoveVisibilityListener() { aVisibilityListener = Link(); }
@@ -151,7 +151,7 @@ public:
     DECL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control* );
 
 protected:
-    virtual void    Select();
+    virtual void    Select() SAL_OVERRIDE;
 
 private:
     SfxStyleFamily                  eStyleFamily;
@@ -205,8 +205,8 @@ private:
     DECL_DLLPRIVATE_LINK( CheckAndMarkUnknownFont, VclWindowEvent* );
 
 protected:
-    virtual void    Select();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Select() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
@@ -221,10 +221,10 @@ public:
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void     SetOwnFontList(::std::auto_ptr<FontList> _aOwnFontList) { m_aOwnFontList = _aOwnFontList; }
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -239,7 +239,7 @@ public:
 class SvxFrmValueSet_Impl : public ValueSet
 {
     sal_uInt16          nModifier;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 public:
     SvxFrmValueSet_Impl(Window* pParent,  WinBits nWinStyle)
         : ValueSet(pParent, nWinStyle), nModifier(0) {}
@@ -265,10 +265,10 @@ private:
     DECL_LINK( SelectHdl, void * );
 
 protected:
-    virtual void    Resize();
-    virtual bool    Close();
-    virtual Window* GetPreferredKeyInputWindow();
-    virtual void    GetFocus();
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
 
 public:
     SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
@@ -276,9 +276,9 @@ public:
     void            StartSelection();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-    virtual SfxPopupWindow* Clone() const;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 
@@ -293,15 +293,15 @@ private:
     DECL_LINK( SelectHdl, void * );
 
 protected:
-    virtual void    Resize();
-    virtual bool    Close();
-    virtual Window* GetPreferredKeyInputWindow();
-    virtual void    GetFocus();
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-    virtual SfxPopupWindow* Clone() const;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
 
 
@@ -320,7 +320,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
                                      SvxStyleToolBoxControl& rTbxCtl );
 
     protected:
-        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
     private:
         SvxStyleToolBoxControl& rControl;

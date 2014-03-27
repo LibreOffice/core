@@ -50,8 +50,8 @@ public:
                         SvxFontPrevWindow(Window* pParent, WinBits nStyle);
     virtual             ~SvxFontPrevWindow();
 
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void                Init( const SfxItemSet& rSet );
 
@@ -65,7 +65,7 @@ public:
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                UseResourceText( bool bUse = true );
-    void                Paint( const Rectangle& );
+    void                Paint( const Rectangle& ) SAL_OVERRIDE;
 
     bool            IsTwoLines() const;
     void                SetTwoLines(bool bSet);
@@ -87,7 +87,7 @@ public:
     void                SetFromItemSet( const SfxItemSet &rSet,
                                         bool bPreviewBackgroundToCharacter = false );
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_FNTCTRL_HXX

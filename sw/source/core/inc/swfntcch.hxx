@@ -80,7 +80,7 @@ class SwFontAccess : public SwCacheAccess
 {
     SwViewShell *pShell;
 protected:
-    virtual SwCacheObj *NewObj( );
+    virtual SwCacheObj *NewObj( ) SAL_OVERRIDE;
 
 public:
     SwFontAccess( const void *pOwner, SwViewShell *pSh );

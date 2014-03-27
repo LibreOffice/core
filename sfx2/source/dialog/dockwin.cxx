@@ -78,11 +78,11 @@ public:
     Window*             GetWrappedWindow() const { return m_pWrappedWindow; }
     void                SetWrappedWindow(Window* const pWindow);
 
-    virtual void        StateChanged( StateChangedType nType );
-    virtual bool        Notify( NotifyEvent& rNEvt );
-    virtual void        Resize();
-    virtual void        Resizing( Size& rSize );
-    virtual bool        Close();
+    virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Resizing( Size& rSize ) SAL_OVERRIDE;
+    virtual bool        Close() SAL_OVERRIDE;
 };
 
 namespace

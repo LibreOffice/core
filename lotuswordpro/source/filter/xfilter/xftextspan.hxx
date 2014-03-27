@@ -77,8 +77,8 @@ public:
     void            Add(IXFContent *pContent);
     void            Add(const OUString& text);
 
-    virtual enumXFContent GetContentType();
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual enumXFContent GetContentType() SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 protected:
     std::vector<IXFContent*>    m_aContents;
 };
@@ -86,12 +86,12 @@ protected:
 class XFTextSpanStart : public XFTextSpan //for adding style of power field
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 class XFTextSpanEnd : public XFTextSpan //for adding style of power field
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 #endif

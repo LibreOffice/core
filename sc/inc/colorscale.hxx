@@ -206,10 +206,10 @@ public:
     const ScRangeList& GetRange() const;
 
     virtual void DataChanged(const ScRange& rRange) = 0;
-    virtual void SetParent(ScConditionalFormat* pParent);
+    virtual void SetParent(ScConditionalFormat* pParent) SAL_OVERRIDE;
 
-    virtual void startRendering();
-    virtual void endRendering();
+    virtual void startRendering() SAL_OVERRIDE;
+    virtual void endRendering() SAL_OVERRIDE;
 
     virtual bool NeedsRepaint() const = 0;
 
@@ -246,20 +246,20 @@ public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
     virtual ~ScColorScaleFormat();
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const;
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const SAL_OVERRIDE;
 
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
 
-    virtual void DataChanged(const ScRange& rRange);
-    virtual void UpdateReference( sc::RefUpdateContext& rCxt );
-    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
-    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
+    virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
+    virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) SAL_OVERRIDE;
 
-    virtual bool NeedsRepaint() const;
+    virtual bool NeedsRepaint() const SAL_OVERRIDE;
 
-    virtual condformat::ScFormatEntryType GetType() const;
+    virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE;
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
     iterator begin();
@@ -275,22 +275,22 @@ class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
 public:
     ScDataBarFormat(ScDocument* pDoc);
     ScDataBarFormat(ScDocument* pDoc, const ScDataBarFormat& rFormat);
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const;
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const SAL_OVERRIDE;
 
     ScDataBarInfo* GetDataBarInfo(const ScAddress& rAddr) const;
 
     void SetDataBarData( ScDataBarFormatData* pData );
     const ScDataBarFormatData* GetDataBarData() const;
 
-    virtual void DataChanged(const ScRange& rRange);
-    virtual void UpdateReference( sc::RefUpdateContext& rCxt );
-    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
-    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
+    virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
+    virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) SAL_OVERRIDE;
 
-    virtual bool NeedsRepaint() const;
+    virtual bool NeedsRepaint() const SAL_OVERRIDE;
 
-    virtual condformat::ScFormatEntryType GetType() const;
+    virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE;
 
 private:
     double getMin(double nMin, double nMax) const;
@@ -322,22 +322,22 @@ public:
     ScIconSetFormat(ScDocument* pDoc);
     ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
 
-    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const;
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const SAL_OVERRIDE;
 
     ScIconSetInfo* GetIconSetInfo(const ScAddress& rAddr) const;
 
     void SetIconSetData( ScIconSetFormatData* pData );
     const ScIconSetFormatData* GetIconSetData() const;
 
-    virtual void DataChanged(const ScRange& rRange);
-    virtual void UpdateReference( sc::RefUpdateContext& rCxt );
-    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
-    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
+    virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
+    virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) SAL_OVERRIDE;
 
-    virtual bool NeedsRepaint() const;
+    virtual bool NeedsRepaint() const SAL_OVERRIDE;
 
-    virtual condformat::ScFormatEntryType GetType() const;
+    virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE;
 
     static ScIconSetMap* getIconSetMap();
     static BitmapEx& getBitmap( ScIconSetType eType, sal_Int32 nIndex );

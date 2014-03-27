@@ -110,16 +110,16 @@ public:
     virtual ~SmXMLExport() {};
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
-    void _ExportAutoStyles() {}
-    void _ExportMasterStyles() {}
-    void _ExportContent();
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass);
+    void _ExportAutoStyles() SAL_OVERRIDE {}
+    void _ExportMasterStyles() SAL_OVERRIDE {}
+    void _ExportContent() SAL_OVERRIDE;
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
 
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
 
     sal_Bool GetSuccess() {return bSuccess;}
 };

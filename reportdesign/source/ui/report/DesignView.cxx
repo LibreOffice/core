@@ -68,7 +68,7 @@ public:
         m_pPropWin = _pPropWin;
     }
 
-    virtual void Resize()
+    virtual void Resize() SAL_OVERRIDE
     {
         const Size aSize = GetOutputSizePixel();
         if ( m_pPropWin && aSize.Height() && aSize.Width() )

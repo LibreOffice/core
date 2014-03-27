@@ -32,9 +32,9 @@ public:
     SvxSelectionModeControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
 
     virtual void     StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                   const SfxPoolItem* pState );
-    virtual bool     MouseButtonDown( const MouseEvent& rEvt );
-    virtual void     Paint( const UserDrawEvent& rEvt );
+                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual bool     MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual void     Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
 
 private:
     sal_uInt16  mnState;

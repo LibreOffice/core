@@ -44,7 +44,7 @@ private:
     sal_Bool            bActiveFlag;
 
 protected:
-                    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+                    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:
 
@@ -60,8 +60,8 @@ public:
 
     void            SetActiveFlag(sal_Bool bFlag=sal_True);
     sal_Bool            GetActiveFlag();
-    void            GetFocus();
-    void            LoseFocus();
+    void            GetFocus() SAL_OVERRIDE;
+    void            LoseFocus() SAL_OVERRIDE;
 };
 
 
@@ -94,10 +94,10 @@ public:
 
     void            ClearStruct();
     virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL);
+                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) SAL_OVERRIDE;
 
-    virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const;
-    virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const;
+    virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
+    virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
 
     void            SetSelectionHdl( const Link& rLink ) { aSelLink = rLink; }
     const Link&     GetSelectionHdl() const { return aSelLink; }

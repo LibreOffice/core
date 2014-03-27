@@ -63,9 +63,9 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
                     m_xFrameContainerWindow;
 
 protected:
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
-    virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
-    virtual bool Close();
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
     DECL_LINK( OnAsyncGetFocus, void* );
 
@@ -87,7 +87,7 @@ public:
     using SfxFloatingWindow::StateChanged;
 
 protected:
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 
 private:
     /** creates the PropertyBrowser (aka ObjectInspector) and plugs it into our frame

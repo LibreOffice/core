@@ -89,17 +89,17 @@ private:
 protected:
 
     using TabPage::DeactivatePage;
-    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
 
                         SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
                         ~SfxCommonPrintOptionsTabPage();
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-    virtual Window*     GetParentLabeledBy( const Window* pLabel ) const;
-    virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual Window*     GetParentLabeledBy( const Window* pLabel ) const SAL_OVERRIDE;
+    virtual Window*     GetParentLabelFor( const Window* pLabel ) const SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 };

@@ -1007,8 +1007,8 @@ public:
     virtual ~GridListenerDelegator();
 
 protected:
-    virtual void selectionChanged();
-    virtual void columnChanged();
+    virtual void selectionChanged() SAL_OVERRIDE;
+    virtual void columnChanged() SAL_OVERRIDE;
 };
 
 

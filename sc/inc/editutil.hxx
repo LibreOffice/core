@@ -225,8 +225,8 @@ public:
 
     void SetExecuteURL(bool bSet)    { bExecuteURL = bSet; }
 
-    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_Int32 );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_Int32 ) SAL_OVERRIDE;
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor ) SAL_OVERRIDE;
 };
 
 
@@ -238,7 +238,7 @@ private:
 
 public:
     ScHeaderEditEngine( SfxItemPool* pEnginePool, bool bDeleteEnginePool = false );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor ) SAL_OVERRIDE;
 
     void SetNumType(SvxNumType eNew)                { aData.eNumType = eNew; }
     void SetData(const ScHeaderFieldData& rNew)     { aData = rNew; }

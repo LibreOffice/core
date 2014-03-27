@@ -26,8 +26,8 @@ class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets2
 public:
     ScTableSheetsObj();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
     CPPUNIT_TEST(testImportValue);
@@ -45,10 +45,10 @@ public:
     CPPUNIT_TEST(testRemoveByName);
     CPPUNIT_TEST_SUITE_END();
 
-    virtual uno::Reference< lang::XComponent > getComponent();
-    virtual void createFileURL(const OUString& rFileBase, OUString& rFileURL);
-    virtual uno::Reference< lang::XComponent > loadFromDesktop(const OUString& rString);
-    virtual uno::Reference< uno::XInterface > init();
+    virtual uno::Reference< lang::XComponent > getComponent() SAL_OVERRIDE;
+    virtual void createFileURL(const OUString& rFileBase, OUString& rFileURL) SAL_OVERRIDE;
+    virtual uno::Reference< lang::XComponent > loadFromDesktop(const OUString& rString) SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
 protected:
     static uno::Reference< lang::XComponent > mxComponent;
     static sal_Int32 nTest;

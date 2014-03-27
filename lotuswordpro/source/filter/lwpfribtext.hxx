@@ -71,7 +71,7 @@ class LwpFribText : public LwpFrib
 public:
     LwpFribText( LwpPara* pPara, sal_Bool bNoUnicode=false);
     ~LwpFribText(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
     OUString m_Content;
@@ -100,7 +100,7 @@ class LwpFribParaNumber : public LwpFrib
 public:
     LwpFribParaNumber( LwpPara* pPara ) : LwpFrib(pPara),
         m_nStyleID(0), m_nNumberChar(0), m_nLevel(1), m_nStart(0){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
 
     inline sal_uInt16 GetStyleID() const;
 
@@ -140,9 +140,9 @@ public:
 
     ~LwpFribDocVar();
 
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
 
-    void RegisterStyle(LwpFoundry* pFoundry);//add by ,05/5/27
+    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;//add by ,05/5/27
 
     void XFConvert(XFContentContainer* pXFPara);//add by ,05/5/27
 
@@ -203,7 +203,7 @@ class LwpFribUnicode: public LwpFrib
 public:
     LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){}
     ~LwpFribUnicode(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
     OUString m_Content;
@@ -217,7 +217,7 @@ public:
     LwpFribPageNumber(LwpPara* pPara) : LwpFrib(pPara),
         m_nNumStyle(0), m_nStartNum(1), m_nStartOnPage(1), m_nFlag(0){}
     ~LwpFribPageNumber(){}
-    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara);
 private:
     sal_uInt16 m_nNumStyle;

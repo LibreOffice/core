@@ -17,9 +17,9 @@ class Xst : public TBBase
 
 public:
     Xst(){}
-    bool Read(SvStream &rS);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
     OUString getString() { return sString; }
-    void Print( FILE* fp );
+    void Print( FILE* fp ) SAL_OVERRIDE;
 };
 
 class SwCTBWrapper;
@@ -33,8 +33,8 @@ class SwTBC : public TBBase
 public:
     SwTBC();
     ~SwTBC();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
     OUString GetCustomText();
 };
@@ -57,8 +57,8 @@ class SwCTB : public TBBase
 public:
     SwCTB();
     ~SwCTB();
-    bool Read(SvStream &rS);
-    void Print( FILE* fp );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* fp ) SAL_OVERRIDE;
     bool IsMenuToolbar();
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
@@ -79,8 +79,8 @@ class TBDelta : public TBBase
 public:
     TBDelta();
     ~TBDelta(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     bool ControlIsModified();
     bool ControlIsInserted();
     bool ControlIsChanged();
@@ -105,7 +105,7 @@ public:
     Tcg255SubStruct( bool bReadId );
     ~Tcg255SubStruct(){}
     virtual sal_uInt8 id() const { return ch; }
-    bool Read(SvStream &rS);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
 };
 
 class SwCTBWrapper;
@@ -126,10 +126,10 @@ class Customization : public TBBase
 public:
     Customization( SwCTBWrapper* rapper );
     ~Customization();
-    bool Read(SvStream &rS);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenu( SwCTBWrapper&, CustomToolBarImportHelper& );
-    void Print( FILE* );
+    void Print( FILE* ) SAL_OVERRIDE;
     sal_Int32 GetTBIDForTB(){ return tbidForTBD; }
     SwCTB*  GetCustomizationData() { return customizationDataCTB.get(); };
 };
@@ -160,12 +160,12 @@ public:
     ~SwCTBWrapper();
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
-    bool Read(SvStream &rS);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 
     Customization* GetCustomizaton( sal_Int16 index );
     SwCTB* GetCustomizationData( const OUString& name );
-    void Print( FILE* );
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class MCD : public TBBase
@@ -184,8 +184,8 @@ public:
     MCD();
     MCD(const MCD&);
     MCD& operator = ( const MCD&);
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class PlfMcd : public Tcg255SubStruct
@@ -197,8 +197,8 @@ class PlfMcd : public Tcg255SubStruct
 
 public:
     PlfMcd( bool bReadId = true );
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class Acd : public TBBase
@@ -211,8 +211,8 @@ class Acd : public TBBase
 public:
     Acd();
     ~Acd(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class PlfAcd: public Tcg255SubStruct
@@ -225,8 +225,8 @@ class PlfAcd: public Tcg255SubStruct
 public:
     PlfAcd( bool bReadId = true );
     ~PlfAcd();
-    bool Read(SvStream &rS);
-    void Print(FILE*);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print(FILE*) SAL_OVERRIDE;
 };
 
 class Kme : public TBBase
@@ -244,8 +244,8 @@ class Kme : public TBBase
 public:
     Kme();
     ~Kme();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class PlfKme : public Tcg255SubStruct
@@ -258,8 +258,8 @@ class PlfKme : public Tcg255SubStruct
 public:
     PlfKme( bool bReadId = true );
     ~PlfKme();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class TcgSttbfCore : public TBBase
@@ -282,8 +282,8 @@ class TcgSttbfCore : public TBBase
 public:
     TcgSttbfCore();
     ~TcgSttbfCore();
-    bool Read(SvStream &rS);
-    void Print( FILE* fp );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* fp ) SAL_OVERRIDE;
 };
 
 class TcgSttbf : public Tcg255SubStruct
@@ -295,8 +295,8 @@ class TcgSttbf : public Tcg255SubStruct
 public:
     TcgSttbf( bool bReadId = true );
     ~TcgSttbf(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* fp );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* fp ) SAL_OVERRIDE;
 };
 
 class Xstz : public TBBase
@@ -310,8 +310,8 @@ class Xstz : public TBBase
 public:
     Xstz();
     ~Xstz(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* fp );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* fp ) SAL_OVERRIDE;
 };
 
 class MacroName : public TBBase
@@ -324,8 +324,8 @@ class MacroName : public TBBase
 public:
     MacroName();
     ~MacroName(){}
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class MacroNames : public Tcg255SubStruct
@@ -339,8 +339,8 @@ class MacroNames : public Tcg255SubStruct
 public:
     MacroNames( bool bReadId = true );
     ~MacroNames();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 class Tcg255 : public TBBase
@@ -353,8 +353,8 @@ class Tcg255 : public TBBase
 public:
     Tcg255();
     ~Tcg255();
-    bool Read(SvStream &rS);
-    void Print( FILE* );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* ) SAL_OVERRIDE;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 };
 
@@ -368,9 +368,9 @@ class Tcg: public TBBase
 public:
     Tcg();
     ~Tcg(){}
-    bool Read(SvStream &rS);
+    bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
-    void Print( FILE* );
+    void Print( FILE* ) SAL_OVERRIDE;
 };
 
 #endif

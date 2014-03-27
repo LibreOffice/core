@@ -59,78 +59,78 @@ class OFormattedModel
         DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel );
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
         // XAggregation
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHelper
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // XServiceInfo
         IMPLEMENTATION_NAME(OFormattedModel);
-        virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+        virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
         // XPersistObject
-        virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
-        virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                               sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                            throw(::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception);
+                                            throw(::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
         // XLoadListener
-        virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertyState
-        void setPropertyToDefaultByHandle(sal_Int32 nHandle);
-        ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+        void setPropertyToDefaultByHandle(sal_Int32 nHandle) SAL_OVERRIDE;
+        ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const SAL_OVERRIDE;
 
-        void SAL_CALL setPropertyToDefault(const OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception);
-        ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception);
+        void SAL_CALL setPropertyToDefault(const OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
-        ) const;
+        ) const SAL_OVERRIDE;
         virtual void describeAggregateProperties(
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
+        ) const SAL_OVERRIDE;
 
         // XPropertyChangeListener
-        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
+        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         // prevent method hiding
         using OEditBaseModel::disposing;
         using OEditBaseModel::getFastPropertyValue;
 
     protected:
-        virtual sal_uInt16 getPersistenceFlags() const;
+        virtual sal_uInt16 getPersistenceFlags() const SAL_OVERRIDE;
         // as we have an own version handling for persistence
 
         // OBoundControlModel overridables
         virtual ::com::sun::star::uno::Any
-                            translateDbColumnToControlValue( );
-        virtual sal_Bool    commitControlValueToDbColumn( bool _bPostReset );
+                            translateDbColumnToControlValue( ) SAL_OVERRIDE;
+        virtual sal_Bool    commitControlValueToDbColumn( bool _bPostReset ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-                            getSupportedBindingTypes();
+                            getSupportedBindingTypes() SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( ) const;
-        virtual void onConnectedExternalValue( );
+                            translateControlValueToExternalValue( ) const SAL_OVERRIDE;
+        virtual void onConnectedExternalValue( ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Any
-                            getDefaultForReset() const;
-        virtual void        resetNoBroadcast();
+                            getDefaultForReset() const SAL_OVERRIDE;
+        virtual void        resetNoBroadcast() SAL_OVERRIDE;
 
-        virtual void        onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
-        virtual void        onDisconnectedDbColumn();
+        virtual void        onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
+        virtual void        onDisconnectedDbColumn() SAL_OVERRIDE;
 
     private:
         DECLARE_XCLONEABLE();
@@ -152,23 +152,23 @@ class OFormattedModel
         virtual ~OFormattedControl();
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl);
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XServiceInfo
         IMPLEMENTATION_NAME(OFormattedControl);
-        virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+        virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::awt::XKeyListener
-        virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::awt::XControl
-        virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // disambiguation
         using OBoundControl::disposing;

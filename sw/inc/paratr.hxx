@@ -59,20 +59,20 @@ private:
     SwFmtDrop & operator= (const SwFmtDrop &);
 
 protected:
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+                                    const IntlWrapper*    pIntl = 0) const SAL_OVERRIDE;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     inline sal_uInt8 GetLines() const { return nLines; }
     inline sal_uInt8 &GetLines() { return nLines; }
@@ -90,7 +90,7 @@ public:
     inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt *pNew );
     /// Get information from Client.
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     /// Get and set Modify pointer.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
@@ -109,12 +109,12 @@ public:
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
 inline SwRegisterItem::SwRegisterItem( const sal_Bool bRegister ) :
@@ -146,16 +146,16 @@ public:
     { SetValue( rCpy.GetValue() ); return *this; }
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const SAL_OVERRIDE;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 };
 
 class SwParaConnectBorderItem : public SfxBoolItem
@@ -169,12 +169,12 @@ public:
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper*    pIntl = 0 ) const;
+                                    const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
 inline SwParaConnectBorderItem::SwParaConnectBorderItem( const sal_Bool bConnect ) :

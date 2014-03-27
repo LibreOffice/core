@@ -48,7 +48,7 @@ public:
         const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags);
 
     // Window
-    virtual void    Activate();
+    virtual void    Activate() SAL_OVERRIDE;
 
     sal_Int32           GetTransliterationFlags() const;
 };

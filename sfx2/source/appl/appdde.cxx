@@ -204,7 +204,7 @@ public:
         : DdeTopic( "TRIGGER" )
         {}
 
-    virtual bool Execute( const OUString* );
+    virtual bool Execute( const OUString* ) SAL_OVERRIDE;
 };
 
 class SfxDdeDocTopic_Impl : public DdeTopic
@@ -218,11 +218,11 @@ public:
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
     {}
 
-    virtual DdeData* Get( sal_uIntPtr );
-    virtual bool Put( const DdeData* );
-    virtual bool Execute( const OUString* );
-    virtual bool StartAdviseLoop();
-    virtual bool MakeItem( const OUString& rItem );
+    virtual DdeData* Get( sal_uIntPtr ) SAL_OVERRIDE;
+    virtual bool Put( const DdeData* ) SAL_OVERRIDE;
+    virtual bool Execute( const OUString* ) SAL_OVERRIDE;
+    virtual bool StartAdviseLoop() SAL_OVERRIDE;
+    virtual bool MakeItem( const OUString& rItem ) SAL_OVERRIDE;
 };
 
 

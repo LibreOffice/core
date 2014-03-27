@@ -44,9 +44,9 @@ public:
 
     virtual ~LineItemWrapper() {}
 
-    virtual const editeng::SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const
+    virtual const editeng::SvxBorderLine* GetItemValue( const SvxLineItem& rItem ) const SAL_OVERRIDE
                             { return rItem.GetLine(); }
-    virtual void        SetItemValue( SvxLineItem& rItem, const editeng::SvxBorderLine* pLine ) const
+    virtual void        SetItemValue( SvxLineItem& rItem, const editeng::SvxBorderLine* pLine ) const SAL_OVERRIDE
                             { rItem.SetLine( pLine ); }
 };
 
@@ -58,11 +58,11 @@ public:
     inline explicit     FrameSelectorWrapper( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
                             SingleControlWrapperType( rFrameSel ), meBorder( eBorder ) {}
 
-    virtual bool        IsControlDontKnow() const;
-    virtual void        SetControlDontKnow( bool bSet );
+    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
+    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
 
-    virtual const editeng::SvxBorderLine* GetControlValue() const;
-    virtual void        SetControlValue( const editeng::SvxBorderLine* pLine );
+    virtual const editeng::SvxBorderLine* GetControlValue() const SAL_OVERRIDE;
+    virtual void        SetControlValue( const editeng::SvxBorderLine* pLine ) SAL_OVERRIDE;
 
 private:
     FrameBorderType       meBorder;         /// The line this wrapper works with.
@@ -115,8 +115,8 @@ public:
                             MetricField& rMfLeft, MetricField& rMfRight,
                             MetricField& rMfTop, MetricField& rMfBottom );
 
-    virtual SvxMarginItem GetControlValue() const;
-    virtual void        SetControlValue( SvxMarginItem aItem );
+    virtual SvxMarginItem GetControlValue() const SAL_OVERRIDE;
+    virtual void        SetControlValue( SvxMarginItem aItem ) SAL_OVERRIDE;
 
 private:
     sfx::Int16MetricFieldWrapper maLeftWrp;
@@ -209,8 +209,8 @@ class ShadowControlsWrapper : public sfx::MultiControlWrapper< SvxShadowItem >
 public:
     explicit            ShadowControlsWrapper( ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor );
 
-    virtual SvxShadowItem GetControlValue() const;
-    virtual void        SetControlValue( SvxShadowItem aItem );
+    virtual SvxShadowItem GetControlValue() const SAL_OVERRIDE;
+    virtual void        SetControlValue( SvxShadowItem aItem ) SAL_OVERRIDE;
 
 private:
     ShadowPosWrapper                maPosWrp;

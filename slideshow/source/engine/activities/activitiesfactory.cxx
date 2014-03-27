@@ -887,7 +887,7 @@ public:
         ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
     }
 
-    virtual void startAnimation()
+    virtual void startAnimation() SAL_OVERRIDE
     {
         if (this->isDisposed() || !mpAnim)
             return;
@@ -898,7 +898,7 @@ public:
                        getShapeAttributeLayer() );
     }
 
-    virtual void endAnimation()
+    virtual void endAnimation() SAL_OVERRIDE
     {
         // end animation
         if (mpAnim)
@@ -908,7 +908,7 @@ public:
     using SimpleContinuousActivityBase::perform;
 
     /// perform override for ContinuousActivityBase
-    virtual void perform( double nModifiedTime, sal_uInt32 ) const
+    virtual void perform( double nModifiedTime, sal_uInt32 ) const SAL_OVERRIDE
     {
         if (this->isDisposed() || !mpAnim)
             return;
@@ -916,7 +916,7 @@ public:
         (*mpAnim)( 1.0 - Direction + nModifiedTime*(2.0*Direction - 1.0) );
     }
 
-    virtual void performEnd()
+    virtual void performEnd() SAL_OVERRIDE
     {
         // xxx todo: review
         if (mpAnim)
@@ -924,7 +924,7 @@ public:
     }
 
     /// Disposable:
-    virtual void dispose()
+    virtual void dispose() SAL_OVERRIDE
     {
         mpAnim.reset();
         ContinuousActivityBase::dispose();

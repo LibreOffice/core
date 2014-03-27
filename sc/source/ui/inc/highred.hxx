@@ -78,7 +78,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( bool bForced = false );
+    virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
                     ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -86,10 +86,10 @@ public:
 
                     ~ScHighlightChgDlg();
 
-    virtual void    SetActive();
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual bool    Close();
-    virtual bool    IsRefInputMode() const;
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
 
 };
 

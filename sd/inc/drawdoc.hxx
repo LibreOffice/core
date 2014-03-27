@@ -204,7 +204,7 @@ private:
 
 protected:
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
 
 public:
 
@@ -213,9 +213,9 @@ public:
                         SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
                         ~SdDrawDocument();
 
-    virtual SdrModel*   AllocModel() const;
-    virtual SdrPage*    AllocPage(bool bMasterPage);
-    virtual bool        IsReadOnly() const;
+    virtual SdrModel*   AllocModel() const SAL_OVERRIDE;
+    virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE;
+    virtual bool        IsReadOnly() const SAL_OVERRIDE;
     virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
 
     SfxItemPool&        GetPool() { return( *pItemPool ); }
@@ -228,7 +228,7 @@ public:
     LanguageType        GetLanguage( const sal_uInt16 nId ) const;
     void                SetLanguage( const LanguageType eLang, const sal_uInt16 nId );
 
-    SvxNumType          GetPageNumType() const;
+    SvxNumType          GetPageNumType() const SAL_OVERRIDE;
     void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
     SD_DLLPUBLIC OUString CreatePageNumValue(sal_uInt16 nNum) const;
 
@@ -246,13 +246,13 @@ public:
     SD_DLLPUBLIC void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
     SD_DLLPUBLIC sal_Bool                CreateMissingNotesAndHandoutPages();
 
-    void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
-    void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    void                DeletePage(sal_uInt16 nPgNum);
-    SdrPage*            RemovePage(sal_uInt16 nPgNum);
+    void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) SAL_OVERRIDE;
+    void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
+    void                DeletePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    SdrPage*            RemovePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
 
-    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
+    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
+    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) SAL_OVERRIDE;
 
     void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, sal_Bool bOnlyDuplicatePages=sal_False, sal_Bool bUndo=sal_True );
     SD_DLLPUBLIC void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
@@ -456,7 +456,7 @@ public:
                                 sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
                                 sal_uInt16 nDestPos=0xFFFF,
                                 bool bMergeMasterPages = false, bool bAllMasterPages = false,
-                                bool bUndo = true, bool bTreadSourceAsConst = false);
+                                bool bUndo = true, bool bTreadSourceAsConst = false) SAL_OVERRIDE;
 
     SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
@@ -657,9 +657,9 @@ private:
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj);
 
-    virtual void PageListChanged();
-    virtual void MasterPageListChanged();
-    virtual ImageMap* GetImageMapForObject(SdrObject* pObj);
+    virtual void PageListChanged() SAL_OVERRIDE;
+    virtual void MasterPageListChanged() SAL_OVERRIDE;
+    virtual ImageMap* GetImageMapForObject(SdrObject* pObj) SAL_OVERRIDE;
 };
 
 namespace sd

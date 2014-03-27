@@ -68,13 +68,13 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage( WizardState _nState );
-        virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
-        virtual void                enterState( WizardState _nState );
-        virtual bool                leaveState( WizardState _nState );
-        virtual bool                onFinish();
+        virtual ::svt::OWizardPage* createPage( WizardState _nState ) SAL_OVERRIDE;
+        virtual WizardState         determineNextState( WizardState _nCurrentState ) const SAL_OVERRIDE;
+        virtual void                enterState( WizardState _nState ) SAL_OVERRIDE;
+        virtual bool                leaveState( WizardState _nState ) SAL_OVERRIDE;
+        virtual bool                onFinish() SAL_OVERRIDE;
 
-        virtual sal_Bool approveControl(sal_Int16 _nClassId);
+        virtual sal_Bool approveControl(sal_Int16 _nClassId) SAL_OVERRIDE;
 
         WizardState getFinalState() const { return isListBox() ? LCW_STATE_FIELDLINK : LCW_STATE_COMBODBFIELD; }
 
@@ -116,12 +116,12 @@ namespace dbp
 
     protected:
         // TabPage overridables
-        virtual void ActivatePage();
+        virtual void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
     protected:
         DECL_LINK( OnTableDoubleClicked, ListBox* );
@@ -150,12 +150,12 @@ namespace dbp
         DECL_LINK( OnTableDoubleClicked, ListBox* );
 
         // TabPage overridables
-        virtual void ActivatePage();
+        virtual void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
     };
 
 
@@ -177,12 +177,12 @@ namespace dbp
 
     protected:
         // TabPage overridables
-        virtual void ActivatePage();
+        virtual void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-        virtual bool        canAdvance() const;
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
     private:
         void implCheckFinish();
@@ -202,13 +202,13 @@ namespace dbp
         OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }
 
         // TabPage overridables
-        virtual void ActivatePage();
+        virtual void ActivatePage() SAL_OVERRIDE;
 
         // OWizardPage overridables
-        virtual bool    canAdvance() const;
+        virtual bool    canAdvance() const SAL_OVERRIDE;
 
         // ODBFieldPage overridables
-        virtual OUString& getDBFieldSetting();
+        virtual OUString& getDBFieldSetting() SAL_OVERRIDE;
     };
 
 

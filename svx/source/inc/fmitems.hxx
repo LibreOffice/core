@@ -39,11 +39,11 @@ public:
     inline FmInterfaceItem&  operator=( const FmInterfaceItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >         GetInterface() const { return xInterface; }
 };

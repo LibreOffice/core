@@ -55,13 +55,13 @@ public:
     ContentWindow(::Window& rParent, SlideSorter& rSlideSorter);
     ~ContentWindow (void);
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
-    virtual void Paint(const Rectangle& rRect);
-    virtual void KeyInput (const KeyEvent& rEvent);
-    virtual void MouseMove (const MouseEvent& rEvent);
-    virtual void MouseButtonUp (const MouseEvent& rEvent);
-    virtual void MouseButtonDown (const MouseEvent& rEvent);
-    virtual void Command (const CommandEvent& rEvent);
-    virtual bool Notify (NotifyEvent& rEvent);
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseMove (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseButtonUp (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
+    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
+    virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
 private:
     SlideSorter& mrSlideSorter;

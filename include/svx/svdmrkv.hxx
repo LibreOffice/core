@@ -141,13 +141,13 @@ private:
     void UndirtyMrkPnt() const;
 
 protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-    virtual void ModelHasChanged(); // Is called by the PaintView
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+    virtual void ModelHasChanged() SAL_OVERRIDE; // Is called by the PaintView
     virtual void SetMarkHandles();                                           // aHdl - fill (List of handles)
     virtual void SetMarkRects();                                             // Rects at the PageViews
     virtual void CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     virtual void AddDragModeHdl(SdrDragMode eMode);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
@@ -175,15 +175,15 @@ protected:
     virtual ~SdrMarkView();
 
 public:
-    virtual bool IsAction() const;
-    virtual void MovAction(const Point& rPnt);
-    virtual void EndAction();
-    virtual void BckAction();
-    virtual void BrkAction();
-    virtual void TakeActionRect(Rectangle& rRect) const;
+    virtual bool IsAction() const SAL_OVERRIDE;
+    virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
+    virtual void EndAction() SAL_OVERRIDE;
+    virtual void BckAction() SAL_OVERRIDE;
+    virtual void BrkAction() SAL_OVERRIDE;
+    virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
-    virtual void ClearPageView();
-    virtual void HideSdrPage();
+    virtual void ClearPageView() SAL_OVERRIDE;
+    virtual void HideSdrPage() SAL_OVERRIDE;
     virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     // Returns sal_True if objects, points or glue points are selected by drawing a frame

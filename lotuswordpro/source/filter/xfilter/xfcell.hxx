@@ -88,7 +88,7 @@ public:
     /**
      * @descr   Add content for table cell.
      */
-    void    Add(IXFContent *pContent);
+    void    Add(IXFContent *pContent) SAL_OVERRIDE;
 
     /**
      * @descr   If cell spans more the one column, then set column span.
@@ -158,7 +158,7 @@ public:
     /**
      * @descr   Output cell as xml element.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     XFRow       *m_pOwnerRow;

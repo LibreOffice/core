@@ -64,10 +64,10 @@ public:
                 ::com::sun::star::beans::PropertyValue >& rMediaDescriptor
                 ,const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XFrame >& xFrame )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception);
+                            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
-        cancel()            throw (::com::sun::star::uno::RuntimeException, std::exception);
+        cancel()            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } //namespace chart

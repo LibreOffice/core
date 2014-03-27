@@ -102,8 +102,8 @@ class SwPageFrm: public SwFtnBossFrm
                                      bool bRightSidebar );
 
 protected:
-    virtual void MakeAll();
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
@@ -161,20 +161,20 @@ public:
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+                              SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
         // erfrage vom Client Informationen
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
-    virtual void CheckDirection( bool bVert );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
+    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
     void CheckGrid( sal_Bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     sal_Bool HasGrid() const { return bHasGrid; }
 
     void PaintDecorators( ) const;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
-    virtual void PaintBreak() const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
+    virtual void PaintBreak() const SAL_OVERRIDE;
 
     //Zeilennummern usw malen
     void RefreshExtraData( const SwRect & ) const;
@@ -311,7 +311,7 @@ public:
     */
     sw::sidebarwindows::SidebarPosition SidebarPosition() const;
 
-    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
     inline sal_Int8 ShadowPxWidth() const
     {

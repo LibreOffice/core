@@ -43,15 +43,15 @@ public:
         NodeContext const& rContext );
 
 protected:
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    virtual void activate_st();
-    virtual void deactivate_st( NodeState eDestState );
-    virtual bool hasPendingAnimation() const;
+    virtual void activate_st() SAL_OVERRIDE;
+    virtual void deactivate_st( NodeState eDestState ) SAL_OVERRIDE;
+    virtual bool hasPendingAnimation() const SAL_OVERRIDE;
 
     /// overridden, because we need to deal with STOPAUDIO commands
-    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
+    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference<

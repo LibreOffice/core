@@ -284,7 +284,7 @@ public:
         const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 void BrwStringDic_Impl::Paint(
@@ -464,7 +464,7 @@ public:
         const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 void BrwString_Impl::Paint(

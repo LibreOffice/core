@@ -36,10 +36,10 @@ public:
     AxisPositionsTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual bool FillItemSet( SfxItemSet& rOutAttrs );
-    virtual void Reset( const SfxItemSet& rInAttrs );
+    virtual bool FillItemSet( SfxItemSet& rOutAttrs ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet& rInAttrs ) SAL_OVERRIDE;
     using TabPage::DeactivatePage;
-    virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
+    virtual int DeactivatePage( SfxItemSet* pItemSet = NULL ) SAL_OVERRIDE;
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
 

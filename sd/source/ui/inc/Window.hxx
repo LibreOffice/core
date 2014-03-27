@@ -137,11 +137,11 @@ public:
     double  GetScrlPageWidth();
     double  GetScrlPageHeight();
     virtual void GrabFocus();
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     /** The DropScroll() method is used by AcceptDrop() to scroll the
         content of the window while dragging and dropping.  With this method
@@ -170,17 +170,17 @@ protected:
     ViewShell* mpViewShell;
     bool mbUseDropScroll;
 
-    virtual void Resize();
-    virtual void PrePaint();
-    virtual void Paint(const Rectangle& rRect);
-    virtual void KeyInput(const KeyEvent& rKEvt);
-    virtual void MouseMove(const MouseEvent& rMEvt);
-    virtual void MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void Command(const CommandEvent& rCEvt);
-    virtual void RequestHelp( const HelpEvent& rEvt );
-    virtual void LoseFocus();
-    virtual bool Notify( NotifyEvent& rNEvt );
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void PrePaint() SAL_OVERRIDE;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rEvt ) SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     /** Create an accessibility object that makes this window accessible.
 
@@ -190,11 +190,11 @@ protected:
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessible (void);
+        CreateAccessible (void) SAL_OVERRIDE;
     virtual void SwitchView();
 
-    OUString GetSurroundingText() const;
-    Selection GetSurroundingTextSelection() const;
+    OUString GetSurroundingText() const SAL_OVERRIDE;
+    Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
 };
 
 } // end of namespace sd

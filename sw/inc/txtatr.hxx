@@ -86,13 +86,13 @@ class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode* m_pTxtNode;
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 public:
     SwTxtRuby( SwFmtRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTxtRuby();
     TYPEINFO_OVERRIDE();
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
 
     SAL_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 

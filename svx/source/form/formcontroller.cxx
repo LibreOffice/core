@@ -439,7 +439,7 @@ public:
     Sequence< PropertyValue >   getValues() const { return m_aValues; }
 
 // XInteractionSupplyParameters
-    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException, std::exception);
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -476,11 +476,11 @@ public:
     {
     }
 
-    virtual OUString GetComponentServiceName() {return OUString("Edit");}
-    virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException, std::exception );
+    virtual OUString GetComponentServiceName() SAL_OVERRIDE {return OUString("Edit");}
+    virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
-    virtual void ImplSetPeerProperty( const OUString& rPropName, const Any& rVal );
+    virtual void ImplSetPeerProperty( const OUString& rPropName, const Any& rVal ) SAL_OVERRIDE;
 };
 
 

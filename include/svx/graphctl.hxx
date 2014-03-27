@@ -63,12 +63,12 @@ protected:
     SdrModel*           pModel;
     SdrView*            pView;
 
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
-    virtual void        KeyInput(const KeyEvent& rKEvt);
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void        MouseMove(const MouseEvent& rMEvt);
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
     virtual void        InitSdrModel();
 
@@ -119,7 +119,7 @@ public:
     void                SetUpdateLink( const Link& rLink ) { aUpdateLink = rLink; }
     const Link&         GetUpdateLink() const { return aUpdateLink; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
 
@@ -132,7 +132,7 @@ public:
                     GraphCtrlUserCall( GraphCtrl& rGraphWin ) : rWin( rGraphWin ) {};
     virtual         ~GraphCtrlUserCall() {};
 
-    virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect );
+    virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect ) SAL_OVERRIDE;
 };
 
 class GraphCtrlView : public SdrView
@@ -141,7 +141,7 @@ class GraphCtrlView : public SdrView
 
 protected:
 
-    virtual void    MarkListHasChanged()
+    virtual void    MarkListHasChanged() SAL_OVERRIDE
                     {
                         SdrView::MarkListHasChanged();
                         rGraphCtrl.MarkListHasChanged();

@@ -190,7 +190,7 @@ protected:
     virtual                     ~SfxObjectShell();
 
     virtual void                ModifyChanged();
-    virtual bool                Close();
+    virtual bool                Close() SAL_OVERRIDE;
 
     /** declares the document to have capabilities to contain basic/dialog libraries
     */
@@ -225,7 +225,7 @@ public:
                                 GetCurrentComponent();
     static void                 SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
-    virtual void                Invalidate(sal_uInt16 nId = 0);
+    virtual void                Invalidate(sal_uInt16 nId = 0) SAL_OVERRIDE;
 
     SfxObjectShellFlags         GetFlags( ) const ;
 
@@ -493,7 +493,7 @@ public:
 
                                 // Documents, for which to format the view size
 
-    virtual SfxObjectShell*     GetObjectShell();
+    virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
 
     virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
@@ -540,16 +540,16 @@ public:
     SvGlobalName    GetClassName() const;
 
     // comphelper::IEmbeddedHelper
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
-    virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const SAL_OVERRIDE;
+    virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const SAL_OVERRIDE
     {
         return const_cast<SfxObjectShell*>(this)->GetStorage();
     }
-    virtual comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const
+    virtual comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const SAL_OVERRIDE
     {
         return GetEmbeddedObjectContainer();
     }
-    bool    isEnableSetModified() const
+    bool    isEnableSetModified() const SAL_OVERRIDE
     {
         return IsEnableSetModified();
     }
@@ -733,7 +733,7 @@ class AutoReloadTimer_Impl : public Timer
 public:
     AutoReloadTimer_Impl( const OUString& rURL, sal_uInt32 nTime,
                           SfxObjectShell* pSh );
-    virtual void Timeout();
+    virtual void Timeout() SAL_OVERRIDE;
 };
 
 class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
@@ -756,11 +756,11 @@ public:
                                 pObjSh( pObjShell )
                             {}
 
-    virtual bool            operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual OUString        GetValueText() const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
     SfxObjectShell*         GetObjectShell() const
                             { return pObjSh; }
 

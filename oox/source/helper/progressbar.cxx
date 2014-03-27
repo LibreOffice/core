@@ -86,11 +86,11 @@ class SubSegment : public ISegmentProgressBar
 public:
     explicit            SubSegment( IProgressBar& rParentProgress, double fStartPos, double fLength );
 
-    virtual double      getPosition() const;
-    virtual void        setPosition( double fPosition );
+    virtual double      getPosition() const SAL_OVERRIDE;
+    virtual void        setPosition( double fPosition ) SAL_OVERRIDE;
 
-    virtual double      getFreeLength() const;
-    virtual ISegmentProgressBarRef createSegment( double fLength );
+    virtual double      getFreeLength() const SAL_OVERRIDE;
+    virtual ISegmentProgressBarRef createSegment( double fLength ) SAL_OVERRIDE;
 
 private:
     IProgressBar&       mrParentProgress;

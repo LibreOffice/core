@@ -63,7 +63,7 @@ public:
     PanelFactory (const cssu::Reference<cssu::XComponentContext>& rxContext);
     virtual ~PanelFactory (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XUIElementFactory
@@ -74,7 +74,7 @@ public:
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException, std::exception);
+            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

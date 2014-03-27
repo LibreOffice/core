@@ -98,8 +98,8 @@ public:
     sal_Bool                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(sal_Bool bPhys);
 
-    virtual void            SetHidden( sal_Bool bHidden );
-    virtual bool        IsHidden( ) const;
+    virtual void            SetHidden( sal_Bool bHidden ) SAL_OVERRIDE;
+    virtual bool        IsHidden( ) const SAL_OVERRIDE;
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
 
@@ -110,15 +110,15 @@ public:
     void                    SetItemSet( const SfxItemSet& rSet,
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
 
-    virtual SfxItemSet&     GetItemSet();
+    virtual SfxItemSet&     GetItemSet() SAL_OVERRIDE;
     /** new method for paragraph styles to merge indent attributes of applied list
      style into the given item set, if the list style indent attributes are applicable. */
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
-    virtual const OUString& GetParent() const;
-    virtual const OUString& GetFollow() const;
+    virtual const OUString& GetParent() const SAL_OVERRIDE;
+    virtual const OUString& GetFollow() const SAL_OVERRIDE;
 
-    virtual sal_uLong GetHelpId( OUString& rFile );
-    virtual void SetHelpId( const OUString& r, sal_uLong nId );
+    virtual sal_uLong GetHelpId( OUString& rFile ) SAL_OVERRIDE;
+    virtual void SetHelpId( const OUString& r, sal_uLong nId ) SAL_OVERRIDE;
 
     /** Preset the members without physical access.
      Used by StyleSheetPool. */
@@ -127,15 +127,15 @@ public:
     void                    PresetParent(const OUString& rName){ aParent = rName; }
     void                    PresetFollow(const OUString& rName){ aFollow = rName; }
 
-    virtual bool            SetName( const OUString& rStr);
-    virtual bool            SetParent( const OUString& rStr);
-    virtual bool            SetFollow( const OUString& rStr);
+    virtual bool            SetName( const OUString& rStr) SAL_OVERRIDE;
+    virtual bool            SetParent( const OUString& rStr) SAL_OVERRIDE;
+    virtual bool            SetFollow( const OUString& rStr) SAL_OVERRIDE;
 
-    virtual bool            HasFollowSupport() const;
-    virtual bool            HasParentSupport() const;
-    virtual bool            HasClearParentSupport() const;
-    virtual OUString        GetDescription();
-    virtual OUString        GetDescription(SfxMapUnit eUnit);
+    virtual bool            HasFollowSupport() const SAL_OVERRIDE;
+    virtual bool            HasParentSupport() const SAL_OVERRIDE;
+    virtual bool            HasClearParentSupport() const SAL_OVERRIDE;
+    virtual OUString        GetDescription() SAL_OVERRIDE;
+    virtual OUString        GetDescription(SfxMapUnit eUnit) SAL_OVERRIDE;
 
     SwCharFmt*              GetCharFmt();
     SwTxtFmtColl*           GetCollection();
@@ -144,7 +144,7 @@ public:
     const SwNumRule*        GetNumRule();
     void                    SetNumRule(const SwNumRule& rRule);
 
-    virtual bool            IsUsed() const;
+    virtual bool            IsUsed() const SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -171,13 +171,13 @@ public:
                           SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
     virtual ~SwStyleSheetIterator();
 
-    virtual sal_uInt16 Count();
-    virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
-    virtual SfxStyleSheetBase* First();
-    virtual SfxStyleSheetBase* Next();
-    virtual SfxStyleSheetBase* Find(const OUString& rStr);
+    virtual sal_uInt16 Count() SAL_OVERRIDE;
+    virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx) SAL_OVERRIDE;
+    virtual SfxStyleSheetBase* First() SAL_OVERRIDE;
+    virtual SfxStyleSheetBase* Next() SAL_OVERRIDE;
+    virtual SfxStyleSheetBase* Find(const OUString& rStr) SAL_OVERRIDE;
 
-    virtual void Notify( SfxBroadcaster&, const SfxHint& );
+    virtual void Notify( SfxBroadcaster&, const SfxHint& ) SAL_OVERRIDE;
 
     void InvalidateIterator();
 };
@@ -188,8 +188,8 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
     SwDoc&              rDoc;
     sal_Bool                bOrganizer : 1;     ///< Organizer
 
-    virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, sal_uInt16 nMask);
-    virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& );
+    virtual SfxStyleSheetBase* Create( const OUString&, SfxStyleFamily, sal_uInt16 nMask) SAL_OVERRIDE;
+    virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& ) SAL_OVERRIDE;
 
     using SfxStyleSheetBasePool::Find;
 
@@ -197,29 +197,29 @@ public:
     SwDocStyleSheetPool( SwDoc&, sal_Bool bOrganizer = sal_False );
 
     virtual void Replace( SfxStyleSheetBase& rSource,
-                          SfxStyleSheetBase& rTarget );
+                          SfxStyleSheetBase& rTarget ) SAL_OVERRIDE;
     virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
             sal_uInt16 nMask) SAL_OVERRIDE;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
-                                    sal_uInt16 n=SFXSTYLEBIT_ALL );
+                                    sal_uInt16 n=SFXSTYLEBIT_ALL ) SAL_OVERRIDE;
 
     virtual bool SetParent( SfxStyleFamily eFam, const OUString &rStyle,
-                            const OUString &rParent );
+                            const OUString &rParent ) SAL_OVERRIDE;
 
-    virtual void Remove( SfxStyleSheetBase* pStyle);
+    virtual void Remove( SfxStyleSheetBase* pStyle) SAL_OVERRIDE;
 
     void    SetOrganizerMode( sal_Bool bMode )  { bOrganizer = bMode; }
     sal_Bool    IsOrganizerMode() const         { return bOrganizer; }
 
-    virtual SfxStyleSheetIteratorPtr CreateIterator( SfxStyleFamily, sal_uInt16 nMask );
+    virtual SfxStyleSheetIteratorPtr CreateIterator( SfxStyleFamily, sal_uInt16 nMask ) SAL_OVERRIDE;
 
     SwDoc& GetDoc() const { return rDoc; }
 
     void dispose();
 
-    virtual void SAL_CALL acquire(  ) throw ();
-    virtual void SAL_CALL release(  ) throw ();
+    virtual void SAL_CALL acquire(  ) throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE;
 
     void InvalidateIterator();
 

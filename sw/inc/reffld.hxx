@@ -62,10 +62,10 @@ class SwGetRefFieldType : public SwFieldType
     SwDoc* pDoc;
 protected:
     /// Overlay in order to update all ref-fields.
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 public:
     SwGetRefFieldType(SwDoc* pDoc );
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 
     SwDoc*                  GetDoc() const { return pDoc; }
 
@@ -84,8 +84,8 @@ private:
     sal_uInt16 nSubType;
     sal_uInt16 nSeqNo;
 
-    virtual OUString    Expand() const;
-    virtual SwField*    Copy() const;
+    virtual OUString    Expand() const SAL_OVERRIDE;
+    virtual SwField*    Copy() const SAL_OVERRIDE;
 
     // #i81002#
     OUString MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
@@ -98,7 +98,7 @@ public:
 
     virtual ~SwGetRefField();
 
-    virtual OUString GetFieldName() const;
+    virtual OUString GetFieldName() const SAL_OVERRIDE;
 
     OUString GetSetRefName() const { return sSetRefName; }
 
@@ -114,8 +114,8 @@ public:
     void                SetExpand( const OUString& rStr ) { sTxt = rStr; }
 
     /// Get/set sub type.
-    virtual sal_uInt16      GetSubType() const;
-    virtual void        SetSubType( sal_uInt16 n );
+    virtual sal_uInt16      GetSubType() const SAL_OVERRIDE;
+    virtual void        SetSubType( sal_uInt16 n ) SAL_OVERRIDE;
 
     // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
@@ -129,16 +129,16 @@ public:
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
     // Name of reference.
-    virtual OUString    GetPar1() const;
-    virtual void        SetPar1(const OUString& rStr);
+    virtual OUString    GetPar1() const SAL_OVERRIDE;
+    virtual void        SetPar1(const OUString& rStr) SAL_OVERRIDE;
 
-    virtual OUString GetPar2() const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual OUString GetPar2() const SAL_OVERRIDE;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) SAL_OVERRIDE;
 
     void                ConvertProgrammaticToUIName();
 
-    virtual OUString GetDescription() const;
+    virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
 #endif /// INCLUDED_SW_INC_REFFLD_HXX

@@ -334,7 +334,7 @@ public:
     virtual ~WorkerThread() {}
 
 protected:
-    virtual void execute()
+    virtual void execute() SAL_OVERRIDE
     {
         processSheetFormulaCells(mrDoc, mrItem, *mpFormatter, mrExternalLinks);
     }

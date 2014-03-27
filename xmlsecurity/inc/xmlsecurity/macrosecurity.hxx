@@ -106,7 +106,7 @@ protected:
 public:
                         MacroSecurityLevelTP( Window* pParent, MacroSecurity* _pDlg );
 
-    virtual void        ClosePage( void );
+    virtual void        ClosePage( void ) SAL_OVERRIDE;
 };
 
 
@@ -141,8 +141,8 @@ public:
     MacroSecurityTrustedSourcesTP(Window* pParent, MacroSecurity* _pDlg);
     ~MacroSecurityTrustedSourcesTP();
 
-    virtual void        ActivatePage();
-    virtual void        ClosePage( void );
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual void        ClosePage( void ) SAL_OVERRIDE;
 };
 
 

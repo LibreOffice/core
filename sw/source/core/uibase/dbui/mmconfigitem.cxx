@@ -155,8 +155,8 @@ public:
     SwMailMergeConfigItem_Impl();
     ~SwMailMergeConfigItem_Impl();
 
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     const           Sequence< OUString>
                         GetAddressBlocks(sal_Bool bConvertToConfig = sal_False) const;
     void                SetAddressBlocks(

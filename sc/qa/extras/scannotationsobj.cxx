@@ -27,11 +27,11 @@ class ScAnnontationsObj : public CalcUnoApiTest, apitest::XSheetAnnotations
 public:
     ScAnnontationsObj();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
-    virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(long nIndex);
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
+    virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(long nIndex) SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScAnnontationsObj);
     CPPUNIT_TEST(testInsertNew);

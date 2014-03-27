@@ -25,17 +25,17 @@ public:
 
     virtual ~TemplateRemoteView ();
 
-    virtual void showRootRegion ();
+    virtual void showRootRegion () SAL_OVERRIDE;
 
-    virtual void showRegion (ThumbnailViewItem *pItem);
+    virtual void showRegion (ThumbnailViewItem *pItem) SAL_OVERRIDE;
 
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
 
-    virtual sal_uInt16 createRegion (const OUString &rName);
+    virtual sal_uInt16 createRegion (const OUString &rName) SAL_OVERRIDE;
 
-    virtual bool isNestedRegionAllowed () const;
+    virtual bool isNestedRegionAllowed () const SAL_OVERRIDE;
 
-    virtual bool isImportAllowed () const;
+    virtual bool isImportAllowed () const SAL_OVERRIDE;
 
 private:
 

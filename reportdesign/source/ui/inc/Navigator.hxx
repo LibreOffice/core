@@ -38,8 +38,8 @@ namespace rptui
         virtual ~ONavigator();
 
         // window
-        virtual void    Resize();
-        virtual void GetFocus();
+        virtual void    Resize() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
     };
 
 } // namespace rptui

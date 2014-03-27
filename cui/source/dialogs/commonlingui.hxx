@@ -41,15 +41,15 @@ public:
     SvxClickInfoCtr( Window* pParent, const ResId& rResId );
     ~SvxClickInfoCtr();
 
-    virtual void        SetText( const OUString& rStr );
-    virtual OUString    GetText() const;
+    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual OUString    GetText() const SAL_OVERRIDE;
 
     void                SetActivateHdl( const Link& rLink ) { aActivateLink = rLink; }
     const Link&         GetActivateHdl() const { return aActivateLink; }
 
 protected:
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 };
 
@@ -91,7 +91,7 @@ protected:
     GroupBox        aAuditBox;
 
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     PushButton* implGetButton( ButtonType _eType  ) const;

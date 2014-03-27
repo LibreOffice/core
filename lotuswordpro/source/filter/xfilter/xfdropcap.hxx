@@ -80,7 +80,7 @@ public:
 
     void    Reset();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFDropcap& dc1, XFDropcap& dc2);
     friend bool operator!=(XFDropcap& dc1, XFDropcap& dc2);

@@ -1722,9 +1722,9 @@ class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< task::XInt
 public:
     RequestPackageReparation_Impl( const OUString& aName );
     sal_Bool    isApproved();
-    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
+    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aName )
@@ -1790,9 +1790,9 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< task::XInteract
 
 public:
     NotifyBrokenPackage_Impl( const OUString& aName );
-    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
+    virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( uno::RuntimeException, std::exception );
+        throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )

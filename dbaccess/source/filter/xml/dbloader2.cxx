@@ -99,9 +99,9 @@ public:
     DBTypeDetection(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(std::exception  );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
+    OUString                        SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
@@ -112,7 +112,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContext)
@@ -231,9 +231,9 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(std::exception  );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
+    OUString                        SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
@@ -247,8 +247,8 @@ public:
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL cancel(void) throw(std::exception);
+                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel(void) throw(std::exception) SAL_OVERRIDE;
 
 private:
     sal_Bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard );

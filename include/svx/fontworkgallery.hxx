@@ -58,8 +58,8 @@ public:
     ~FontWorkShapeTypeControl();
 
     virtual void                Select( sal_Bool bMod1 = sal_False );
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };
 
 

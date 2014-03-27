@@ -198,7 +198,7 @@ public:
                             const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
 
     /** Writes the entire Link table. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef boost::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;

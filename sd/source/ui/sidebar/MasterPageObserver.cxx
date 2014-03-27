@@ -89,7 +89,7 @@ private:
 
     virtual void Notify(
         SfxBroadcaster& rBroadcaster,
-        const SfxHint& rHint);
+        const SfxHint& rHint) SAL_OVERRIDE;
 
     void AnalyzeUsedMasterPages (SdDrawDocument& rDocument);
 

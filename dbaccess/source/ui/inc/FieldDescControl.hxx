@@ -196,9 +196,9 @@ namespace dbaui
         void                paste();
 
         virtual void        Init();
-        virtual void        GetFocus();
-        virtual void        LoseFocus();
-        virtual void        Resize();
+        virtual void        GetFocus() SAL_OVERRIDE;
+        virtual void        LoseFocus() SAL_OVERRIDE;
+        virtual void        Resize() SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;

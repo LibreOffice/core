@@ -58,9 +58,9 @@ namespace dbaui
 
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
-        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
 
-        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue) SAL_OVERRIDE;
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(false); }
         inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
@@ -75,14 +75,14 @@ namespace dbaui
         virtual ~OConnectionTabPage();
 
         // <method>OGenericAdministrationPage::fillControls</method>
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         // <method>OGenericAdministrationPage::fillWindows</method>
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
         /** enables the test connection button, if allowed
         */
-        virtual bool checkTestConnection();
+        virtual bool checkTestConnection() SAL_OVERRIDE;
     };
 }   // namespace dbaui
 

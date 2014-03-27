@@ -36,8 +36,8 @@ public:
     virtual ~ColorPanel (void);
 
     // From ::Window
-    virtual void Resize (void);
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void Resize (void) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
 private:
     /** Depending on the given number of columns and the item size

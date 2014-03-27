@@ -34,7 +34,7 @@ public:
     virtual                 ~SdUndoAction() {}
 
     void                    SetComment(OUString& rStr) { maComment = rStr; }
-    virtual OUString        GetComment() const { return maComment; }
+    virtual OUString        GetComment() const SAL_OVERRIDE { return maComment; }
     virtual SdUndoAction*   Clone() const { return NULL; }
 
 protected:

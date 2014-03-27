@@ -245,7 +245,7 @@ namespace
     {
         OSelectionBrowseBox* m_pBrowseBox;
     protected:
-        virtual void Select();
+        virtual void Select() SAL_OVERRIDE;
     public:
         OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
     };

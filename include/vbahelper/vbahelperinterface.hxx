@@ -165,8 +165,8 @@ css::uno::Sequence< OUString > classname::getServiceNames() \
     declaration.
  */
 #define VBAHELPER_DECL_XHELPERINTERFACE \
-    virtual OUString getServiceImplName(); \
-    virtual css::uno::Sequence< OUString > getServiceNames();
+    virtual OUString getServiceImplName() SAL_OVERRIDE; \
+    virtual css::uno::Sequence< OUString > getServiceNames() SAL_OVERRIDE;
 
 
 

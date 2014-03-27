@@ -36,7 +36,7 @@ public:
     ~PreviewValueSet (void);
 
     void SetRightMouseClickHandler (const Link& rLink);
-    virtual void Resize (void);
+    virtual void Resize (void) SAL_OVERRIDE;
 
     void SetPreviewSize (const Size& rSize);
 
@@ -49,7 +49,7 @@ public:
     void Rearrange (bool bForceRequestResize = false);
 
 protected:
-    virtual void MouseButtonDown (const MouseEvent& rEvent);
+    virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
 
 private:
     Link maRightMouseClickHandler;

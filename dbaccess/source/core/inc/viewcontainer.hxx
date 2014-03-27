@@ -71,26 +71,26 @@ namespace dbaccess
 
     protected:
         // OFilteredContainer overridables
-        virtual OUString getTableTypeRestriction() const;
+        virtual OUString getTableTypeRestriction() const SAL_OVERRIDE;
 
     private:
-        inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
-        inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
+        inline virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OFilteredContainer::acquire();}
+        inline virtual void SAL_CALL release() throw() SAL_OVERRIDE { OFilteredContainer::release();}
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::connectivity::sdbcx::OCollection
-        virtual ::connectivity::sdbcx::ObjectType       createObject(const OUString& _rName);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
-        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName);
+        virtual ::connectivity::sdbcx::ObjectType       createObject(const OUString& _rName) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor() SAL_OVERRIDE;
+        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) SAL_OVERRIDE;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) SAL_OVERRIDE;
 
         using OFilteredContainer::disposing;
 

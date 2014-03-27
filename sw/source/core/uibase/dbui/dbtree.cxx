@@ -81,10 +81,10 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
             pWrtSh(pShell) {}
         ~SwDBTreeList_Impl();
 
-    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception);
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Bool                        HasContext();
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}

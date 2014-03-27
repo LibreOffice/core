@@ -317,7 +317,7 @@ public:
     /// Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) SAL_OVERRIDE;
 
 private:
     /// Private constructor because copying is never allowed!!
@@ -374,7 +374,7 @@ protected:
        SwAttrSet (handle): */
     sal_uInt16 ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds );
 
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     /// Already contained in base class Client.
@@ -430,7 +430,7 @@ public:
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
 
     /// Get information from Client.
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     /// SS for PoolItems: hard attributation.
 

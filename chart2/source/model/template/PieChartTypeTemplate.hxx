@@ -55,55 +55,55 @@ public:
 protected:
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+        throw(::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram,
         sal_Bool bAdaptProperties )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
         getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL applyStyle(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL resetStyles(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ ChartTypeTemplate ____
-    virtual sal_Int32 getDimension() const;
+    virtual sal_Int32 getDimension() const SAL_OVERRIDE;
 
     virtual void adaptDiagram(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram );
+            ::com::sun::star::chart2::XDiagram > & xDiagram ) SAL_OVERRIDE;
 
-    virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension );
+    virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension ) SAL_OVERRIDE;
 
     virtual void adaptAxes(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
+                ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys ) SAL_OVERRIDE;
 
     virtual void adaptScales(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > > & aCooSysSeq,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
+            ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories ) SAL_OVERRIDE;
 
     virtual void createChartTypes(
             const ::com::sun::star::uno::Sequence<
@@ -116,10 +116,10 @@ protected:
             const ::com::sun::star::uno::Sequence<
                   ::com::sun::star::uno::Reference<
                       ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
-            );
+            ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
-                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex ) SAL_OVERRIDE;
 };
 
 } //  namespace chart

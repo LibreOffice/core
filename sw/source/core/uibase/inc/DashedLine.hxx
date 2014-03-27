@@ -22,7 +22,7 @@ public:
     SwDashedLine( Window* pParent, Color& ( *pColorFn )() );
     ~SwDashedLine( );
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 #endif

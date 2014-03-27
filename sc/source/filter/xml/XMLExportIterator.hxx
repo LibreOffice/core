@@ -81,7 +81,7 @@ class ScMyShapesContainer : ScMyIteratorBase
 private:
     ScMyShapeList               aShapeList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyShapesContainer();
     virtual                     ~ScMyShapesContainer();
@@ -90,8 +90,8 @@ public:
     void                        AddNewShape(const ScMyShape& aShape);
     bool                        HasShapes() { return !aShapeList.empty(); }
     const ScMyShapeList*        GetShapes() const { return &aShapeList; }
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
 };
 
@@ -110,7 +110,7 @@ class ScMyNoteShapesContainer : ScMyIteratorBase
 private:
     ScMyNoteShapeList           aNoteShapeList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyNoteShapesContainer();
     virtual                     ~ScMyNoteShapesContainer();
@@ -119,8 +119,8 @@ public:
     void                        AddNewNote(const ScMyNoteShape& aNote);
     bool                        HasNotes() { return !aNoteShapeList.empty(); }
     const ScMyNoteShapeList*    GetNotes() const { return &aNoteShapeList; }
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
 };
 
@@ -141,15 +141,15 @@ class ScMyMergedRangesContainer : ScMyIteratorBase
 private:
     ScMyMergedRangeList         aRangeList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyMergedRangesContainer();
     virtual                     ~ScMyMergedRangesContainer();
     void                        AddRange(const com::sun::star::table::CellRangeAddress aMergedRange);
 
                                 using ScMyIteratorBase::UpdateAddress;
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort(); // + remove doublets
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE; // + remove doublets
     void                        SkipTable(SCTAB nSkip);
 };
 
@@ -180,7 +180,7 @@ class ScMyAreaLinksContainer : ScMyIteratorBase
 private:
     ScMyAreaLinkList            aAreaLinkList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyAreaLinksContainer();
     virtual                     ~ScMyAreaLinksContainer();
@@ -189,8 +189,8 @@ public:
                                     { aAreaLinkList.push_back( rAreaLink ); }
 
                                 using ScMyIteratorBase::UpdateAddress;
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
 };
 
@@ -209,15 +209,15 @@ class ScMyEmptyDatabaseRangesContainer : ScMyIteratorBase
 private:
     ScMyEmptyDatabaseRangeList  aDatabaseList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyEmptyDatabaseRangesContainer();
     virtual                     ~ScMyEmptyDatabaseRangesContainer();
     void                        AddNewEmptyDatabaseRange(const com::sun::star::table::CellRangeAddress& aCellRangeAddress);
 
                                 using ScMyIteratorBase::UpdateAddress;
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
 };
 
@@ -240,7 +240,7 @@ class ScMyDetectiveObjContainer : ScMyIteratorBase
 private:
     ScMyDetectiveObjList        aDetectiveObjList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyDetectiveObjContainer();
     virtual                     ~ScMyDetectiveObjContainer();
@@ -253,8 +253,8 @@ public:
                                     bool bHasError );
 
                                 using ScMyIteratorBase::UpdateAddress;
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
 };
 
@@ -276,7 +276,7 @@ class ScMyDetectiveOpContainer : ScMyIteratorBase
 private:
     ScMyDetectiveOpList         aDetectiveOpList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) SAL_OVERRIDE;
 public:
                                 ScMyDetectiveOpContainer();
     virtual                     ~ScMyDetectiveOpContainer();
@@ -284,8 +284,8 @@ public:
     void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex );
 
                                 using ScMyIteratorBase::UpdateAddress;
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
+    virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
+    virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
 };
 

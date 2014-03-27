@@ -81,23 +81,23 @@ namespace pcr
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertySet and friends
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue
-            )   throw (::com::sun::star::lang::IllegalArgumentException);
+            )   throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                 sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue
-            ) throw (::com::sun::star::uno::Exception, std::exception);
+            ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL getFastPropertyValue(
                 ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle
-            ) const;
+            ) const SAL_OVERRIDE;
     private:
         using FormController_PropertyBase1::getFastPropertyValue;
     };

@@ -42,11 +42,11 @@ namespace abp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
+        virtual void        initializePage() SAL_OVERRIDE;
 
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        DeactivatePage();
+        virtual void        ActivatePage() SAL_OVERRIDE;
+        virtual void        DeactivatePage() SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnInvokeDialog, void* );

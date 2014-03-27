@@ -31,7 +31,7 @@ private:
     sal_uInt16 m_nNamePageId;
     sal_uInt16 m_nEffectsPageId;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
 public:
     ScCharDlg(Window* pParent, const SfxItemSet* pAttr,
         const SfxObjectShell* pDocShell);
@@ -42,7 +42,7 @@ class ScParagraphDlg : public SfxTabDialog
 private:
     sal_uInt16 m_nTabPageId;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) SAL_OVERRIDE;
 
 public:
     ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr);

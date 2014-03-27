@@ -54,7 +54,7 @@ namespace abp
         const AddressSettings&  getSettings() const;
 
         // TabDialog overridables
-        virtual void        DeactivatePage();
+        virtual void        DeactivatePage() SAL_OVERRIDE;
     };
 
 

@@ -81,10 +81,10 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >     getContainer() { return m_xMe; }
 
     protected:
-        virtual bool PreNotify( NotifyEvent& rNEvt );
-        virtual void GetFocus();
-        virtual void resizeDocumentView(Rectangle& rRect);
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void resizeDocumentView(Rectangle& rRect) SAL_OVERRIDE;
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
     private:
         using ODataView::Construct;

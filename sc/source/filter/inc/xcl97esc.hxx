@@ -40,7 +40,7 @@ public:
 
 private:
     /** Overloaded to create a new temporary file and return its stream. */
-    virtual SvStream*   ImplQueryPictureStream();
+    virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
 
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -99,9 +99,9 @@ public:
 
     virtual EscherExHostAppData* StartShape(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape,
-                            const Rectangle* pChildAnchor );
-    virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID );
-    virtual EscherExHostAppData*    EnterAdditionalTextGroup();
+                            const Rectangle* pChildAnchor ) SAL_OVERRIDE;
+    virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID ) SAL_OVERRIDE;
+    virtual EscherExHostAppData*    EnterAdditionalTextGroup() SAL_OVERRIDE;
 
                                 /// Flush and merge PicStream into EscherStream
             void                EndDocument();
@@ -163,7 +163,7 @@ class XclEscherClientData : public EscherExClientRecord_Base
 {
 public:
                         XclEscherClientData() {}
-    virtual void        WriteData( EscherEx& rEx ) const;
+    virtual void        WriteData( EscherEx& rEx ) const SAL_OVERRIDE;
 };
 
 
@@ -186,7 +186,7 @@ public:
                                 //! ONLY for the AdditionalText mimic
     inline  void        SetXclObj( XclObj* p )  { pXclObj = p; }
 
-    virtual void        WriteData( EscherEx& rEx ) const;
+    virtual void        WriteData( EscherEx& rEx ) const SAL_OVERRIDE;
 };
 
 

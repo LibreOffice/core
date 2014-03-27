@@ -107,7 +107,7 @@ protected:
         CF_COPYMASK             = (CF_MODIFIED | CF_PRIVATE)
     };
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 public:
     inline LwpAssociatedLayouts* GetLayoutsWithMe();
     LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
@@ -153,7 +153,7 @@ public:
     LwpHeadContent(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeadContent(){}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 #endif

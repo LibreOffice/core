@@ -45,10 +45,10 @@ public:
                     SwDoc * pDoc);
     virtual ~SwUndoFmtCreate();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom) = 0;
     virtual void Delete() = 0;
@@ -69,10 +69,10 @@ public:
     SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
     ~SwUndoFmtDelete();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     virtual SwFmt * Create(SwFmt * pDerivedFrom) = 0;
     virtual void Delete(SwFmt * pFmt) = 0;
@@ -91,10 +91,10 @@ public:
                     SwDoc * pDoc);
     ~SwUndoRenameFmt();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    SwRewriter GetRewriter() const;
+    SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     virtual SwFmt * Find(const OUString & rName) const = 0;
 };
@@ -105,9 +105,9 @@ public:
     SwUndoTxtFmtCollCreate(SwTxtFmtColl * pNew, SwTxtFmtColl * pDerivedFrom,
                            SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom);
-    virtual void Delete();
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete() SAL_OVERRIDE;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoTxtFmtCollDelete : public SwUndoFmtDelete
@@ -115,9 +115,9 @@ class SwUndoTxtFmtCollDelete : public SwUndoFmtDelete
 public:
     SwUndoTxtFmtCollDelete(SwTxtFmtColl * pOld, SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom);
-    virtual void Delete(SwFmt * pFmt);
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoRenameFmtColl : public SwUndoRenameFmt
@@ -127,7 +127,7 @@ public:
                         const OUString & sNewName,
                         SwDoc * pDoc);
 
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoCharFmtCreate : public SwUndoFmtCreate
@@ -136,9 +136,9 @@ public:
     SwUndoCharFmtCreate(SwCharFmt * pNew, SwCharFmt * pDerivedFrom,
                            SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom);
-    virtual void Delete();
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete() SAL_OVERRIDE;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoCharFmtDelete : public SwUndoFmtDelete
@@ -146,9 +146,9 @@ class SwUndoCharFmtDelete : public SwUndoFmtDelete
 public:
     SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom);
-    virtual void Delete(SwFmt * pFmt);
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoRenameCharFmt : public SwUndoRenameFmt
@@ -158,7 +158,7 @@ public:
                         const OUString & sNewName,
                         SwDoc * pDoc);
 
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoFrmFmtCreate : public SwUndoFmtCreate
@@ -169,9 +169,9 @@ public:
     SwUndoFrmFmtCreate(SwFrmFmt * pNew, SwFrmFmt * pDerivedFrom,
                        SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom);
-    virtual void Delete();
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete() SAL_OVERRIDE;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoFrmFmtDelete : public SwUndoFmtDelete
@@ -179,9 +179,9 @@ class SwUndoFrmFmtDelete : public SwUndoFmtDelete
 public:
     SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom);
-    virtual void Delete(SwFmt * pFmt);
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoRenameFrmFmt : public SwUndoRenameFmt
@@ -191,7 +191,7 @@ public:
                        const OUString & sNewName,
                        SwDoc * pDoc);
 
-    virtual SwFmt * Find(const OUString & rName) const;
+    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoNumruleCreate : public SwUndo
@@ -204,10 +204,10 @@ class SwUndoNumruleCreate : public SwUndo
 public:
     SwUndoNumruleCreate(const SwNumRule * pNew, SwDoc * pDoc);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    SwRewriter GetRewriter() const;
+    SwRewriter GetRewriter() const SAL_OVERRIDE;
 };
 
 class SwUndoNumruleDelete : public SwUndo
@@ -218,10 +218,10 @@ class SwUndoNumruleDelete : public SwUndo
 public:
     SwUndoNumruleDelete(const SwNumRule  & aRule, SwDoc * pDoc);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    SwRewriter GetRewriter() const;
+    SwRewriter GetRewriter() const SAL_OVERRIDE;
 };
 
 class SwUndoNumruleRename : public SwUndo
@@ -233,10 +233,10 @@ class SwUndoNumruleRename : public SwUndo
     SwUndoNumruleRename(const OUString & aOldName, const OUString & aNewName,
                         SwDoc * pDoc);
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    SwRewriter GetRewriter() const;
+    SwRewriter GetRewriter() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SWUNDOFMT_HXX

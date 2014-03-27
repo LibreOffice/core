@@ -39,20 +39,20 @@ namespace dbaui
         DECL_LINK( OnContainerSelectHdl,    SvtIconChoiceCtrl* );
         DECL_LINK( ChangeToLastSelected, void* );
     protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt);
+        virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
         OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow );
         virtual ~OApplicationSwapWindow();
         // window overloads
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
-        inline sal_Bool isCutAllowed()      { return sal_False; }
-        inline sal_Bool isCopyAllowed()     { return sal_False; }
-        inline sal_Bool isPasteAllowed()    { return sal_False; }
-        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
-        inline void copy()  { }
-        inline void cut()   { }
-        inline void paste() { }
+        inline sal_Bool isCutAllowed() SAL_OVERRIDE      { return sal_False; }
+        inline sal_Bool isCopyAllowed() SAL_OVERRIDE     { return sal_False; }
+        inline sal_Bool isPasteAllowed() SAL_OVERRIDE    { return sal_False; }
+        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
+        inline void copy() SAL_OVERRIDE  { }
+        inline void cut() SAL_OVERRIDE   { }
+        inline void paste() SAL_OVERRIDE { }
 
         inline sal_uLong                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
         inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl.GetEntry(nPos); }

@@ -113,10 +113,10 @@ public:
                         SdrGraphicLink(SdrGrafObj& rObj);
     virtual             ~SdrGraphicLink();
 
-    virtual void        Closed();
+    virtual void        Closed() SAL_OVERRIDE;
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
     void                DataChanged( const Graphic& rGraphic );
 
     bool                Connect() { return 0 != GetRealObject(); }
@@ -141,12 +141,12 @@ protected:
     /** is called from the inherited create method and acts as the
         main function of this thread.
     */
-    virtual void SAL_CALL run(void);
+    virtual void SAL_CALL run(void) SAL_OVERRIDE;
 
     /** Called after the thread is terminated via the terminate
         method.  Used to kill the thread by calling delete on this.
     */
-    virtual void SAL_CALL onTerminated(void);
+    virtual void SAL_CALL onTerminated(void) SAL_OVERRIDE;
 
 private:
 

@@ -82,7 +82,7 @@ public:
 
                             ~IMapUserData() { }
 
-    virtual SdrObjUserData* Clone( SdrObject * ) const { return new IMapUserData( *this ); }
+    virtual SdrObjUserData* Clone( SdrObject * ) const SAL_OVERRIDE { return new IMapUserData( *this ); }
 
     void                    SetObject( const IMapObjectPtr& rIMapObj ) { mpObj = rIMapObj; }
     const IMapObjectPtr     GetObject() const { return mpObj; }
@@ -106,17 +106,17 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
 protected:
 
     // GraphCtrl
-    virtual void        MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void        Command(const CommandEvent& rCEvt);
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        SdrObjCreated( const SdrObject& rObj );
-    virtual void        SdrObjChanged( const SdrObject& rObj );
-    virtual void        MarkListHasChanged();
-    virtual void        InitSdrModel();
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void        Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;
+    virtual void        SdrObjChanged( const SdrObject& rObj ) SAL_OVERRIDE;
+    virtual void        MarkListHasChanged() SAL_OVERRIDE;
+    virtual void        InitSdrModel() SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     void                CreateImageMap();
     void                ReplaceImageMap( const ImageMap& rNewImageMap, sal_Bool bScaleToGraphic );
@@ -155,7 +155,7 @@ public:
     void                SelectFirstObject();
     void                StartPolyEdit();
 
-    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
 

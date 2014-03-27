@@ -56,11 +56,11 @@ private:
 
 protected:
 
-    virtual void        StartSplit();
-    virtual void        SplitResize();
-    virtual void        Split();
-    virtual void        Command ( const CommandEvent& rCEvt );
-    virtual void        MouseButtonDown ( const MouseEvent& );
+    virtual void        StartSplit() SAL_OVERRIDE;
+    virtual void        SplitResize() SAL_OVERRIDE;
+    virtual void        Split() SAL_OVERRIDE;
+    virtual void        Command ( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonDown ( const MouseEvent& ) SAL_OVERRIDE;
 
 public:
                         SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
@@ -109,9 +109,9 @@ public:
     sal_Bool                IsAutoHide( sal_Bool bSelf = sal_False ) const;
     SplitWindow*        GetSplitWindow();
 
-    virtual void        AutoHide();
-    virtual void        FadeOut();
-    virtual void        FadeIn();
+    virtual void        AutoHide() SAL_OVERRIDE;
+    virtual void        FadeOut() SAL_OVERRIDE;
+    virtual void        FadeIn() SAL_OVERRIDE;
     void                Show_Impl();
     void                Pin_Impl( sal_Bool bPinned );
     sal_Bool                ActivateNextChild_Impl( sal_Bool bForward = sal_True );

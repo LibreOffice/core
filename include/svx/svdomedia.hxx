@@ -45,18 +45,18 @@ public:
 
         virtual                     ~SdrMediaObj();
 
-        virtual bool                HasTextEdit() const;
+        virtual bool                HasTextEdit() const SAL_OVERRIDE;
 
-        virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-        virtual sal_uInt16              GetObjIdentifier() const;
+        virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
+        virtual sal_uInt16              GetObjIdentifier() const SAL_OVERRIDE;
 
-        virtual OUString            TakeObjNameSingul() const;
-        virtual OUString            TakeObjNamePlural() const;
+        virtual OUString            TakeObjNameSingul() const SAL_OVERRIDE;
+        virtual OUString            TakeObjNamePlural() const SAL_OVERRIDE;
 
-        virtual SdrMediaObj*            Clone() const;
+        virtual SdrMediaObj*            Clone() const SAL_OVERRIDE;
         SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
-        virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+        virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false ) SAL_OVERRIDE;
 
 public:
 
@@ -76,7 +76,7 @@ public:
 protected:
 
         virtual void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
-        virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+        virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 private:
         struct Impl;

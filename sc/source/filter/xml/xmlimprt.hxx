@@ -975,8 +975,8 @@ protected:
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual XMLShapeImportHelper* CreateShapeImport();
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
+    virtual XMLShapeImportHelper* CreateShapeImport() SAL_OVERRIDE;
 
 public:
     // #110680#
@@ -1002,7 +1002,7 @@ public:
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void SetStatistics(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) SAL_OVERRIDE;
 
     ScDocumentImport& GetDoc();
 
@@ -1146,8 +1146,8 @@ public:
     void InsertStyles();
 
     void SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps);
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) SAL_OVERRIDE;
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
 
     void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
     std::vector<OUString> GetTableStyle() { return aTableStyles; }
@@ -1179,16 +1179,16 @@ public:
     void SetStylesToRangesFinished();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL startDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception );
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL endDocument()
         throw(::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException,
-              std::exception);
+              std::exception) SAL_OVERRIDE;
 
-    virtual void DisposingModel();
+    virtual void DisposingModel() SAL_OVERRIDE;
 
     /**
      * Use this class to manage solar mutex locking instead of calling

@@ -45,7 +45,7 @@ namespace dbaui
         */
         static void bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues );
 
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
     private:
         ::std::auto_ptr< OTextConnectionHelper >    m_pTextConnectionHelper;

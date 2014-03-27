@@ -61,8 +61,8 @@ public:
     ~ContentListBox_Impl();
 
 
-    virtual void    RequestingChildren( SvTreeListEntry* pParent );
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
     OUString        GetSelectEntry() const;
@@ -94,8 +94,8 @@ private:
 public:
     ContentTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
 
-    virtual void        ActivatePage();
-    virtual Control*    GetLastFocusControl();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
     void     SetOpenHdl( const Link& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
     OUString GetSelectEntry() const { return m_pContentBox->GetSelectEntry(); }
@@ -109,8 +109,8 @@ class IndexBox_Impl : public ComboBox
 public:
     IndexBox_Impl(Window* pParent, WinBits nStyle);
 
-    virtual void        UserDraw( const UserDrawEvent& rUDEvt );
-    virtual bool        Notify( NotifyEvent& rNEvt );
+    virtual void        UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void                SelectExecutableEntry();
 };
@@ -140,8 +140,8 @@ public:
     IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     ~IndexTabPage_Impl();
 
-    virtual void        ActivatePage();
-    virtual Control*    GetLastFocusControl();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const OUString& rFactory );
@@ -173,8 +173,8 @@ public:
         SetDropDownLineCount(5);
     }
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        Select();
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        Select() SAL_OVERRIDE;
 
     inline void         SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
 };
@@ -187,7 +187,7 @@ public:
     {
     }
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 class SearchTabPage_Impl : public HelpTabPage_Impl
@@ -216,8 +216,8 @@ public:
     SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     ~SearchTabPage_Impl();
 
-    virtual void        ActivatePage();
-    virtual Control*    GetLastFocusControl();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
@@ -241,7 +241,7 @@ public:
     BookmarksBox_Impl(Window* pParent, WinBits nStyle);
     ~BookmarksBox_Impl();
 
-    virtual bool        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 class BookmarksTabPage_Impl : public HelpTabPage_Impl
@@ -255,8 +255,8 @@ private:
 public:
     BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
 
-    virtual void        ActivatePage();
-    virtual Control*    GetLastFocusControl();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
     void                SetDoubleClickHdl( const Link& rLink );
     OUString            GetSelectEntry() const;
@@ -312,9 +312,9 @@ public:
     SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
     ~SfxHelpIndexWindow_Impl();
 
-    virtual void        Resize();
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
@@ -392,7 +392,7 @@ public:
                             TextWin_Impl( Window* pParent );
     virtual                 ~TextWin_Impl();
 
-    virtual bool            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -450,10 +450,10 @@ public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
     ~SfxHelpTextWindow_Impl();
 
-    virtual void            Resize();
-    virtual bool            PreNotify( NotifyEvent& rNEvt );
-    virtual void            GetFocus();
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void            GetFocus() SAL_OVERRIDE;
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             getFrame() const { return xFrame; }
@@ -499,9 +499,9 @@ friend class SfxHelpIndexWindow_Impl;
     OUString            sTitle;
     OUString            sKeyword;
 
-    virtual void        Resize();
-    virtual void        Split();
-    virtual void        GetFocus();
+    virtual void        Resize() SAL_OVERRIDE;
+    virtual void        Split() SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
 
     void                MakeLayout();
     void                InitSizes();
@@ -519,7 +519,7 @@ public:
                         Window* pParent, WinBits nBits );
     ~SfxHelpWindow_Impl();
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );

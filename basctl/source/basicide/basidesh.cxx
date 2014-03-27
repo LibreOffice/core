@@ -105,17 +105,17 @@ public:
     }
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& ) throw( uno::RuntimeException, std::exception ) {}
+    virtual void SAL_CALL disposing( const lang::EventObject& ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE {}
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) throw( uno::RuntimeException, std::exception )
+    virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )
             mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, true, false );
     }
-    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( com::sun::star::uno::RuntimeException, std::exception ) { }
-    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException, std::exception )
+    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE { }
+    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         OUString sModuleName;
         if( mpShell  && ( Event.Accessor >>= sModuleName ) )

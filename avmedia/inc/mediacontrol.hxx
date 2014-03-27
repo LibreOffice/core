@@ -67,7 +67,7 @@ protected:
     virtual void        update() = 0;
     virtual void        execute( const MediaItem& rItem ) = 0;
 
-    virtual void        Resize();
+    virtual void        Resize() SAL_OVERRIDE;
 
 private:
 

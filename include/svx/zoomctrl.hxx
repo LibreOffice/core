@@ -32,9 +32,9 @@ private:
 
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-    virtual void    Paint( const UserDrawEvent& rEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     SFX_DECL_STATUSBAR_CONTROL();
 

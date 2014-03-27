@@ -57,7 +57,7 @@ public:
     /** Late initialization that has to be called after a new instance has
         completed its construction.
     */
-    virtual void Init (bool bIsMainViewShell);
+    virtual void Init (bool bIsMainViewShell) SAL_OVERRIDE;
 
     /** Return a slide sorter that is currently displayed in one of the
         panes that belong to the given ViewShellBase object.
@@ -70,10 +70,10 @@ public:
 
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
-    virtual SdPage* GetActualPage (void);
+    virtual SdPage* GetActualPage (void) SAL_OVERRIDE;
 
     /// inherited from sd::ViewShell
-    virtual SdPage* getCurrentPage() const;
+    virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
 
     void ExecCtrl (SfxRequest& rRequest);
     virtual void GetCtrlState (SfxItemSet &rSet);
@@ -83,12 +83,12 @@ public:
     virtual void FuPermanent (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
     void ExecStatusBar (SfxRequest& rRequest);
-    virtual void Command (const CommandEvent& rEvent, ::sd::Window* pWindow);
+    virtual void Command (const CommandEvent& rEvent, ::sd::Window* pWindow) SAL_OVERRIDE;
     virtual void GetMenuState (SfxItemSet &rSet);
     virtual void GetClipboardState (SfxItemSet &rSet);
 
-    virtual void ReadFrameViewData (FrameView* pView);
-    virtual void WriteFrameViewData (void);
+    virtual void ReadFrameViewData (FrameView* pView) SAL_OVERRIDE;
+    virtual void WriteFrameViewData (void) SAL_OVERRIDE;
 
     /** Set the zoom factor.  The given value is clipped against an upper
         bound.
@@ -96,22 +96,22 @@ public:
             An integer percent value, i.e. nZoom/100 is the actual zoom
             factor.
         */
-    virtual void SetZoom (long int nZoom);
-    virtual void SetZoomRect (const Rectangle& rZoomRect);
+    virtual void SetZoom (long int nZoom) SAL_OVERRIDE;
+    virtual void SetZoomRect (const Rectangle& rZoomRect) SAL_OVERRIDE;
 
     /** This is a callback method used by the active window to delegate its
         Paint() call to.  This view shell itself delegates it to the view.
     */
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin);
+    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) SAL_OVERRIDE;
 
     /** Place and size the controls and windows.  You may want to call this
         method when something has changed that for instance affects the
         visibility state of the scroll bars.
     */
-    virtual void ArrangeGUIElements (void);
+    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
 
-    virtual void Activate (bool IsMDIActivate);
-    virtual void Deactivate (bool IsMDIActivate);
+    virtual void Activate (bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void Deactivate (bool IsMDIActivate) SAL_OVERRIDE;
 
     //===== Drag and Drop =====================================================
 
@@ -125,13 +125,13 @@ public:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND ) SAL_OVERRIDE;
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND) SAL_OVERRIDE;
 
     typedef ::std::vector<SdPage*> PageSelection;
 
@@ -158,7 +158,7 @@ public:
     */
     void RemoveSelectionChangeListener (const Link& rListener);
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) SAL_OVERRIDE;
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -169,16 +169,16 @@ public:
    */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
-        CreateAccessibleDocumentView (::sd::Window* pWindow);
+        CreateAccessibleDocumentView (::sd::Window* pWindow) SAL_OVERRIDE;
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
-    virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc );
+    virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc ) SAL_OVERRIDE;
 
     SlideSorter& GetSlideSorter (void) const;
 
     /** Try to relocate all toplevel window elements to the given parent
         window.
     */
-    virtual bool RelocateToParentWindow (::Window* pParentWindow);
+    virtual bool RelocateToParentWindow (::Window* pParentWindow) SAL_OVERRIDE;
 
 protected:
 
@@ -187,7 +187,7 @@ protected:
     /** This method is overloaded to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
-    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
+    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const SAL_OVERRIDE;
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;
@@ -204,7 +204,7 @@ private:
         scroll bar and the base class call is thus unnecessary.  It simply
         calls UpdateScrollBars(false).
     */
-    virtual void UpdateScrollBars (void);
+    virtual void UpdateScrollBars (void) SAL_OVERRIDE;
 };
 
 typedef ::boost::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;

@@ -31,12 +31,12 @@ private:
     SvHeaderTabListBox          maListBox;
 protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
-    virtual bool                Notify( NotifyEvent& rNEvt );
+    virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     MacroEventListBox( Window* pParent, WinBits nStyle );
 
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     SvHeaderTabListBox& GetListBox()
     {

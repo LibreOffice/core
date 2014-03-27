@@ -44,13 +44,13 @@ public:
         rFldType( rType )
     {}
 
-    virtual void Closed();
+    virtual void Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
-    virtual const SwNode* GetAnchor() const;
+    virtual const SwNode* GetAnchor() const SAL_OVERRIDE;
     virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
-                            sal_Int32 nEnd = -1 ) const;
+                            sal_Int32 nEnd = -1 ) const SAL_OVERRIDE;
 };
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,

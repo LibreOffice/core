@@ -41,7 +41,7 @@ public:
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper);
-    virtual bool    QueryClose();
+    virtual bool    QueryClose() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_HYPERDLG_HXX

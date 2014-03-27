@@ -129,15 +129,15 @@ class NavigatorTree :   public ::cppu::BaseMutex
         inline void setContent(const uno::Reference< uno::XInterface >& _xContent) { m_xContent = _xContent; }
     protected:
         // OPropertyChangeListener
-        virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException);
+        virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException) SAL_OVERRIDE;
 
         // OContainerListener
-        virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception);
+        virtual void _elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void _elementRemoved( const container::ContainerEvent& _Event )
-            throw (uno::RuntimeException, std::exception);
-        virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception);
+            throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void _elementReplaced( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void _disposing(const lang::EventObject& _rSource)
-            throw (uno::RuntimeException, std::exception);
+            throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
     enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
@@ -160,19 +160,19 @@ class NavigatorTree :   public ::cppu::BaseMutex
     NavigatorTree(const NavigatorTree&);
     void operator =(const NavigatorTree&);
 protected:
-    virtual void        Command( const CommandEvent& rEvt );
+    virtual void        Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
     // DragSourceHelper overridables
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
     // DropTargetHelper overridables
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
 
     // OSelectionChangeListener
     virtual void _disposing(const lang::EventObject& _rSource)
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertyChangeListener
-    virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException);
+    virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException) SAL_OVERRIDE;
 
     // OContainerListener Helper
     void _elementInserted( const container::ContainerEvent& _rEvent );
@@ -186,23 +186,23 @@ public:
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
     DECL_LINK( OnDropActionTimer, void* );
 
-    virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException);
+    virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException) SAL_OVERRIDE;
 
     // ITraverseReport
-    virtual void traverseReport(const uno::Reference< report::XReportDefinition>& _xReport);
-    virtual void traverseReportFunctions(const uno::Reference< report::XFunctions>& _xFunctions);
-    virtual void traverseReportHeader(const uno::Reference< report::XSection>& _xSection);
-    virtual void traverseReportFooter(const uno::Reference< report::XSection>& _xSection);
-    virtual void traversePageHeader(const uno::Reference< report::XSection>& _xSection);
-    virtual void traversePageFooter(const uno::Reference< report::XSection>& _xSection);
+    virtual void traverseReport(const uno::Reference< report::XReportDefinition>& _xReport) SAL_OVERRIDE;
+    virtual void traverseReportFunctions(const uno::Reference< report::XFunctions>& _xFunctions) SAL_OVERRIDE;
+    virtual void traverseReportHeader(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
+    virtual void traverseReportFooter(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
+    virtual void traversePageHeader(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
+    virtual void traversePageFooter(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
 
-    virtual void traverseGroups(const uno::Reference< report::XGroups>& _xGroups);
-    virtual void traverseGroup(const uno::Reference< report::XGroup>& _xGroup);
-    virtual void traverseGroupFunctions(const uno::Reference< report::XFunctions>& _xFunctions);
-    virtual void traverseGroupHeader(const uno::Reference< report::XSection>& _xSection);
-    virtual void traverseGroupFooter(const uno::Reference< report::XSection>& _xSection);
+    virtual void traverseGroups(const uno::Reference< report::XGroups>& _xGroups) SAL_OVERRIDE;
+    virtual void traverseGroup(const uno::Reference< report::XGroup>& _xGroup) SAL_OVERRIDE;
+    virtual void traverseGroupFunctions(const uno::Reference< report::XFunctions>& _xFunctions) SAL_OVERRIDE;
+    virtual void traverseGroupHeader(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
+    virtual void traverseGroupFooter(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
 
-    virtual void traverseDetail(const uno::Reference< report::XSection>& _xSection);
+    virtual void traverseDetail(const uno::Reference< report::XSection>& _xSection) SAL_OVERRIDE;
 
     SvTreeListEntry* find(const uno::Reference< uno::XInterface >& _xContent);
     void removeEntry(SvTreeListEntry* _pEntry,bool _bRemove = true);

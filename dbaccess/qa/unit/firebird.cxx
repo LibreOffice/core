@@ -29,7 +29,7 @@ public:
     void testEmptyDBConnection();
     void testIntegerDatabase();
 
-    virtual void setUp();
+    virtual void setUp() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);

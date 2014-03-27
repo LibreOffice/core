@@ -82,7 +82,7 @@ public:
 
     virtual ~LwpParaStyle();
 
-    void Read();
+    void Read() SAL_OVERRIDE;
 
     virtual void    Apply(XFParaStyle *pStrm);
     // 01/26/2005
@@ -95,7 +95,7 @@ public:
 
     static void ApplyTab(XFParaStyle* pParaStyle, LwpTabOverride* pTab);
 
-    void RegisterStyle();
+    void RegisterStyle() SAL_OVERRIDE;
 
     LwpAlignmentOverride* GetAlignment();//add by  1-24
     LwpIndentOverride* GetIndent();

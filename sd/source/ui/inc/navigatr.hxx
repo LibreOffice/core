@@ -98,7 +98,7 @@ public:
         const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin();
 
-    virtual void                KeyInput( const KeyEvent& rKEvt );
+    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = NULL );
@@ -109,8 +109,8 @@ public:
     void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
 
 protected:
-    virtual void                Resize();
-    virtual bool                Notify(NotifyEvent& rNEvt);
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual bool                Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
 
 private:
@@ -153,7 +153,7 @@ private:
                                 DECL_LINK( MenuSelectHdl, Menu * );
                                 DECL_LINK( ShapeFilterCallback, Menu * );
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void                        SetDragImage();
     void                        ApplyImageList();
 public:
@@ -177,7 +177,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
+                                const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 private:
     SdNavigatorWin* pNavigatorWin;
@@ -197,7 +197,7 @@ public:
 
 protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
+                                const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 private:
     SdNavigatorWin* pNavigatorWin;

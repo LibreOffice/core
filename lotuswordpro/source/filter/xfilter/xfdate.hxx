@@ -82,7 +82,7 @@ public:
 
     void    SetFixed(sal_Bool fixed = sal_True);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     sal_Bool    m_bFixed;
@@ -118,13 +118,13 @@ inline  void XFDate::SetFixed(sal_Bool fixed)
 class XFDateStart : public XFDate
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 class XFDateEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 #endif

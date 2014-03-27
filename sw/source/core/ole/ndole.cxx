@@ -72,8 +72,8 @@ public:
     SwOLELRUCache();
 
     virtual void Notify( const uno::Sequence<
-                                OUString>& aPropertyNames );
-    virtual void Commit();
+                                OUString>& aPropertyNames ) SAL_OVERRIDE;
+    virtual void Commit() SAL_OVERRIDE;
     void Load();
 
     void InsertObj( SwOLEObj& rObj );
@@ -98,9 +98,9 @@ class SwOLEListener_Impl : public ::cppu::WeakImplHelper1< embed::XStateChangeLi
 public:
     SwOLEListener_Impl( SwOLEObj* pObj );
     void Release();
-    virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException, std::exception);
-    virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException, std::exception);
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (uno::RuntimeException, std::exception);
+    virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 SwOLEListener_Impl::SwOLEListener_Impl( SwOLEObj* pObj )
@@ -158,9 +158,9 @@ public:
                         SwEmbedObjectLink(SwOLENode* pNode);
     virtual             ~SwEmbedObjectLink();
 
-    virtual void        Closed();
+    virtual void        Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
     bool            Connect() { return GetRealObject() != NULL; }
 };

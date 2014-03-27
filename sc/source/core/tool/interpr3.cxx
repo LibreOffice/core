@@ -2191,7 +2191,7 @@ public:
 
     virtual ~ScGammaDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - rInt.GetGammaDist(x, fAlpha, fBeta); }
+    double  GetValue( double x ) const SAL_OVERRIDE  { return fp - rInt.GetGammaDist(x, fAlpha, fBeta); }
 };
 
 void ScInterpreter::ScGammaInv()
@@ -2231,7 +2231,7 @@ public:
 
     virtual ~ScBetaDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - rInt.GetBetaDist(x, fAlpha, fBeta); }
+    double  GetValue( double x ) const SAL_OVERRIDE  { return fp - rInt.GetBetaDist(x, fAlpha, fBeta); }
 };
 
 void ScInterpreter::ScBetaInv()
@@ -2287,7 +2287,7 @@ public:
 
     virtual ~ScTDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - rInt.GetTDist( x, fDF, nT ); }
+    double  GetValue( double x ) const SAL_OVERRIDE  { return fp - rInt.GetTDist( x, fDF, nT ); }
 };
 
 void ScInterpreter::ScTInv( int nType )
@@ -2333,7 +2333,7 @@ public:
 
     virtual ~ScFDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - rInt.GetFDist(x, fF1, fF2); }
+    double  GetValue( double x ) const SAL_OVERRIDE  { return fp - rInt.GetFDist(x, fF1, fF2); }
 };
 
 void ScInterpreter::ScFInv()
@@ -2389,7 +2389,7 @@ public:
 
     virtual ~ScChiDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - rInt.GetChiDist(x, fDF); }
+    double  GetValue( double x ) const SAL_OVERRIDE  { return fp - rInt.GetChiDist(x, fDF); }
 };
 
 void ScInterpreter::ScChiInv()
@@ -2424,7 +2424,7 @@ public:
 
     virtual ~ScChiSqDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
+    double  GetValue( double x ) const SAL_OVERRIDE  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
 };
 
 void ScInterpreter::ScChiSqInv()

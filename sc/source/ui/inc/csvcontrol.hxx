@@ -272,8 +272,8 @@ public:
 
     // event handling ---------------------------------------------------------
 
-    virtual void                GetFocus();
-    virtual void                LoseFocus();
+    virtual void                GetFocus() SAL_OVERRIDE;
+    virtual void                LoseFocus() SAL_OVERRIDE;
 
     /** Sends a GetFocus or LoseFocus event to the accessibility object. */
     void                        AccSendFocusEvent( bool bFocused );
@@ -409,7 +409,7 @@ public:
 public:
     /** Creates and returns the accessible object of this control. Do not overwrite in
         derived classes, use ImplCreateAccessible() instead. */
-    virtual XAccessibleRef     CreateAccessible();
+    virtual XAccessibleRef     CreateAccessible() SAL_OVERRIDE;
 
 protected:
     /** Derived classes create a new accessible object here. */

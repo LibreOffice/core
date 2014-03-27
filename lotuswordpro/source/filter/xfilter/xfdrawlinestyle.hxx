@@ -129,9 +129,9 @@ public:
 
     sal_Int32   GetTransparency();
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     enumXFLineStyle m_eLineStyle;

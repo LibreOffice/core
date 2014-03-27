@@ -131,7 +131,7 @@ class ScDPGroupTableData : public ScDPTableData
     StringHashSet           aGroupNames;
 
     void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
-    virtual long                GetSourceDim( long nDim );
+    virtual long                GetSourceDim( long nDim ) SAL_OVERRIDE;
 
     bool        IsNumGroupDimension( long nDimension ) const;
     void GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo);
@@ -151,37 +151,37 @@ public:
 
     ScDocument* GetDocument()   { return pDoc; }
 
-    virtual long                    GetColumnCount();
-    virtual long                    GetMembersCount( long nDim );
-    virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    virtual const ScDPItemData* GetMemberById( long nDim, long nId);
-    virtual long Compare( long nDim, long nDataId1, long nDataId2);
+    virtual long                    GetColumnCount() SAL_OVERRIDE;
+    virtual long                    GetMembersCount( long nDim ) SAL_OVERRIDE;
+    virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) SAL_OVERRIDE ;
+    virtual const ScDPItemData* GetMemberById( long nDim, long nId) SAL_OVERRIDE;
+    virtual long Compare( long nDim, long nDataId1, long nDataId2) SAL_OVERRIDE;
 
-    virtual OUString                getDimensionName(long nColumn);
-    virtual bool                    getIsDataLayoutDimension(long nColumn);
-    virtual bool                    IsDateDimension(long nDim);
-    virtual sal_uLong               GetNumberFormat(long nDim);
-    virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
+    virtual OUString                getDimensionName(long nColumn) SAL_OVERRIDE;
+    virtual bool                    getIsDataLayoutDimension(long nColumn) SAL_OVERRIDE;
+    virtual bool                    IsDateDimension(long nDim) SAL_OVERRIDE;
+    virtual sal_uLong               GetNumberFormat(long nDim) SAL_OVERRIDE;
+    virtual void                    DisposeData() SAL_OVERRIDE;
+    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) SAL_OVERRIDE;
 
-    virtual bool                    IsRepeatIfEmpty();
+    virtual bool                    IsRepeatIfEmpty() SAL_OVERRIDE;
 
-    virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
+    virtual void                    CreateCacheTable() SAL_OVERRIDE;
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) SAL_OVERRIDE;
     virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const ::boost::unordered_set<sal_Int32>& rCatDims,
-                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
-    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
-    virtual const ScDPFilteredCache&   GetCacheTable() const;
-    virtual void ReloadCacheTable();
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) SAL_OVERRIDE;
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) SAL_OVERRIDE;
+    virtual const ScDPFilteredCache&   GetCacheTable() const SAL_OVERRIDE;
+    virtual void ReloadCacheTable() SAL_OVERRIDE;
 
-    virtual bool                    IsBaseForGroup(long nDim) const;
-    virtual long                    GetGroupBase(long nGroupDim) const;
-    virtual bool                    IsNumOrDateGroup(long nDim) const;
+    virtual bool                    IsBaseForGroup(long nDim) const SAL_OVERRIDE;
+    virtual long                    GetGroupBase(long nGroupDim) const SAL_OVERRIDE;
+    virtual bool                    IsNumOrDateGroup(long nDim) const SAL_OVERRIDE;
     virtual bool                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                               const ScDPItemData& rBaseData, long nBaseIndex ) const;
+                                               const ScDPItemData& rBaseData, long nBaseIndex ) const SAL_OVERRIDE;
     virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
-                                                      const ScDPItemData& rSecondData, long nSecondIndex ) const;
+                                                      const ScDPItemData& rSecondData, long nSecondIndex ) const SAL_OVERRIDE;
 
 #if DEBUG_PIVOT_TABLE
     virtual void Dump() const;

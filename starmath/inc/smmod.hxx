@@ -106,7 +106,7 @@ public:
     SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule();
 
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
     svtools::ColorConfig &  GetColorConfig();
 
@@ -132,9 +132,9 @@ public:
     }
 
     //virtual methods for options dialog
-    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
-    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 #define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )

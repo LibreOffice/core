@@ -94,8 +94,8 @@ namespace dbaxml
             virtual ~FastLoader(){}
 
             /// Working method which should be overridden.
-            virtual void SAL_CALL run();
-            virtual void SAL_CALL onTerminated();
+            virtual void SAL_CALL run() SAL_OVERRIDE;
+            virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
         private:
             uno::Reference< uno::XComponentContext > m_xContext;
             StartType m_eWhat;
@@ -182,7 +182,7 @@ namespace dbaxml
         public:
             DatasourceURLListener(uno::Reference< uno::XComponentContext > const & _xContext) : m_xContext(_xContext), m_aTypeCollection(_xContext){}
             // XPropertyChangeListener
-            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException, std::exception)
+            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
             {
                 OUString sURL;
                 _rEvent.NewValue >>= sURL;
@@ -206,7 +206,7 @@ namespace dbaxml
                 }
             }
             // XEventListener
-            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException, std::exception)
+            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
             {
             }
         };

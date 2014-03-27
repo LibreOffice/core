@@ -119,10 +119,10 @@ public:
                                const SfxItemSet& rSet);
     ~SwNumPositionTabPage();
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -152,8 +152,8 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
     sal_uInt16 m_nPositionPageId;
 
     protected:
-        virtual short   Ok();
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage);
+        virtual short   Ok() SAL_OVERRIDE;
+        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
         DECL_LINK(RemoveNumberingHdl, void *);
     public:
         SwSvxNumBulletTabDialog(Window* pParent,

@@ -54,7 +54,7 @@ public:
         const ::com::sun::star::util::URL& URL,
         const ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue >& Arguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     addStatusListener(
@@ -63,7 +63,7 @@ public:
         const ::com::sun::star::util::URL& URL )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     removeStatusListener(
@@ -72,14 +72,14 @@ public:
         const ::com::sun::star::util::URL& URL )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     //XInterceptorInfo
     virtual ::com::sun::star::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
     virtual ::com::sun::star::uno::Reference<
@@ -90,7 +90,7 @@ public:
         sal_Int32 SearchFlags )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence<
     ::com::sun::star::uno::Reference<
@@ -100,7 +100,7 @@ public:
         ::com::sun::star::frame::DispatchDescriptor >& Requests )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     //XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference<
@@ -108,7 +108,7 @@ public:
     getSlaveDispatchProvider(  )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     setSlaveDispatchProvider(
@@ -116,14 +116,14 @@ public:
         ::com::sun::star::frame::XDispatchProvider >& NewDispatchProvider )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XDispatchProvider > SAL_CALL
     getMasterDispatchProvider(  )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     virtual void SAL_CALL
     setMasterDispatchProvider(
@@ -131,11 +131,11 @@ public:
         ::com::sun::star::frame::XDispatchProvider >& NewSupplier )
         throw (
             ::com::sun::star::uno::RuntimeException, std::exception
-        );
+        ) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
 

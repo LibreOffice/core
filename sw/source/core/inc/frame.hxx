@@ -428,7 +428,7 @@ protected:
 
     // draw shadow and borders
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
-    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
     virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
 

@@ -95,54 +95,54 @@ public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator);
     virtual ~OOXMLDocumentImpl();
 
-    virtual void resolve(Stream & rStream);
+    virtual void resolve(Stream & rStream) SAL_OVERRIDE;
 
-    virtual string getType() const;
+    virtual string getType() const SAL_OVERRIDE;
 
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rType,
-                                 const sal_Int32 nNoteId);
+                                 const sal_Int32 nNoteId) SAL_OVERRIDE;
     virtual void resolveEndnote(Stream & rStream,
                                 const Id & rType,
-                                const sal_Int32 nNoteId);
+                                const sal_Int32 nNoteId) SAL_OVERRIDE;
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
-                               const OUString & rId);
+                               const OUString & rId) SAL_OVERRIDE;
     virtual void resolveFooter(Stream & rStream,
                                const sal_Int32 type,
-                               const OUString & rId);
+                               const OUString & rId) SAL_OVERRIDE;
 
-    virtual void resolveComment(Stream & rStream, const sal_Int32 nId);
+    virtual void resolveComment(Stream & rStream, const sal_Int32 nId) SAL_OVERRIDE;
 
     virtual OOXMLPropertySet * getPicturePropSet
     (const OUString & rId);
-    virtual void resolvePicture(Stream & rStream, const OUString & rId);
+    virtual void resolvePicture(Stream & rStream, const OUString & rId) SAL_OVERRIDE;
 
-    virtual OUString getTargetForId(const OUString & rId);
+    virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;
 
-    virtual void setModel(uno::Reference<frame::XModel> xModel);
-    virtual uno::Reference<frame::XModel> getModel();
-    virtual void setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage);
-    virtual uno::Reference<drawing::XDrawPage> getDrawPage();
-    virtual uno::Reference<io::XInputStream> getInputStream();
-    virtual uno::Reference<io::XInputStream> getStorageStream();
-    virtual uno::Reference<io::XInputStream> getInputStreamForId(const OUString & rId);
-    virtual void setXNoteId(const sal_Int32 nId);
-    virtual sal_Int32 getXNoteId() const;
-    virtual void setXNoteType(const Id & rId);
-    virtual const Id & getXNoteType() const;
-    virtual const OUString & getTarget() const;
-    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( );
-    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext );
-    virtual void setThemeDom(uno::Reference<xml::dom::XDocument> xThemeDom);
-    virtual uno::Reference<xml::dom::XDocument> getThemeDom();
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList();
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList();
-    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList();
-    virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList();
-    virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom();
-    virtual uno::Sequence<uno::Sequence< uno::Any> >  getGlossaryDomList();
-    virtual uno::Sequence<beans::PropertyValue >  getEmbeddingsList();
+    virtual void setModel(uno::Reference<frame::XModel> xModel) SAL_OVERRIDE;
+    virtual uno::Reference<frame::XModel> getModel() SAL_OVERRIDE;
+    virtual void setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage) SAL_OVERRIDE;
+    virtual uno::Reference<drawing::XDrawPage> getDrawPage() SAL_OVERRIDE;
+    virtual uno::Reference<io::XInputStream> getInputStream() SAL_OVERRIDE;
+    virtual uno::Reference<io::XInputStream> getStorageStream() SAL_OVERRIDE;
+    virtual uno::Reference<io::XInputStream> getInputStreamForId(const OUString & rId) SAL_OVERRIDE;
+    virtual void setXNoteId(const sal_Int32 nId) SAL_OVERRIDE;
+    virtual sal_Int32 getXNoteId() const SAL_OVERRIDE;
+    virtual void setXNoteType(const Id & rId) SAL_OVERRIDE;
+    virtual const Id & getXNoteType() const SAL_OVERRIDE;
+    virtual const OUString & getTarget() const SAL_OVERRIDE;
+    virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) SAL_OVERRIDE;
+    virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) SAL_OVERRIDE;
+    virtual void setThemeDom(uno::Reference<xml::dom::XDocument> xThemeDom) SAL_OVERRIDE;
+    virtual uno::Reference<xml::dom::XDocument> getThemeDom() SAL_OVERRIDE;
+    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomList() SAL_OVERRIDE;
+    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList() SAL_OVERRIDE;
+    virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList() SAL_OVERRIDE;
+    virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList() SAL_OVERRIDE;
+    virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom() SAL_OVERRIDE;
+    virtual uno::Sequence<uno::Sequence< uno::Any> >  getGlossaryDomList() SAL_OVERRIDE;
+    virtual uno::Sequence<beans::PropertyValue >  getEmbeddingsList() SAL_OVERRIDE;
 
     void incrementProgress();
 };

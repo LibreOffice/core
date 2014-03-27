@@ -61,20 +61,20 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController);
     virtual ~ToolBarModule (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
         const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
 
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<

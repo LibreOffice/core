@@ -72,13 +72,13 @@ namespace pcr
 
         // IPropertyEnumRepresentation implementqation
         virtual ::std::vector< OUString >
-                                    SAL_CALL getDescriptions() const;
-        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const;
-        virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const;
+                                    SAL_CALL getDescriptions() const SAL_OVERRIDE;
+        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const SAL_OVERRIDE;
+        virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const SAL_OVERRIDE;
 
         // IReference implementqation
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     private:
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;
@@ -209,10 +209,10 @@ namespace pcr
         ~UrlClickHandler();
 
         // XActionListener
-        virtual void SAL_CALL actionPerformed( const ActionEvent& rEvent ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL actionPerformed( const ActionEvent& rEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         void impl_dispatch_throw( const OUString& _rURL );

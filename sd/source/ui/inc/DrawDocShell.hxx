@@ -71,34 +71,34 @@ public:
     virtual ~DrawDocShell();
 
     void                    UpdateRefDevice();
-    virtual void            Activate( bool bMDI );
-    virtual void            Deactivate( bool bMDI );
-    virtual bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual void            Activate( bool bMDI ) SAL_OVERRIDE;
+    virtual void            Deactivate( bool bMDI ) SAL_OVERRIDE;
+    virtual bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
     virtual bool            ImportFrom(SfxMedium &rMedium,
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
         SAL_OVERRIDE;
-    virtual bool            ConvertFrom( SfxMedium &rMedium );
-    virtual bool            Save();
-    virtual bool            SaveAsOwnFormat( SfxMedium& rMedium );
-    virtual bool            ConvertTo( SfxMedium &rMedium );
-    virtual bool            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool            ConvertFrom( SfxMedium &rMedium ) SAL_OVERRIDE;
+    virtual bool            Save() SAL_OVERRIDE;
+    virtual bool            SaveAsOwnFormat( SfxMedium& rMedium ) SAL_OVERRIDE;
+    virtual bool            ConvertTo( SfxMedium &rMedium ) SAL_OVERRIDE;
+    virtual bool            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
 
-    virtual bool            Load( SfxMedium &rMedium  );
-    virtual bool            LoadFrom( SfxMedium& rMedium );
-    virtual bool            SaveAs( SfxMedium &rMedium  );
+    virtual bool            Load( SfxMedium &rMedium  ) SAL_OVERRIDE;
+    virtual bool            LoadFrom( SfxMedium& rMedium ) SAL_OVERRIDE;
+    virtual bool            SaveAs( SfxMedium &rMedium  ) SAL_OVERRIDE;
 
-    virtual Rectangle       GetVisArea(sal_uInt16 nAspect) const;
-    virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect = ASPECT_CONTENT);
+    virtual Rectangle       GetVisArea(sal_uInt16 nAspect) const SAL_OVERRIDE;
+    virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect = ASPECT_CONTENT) SAL_OVERRIDE;
     virtual ::svl::IUndoManager*
-                            GetUndoManager();
-    virtual Printer*        GetDocumentPrinter();
-    virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter);
-    virtual SfxStyleSheetBasePool* GetStyleSheetPool();
-    virtual Size            GetFirstPageSize();
-    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const;
-    virtual void            SetModified( bool = true );
+                            GetUndoManager() SAL_OVERRIDE;
+    virtual Printer*        GetDocumentPrinter() SAL_OVERRIDE;
+    virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter) SAL_OVERRIDE;
+    virtual SfxStyleSheetBasePool* GetStyleSheetPool() SAL_OVERRIDE;
+    virtual Size            GetFirstPageSize() SAL_OVERRIDE;
+    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const SAL_OVERRIDE;
+    virtual void            SetModified( bool = true ) SAL_OVERRIDE;
     virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( ::Window *pParent,
-                                                              const SfxItemSet &rSet );
+                                                              const SfxItemSet &rSet ) SAL_OVERRIDE;
 
     using SotObject::GetInterface;
     using SfxObjectShell::GetVisArea;
@@ -192,7 +192,7 @@ public:
         @return
             Returns NULL when the current document has no reference device.
     */
-    virtual OutputDevice* GetDocumentRefDev (void);
+    virtual OutputDevice* GetDocumentRefDev (void) SAL_OVERRIDE;
 
     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
@@ -221,7 +221,7 @@ protected:
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);
-    virtual void            InPlaceActivate( bool bActive );
+    virtual void            InPlaceActivate( bool bActive ) SAL_OVERRIDE;
 public:
     virtual void setDocAccTitle( const OUString& rTitle );
     virtual const OUString getDocAccTitle() const;

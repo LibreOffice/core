@@ -50,14 +50,14 @@ class SwLayoutFrm: public SwFrm
 protected:
     void Destroy(); // for ~SwRootFrm
 
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void MakeAll();
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void MakeAll() SAL_OVERRIDE;
 
     SwFrm           *pLower;
     std::vector<SwAnchoredObject*> aVertPosOrientFrmsFor;
 
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
 
     long CalcRel( const SwFmtFrmSize &rSz, sal_Bool bWidth ) const;
 
@@ -81,13 +81,13 @@ public:
     void PaintColLines( const SwRect &, const SwFmtCol &,
                         const SwPageFrm * ) const;
 
-    virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
+    virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
     virtual bool GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
 
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
         //sucht den dichtesten Cntnt zum SPoint, wird bei Seiten, Flys und Cells
         //benutzt wenn GetCrsrOfst versagt hat.
@@ -101,7 +101,7 @@ public:
     virtual ~SwLayoutFrm();
 
     virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
+                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     const SwFrm *Lower() const { return pLower; }
           SwFrm *Lower()       { return pLower; }
     const SwCntntFrm *ContainsCntnt() const;

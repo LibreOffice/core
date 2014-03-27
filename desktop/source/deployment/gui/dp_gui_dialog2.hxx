@@ -141,19 +141,19 @@ public:
                     ExtMgrDialog( Window * pParent, TheExtensionManager *pManager );
     virtual        ~ExtMgrDialog();
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual bool    Close();
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
-    virtual void    showProgress( bool bStart );
+    virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
     virtual void    updateProgress( const OUString &rText,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
-    virtual void    updateProgress( const long nProgress );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
+    virtual void    updateProgress( const long nProgress ) SAL_OVERRIDE;
 
-    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
 
     void            setGetExtensionsURL( const OUString &rURL );
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
-                                      bool bLicenseMissing = false );
+                                      bool bLicenseMissing = false ) SAL_OVERRIDE;
     bool enablePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                         bool bEnable );
     bool removePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
@@ -162,8 +162,8 @@ public:
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
-    virtual void    prepareChecking();
-    virtual void    checkEntries();
+    virtual void    prepareChecking() SAL_OVERRIDE;
+    virtual void    checkEntries() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
 };
@@ -214,24 +214,24 @@ public:
                     UpdateRequiredDialog( Window * pParent, TheExtensionManager *pManager );
     virtual        ~UpdateRequiredDialog();
 
-    virtual short   Execute();
-    virtual void    Resize();
-    virtual bool    Close();
+    virtual short   Execute() SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
-    virtual void    showProgress( bool bStart );
+    virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
     virtual void    updateProgress( const OUString &rText,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
-    virtual void    updateProgress( const long nProgress );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
+    virtual void    updateProgress( const long nProgress ) SAL_OVERRIDE;
 
-    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
 
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
-                                      bool bLicenseMissing = false );
+                                      bool bLicenseMissing = false ) SAL_OVERRIDE;
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage, bool bEnable );
     bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    virtual void    prepareChecking();
-    virtual void    checkEntries();
+    virtual void    prepareChecking() SAL_OVERRIDE;
+    virtual void    checkEntries() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
 
@@ -259,8 +259,8 @@ public:
                                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xComponentContext );
 
     // XExecutableDialog
-    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual sal_Int16 SAL_CALL    execute() throw ( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL    execute() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 } // namespace dp_gui

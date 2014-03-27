@@ -36,12 +36,12 @@ const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
 class SwFlyDrawObj : public SdrObject
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
 protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -50,8 +50,8 @@ public:
     ~SwFlyDrawObj();
 
     // for instantiation of this class while loading (via factory)
-    virtual sal_uInt32 GetObjInventor()     const;
-    virtual sal_uInt16 GetObjIdentifier()   const;
+    virtual sal_uInt32 GetObjInventor()     const SAL_OVERRIDE;
+    virtual sal_uInt16 GetObjIdentifier()   const SAL_OVERRIDE;
 };
 
 // virtual objects for Flys
@@ -66,7 +66,7 @@ protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
     // not used but something own (top left of new SnapRect minus top left
     // of original SnapRect)
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 public:
     // for paints triggered form ExecutePrimitive
@@ -82,26 +82,26 @@ public:
     ~SwVirtFlyDrawObj();
 
     // overloaded method of base class SdrVirtObj
-    virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
+    virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const SAL_OVERRIDE;
 
     // we treat the size calculation completely on ourself here
-    virtual const Rectangle& GetCurrentBoundRect() const;
-    virtual const Rectangle& GetLastBoundRect() const;
-    virtual       void       RecalcBoundRect();
-    virtual       void       RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect()  const;
-    virtual       void       SetSnapRect(const Rectangle& rRect);
-    virtual       void       NbcSetSnapRect(const Rectangle& rRect);
-    virtual const Rectangle& GetLogicRect() const;
-    virtual       void       SetLogicRect(const Rectangle& rRect);
-    virtual       void       NbcSetLogicRect(const Rectangle& rRect);
-    virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual       void       NbcMove  (const Size& rSiz);
+    virtual const Rectangle& GetCurrentBoundRect() const SAL_OVERRIDE;
+    virtual const Rectangle& GetLastBoundRect() const SAL_OVERRIDE;
+    virtual       void       RecalcBoundRect() SAL_OVERRIDE;
+    virtual       void       RecalcSnapRect() SAL_OVERRIDE;
+    virtual const Rectangle& GetSnapRect()  const SAL_OVERRIDE;
+    virtual       void       SetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual       void       NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual const Rectangle& GetLogicRect() const SAL_OVERRIDE;
+    virtual       void       SetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual       void       NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
+    virtual       void       NbcMove  (const Size& rSiz) SAL_OVERRIDE;
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
-                                       const Fraction& yFact);
-    virtual       void       Move  (const Size& rSiz);
+                                       const Fraction& yFact) SAL_OVERRIDE;
+    virtual       void       Move  (const Size& rSiz) SAL_OVERRIDE;
     virtual       void       Resize(const Point& rRef, const Fraction& xFact,
-                                    const Fraction& yFact, bool bUnsetRelative = true);
+                                    const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();
@@ -113,13 +113,13 @@ public:
     void SetRect() const;
 
     // if an URL is attached to a graphic than this is a macro object
-    virtual bool       HasMacro() const;
-    virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
-    virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;
+    virtual bool       HasMacro() const SAL_OVERRIDE;
+    virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
+    virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;
 
     // FullDrag support
-    virtual bool supportsFullDrag() const;
-    virtual SdrObject* getFullDragClone() const;
+    virtual bool supportsFullDrag() const SAL_OVERRIDE;
+    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
 };
 
 #endif

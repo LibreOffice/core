@@ -40,8 +40,8 @@ public:
     AnnotationEnumeration( const AnnotationVector& rAnnotations );
 
     // ::com::sun::star::office::XAnnotationEnumeration:
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception);
-    virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception);
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception) SAL_OVERRIDE;
 
 private:
     AnnotationEnumeration(const AnnotationEnumeration &); // not defined

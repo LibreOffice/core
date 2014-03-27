@@ -201,7 +201,7 @@ class ScDPShowDetailDlg : public ModalDialog
 public:
     explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
 
-    virtual short       Execute();
+    virtual short       Execute() SAL_OVERRIDE;
 
     /**
      * @return String internal name of the selected field.  Note that this may

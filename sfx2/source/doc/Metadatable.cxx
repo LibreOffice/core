@@ -220,14 +220,14 @@ public:
 
     virtual ~XmlIdRegistryDocument();
 
-    virtual void RegisterMetadatableAndCreateID(Metadatable& i_xObject);
+    virtual void RegisterMetadatableAndCreateID(Metadatable& i_xObject) SAL_OVERRIDE;
 
     virtual bool TryRegisterMetadatable(Metadatable& i_xObject,
-        OUString const& i_rStreamName, OUString const& i_rIdref);
+        OUString const& i_rStreamName, OUString const& i_rIdref) SAL_OVERRIDE;
 
-    virtual void UnregisterMetadatable(Metadatable const&);
+    virtual void UnregisterMetadatable(Metadatable const&) SAL_OVERRIDE;
 
-    virtual void RemoveXmlIdForElement(Metadatable const&);
+    virtual void RemoveXmlIdForElement(Metadatable const&) SAL_OVERRIDE;
 
     /** register i_rCopy as a copy of i_rSource,
         with precedence iff i_bCopyPrecedesSource is true */
@@ -243,12 +243,12 @@ public:
 
     // unfortunately public, Metadatable::RegisterAsCopyOf needs this
     virtual bool LookupXmlId(const Metadatable& i_xObject,
-        OUString & o_rStream, OUString & o_rIdref) const;
+        OUString & o_rStream, OUString & o_rIdref) const SAL_OVERRIDE;
 
 private:
 
     virtual Metadatable* LookupElement(const OUString & i_rStreamName,
-        const OUString & i_rIdref) const;
+        const OUString & i_rIdref) const SAL_OVERRIDE;
 
     struct XmlIdRegistry_Impl;
     ::std::auto_ptr<XmlIdRegistry_Impl> m_pImpl;
@@ -264,18 +264,18 @@ class MetadatableUndo : public Metadatable
 public:
     MetadatableUndo(const bool i_isInContent)
         : m_isInContent(i_isInContent) { }
-    virtual ::sfx2::XmlIdRegistry& GetRegistry()
+    virtual ::sfx2::XmlIdRegistry& GetRegistry() SAL_OVERRIDE
     {
         // N.B. for Undo, m_pReg is initialized by registering this as copy in
         // CreateUndo; it is never cleared
         OSL_ENSURE(m_pReg, "no m_pReg in MetadatableUndo ?");
         return *m_pReg;
     }
-    virtual bool IsInClipboard() const { return false; }
-    virtual bool IsInUndo() const { return true; }
-    virtual bool IsInContent() const { return m_isInContent; }
+    virtual bool IsInClipboard() const SAL_OVERRIDE { return false; }
+    virtual bool IsInUndo() const SAL_OVERRIDE { return true; }
+    virtual bool IsInContent() const SAL_OVERRIDE { return m_isInContent; }
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject()
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE
     { OSL_FAIL("MetadatableUndo::MakeUnoObject"); throw; }
 };
 
@@ -289,18 +289,18 @@ class MetadatableClipboard : public Metadatable
 public:
     MetadatableClipboard(const bool i_isInContent)
         : m_isInContent(i_isInContent) { }
-    virtual ::sfx2::XmlIdRegistry& GetRegistry()
+    virtual ::sfx2::XmlIdRegistry& GetRegistry() SAL_OVERRIDE
     {
     // N.B. for Clipboard, m_pReg is initialized by registering this as copy in
     // RegisterAsCopyOf; it is only cleared by OriginNoLongerInBusinessAnymore
         OSL_ENSURE(m_pReg, "no m_pReg in MetadatableClipboard ?");
         return *m_pReg;
     }
-    virtual bool IsInClipboard() const { return true; }
-    virtual bool IsInUndo() const { return false; }
-    virtual bool IsInContent() const { return m_isInContent; }
+    virtual bool IsInClipboard() const SAL_OVERRIDE { return true; }
+    virtual bool IsInUndo() const SAL_OVERRIDE { return false; }
+    virtual bool IsInContent() const SAL_OVERRIDE { return m_isInContent; }
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject()
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE
     { OSL_FAIL("MetadatableClipboard::MakeUnoObject"); throw; }
     void OriginNoLongerInBusinessAnymore() { m_pReg = 0; }
 };
@@ -314,14 +314,14 @@ public:
     XmlIdRegistryClipboard();
     virtual ~XmlIdRegistryClipboard();
 
-    virtual void RegisterMetadatableAndCreateID(Metadatable& i_xObject);
+    virtual void RegisterMetadatableAndCreateID(Metadatable& i_xObject) SAL_OVERRIDE;
 
     virtual bool TryRegisterMetadatable(Metadatable& i_xObject,
-        OUString const& i_rStreamName, OUString const& i_rIdref);
+        OUString const& i_rStreamName, OUString const& i_rIdref) SAL_OVERRIDE;
 
-    virtual void UnregisterMetadatable(Metadatable const&);
+    virtual void UnregisterMetadatable(Metadatable const&) SAL_OVERRIDE;
 
-    virtual void RemoveXmlIdForElement(Metadatable const&);
+    virtual void RemoveXmlIdForElement(Metadatable const&) SAL_OVERRIDE;
 
     /** register i_rCopy as a copy of i_rSource */
     MetadatableClipboard & RegisterCopyClipboard(Metadatable & i_rCopy,
@@ -333,10 +333,10 @@ public:
 
 private:
     virtual bool LookupXmlId(const Metadatable& i_xObject,
-        OUString & o_rStream, OUString & o_rIdref) const;
+        OUString & o_rStream, OUString & o_rIdref) const SAL_OVERRIDE;
 
     virtual Metadatable* LookupElement(const OUString & i_rStreamName,
-        const OUString & i_rIdref) const;
+        const OUString & i_rIdref) const SAL_OVERRIDE;
 
     /** create a Clipboard Metadatable for i_rObject. */
     ::boost::shared_ptr<MetadatableClipboard> CreateClipboard(

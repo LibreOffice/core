@@ -112,35 +112,35 @@ public:
     virtual void GetState (SfxItemSet& rSet);
 
     /* override these from SfxViewShell */
-    virtual OUString GetSelectionText(bool);
-    virtual bool HasSelection(bool) const;
+    virtual OUString GetSelectionText(bool) SAL_OVERRIDE;
+    virtual bool HasSelection(bool) const SAL_OVERRIDE;
 
     SvBorder GetBorder (bool bOuterResize);
-    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize);
-    virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize);
+    virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize) SAL_OVERRIDE;
+    virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize) SAL_OVERRIDE;
 
     /** This call is forwarded to the main sub-shell.
     */
-    virtual ErrCode DoVerb (long nVerb);
+    virtual ErrCode DoVerb (long nVerb) SAL_OVERRIDE;
 
     /** Return a new renderer that can be used for example for printing the
         document.
     */
-    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
+    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void) SAL_OVERRIDE;
 
     /// Forwarded to the print manager.
-    virtual SfxPrinter* GetPrinter (bool bCreate = false);
+    virtual SfxPrinter* GetPrinter (bool bCreate = false) SAL_OVERRIDE;
 
     /// Forwarded to the print manager.
     virtual sal_uInt16 SetPrinter (
         SfxPrinter* pNewPrinter,
-        sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
+        sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false) SAL_OVERRIDE;
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
         ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
-        bool bBrowse = false);
+        bool bBrowse = false) SAL_OVERRIDE;
 
     /** Pass the given properties to the main view shell.  After that we
         ensure that the right view shell type is displayed in the center
@@ -149,20 +149,20 @@ public:
     virtual void ReadUserDataSequence (
         const ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
-        bool bBrowse = false);
+        bool bBrowse = false) SAL_OVERRIDE;
 
-    virtual void UIActivating( SfxInPlaceClient* );
-    virtual void UIDeactivated( SfxInPlaceClient* );
-    virtual void Activate (bool IsMDIActivate);
-    virtual void Deactivate (bool IsMDIActivate);
+    virtual void UIActivating( SfxInPlaceClient* ) SAL_OVERRIDE;
+    virtual void UIDeactivated( SfxInPlaceClient* ) SAL_OVERRIDE;
+    virtual void Activate (bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void Deactivate (bool IsMDIActivate) SAL_OVERRIDE;
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
-        const Fraction &rZoomY);
+        const Fraction &rZoomY) SAL_OVERRIDE;
     virtual bool PrepareClose (bool bUI = true) SAL_OVERRIDE;
-    virtual void WriteUserData (OUString&, bool bBrowse = false);
-    virtual void ReadUserData (const OUString&, bool bBrowse = false);
-    virtual SdrView* GetDrawView (void) const;
-    virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
+    virtual void WriteUserData (OUString&, bool bBrowse = false) SAL_OVERRIDE;
+    virtual void ReadUserData (const OUString&, bool bBrowse = false) SAL_OVERRIDE;
+    virtual SdrView* GetDrawView (void) const SAL_OVERRIDE;
+    virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize) SAL_OVERRIDE;
 
     /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
         whatever the busy shape looks like on the system.)
@@ -228,7 +228,7 @@ public:
 protected:
     osl::Mutex maMutex;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
     virtual void InitializeFramework (void);
 

@@ -34,7 +34,7 @@ public:
         sal_Bool bShowProgress);
     virtual ~SdHTMLFilter (void);
 
-    virtual sal_Bool        Export();
+    virtual sal_Bool        Export() SAL_OVERRIDE;
 
 private:
     DECL_LINK( IOProgressHdl, sal_uInt16* );

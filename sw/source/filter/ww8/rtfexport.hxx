@@ -51,93 +51,93 @@ class RtfExport : public MSWordExportBase
 
 public:
     /// Access to the attribute output class.
-    virtual AttributeOutputBase& AttrOutput() const;
+    virtual AttributeOutputBase& AttrOutput() const SAL_OVERRIDE;
 
     /// Access to the sections/headers/footres.
-    virtual MSWordSections& Sections() const;
+    virtual MSWordSections& Sections() const SAL_OVERRIDE;
 
     /// Access to the Rtf Sdr exporter.
     virtual RtfSdrExport& SdrExporter() const;
 
     /// Determines if the format is expected to support unicode.
-    virtual bool SupportsUnicode() const { return true; }
+    virtual bool SupportsUnicode() const SAL_OVERRIDE { return true; }
 
-    virtual bool SupportsOneColumnBreak() const { return false; }
+    virtual bool SupportsOneColumnBreak() const SAL_OVERRIDE { return false; }
 
-    virtual bool FieldsQuoted() const { return true; }
+    virtual bool FieldsQuoted() const SAL_OVERRIDE { return true; }
 
-    virtual bool AddSectionBreaksForTOX() const { return false; }
+    virtual bool AddSectionBreaksForTOX() const SAL_OVERRIDE { return false; }
 
     /// Guess the script (asian/western).
-    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
+    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) SAL_OVERRIDE;
 
-    virtual void AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen );
+    virtual void AppendBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
 
-    virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
+    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) SAL_OVERRIDE;
 
-    virtual void AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen );
+    virtual void AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) SAL_OVERRIDE;
 
     //For i120928,add an interface to export graphic of bullet
-    virtual void ExportGrfBullet(const SwTxtNode& rNd);
+    virtual void ExportGrfBullet(const SwTxtNode& rNd) SAL_OVERRIDE;
 
-    virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) { /* no-op for rtf, most probably should not even be in MSWordExportBase */ }
-    virtual void WriteChar( sal_Unicode );
+    virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) SAL_OVERRIDE { /* no-op for rtf, most probably should not even be in MSWordExportBase */ }
+    virtual void WriteChar( sal_Unicode ) SAL_OVERRIDE;
 
     /// Write the numbering table.
-    virtual void WriteNumbering();
+    virtual void WriteNumbering() SAL_OVERRIDE;
 
     /// Write the revision table.
     virtual void WriteRevTab();
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode );
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode ) SAL_OVERRIDE;
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) SAL_OVERRIDE;
 
     /// Write the data of the form field
-    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
-    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
+    virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) SAL_OVERRIDE;
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) SAL_OVERRIDE;
 
     virtual void DoComboBox(const OUString &rName,
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    com::sun::star::uno::Sequence<OUString> &rListItems);
+                    com::sun::star::uno::Sequence<OUString> &rListItems) SAL_OVERRIDE;
 
-    virtual void DoFormText(const SwInputField * pFld);
+    virtual void DoFormText(const SwInputField * pFld) SAL_OVERRIDE;
 
-    virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
+    virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) SAL_OVERRIDE;
 
 protected:
     /// Format-dependent part of the actual export.
-    virtual void ExportDocument_Impl();
+    virtual void ExportDocument_Impl() SAL_OVERRIDE;
 
-    virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
+    virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) SAL_OVERRIDE {}
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
-                                     const SwPageDesc* pNewPgDesc = 0 );
+                                     const SwPageDesc* pNewPgDesc = 0 ) SAL_OVERRIDE;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
-    virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
+    virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt) SAL_OVERRIDE;
 
     /// Output SwTxtNode is depending on outline export mode
     virtual void OutputTextNode( const SwTxtNode& ) SAL_OVERRIDE;
 
     /// Output SwGrfNode
-    virtual void OutputGrfNode( const SwGrfNode& );
+    virtual void OutputGrfNode( const SwGrfNode& ) SAL_OVERRIDE;
 
     /// Output SwOLENode
-    virtual void OutputOLENode( const SwOLENode& );
+    virtual void OutputOLENode( const SwOLENode& ) SAL_OVERRIDE;
 
-    virtual void OutputLinkedOLE(const OUString&);
+    virtual void OutputLinkedOLE(const OUString&) SAL_OVERRIDE;
 
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum ) SAL_OVERRIDE;
 
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.

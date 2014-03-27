@@ -32,10 +32,10 @@ class SwOleClient : public SfxInPlaceClient
     sal_Bool bInDoVerb;
     sal_Bool bOldCheckForOLEInCaption;
 
-    virtual void ObjectAreaChanged();
-    virtual void RequestNewObjectArea( Rectangle& );
-    virtual void ViewChanged();
-    virtual void MakeVisible();
+    virtual void ObjectAreaChanged() SAL_OVERRIDE;
+    virtual void RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
+    virtual void ViewChanged() SAL_OVERRIDE;
+    virtual void MakeVisible() SAL_OVERRIDE;
 
 public:
     SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );
@@ -44,7 +44,7 @@ public:
 
     sal_Bool IsCheckForOLEInCaption() const         { return bOldCheckForOLEInCaption; }
 
-    virtual void FormatChanged();
+    virtual void FormatChanged() SAL_OVERRIDE;
 };
 
 #endif

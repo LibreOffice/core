@@ -45,11 +45,11 @@ public:
 
     virtual ~SwUndoInsNum();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    virtual SwRewriter GetRewriter() const;
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     SwHistory* GetHistory(); // will be created if necessary
     void SetSttNum( sal_uLong nNdIdx ) { nSttSet = nNdIdx; }
@@ -75,9 +75,9 @@ public:
 
     virtual ~SwUndoDelNum();
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     void AddNode( const SwTxtNode& rNd, sal_Bool bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
@@ -91,9 +91,9 @@ class SwUndoMoveNum : public SwUndo, private SwUndRng
 public:
     SwUndoMoveNum( const SwPaM& rPam, long nOffset, bool bIsOutlMv = false );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     void SetStartNode( sal_uLong nValue ) { nNewStt = nValue; }
 };
@@ -105,9 +105,9 @@ class SwUndoNumUpDown : public SwUndo, private SwUndRng
 public:
     SwUndoNumUpDown( const SwPaM& rPam, short nOffset );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 };
 
 class SwUndoNumOrNoNum : public SwUndo
@@ -119,9 +119,9 @@ public:
     SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool mbOldNum,
                       sal_Bool mbNewNum );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 };
 
 class SwUndoNumRuleStart : public SwUndo
@@ -135,9 +135,9 @@ public:
     SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bDelete );
     SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDONUMBERING_HXX

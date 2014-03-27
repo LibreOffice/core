@@ -278,36 +278,36 @@ public:
     ScFormatFilterPluginImpl();
     virtual ~ScFormatFilterPluginImpl();
     // various import filters
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW );
-    virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) SAL_OVERRIDE;
+    virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) SAL_OVERRIDE;
+    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) SAL_OVERRIDE;
         // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
         // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
         // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
-    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
+    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) SAL_OVERRIDE;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
-    virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange );
+                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) SAL_OVERRIDE;
+    virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) SAL_OVERRIDE;
     virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor = 1.0, bool bCalcWidthHeight = true,
-                                   SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
+                                   SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) SAL_OVERRIDE;
 
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
-    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName );
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) SAL_OVERRIDE;
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) SAL_OVERRIDE;
+    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) SAL_OVERRIDE;
 
     // various export filters
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest );
+    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) SAL_OVERRIDE;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest,
-                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
+                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) SAL_OVERRIDE;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest,
-                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
+                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) SAL_OVERRIDE;
     virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
-                  const OUString& rStreamPath, OUString& rNonConvertibleChars );
-    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest );
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars ) SAL_OVERRIDE;
+    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) SAL_OVERRIDE;
 
-    virtual ScOrcusFilters* GetOrcusFilters();
+    virtual ScOrcusFilters* GetOrcusFilters() SAL_OVERRIDE;
 };
 
 

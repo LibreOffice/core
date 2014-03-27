@@ -57,7 +57,7 @@ namespace rptxml
 
         virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                 const OUString& rLocalName,
-                                const OUString& rValue );
+                                const OUString& rValue ) SAL_OVERRIDE;
 
     public:
 
@@ -72,9 +72,9 @@ namespace rptxml
 
 
         virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > & rPropSet );
+                    ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
 
-        virtual void SetDefaults();
+        virtual void SetDefaults() SAL_OVERRIDE;
 
           void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
 
@@ -118,13 +118,13 @@ namespace rptxml
                 sal_uInt16 nFamily,
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
         virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
                 sal_uInt16 nFamily, sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     public:
 
@@ -136,15 +136,15 @@ namespace rptxml
                 const sal_Bool bAutoStyles );
         virtual ~OReportStylesContext();
 
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
 
         virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-                            sal_uInt16 nFamily ) const;
+                            sal_uInt16 nFamily ) const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XNameContainer >
-            GetStylesContainer( sal_uInt16 nFamily ) const;
-        virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
-        virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
+            GetStylesContainer( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+        virtual OUString GetServiceName( sal_uInt16 nFamily ) const SAL_OVERRIDE;
+        virtual sal_uInt16 GetFamily( const OUString& rFamily ) const SAL_OVERRIDE;
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };

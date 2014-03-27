@@ -79,8 +79,8 @@ namespace formula
 
         virtual ~OFormulaToken() {}
 
-        virtual bool isFunction() const { return m_bIsFunction; }
-        virtual sal_uInt32 getArgumentCount() const { return m_nParaCount; }
+        virtual bool isFunction() const SAL_OVERRIDE { return m_bIsFunction; }
+        virtual sal_uInt32 getArgumentCount() const SAL_OVERRIDE { return m_nParaCount; }
     };
 
 

@@ -42,7 +42,7 @@ public:
 
     DummyReplacement (const Bitmap& rPreview) : maPreview(rPreview)  { }
     virtual ~DummyReplacement(void) {}
-    virtual sal_Int32 GetMemorySize (void) const { return maPreview.GetSizeBytes(); }
+    virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE { return maPreview.GetSizeBytes(); }
 };
 
 
@@ -107,7 +107,7 @@ public:
     Size maOriginalSize;
 
     virtual ~ResolutionReducedReplacement();
-    virtual sal_Int32 GetMemorySize (void) const;
+    virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE;
 };
 
 ResolutionReduction::ResolutionReducedReplacement::~ResolutionReducedReplacement()
@@ -184,7 +184,7 @@ public:
     {
         delete [] (char*)mpData;
     }
-    virtual sal_Int32 GetMemorySize (void) const
+    virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE
     {
         return mnDataSize;
     }

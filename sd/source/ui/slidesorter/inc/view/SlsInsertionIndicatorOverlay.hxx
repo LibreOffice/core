@@ -56,7 +56,7 @@ public:
     InsertionIndicatorOverlay (SlideSorter& rSlideSorter);
     virtual ~InsertionIndicatorOverlay (void);
 
-    virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator);
+    virtual void SetLayerInvalidator (const SharedILayerInvalidator& rpInvalidator) SAL_OVERRIDE;
 
     void Create (const SdTransferable* pTransferable);
 
@@ -70,7 +70,7 @@ public:
 
     virtual void Paint (
         OutputDevice& rDevice,
-        const Rectangle& rRepaintArea);
+        const Rectangle& rRepaintArea) SAL_OVERRIDE;
 
     bool IsVisible (void) const;
     void Hide (void);

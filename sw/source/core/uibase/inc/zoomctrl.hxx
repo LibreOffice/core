@@ -26,10 +26,10 @@ class SwZoomControl : public SvxZoomStatusBarControl
 private:
     OUString  sPreviewZoom;
 public:
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-    virtual void    Paint( const UserDrawEvent& rEvt );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void    Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
 
     SFX_DECL_STATUSBAR_CONTROL();
 

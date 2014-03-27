@@ -27,12 +27,12 @@ class SwBorderAttrs;
 class SwBodyFrm: public SwLayoutFrm
 {
 protected:
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
 
 public:
     SwBodyFrm( SwFrmFmt*, SwFrm* );
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };

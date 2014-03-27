@@ -208,106 +208,106 @@ public:
 
 
     virtual OUString SAL_CALL getID()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setID( const OUString& sID )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL initialize()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL rebuild()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL recalculate()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL revalidate()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL refresh()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL submit( const OUString& sID )
-        throw( VetoException_t, WrappedTargetException_t, RuntimeException_t, std::exception );
+        throw( VetoException_t, WrappedTargetException_t, RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL submitWithInteraction( const OUString& id, const XInteractionHandler_t& _rxHandler )
-        throw( VetoException_t, WrappedTargetException_t, RuntimeException_t, std::exception );
+        throw( VetoException_t, WrappedTargetException_t, RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XDataTypeRepository_t SAL_CALL getDataTypeRepository(  )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
     // XModel: instance management
 
     virtual XSet_t SAL_CALL getInstances()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XDocument_t SAL_CALL getInstanceDocument( const OUString& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XDocument_t SAL_CALL getDefaultInstance()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
     // XModel: binding management
 
     virtual XPropertySet_t SAL_CALL createBinding()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL cloneBinding( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL getBinding( const OUString& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XSet_t SAL_CALL getBindings()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
     // XModel: submission management
 
     virtual XSubmission_t SAL_CALL createSubmission()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XSubmission_t SAL_CALL cloneSubmission( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XSubmission_t SAL_CALL getSubmission( const OUString& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XSet_t SAL_CALL getSubmissions()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     // XPropertySet
 
     virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p)
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { return PropertySetBase::getPropertyValue(p); }
 
     virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::addPropertyChangeListener(p1, p2); }
 
     virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::removePropertyChangeListener(p1, p2); }
 
     virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::addVetoableChangeListener(p1, p2); }
 
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::removeVetoableChangeListener(p1, p2); }
 
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { return PropertySetBase::getPropertySetInfo(); }
 
    virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2)
-        throw( css::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::setPropertyValue(p1, p2); }
 
 
@@ -317,10 +317,10 @@ public:
 
     /// determine a reasonable control service for a given node
     /// (based on data type MIP assigned to the node)
-    virtual OUString SAL_CALL getDefaultServiceNameForNode( const XNode_t& xNode ) throw (RuntimeException_t, std::exception);
+    virtual OUString SAL_CALL getDefaultServiceNameForNode( const XNode_t& xNode ) throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
 
     /// call getDefaultBindingExpressionForNode with default evaluation context
-    virtual OUString SAL_CALL getDefaultBindingExpressionForNode( const XNode_t& xNode ) throw (RuntimeException_t, std::exception);
+    virtual OUString SAL_CALL getDefaultBindingExpressionForNode( const XNode_t& xNode ) throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
 
     /// determine a reasonable default binding expression for a given node
     /// and a given evaluation context
@@ -331,88 +331,88 @@ public:
 
     virtual OUString SAL_CALL getNodeDisplayName( const XNode_t&,
                                                        sal_Bool bDetail )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getNodeName( const XNode_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getBindingName( const XPropertySet_t&,
                                                    sal_Bool bDetail )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getSubmissionName( const XPropertySet_t&,
                                                       sal_Bool bDetail )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL cloneBindingAsGhost( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeBindingIfUseless( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XDocument_t SAL_CALL newInstance( const OUString& sName,
                                               const OUString& sURL,
                                               sal_Bool bURLOnce )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL renameInstance( const OUString& sFrom,
                                           const OUString& sTo,
                                           const OUString& sURL,
                                           sal_Bool bURLOnce )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeInstance( const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
     virtual XModel_t SAL_CALL newModel( const Frame_XModel_t& xComponent,
                                         const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL renameModel( const Frame_XModel_t& xComponent,
                                        const OUString& sFrom,
                                        const OUString& sTo )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeModel( const Frame_XModel_t& xComponent,
                                        const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
     virtual XNode_t SAL_CALL createElement( const XNode_t& xParent,
                                             const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XNode_t SAL_CALL createAttribute( const XNode_t& xParent,
                                               const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XNode_t SAL_CALL renameNode( const XNode_t& xNode,
                                          const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL getBindingForNode( const XNode_t&,
                                                        sal_Bool bCreate )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeBindingForNode( const XNode_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getResultForExpression(
         const XPropertySet_t& xBinding,
         sal_Bool bIsBindingExpression,
         const OUString& sExpression )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isValidXMLName( const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isValidPrefixName( const OUString& sName )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setNodeValue(
         const XNode_t& xNode,
         const OUString& sValue )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -421,7 +421,7 @@ public:
 
 public:
     virtual void SAL_CALL update()
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
     // XUnoTunnel
@@ -429,7 +429,7 @@ public:
 
 public:
     virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
-        throw( RuntimeException_t, std::exception );
+        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
 
 
     // XTypeProvider::getImplementationId
@@ -437,7 +437,7 @@ public:
 
 public:
     virtual IntSequence_t SAL_CALL getImplementationId()
-        throw( RuntimeException_t );
+        throw( RuntimeException_t ) SAL_OVERRIDE;
 
 };
 

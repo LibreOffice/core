@@ -75,11 +75,11 @@ class LwpFootnoteLayout : public LwpTableLayout
 public:
     LwpFootnoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFootnoteLayout();
-    void RegisterStyle();
-    virtual void XFConvert(XFContentContainer * pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FOOTNOTE_LAYOUT;}
+    void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer * pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FOOTNOTE_LAYOUT;}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -91,11 +91,11 @@ class LwpFnRowLayout : public LwpRowLayout
 public:
     LwpFnRowLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFnRowLayout();
-    void RegisterStyle();
-    virtual void XFConvert(XFContentContainer * pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FOOTNOTE_ROW_LAYOUT;}
+    void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer * pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FOOTNOTE_ROW_LAYOUT;}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -107,11 +107,11 @@ class LwpFnCellLayout : public LwpCellLayout
 public:
     LwpFnCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFnCellLayout();
-    void RegisterStyle();
-    virtual void XFConvert(XFContentContainer * pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FOOTNOTE_CELL_LAYOUT;}
+    void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer * pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FOOTNOTE_CELL_LAYOUT;}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -123,11 +123,11 @@ class LwpEndnoteLayout : public LwpTableLayout
 public:
     LwpEndnoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpEndnoteLayout();
-    void RegisterStyle();
-    virtual void XFConvert(XFContentContainer * pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_ENDNOTE_LAYOUT;}
+    void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer * pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_ENDNOTE_LAYOUT;}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -139,12 +139,12 @@ class LwpEnSuperTableLayout : public LwpSuperTableLayout
 public:
     LwpEnSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpEnSuperTableLayout();
-    void RegisterStyle();
-    void XFConvert(XFContentContainer* pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_ENDNOTE_SUPERTABLE_LAYOUT;}
+    void RegisterStyle() SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_ENDNOTE_SUPERTABLE_LAYOUT;}
     virtual LwpVirtualLayout* GetMainTableLayout();
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -156,12 +156,12 @@ class LwpFnSuperTableLayout : public LwpEnSuperTableLayout
 public:
     LwpFnSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFnSuperTableLayout();
-    void RegisterStyle();
-    void XFConvert(XFContentContainer* pCont);
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FOOTNOTE_SUPERTABLE_LAYOUT;}
-    virtual LwpVirtualLayout* GetMainTableLayout();
+    void RegisterStyle() SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FOOTNOTE_SUPERTABLE_LAYOUT;}
+    virtual LwpVirtualLayout* GetMainTableLayout() SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -173,10 +173,10 @@ class LwpContFromLayout : public LwpPlacableLayout
 public:
     LwpContFromLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpContFromLayout();
-    void RegisterStyle();
-    void XFConvert(XFContentContainer* pCont);
+    void RegisterStyle() SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 /**
@@ -188,10 +188,10 @@ class LwpContOnLayout : public LwpPlacableLayout
 public:
     LwpContOnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpContOnLayout();
-    void RegisterStyle();
-    void XFConvert(XFContentContainer* pCont);
+    void RegisterStyle() SAL_OVERRIDE;
+    void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 #endif
 

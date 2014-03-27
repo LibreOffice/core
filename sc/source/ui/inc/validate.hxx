@@ -115,13 +115,13 @@ public:
 
     virtual void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 
-    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc )
+    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE
     {
         if ( m_pHandler && m_pSetReferenceHdl )
             (m_pHandler->*m_pSetReferenceHdl)( rRef, pDoc );
     }
 
-    virtual void            SetActive()
+    virtual void            SetActive() SAL_OVERRIDE
     {
         if ( m_pHandler && m_pSetActiveHdl )
             (m_pHandler->*m_pSetActiveHdl)();
@@ -140,7 +140,7 @@ public:
     bool IsRefInputting(){  return m_bRefInputting; }
     Window*             get_refinput_shrink_parent() { return m_pHBox; }
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL )
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE
     {
         if( !CanInputStart( pEdit ) )
             return;
@@ -153,7 +153,7 @@ public:
             (m_pHandler->*m_pRefInputStartPostHdl)( pEdit, pButton );
     }
 
-    virtual void        RefInputDone( bool bForced = false )
+    virtual void        RefInputDone( bool bForced = false ) SAL_OVERRIDE
     {
         if( !CanInputDone( bForced ) )
             return;
@@ -172,7 +172,7 @@ public:
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    bool Close();
+    bool Close() SAL_OVERRIDE;
 };
 
 
@@ -188,8 +188,8 @@ public:
     static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rArgSet );
     static sal_uInt16*              GetRanges();
 
-    virtual bool                FillItemSet( SfxItemSet& rArgSet );
-    virtual void                Reset( const SfxItemSet& rArgSet );
+    virtual bool                FillItemSet( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void                Reset( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 
 private:
     void                        Init();
@@ -235,7 +235,7 @@ private:
     formula::RefEdit*           m_pRefEdit;
     class ScRefButtonEx:public ::formula::RefButton
     {
-        void Click();
+        void Click() SAL_OVERRIDE;
     public:
         ScRefButtonEx( Window* pParent, const ResId& rResId, formula::RefEdit* pEdit = NULL,
             ScRefHandler *pRefHdlr = NULL )
@@ -279,8 +279,8 @@ public:
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
     static  sal_uInt16*     GetRanges   ();
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
 
 
@@ -307,8 +307,8 @@ public:
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
     static  sal_uInt16*     GetRanges   ();
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet );
-    virtual void        Reset       ( const SfxItemSet& rArgSet );
+    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
 
 #endif // SC_VALIDATE_HXX

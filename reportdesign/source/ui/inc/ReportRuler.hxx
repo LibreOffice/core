@@ -38,7 +38,7 @@ namespace rptui
         virtual ~OReportRuler();
 
         // windows overloads
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
 
         inline OReportSection*      getSection()        const { return m_pSection; }
         inline OReportWindow*       getView()           const { return m_pParent; }

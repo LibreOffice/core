@@ -37,7 +37,7 @@ public:
     HyphenEdit(Window* pParent);
 
 protected:
-    virtual void KeyInput(const KeyEvent &rKEvt);
+    virtual void KeyInput(const KeyEvent &rKEvt) SAL_OVERRIDE;
 };
 
 class SvxHyphenWordDialog : public SfxModalDialog

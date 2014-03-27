@@ -40,8 +40,8 @@ namespace dbaui
 
     protected:
         // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX

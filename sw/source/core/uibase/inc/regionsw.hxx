@@ -191,8 +191,8 @@ public:
 
     void    SetWrtShell(SwWrtShell& rSh);
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -233,8 +233,8 @@ public:
     SwSectionFtnEndTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionFtnEndTabPage();
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -251,8 +251,8 @@ public:
     SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();
 
-    virtual bool        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
+    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -272,8 +272,8 @@ class SwInsertSectionTabDialog : public SfxTabDialog
     sal_uInt16 m_nIndentPage;
 
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual short   Ok();
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual short   Ok() SAL_OVERRIDE;
 public:
     SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog();
@@ -292,7 +292,7 @@ class SwSectionPropertyTabDialog : public SfxTabDialog
     sal_uInt16 m_nIndentPage;
 
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 public:
     SwSectionPropertyTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwSectionPropertyTabDialog();

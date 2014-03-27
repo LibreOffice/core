@@ -66,7 +66,7 @@ class ODataSettings : public ::comphelper::OPropertyStateContainer
     sal_Bool m_bQuery;
 protected:
     ODataSettings(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery = sal_False);
-    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
+    virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const SAL_OVERRIDE;
 
     /** register the properties from the param given. The parameter instance must be alive as long as tis object live.
         @param  _pItem

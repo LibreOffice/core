@@ -441,8 +441,8 @@ struct SBBItem
 public:
     Sttb();
     ~Sttb();
-    bool Read(SvStream &rS);
-    void Print( FILE* fp );
+    bool Read(SvStream &rS) SAL_OVERRIDE;
+    void Print( FILE* fp ) SAL_OVERRIDE;
     OUString getStringAtIndex( sal_uInt32 );
 };
 

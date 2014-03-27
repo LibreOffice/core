@@ -49,8 +49,8 @@ struct ScQueryEntry;
 class ExcRecord : public XclExpRecord
 {
 public:
-    virtual void            Save( XclExpStream& rStrm );
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void            Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
     virtual sal_uInt16          GetNum() const = 0;
     virtual sal_Size        GetLen() const = 0;
@@ -60,7 +60,7 @@ protected:
 
 private:
     /** Writes the body of the record. */
-    virtual void            WriteBody( XclExpStream& rStrm );
+    virtual void            WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
 
@@ -71,9 +71,9 @@ class ExcEmptyRec : public ExcRecord
 private:
 protected:
 public:
-    virtual void            Save( XclExpStream& rStrm );
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_Size        GetLen() const;
+    virtual void            Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
 };
 
 //--------------------------------------------------------- class ExcDummyRec -
@@ -82,8 +82,8 @@ class ExcDummyRec : public ExcRecord
 {
 protected:
 public:
-    virtual void            Save( XclExpStream& rStrm );
-    virtual sal_uInt16          GetNum() const;
+    virtual void            Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
     virtual const sal_uInt8*        GetData() const = 0;    // byte data must contain header and body
 };
 
@@ -94,7 +94,7 @@ public:
 class ExcBoolRecord : public ExcRecord
 {
 private:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 protected:
     bool                    bVal;
@@ -104,7 +104,7 @@ protected:
 public:
     inline                  ExcBoolRecord( const bool bDefault ) : bVal( bDefault ) {}
 
-    virtual sal_Size        GetLen( void ) const;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
 
@@ -129,12 +129,12 @@ public:
 class ExcBof : public ExcBof_Base
 {
 private:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 public:
                             ExcBof( void );
 
-    virtual sal_uInt16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
+    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
 
@@ -144,12 +144,12 @@ public:
 class ExcBofW : public ExcBof_Base
 {
 private:
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 public:
                             ExcBofW( void );
 
-    virtual sal_uInt16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
+    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
 
@@ -159,8 +159,8 @@ class ExcEof : public ExcRecord
 {
 private:
 public:
-    virtual sal_uInt16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
+    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
 };
 
 
@@ -173,8 +173,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
 // EXC_ID_WINDOWPROTECTION
@@ -183,7 +183,7 @@ class XclExpWindowProtection : public   XclExpBoolRecord
     public:
         XclExpWindowProtection(bool bValue);
 
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 // EXC_ID_PROTECT  Document Protection
@@ -198,7 +198,7 @@ class XclExpSheetProtection : public XclExpProtection
     SCTAB                   mnTab;
     public:
         XclExpSheetProtection(bool bValue, SCTAB nTab);
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 class XclExpPassHash : public XclExpRecord
@@ -208,7 +208,7 @@ public:
     virtual ~XclExpPassHash();
 
 private:
-    virtual void    WriteBody(XclExpStream& rStrm);
+    virtual void    WriteBody(XclExpStream& rStrm) SAL_OVERRIDE;
 
 private:
     sal_uInt16  mnHash;
@@ -224,8 +224,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
 
@@ -236,8 +236,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
 
@@ -247,9 +247,9 @@ class Exc1904 : public ExcBoolRecord
 {
 public:
                             Exc1904( ScDocument& rDoc );
-    virtual sal_uInt16          GetNum( void ) const;
+    virtual sal_uInt16          GetNum( void ) const SAL_OVERRIDE;
 
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
     bool                    bDateCompatibility;
 };
@@ -273,7 +273,7 @@ public:
     inline void             SetStreamPos( sal_Size nNewStrPos ) { nStrPos = nNewStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
-    virtual sal_uInt16          GetNum() const;
+    virtual sal_uInt16          GetNum() const SAL_OVERRIDE;
 };
 
 
@@ -283,11 +283,11 @@ class ExcBundlesheet : public ExcBundlesheetBase
 private:
     OString            aName;
 
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 public:
                             ExcBundlesheet( RootData& rRootData, SCTAB nTab );
-    virtual sal_Size        GetLen() const;
+    virtual sal_Size        GetLen() const SAL_OVERRIDE;
 };
 
 //--------------------------------------------------------- class ExcDummy_02 -
@@ -299,8 +299,8 @@ private:
     static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
-    virtual const sal_uInt8*        GetData( void ) const;
+    virtual sal_Size        GetLen( void ) const SAL_OVERRIDE;
+    virtual const sal_uInt8*        GetData( void ) const SAL_OVERRIDE;
 };
 
 
@@ -317,7 +317,7 @@ private:
     sal_uInt16                  mnDocCountry;       /// The document country ID.
 
     /** Writes the body of the COUNTRY record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
 
@@ -338,7 +338,7 @@ public:
     explicit XclExpXmlSheetPr(
         bool bFitToPages, SCTAB nScTab, const Color& rTabColor, XclExpFilterManager* pManager );
 
-    virtual void SaveXml( XclExpXmlStream& rStrm );
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     SCTAB mnScTab;
@@ -410,7 +410,7 @@ private:
                                 sal_uInt8 nOp, double fVal, OUString* pText,
                                 bool bSimple = false );
 
-    virtual void            WriteBody( XclExpStream& rStrm );
+    virtual void            WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 public:
                             XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
@@ -422,7 +422,7 @@ public:
     bool                    AddEntry( const ScQueryEntry& rEntry );
     bool                    AddMultiValueEntry( const ScQueryEntry& rEntry );
 
-    virtual void            SaveXml( XclExpXmlStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 
@@ -435,8 +435,8 @@ public:
 
     void                AddObjRecs();
 
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
     bool                HasFilterMode() const;
 

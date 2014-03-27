@@ -185,28 +185,28 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
 protected:
 
-    virtual void    DataChanged( const DataChangedEvent& );
-    virtual void    PrePaint();
-    virtual void    Paint( const Rectangle& rRect );
-    virtual void    KeyInput(const KeyEvent &rKEvt);
+    virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+    virtual void    PrePaint() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    KeyInput(const KeyEvent &rKEvt) SAL_OVERRIDE;
 
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
-    virtual void    MouseMove(const MouseEvent& rMEvt);
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void    RequestHelp(const HelpEvent& rEvt);
+    virtual void    MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
                                 // Drag & Drop Interface
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
-    virtual OUString GetSurroundingText() const;
-    virtual Selection GetSurroundingTextSelection() const;
+    virtual OUString GetSurroundingText() const SAL_OVERRIDE;
+    virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
 
     void    ShowAutoTextCorrectQuickHelp( const OUString& rWord, SvxAutoCorrCfg* pACfg,
                                 SvxAutoCorrect* pACorr, bool bFromIME = false );
@@ -269,7 +269,7 @@ public:
     const SwView &GetView() const { return m_rView; }
           SwView &GetView()       { return m_rView; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     static inline long GetDDStartPosX() { return m_nDDStartPosX; }
     static inline long GetDDStartPosY() { return m_nDDStartPosY; }

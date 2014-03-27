@@ -58,18 +58,18 @@ class SwGlTreeListBox : public SvTreeListBox
     SvTreeListEntry*  pDragEntry;
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
-                                            SvTreeListEntry* );
-    virtual bool         NotifyAcceptDrop( SvTreeListEntry* );
+                                            SvTreeListEntry* ) SAL_OVERRIDE;
+    virtual bool         NotifyAcceptDrop( SvTreeListEntry* ) SAL_OVERRIDE;
 
     virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
-                                );
+                                ) SAL_OVERRIDE;
     virtual sal_Bool    NotifyCopying(  SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos);
+                                    sal_uLong&        rNewChildPos) SAL_OVERRIDE;
 
     sal_Bool NotifyCopyingOrMoving( SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
@@ -77,8 +77,8 @@ class SwGlTreeListBox : public SvTreeListBox
 public:
     SwGlTreeListBox(Window* pParent, WinBits nBits);
 
-    virtual void RequestHelp( const HelpEvent& rHEvt );
-    virtual Size GetOptimalSize() const;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
     void Clear();
 };
 
@@ -135,7 +135,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( CheckBoxHdl, CheckBox * );
     DECL_LINK( PreviewLoadedHdl, void * );
 
-    virtual void    Apply();
+    virtual void    Apply() SAL_OVERRIDE;
     void            Init();
     SvTreeListEntry*    DoesBlockExist(const OUString& sBlock, const OUString& rShort);
     void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);

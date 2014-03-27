@@ -103,7 +103,7 @@ class SeriesHeaderEdit : public Edit
 public:
     SeriesHeaderEdit( Window * pParent );
     virtual ~SeriesHeaderEdit();
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void setStartColumn( sal_Int32 nStartColumn );
     sal_Int32 getStartColumn() const;

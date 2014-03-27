@@ -59,9 +59,9 @@ private:
     OUString GetCopyrightString();
 
 protected:
-    virtual bool Close();
-    virtual void Paint( const Rectangle& rRect );
-    virtual void Resize();
+    virtual bool Close() SAL_OVERRIDE;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
 public:
     AboutDialog(Window* pParent);

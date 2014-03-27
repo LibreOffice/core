@@ -70,7 +70,7 @@ public:
     void SetScrolledHdl( const Link& rHdl )  { maScrolledHdl = rHdl; }
     const Link& GetScrolledHdl() const { return maScrolledHdl; }
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 protected:
     using MultiLineEdit::Notify;
@@ -102,7 +102,7 @@ struct LicenseDialogImpl : public ModalDialog
         const OUString & sExtensionName,
         const OUString & sLicenseText);
 
-    virtual void Activate();
+    virtual void Activate() SAL_OVERRIDE;
 
 };
 

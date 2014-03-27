@@ -68,30 +68,30 @@ class FontTable : public LoggedProperties, public LoggedTable
 
  private:
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
     void resolveSprm(Sprm & r_sprm);
 
     // Table
-    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
     // Stream
-    virtual void lcl_startSectionGroup();
-    virtual void lcl_endSectionGroup();
-    virtual void lcl_startParagraphGroup();
-    virtual void lcl_endParagraphGroup();
-    virtual void lcl_startCharacterGroup();
-    virtual void lcl_endCharacterGroup();
-    virtual void lcl_text(const sal_uInt8 * data, size_t len);
-    virtual void lcl_utext(const sal_uInt8 * data, size_t len);
-    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_startSectionGroup() SAL_OVERRIDE;
+    virtual void lcl_endSectionGroup() SAL_OVERRIDE;
+    virtual void lcl_startParagraphGroup() SAL_OVERRIDE;
+    virtual void lcl_endParagraphGroup() SAL_OVERRIDE;
+    virtual void lcl_startCharacterGroup() SAL_OVERRIDE;
+    virtual void lcl_endCharacterGroup() SAL_OVERRIDE;
+    virtual void lcl_text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
+    virtual void lcl_utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
+    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_table(Id name,
-                           writerfilter::Reference<Table>::Pointer_t ref);
+                           writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref);
-    virtual void lcl_info(const string & info);
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual void lcl_endShape( );
+                               ::writerfilter::Reference<Stream>::Pointer_t ref) SAL_OVERRIDE;
+    virtual void lcl_info(const string & info) SAL_OVERRIDE;
+    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) SAL_OVERRIDE;
+    virtual void lcl_endShape( ) SAL_OVERRIDE;
 
 };
 typedef boost::shared_ptr< FontTable >          FontTablePtr;
@@ -102,8 +102,8 @@ public:
     EmbeddedFontHandler( const OUString& fontName, const char* style );
     virtual ~EmbeddedFontHandler();
 private:
-    virtual void lcl_attribute( Id name, Value& val );
-    virtual void lcl_sprm( Sprm& rSprm );
+    virtual void lcl_attribute( Id name, Value& val ) SAL_OVERRIDE;
+    virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
     OUString fontName;
     const char* const style;
     OUString id;

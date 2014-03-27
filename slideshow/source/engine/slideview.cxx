@@ -480,7 +480,7 @@ public:
         }
     }
 
-    virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const
+    virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const SAL_OVERRIDE
     {
         basegfx::B2DRectangle aTmpRect;
         canvas::tools::calcTransformedRectBounds( aTmpRect,
@@ -504,7 +504,7 @@ private:
 
     virtual cppcanvas::CustomSpriteSharedPtr createSprite(
         const ::basegfx::B2DSize& rSpriteSizePixel,
-        double                    nPriority ) const
+        double                    nPriority ) const SAL_OVERRIDE
     {
         cppcanvas::CustomSpriteSharedPtr pSprite(
             mpSpriteCanvas->createCustomSprite( rSpriteSizePixel ) );
@@ -515,7 +515,7 @@ private:
         return pSprite;
     }
 
-    virtual void setPriority( const basegfx::B1DRange& rRange )
+    virtual void setPriority( const basegfx::B1DRange& rRange ) SAL_OVERRIDE
     {
         OSL_ENSURE( !rRange.isEmpty() &&
                     rRange.getMinimum() >= 1.0,
@@ -528,7 +528,7 @@ private:
             mpSprite->setPriority( rRange.getMinimum() );
     }
 
-    virtual basegfx::B2DHomMatrix getTransformation() const
+    virtual basegfx::B2DHomMatrix getTransformation() const SAL_OVERRIDE
     {
         // Offset given transformation by left, top border of given
         // range (after transformation through given transformation)
@@ -550,12 +550,12 @@ private:
         return aMatrix;
     }
 
-    virtual basegfx::B2DHomMatrix getSpriteTransformation() const
+    virtual basegfx::B2DHomMatrix getSpriteTransformation() const SAL_OVERRIDE
     {
         return maTransformation;
     }
 
-    virtual void clear() const
+    virtual void clear() const SAL_OVERRIDE
     {
         // grab canvas - that also lazy-initializes maLayerBoundsPixel
         cppcanvas::CanvasSharedPtr pCanvas=getCanvas()->clone();
@@ -566,7 +566,7 @@ private:
                   basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
-    virtual void clearAll() const
+    virtual void clearAll() const SAL_OVERRIDE
     {
         // grab canvas - that also lazy-initializes maLayerBoundsPixel
         ::cppcanvas::CanvasSharedPtr pCanvas( getCanvas()->clone() );
@@ -580,12 +580,12 @@ private:
                   basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
-    virtual bool isOnView(boost::shared_ptr<View> const& rView) const
+    virtual bool isOnView(boost::shared_ptr<View> const& rView) const SAL_OVERRIDE
     {
         return rView.get() == mpParentView;
     }
 
-    virtual cppcanvas::CanvasSharedPtr getCanvas() const
+    virtual cppcanvas::CanvasSharedPtr getCanvas() const SAL_OVERRIDE
     {
         if( !mpOutputCanvas )
         {
@@ -644,7 +644,7 @@ private:
         return mpOutputCanvas;
     }
 
-    virtual void setClip( const basegfx::B2DPolyPolygon& rClip )
+    virtual void setClip( const basegfx::B2DPolyPolygon& rClip ) SAL_OVERRIDE
     {
         basegfx::B2DPolyPolygon aNewClip = prepareClip( rClip );
 
@@ -660,7 +660,7 @@ private:
         }
     }
 
-    virtual bool resize( const ::basegfx::B2DRange& rArea )
+    virtual bool resize( const ::basegfx::B2DRange& rArea ) SAL_OVERRIDE
     {
         const bool bRet( maLayerBounds != rArea );
         maLayerBounds = rArea;
@@ -695,44 +695,44 @@ public:
 
 private:
     // View:
-    virtual ViewLayerSharedPtr createViewLayer( const basegfx::B2DRange& rLayerBounds ) const;
-    virtual bool updateScreen() const;
-    virtual bool paintScreen() const;
-    virtual void setViewSize( const ::basegfx::B2DSize& );
-    virtual void setCursorShape( sal_Int16 nPointerShape );
+    virtual ViewLayerSharedPtr createViewLayer( const basegfx::B2DRange& rLayerBounds ) const SAL_OVERRIDE;
+    virtual bool updateScreen() const SAL_OVERRIDE;
+    virtual bool paintScreen() const SAL_OVERRIDE;
+    virtual void setViewSize( const ::basegfx::B2DSize& ) SAL_OVERRIDE;
+    virtual void setCursorShape( sal_Int16 nPointerShape ) SAL_OVERRIDE;
 
     // ViewLayer interface
-    virtual bool isOnView(boost::shared_ptr<View> const& rView) const;
-    virtual void clear() const;
-    virtual void clearAll() const;
-    virtual cppcanvas::CanvasSharedPtr getCanvas() const;
+    virtual bool isOnView(boost::shared_ptr<View> const& rView) const SAL_OVERRIDE;
+    virtual void clear() const SAL_OVERRIDE;
+    virtual void clearAll() const SAL_OVERRIDE;
+    virtual cppcanvas::CanvasSharedPtr getCanvas() const SAL_OVERRIDE;
     virtual cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
-                                                           double                    nPriority ) const;
-    virtual void setPriority( const basegfx::B1DRange& rRange );
-    virtual geometry::IntegerSize2D getTranslationOffset() const;
-    virtual ::basegfx::B2DHomMatrix getTransformation() const;
-    virtual basegfx::B2DHomMatrix getSpriteTransformation() const;
-    virtual void setClip( const ::basegfx::B2DPolyPolygon& rClip );
-    virtual bool resize( const ::basegfx::B2DRange& rArea );
+                                                           double                    nPriority ) const SAL_OVERRIDE;
+    virtual void setPriority( const basegfx::B1DRange& rRange ) SAL_OVERRIDE;
+    virtual geometry::IntegerSize2D getTranslationOffset() const SAL_OVERRIDE;
+    virtual ::basegfx::B2DHomMatrix getTransformation() const SAL_OVERRIDE;
+    virtual basegfx::B2DHomMatrix getSpriteTransformation() const SAL_OVERRIDE;
+    virtual void setClip( const ::basegfx::B2DPolyPolygon& rClip ) SAL_OVERRIDE;
+    virtual bool resize( const ::basegfx::B2DRange& rArea ) SAL_OVERRIDE;
 
     // UnoView:
-    virtual void _dispose();
-    virtual uno::Reference<presentation::XSlideShowView> getUnoView()const;
-    virtual void setIsSoundEnabled (const bool bValue);
-    virtual bool isSoundEnabled (void) const;
+    virtual void _dispose() SAL_OVERRIDE;
+    virtual uno::Reference<presentation::XSlideShowView> getUnoView()const SAL_OVERRIDE;
+    virtual void setIsSoundEnabled (const bool bValue) SAL_OVERRIDE;
+    virtual bool isSoundEnabled (void) const SAL_OVERRIDE;
 
     // XEventListener:
     virtual void SAL_CALL disposing( lang::EventObject const& evt )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XModifyListener:
     virtual void SAL_CALL modified( const lang::EventObject& aEvent )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XPaintListener:
     virtual void SAL_CALL windowPaint( const awt::PaintEvent& e )
-        throw (uno::RuntimeException, std::exception);
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // WeakComponentImplHelperBase:
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     void updateClip();
 

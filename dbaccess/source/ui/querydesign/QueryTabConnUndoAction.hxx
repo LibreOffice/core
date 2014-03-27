@@ -36,8 +36,8 @@ namespace dbaui
         OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uInt16 nCommentID);
         virtual ~OQueryTabConnUndoAction();
 
-        virtual void Undo() = 0;
-        virtual void Redo() = 0;
+        virtual void Undo() SAL_OVERRIDE = 0;
+        virtual void Redo() SAL_OVERRIDE = 0;
 
         void SetConnection(OQueryTableConnection* pConn) { m_pConnection = pConn; }
         // now SetOwnership please

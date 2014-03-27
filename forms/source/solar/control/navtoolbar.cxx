@@ -117,7 +117,7 @@ namespace frm
 
     protected:
         // ToolBox overridables
-        virtual void        Select();
+        virtual void        Select() SAL_OVERRIDE;
 
     };
 

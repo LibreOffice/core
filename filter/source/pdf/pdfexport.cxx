@@ -270,7 +270,7 @@ class PDFExportStreamDoc : public vcl::PDFOutputStream
     {}
     virtual ~PDFExportStreamDoc();
 
-    virtual void write( const Reference< XOutputStream >& xStream );
+    virtual void write( const Reference< XOutputStream >& xStream ) SAL_OVERRIDE;
 };
 
 PDFExportStreamDoc::~PDFExportStreamDoc()
@@ -956,8 +956,8 @@ public:
     PDFErrorRequest( const task::PDFExportException& i_rExc );
 
     // XInteractionRequest
-    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception);
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException, std::exception);
+    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 PDFErrorRequest::PDFErrorRequest( const task::PDFExportException& i_rExc ) :

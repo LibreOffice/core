@@ -31,9 +31,9 @@ public:
     SwPrintOptions(sal_Bool bWeb);
     virtual ~SwPrintOptions();
 
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void            doSetModified( ) { bModified = sal_True; SetModified();}
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
+    virtual void            doSetModified( ) SAL_OVERRIDE { bModified = sal_True; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)
     {

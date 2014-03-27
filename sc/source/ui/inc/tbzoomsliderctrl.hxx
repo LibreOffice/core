@@ -34,8 +34,8 @@ public:
     ScZoomSliderControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~ScZoomSliderControl();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual Window* CreateItemWindow( Window *pParent );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window* CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 class ScZoomSliderWnd: public Window
@@ -58,9 +58,9 @@ public:
     void            UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
 
 protected:
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 #endif
 

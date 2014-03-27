@@ -43,7 +43,7 @@ class ThreadListener : public IFinishedThreadListener
         void ListenToThread( const oslInterlockedCount nThreadID,
                              ObservableThread& rThread );
 
-        virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
+        virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID ) SAL_OVERRIDE;
 
     private:
 

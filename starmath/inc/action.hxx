@@ -34,10 +34,10 @@ class SmFormatAction: public SfxUndoAction
 public:
     SmFormatAction(SmDocShell *pDocSh, const SmFormat& rOldFormat, const SmFormat& rNewFormat);
 
-    virtual void Undo();
-    virtual void Redo();
-    virtual void Repeat(SfxRepeatTarget& rDocSh);
-    virtual OUString GetComment() const;
+    virtual void Undo() SAL_OVERRIDE;
+    virtual void Redo() SAL_OVERRIDE;
+    virtual void Repeat(SfxRepeatTarget& rDocSh) SAL_OVERRIDE;
+    virtual OUString GetComment() const SAL_OVERRIDE;
 };
 
 #endif

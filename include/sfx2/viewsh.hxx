@@ -141,8 +141,8 @@ friend class SfxPrinterController;
     bool                        bNoNewWindow;
 
 protected:
-    virtual void                Activate(bool IsMDIActivate);
-    virtual void                Deactivate(bool IsMDIActivate);
+    virtual void                Activate(bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void                Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
@@ -150,7 +150,7 @@ protected:
 
     virtual void                Move();
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 public:
     // Iteration
@@ -225,7 +225,7 @@ public:
     virtual void                ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
-    virtual SfxObjectShell*     GetObjectShell();
+    virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
     /** retrieves the document which shall be considered the "current document" when the frame is active
 
         The default implementation simply returns the XModel of the associated SfxObjectShell. You will rarely

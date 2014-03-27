@@ -165,12 +165,12 @@ class ScriptTypeAggregator : public sc::ColumnSpanSet::Action
 public:
     ScriptTypeAggregator(ScDocument& rDoc) : mrDoc(rDoc), mnScriptType(0) {}
 
-    virtual void startColumn(SCTAB nTab, SCCOL nCol)
+    virtual void startColumn(SCTAB nTab, SCCOL nCol) SAL_OVERRIDE
     {
         mrDoc.InitColumnBlockPosition(maBlockPos, nTab, nCol);
     }
 
-    virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal)
+    virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal) SAL_OVERRIDE
     {
         if (!bVal)
             return;

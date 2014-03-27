@@ -29,16 +29,16 @@ public:
 
     virtual ~GL3DBarChartTypeTemplate();
 
-    virtual css::uno::Reference<css::chart2::XChartType> getChartTypeForIndex( sal_Int32 nChartTypeIndex );
+    virtual css::uno::Reference<css::chart2::XChartType> getChartTypeForIndex( sal_Int32 nChartTypeIndex ) SAL_OVERRIDE;
 
     // XChartTypeTemplate
 
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes )
-            throw (::css::uno::RuntimeException, ::std::exception);
+            throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsCategories()
-        throw (::css::uno::RuntimeException, ::std::exception);
+        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
 };
 
 }

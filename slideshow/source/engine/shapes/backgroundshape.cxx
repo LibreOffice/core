@@ -79,34 +79,34 @@ namespace slideshow
                              const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const;
+                ::com::sun::star::drawing::XShape > getXShape() const SAL_OVERRIDE;
 
             // View layer methods
 
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
-                                       bool                         bRedrawLayer );
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer );
-            virtual bool clearAllViewLayers();
+                                       bool                         bRedrawLayer ) SAL_OVERRIDE;
+            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) SAL_OVERRIDE;
+            virtual bool clearAllViewLayers() SAL_OVERRIDE;
 
 
             // attribute methods
 
 
-            virtual ::basegfx::B2DRectangle getBounds() const;
-            virtual ::basegfx::B2DRectangle getDomBounds() const;
-            virtual ::basegfx::B2DRectangle getUpdateArea() const;
-            virtual bool isVisible() const;
-            virtual double getPriority() const;
-            virtual bool isBackgroundDetached() const;
+            virtual ::basegfx::B2DRectangle getBounds() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getDomBounds() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getUpdateArea() const SAL_OVERRIDE;
+            virtual bool isVisible() const SAL_OVERRIDE;
+            virtual double getPriority() const SAL_OVERRIDE;
+            virtual bool isBackgroundDetached() const SAL_OVERRIDE;
 
 
             // render methods
 
 
-            virtual bool update() const;
-            virtual bool render() const;
-            virtual bool isContentChanged() const;
+            virtual bool update() const SAL_OVERRIDE;
+            virtual bool render() const SAL_OVERRIDE;
+            virtual bool isContentChanged() const SAL_OVERRIDE;
 
         private:
             /// The metafile actually representing the Shape

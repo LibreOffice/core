@@ -74,11 +74,11 @@ class SVX_DLLPUBLIC FrameDirListBoxWrapper : public sfx::SingleControlWrapper< F
 public:
     explicit            FrameDirListBoxWrapper( FrameDirListBox& rListBox );
 
-    virtual bool        IsControlDontKnow() const;
-    virtual void        SetControlDontKnow( bool bSet );
+    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
+    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
 
-    virtual SvxFrameDirection GetControlValue() const;
-    virtual void        SetControlValue( SvxFrameDirection eValue );
+    virtual SvxFrameDirection GetControlValue() const SAL_OVERRIDE;
+    virtual void        SetControlValue( SvxFrameDirection eValue ) SAL_OVERRIDE;
 };
 
 /** Wrapper for usage of a SvxFrameDirectionItem in item connections. */

@@ -43,11 +43,11 @@ namespace rptxml
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-        virtual void EndElement();
+        virtual void EndElement() SAL_OVERRIDE;
 
-        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair);
+        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) SAL_OVERRIDE;
 
     private:
         /** initializes our object's properties whose runtime (API) default is different from the file

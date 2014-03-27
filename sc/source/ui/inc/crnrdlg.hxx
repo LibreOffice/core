@@ -40,11 +40,11 @@ public:
                                  ScViewData*    ptrViewData );
                     ~ScColRowNameRangesDlg();
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 
-    virtual bool    IsRefInputMode() const;
-    virtual void    SetActive();
-    virtual bool    Close();
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
 private:
     ListBox*         pLbRange;

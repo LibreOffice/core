@@ -63,8 +63,8 @@ class SwOutlineTabDialog : public SfxTabDialog
     DECL_LINK( FormHdl, Button * );
     DECL_LINK( MenuSelectHdl, Menu * );
 
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage);
-        virtual short   Ok();
+        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
+        virtual short   Ok() SAL_OVERRIDE;
 
     public:
         SwOutlineTabDialog(Window* pParent,
@@ -124,11 +124,11 @@ public:
 
     void SetWrtShell(SwWrtShell* pShell);
 
-    virtual void        ActivatePage(const SfxItemSet& rSet);
-    virtual int         DeactivatePage(SfxItemSet *pSet);
+    virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };

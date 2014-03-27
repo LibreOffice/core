@@ -43,13 +43,13 @@ public:
     DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor);
     virtual ~DlgEdView();
 
-    virtual void MarkListHasChanged();
-    virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
+    virtual void MarkListHasChanged() SAL_OVERRIDE;
+    virtual void MakeVisible( const Rectangle& rRect, Window& rWin ) SAL_OVERRIDE;
 
 protected:
     // overloaded to handle HitTest for some objects special
     using SdrView::CheckSingleSdrObjectHit;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const;
+    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const SAL_OVERRIDE;
 };
 
 } // namespace basctl

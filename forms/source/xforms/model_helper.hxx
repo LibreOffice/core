@@ -55,19 +55,19 @@ public:
     BindingCollection( Model* pModel ) : mpModel( pModel ) {}
     virtual ~BindingCollection() {}
 
-    virtual bool isValid( const T& t ) const
+    virtual bool isValid( const T& t ) const SAL_OVERRIDE
     {
         return Binding::getBinding( t ) != NULL;
     }
 
 protected:
-    virtual void _insert( const T& t )
+    virtual void _insert( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
         Binding::getBinding( t )->_setModel( Binding::Model_t( mpModel ) );
     }
 
-    virtual void _remove( const T& t )
+    virtual void _remove( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
         Binding::getBinding( t )->_setModel( Binding::Model_t() );
@@ -89,19 +89,19 @@ public:
     virtual ~SubmissionCollection() {}
 
 public:
-    virtual bool isValid( const T& t ) const
+    virtual bool isValid( const T& t ) const SAL_OVERRIDE
     {
         return Submission::getSubmission( t ) != NULL;
     }
 
 protected:
-    virtual void _insert( const T& t )
+    virtual void _insert( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
         Submission::getSubmission( t )->setModel( com::sun::star::uno::Reference<com::sun::star::xforms::XModel>( mpModel ) );
     }
 
-    virtual void _remove( const T& t )
+    virtual void _remove( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Submission::getSubmission( t ) != NULL, "invalid item?" );
         Submission::getSubmission( t )->setModel( com::sun::star::uno::Reference<com::sun::star::xforms::XModel>( ) );
@@ -116,7 +116,7 @@ protected:
 class InstanceCollection : public Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >
 {
 public:
-    virtual bool isValid( const T& t ) const
+    virtual bool isValid( const T& t ) const SAL_OVERRIDE
     {
         const com::sun::star::beans::PropertyValue* pValues = t.getConstArray();
         OUString sInstance( "Instance" );

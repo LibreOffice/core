@@ -324,14 +324,14 @@ public:
                                         OUString* pRelationshipId = NULL );
 
     // ignore
-    virtual bool exportDocument() throw();
+    virtual bool exportDocument() throw() SAL_OVERRIDE;
 
     // only needed for import; ignore
-    virtual bool importDocument() throw();
-    virtual oox::vml::Drawing* getVmlDrawing();
-    virtual const oox::drawingml::Theme* getCurrentTheme() const;
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
-    virtual oox::drawingml::chart::ChartConverter* getChartConverter();
+    virtual bool importDocument() throw() SAL_OVERRIDE;
+    virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;
+    virtual const oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
 
     /*
       Now create all the overloads in a typesafe way (i.e. without varargs) by creating a number of overloads
@@ -364,8 +364,8 @@ public:
     #undef SAX_ARGS_FUNC
 
 private:
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual OUString implGetImplementationName() const;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
+    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
     ScDocShell *getDocShell();
     sax_fastparser::FSHelperPtr&    WriteAttributesInternal( sal_Int32 nAttribute, ... );
 

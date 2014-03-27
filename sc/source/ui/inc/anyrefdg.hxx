@@ -134,8 +134,8 @@ protected:
 
     void                SetDispatcherLock( bool bLock );
 
-    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void        RefInputDone( bool bForced = false );
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
+    virtual void        RefInputDone( bool bForced = false ) SAL_OVERRIDE;
     void                ShowSimpleReference(const OUString& rStr);
     void                ShowFormulaReference(const OUString& rStr);
 
@@ -148,23 +148,23 @@ public:
                         ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef );
     virtual             ~ScRefHandler();
 
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
-    virtual void        AddRefEntry();
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE = 0;
+    virtual void        AddRefEntry() SAL_OVERRIDE;
 
-    virtual bool        IsRefInputMode() const;
-    virtual bool        IsTableLocked() const;
-    virtual bool        IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual bool        IsRefInputMode() const SAL_OVERRIDE;
+    virtual bool        IsTableLocked() const SAL_OVERRIDE;
+    virtual bool        IsDocAllowed( SfxObjectShell* pDocSh ) const SAL_OVERRIDE;
 
-    virtual void        ShowReference(const OUString& rStr);
-    virtual void        HideReference( bool bDoneRefMode = true );
+    virtual void        ShowReference(const OUString& rStr) SAL_OVERRIDE;
+    virtual void        HideReference( bool bDoneRefMode = true ) SAL_OVERRIDE;
 
-    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
+    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
 
-    virtual void        ViewShellChanged();
+    virtual void        ViewShellChanged() SAL_OVERRIDE;
     void                SwitchToDocument();
 
-    virtual void        SetActive() = 0;
+    virtual void        SetActive() SAL_OVERRIDE = 0;
 
 public:
     bool                EnterRefMode();
@@ -180,8 +180,8 @@ class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler
 {
 public:
 
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
-    virtual void        StateChanged( StateChangedType nStateChange );
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 protected:
     ScRefHdlModalImpl(Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);

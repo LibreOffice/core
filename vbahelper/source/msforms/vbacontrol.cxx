@@ -101,7 +101,7 @@ private:
 public:
     ScVbaControlListener( ScVbaControl *pTmpControl );
     virtual ~ScVbaControlListener();
-    virtual void SAL_CALL disposing( const lang::EventObject& rEventObject ) throw( uno::RuntimeException, std::exception );
+    virtual void SAL_CALL disposing( const lang::EventObject& rEventObject ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 ScVbaControlListener::ScVbaControlListener( ScVbaControl *pTmpControl ): pControl( pTmpControl )
@@ -782,7 +782,7 @@ class ControlProviderImpl : public ControlProvider_BASE
     uno::Reference< uno::XComponentContext > m_xCtx;
 public:
     ControlProviderImpl( const uno::Reference< uno::XComponentContext >& xCtx ) : m_xCtx( xCtx ) {}
-    virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) throw (uno::RuntimeException, std::exception);
+    virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 uno::Reference< msforms::XControl > SAL_CALL

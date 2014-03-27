@@ -70,19 +70,19 @@ public:
                                 SfxItemSet& rSet,
                                 const OUString& rValue,
                                 const SvXMLUnitConverter& rUnitConverter,
-                                const SvXMLNamespaceMap& rNamespaceMap );
+                                const SvXMLNamespaceMap& rNamespaceMap ) SAL_OVERRIDE;
 
     virtual bool
     handleNoItem(SvXMLItemMapEntry const& rEntry,
                  SfxItemSet & rSet,
                  OUString const& rValue,
                  SvXMLUnitConverter const& rUnitConverter,
-                 SvXMLNamespaceMap const& rNamespaceMap);
+                 SvXMLNamespaceMap const& rNamespaceMap) SAL_OVERRIDE;
 
     virtual void finished(SfxItemSet & rSet,
-                          SvXMLUnitConverter const& rUnitConverter) const;
+                          SvXMLUnitConverter const& rUnitConverter) const SAL_OVERRIDE;
 
-    virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
+    virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries ) SAL_OVERRIDE;
 
 private:
     void Reset();
@@ -261,7 +261,7 @@ public:
                    const ::uno::Reference< xml::sax::XAttributeList > & xAttrList,
                    SfxItemSet&  rItemSet,
                    const SvXMLItemMapEntry& rEntry,
-                   const SvXMLUnitConverter& rUnitConv );
+                   const SvXMLUnitConverter& rUnitConv ) SAL_OVERRIDE;
 };
 
 SwXMLItemSetContext_Impl::SwXMLItemSetContext_Impl(

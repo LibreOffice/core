@@ -57,8 +57,20 @@ public:
             ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~RegressionEquation();
 
-    /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
+    virtual OUString SAL_CALL
+        getImplementationName()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& ServiceName )
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    static OUString getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString >
+        getSupportedServiceNames_Static();
+
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// establish methods for factory instatiation
@@ -69,51 +81,51 @@ protected:
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
+        throw(::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
 
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
         const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XTitle ____
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XFormattedString > > SAL_CALL getText()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setText( const ::com::sun::star::uno::Sequence<
                                    ::com::sun::star::uno::Reference<
                                    ::com::sun::star::chart2::XFormattedString > >& Strings )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     using ::cppu::OPropertySetHelper::disposing;
 
     // ____ OPropertySet ____
-    virtual void firePropertyChangeEvent();
+    virtual void firePropertyChangeEvent() SAL_OVERRIDE;
 
     void fireModifyEvent();
 

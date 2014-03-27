@@ -63,8 +63,8 @@ public:
     void FillValueSets();
 
     // ____ RangeSelectionListenerParent ____
-    virtual void listeningFinished( const OUString & rNewRange );
-    virtual void disposingRangeSelection();
+    virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
+    virtual void disposingRangeSelection() SAL_OVERRIDE;
 
 private:
     // category

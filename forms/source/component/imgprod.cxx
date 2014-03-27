@@ -47,11 +47,11 @@ public:
                         ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
-    virtual ErrCode     ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const;
-    virtual ErrCode     WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten );
-    virtual ErrCode     Flush() const;
-    virtual ErrCode     SetSize( sal_Size nSize );
-    virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
+    virtual ErrCode     ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const SAL_OVERRIDE;
+    virtual ErrCode     WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten ) SAL_OVERRIDE;
+    virtual ErrCode     Flush() const SAL_OVERRIDE;
+    virtual ErrCode     SetSize( sal_Size nSize ) SAL_OVERRIDE;
+    virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const SAL_OVERRIDE;
 };
 
 

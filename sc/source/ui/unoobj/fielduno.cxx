@@ -181,7 +181,7 @@ public:
                 ~ScUnoEditEngine();
 
     virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
-                                    Color*& rTxtColor, Color*& rFldColor );
+                                    Color*& rTxtColor, Color*& rFldColor ) SAL_OVERRIDE;
 
     sal_uInt16 CountFields();
     SvxFieldData* FindByIndex(sal_uInt16 nIndex);

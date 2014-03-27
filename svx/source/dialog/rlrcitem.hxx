@@ -32,7 +32,7 @@ private:
 
 protected:
     virtual void StateChanged( sal_uInt16,
-                               SfxItemState, const SfxPoolItem* pState );
+                               SfxItemState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 public:
     SvxRulerItem( sal_uInt16 nId, SvxRuler&, SfxBindings& );

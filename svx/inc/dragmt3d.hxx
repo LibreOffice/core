@@ -79,16 +79,16 @@ public:
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
-    virtual void TakeSdrDragComment(OUString& rStr) const;
-    virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
-    virtual void CancelSdrDrag();
-    virtual bool EndSdrDrag(bool bCopy);
+    virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
+    virtual bool BeginSdrDrag() SAL_OVERRIDE;
+    virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
+    virtual void CancelSdrDrag() SAL_OVERRIDE;
+    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
 
     E3dView& Get3DView()  { return (E3dView&)getSdrDragView();  }
 
     // for migration from XOR to overlay
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager);
+    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager) SAL_OVERRIDE;
 };
 
 
@@ -110,8 +110,8 @@ public:
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
-    virtual void MoveSdrDrag(const Point& rPnt);
-    virtual Pointer GetSdrDragPointer() const;
+    virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
+    virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
 };
 
 
@@ -135,8 +135,8 @@ public:
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
-    virtual void MoveSdrDrag(const Point& rPnt);
-    virtual Pointer GetSdrDragPointer() const;
+    virtual void MoveSdrDrag(const Point& rPnt) SAL_OVERRIDE;
+    virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
 };
 
 

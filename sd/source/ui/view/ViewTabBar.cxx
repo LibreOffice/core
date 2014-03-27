@@ -71,8 +71,8 @@ public:
     TabBarControl (
         ::Window* pParentWindow,
         const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
-    virtual void Paint (const Rectangle& rRect);
-    virtual void ActivatePage (void);
+    virtual void Paint (const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void ActivatePage (void) SAL_OVERRIDE;
 private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
 };
@@ -87,7 +87,7 @@ class ViewTabPage : public TabPage
 {
 public:
     ViewTabPage (Window* pParent) : TabPage(pParent) {}
-    virtual void Resize (void)
+    virtual void Resize (void) SAL_OVERRIDE
     { SetPosSizePixel(Point(0,0),GetParent()->GetOutputSizePixel()); }
 };
 

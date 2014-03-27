@@ -234,7 +234,7 @@ private:
     SVX_DLLPRIVATE void         SetUILightState( ImageButton& aBtn, bool bState );
 
 protected:
-    virtual void    Resize();
+    virtual void    Resize() SAL_OVERRIDE;
 
 public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
@@ -261,7 +261,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 {
  protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
+                                const SfxPoolItem* pState ) SAL_OVERRIDE;
 
  public:
     Svx3DCtrlItem( sal_uInt16, SfxBindings* );
@@ -279,7 +279,7 @@ class SvxConvertTo3DItem : public SfxControllerItem
     bool                        bState;
 
 protected:
-    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState);
+    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
 
 public:
     SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);

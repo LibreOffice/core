@@ -267,7 +267,7 @@ private:
     bool                        bUseLuminance : 1;
 
     // create marker for this kind
-    SVX_DLLPRIVATE virtual void CreateB2dIAObject();
+    SVX_DLLPRIVATE virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
     // help functions
     SVX_DLLPRIVATE Bitmap CreateColorDropper(Color aCol);
@@ -310,7 +310,7 @@ private:
     bool                        bMoveFirstHandle : 1;
 
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 public:
     SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad = true);
@@ -345,7 +345,7 @@ public:
 class SdrHdlLine: public SdrHdl
 {
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 protected:
     SdrHdl*                     pHdl1;
@@ -355,7 +355,7 @@ public:
     SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind=HDL_MIRX) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
     virtual ~SdrHdlLine();
 
-    virtual Pointer GetPointer() const;
+    virtual Pointer GetPointer() const SAL_OVERRIDE;
 };
 
 // Ein SdrHdlBezWgt hat Kenntnis von seinem "BasisHandle". Seine Draw-Methode
@@ -364,7 +364,7 @@ public:
 class SdrHdlBezWgt: public SdrHdl
 {
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 protected:
     const SdrHdl* pHdl1;
@@ -382,7 +382,7 @@ class E3dVolumeMarker : public SdrHdl
     basegfx::B2DPolyPolygon             aWireframePoly;
 
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 public:
     explicit E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly);
@@ -395,7 +395,7 @@ class ImpEdgeHdl: public SdrHdl
     SdrEdgeLineCode eLineCode;
 
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 public:
     ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),eLineCode(MIDDLELINE) {}
@@ -404,7 +404,7 @@ public:
     void SetLineCode(SdrEdgeLineCode eCode);
     SdrEdgeLineCode GetLineCode() const     { return eLineCode; }
     bool IsHorzDrag() const;
-    virtual Pointer GetPointer() const;
+    virtual Pointer GetPointer() const SAL_OVERRIDE;
 };
 
 
@@ -412,13 +412,13 @@ public:
 class ImpMeasureHdl: public SdrHdl
 {
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 public:
     ImpMeasureHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind) {}
     virtual ~ImpMeasureHdl();
 
-    virtual Pointer GetPointer() const;
+    virtual Pointer GetPointer() const SAL_OVERRIDE;
 };
 
 
@@ -428,7 +428,7 @@ class ImpTextframeHdl: public SdrHdl
     const Rectangle maRect;
 
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
 public:
     explicit ImpTextframeHdl(const Rectangle& rRect);
@@ -517,7 +517,7 @@ public:
 
 protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
 
@@ -547,7 +547,7 @@ public:
 
 protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
 };
 
 

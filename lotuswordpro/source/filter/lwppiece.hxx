@@ -93,7 +93,7 @@ public:
             delete m_pOverride;
     }
 
-    virtual void Read()
+    virtual void Read() SAL_OVERRIDE
     {
         LwpDLVList::Read();
         if( m_pOverride )

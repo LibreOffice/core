@@ -38,23 +38,23 @@ public:
     virtual ~AnnotationTag();
 
     /// @return true if the SmartTag handled the event.
-    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
+    virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) SAL_OVERRIDE;
 
     /// @return true if the SmartTag consumes this event.
-    virtual bool KeyInput( const KeyEvent& rKEvt );
+    virtual bool KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     /// @return true if the SmartTag consumes this event.
-    virtual bool RequestHelp( const HelpEvent& rHEvt );
+    virtual bool RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     /// @return true if the SmartTag consumes this event.
-    virtual bool Command( const CommandEvent& rCEvt );
+    virtual bool Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
-    virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual sal_uLong GetMarkablePointCount() const SAL_OVERRIDE;
+    virtual sal_uLong GetMarkedPointCount() const SAL_OVERRIDE;
+    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False) SAL_OVERRIDE;
+    virtual void CheckPossibilities() SAL_OVERRIDE;
+    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark) SAL_OVERRIDE;
 
     void Move( int nDX, int nDY );
     bool OnMove( const KeyEvent& rKEvt );
@@ -67,11 +67,11 @@ public:
     void ClosePopup();
 
 protected:
-    virtual void addCustomHandles( SdrHdlList& rHandlerList );
-    virtual bool getContext( SdrViewContext& rContext );
-    virtual void disposing();
-    virtual void select();
-    virtual void deselect();
+    virtual void addCustomHandles( SdrHdlList& rHandlerList ) SAL_OVERRIDE;
+    virtual bool getContext( SdrViewContext& rContext ) SAL_OVERRIDE;
+    virtual void disposing() SAL_OVERRIDE;
+    virtual void select() SAL_OVERRIDE;
+    virtual void deselect() SAL_OVERRIDE;
 
     DECL_LINK( WindowEventHandler, VclWindowEvent* );
     DECL_LINK( ClosePopupHdl, void* );

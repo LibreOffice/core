@@ -55,17 +55,17 @@ public:
 
     int     mnFileTypes;
 
-    virtual void Clear();
+    virtual void Clear() SAL_OVERRIDE;
 
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
 
 protected:
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
     void OpenItem( const ThumbnailViewItem *pItem );
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual void LoseFocus();
+    virtual void LoseFocus() SAL_OVERRIDE;
 
     bool isAcceptedFile(const OUString &rURL) const;
 

@@ -59,25 +59,25 @@ protected:
     sal_Bool                bInternalMove;
 
     // TabBar
-    virtual void        Select();
-    virtual void        DoubleClick();
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void        Select() SAL_OVERRIDE;
+    virtual void        DoubleClick() SAL_OVERRIDE;
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void        Command(const CommandEvent& rCEvt);
+    virtual void        Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
 
-    virtual long        StartRenaming();
-    virtual long        AllowRenaming();
-    virtual void        EndRenaming();
+    virtual long        StartRenaming() SAL_OVERRIDE;
+    virtual long        AllowRenaming() SAL_OVERRIDE;
+    virtual void        EndRenaming() SAL_OVERRIDE;
 
-    virtual void        ActivatePage();
-    virtual long        DeactivatePage();
+    virtual void        ActivatePage() SAL_OVERRIDE;
+    virtual long        DeactivatePage() SAL_OVERRIDE;
 
     // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
                         DECL_LINK(DeactivatePageHdl, void*);
 
@@ -94,9 +94,9 @@ private:
 
         virtual             ~TabControlTransferable();
 
-        virtual void        AddSupportedFormats();
-        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        DragFinished( sal_Int8 nDropAction );
+        virtual void        AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+        virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 
     };
 

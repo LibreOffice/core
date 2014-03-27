@@ -44,13 +44,13 @@ namespace sdr
             SfxStyleSheet*                                  mpStyleSheet;
 
             // create a new itemset
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool);
+            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool) SAL_OVERRIDE;
 
             // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0);
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) SAL_OVERRIDE;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet);
+            virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
         public:
             // basic constructor
@@ -60,31 +60,31 @@ namespace sdr
             AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj);
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // destructor
             virtual ~AttributeProperties();
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
 
             // get the installed StyleSheet
-            virtual SfxStyleSheet* GetStyleSheet() const;
+            virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
+            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L) SAL_OVERRIDE;
 
             // Set new model.
-            virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
+            virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel) SAL_OVERRIDE;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
-            virtual void ForceStyleToHardAttributes();
+            virtual void ForceStyleToHardAttributes() SAL_OVERRIDE;
 
             // This is the Notify(...) from 2nd base class SfxListener
-            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
-            virtual bool isUsedByModel() const;
+            virtual bool isUsedByModel() const SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

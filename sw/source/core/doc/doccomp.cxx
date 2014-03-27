@@ -206,9 +206,9 @@ public:
     LineArrayComparator( const CompareData &rD1, const CompareData &rD2,
                             int nStt1, int nEnd1, int nStt2, int nEnd2 );
 
-    virtual bool Compare( int nIdx1, int nIdx2 ) const;
-    virtual int GetLen1() const { return nLen1; }
-    virtual int GetLen2() const { return nLen2; }
+    virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
+    virtual int GetLen1() const SAL_OVERRIDE { return nLen1; }
+    virtual int GetLen2() const SAL_OVERRIDE { return nLen2; }
 };
 
 class WordArrayComparator : public ArrayComparator
@@ -224,9 +224,9 @@ public:
     WordArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 );
     ~WordArrayComparator();
 
-    virtual bool Compare( int nIdx1, int nIdx2 ) const;
-    virtual int GetLen1() const { return nCnt1; }
-    virtual int GetLen2() const { return nCnt2; }
+    virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
+    virtual int GetLen1() const SAL_OVERRIDE { return nCnt1; }
+    virtual int GetLen2() const SAL_OVERRIDE { return nCnt2; }
     int GetCharSequence( const int *pWordLcs1, const int *pWordLcs2,
                         int *pSubseq1, int *pSubseq2, int nLcsLen );
 };
@@ -242,9 +242,9 @@ public:
     {
     }
 
-    virtual bool Compare( int nIdx1, int nIdx2 ) const;
-    virtual int GetLen1() const { return pTxtNd1->GetTxt().getLength(); }
-    virtual int GetLen2() const { return pTxtNd2->GetTxt().getLength(); }
+    virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
+    virtual int GetLen1() const SAL_OVERRIDE { return pTxtNd1->GetTxt().getLength(); }
+    virtual int GetLen2() const SAL_OVERRIDE { return pTxtNd2->GetTxt().getLength(); }
 };
 
 /// Options set in Tools->Options->Writer->Comparison
@@ -952,8 +952,8 @@ public:
     SwCompareLine( const SwNode& rNd );
     virtual ~SwCompareLine();
 
-    virtual sal_uLong GetHashValue() const;
-    virtual bool Compare( const CompareLine& rLine ) const;
+    virtual sal_uLong GetHashValue() const SAL_OVERRIDE;
+    virtual bool Compare( const CompareLine& rLine ) const SAL_OVERRIDE;
 
     static sal_uLong GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nVal );
     static bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );
@@ -979,14 +979,14 @@ class SwCompareData : public CompareData
     sal_uLong PrevIdx( const SwNode* pNd );
     sal_uLong NextIdx( const SwNode* pNd );
 
-    virtual void CheckRanges( CompareData& );
-    virtual void ShowInsert( sal_uLong nStt, sal_uLong nEnd );
+    virtual void CheckRanges( CompareData& ) SAL_OVERRIDE;
+    virtual void ShowInsert( sal_uLong nStt, sal_uLong nEnd ) SAL_OVERRIDE;
     virtual void ShowDelete( const CompareData& rData, sal_uLong nStt,
-                                sal_uLong nEnd, sal_uLong nInsPos );
+                                sal_uLong nEnd, sal_uLong nInsPos ) SAL_OVERRIDE;
 
     virtual void CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong& nStt, sal_uLong& nEnd,
-                                    sal_uLong& nThisStt, sal_uLong& nThisEnd );
+                                    sal_uLong& nThisStt, sal_uLong& nThisEnd ) SAL_OVERRIDE;
 
 public:
     SwCompareData( SwDoc& rD ) : rDoc( rD ), pInsRing(0), pDelRing(0) {}

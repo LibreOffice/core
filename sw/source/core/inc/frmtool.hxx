@@ -374,7 +374,7 @@ class SwBorderAttrAccess : public SwCacheAccess
     const SwFrm *pConstructor;      //opt: for passing on to SwBorderAttrs
 
 protected:
-    virtual SwCacheObj *NewObj();
+    virtual SwCacheObj *NewObj() SAL_OVERRIDE;
 
 public:
     SwBorderAttrAccess( SwCache &rCache, const SwFrm *pOwner );

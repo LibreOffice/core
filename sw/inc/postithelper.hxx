@@ -136,13 +136,13 @@ public:
     {
     }
 
-    virtual SwPosition GetAnchorPosition() const;
-    virtual bool UseElement();
-    virtual const SwFmtFld& GetFmtFld() const
+    virtual SwPosition GetAnchorPosition() const SAL_OVERRIDE;
+    virtual bool UseElement() SAL_OVERRIDE;
+    virtual const SwFmtFld& GetFmtFld() const SAL_OVERRIDE
     {
         return mrFmtFld;
     }
-    virtual const SfxBroadcaster* GetBroadCaster() const
+    virtual const SfxBroadcaster* GetBroadCaster() const SAL_OVERRIDE
     {
         return dynamic_cast<const SfxBroadcaster *> (&mrFmtFld);
     }
@@ -150,7 +150,7 @@ public:
         SwEditWin& rEditWin,
         WinBits nBits,
         SwPostItMgr& aMgr,
-        SwPostItBits aBits );
+        SwPostItBits aBits ) SAL_OVERRIDE;
 
 private:
     SwFmtFld& mrFmtFld;

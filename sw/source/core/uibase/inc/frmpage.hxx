@@ -130,8 +130,8 @@ class SwFrmPage: public SfxTabPage
     bool    m_bIsMathOLE;
     bool    m_bIsMathBaselineAlignment;
 
-    virtual void    ActivatePage(const SfxItemSet& rSet);
-    virtual int     DeactivatePage(SfxItemSet *pSet);
+    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     DECL_LINK(RangeModifyHdl, void *);
     DECL_LINK(AnchorTypeHdl, void *);
@@ -190,8 +190,8 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static sal_uInt16* GetRanges();
 
-    virtual bool FillItemSet(SfxItemSet &rSet);
-    virtual void Reset(const SfxItemSet &rSet);
+    virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
     void            SetNewFrame(sal_Bool bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(sal_Bool bFmt);
@@ -225,7 +225,7 @@ class SwGrfExtPage: public SfxTabPage
     DECL_LINK(MirrorHdl, void *);
     DECL_LINK(BrowseHdl, void *);
 
-    virtual void    ActivatePage(const SfxItemSet& rSet);
+    virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     SwGrfExtPage(Window *pParent, const SfxItemSet &rSet);
     ~SwGrfExtPage();
 
@@ -236,9 +236,9 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual bool FillItemSet(SfxItemSet &rSet);
-    virtual void Reset(const SfxItemSet &rSet);
-    virtual int  DeactivatePage(SfxItemSet *pSet);
+    virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual int  DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 };
 
 class SwFrmURLPage : public SfxTabPage
@@ -265,8 +265,8 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual bool FillItemSet(SfxItemSet &rSet);
-    virtual void Reset(const SfxItemSet &rSet);
+    virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 };
 
 class SwFrmAddPage : public SfxTabPage
@@ -313,8 +313,8 @@ public:
     static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rSet);
     static sal_uInt16*      GetRanges();
 
-    virtual bool FillItemSet(SfxItemSet &rSet);
-    virtual void Reset(const SfxItemSet &rSet);
+    virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
     void            SetFormatUsed(sal_Bool bFmt);
     void            SetFrmType(const OString &rType) { sDlgType = rType; }

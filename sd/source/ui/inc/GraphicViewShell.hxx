@@ -62,11 +62,11 @@ public:
     /** This method is overloaded in order to have the layer mode always
         active.
     */
-    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
+    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive) SAL_OVERRIDE;
 
 protected:
     void ConstructGraphicViewShell (void);
-    virtual void ArrangeGUIElements (void);
+    virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
 
 private:
     DECL_LINK(TabBarSplitHandler, TabBar*);

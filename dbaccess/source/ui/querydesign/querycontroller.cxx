@@ -99,11 +99,11 @@ namespace dbaui
 
     class OViewController : public OQueryController
     {
-        virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception )
+        virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) SAL_OVERRIDE
         {
             return getImplementationName_Static();
         }
-        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception)
+        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE
         {
             return getSupportedServiceNames_Static();
         }

@@ -46,7 +46,7 @@ public:
     ~View3DDialog();
 
     // from Dialog (base of TabDialog)
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
 
 private:
     TabControl*     m_pTabControl;

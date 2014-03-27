@@ -36,11 +36,11 @@ public:
            , sal_Int32 nDimensionCount );
     virtual ~VPolarAngleAxis();
 
-    virtual void createMaximumLabels();
-    virtual void createLabels();
-    virtual void updatePositions();
+    virtual void createMaximumLabels() SAL_OVERRIDE;
+    virtual void createLabels() SAL_OVERRIDE;
+    virtual void updatePositions() SAL_OVERRIDE;
 
-    virtual void createShapes();
+    virtual void createShapes() SAL_OVERRIDE;
 
 private: //methods
     bool createTextShapes_ForAngleAxis(

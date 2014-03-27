@@ -41,9 +41,9 @@ class SwFrmCtrlWindow : public VclEventBox
 public:
     SwFrmCtrlWindow(Window* pParent, SwOneExampleFrame* pFrame);
 
-    virtual void Command( const CommandEvent& rCEvt );
-    virtual Size GetOptimalSize() const;
-    virtual void Resize();
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 class MenuResource : public Resource

@@ -317,7 +317,7 @@ public:
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
-    virtual void StateChanged( StateChangedType nType );
+    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
 private:
     DECL_LINK( SplineTypeListBoxHdl, void* );
@@ -404,7 +404,7 @@ public:
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
 
-    virtual void StateChanged( StateChangedType nType );
+    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
 private:
 

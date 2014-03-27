@@ -84,10 +84,10 @@ public:
     SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
-    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
-    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum);
-    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum);
+    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
+    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
+    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum) SAL_OVERRIDE;
 };
 
 /*************************************************************************
@@ -107,7 +107,7 @@ private:
     friend class E3dDragMethod;
 
  protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
     E3dObjList                  maSubList;          // child objects
 
@@ -137,24 +137,24 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    virtual void RecalcSnapRect();
-    virtual void SetRectsDirty(bool bNotMyself = false);
+    virtual void RecalcSnapRect() SAL_OVERRIDE;
+    virtual void SetRectsDirty(bool bNotMyself = false) SAL_OVERRIDE;
 
     virtual ~E3dObject();
 
-    virtual sal_uInt32  GetObjInventor() const;
-    virtual sal_uInt16  GetObjIdentifier() const;
+    virtual sal_uInt32  GetObjInventor() const SAL_OVERRIDE;
+    virtual sal_uInt16  GetObjIdentifier() const SAL_OVERRIDE;
 
-    virtual void    TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual void    TakeObjInfo(SdrObjTransformInfoRec& rInfo) const SAL_OVERRIDE;
 
-    virtual void        NbcSetLayer(SdrLayerID nLayer);
+    virtual void        NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
 
-    virtual void        SetObjList(SdrObjList* pNewObjList);
-    virtual void        SetPage(SdrPage* pNewPage);
-    virtual void        SetModel(SdrModel* pNewModel);
-    virtual void        NbcMove(const Size& rSize);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual SdrObjList* GetSubList() const;
+    virtual void        SetObjList(SdrObjList* pNewObjList) SAL_OVERRIDE;
+    virtual void        SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
+    virtual void        SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    virtual void        NbcMove(const Size& rSize) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual SdrObjList* GetSubList() const SAL_OVERRIDE;
 
     // Insert 3D object into the group; transfer to other owner!
     virtual void Insert3DObj(E3dObject* p3DObj);
@@ -178,21 +178,21 @@ public:
     // which is vertical to the screen, plus a shift of the scene.
     // This means that also the scene (E3dScene) must define this
     // routine as virtual in its class.
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
+    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
 
     // get wireframe polygon for local object. No transform is applied.
     basegfx::B3DPolyPolygon CreateWireframe() const;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
     sal_uInt16 GetLogicalGroup() { return 0; }
-    virtual E3dObject* Clone() const;
+    virtual E3dObject* Clone() const SAL_OVERRIDE;
     E3dObject& operator=( const E3dObject& rObj );
 
-    virtual SdrObjGeoData *NewGeoData() const;
-    virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void          RestGeoData(const SdrObjGeoData& rGeo);
+    virtual SdrObjGeoData *NewGeoData() const SAL_OVERRIDE;
+    virtual void          SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
+    virtual void          RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 
     // get/set the selection
     bool GetSelected() const { return mbIsSelected; }
@@ -223,7 +223,7 @@ private:
     friend class sdr::properties::E3dSphereProperties;
 
 protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
     // material of the object
     Color                   aMaterialAmbientColor;
@@ -245,9 +245,9 @@ public :
     E3dCompoundObject(E3dDefaultAttributes& rDefault);
     virtual ~E3dCompoundObject();
 
-    virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
+    virtual sal_uInt32 GetHdlCount() const SAL_OVERRIDE;
+    virtual void    AddToHdlList(SdrHdlList& rHdlList) const SAL_OVERRIDE;
 
     // DoubleSided: sal_True/FALSE
     bool GetDoubleSided() const
@@ -298,15 +298,15 @@ public :
     bool GetReducedLineGeometry() const
         { return ((const Svx3DReducedLineGeometryItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue(); }
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void RecalcSnapRect();
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual void RecalcSnapRect() SAL_OVERRIDE;
 
     // set/get parameters for geometry creation
     bool GetCreateNormals() const { return bCreateNormals; }
 
     bool GetCreateTexture() const { return bCreateTexture; }
 
-    virtual E3dCompoundObject* Clone() const;
+    virtual E3dCompoundObject* Clone() const SAL_OVERRIDE;
 
     // material of the object
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }

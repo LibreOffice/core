@@ -88,10 +88,10 @@ namespace svxform
         FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
-        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException, std::exception);
-        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) throw (InvocationTargetException, RuntimeException, std::exception);
+        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) throw (InvocationTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // lifetime control
         void SAL_CALL dispose();
@@ -160,13 +160,13 @@ namespace svxform
         void doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult );
 
         // IFormScriptingEnvironment
-        virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager );
-        virtual void revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager );
-        virtual void dispose();
+        virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
+        virtual void revokeEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
+        virtual void dispose() SAL_OVERRIDE;
 
         // IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     private:
         void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
@@ -912,7 +912,7 @@ namespace svxform
             }
 
             // IScript
-            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
+            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult ) SAL_OVERRIDE;
         };
 
 

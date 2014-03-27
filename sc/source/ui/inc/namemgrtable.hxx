@@ -57,8 +57,8 @@ public:
     ScRangeManagerTable( SvSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
     virtual ~ScRangeManagerTable();
 
-    virtual void Resize();
-    virtual void StateChanged( StateChangedType nStateChange );
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry = true );
     void DeleteSelectedEntries();

@@ -44,8 +44,8 @@ class SVX_DLLPUBLIC SvxHFPage: public SfxTabPage
 
 public:
 
-    virtual bool    FillItemSet( SfxItemSet& rOutSet );
-    virtual void    Reset( const SfxItemSet& rSet );
+    virtual bool    FillItemSet( SfxItemSet& rOutSet ) SAL_OVERRIDE;
+    virtual void    Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     virtual         ~SvxHFPage();
 
@@ -54,8 +54,8 @@ public:
     void            EnableDynamicSpacing();
 
 protected:
-    virtual void    ActivatePage( const SfxItemSet& rSet );
-    virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId );
 

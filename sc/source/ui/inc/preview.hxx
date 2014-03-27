@@ -104,23 +104,23 @@ private:
     using Window::SetZoom;
 
 protected:
-    virtual void   Paint( const Rectangle& rRect );
-    virtual void   Command( const CommandEvent& rCEvt );
-    virtual void   KeyInput( const KeyEvent& rKEvt );
-    virtual void   MouseMove( const MouseEvent& rMEvt );
-    virtual void   MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void   MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void   Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void   Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void   KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void   MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void   MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void   MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    virtual void   GetFocus();
-    virtual void   LoseFocus();
+    virtual void   GetFocus() SAL_OVERRIDE;
+    virtual void   LoseFocus() SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
 public:
             ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
             ~ScPreview();
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     SC_DLLPUBLIC void    DataChanged(bool bNewTime = false);             //  Instead of calling Invalidate
     void    DoInvalidate();

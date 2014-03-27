@@ -21,7 +21,7 @@ public:
         salhelper::Thread("sheet-import-thread-pool"),
         mpPool( pPool ) {}
 
-    virtual void execute()
+    virtual void execute() SAL_OVERRIDE
     {
         ThreadTask *pTask;
         while ( ( pTask = waitForWork() ) )

@@ -40,7 +40,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 };
 
 
@@ -56,7 +56,7 @@ public:
                             const OUString& rSysFileName );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 };
 
 

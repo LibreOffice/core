@@ -609,7 +609,7 @@ public:
     SwFrameProperties_Impl();
     virtual ~SwFrameProperties_Impl(){}
 
-    bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound);
+    bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound) SAL_OVERRIDE;
 };
 
 SwFrameProperties_Impl::SwFrameProperties_Impl():
@@ -676,7 +676,7 @@ public:
     SwGraphicProperties_Impl();
     virtual ~SwGraphicProperties_Impl(){}
 
-    virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound);
+    virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound) SAL_OVERRIDE;
 };
 
 SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
@@ -777,7 +777,7 @@ public:
         SwFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT)*/ ){}
     virtual ~SwOLEProperties_Impl(){}
 
-    virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound);
+    virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound) SAL_OVERRIDE;
 };
 
 bool SwOLEProperties_Impl::AnyToItemSet(

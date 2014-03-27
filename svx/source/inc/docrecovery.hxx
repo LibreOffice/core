@@ -273,11 +273,11 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         // css.frame.XStatusListener
         virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // helper
@@ -348,30 +348,30 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
         // XStatusIndicator
         virtual void SAL_CALL start(const OUString& sText ,
                                           sal_Int32        nRange)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL end()
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL setText(const OUString& sText)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL setValue(sal_Int32 nValue)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL reset()
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
         // XComponent
         virtual void SAL_CALL dispose()
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
-            throw(css::uno::RuntimeException, std::exception);
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -424,7 +424,7 @@ class TabDialog4Recovery : public TabDialog
         virtual ~TabDialog4Recovery();
 
         virtual void addTabPage(IExtendedTabPage* pPage);
-        virtual short Execute();
+        virtual short Execute() SAL_OVERRIDE;
 };
 
 
@@ -474,11 +474,11 @@ class SaveDialog : public IExtendedTabPage
 
 
         /** @short  TODO*/
-        virtual short   execute();
+        virtual short   execute() SAL_OVERRIDE;
 
 
         /** @short  TODO*/
-        virtual void    setDefButton();
+        virtual void    setDefButton() SAL_OVERRIDE;
 
         DECL_LINK(OKButtonHdl, void*);
 };
@@ -529,13 +529,13 @@ class SaveProgressDialog : public ModalDialog
 
 
         /** @short  start the emergency save operation. */
-        virtual short Execute();
+        virtual short Execute() SAL_OVERRIDE;
 
         // IRecoveryUpdateListener
-        virtual void updateItems();
-        virtual void stepNext(TURLInfo* pItem);
-        virtual void start();
-        virtual void end();
+        virtual void updateItems() SAL_OVERRIDE;
+        virtual void stepNext(TURLInfo* pItem) SAL_OVERRIDE;
+        virtual void start() SAL_OVERRIDE;
+        virtual void end() SAL_OVERRIDE;
 };
 
 
@@ -552,7 +552,7 @@ public:
 
     /** @short TODO */
     virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 
@@ -589,7 +589,7 @@ class RecovDocList : public SvSimpleTable
                                const OUString& rText,
                                const Image& rImage1,
                                const Image& rImage2,
-                               SvLBoxButtonKind eButtonKind);
+                               SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 };
 
 
@@ -650,18 +650,18 @@ class RecoveryDialog : public IExtendedTabPage
 
 
         // IRecoveryUpdateListener
-        virtual void updateItems();
-        virtual void stepNext(TURLInfo* pItem);
-        virtual void start();
-        virtual void end();
+        virtual void updateItems() SAL_OVERRIDE;
+        virtual void stepNext(TURLInfo* pItem) SAL_OVERRIDE;
+        virtual void start() SAL_OVERRIDE;
+        virtual void end() SAL_OVERRIDE;
 
 
         /** @short TODO */
-        virtual short execute();
+        virtual short execute() SAL_OVERRIDE;
 
 
         /** @short  TODO*/
-        virtual void    setDefButton();
+        virtual void    setDefButton() SAL_OVERRIDE;
 
 
     // helper

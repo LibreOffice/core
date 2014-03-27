@@ -249,7 +249,7 @@ public:
         StartListening( *pFrame );
         push_back( pFrame );
     }
-    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 

@@ -66,9 +66,9 @@ public:
     void                UpdateEntries( const std::vector<OUString> &aNewEntryList );
 
 protected:
-    virtual void        Select();
-    virtual void        DoubleClick();
-    virtual bool        Notify( NotifyEvent& rNEvt );
+    virtual void        Select() SAL_OVERRIDE;
+    virtual void        DoubleClick() SAL_OVERRIDE;
+    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 private:
     struct ScenarioEntry
@@ -107,11 +107,11 @@ public:
     void    SetComment( const OUString& rComment )
                 { aEdComment.SetText( rComment ); }
 
-    void    SetSizePixel( const Size& rNewSize );
+    void    SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
 
 protected:
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     ScScenarioListBox   aLbScenario;
@@ -131,12 +131,12 @@ public:
     void    SetCol( SCCOL nColNo );
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    LoseFocus();
-    virtual void    Up();
-    virtual void    Down();
-    virtual void    First();
-    virtual void    Last();
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void    Up() SAL_OVERRIDE;
+    virtual void    Down() SAL_OVERRIDE;
+    virtual void    First() SAL_OVERRIDE;
+    virtual void    Last() SAL_OVERRIDE;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -164,8 +164,8 @@ public:
     void    SetRow( SCROW nRow ){ SetValue( nRow ); }
 
 protected:
-    virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual void    LoseFocus();
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -184,7 +184,7 @@ public:
             ~ScDocListBox();
 
 protected:
-    virtual void    Select();
+    virtual void    Select() SAL_OVERRIDE;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -204,13 +204,13 @@ public:
     void UpdateButtons();
     void InitImageList();
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     DECL_LINK( ToolBoxDropdownClickHdl, void* );
 
 protected:
-    virtual void    Select();
-    virtual void    Click();
+    virtual void    Select() SAL_OVERRIDE;
+    virtual void    Click() SAL_OVERRIDE;
 
 private:
     ScNavigatorDlg& rDlg;
@@ -315,8 +315,8 @@ private:
     static void ReleaseFocus();
 
 protected:
-    virtual void    Resize();
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Resizing( Size& rSize );
 
 public:
@@ -325,13 +325,13 @@ public:
                 ~ScNavigatorDlg();
 
     using Window::Notify;
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     void            CursorPosChanged();
 
     virtual SfxChildAlignment
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 
@@ -346,7 +346,7 @@ public:
 
     SFX_DECL_CHILDWINDOWCONTEXT(ScNavigatorDialogWrapper)
 
-    virtual void    Resizing( Size& rSize );
+    virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
 
 private:
     ScNavigatorDlg* pNavigator;

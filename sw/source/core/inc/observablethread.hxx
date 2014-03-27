@@ -47,8 +47,8 @@ class ObservableThread : public osl::Thread,
                           const oslInterlockedCount nThreadID );
 
         // IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
+        virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+        virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     protected:
 
@@ -61,7 +61,7 @@ class ObservableThread : public osl::Thread,
             Otherwise, it's not guaranteed, that its ref-count is increased
             during the execution of the thread.
         */
-        virtual void SAL_CALL run();
+        virtual void SAL_CALL run() SAL_OVERRIDE;
 
         virtual void threadFunction() = 0;
 
@@ -73,7 +73,7 @@ class ObservableThread : public osl::Thread,
             the end of its execution and that the observer is notified, that
             the thread has finished its work.
         */
-        virtual void SAL_CALL onTerminated();
+        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
         virtual void threadFinished();
 

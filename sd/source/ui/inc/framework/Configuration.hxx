@@ -84,7 +84,7 @@ public:
         bool bBroadcastRequestEvents);
     virtual ~Configuration (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XConfiguration
@@ -92,12 +92,12 @@ public:
     virtual void SAL_CALL addResource (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeResource(
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
         com::sun::star::drawing::framework::XResourceId> > SAL_CALL getResources (
@@ -105,19 +105,19 @@ public:
             ::com::sun::star::drawing::framework::XResourceId>& rxAnchorId,
         const OUString& rsResourceURLPrefix,
         ::com::sun::star::drawing::framework::AnchorBindingMode eMode)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasResource (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XCloneable
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
         SAL_CALL createClone (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     // XNamed
@@ -126,13 +126,13 @@ public:
         debugging purposes.
     */
     virtual OUString SAL_CALL getName (void)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This call is ignored because the XNamed interface is (mis)used to
         give access to a human readable name for debugging purposes.
     */
     virtual void SAL_CALL setName (const OUString& rName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     class ResourceContainer;

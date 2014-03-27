@@ -757,7 +757,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const
+            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
@@ -815,7 +815,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const
+            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
@@ -900,7 +900,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const
+            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
         {
             (void)rViewShell;
             MapMode aMap (maMap);
@@ -973,7 +973,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const
+            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
 
@@ -1122,7 +1122,7 @@ namespace {
             View* pView,
             DrawView& rPrintView,
             const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const
+            const SetOfByte& rPrintableLayers) const SAL_OVERRIDE
         {
             (void)rViewShell;
             (void)pView;
@@ -1201,7 +1201,7 @@ public:
 
 
 
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE
     {
         const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
         if (pSimpleHint != NULL

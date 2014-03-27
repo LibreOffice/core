@@ -42,15 +42,15 @@ public:
     SvxUnoBitmapTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoBitmapTable() throw();
 
-    virtual NameOrIndex* createItem() const throw();
-    virtual bool isValid( const NameOrIndex* pItem ) const;
+    virtual NameOrIndex* createItem() const throw() SAL_OVERRIDE;
+    virtual bool isValid( const NameOrIndex* pItem ) const SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception );
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception);
+    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception);
+    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()

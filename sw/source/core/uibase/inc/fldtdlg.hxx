@@ -38,10 +38,10 @@ class SwFldDlg: public SfxTabDialog
     sal_uInt16          m_nFuncId;
     sal_uInt16          m_nDbId;
 
-    virtual bool    Close();
-    virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId );
-    virtual void        Activate();
-    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    virtual bool    Close() SAL_OVERRIDE;
+    virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual void        Activate() SAL_OVERRIDE;
+    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 
     void                ReInitTabPage( sal_uInt16 nPageId,
                                         sal_Bool bOnlyActivate = sal_False );

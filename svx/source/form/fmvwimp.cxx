@@ -158,7 +158,7 @@ class FmXFormView::ObjectRemoveListener : public SfxListener
     FmXFormView* m_pParent;
 public:
     ObjectRemoveListener( FmXFormView* pParent );
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 

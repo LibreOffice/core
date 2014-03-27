@@ -125,8 +125,8 @@ public:
     OColorPopup(Window* _pParent,Condition* _pCondition);
     ValueSet        m_aColorSet;
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void Resize();
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     void StartSelection();
     void SetSlotId(sal_uInt16 _nSlotId);

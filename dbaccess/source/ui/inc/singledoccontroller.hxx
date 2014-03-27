@@ -44,7 +44,7 @@ namespace dbaui
         virtual ~OSingleDocumentController();
 
         // OComponentHelper
-        virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     public:
         /// need for undo's and redo's
@@ -60,14 +60,14 @@ namespace dbaui
         void addUndoActionAndInvalidate( SfxUndoAction* pAction );
 
         // OGenericUnoController
-        virtual FeatureState    GetState( sal_uInt16 nId ) const;
-        virtual void            Execute( sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs );
+        virtual FeatureState    GetState( sal_uInt16 nId ) const SAL_OVERRIDE;
+        virtual void            Execute( sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs ) SAL_OVERRIDE;
 
         // XUndoManagerSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
         ::std::auto_ptr< OSingleDocumentController_Data >   m_pData;

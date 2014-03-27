@@ -35,7 +35,7 @@ namespace sdr
             basegfx::B2DPoint                       maSecondPosition;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
         public:
             OverlayLineStriped(
@@ -47,7 +47,7 @@ namespace sdr
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
 
             // react on stripe definition change
-            virtual void stripeDefinitionHasChanged();
+            virtual void stripeDefinitionHasChanged() SAL_OVERRIDE;
         };
     } // end of namespace overlay
 } // end of namespace sdr

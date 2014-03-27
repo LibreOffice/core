@@ -47,8 +47,8 @@ private:
     DECL_LINK( SelectHdl, void * );
 
 protected:
-    virtual void    Resize();
-    virtual bool    Close();
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
 public:
     SvxColorWindow_Impl( const OUString& rCommand,
@@ -60,10 +60,10 @@ public:
     ~SvxColorWindow_Impl();
     void                StartSelection();
 
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual SfxPopupWindow* Clone() const;
+    virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
 
 #endif

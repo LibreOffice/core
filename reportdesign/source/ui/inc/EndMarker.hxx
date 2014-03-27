@@ -31,14 +31,14 @@ namespace rptui
         OEndMarker(OEndMarker&);
         void operator =(OEndMarker&);
     protected:
-        virtual void ImplInitSettings();
+        virtual void ImplInitSettings() SAL_OVERRIDE;
     public:
         OEndMarker(Window* _pParent,const OUString& _sColorEntry);
         virtual ~OEndMarker();
 
         // windows
-        virtual void    Paint( const Rectangle& rRect );
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     };
 }
 #endif // RPTUI_ENDMARKER_HXX

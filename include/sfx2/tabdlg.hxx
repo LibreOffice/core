@@ -53,8 +53,8 @@ public:
     TYPEINFO_OVERRIDE();
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool=NULL);
-    virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const;
-    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const;
+    virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;
 };
 
 class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog
@@ -212,8 +212,8 @@ public:
     PushButton*         GetUserButton() { return m_pUserBtn; }
     void                RemoveResetButton();
 
-    short               Execute();
-    void                StartExecuteModal( const Link& rEndDialogHdl );
+    short               Execute() SAL_OVERRIDE;
+    void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
     void                Start( bool bShow = true );
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }

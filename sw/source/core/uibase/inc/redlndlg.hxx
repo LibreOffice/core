@@ -139,8 +139,8 @@ public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, Window *pParent);
     ~SwModelessRedlineAcceptDlg();
 
-    virtual void    Activate();
-    virtual void    FillInfo(SfxChildWinInfo&) const;
+    virtual void    Activate() SAL_OVERRIDE;
+    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
     void            Initialize (SfxChildWinInfo* pInfo);
 };
 
@@ -154,7 +154,7 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 
-    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
 };
 
 #endif

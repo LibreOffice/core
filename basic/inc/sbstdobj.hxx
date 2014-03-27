@@ -31,7 +31,7 @@ class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
 public:
     SbStdFactory();
 
-    virtual SbxObject*  CreateObject( const OUString& rClassName );
+    virtual SbxObject*  CreateObject( const OUString& rClassName ) SAL_OVERRIDE;
 };
 
 // class SbStdPicture
@@ -42,7 +42,7 @@ protected:
 
    ~SbStdPicture();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType );
+                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
     void    PropType( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void    PropWidth( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
@@ -52,7 +52,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SbStdPicture();
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     Graphic GetGraphic() const { return aGraphic; }
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
@@ -71,7 +71,7 @@ protected:
 
    ~SbStdFont();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType );
+                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
     void    PropBold( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
     void    PropItalic( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
@@ -84,7 +84,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SbStdFont();
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     void     SetBold( sal_Bool bB ) { bBold = bB; }
     sal_Bool IsBold() const { return bBold; }
@@ -107,7 +107,7 @@ protected:
 
    ~SbStdClipboard();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType );
+                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
     void    MethClear( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
     void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
@@ -120,7 +120,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SbStdClipboard();
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_BASIC_INC_SBSTDOBJ_HXX

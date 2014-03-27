@@ -299,16 +299,16 @@ namespace sfx2
     public:
         CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame );
 
-        virtual OUString GetDisplayName() const;
-        virtual Image GetImage() const;
-        virtual OString GetHelpID() const;
-        virtual void Activate( Window& i_rParentWindow );
-        virtual void Deactivate();
-        virtual void SetSizePixel( const Size& i_rPanelWindowSize );
-        virtual void GrabFocus();
-        virtual void Dispose();
+        virtual OUString GetDisplayName() const SAL_OVERRIDE;
+        virtual Image GetImage() const SAL_OVERRIDE;
+        virtual OString GetHelpID() const SAL_OVERRIDE;
+        virtual void Activate( Window& i_rParentWindow ) SAL_OVERRIDE;
+        virtual void Deactivate() SAL_OVERRIDE;
+        virtual void SetSizePixel( const Size& i_rPanelWindowSize ) SAL_OVERRIDE;
+        virtual void GrabFocus() SAL_OVERRIDE;
+        virtual void Dispose() SAL_OVERRIDE;
         virtual Reference< XAccessible >
-                    CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible );
+                    CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible ) SAL_OVERRIDE;
 
         const OUString&
                     GetResourceURL() const { return m_sResourceURL; }
@@ -859,11 +859,11 @@ namespace sfx2
 
     protected:
         // IToolPanelDeckListener overridables
-        virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
-        virtual void PanelRemoved( const size_t i_nPosition );
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
-        virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter );
-        virtual void Dying();
+        virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void PanelRemoved( const size_t i_nPosition ) SAL_OVERRIDE;
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) SAL_OVERRIDE;
+        virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
+        virtual void Dying() SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnToolboxClicked, ToolBox* );

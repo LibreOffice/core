@@ -142,7 +142,7 @@ class SwPreviewZoomDlg : public SvxStandardDialog
     NumericField* m_pRowEdit;
     NumericField* m_pColEdit;
 
-    virtual void  Apply();
+    virtual void  Apply() SAL_OVERRIDE;
 
 public:
     SwPreviewZoomDlg( SwPagePreviewWin& rParent );

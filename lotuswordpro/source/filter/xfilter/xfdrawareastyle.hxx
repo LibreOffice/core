@@ -86,9 +86,9 @@ public:
 
     XFColor GetBackColor();
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     enumXFAreaStyle     m_eAreaStyle;

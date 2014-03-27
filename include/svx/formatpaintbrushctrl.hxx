@@ -44,12 +44,12 @@ public:
     FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~FormatPaintBrushToolBoxControl();
 
-    virtual void    DoubleClick();
-    virtual void    Click();
+    virtual void    DoubleClick() SAL_OVERRIDE;
+    virtual void    Click() SAL_OVERRIDE;
     virtual void    Select( sal_Bool bMod1 = sal_False );
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
 private:
     DECL_LINK( WaitDoubleClickHdl, void* );
     void impl_executePaintBrush();

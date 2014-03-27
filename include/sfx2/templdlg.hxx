@@ -52,10 +52,10 @@ friend class SfxTemplateDialog_Impl;
 
     SfxTemplateDialog_Impl*     pImpl;
 
-    virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
-    virtual void                Resize();
-    virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
-    virtual void                StateChanged( StateChangedType nStateChange );
+    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
+    virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
 public:
     SfxTemplateDialog( SfxBindings*, SfxChildWindow*, Window* );
@@ -88,10 +88,10 @@ public:
     virtual ~SfxTemplatePanelControl();
 
     virtual void                Update();
-    virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
-    virtual void                Resize();
+    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
+    virtual void                Resize() SAL_OVERRIDE;
     virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
-    virtual void                StateChanged( StateChangedType nStateChange );
+    virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void                FreeResource (void);
 
 private:

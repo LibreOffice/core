@@ -74,7 +74,7 @@ public:
 public:
     void    SetTexture(sal_Bool bTexture);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     sal_Bool        m_bTexture;
@@ -121,9 +121,9 @@ public:
 
     void    AddText( const OUString& part );
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     sal_Bool    m_bFixed;

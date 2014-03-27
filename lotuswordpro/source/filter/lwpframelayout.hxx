@@ -130,17 +130,17 @@ class LwpFrameLayout: public LwpPlacableLayout
 public:
     LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFrameLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FRAME_LAYOUT;}
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
-    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FRAME_LAYOUT;}
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
     OUString GetNextLinkName();
     sal_Bool HasPreviousLinkLayout();
-    sal_Bool IsForWaterMark();
-    double GetWidth();
+    sal_Bool IsForWaterMark() SAL_OVERRIDE;
+    double GetWidth() SAL_OVERRIDE;
     void ApplyGraphicSize(XFFrame* pXFFrame);
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     double GetMaxWidth();
 
@@ -158,12 +158,12 @@ class LwpGroupLayout: public LwpPlacableLayout
 public:
     LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGroupLayout();
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_GROUP_LAYOUT;}
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
-    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_GROUP_LAYOUT;}
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
+    void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     LwpFrame* m_pFrame;
 
@@ -178,10 +178,10 @@ class LwpGroupFrame: public LwpContent
 public:
     LwpGroupFrame(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpGroupFrame();
-    virtual void RegisterStyle();
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual void RegisterStyle() SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 };
 
 class LwpStory;
@@ -191,17 +191,17 @@ class LwpDropcapLayout : public LwpFrameLayout
 public:
     LwpDropcapLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpDropcapLayout(){}
-    virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_DROPCAP_LAYOUT;}
-    virtual void Parse(IXFStream* pOutputStream);
-    virtual void XFConvert(XFContentContainer* pCont);
+    virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_DROPCAP_LAYOUT;}
+    virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
+    virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     sal_uInt16 GetLines(){return m_nLines;}
     void SetChars(sal_uInt32 nChars){ m_nChars += nChars;}
     sal_uInt32 GetChars() const {return m_nChars;}
     LwpStory* GetContentStory();
     void RegisterStyle(LwpFoundry* pFoundry);
-    void RegisterStyle();
+    void RegisterStyle() SAL_OVERRIDE;
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     sal_uInt16 m_nLines;
     sal_uInt32 m_nChars;
@@ -217,7 +217,7 @@ public:
     LwpStory* GetContentStory();
     sal_uInt8 GetPosition(){return m_nPlacement;}
     sal_uInt8 GetAlignment(){return m_nAlignment;}
-    void RegisterStyle();
+    void RegisterStyle() SAL_OVERRIDE;
     enum{
     LEFT = 4,
     RIGHT = 5,
@@ -226,7 +226,7 @@ public:
     BOTTOM = 3
     };
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     sal_uInt8 m_nPlacement;
     sal_uInt8 m_nAlignment;

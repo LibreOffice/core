@@ -67,17 +67,17 @@ public:
         SfxBindings* pBindings,
         const cssu::Reference<css::ui::XSidebar>& rxSidebar);
 
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     SfxBindings* GetBindings();
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext aContext);
+        const ::sfx2::sidebar::EnumContext aContext) SAL_OVERRIDE;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) SAL_OVERRIDE;
 
     sal_uInt16 GetBulletTypeIndex(){ return mnBulletTypeIndex; }
     sal_uInt16 GetNumTypeIndex(){ return mnNumTypeIndex; }

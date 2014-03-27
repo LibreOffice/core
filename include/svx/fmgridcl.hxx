@@ -53,9 +53,9 @@ public:
     }
 
 protected:
-    virtual void Command( const CommandEvent& rCEvt );
-    virtual void RequestHelp( const HelpEvent& rHEvt );
-    virtual void Select();
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void Select() SAL_OVERRIDE;
 
     /** the value returned by GetItemPos is meaningless for the grid model if there are hidden columns,
         so use GetModelColumnPos instead
@@ -75,8 +75,8 @@ protected:
     virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     /** selects the column at the selection supplier.
         @param  nColumnId
@@ -111,7 +111,7 @@ public:
         WinBits nBits);
 
     // Window
-    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XPropertyChangeListener
     void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
@@ -138,7 +138,7 @@ public:
         @return
             The name of the specified object.
     */
-    virtual OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+    virtual OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
 
     /** return the description of the specified object.
         @param  eObjType
@@ -148,33 +148,33 @@ public:
         @return
             The description of the specified object.
     */
-    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
 
 protected:
-    virtual void Command(const CommandEvent& rEvt);
+    virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;
 
-    virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent);
-    virtual long QueryMinimumRowHeight();
-    virtual void RowHeightChanged();
-    virtual void ColumnResized(sal_uInt16 nId);
-    virtual void ColumnMoved(sal_uInt16 nId);
-    virtual void DeleteSelectedRows();
+    virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+    virtual long QueryMinimumRowHeight() SAL_OVERRIDE;
+    virtual void RowHeightChanged() SAL_OVERRIDE;
+    virtual void ColumnResized(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual void ColumnMoved(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual void DeleteSelectedRows() SAL_OVERRIDE;
     virtual void SetDesignMode(bool bMode) SAL_OVERRIDE;
-    virtual void CellModified();
-    virtual void HideColumn(sal_uInt16 nId);
-    virtual void ShowColumn(sal_uInt16 nId);
+    virtual void CellModified() SAL_OVERRIDE;
+    virtual void HideColumn(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual void ShowColumn(sal_uInt16 nId) SAL_OVERRIDE;
 
     bool    IsInColumnMove() const {return m_bInColumnMove;}
 
-    virtual void BeginCursorAction();
-    virtual void EndCursorAction();
-    virtual void Select();
+    virtual void BeginCursorAction() SAL_OVERRIDE;
+    virtual void EndCursorAction() SAL_OVERRIDE;
+    virtual void Select() SAL_OVERRIDE;
 
     // Initialize columns
     // a.) only by column description
     virtual void InitColumnsByModels(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xColumns);
     // b.) during alivemode by database fields
-    virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields);
+    virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) SAL_OVERRIDE;
 
             // some kind of impl version (for one single column) of our version of InitColumnsByFields
             void InitColumnByField(

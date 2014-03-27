@@ -50,14 +50,14 @@ public:
     ~SvxPopupWindowTbxMgr();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState);
-    virtual SfxPopupWindow*     Clone() const;
-    virtual void                PopupModeEnd();
+                                              const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual SfxPopupWindow*     Clone() const SAL_OVERRIDE;
+    virtual void                PopupModeEnd() SAL_OVERRIDE;
 
     void                        StartSelection();
 
     // toolbox click or execute may chage the default selection in the tools toolbox
-    virtual void                UserEvent( sal_uIntPtr nEvent, void* pEventData );
+    virtual void                UserEvent( sal_uIntPtr nEvent, void* pEventData ) SAL_OVERRIDE;
 };
 
 

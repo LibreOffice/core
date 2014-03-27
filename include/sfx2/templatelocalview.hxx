@@ -34,13 +34,13 @@ public:
     virtual ~TemplateLocalView ();
 
     // Fill view with template folders thumbnails
-    virtual void Populate ();
+    virtual void Populate () SAL_OVERRIDE;
 
-    virtual void reload ();
+    virtual void reload () SAL_OVERRIDE;
 
-    virtual void showRootRegion ();
+    virtual void showRootRegion () SAL_OVERRIDE;
 
-    virtual void showRegion (ThumbnailViewItem *pItem);
+    virtual void showRegion (ThumbnailViewItem *pItem) SAL_OVERRIDE;
 
     void showRegion (const OUString &rName);
 
@@ -57,11 +57,11 @@ public:
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
-    virtual sal_uInt16 createRegion (const OUString &rName);
+    virtual sal_uInt16 createRegion (const OUString &rName) SAL_OVERRIDE;
 
-    virtual bool isNestedRegionAllowed () const;
+    virtual bool isNestedRegionAllowed () const SAL_OVERRIDE;
 
-    virtual bool isImportAllowed () const;
+    virtual bool isImportAllowed () const SAL_OVERRIDE;
 
     bool removeRegion (const sal_uInt16 nItemId);
 
@@ -91,7 +91,7 @@ public:
 
     bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) SAL_OVERRIDE;
 
 private:
 

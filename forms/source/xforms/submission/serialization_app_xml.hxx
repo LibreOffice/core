@@ -35,8 +35,8 @@ private:
 public:
     CSerializationAppXML();
 
-    virtual void serialize();
-    virtual CSS::uno::Reference< CSS::io::XInputStream > getInputStream();
+    virtual void serialize() SAL_OVERRIDE;
+    virtual CSS::uno::Reference< CSS::io::XInputStream > getInputStream() SAL_OVERRIDE;
 };
 
 #endif

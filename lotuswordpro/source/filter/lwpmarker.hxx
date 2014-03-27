@@ -76,7 +76,7 @@ class LwpMarker : public LwpDLNFPVList
 public:
     LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpMarker(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     OUString GetNamedProperty(const OUString& name);
 protected:
     enum{
@@ -109,7 +109,7 @@ class LwpStoryMarker : public LwpMarker
 public:
     LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpStoryMarker(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
 private:
     LwpFribRange m_Range;
     sal_uInt16 m_nFlag;
@@ -120,7 +120,7 @@ class LwpCHBlkMarker : public LwpStoryMarker
 public:
     LwpCHBlkMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpCHBlkMarker(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     sal_uInt16 GetAction(){return m_nAction;}
     void ConvertCHBlock(XFContentContainer* pXFPara,sal_uInt8 nType);
     enum{
@@ -179,7 +179,7 @@ public:
     LwpBookMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpBookMark(){}
 protected:
-    void Read();
+    void Read() SAL_OVERRIDE;
 public:
     sal_Bool IsRightMarker(LwpObjectID objMarker);
     OUString GetName();
@@ -196,7 +196,7 @@ class LwpFieldMark : public LwpStoryMarker
 public:
     LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpFieldMark(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     void ParseIndex(OUString& sKey1,OUString& sKey2);
     void ParseTOC(OUString& sLevel,OUString& sText);
     sal_uInt16 GetFieldType(){return m_nFieldType;}
@@ -260,7 +260,7 @@ class LwpRubyMarker : public LwpStoryMarker
 public:
     LwpRubyMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpRubyMarker(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     OUString GetRubyText(){return m_strRubyText;}
     void SetRubyText(const OUString& sText){m_strRubyText = sText;}
     OUString GetTextStyleName(){return m_TextStyle;}

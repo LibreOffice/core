@@ -299,8 +299,8 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
 public:
 
     SingleRangeEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xRange( xRange ), mxContext( xContext ), bHasMore( true ) { }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) { return bHasMore; }
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return bHasMore; }
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( !bHasMore )
             throw container::NoSuchElementException();
@@ -323,19 +323,19 @@ private:
 public:
     SingleRangeIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ):mxParent( xParent ), m_xRange( xRange ), mxContext( xContext ) {}
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount() throw (::uno::RuntimeException, std::exception) { return 1; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual ::sal_Int32 SAL_CALL getCount() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return 1; }
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( Index != 0 )
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( m_xRange );
     }
         // XElementAccess
-        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception){ return cppu::UnoType<table::XCellRange>::get(); }
+        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return cppu::UnoType<table::XCellRange>::get(); }
 
-        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) { return sal_True; }
+        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return sal_True; }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) { return new SingleRangeEnumeration( mxParent, mxContext, m_xRange ); }
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return new SingleRangeEnumeration( mxParent, mxContext, m_xRange ); }
 
 };
 
@@ -348,7 +348,7 @@ class RangesEnumerationImpl : public EnumerationHelperImpl
 public:
 
     RangesEnumerationImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, bool bIsRows, bool bIsColumns ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return lcl_makeRange( m_xParent, m_xContext, m_xEnumeration->nextElement(), mbIsRows, mbIsColumns );
     }
@@ -363,16 +363,16 @@ public:
     ScVbaRangeAreas( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess, bool bIsRows, bool bIsColumns ) : ScVbaCollectionBaseImpl( xParent, xContext, xIndexAccess ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
 
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException);
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException){ return cppu::UnoType<excel::XRange>::get(); }
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException) SAL_OVERRIDE { return cppu::UnoType<excel::XRange>::get(); }
 
-    virtual uno::Any createCollectionObject( const uno::Any& aSource );
+    virtual uno::Any createCollectionObject( const uno::Any& aSource ) SAL_OVERRIDE;
 
-    virtual OUString getServiceImplName() { return OUString(); }
+    virtual OUString getServiceImplName() SAL_OVERRIDE { return OUString(); }
 
-    virtual uno::Sequence< OUString > getServiceNames() { return uno::Sequence< OUString >(); }
+    virtual uno::Sequence< OUString > getServiceNames() SAL_OVERRIDE { return uno::Sequence< OUString >(); }
 
 };
 
@@ -632,9 +632,9 @@ public:
         {
     }
 
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception){ return mCurElem < mMaxElems; }
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return mCurElem < mMaxElems; }
 
-    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -682,9 +682,9 @@ public:
         }
         m_it = m_CellPositions.begin();
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception){ return m_it != m_CellPositions.end(); }
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_it != m_CellPositions.end(); }
 
-    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -719,8 +719,8 @@ protected:
     uno::TypeClass mTypeClass;
 public:
     CellValueSetter( const uno::Any& aValue );
-    virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell );
-    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell );
+    virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE;
+    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE;
 
 };
 
@@ -815,9 +815,9 @@ protected:
     uno::TypeClass mTypeClass;
 public:
     CellValueGetter() {}
-    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell );
-    virtual void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue );
-    const uno::Any& getValue() const { return maValue; }
+    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE;
+    virtual void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue ) SAL_OVERRIDE;
+    const uno::Any& getValue() const SAL_OVERRIDE { return maValue; }
 
 };
 
@@ -885,7 +885,7 @@ private:
 public:
     CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eGrammar( eGram ){}
 protected:
-    bool processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
+    bool processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE
     {
         OUString sFormula;
         double aDblValue = 0.0;
@@ -934,7 +934,7 @@ private:
     formula::FormulaGrammar::Grammar m_eGrammar;
 public:
     CellFormulaValueGetter(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
-    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
+    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE
     {
         uno::Any aValue;
         aValue <<= xCell->getFormula();
@@ -983,7 +983,7 @@ public:
             aMatrix[index].realloc( nColCount );
         maValue <<= aMatrix;
     }
-    void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
+    void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE
 
     {
         mValueGetter.visitNode( x, y, xCell );
@@ -1006,7 +1006,7 @@ public:
         aValue >>= aMatrix;
         nColCount = aMatrix.getLength();
     }
-    virtual void visitNode( sal_Int32 /*x*/, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
+    virtual void visitNode( sal_Int32 /*x*/, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE
     {
         if ( y < nColCount )
             mCellValueSetter.processValue( aMatrix[ y ], xCell );
@@ -1031,7 +1031,7 @@ public:
         nColCount = aMatrix[0].getLength();
     }
 
-    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
+    virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) SAL_OVERRIDE
     {
         if ( x < nRowCount && y < nColCount )
             mCellValueSetter.processValue( aMatrix[ x ][ y ], xCell );
@@ -1056,7 +1056,7 @@ class RangeValueProcessor : public RangeProcessor
 public:
     RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
     virtual ~RangeValueProcessor() {}
-    virtual void process( const uno::Reference< excel::XRange >& xRange )
+    virtual void process( const uno::Reference< excel::XRange >& xRange ) SAL_OVERRIDE
     {
         xRange->setValue( m_aVal );
     }
@@ -1068,7 +1068,7 @@ class RangeFormulaProcessor : public RangeProcessor
 public:
     RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
     virtual ~RangeFormulaProcessor() {}
-    virtual void process( const uno::Reference< excel::XRange >& xRange )
+    virtual void process( const uno::Reference< excel::XRange >& xRange ) SAL_OVERRIDE
     {
         xRange->setFormula( m_aVal );
     }
@@ -1080,7 +1080,7 @@ class RangeCountProcessor : public RangeProcessor
 public:
     RangeCountProcessor():nCount(0){}
     virtual ~RangeCountProcessor() {}
-    virtual void process( const uno::Reference< excel::XRange >& xRange )
+    virtual void process( const uno::Reference< excel::XRange >& xRange ) SAL_OVERRIDE
     {
         nCount = nCount + xRange->getCount();
     }

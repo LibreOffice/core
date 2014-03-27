@@ -32,7 +32,7 @@ public:
     DiagramDataFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramDataPtr pDataPtr ) throw();
     virtual ~DiagramDataFragmentHandler() throw();
 
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
@@ -48,7 +48,7 @@ public:
     DiagramLayoutFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramLayoutPtr pDataPtr ) throw();
     virtual ~DiagramLayoutFragmentHandler() throw();
 
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
@@ -64,10 +64,10 @@ public:
         const OUString& rFragmentPath,
         DiagramQStyleMap& rStylesMap );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    virtual void onStartElement( const AttributeList& rAttribs );
-    virtual void onEndElement();
+    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
 
 private:
     ::oox::core::ContextHandlerRef createStyleMatrixContext(sal_Int32 nElement,
@@ -87,10 +87,10 @@ public:
         const OUString& rFragmentPath,
         DiagramColorMap& rColorMap );
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    virtual void onStartElement( const AttributeList& rAttribs );
-    virtual void onEndElement();
+    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
 
 private:
     OUString   maColorName;

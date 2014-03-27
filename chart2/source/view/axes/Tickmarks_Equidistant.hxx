@@ -39,8 +39,8 @@ public:
     virtual double*     firstValue();
     virtual double*     nextValue();
 
-    virtual TickInfo*   firstInfo();
-    virtual TickInfo*   nextInfo();
+    virtual TickInfo*   firstInfo() SAL_OVERRIDE;
+    virtual TickInfo*   nextInfo() SAL_OVERRIDE;
 
     sal_Int32   getCurrentDepth() const { return m_nCurrentDepth; }
 

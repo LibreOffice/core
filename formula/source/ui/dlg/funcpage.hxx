@@ -46,8 +46,8 @@ class FormulaListBox : public ListBox
 {
 protected:
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual bool    PreNotify( NotifyEvent& rNEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
                     FormulaListBox( Window* pParent, const ResId& rResId );

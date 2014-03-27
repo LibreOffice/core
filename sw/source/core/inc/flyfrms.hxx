@@ -59,7 +59,7 @@ protected:
     // method <NotifyBackground>
     friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrm *pPage,
-                                   const SwRect& rRect, PrepareHint eHint);
+                                   const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
 public:
@@ -68,7 +68,7 @@ public:
 
     virtual ~SwFlyFreeFrm();
 
-    virtual void MakeAll();
+    virtual void MakeAll() SAL_OVERRIDE;
 
     // #i37068# - accessors for member <mbNoMoveOnCheckClip>
     inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
@@ -115,7 +115,7 @@ public:
         format isn't possible, if Writer fly frame isn't registered at a page frame
         and its anchor frame isn't inside another Writer fly frame.
     */
-    virtual bool IsFormatPossible() const;
+    virtual bool IsFormatPossible() const SAL_OVERRIDE;
 };
 
 // Flys that are bound to LayoutFrms and not to Cntnt
@@ -128,25 +128,25 @@ public:
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 };
 
 // Flys that are bound to Cntnt but not in Cntnt
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
 protected:
-    virtual void MakeAll();
+    virtual void MakeAll() SAL_OVERRIDE;
 
     // #i28701#
-    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const;
+    virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const SAL_OVERRIDE;
 
     /** method to assure that anchored object is registered at the correct
         page frame
 
         #i28701#
     */
-    virtual void RegisterAtCorrectPage();
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void RegisterAtCorrectPage() SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     // #i28701#
@@ -157,7 +157,7 @@ public:
     void SetAbsPos( const Point &rNew );
 
     // #i26791#
-    virtual void MakeObjPos();
+    virtual void MakeObjPos() SAL_OVERRIDE;
 
     /** method to determine, if a format on the Writer fly frame is possible
 
@@ -166,7 +166,7 @@ public:
         <SwFlyFreeFrm::IsFormatPossible()> by:
         format isn't possible, if method <MakeAll()> is already in progress.
     */
-    virtual bool IsFormatPossible() const;
+    virtual bool IsFormatPossible() const SAL_OVERRIDE;
 };
 
 // Flys that are bound to a character in Cntnt
@@ -179,9 +179,9 @@ class SwFlyInCntFrm : public SwFlyFrm
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
-                                   const SwRect& rRect, PrepareHint eHint);
-    virtual void MakeAll();
-    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
+                                   const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
+    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     // #i28701#
@@ -190,7 +190,7 @@ public:
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     virtual ~SwFlyInCntFrm();
-    virtual void  Format(  const SwBorderAttrs *pAttrs = 0 );
+    virtual void  Format(  const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
@@ -216,11 +216,11 @@ public:
     void AddRefOfst( long nOfst ) { aRef.Y() += nOfst; }
 
     // #i26791#
-    virtual void MakeObjPos();
+    virtual void MakeObjPos() SAL_OVERRIDE;
 
     // invalidate anchor frame on invalidation of the position, because the
     // position is calculated during the format of the anchor frame
-    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
+    virtual void _ActionOnInvalidation( const InvalidationType _nInvalid ) SAL_OVERRIDE;
 };
 
 inline void SwFlyInCntFrm::InvalidateLayout() const

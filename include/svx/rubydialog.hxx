@@ -43,7 +43,7 @@ class SvxRubyDialog;
 class RubyPreview : public Window
 {
 protected:
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     SvxRubyDialog* m_pParentDlg;
 
 public:
@@ -52,7 +52,7 @@ public:
     {
         m_pParentDlg = pParentDlg;
     }
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
@@ -69,8 +69,8 @@ class RubyEdit  : public Edit
 {
     Link    aScrollHdl;
     Link    aJumpHdl;
-    virtual void        GetFocus();
-    virtual bool        PreNotify( NotifyEvent& rNEvt );
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     RubyEdit(Window* pParent, const ResId& rResId)
         : Edit(pParent, rResId)
@@ -143,7 +143,7 @@ class SvxRubyDialog : public SfxModelessDialog
     void                AssertOneEntry();
 
     void                Update();
-    virtual bool    Close();
+    virtual bool    Close() SAL_OVERRIDE;
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
@@ -157,15 +157,15 @@ class SvxRubyDialog : public SfxModelessDialog
 
     void                UpdateColors( void );
 protected:
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
 
                         SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
                                     Window* pParent);
     virtual             ~SvxRubyDialog();
 
-    virtual void        Activate();
-    virtual void        Deactivate();
+    virtual void        Activate() SAL_OVERRIDE;
+    virtual void        Deactivate() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_RUBYDIALOG_HXX

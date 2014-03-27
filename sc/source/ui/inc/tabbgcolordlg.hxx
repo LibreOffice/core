@@ -47,7 +47,7 @@ public:
             m_pTabBgColorDlg = pTabBgColorDlg;
         }
 
-        virtual void KeyInput( const KeyEvent& rKEvt );
+        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     private:
         ScTabBgColorDlg* m_pTabBgColorDlg;
     };

@@ -41,12 +41,12 @@ protected:
     virtual void exportHeaderFooterContent(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XText >& rText,
-            bool bAutoStyles, bool bProgress );
+            bool bAutoStyles, bool bProgress ) SAL_OVERRIDE;
 
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
-                 bool bAutoStyles );
+                 bool bAutoStyles ) SAL_OVERRIDE;
 
 public:
     XMLTableMasterPageExport( ScXMLExport& rExp );

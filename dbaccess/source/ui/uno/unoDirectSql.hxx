@@ -57,8 +57,8 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual Dialog* createDialog(Window* _pParent);
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
+        virtual Dialog* createDialog(Window* _pParent) SAL_OVERRIDE;
+        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
     };
 
 }   // namespace dbaui

@@ -603,61 +603,61 @@ namespace slideshow
                 {
                 }
 
-                virtual bool isOnView(boost::shared_ptr<View> const& /*rView*/) const
+                virtual bool isOnView(boost::shared_ptr<View> const& /*rView*/) const SAL_OVERRIDE
                 {
                     return true; // visible on all views
                 }
 
-                virtual ::cppcanvas::CanvasSharedPtr getCanvas() const
+                virtual ::cppcanvas::CanvasSharedPtr getCanvas() const SAL_OVERRIDE
                 {
                     return mpCanvas;
                 }
 
-                virtual void clear() const
+                virtual void clear() const SAL_OVERRIDE
                 {
                     // NOOP
                 }
 
-                virtual void clearAll() const
+                virtual void clearAll() const SAL_OVERRIDE
                 {
                     // NOOP
                 }
 
                 virtual ::cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& /*rSpriteSizePixel*/,
-                                                                         double                    /*nSpritePrio*/ ) const
+                                                                         double                    /*nSpritePrio*/ ) const SAL_OVERRIDE
                 {
                     ENSURE_OR_THROW( false,
                                       "DummyLayer::createSprite(): This method is not supposed to be called!" );
                     return ::cppcanvas::CustomSpriteSharedPtr();
                 }
 
-                virtual void setPriority( const basegfx::B1DRange& /*rRange*/ )
+                virtual void setPriority( const basegfx::B1DRange& /*rRange*/ ) SAL_OVERRIDE
                 {
                     OSL_FAIL( "BitmapView::setPriority(): This method is not supposed to be called!" );
                 }
 
-                virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const
+                virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const SAL_OVERRIDE
                 {
                     return geometry::IntegerSize2D(0,0);
                 }
 
-                virtual ::basegfx::B2DHomMatrix getTransformation() const
+                virtual ::basegfx::B2DHomMatrix getTransformation() const SAL_OVERRIDE
                 {
                     return mpCanvas->getTransformation();
                 }
 
-                virtual ::basegfx::B2DHomMatrix getSpriteTransformation() const
+                virtual ::basegfx::B2DHomMatrix getSpriteTransformation() const SAL_OVERRIDE
                 {
                     OSL_FAIL( "BitmapView::getSpriteTransformation(): This method is not supposed to be called!" );
                     return ::basegfx::B2DHomMatrix();
                 }
 
-                virtual void setClip( const ::basegfx::B2DPolyPolygon& /*rClip*/ )
+                virtual void setClip( const ::basegfx::B2DPolyPolygon& /*rClip*/ ) SAL_OVERRIDE
                 {
                     OSL_FAIL( "BitmapView::setClip(): This method is not supposed to be called!" );
                 }
 
-                virtual bool resize( const ::basegfx::B2DRange& /*rArea*/ )
+                virtual bool resize( const ::basegfx::B2DRange& /*rArea*/ ) SAL_OVERRIDE
                 {
                     OSL_FAIL( "BitmapView::resize(): This method is not supposed to be called!" );
                     return false;

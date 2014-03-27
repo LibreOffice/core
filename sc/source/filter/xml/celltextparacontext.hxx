@@ -25,11 +25,11 @@ class ScXMLCellTextParaContext : public ScXMLImportContext
 public:
     ScXMLCellTextParaContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLTableRowCellContext& rParent);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
-    virtual void Characters(const OUString& rChars);
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters(const OUString& rChars) SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 
     void PushSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushFieldSheetName(const OUString& rStyleName);
@@ -49,11 +49,11 @@ class ScXMLCellTextSpanContext : public ScXMLImportContext
 public:
     ScXMLCellTextSpanContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
-    virtual void Characters(const OUString& rChars);
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters(const OUString& rChars) SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 };
 
 /**
@@ -68,11 +68,11 @@ public:
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
-    virtual void Characters(const OUString& rChars);
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters(const OUString& rChars) SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 };
 
 /**
@@ -87,11 +87,11 @@ public:
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
-    virtual void Characters(const OUString& rChars);
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters(const OUString& rChars) SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 };
 
 /**
@@ -106,11 +106,11 @@ public:
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
-    virtual void Characters(const OUString& rChars);
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters(const OUString& rChars) SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 };
 
 /**
@@ -127,11 +127,11 @@ public:
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
-    virtual void Characters(const OUString& rChars);
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
+    virtual void Characters(const OUString& rChars) SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 };
 
 /**
@@ -149,10 +149,10 @@ public:
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    virtual void EndElement();
+    virtual void StartElement(const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
+    virtual void EndElement() SAL_OVERRIDE;
     virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+        sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
 };
 
 #endif

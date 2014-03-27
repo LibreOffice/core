@@ -73,9 +73,9 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    OUString                 SAL_CALL getImplementationName() throw(std::exception  );
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  );
-    Sequence< OUString >     SAL_CALL getSupportedServiceNames(void) throw(std::exception  );
+    OUString                 SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) SAL_OVERRIDE;
+    Sequence< OUString >     SAL_CALL getSupportedServiceNames(void) throw(std::exception  ) SAL_OVERRIDE;
 
     // static methods
     static OUString          getImplementationName_Static() throw(  )
@@ -89,8 +89,8 @@ public:
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual void SAL_CALL cancel(void) throw(std::exception);
+                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel(void) throw(std::exception) SAL_OVERRIDE;
 };
 
 

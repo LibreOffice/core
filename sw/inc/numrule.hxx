@@ -53,13 +53,13 @@ class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     cGrfBulletCP;
     SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
-    SAL_DLLPRIVATE virtual void NotifyGraphicArrived();
+    SAL_DLLPRIVATE virtual void NotifyGraphicArrived() SAL_OVERRIDE;
 
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
     SwNumFmt();
@@ -77,16 +77,16 @@ public:
     void SetCharFmt( SwCharFmt* );
 
     virtual void            SetCharFmtName(const OUString& rSet);
-    virtual OUString        GetCharFmtName()const;
+    virtual OUString        GetCharFmtName()const SAL_OVERRIDE;
 
     //For i120928,access the cp info of graphic within bullet
     void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
     sal_Unicode     GetGrfBulletCP()const {return cGrfBulletCP;}
 
-    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0) SAL_OVERRIDE;
 
-    virtual void                SetVertOrient(sal_Int16 eSet);
-    virtual sal_Int16   GetVertOrient() const;
+    virtual void                SetVertOrient(sal_Int16 eSet) SAL_OVERRIDE;
+    virtual sal_Int16   GetVertOrient() const SAL_OVERRIDE;
     const SwFmtVertOrient*      GetGraphicOrientation() const;
 
     sal_Bool IsEnumeration() const; // #i22362#

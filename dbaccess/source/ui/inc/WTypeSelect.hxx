@@ -37,24 +37,24 @@ namespace dbaui
     class OWizTypeSelectControl : public OFieldDescControl
     {
     protected:
-        virtual void        ActivateAggregate( EControlType eType );
-        virtual void        DeactivateAggregate( EControlType eType );
+        virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
+        virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
 
-        virtual void        CellModified(long nRow, sal_uInt16 nColId );
+        virtual void        CellModified(long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::lang::Locale  GetLocale() const;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const;
-        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos);
-        virtual const OTypeInfoMap* getTypeInfo() const;
-        virtual sal_Bool            isAutoIncrementValueEnabled() const;
-        virtual OUString     getAutoIncrementValue() const;
+        virtual ::com::sun::star::lang::Locale  GetLocale() const SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const SAL_OVERRIDE;
+        virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) SAL_OVERRIDE;
+        virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
+        virtual sal_Bool            isAutoIncrementValueEnabled() const SAL_OVERRIDE;
+        virtual OUString     getAutoIncrementValue() const SAL_OVERRIDE;
 
     public:
         OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
         virtual ~OWizTypeSelectControl();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
     };
 
     // Wizard Page: OWizTypeSelectList
@@ -67,7 +67,7 @@ namespace dbaui
                                                 sal_uInt16 _nPos,
                                                 sal_Bool _bSet = sal_False);
     protected:
-        virtual bool            PreNotify( NotifyEvent& rNEvt );
+        virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     public:
         OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
@@ -111,11 +111,11 @@ namespace dbaui
 
         void                    EnableAuto(sal_Bool bEnable);
     public:
-        virtual void            Reset ( );
-        virtual void            ActivatePage( );
-        virtual void            Resize();
-        virtual sal_Bool        LeavePage();
-        virtual OUString        GetTitle() const;
+        virtual void            Reset ( ) SAL_OVERRIDE;
+        virtual void            ActivatePage( ) SAL_OVERRIDE;
+        virtual void            Resize() SAL_OVERRIDE;
+        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual OUString        GetTitle() const SAL_OVERRIDE;
 
         OWizTypeSelect(Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();

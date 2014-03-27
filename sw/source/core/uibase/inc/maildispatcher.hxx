@@ -128,8 +128,8 @@ public:
     void addListener(::rtl::Reference<IMailDispatcherListener> listener);
 
 protected:
-    virtual void SAL_CALL run();
-    virtual void SAL_CALL onTerminated();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
+    virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 private:
     std::list< ::rtl::Reference<IMailDispatcherListener> > cloneListener();

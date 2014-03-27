@@ -37,7 +37,7 @@ namespace sdr
             const drawinglayer::primitive2d::Primitive2DSequence    maSequence;
 
             // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
         private:
             // internal helper to create a drawinglayer::geometry::ViewInformation2D

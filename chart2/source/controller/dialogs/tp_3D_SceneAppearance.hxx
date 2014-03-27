@@ -47,7 +47,7 @@ public:
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();
 
-    virtual void ActivatePage();
+    virtual void ActivatePage() SAL_OVERRIDE;
 
 private:
     DECL_LINK( SelectSchemeHdl, void* );

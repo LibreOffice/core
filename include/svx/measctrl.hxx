@@ -44,14 +44,14 @@ public:
     SvxXMeasurePreview(Window* pParent, WinBits nStyle);
     ~SvxXMeasurePreview();
 
-    virtual void Paint(const Rectangle& rRect);
-    virtual void Resize();
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual Size GetOptimalSize() const;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
 #endif

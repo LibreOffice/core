@@ -117,7 +117,7 @@ public:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >&
         GetFilterController() { return m_xFilterController; }
 
-    virtual Image GetImage() const;
+    virtual Image GetImage() const SAL_OVERRIDE;
 };
 
 
@@ -129,7 +129,7 @@ public:
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
-    virtual Image GetImage() const;
+    virtual Image GetImage() const SAL_OVERRIDE;
 };
 
 
@@ -150,7 +150,7 @@ public:
     const OUString& GetFieldName() const {return m_aFieldName;}
     sal_Int32 GetComponentIndex() const { return m_nComponentIndex; }
 
-    virtual Image GetImage() const;
+    virtual Image GetImage() const SAL_OVERRIDE;
 };
 
 
@@ -217,7 +217,7 @@ public:
     void addSelectedItem( FmFilterItem* _pItem) { m_aDraggedEntries.push_back(_pItem); }
 
 protected:
-    virtual void AddSupportedFormats();
+    virtual void AddSupportedFormats() SAL_OVERRIDE;
 };
 
 inline sal_Bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats )
@@ -236,7 +236,7 @@ public:
     OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_pTransferable); }
 
 protected:
-    virtual OLocalExchange* createExchange() const;
+    virtual OLocalExchange* createExchange() const SAL_OVERRIDE;
 };
 
 
@@ -267,17 +267,17 @@ public:
 protected:
     using Control::Notify;
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
-    virtual void Command( const CommandEvent& rEvt );
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
     virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection );
-    virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection ) SAL_OVERRIDE;
+    virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     void DeleteSelection();
     SvTreeListEntry* FindEntry(const FmFilterData* pItem) const;
@@ -320,10 +320,10 @@ private:
     FmFilterNavigator* m_pNavigator;
 
 protected:
-    virtual void Resize();
-    virtual bool Close();
-    virtual Size CalcDockingSize( SfxChildAlignment );
-    virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+    virtual void Resize() SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
+    virtual Size CalcDockingSize( SfxChildAlignment ) SAL_OVERRIDE;
+    virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
 
 public:
     FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
@@ -331,12 +331,12 @@ public:
     virtual ~FmFilterNavigatorWin();
 
     void UpdateContent( FmFormShell* pFormShell );
-    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void FillInfo( SfxChildWinInfo& rInfo ) const;
+    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
 
     using SfxDockingWindow::StateChanged;
 
-    virtual void GetFocus();
+    virtual void GetFocus() SAL_OVERRIDE;
 };
 
 

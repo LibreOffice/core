@@ -125,7 +125,7 @@ public:
     void UpdateAllPreviews (void);
 
     // ILayoutableWindow
-    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
 protected:
     mutable ::osl::Mutex maMutex;
@@ -200,7 +200,7 @@ protected:
     */
     virtual ResId GetContextMenuResId (void) const;
 
-    virtual void Command (const CommandEvent& rEvent);
+    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 
     virtual void ProcessPopupMenu (Menu& rMenu);
     virtual void ExecuteCommand (const sal_Int32 nCommandId);

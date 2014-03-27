@@ -94,12 +94,12 @@ public:
     virtual ~DomainMapperTableHandler();
 
     virtual void startTable(unsigned int nRows, unsigned int nDepth,
-                            TablePropertyMapPtr pProps);
-    virtual void endTable(unsigned int nestedTableLevel);
-    virtual void startRow(unsigned int nCells, TablePropertyMapPtr pProps);
-    virtual void endRow();
-    virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps);
-    virtual void endCell(const Handle_t & end);
+                            TablePropertyMapPtr pProps) SAL_OVERRIDE;
+    virtual void endTable(unsigned int nestedTableLevel) SAL_OVERRIDE;
+    virtual void startRow(unsigned int nCells, TablePropertyMapPtr pProps) SAL_OVERRIDE;
+    virtual void endRow() SAL_OVERRIDE;
+    virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps) SAL_OVERRIDE;
+    virtual void endCell(const Handle_t & end) SAL_OVERRIDE;
 
     virtual Handle_t* getTable( )
     {

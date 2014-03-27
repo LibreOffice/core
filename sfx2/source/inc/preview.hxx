@@ -33,14 +33,14 @@ protected:
 public:
     SfxPreviewBase_Impl(Window* pParent, WinBits nStyle);
     void            SetObjectShell( SfxObjectShell* pObj );
-    virtual void    Resize();
-    virtual Size    GetOptimalSize() const;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
 {
 protected:
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 public:
     SfxPreviewWin_Impl(Window* pParent, WinBits nStyle)
         : SfxPreviewBase_Impl(pParent, nStyle)

@@ -48,15 +48,15 @@ public:
 
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XScaling > SAL_CALL
-        getInverseScaling() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        getInverseScaling() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XServiceName ____
     virtual OUString SAL_CALL getServiceName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     const Date m_aNullDate;
@@ -80,15 +80,15 @@ public:
 
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XScaling > SAL_CALL
-        getInverseScaling() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        getInverseScaling() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XServiceName ____
     virtual OUString SAL_CALL getServiceName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     const Date m_aNullDate;

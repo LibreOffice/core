@@ -50,8 +50,8 @@ public:
     virtual ~CalcConfigItem();
 
     FieldUnit getFieldUnit();
-    virtual void                    Commit();
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames);
+    virtual void                    Commit() SAL_OVERRIDE;
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 };
 
 CalcConfigItem::CalcConfigItem()

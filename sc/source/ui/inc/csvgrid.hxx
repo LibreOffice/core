@@ -278,22 +278,22 @@ public:
 
     // event handling ---------------------------------------------------------
 protected:
-    virtual void                Resize();
-    virtual void                GetFocus();
-    virtual void                LoseFocus();
+    virtual void                Resize() SAL_OVERRIDE;
+    virtual void                GetFocus() SAL_OVERRIDE;
+    virtual void                LoseFocus() SAL_OVERRIDE;
 
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void                Tracking( const TrackingEvent& rTEvt );
-    virtual void                KeyInput( const KeyEvent& rKEvt );
-    virtual void                Command( const CommandEvent& rCEvt );
+    virtual void                MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void                Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
+    virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void                Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( const Rectangle& );
+    virtual void                Paint( const Rectangle& ) SAL_OVERRIDE;
 
 public:
     /** Redraws the entire data grid. */
@@ -343,7 +343,7 @@ private:
     // accessibility ----------------------------------------------------------
 protected:
     /** Creates a new accessible object. */
-    virtual ScAccessibleCsvControl* ImplCreateAccessible();
+    virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
 };
 
 

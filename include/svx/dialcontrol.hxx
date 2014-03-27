@@ -84,19 +84,19 @@ public:
 
     virtual             ~DialControl();
 
-    virtual void        Paint( const Rectangle& rRect );
+    virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        LoseFocus();
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
 
-    virtual Size        GetOptimalSize() const;
-    virtual void        Resize();
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
 
     /** Returns true, if the control is not in "don't care" state. */
     bool                HasRotation() const;
@@ -174,11 +174,11 @@ class SVX_DLLPUBLIC DialControlWrapper : public sfx::SingleControlWrapper< DialC
 public:
     explicit            DialControlWrapper( DialControl& rDial );
 
-    virtual bool        IsControlDontKnow() const;
-    virtual void        SetControlDontKnow( bool bSet );
+    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
+    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
 
-    virtual sal_Int32   GetControlValue() const;
-    virtual void        SetControlValue( sal_Int32 nValue );
+    virtual sal_Int32   GetControlValue() const SAL_OVERRIDE;
+    virtual void        SetControlValue( sal_Int32 nValue ) SAL_OVERRIDE;
 };
 
 

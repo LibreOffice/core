@@ -36,8 +36,8 @@ struct SwFindParaFmtColl : public SwFindParas
         : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
     virtual ~SwFindParaFmtColl() {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
-    virtual bool IsReplaceMode() const;
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly ) SAL_OVERRIDE;
+    virtual bool IsReplaceMode() const SAL_OVERRIDE;
 };
 
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,

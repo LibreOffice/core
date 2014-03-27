@@ -35,12 +35,12 @@ class ScEditFieldObj_Header : public CalcUnoApiTest, apitest::XTextContent, apit
 public:
     ScEditFieldObj_Header();
 
-    virtual void setUp();
-    virtual void tearDown();
-    virtual uno::Reference<uno::XInterface> init();
-    virtual uno::Reference<text::XTextContent> getTextContent();
-    virtual uno::Reference<text::XTextRange> getTextRange();
-    virtual bool isAttachSupported() { return false; }
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+    virtual uno::Reference<uno::XInterface> init() SAL_OVERRIDE;
+    virtual uno::Reference<text::XTextContent> getTextContent() SAL_OVERRIDE;
+    virtual uno::Reference<text::XTextRange> getTextRange() SAL_OVERRIDE;
+    virtual bool isAttachSupported() SAL_OVERRIDE { return false; }
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Header);
 

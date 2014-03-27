@@ -76,7 +76,7 @@ protected:
 
         @see ::cppu::OPropertySetHelper
      */
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() = 0;
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE = 0;
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
@@ -107,7 +107,7 @@ protected:
           ::com::sun::star::uno::Any & rOldValue,
           sal_Int32 nHandle,
           const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
+        throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
     /** The same as setFastProperyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
@@ -129,7 +129,7 @@ protected:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
           const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception, std::exception);
+        throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     /**
        The same as getFastProperyValue, but return the value through rValue and
@@ -139,7 +139,7 @@ protected:
      */
     virtual void SAL_CALL getFastPropertyValue
         ( ::com::sun::star::uno::Any& rValue,
-          sal_Int32 nHandle ) const;
+          sal_Int32 nHandle ) const SAL_OVERRIDE;
 
     /// make original interface function visible again
     using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
@@ -156,67 +156,67 @@ protected:
 
     // ____ XInterface ____
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XTypeProvider ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
         getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XPropertyState ____
     virtual ::com::sun::star::beans::PropertyState SAL_CALL
         getPropertyState( const OUString& PropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL
         getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         setPropertyToDefault( const OUString& PropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL
         getPropertyDefault( const OUString& aPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XMultiPropertyStates ____
     // Note: getPropertyStates() is already implemented in XPropertyState with the
     // same signature
     virtual void SAL_CALL
         setAllPropertiesToDefault()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL
         setPropertiesToDefault( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
         throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
         getPropertyDefaults( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XStyleSupplier ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > SAL_CALL getStyle()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle )
         throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException, std::exception);
+               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(
         const ::com::sun::star::uno::Sequence< OUString >& PropertyNames,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values )
-        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XFastPropertySet ____
     virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception);
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue

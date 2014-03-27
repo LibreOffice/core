@@ -66,7 +66,7 @@
 class XFLineBreak : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
 inline void XFLineBreak::ToXml(IXFStream *pStrm)

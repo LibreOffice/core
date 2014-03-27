@@ -54,17 +54,17 @@ private:
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
     E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize);
     E3dCubeObj();
 
-    virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
+    virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
 
-    virtual E3dCubeObj* Clone() const;
+    virtual E3dCubeObj* Clone() const SAL_OVERRIDE;
 
     // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);
@@ -79,8 +79,8 @@ public:
     sal_uInt16 GetSideFlags() { return nSideFlags; }
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
-    virtual OUString TakeObjNameSingul() const;
-    virtual OUString TakeObjNamePlural() const;
+    virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
+    virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_CUBE3D_HXX

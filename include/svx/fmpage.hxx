@@ -51,15 +51,15 @@ public:
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 
-    virtual void    SetModel(SdrModel* pNewModel);
+    virtual void    SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 
-    virtual SdrPage* Clone() const;
+    virtual SdrPage* Clone() const SAL_OVERRIDE;
     using SdrPage::Clone;
 
     virtual void    InsertObject(SdrObject* pObj, sal_uLong nPos = CONTAINER_APPEND,
-                                    const SdrInsertReason* pReason=NULL);
+                                    const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
 
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
+    virtual SdrObject* RemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
 
     // access to all forms
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& GetForms( bool _bForceCreate = true ) const;

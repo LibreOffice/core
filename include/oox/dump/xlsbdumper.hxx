@@ -47,7 +47,7 @@ protected:
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
     void                construct( const RecordObjectBase& rParent );
 
-    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
+    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
 
     OUString     getErrorName( sal_uInt8 nErrCode ) const;
 
@@ -105,7 +105,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 };
 
 
@@ -121,7 +121,7 @@ public:
                             const OUString& rSysFileName );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 };
 
 

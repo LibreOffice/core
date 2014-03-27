@@ -38,8 +38,8 @@ class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 public:
     SwUserFieldType( SwDoc* pDocPtr, const OUString& );
 
-    virtual OUString        GetName() const;
-    virtual SwFieldType*    Copy() const;
+    virtual OUString        GetName() const SAL_OVERRIDE;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 
     OUString                Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
 
@@ -59,11 +59,11 @@ public:
     bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( bool b )    { bDeleted = b; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) SAL_OVERRIDE;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 };
 
 inline bool SwUserFieldType::IsValid() const
@@ -91,28 +91,28 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     sal_uInt16  nSubType;
 
-    virtual OUString        Expand() const;
-    virtual SwField*        Copy() const;
+    virtual OUString        Expand() const SAL_OVERRIDE;
+    virtual SwField*        Copy() const SAL_OVERRIDE;
 
 public:
     SwUserField(SwUserFieldType*, sal_uInt16 nSub = 0, sal_uInt32 nFmt = 0);
 
-    virtual sal_uInt16          GetSubType() const;
-    virtual void            SetSubType(sal_uInt16 nSub);
+    virtual sal_uInt16          GetSubType() const SAL_OVERRIDE;
+    virtual void            SetSubType(sal_uInt16 nSub) SAL_OVERRIDE;
 
-    virtual double          GetValue() const;
-    virtual void            SetValue( const double& rVal );
+    virtual double          GetValue() const SAL_OVERRIDE;
+    virtual void            SetValue( const double& rVal ) SAL_OVERRIDE;
 
-    virtual OUString        GetFieldName() const;
+    virtual OUString        GetFieldName() const SAL_OVERRIDE;
 
     // Name cannot be changed.
-    virtual OUString   GetPar1() const;
+    virtual OUString   GetPar1() const SAL_OVERRIDE;
 
     // Content.
-    virtual OUString   GetPar2() const;
-    virtual void            SetPar2(const OUString& rStr);
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual OUString   GetPar2() const SAL_OVERRIDE;
+    virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_INC_USRFLD_HXX

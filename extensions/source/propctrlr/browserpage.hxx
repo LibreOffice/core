@@ -37,8 +37,8 @@ namespace pcr
         OBrowserListBox     m_aListBox;
 
     protected:
-        virtual void Resize();
-        virtual void StateChanged(StateChangedType nType);
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
 
     public:
         OBrowserPage(Window* pParent, WinBits nWinStyle = 0);

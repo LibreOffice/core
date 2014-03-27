@@ -132,7 +132,7 @@ public:
         m_aNumFmt.SetStartValue(start);
     }
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 private:
     XFNumFmt    m_aNumFmt;
 };
@@ -163,7 +163,7 @@ public:
         m_strFontName = name;
     }
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 private:
     XFNumFmt    m_aNumFmt;
     int32_t     m_chBullet;
@@ -174,7 +174,7 @@ private:
 class XFListLevelImage : public XFListLevel
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 private:
     sal_Int16       m_nWidth;
     sal_Int16       m_nHeight;
@@ -214,11 +214,11 @@ public:
     //not implemented now.
     void    SetListImage(){}
 
-    virtual enumXFStyle GetStyleFamily()
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE
     {
         return enumXFStyleList;
     }
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     XFListLevel     *m_pListLevels[10];

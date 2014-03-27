@@ -174,7 +174,7 @@ class SfxMediumHandler_Impl : public ::cppu::WeakImplHelper1< com::sun::star::ta
 
 public:
     virtual void SAL_CALL handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
-            throw( com::sun::star::uno::RuntimeException, std::exception );
+            throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     SfxMediumHandler_Impl( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction )
         : m_xInter( xInteraction )

@@ -44,12 +44,12 @@ public:
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const SAL_OVERRIDE;
+    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -64,7 +64,7 @@ public:
         SwFixPortion( const KSHORT nFixWidth, const KSHORT nFixPos );
     inline void   Fix( const KSHORT nNewFix ) { nFix = nNewFix; }
     inline KSHORT Fix() const { return nFix; }
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -76,7 +76,7 @@ class SwMarginPortion : public SwGluePortion
 public:
         SwMarginPortion( const KSHORT nFixWidth );
         void AdjustRight( const SwLineLayout* pCurr );
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************

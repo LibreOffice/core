@@ -33,7 +33,7 @@ public:
     virtual ~SvxSearchFormatDialog();
 
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
 private:
     FontList*  m_pFontList;

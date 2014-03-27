@@ -68,24 +68,24 @@ namespace rptui
         void operator =(OReportSection&);
     protected:
         // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) SAL_OVERRIDE;
 
         // window overrides
-        virtual void        Paint( const Rectangle& rRect );
-        virtual void        MouseMove( const MouseEvent& rMEvt );
-        virtual void        Command( const CommandEvent& rCEvt );
-        virtual void        Resize();
+        virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+        virtual void        Resize() SAL_OVERRIDE;
 
         // OPropertyChangeListener
-        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
+        virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     public:
         OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         virtual ~OReportSection();
 
         // window overrides
-        virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
         /** copies the current selection in this section
             @param  _rAllreadyCopiedObjects This is an out/in put param which contains all already copied objects.

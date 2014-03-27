@@ -33,11 +33,11 @@ public:
 
     virtual ~ScExponentialSmoothingDialog();
 
-    virtual bool Close();
+    virtual bool Close() SAL_OVERRIDE;
 
 protected:
-    virtual sal_Int16 GetUndoNameId();
-    virtual ScRange ApplyOutput(ScDocShell* pDocShell);
+    virtual sal_Int16 GetUndoNameId() SAL_OVERRIDE;
+    virtual ScRange ApplyOutput(ScDocShell* pDocShell) SAL_OVERRIDE;
 };
 
 #endif

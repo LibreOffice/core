@@ -67,10 +67,10 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public Window
     Rectangle DrawInnerFrame_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor);
 
     void DrawRect_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
-    virtual void Paint(const Rectangle&);
-    virtual Size GetOptimalSize() const;
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 protected:
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
 
     SvxSwFrameExample(Window* pParent, WinBits nStyle);

@@ -26,7 +26,7 @@ class SwViewShell;
 class SwHTMLViewShellClient : public SwClient
 {
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
 public:
 

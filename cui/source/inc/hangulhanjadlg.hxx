@@ -51,7 +51,7 @@ namespace svx
         SuggestionSet( Window* pParent );
         virtual ~SuggestionSet();
 
-        virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+        virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
         void            ClearSet();
     };
 
@@ -74,15 +74,15 @@ namespace svx
         OUString GetEntry( sal_uInt16 nPos ) const;
         OUString GetSelectEntry() const;
 
-        virtual void StateChanged( StateChangedType nStateChange );
+        virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-        virtual void KeyInput( const KeyEvent& rKEvt );
-        virtual void KeyUp( const KeyEvent& rKEvt );
-        virtual void Activate();
-        virtual void Deactivate();
-        virtual void GetFocus();
-        virtual void LoseFocus();
-        virtual void Command( const CommandEvent& rCEvt );
+        virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+        virtual void Activate() SAL_OVERRIDE;
+        virtual void Deactivate() SAL_OVERRIDE;
+        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void LoseFocus() SAL_OVERRIDE;
+        virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
         DECL_LINK( SelectSuggestionHdl, Control* );
 
@@ -264,7 +264,7 @@ namespace svx
                                     ScrollBar& _rScrollBar,
                                     SuggestionEdit* _pPrev, SuggestionEdit* _pNext );
         virtual             ~SuggestionEdit();
-        virtual bool        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
 
 

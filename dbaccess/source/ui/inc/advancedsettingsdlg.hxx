@@ -42,7 +42,7 @@ namespace dbaui
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     protected:
-        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
+        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) SAL_OVERRIDE;
 
     public:
         AdvancedSettingsDialog( Window* _pParent
@@ -55,20 +55,20 @@ namespace dbaui
         /// determines whether or not the given data source type has any advanced setting
         static  bool    doesHaveAnyAdvancedSettings( const OUString& _sURL );
 
-        virtual const SfxItemSet* getOutputSet() const;
-        virtual SfxItemSet* getWriteOutputSet();
+        virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
+        virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;
 
-        virtual short   Execute();
+        virtual short   Execute() SAL_OVERRIDE;
 
         // forwards to ODbDataSourceAdministrationHelper
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
-        virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-        virtual OUString getDatasourceType(const SfxItemSet& _rSet) const;
-        virtual void clearPassword();
-        virtual sal_Bool saveDatasource();
-        virtual void setTitle(const OUString& _sTitle);
-        virtual void enableConfirmSettings( bool _bEnable );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const SAL_OVERRIDE;
+        virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() SAL_OVERRIDE;
+        virtual OUString getDatasourceType(const SfxItemSet& _rSet) const SAL_OVERRIDE;
+        virtual void clearPassword() SAL_OVERRIDE;
+        virtual sal_Bool saveDatasource() SAL_OVERRIDE;
+        virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
+        virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
     };
 
 } // namespace dbaui

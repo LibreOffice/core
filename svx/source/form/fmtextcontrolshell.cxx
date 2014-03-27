@@ -179,9 +179,9 @@ namespace svx
         ~FmFocusListenerAdapter();
 
     protected:
-        virtual void SAL_CALL focusGained( const FocusEvent& e ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL focusLost( const FocusEvent& e ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL focusGained( const FocusEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL focusLost( const FocusEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 
@@ -268,11 +268,11 @@ namespace svx
         ~FmMouseListenerAdapter();
 
     protected:
-        virtual void SAL_CALL mousePressed( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL mouseReleased( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL mouseEntered( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL mouseExited( const awt::MouseEvent& e ) throw (RuntimeException, std::exception);
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+        virtual void SAL_CALL mousePressed( const awt::MouseEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL mouseReleased( const awt::MouseEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL mouseEntered( const awt::MouseEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL mouseExited( const awt::MouseEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 

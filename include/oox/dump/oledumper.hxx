@@ -60,7 +60,7 @@ public:
     explicit            StdFontObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 };
 
 
@@ -71,7 +71,7 @@ public:
     explicit            StdPicObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 };
 
 
@@ -91,7 +91,7 @@ public:
     explicit            OleCompObjObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 };
 
 
@@ -103,7 +103,7 @@ public:
     explicit            OlePropertyStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 
 private:
     void                dumpSection( const OUString& rGuid, sal_uInt32 nStartPos );
@@ -153,7 +153,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 };
 
 
@@ -167,7 +167,7 @@ protected:
                             sal_uInt32 nDataId5, sal_uInt32 nDataId6, sal_uInt16 nVersion,
                             bool bCommonPart, bool bComplexPart );
 
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
     virtual void        implDumpProperties() = 0;
     virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
     virtual void        implDumpCommonTrailing();
@@ -195,7 +195,7 @@ public:
     explicit            ComCtlScrollBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
+    virtual void        implDumpProperties() SAL_OVERRIDE;
 };
 
 
@@ -206,7 +206,7 @@ public:
     explicit            ComCtlProgressBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
+    virtual void        implDumpProperties() SAL_OVERRIDE;
 };
 
 
@@ -217,7 +217,7 @@ public:
     explicit            ComCtlSliderObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
+    virtual void        implDumpProperties() SAL_OVERRIDE;
 };
 
 
@@ -228,7 +228,7 @@ public:
     explicit            ComCtlUpDownObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
+    virtual void        implDumpProperties() SAL_OVERRIDE;
 };
 
 
@@ -239,9 +239,9 @@ public:
     explicit            ComCtlImageListObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
-    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
-    virtual void        implDumpCommonTrailing();
+    virtual void        implDumpProperties() SAL_OVERRIDE;
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos ) SAL_OVERRIDE;
+    virtual void        implDumpCommonTrailing() SAL_OVERRIDE;
 };
 
 
@@ -252,8 +252,8 @@ public:
     explicit            ComCtlTabStripObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
-    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+    virtual void        implDumpProperties() SAL_OVERRIDE;
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos ) SAL_OVERRIDE;
 };
 
 
@@ -264,8 +264,8 @@ public:
     explicit            ComCtlTreeViewObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
-    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
+    virtual void        implDumpProperties() SAL_OVERRIDE;
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos ) SAL_OVERRIDE;
 
 private:
     sal_uInt32          mnStringFlags;
@@ -279,9 +279,9 @@ public:
     explicit            ComCtlStatusBarObject( const InputObjectBase& rParent, sal_uInt16 nVersion );
 
 protected:
-    virtual void        implDumpProperties();
-    virtual void        implDumpCommonExtra( sal_Int64 nEndPos );
-    virtual void        implDumpCommonTrailing();
+    virtual void        implDumpProperties() SAL_OVERRIDE;
+    virtual void        implDumpCommonExtra( sal_Int64 nEndPos ) SAL_OVERRIDE;
+    virtual void        implDumpCommonTrailing() SAL_OVERRIDE;
 };
 
 
@@ -304,8 +304,8 @@ protected:
                             const String& rPropNameList,
                             bool b64BitPropFlags = false );
 
-    virtual bool        implIsValid() const;
-    virtual void        implDump();
+    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual void        implDump() SAL_OVERRIDE;
 
     virtual void        implDumpShortProperties();
     virtual void        implDumpExtended();
@@ -433,7 +433,7 @@ public:
     explicit            AxCFontNewObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -444,7 +444,7 @@ public:
     explicit            AxColumnInfoObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -455,8 +455,8 @@ public:
     explicit            AxCommandButtonObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
+    virtual void        implDumpExtended() SAL_OVERRIDE;
 };
 
 
@@ -467,8 +467,8 @@ public:
     explicit            AxMorphControlObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
+    virtual void        implDumpExtended() SAL_OVERRIDE;
 
 private:
     void                dumpColumnInfos();
@@ -486,8 +486,8 @@ public:
     explicit            AxLabelObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
+    virtual void        implDumpExtended() SAL_OVERRIDE;
 };
 
 
@@ -498,7 +498,7 @@ public:
     explicit            AxImageObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -509,7 +509,7 @@ public:
     explicit            AxScrollBarObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -520,7 +520,7 @@ public:
     explicit            AxSpinButtonObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -531,8 +531,8 @@ public:
     explicit            AxTabStripObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
+    virtual void        implDumpExtended() SAL_OVERRIDE;
 
 private:
     sal_Int32           mnTabFlagCount;
@@ -555,7 +555,7 @@ public:
                             const OUString* pProgId = 0 );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 
 private:
     void                constructFormCtrlStrmObj( const OUString* pProgId );
@@ -596,7 +596,7 @@ public:
     explicit            VbaFormClassInfoObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 
 private:
     VbaFormSharedData&  mrFormData;
@@ -610,7 +610,7 @@ public:
     explicit            VbaFormSiteObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 
 private:
     VbaFormSharedData&  mrFormData;
@@ -624,7 +624,7 @@ public:
     explicit            VbaFormDesignExtObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -639,8 +639,8 @@ public:
                             VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
+    virtual void        implDumpExtended() SAL_OVERRIDE;
 
 private:
     void                dumpClassInfos();
@@ -665,7 +665,7 @@ public:
                             VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 
 private:
     VbaFormSharedData&  mrFormData;
@@ -679,7 +679,7 @@ public:
     explicit            VbaPageObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
 };
 
 
@@ -690,8 +690,8 @@ public:
     explicit            VbaMultiPageObject( const InputObjectBase& rParent );
 
 protected:
-    virtual void        implDumpShortProperties();
-    virtual void        implDumpExtended();
+    virtual void        implDumpShortProperties() SAL_OVERRIDE;
+    virtual void        implDumpExtended() SAL_OVERRIDE;
 
 private:
     sal_Int32           mnPageCount;
@@ -709,7 +709,7 @@ public:
                             VbaFormSharedData& rFormData );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 
 private:
     VbaFormSharedData&  mrFormData;
@@ -730,12 +730,12 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 
     virtual void        implDumpStorage(
                             const StorageRef& rxStrg,
                             const OUString& rStrgPath,
-                            const OUString& rSysPath );
+                            const OUString& rSysPath ) SAL_OVERRIDE;
 
 private:
     bool                isFormStorage( const OUString& rStrgPath ) const;
@@ -772,9 +772,9 @@ public:
                             VbaSharedData& rVbaData );
 
 protected:
-    virtual bool        implIsValid() const;
-    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
-    virtual void        implDumpRecordBody();
+    virtual bool        implIsValid() const SAL_OVERRIDE;
+    virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
+    virtual void        implDumpRecordBody() SAL_OVERRIDE;
 
 private:
     OUString     dumpByteString( const String& rName = EMPTY_STRING );
@@ -802,7 +802,7 @@ public:
                             sal_Int32 nStrmOffset );
 
 protected:
-    virtual void        implDump();
+    virtual void        implDump() SAL_OVERRIDE;
 
 private:
     VbaSharedData&      mrVbaData;
@@ -825,7 +825,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 
 private:
     VbaSharedData&      mrVbaData;
@@ -847,7 +847,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 
 private:
     VbaSharedData&      mrVbaData;
@@ -865,12 +865,12 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 
     virtual void        implDumpStorage(
                             const StorageRef& rxStrg,
                             const OUString& rStrgPath,
-                            const OUString& rSysPath );
+                            const OUString& rSysPath ) SAL_OVERRIDE;
 
 private:
     VbaSharedData       maVbaData;
@@ -890,7 +890,7 @@ public:
 protected:
     virtual void        implDumpBaseStream(
                             const BinaryInputStreamRef& rxStrm,
-                            const OUString& rSysFileName );
+                            const OUString& rSysFileName ) SAL_OVERRIDE;
 };
 
 

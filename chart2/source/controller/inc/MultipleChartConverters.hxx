@@ -49,7 +49,7 @@ public:
     virtual ~AllAxisItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
 class AllGridItemConverter : public ::comphelper::MultipleItemConverter
@@ -65,7 +65,7 @@ public:
     virtual ~AllGridItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
 class AllDataLabelItemConverter : public ::comphelper::MultipleItemConverter
@@ -85,7 +85,7 @@ public:
     virtual ~AllDataLabelItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
 class AllTitleItemConverter : public ::comphelper::MultipleItemConverter
@@ -105,7 +105,7 @@ public:
     virtual ~AllTitleItemConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
 class AllSeriesStatisticsConverter : public ::comphelper::MultipleItemConverter
@@ -118,7 +118,7 @@ public:
     virtual ~AllSeriesStatisticsConverter();
 
 protected:
-    virtual const sal_uInt16 * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const SAL_OVERRIDE;
 };
 
 } //  namespace wrapper

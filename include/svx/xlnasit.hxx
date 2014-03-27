@@ -39,9 +39,9 @@ public:
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr);
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr,
                                              SfxItemPool* pItemPool);
-    virtual SfxPoolItem*    Clone( SfxItemPool* pToPool ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVersion ) const;
-    virtual SvStream&       Store( SvStream& rStream, sal_uInt16 nItemVersion ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pToPool ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVersion ) const SAL_OVERRIDE;
+    virtual SvStream&       Store( SvStream& rStream, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 };
 
 #endif

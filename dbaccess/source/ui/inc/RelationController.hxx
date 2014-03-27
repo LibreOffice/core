@@ -33,11 +33,11 @@ namespace dbaui
         sal_Bool    m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures();
+        virtual void            describeSupportedFeatures() SAL_OVERRIDE;
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
@@ -55,11 +55,11 @@ namespace dbaui
 
         void mergeData(const TTableConnectionData& _aConnectionData);
 
-        virtual sal_Bool Construct(Window* pParent);
+        virtual sal_Bool Construct(Window* pParent) SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
         static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -67,15 +67,15 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // OJoinController overridables
-        virtual bool allowViews() const;
-        virtual bool allowQueries() const;
+        virtual bool allowViews() const SAL_OVERRIDE;
+        virtual bool allowQueries() const SAL_OVERRIDE;
 
     private:
         // ask the user if the design should be saved when it is modified
-        virtual short saveModified();
-        virtual void reset();
-        virtual void impl_initialize();
-        virtual OUString getPrivateTitle( ) const;
+        virtual short saveModified() SAL_OVERRIDE;
+        virtual void reset() SAL_OVERRIDE;
+        virtual void impl_initialize() SAL_OVERRIDE;
+        virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
         DECL_LINK( OnThreadFinished, void* );
     };
 }

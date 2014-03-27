@@ -44,17 +44,17 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     SAL_DLLPRIVATE DECL_LINK( DBCompare, SvSortData* );
 
     SAL_DLLPRIVATE void          InitTreeList();
-    SAL_DLLPRIVATE virtual void  RequestingChildren( SvTreeListEntry* pParent );
+    SAL_DLLPRIVATE virtual void  RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
 
-    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    SAL_DLLPRIVATE virtual void  StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    SAL_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void  StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
     using SvTreeListBox::Select;
 
 public:
     SwDBTreeList(Window* pParent, WinBits nStyle);
     virtual ~SwDBTreeList();
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = 0);
 

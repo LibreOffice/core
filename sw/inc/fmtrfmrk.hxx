@@ -41,8 +41,8 @@ public:
     ~SwFmtRefMark( );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual bool            operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     const SwTxtRefMark *GetTxtRefMark() const   { return pTxtAttr; }
     SwTxtRefMark *GetTxtRefMark()               { return pTxtAttr; }

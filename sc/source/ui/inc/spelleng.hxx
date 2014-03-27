@@ -108,20 +108,20 @@ public:
                             XSpellCheckerRef xSpeller );
 
     /** Checks spelling of all cells in the selection or sheet. */
-    virtual void        ConvertAll( EditView& rEditView );
+    virtual void        ConvertAll( EditView& rEditView ) SAL_OVERRIDE;
 
 protected:
     /** Callback from edit engine to check the next cell. */
-    virtual bool        SpellNextDocument();
+    virtual bool        SpellNextDocument() SAL_OVERRIDE;
 
     /** Returns true, if the current text contains a spelling error. */
-    virtual bool        NeedsConversion();
+    virtual bool        NeedsConversion() SAL_OVERRIDE;
 
     /** Show a query box that asks whether to restart at top of the sheet.
         @return  true = Restart at top, false = Stop the conversion. */
-    virtual bool        ShowTableWrapDialog();
+    virtual bool        ShowTableWrapDialog() SAL_OVERRIDE;
     /** Show a message box stating that spell checking is finished. */
-    virtual void        ShowFinishDialog();
+    virtual void        ShowFinishDialog() SAL_OVERRIDE;
 
 private:
     /** Returns the spelling dialog if it is open. */
@@ -142,14 +142,14 @@ public:
                             ScDocument* pRedoDoc );
 
     /** Converts all cells in the selection or sheet according to set language. */
-    virtual void        ConvertAll( EditView& rEditView );
+    virtual void        ConvertAll( EditView& rEditView ) SAL_OVERRIDE;
 
 protected:
     /** Callback from edit engine to convert the next cell. */
-    virtual bool        ConvertNextDocument();
+    virtual bool        ConvertNextDocument() SAL_OVERRIDE;
 
     /** Returns true, if the current text contains text to convert. */
-    virtual bool        NeedsConversion();
+    virtual bool        NeedsConversion() SAL_OVERRIDE;
 
 private:
     ScConversionParam   maConvParam;        /// Conversion parameters.

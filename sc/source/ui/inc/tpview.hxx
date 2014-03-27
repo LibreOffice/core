@@ -75,12 +75,12 @@ class ScTpContentOptions : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rCoreSet );
-    virtual bool        FillItemSet     ( SfxItemSet& rCoreSet );
-    virtual void        Reset           ( const SfxItemSet& rCoreSet );
+    virtual bool        FillItemSet     ( SfxItemSet& rCoreSet ) SAL_OVERRIDE;
+    virtual void        Reset           ( const SfxItemSet& rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void        ActivatePage( const SfxItemSet& );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 
 };
@@ -125,12 +125,12 @@ class ScTpLayoutOptions : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rCoreSet );
-    virtual bool        FillItemSet     ( SfxItemSet& rCoreSet );
-    virtual void        Reset           ( const SfxItemSet& rCoreSet );
+    virtual bool        FillItemSet     ( SfxItemSet& rCoreSet ) SAL_OVERRIDE;
+    virtual void        Reset           ( const SfxItemSet& rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void        ActivatePage( const SfxItemSet& );
-    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
 

@@ -35,7 +35,7 @@ class NumberingPreview : public Window
     sal_uInt16              nActLevel;
 
     protected:
-        virtual void        Paint( const Rectangle& rRect );
+        virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     public:
         NumberingPreview(Window* pParent, const ResId& rResId)

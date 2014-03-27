@@ -46,7 +46,7 @@ public :
     SvxHlinkCtrl( sal_uInt16 nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                const SfxPoolItem* pState );
+                                const SfxPoolItem* pState ) SAL_OVERRIDE;
 };
 
 
@@ -72,14 +72,14 @@ private:
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 protected:
-    virtual bool            Close();
-    virtual void            Move();
+    virtual bool            Close() SAL_OVERRIDE;
+    virtual void            Move() SAL_OVERRIDE;
 
 public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();
 
-    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
+    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) SAL_OVERRIDE;
 
     sal_uInt16                  SetPage( SvxHyperlinkItem* pItem );
     void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );

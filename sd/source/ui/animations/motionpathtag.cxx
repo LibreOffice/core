@@ -76,7 +76,7 @@ private:
     basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
 protected:
-    virtual void createSdrDragEntries();
+    virtual void createSdrDragEntries() SAL_OVERRIDE;
 
 public:
     PathDragMove(SdrDragView& rNewView,
@@ -94,8 +94,8 @@ public:
         mxTag( xTag )
     {}
 
-    virtual bool BeginSdrDrag();
-    virtual bool EndSdrDrag(bool bCopy);
+    virtual bool BeginSdrDrag() SAL_OVERRIDE;
+    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
 
     rtl::Reference <MotionPathTag > mxTag;
 };
@@ -140,7 +140,7 @@ private:
     basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
 protected:
-    virtual void createSdrDragEntries();
+    virtual void createSdrDragEntries() SAL_OVERRIDE;
 
 public:
     PathDragResize(SdrDragView& rNewView,
@@ -158,7 +158,7 @@ public:
         mxTag( xTag )
     {}
 
-    virtual bool EndSdrDrag(bool bCopy);
+    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
     rtl::Reference <MotionPathTag > mxTag;
 };
 
@@ -201,7 +201,7 @@ private:
     basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
 protected:
-    virtual void createSdrDragEntries();
+    virtual void createSdrDragEntries() SAL_OVERRIDE;
 
 public:
     PathDragObjOwn(SdrDragView& rNewView,
@@ -215,7 +215,7 @@ public:
         maPathPolyPolygon()
     {}
 
-    virtual bool EndSdrDrag(bool bCopy);
+    virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
 };
 
 void PathDragObjOwn::createSdrDragEntries()
@@ -252,10 +252,10 @@ class SdPathHdl : public SmartHdl
 public:
     SdPathHdl( const SmartTagReference& xTag, SdrPathObj* mpPathObj );
     virtual ~SdPathHdl();
-    virtual void CreateB2dIAObject();
-    virtual bool IsFocusHdl() const;
+    virtual void CreateB2dIAObject() SAL_OVERRIDE;
+    virtual bool IsFocusHdl() const SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const;
-    virtual bool isMarkable() const;
+    virtual bool isMarkable() const SAL_OVERRIDE;
 
 private:
     SdrPathObj* mpPathObj;

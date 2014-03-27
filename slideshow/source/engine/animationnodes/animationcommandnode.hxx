@@ -42,11 +42,11 @@ public:
         NodeContext const& rContext );
 
 protected:
-    virtual void dispose();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    virtual void activate_st();
-    virtual bool hasPendingAnimation() const;
+    virtual void activate_st() SAL_OVERRIDE;
+    virtual bool hasPendingAnimation() const SAL_OVERRIDE;
 
 private:
     ExternalMediaShapeSharedPtr mpShape;

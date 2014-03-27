@@ -436,13 +436,13 @@ public:
 
                         SdrEscherImport( PowerPointImportParam&, const OUString& rBaseURL );
     virtual             ~SdrEscherImport();
-    virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const;
-    virtual sal_Bool    SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
+    virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const SAL_OVERRIDE;
+    virtual sal_Bool    SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const SAL_OVERRIDE;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const;
-    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
-    virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj );
+    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) SAL_OVERRIDE;
+    virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) SAL_OVERRIDE;
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
 };
 
@@ -560,7 +560,7 @@ protected:
                                 SfxStyleSheet*,
                                 SfxStyleSheet** )
                              const;
-    virtual SdrObject*      ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const;
+    virtual SdrObject*      ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const SAL_OVERRIDE;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object.
     virtual SdrObject*      ImportOLE(
@@ -570,7 +570,7 @@ protected:
                                 const Rectangle& rVisArea,
                                 const int _nCalledByGroup,
                                 sal_Int64 nAspect
-                            ) const;
+                            ) const SAL_OVERRIDE;
     SvMemoryStream*         ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const;
     SdrPage*                MakeBlancPage(sal_Bool bMaster) const;
     sal_Bool                ReadFontCollection();
@@ -610,8 +610,8 @@ public:
                             ) const;
 
     void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = NULL );
-    virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
-    virtual sal_Bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
+    virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const SAL_OVERRIDE;
+    virtual sal_Bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const SAL_OVERRIDE;
     sal_Unicode             PPTSubstitute(
                                 sal_uInt16 nFont,
                                 sal_Unicode nChar,
@@ -620,7 +620,7 @@ public:
                                 char nDefault
                             ) const;
     const PptDocumentAtom&  GetDocumentAtom() const { return aDocAtom; }
-    virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const;
+    virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const SAL_OVERRIDE;
     SdrObject*              CreateTable(
                                 SdrObject* pGroupObject,
                                 sal_uInt32* pTableArry,
@@ -1295,7 +1295,7 @@ public:
 
 class PPTConvertOCXControls : public SvxMSConvertOCXControls
 {
-    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > & GetDrawPage();
+    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > & GetDrawPage() SAL_OVERRIDE;
     PptPageKind     ePageKind;
     const SdrPowerPointImport* mpPPTImporter;
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > mxInStrm;
@@ -1316,7 +1316,7 @@ public :
         const com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShape,
         bool bFloatingCtrl
-    );
+    ) SAL_OVERRIDE;
 };
 
 // PowerPoint record types

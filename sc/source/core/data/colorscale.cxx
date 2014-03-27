@@ -33,7 +33,7 @@ public:
     ScFormulaListener(ScFormulaCell* pCell);
     virtual ~ScFormulaListener();
 
-    void Notify( const SfxHint& rHint );
+    void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
 
     bool NeedsRepaint() const;
 };

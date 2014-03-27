@@ -55,9 +55,9 @@ namespace dbaui
         Point                                   m_aMinimumTableViewSize;
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         /** loads the information for the windows.
             @param  i_rViewSettings
@@ -87,8 +87,8 @@ namespace dbaui
         inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
         // OSingleDocumentController overridables
-        virtual void        reconnect( sal_Bool _bUI );
-        virtual void        impl_onModifyChanged();
+        virtual void        reconnect( sal_Bool _bUI ) SAL_OVERRIDE;
+        virtual void        impl_onModifyChanged() SAL_OVERRIDE;
 
         // own overridables
         /** determines whether or not it's allowed for database views to participate in the game
@@ -116,12 +116,12 @@ namespace dbaui
 
         // UNO interface overridables
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XComponent
-        virtual void    SAL_CALL disposing();
+        virtual void    SAL_CALL disposing() SAL_OVERRIDE;
         // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // misc
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state
@@ -147,7 +147,7 @@ namespace dbaui
         virtual short saveModified() = 0;
         // called when the orignal state should be reseted (first time load)
         virtual void reset()         = 0;
-        virtual void describeSupportedFeatures();
+        virtual void describeSupportedFeatures() SAL_OVERRIDE;
 
         AddTableDialogContext&  impl_getDialogContext() const;
     };

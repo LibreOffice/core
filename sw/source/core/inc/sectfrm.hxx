@@ -54,11 +54,11 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     const SwSectionFmt* _GetEndSectFmt() const;
     bool IsEndnoteAtMyEnd() const;
 protected:
-    virtual void MakeAll();
-    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat );
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual void SwClientNotify( const SwModify&, const SfxHint& );
+    virtual void MakeAll() SAL_OVERRIDE;
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) SAL_OVERRIDE;
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify&, const SfxHint& ) SAL_OVERRIDE;
 
 public:
     SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
@@ -66,12 +66,12 @@ public:
     virtual ~SwSectionFrm();
 
     void Init();
-    virtual void CheckDirection( bool bVert );
+    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
     inline const SwSectionFrm *GetFollow() const;
     inline       SwSectionFrm *GetFollow();
@@ -127,7 +127,7 @@ public:
 
     bool IsBalancedSection() const;
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) SAL_OVERRIDE;
 
     bool IsFtnAtEnd() const { return bFtnAtEnd; }
     bool IsEndnAtEnd() const { return bEndnAtEnd;   }

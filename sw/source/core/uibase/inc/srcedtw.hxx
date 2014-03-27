@@ -42,13 +42,13 @@ class TextViewOutWin : public Window
     ExtTextView*    pTextView;
 
 protected:
-    virtual void    Paint( const Rectangle& );
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    DataChanged( const DataChangedEvent& );
+    virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
 
 public:
         TextViewOutWin(Window* pParent, WinBits nBits) :
@@ -102,15 +102,15 @@ private:
 
 protected:
 
-    virtual void    Resize();
-    virtual void    DataChanged( const DataChangedEvent& );
-    virtual void    GetFocus();
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual void    DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
 //  virtual void    LoseFocus();
 
     void            CreateTextEngine();
     void            DoSyntaxHighlight( sal_uInt16 nPara );
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 
@@ -131,7 +131,7 @@ public:
 
     TextViewOutWin* GetOutWin() {return pOutWin;}
 
-    virtual void    Invalidate( sal_uInt16 nFlags = 0 );
+    virtual void    Invalidate( sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
 
     void            ClearModifyFlag()
                         { pTextEngine->SetModified(false); }
@@ -146,7 +146,7 @@ public:
 
     void            SetStartLine(sal_uInt16 nLine){nStartLine = nLine;}
 
-    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     void            HandleWheelCommand( const CommandEvent& rCEvt );
 
     void            SetTextEncoding(rtl_TextEncoding eEncoding);

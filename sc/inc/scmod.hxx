@@ -119,8 +119,8 @@ public:
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
     void                DeleteCfg();
 
                         // moved by the application
@@ -239,9 +239,9 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     sal_uInt16              GetCurRefDlgId() const                  { return nCurRefDlgId; }
 
     // virtual methods for the options dialog
-    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
-    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     void                SetInSharedDocLoading( bool bNew )  { mbIsInSharedDocLoading = bNew; }
     bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }

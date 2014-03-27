@@ -336,12 +336,12 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                             { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
     // methods for printing
-    SAL_DLLPRIVATE virtual SfxPrinter*       GetPrinter( bool bCreate = false );
-    SAL_DLLPRIVATE virtual bool              HasPrintOptionsPage() const;
+    SAL_DLLPRIVATE virtual SfxPrinter*       GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool              HasPrintOptionsPage() const SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
-                                                    const SfxItemSet& rSet);
+                                                    const SfxItemSet& rSet) SAL_OVERRIDE;
     // for readonly switching
-    SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     SAL_DLLPRIVATE void          _CheckReadonlyState();
     SAL_DLLPRIVATE void          _CheckReadonlySelection();
 
@@ -356,7 +356,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE void          ShowAtResize();
 
-    SAL_DLLPRIVATE virtual void  Move();
+    SAL_DLLPRIVATE virtual void  Move() SAL_OVERRIDE;
 
     SAL_DLLPRIVATE void          DocumentStatsChanged();
 
@@ -378,10 +378,10 @@ protected:
 
     virtual void    SelectShell();
 
-    virtual void    Activate(bool);
-    virtual void    Deactivate(bool);
-    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
+    virtual void    Activate(bool) SAL_OVERRIDE;
+    virtual void    Deactivate(bool) SAL_OVERRIDE;
+    virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
+    virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
 
     void            SetImageButtonColor(Color& rColor);
 
@@ -402,23 +402,23 @@ public:
     SfxDispatcher   &GetDispatcher();
 
     void                    GotFocus() const;
-    virtual SdrView*        GetDrawView() const;
-    virtual bool            HasUIFeature( sal_uInt32 nFeature );
-    virtual void            ShowCursor( bool bOn = true );
-    virtual ErrCode         DoVerb( long nVerb );
+    virtual SdrView*        GetDrawView() const SAL_OVERRIDE;
+    virtual bool            HasUIFeature( sal_uInt32 nFeature ) SAL_OVERRIDE;
+    virtual void            ShowCursor( bool bOn = true ) SAL_OVERRIDE;
+    virtual ErrCode         DoVerb( long nVerb ) SAL_OVERRIDE;
 
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
-                                        sal_uInt16 nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
+                                        sal_uInt16 nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
 
     OUString                GetSelectionTextParam( bool bCompleteWords,
                                                    bool bEraseTrail );
-    virtual bool            HasSelection( bool bText ) const;
-    virtual OUString        GetSelectionText( bool bCompleteWords = false );
+    virtual bool            HasSelection( bool bText ) const SAL_OVERRIDE;
+    virtual OUString        GetSelectionText( bool bCompleteWords = false ) SAL_OVERRIDE;
     virtual bool            PrepareClose( bool bUI = true ) SAL_OVERRIDE;
-    virtual void            MarginChanged();
+    virtual void            MarginChanged() SAL_OVERRIDE;
 
     // replace word/selection with text from the thesaurus
     // (this code has special handling for "in word" character)
@@ -493,7 +493,7 @@ public:
     void            InsFrmMode(sal_uInt16 nCols);
 
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, sal_Bool bViewOnly = sal_False);
-    virtual void    SetZoomFactor( const Fraction &rX, const Fraction & );
+    virtual void    SetZoomFactor( const Fraction &rX, const Fraction & ) SAL_OVERRIDE;
 
     void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewOnly = sal_False );
 
@@ -595,10 +595,10 @@ public:
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = 0; }
 
-    virtual void    WriteUserData(OUString &, bool bBrowse = false);
-    virtual void    ReadUserData(const OUString &, bool bBrowse = false);
-    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse );
-    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse );
+    virtual void    WriteUserData(OUString &, bool bBrowse = false) SAL_OVERRIDE;
+    virtual void    ReadUserData(const OUString &, bool bBrowse = false) SAL_OVERRIDE;
+    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) SAL_OVERRIDE;
+    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) SAL_OVERRIDE;
 
     void SetCrsrAtTop( sal_Bool bFlag, sal_Bool bCenter = sal_False )
         { m_bTopCrsr = bFlag, m_bCenterCrsr = bCenter; }

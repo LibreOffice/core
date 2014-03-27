@@ -48,7 +48,7 @@ protected:
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
     void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
 
@@ -56,7 +56,7 @@ protected:
 
     svtools::ColorConfig maColorConfig;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
     void updateViewSettings();
 
@@ -64,15 +64,15 @@ public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
                     ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
-    virtual void    Resize();
+    virtual void    Resize() SAL_OVERRIDE;
     void            startPreview();
 
-    virtual bool    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void            SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
     const Link&     GetClickHdl() const { return aClickHdl; }
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 };
 

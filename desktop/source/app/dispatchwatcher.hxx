@@ -83,10 +83,10 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw(::com::sun::star::uno::RuntimeException, std::exception);
+            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDispachResultListener
-        virtual void SAL_CALL dispatchFinished( const com::sun::star::frame::DispatchResultEvent& aEvent ) throw( com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL dispatchFinished( const com::sun::star::frame::DispatchResultEvent& aEvent ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Access function to get a dispatcher watcher reference. There must be a global reference holder
         static DispatchWatcher* GetDispatchWatcher();

@@ -87,33 +87,33 @@ namespace dbaui
         ClipboardInvalidator m_aInvalidate;
 
     protected:
-        virtual void Command( const CommandEvent& rEvt );
-        virtual bool SeekRow(long nRow);
+        virtual void Command( const CommandEvent& rEvt ) SAL_OVERRIDE;
+        virtual bool SeekRow(long nRow) SAL_OVERRIDE;
         virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect,
-                               sal_uInt16 nColumnId ) const;
+                               sal_uInt16 nColumnId ) const SAL_OVERRIDE;
 
-        virtual void CursorMoved();
-        virtual RowStatus GetRowStatus(long nRow) const;
+        virtual void CursorMoved() SAL_OVERRIDE;
+        virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
 
-        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol);
-        virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
+        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
+        virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
 
-        virtual void CellModified();
-        virtual bool SaveModified(); // is called before changing a cell (false prevents change)
+        virtual void CellModified() SAL_OVERRIDE;
+        virtual bool SaveModified() SAL_OVERRIDE; // is called before changing a cell (false prevents change)
 
         virtual void Undo();
         virtual void Redo();
-        virtual OUString GetCellText(long nRow, sal_uInt16 nColId) const;
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
+        virtual OUString GetCellText(long nRow, sal_uInt16 nColId) const SAL_OVERRIDE;
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
 
-        virtual void CopyRows();
-        virtual void InsertRows( long nRow );
-        virtual void DeleteRows();
-        virtual void InsertNewRows( long nRow );
+        virtual void CopyRows() SAL_OVERRIDE;
+        virtual void InsertRows( long nRow ) SAL_OVERRIDE;
+        virtual void DeleteRows() SAL_OVERRIDE;
+        virtual void InsertNewRows( long nRow ) SAL_OVERRIDE;
 
-        virtual sal_Bool IsPrimaryKeyAllowed( long nRow );
-        virtual sal_Bool IsInsertNewAllowed( long nRow );
-        virtual sal_Bool IsDeleteAllowed( long nRow );
+        virtual sal_Bool IsPrimaryKeyAllowed( long nRow ) SAL_OVERRIDE;
+        virtual sal_Bool IsInsertNewAllowed( long nRow ) SAL_OVERRIDE;
+        virtual sal_Bool IsDeleteAllowed( long nRow ) SAL_OVERRIDE;
 
         void ClearModified();
 
@@ -125,7 +125,7 @@ namespace dbaui
     public:
         OTableEditorCtrl(Window* pParentWin);
         virtual ~OTableEditorCtrl();
-        virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+        virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
         virtual void UpdateAll();
         SfxUndoManager& GetUndoManager() const;
 
@@ -141,13 +141,13 @@ namespace dbaui
         /// force displaying of the given row
         void DisplayData( long nRow, sal_Bool bGrabFocus = sal_True );
 
-        virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
-        virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );
-        virtual ::com::sun::star::uno::Any  GetCellData( long nRow, sal_uInt16 nColId );
-        virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText );
-        virtual OUString GetControlText( long nRow, sal_uInt16 nColId );
+        virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) SAL_OVERRIDE;
+        virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData ) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Any  GetCellData( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
+        virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText ) SAL_OVERRIDE;
+        virtual OUString GetControlText( long nRow, sal_uInt16 nColId ) SAL_OVERRIDE;
 
-        virtual OTableDesignView* GetView() const;
+        virtual OTableDesignView* GetView() const SAL_OVERRIDE;
 
         ::std::vector< ::boost::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
@@ -155,8 +155,8 @@ namespace dbaui
         void CellModified( long nRow, sal_uInt16 nColId );
         void SetReadOnly( sal_Bool bRead=sal_True );
 
-        virtual void Init();
-        virtual void DeactivateCell(bool bUpdate = true);
+        virtual void Init() SAL_OVERRIDE;
+        virtual void DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
 
         sal_Bool IsCutAllowed( long nRow = -1 );
         sal_Bool IsCopyAllowed( long nRow = -1 );
@@ -165,17 +165,17 @@ namespace dbaui
         OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads
-        virtual bool PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
         // IClipboardTest
-        virtual sal_Bool isCutAllowed() { return IsCutAllowed(); }
-        virtual sal_Bool isCopyAllowed() { return IsCopyAllowed(); }
-        virtual sal_Bool isPasteAllowed() { return IsPasteAllowed(); }
-        virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
+        virtual sal_Bool isCutAllowed() SAL_OVERRIDE { return IsCutAllowed(); }
+        virtual sal_Bool isCopyAllowed() SAL_OVERRIDE { return IsCopyAllowed(); }
+        virtual sal_Bool isPasteAllowed() SAL_OVERRIDE { return IsPasteAllowed(); }
+        virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
 
-        virtual void cut();
-        virtual void copy();
-        virtual void paste();
+        virtual void cut() SAL_OVERRIDE;
+        virtual void copy() SAL_OVERRIDE;
+        virtual void paste() SAL_OVERRIDE;
 
     private:
         DECL_LINK( StartIndexing, void* );

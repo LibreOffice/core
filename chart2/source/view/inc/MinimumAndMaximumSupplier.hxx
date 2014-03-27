@@ -69,21 +69,21 @@ public:
     void clearMinimumAndMaximumSupplierList();
 
     //--MinimumAndMaximumSupplier
-    virtual double getMinimumX();
-    virtual double getMaximumX();
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex );
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex );
-    virtual double getMinimumZ();
-    virtual double getMaximumZ();
+    virtual double getMinimumX() SAL_OVERRIDE;
+    virtual double getMaximumX() SAL_OVERRIDE;
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) SAL_OVERRIDE;
+    virtual double getMinimumZ() SAL_OVERRIDE;
+    virtual double getMaximumZ() SAL_OVERRIDE;
 
-    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex );
-    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
-    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
-    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
-    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) SAL_OVERRIDE;
 
-    virtual long calculateTimeResolutionOnXAxis();
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );
+    virtual long calculateTimeResolutionOnXAxis() SAL_OVERRIDE;
+    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) SAL_OVERRIDE;
 
 private:
     typedef ::std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;

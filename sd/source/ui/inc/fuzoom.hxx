@@ -36,12 +36,12 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void Activate();        ///< activates the function
-    virtual void Deactivate();      ///< deactivates the function
+    virtual void Activate() SAL_OVERRIDE;        ///< activates the function
+    virtual void Deactivate() SAL_OVERRIDE;      ///< deactivates the function
 
 protected:
     virtual ~FuZoom (void);

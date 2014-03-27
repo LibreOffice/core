@@ -25,7 +25,19 @@ public:
     GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~GL3DBarChartType();
 
-    APPHELPER_XSERVICEINFO_DECL()
+    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
+    virtual OUString SAL_CALL
+        getImplementationName()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL
+        supportsService( const OUString& ServiceName )
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
+            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+    static OUString getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString >
+        getSupportedServiceNames_Static();
 
     APPHELPER_SERVICE_FACTORY_HELPER( GL3DBarChartType )
 
@@ -33,22 +45,22 @@ protected:
     GL3DBarChartType( const GL3DBarChartType& rOther );
 
     virtual OUString SAL_CALL getChartType()
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL
         createClone()
-            throw (css::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertySet
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException);
+        throw (css::beans::UnknownPropertyException) SAL_OVERRIDE;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }

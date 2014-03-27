@@ -69,14 +69,14 @@ public:
     inline const SwFont *GetFont() const { return pFnt; }
 
     inline OUString GetExp() const { return aExpand; }
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
 
     // Empty fields are also allowed
-    virtual SwLinePortion *Compress();
+    virtual SwLinePortion *Compress() SAL_OVERRIDE;
 
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
 
     inline bool IsFollow() const { return bFollow; }
     inline void SetFollow( bool bNew ) { bFollow = bNew; }
@@ -103,12 +103,12 @@ public:
     virtual SwFldPortion *Clone( const OUString &rExpand ) const;
 
     // Extra GetTxtSize because of pFnt
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
+    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
-    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -122,12 +122,12 @@ public:
     inline SwHiddenPortion( const OUString &rExpand, SwFont *pFntL = 0 )
          : SwFldPortion( rExpand, pFntL )
         { SetLen(1); SetWhichPor( POR_HIDDEN ); }
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
-    OUTPUT_OPERATOR
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -148,15 +148,15 @@ public:
                      const bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
-    virtual void FormatEOL( SwTxtFormatInfo &rInf );
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -173,7 +173,7 @@ public:
                      const bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -198,8 +198,8 @@ public:
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     ~SwGrfNumPortion();
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 
     void SetBase( long nLnAscent, long nLnDescent,
         long nFlyAscent, long nFlyDescent );
@@ -218,7 +218,7 @@ public:
     inline SwTwips GetId() const { return nId; }
     inline sal_Int16 GetOrient() const { return eOrient; }
 
-    OUTPUT_OPERATOR
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 /*************************************************************************
@@ -241,10 +241,10 @@ class SwCombinedPortion : public SwFldPortion
     sal_uInt8 nProportion;  // relative font height
 public:
     SwCombinedPortion( const OUString &rExpand );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf );
-    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
-    OUTPUT_OPERATOR
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    OUTPUT_OPERATOR_OVERRIDE
 };
 
 #endif

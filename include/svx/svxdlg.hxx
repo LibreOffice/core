@@ -149,8 +149,8 @@ class AbstractSvxSearchFormatDialog : public SfxAbstractTabDialog   //for SvxSea
 {
 public:
     //From class Window.
-    virtual void        SetText( const OUString& rStr ) =0 ;
-    virtual OUString    GetText() const =0 ;
+    virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE =0 ;
+    virtual OUString    GetText() const SAL_OVERRIDE =0 ;
 };
 
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog
@@ -437,7 +437,7 @@ public:
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj = NULL,
                                                                  bool bHasObj = true )=0;
-    virtual VclAbstractDialog*              CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
+    virtual VclAbstractDialog*              CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE = 0;
     virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
@@ -451,7 +451,7 @@ public:
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext = false) = 0;
-    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const OUString& rLanguage ) = 0;
+    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const OUString& rLanguage ) SAL_OVERRIDE = 0;
 
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0;
     virtual DialogGetRanges             GetDialogGetRangesFunc() = 0;
@@ -461,10 +461,10 @@ public:
             Window* pParent,
             bool bShowSlots,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
-        ) = 0;
+        ) SAL_OVERRIDE = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
-            Window* pParent, com::sun::star::uno::Any aException) = 0;
+            Window* pParent, com::sun::star::uno::Any aException) SAL_OVERRIDE = 0;
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
                 Window* _pParent,

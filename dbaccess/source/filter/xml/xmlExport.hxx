@@ -159,16 +159,16 @@ private:
                             ODBExport();
 protected:
 
-    virtual void                    _ExportStyles( bool bUsed );
-    virtual void                    _ExportAutoStyles();
-    virtual void                    _ExportContent();
-    virtual void                    _ExportMasterStyles();
-    virtual void                    _ExportFontDecls();
-    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
-    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool();
+    virtual void                    _ExportStyles( bool bUsed ) SAL_OVERRIDE;
+    virtual void                    _ExportAutoStyles() SAL_OVERRIDE;
+    virtual void                    _ExportContent() SAL_OVERRIDE;
+    virtual void                    _ExportMasterStyles() SAL_OVERRIDE;
+    virtual void                    _ExportFontDecls() SAL_OVERRIDE;
+    virtual sal_uInt32              exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) SAL_OVERRIDE;
+    virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() SAL_OVERRIDE;
 
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) SAL_OVERRIDE;
 
     virtual                 ~ODBExport(){};
 public:
@@ -188,7 +188,7 @@ public:
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 };

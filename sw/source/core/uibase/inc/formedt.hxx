@@ -50,7 +50,7 @@ class SwIdxFormDlg : public SvxStandardDialog
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( AssignHdl, Button * );
     void            UpdatePattern();
-    void            Apply();
+    void            Apply() SAL_OVERRIDE;
 
     ListBox         aEntryLB;
     OKButton        aOKBtn;

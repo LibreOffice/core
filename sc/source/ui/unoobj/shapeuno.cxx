@@ -1385,7 +1385,7 @@ public:
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
         throw (lang::IllegalArgumentException, container::NoSuchElementException,
                lang::WrappedTargetException, uno::RuntimeException,
-               std::exception)
+               std::exception) SAL_OVERRIDE
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -1423,7 +1423,7 @@ public:
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const OUString& aName )
         throw (container::NoSuchElementException, lang::WrappedTargetException,
-               uno::RuntimeException, std::exception)
+               uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         uno::Sequence< beans::PropertyValue > aProperties;
         ScMacroInfo* pInfo = getInfo();
@@ -1447,25 +1447,25 @@ public:
         return uno::Any( aProperties );
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames() throw(uno::RuntimeException, std::exception)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         uno::Sequence< OUString > aSeq( 1 );
         aSeq[ 0 ] = SC_EVENTACC_ONCLICK;
         return aSeq;
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return aName == SC_EVENTACC_ONCLICK;
     }
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException, std::exception)
+    virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ::getCppuType((const uno::Sequence< beans::PropertyValue >*)0);
     }
 
-    virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException, std::exception)
+    virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         // elements are always present (but contained property sequences may be empty)
         return sal_True;

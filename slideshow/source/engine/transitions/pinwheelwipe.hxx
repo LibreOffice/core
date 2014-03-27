@@ -32,7 +32,7 @@ class PinWheelWipe : public ParametricPolyPolygon
 {
 public:
     PinWheelWipe( sal_Int32 blades ) : m_blades(blades) {}
-    virtual ::basegfx::B2DPolyPolygon operator () ( double t );
+    virtual ::basegfx::B2DPolyPolygon operator () ( double t ) SAL_OVERRIDE;
 private:
     sal_Int32 m_blades;
 };

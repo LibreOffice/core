@@ -1602,7 +1602,7 @@ public:
         m_pDialog.reset( new SvxMacroAssignDlg( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );
     }
 
-    virtual short Execute();
+    virtual short Execute() SAL_OVERRIDE;
     virtual ~SvxMacroAssignDialog();
 
 private:

@@ -105,15 +105,15 @@ protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const OString& rID, const OUString& rUIXMLDescription );
                             ~SfxModelessDialog();
-    virtual bool            Close();
-    virtual void            Resize();
-    virtual void            Move();
-    virtual void            StateChanged( StateChangedType nStateChange );
+    virtual bool            Close() SAL_OVERRIDE;
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual void            Move() SAL_OVERRIDE;
+    virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
-    virtual bool            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
@@ -143,11 +143,11 @@ protected:
                                               const ResId& rResId);
                             ~SfxFloatingWindow();
 
-    virtual void            StateChanged( StateChangedType nStateChange );
-    virtual bool            Close();
-    virtual void            Resize();
-    virtual void            Move();
-    virtual bool            Notify( NotifyEvent& rNEvt );
+    virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual bool            Close() SAL_OVERRIDE;
+    virtual void            Resize() SAL_OVERRIDE;
+    virtual void            Move() SAL_OVERRIDE;
+    virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 

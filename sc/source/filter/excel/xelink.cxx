@@ -57,7 +57,7 @@ public:
 
 private:
     /** Writes the start of the record that is equal in all EXTERNNAME records and calls WriteAddData(). */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
     /** Called to write additional data following the common record contents.
         @descr  Derived classes should overwrite this function to write their data. */
     virtual void        WriteAddData( XclExpStream& rStrm );
@@ -78,7 +78,7 @@ public:
 
 private:
     /** Writes additional record contents. */
-    virtual void        WriteAddData( XclExpStream& rStrm );
+    virtual void        WriteAddData( XclExpStream& rStrm ) SAL_OVERRIDE;
 };
 
 
@@ -92,7 +92,7 @@ public:
 
 private:
     /** Writes additional record contents. */
-    virtual void        WriteAddData( XclExpStream& rStrm );
+    virtual void        WriteAddData( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef boost::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
@@ -111,7 +111,7 @@ public:
 
 private:
     /** Writes additional record contents. */
-    virtual void        WriteAddData( XclExpStream& rStrm );
+    virtual void        WriteAddData( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     const XclExpSupbook&    mrSupbook;
@@ -138,7 +138,7 @@ public:
     sal_uInt16          InsertExtName( const XclExpSupbook& rSupbook, const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
 
     /** Writes the EXTERNNAME record list. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpExtNameBase >   XclExpExtNameList;
@@ -167,7 +167,7 @@ public:
     bool                InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue );
 
 private:
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
     void                WriteBool( XclExpStream& rStrm, bool bValue );
     void                WriteDouble( XclExpStream& rStrm, double fValue );
@@ -204,7 +204,7 @@ public:
     void                StoreCellRange( const ScRange& rRange, const ::formula::FormulaToken& rToken );
 
     /** Writes the XCT and all CRN records. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     ScExternalRefCache::TableTypeRef mxCacheTable;
@@ -258,13 +258,13 @@ public:
     sal_uInt16          InsertAddIn( const OUString& rName );
 
     /** Writes the EXTERNSHEET and all EXTERNNAME, XCT and CRN records. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Initializes the record data with the passed encoded URL. */
     void                Init( const OUString& rEncUrl );
     /** Writes the contents of the EXTERNSHEET  record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     XclExpString        maTabName;      /// The name of the sheet.
@@ -318,14 +318,14 @@ public:
     sal_uInt16          InsertExtName( const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
 
     /** Writes the SUPBOOK and all EXTERNNAME, XCT and CRN records. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Returns the sheet name inside of this SUPBOOK. */
     const XclExpString* GetTabName( sal_uInt16 nSBTab ) const;
 
     /** Writes the SUPBOOK record contents. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpXct >   XclExpXctList;
@@ -411,7 +411,7 @@ public:
                                 XclExpRefLogEntry* pRefLogEntry = NULL );
 
     /** Writes all SUPBOOK records with their sub records. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
     struct XclExpSBIndex
     {
@@ -511,36 +511,36 @@ public:
     virtual void        FindExtSheet( sal_uInt16& rnExtSheet,
                             sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
                             SCTAB nFirstScTab, SCTAB nLastScTab,
-                            XclExpRefLogEntry* pRefLogEntry );
-    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode );
+                            XclExpRefLogEntry* pRefLogEntry ) SAL_OVERRIDE;
+    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode ) SAL_OVERRIDE;
 
     virtual void FindExtSheet( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
-                               XclExpRefLogEntry* pRefLogEntry );
+                               XclExpRefLogEntry* pRefLogEntry ) SAL_OVERRIDE;
 
-    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos );
+    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos ) SAL_OVERRIDE;
 
-    virtual void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos );
-    virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange );
+    virtual void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos ) SAL_OVERRIDE;
+    virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange ) SAL_OVERRIDE;
 
     virtual bool        InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName );
+                            const OUString& rName ) SAL_OVERRIDE;
 
     /** InsertEuroTool */
     virtual bool        InsertEuroTool(
                              sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                             const OUString& rName );
+                             const OUString& rName ) SAL_OVERRIDE;
 
     virtual bool        InsertDde(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
+                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem ) SAL_OVERRIDE;
 
     virtual bool        InsertExtName(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) SAL_OVERRIDE;
 
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     typedef XclExpRecordList< XclExpExternSheet >   XclExpExtSheetList;
@@ -581,35 +581,35 @@ public:
     virtual void        FindExtSheet( sal_uInt16& rnExtSheet,
                             sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
                             SCTAB nFirstScTab, SCTAB nLastScTab,
-                            XclExpRefLogEntry* pRefLogEntry );
-    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode );
+                            XclExpRefLogEntry* pRefLogEntry ) SAL_OVERRIDE;
+    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode ) SAL_OVERRIDE;
 
     virtual void FindExtSheet( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
-                               XclExpRefLogEntry* pRefLogEntry );
+                               XclExpRefLogEntry* pRefLogEntry ) SAL_OVERRIDE;
 
-    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos );
+    virtual void StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos ) SAL_OVERRIDE;
 
-    virtual void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos );
-    virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange );
+    virtual void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos ) SAL_OVERRIDE;
+    virtual void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange ) SAL_OVERRIDE;
 
     virtual bool        InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName );
+                            const OUString& rName ) SAL_OVERRIDE;
     /** InsertEuroTool */
     virtual bool        InsertEuroTool(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rName );
+                            const OUString& rName ) SAL_OVERRIDE;
 
     virtual bool        InsertDde(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
+                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem ) SAL_OVERRIDE;
 
     virtual bool        InsertExtName(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) SAL_OVERRIDE;
 
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Searches for or inserts a new XTI structure.

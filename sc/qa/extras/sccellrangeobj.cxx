@@ -31,10 +31,10 @@ class ScCellRangeObj : public CalcUnoApiTest, apitest::XCellRangesQuery, apitest
 public:
     ScCellRangeObj();
 
-    virtual void setUp();
-    virtual void tearDown();
-    virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< uno::XInterface > getXCellRangeData();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
+    virtual uno::Reference< uno::XInterface > getXCellRangeData() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScCellRangeObj);
     CPPUNIT_TEST(testQueryColumnDifference);

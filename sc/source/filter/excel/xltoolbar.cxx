@@ -31,8 +31,8 @@ class MSOExcelCommandConvertor : public MSOCommandConvertor
    IdToString tcidToOOcmd;
 public:
     MSOExcelCommandConvertor();
-    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
-    virtual OUString MSOTCIDToOOCommand( sal_Int16 key );
+    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) SAL_OVERRIDE;
+    virtual OUString MSOTCIDToOOCommand( sal_Int16 key ) SAL_OVERRIDE;
 };
 
 MSOExcelCommandConvertor::MSOExcelCommandConvertor()

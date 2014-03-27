@@ -110,7 +110,7 @@ public:
 
     virtual ~ConstraintAtom() { }
 
-    virtual void accept( LayoutAtomVisitor& );
+    virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
 
     void setFor( sal_Int32 nToken )
         { mnFor = nToken; }
@@ -160,7 +160,7 @@ public:
 
     typedef std::map<sal_Int32,sal_Int32> ParamMap;
 
-    virtual void accept( LayoutAtomVisitor& );
+    virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
 
     void setType( sal_Int32 nToken )
         { mnType = nToken; }
@@ -186,7 +186,7 @@ public:
 
     IteratorAttr & iterator()
         { return maIter; }
-    virtual void accept( LayoutAtomVisitor& );
+    virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
 
 private:
     IteratorAttr maIter;
@@ -203,15 +203,15 @@ public:
     virtual ~ConditionAtom()
         { }
     bool test();
-    virtual void accept( LayoutAtomVisitor& );
+    virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
     IteratorAttr & iterator()
         { return maIter; }
     ConditionAttr & cond()
         { return maCond; }
     void readElseBranch()
         { mbElse=true; }
-    virtual void addChild( const LayoutAtomPtr & pNode );
-    virtual const std::vector<LayoutAtomPtr>& getChildren() const;
+    virtual void addChild( const LayoutAtomPtr & pNode ) SAL_OVERRIDE;
+    virtual const std::vector<LayoutAtomPtr>& getChildren() const SAL_OVERRIDE;
 private:
     bool          mbElse;
     IteratorAttr  maIter;
@@ -229,7 +229,7 @@ class ChooseAtom
 public:
     virtual ~ChooseAtom()
         { }
-    virtual void accept( LayoutAtomVisitor& );
+    virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
 };
 
 class LayoutNode
@@ -253,7 +253,7 @@ public:
 
     LayoutNode() : mnChildOrder(0) {}
     virtual ~LayoutNode() { }
-    virtual void accept( LayoutAtomVisitor& );
+    virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
     VarMap & variables()
         { return mVariables; }
     void setMoveWith( const OUString & sName )
@@ -299,12 +299,12 @@ class ShapeCreationVisitor : public LayoutAtomVisitor
     sal_Int32 mnCurrIdx;
 
     void defaultVisit(LayoutAtom& rAtom);
-    virtual void visit(ConstraintAtom& rAtom);
-    virtual void visit(AlgAtom& rAtom);
-    virtual void visit(ForEachAtom& rAtom);
-    virtual void visit(ConditionAtom& rAtom);
-    virtual void visit(ChooseAtom& rAtom);
-    virtual void visit(LayoutNode& rAtom);
+    virtual void visit(ConstraintAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(AlgAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ForEachAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ConditionAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(ChooseAtom& rAtom) SAL_OVERRIDE;
+    virtual void visit(LayoutNode& rAtom) SAL_OVERRIDE;
 
 public:
     ShapeCreationVisitor(const ShapePtr& rParentShape,

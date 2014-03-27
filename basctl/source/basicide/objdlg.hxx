@@ -52,8 +52,8 @@ private:
     TreeListBox aTree;
 
 private:
-    virtual void Resize (); // Window
-    virtual void ToggleFloatingMode (); // DockingWindow
+    virtual void Resize () SAL_OVERRIDE; // Window
+    virtual void ToggleFloatingMode () SAL_OVERRIDE; // DockingWindow
     void ArrangeWindows ();
 };
 

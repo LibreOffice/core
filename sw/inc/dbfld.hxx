@@ -43,8 +43,8 @@ public:
     SwDBFieldType(SwDoc* pDocPtr, const OUString& rColumnName, const SwDBData& rDBData);
     ~SwDBFieldType();
 
-    virtual OUString GetName() const;
-    virtual SwFieldType*  Copy() const;
+    virtual OUString GetName() const SAL_OVERRIDE;
+    virtual SwFieldType*  Copy() const SAL_OVERRIDE;
 
     inline void     AddRef() { nRefCnt++; }
     void            ReleaseRef();
@@ -52,8 +52,8 @@ public:
     OUString        GetColumnName() const {return sColumn;}
     const SwDBData& GetDBData() const {return aDBData;}
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -70,22 +70,22 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     bool    bValidValue     : 1;
     bool    bInitialized    : 1;
 
-    virtual OUString    Expand() const;
-    virtual SwField*    Copy() const;
+    virtual OUString    Expand() const SAL_OVERRIDE;
+    virtual SwField*    Copy() const SAL_OVERRIDE;
 
 public:
     SwDBField(SwDBFieldType*, sal_uLong nFmt = 0);
     virtual ~SwDBField();
 
-    virtual SwFieldType*    ChgTyp( SwFieldType* );
+    virtual SwFieldType*    ChgTyp( SwFieldType* ) SAL_OVERRIDE;
 
     /// Current text.
     inline  void        SetExpansion(const OUString& rStr);
 
-    virtual sal_uInt16      GetSubType() const;
-    virtual void        SetSubType(sal_uInt16 nType);
+    virtual sal_uInt16      GetSubType() const SAL_OVERRIDE;
+    virtual void        SetSubType(sal_uInt16 nType) SAL_OVERRIDE;
 
-    virtual OUString    GetFieldName() const;
+    virtual OUString    GetFieldName() const SAL_OVERRIDE;
 
     /// For calculations in expressions.
     void                ChgValue( double d, bool bVal );
@@ -105,7 +105,7 @@ public:
     inline void         SetInitialized()        { bInitialized = true; }
 
     /// Get name.
-    virtual OUString    GetPar1() const;
+    virtual OUString    GetPar1() const SAL_OVERRIDE;
 
     /// access to the command string
     OUString            GetFieldCode() const { return sFieldCode;}
@@ -113,8 +113,8 @@ public:
 
     /// DBName
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 inline  void SwDBField::SetExpansion(const OUString& rStr)
@@ -146,12 +146,12 @@ public:
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData);
 
-    virtual OUString        GetFieldName() const;
+    virtual OUString        GetFieldName() const SAL_OVERRIDE;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
-    virtual sal_uInt16          GetSubType() const;
-    virtual void            SetSubType(sal_uInt16 nType);
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
+    virtual sal_uInt16          GetSubType() const SAL_OVERRIDE;
+    virtual void            SetSubType(sal_uInt16 nType) SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -163,7 +163,7 @@ class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
 public:
     SwDBNextSetFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -179,18 +179,18 @@ public:
     SwDBNextSetField( SwDBNextSetFieldType*,
                       const OUString& rCond, const OUString& rDummy, const SwDBData& rDBData);
 
-    virtual OUString        Expand() const;
-    virtual SwField*        Copy() const;
+    virtual OUString        Expand() const SAL_OVERRIDE;
+    virtual SwField*        Copy() const SAL_OVERRIDE;
 
     void                    Evaluate(SwDoc*);
     inline void             SetCondValid(bool bCond);
     inline bool             IsCondValid() const;
 
     // Condition
-    virtual OUString    GetPar1() const;
-    virtual void        SetPar1(const OUString& rStr);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual OUString    GetPar1() const SAL_OVERRIDE;
+    virtual void        SetPar1(const OUString& rStr) SAL_OVERRIDE;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 inline bool SwDBNextSetField::IsCondValid() const
@@ -208,7 +208,7 @@ class SwDBNumSetFieldType : public SwFieldType
 public:
     SwDBNumSetFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -225,24 +225,24 @@ class SwDBNumSetField : public SwDBNameInfField
 public:
     SwDBNumSetField(SwDBNumSetFieldType*, const OUString& rCond, const OUString& rDBNum, const SwDBData& rDBData);
 
-    virtual OUString        Expand() const;
-    virtual SwField*        Copy() const;
+    virtual OUString        Expand() const SAL_OVERRIDE;
+    virtual SwField*        Copy() const SAL_OVERRIDE;
 
     inline bool             IsCondValid() const;
     inline void             SetCondValid(bool bCond);
     void                    Evaluate(SwDoc*);
 
     // Condition
-    virtual OUString        GetPar1() const;
-    virtual void            SetPar1(const OUString& rStr);
+    virtual OUString        GetPar1() const SAL_OVERRIDE;
+    virtual void            SetPar1(const OUString& rStr) SAL_OVERRIDE;
 
     // Number of data record.
-    virtual OUString   GetPar2()   const;
-    virtual void            SetPar2(const OUString& rStr);
+    virtual OUString   GetPar2()   const SAL_OVERRIDE;
+    virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
 
     // Number of data record is in nFormat!!
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 inline bool SwDBNumSetField::IsCondValid() const
@@ -262,7 +262,7 @@ public:
     SwDBNameFieldType(SwDoc*);
 
     OUString                Expand(sal_uLong) const;
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -274,10 +274,10 @@ class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
-    virtual OUString Expand() const;
-    virtual SwField* Copy() const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual OUString Expand() const SAL_OVERRIDE;
+    virtual SwField* Copy() const SAL_OVERRIDE;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -289,7 +289,7 @@ class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
 public:
     SwDBSetNumberFieldType();
 
-    virtual SwFieldType*    Copy() const;
+    virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };
 
 /*--------------------------------------------------------------------
@@ -303,14 +303,14 @@ class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
-    virtual OUString Expand() const;
-    virtual         SwField* Copy() const;
+    virtual OUString Expand() const SAL_OVERRIDE;
+    virtual         SwField* Copy() const SAL_OVERRIDE;
     void            Evaluate(SwDoc*);
 
     inline long     GetSetNumber() const;
     inline void     SetSetNumber(long nNum);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
 inline long SwDBSetNumberField::GetSetNumber() const

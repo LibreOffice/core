@@ -70,15 +70,15 @@ public:
     ~PowerPointExport();
 
     // from FilterBase
-    virtual bool importDocument() throw();
-    virtual bool exportDocument() throw();
+    virtual bool importDocument() throw() SAL_OVERRIDE;
+    virtual bool exportDocument() throw() SAL_OVERRIDE;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
     virtual sal_Int32 getSchemeClr( sal_Int32 /* nColorSchemeToken */ ) const { return 0; }
-    virtual oox::vml::Drawing* getVmlDrawing() { return NULL; }
-    virtual const oox::drawingml::Theme* getCurrentTheme() const { return NULL; }
-    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() { return oox::drawingml::table::TableStyleListPtr(); }
-    virtual oox::drawingml::chart::ChartConverter* getChartConverter() { return NULL; }
+    virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE { return NULL; }
+    virtual const oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE { return NULL; }
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE { return oox::drawingml::table::TableStyleListPtr(); }
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE { return NULL; }
 
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );
@@ -88,16 +88,16 @@ public:
 protected:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                 sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );
-    virtual void ImplWriteNotes( sal_uInt32 nPageNum );
-    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );
-    virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
+                                 sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
+    virtual void ImplWriteNotes( sal_uInt32 nPageNum ) SAL_OVERRIDE;
+    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet ) SAL_OVERRIDE;
+    virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum ) SAL_OVERRIDE;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
     void WriteTheme( sal_Int32 nThemeNum );
 
-    virtual sal_Bool ImplCreateDocument();
-    virtual sal_Bool ImplCreateMainNotes();
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
+    virtual sal_Bool ImplCreateDocument() SAL_OVERRIDE;
+    virtual sal_Bool ImplCreateMainNotes() SAL_OVERRIDE;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
     sal_Bool WriteNotesMaster();
 
     void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any aValue, const OUString& rAttributeName );
@@ -130,7 +130,7 @@ protected:
 private:
     void AddLayoutIdAndRelation( ::sax_fastparser::FSHelperPtr pFS, sal_Int32 nLayoutFileId );
 
-    virtual OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
 
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 

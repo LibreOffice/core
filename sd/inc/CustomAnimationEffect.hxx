@@ -370,10 +370,10 @@ public:
     InteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence );
 
     /** this method rebuilds the animation nodes */
-    virtual void rebuild();
+    virtual void rebuild() SAL_OVERRIDE;
 
 private:
-    virtual void implRebuild();
+    virtual void implRebuild() SAL_OVERRIDE;
 
     MainSequence*   mpMainSequence;
 };
@@ -392,23 +392,23 @@ public:
     MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
     ~MainSequence();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode() SAL_OVERRIDE;
     void reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
 
     /** this method rebuilds the animation nodes */
-    virtual void rebuild();
+    virtual void rebuild() SAL_OVERRIDE;
 
-    virtual CustomAnimationEffectPtr findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
+    virtual CustomAnimationEffectPtr findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const SAL_OVERRIDE;
 
-    virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
-    virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
-    virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
-    virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
-    virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) SAL_OVERRIDE;
+    virtual void insertTextRange( const com::sun::star::uno::Any& aTarget ) SAL_OVERRIDE;
+    virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget ) SAL_OVERRIDE;
+    virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) SAL_OVERRIDE;
+    virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ) SAL_OVERRIDE;
 
     const InteractiveSequenceList& getInteractiveSequenceList() const { return maInteractiveSequenceList; }
 
-    virtual void notify_change();
+    virtual void notify_change() SAL_OVERRIDE;
 
     bool setTrigger( const CustomAnimationEffectPtr& pEffect, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTriggerShape );
 
@@ -418,8 +418,8 @@ public:
     /** starts a timer that rebuilds the API core from the internal structure after 1 second */
     void startRebuildTimer();
 
-    virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;
-    virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const;
+    virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const SAL_OVERRIDE;
+    virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const SAL_OVERRIDE;
 
 protected:
     /** permits rebuilds until unlockRebuilds() is called. All rebuild calls during a locked sequence are
@@ -429,12 +429,12 @@ protected:
 
     DECL_LINK(onTimerHdl, void *);
 
-    virtual void implRebuild();
+    virtual void implRebuild() SAL_OVERRIDE;
 
     void init();
 
     void createMainSequence();
-    virtual void reset();
+    virtual void reset() SAL_OVERRIDE;
 
     InteractiveSequencePtr createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
 

@@ -77,10 +77,10 @@ public:
     void getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (IndexOutOfBoundsException );
 
     // XModifyListener
-    virtual void SAL_CALL modified( const EventObject& aEvent ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL modified( const EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     AccessibleShapeTreeInfo& mrShapeTreeInfo;
     Reference< XTable > mxTable;

@@ -74,11 +74,11 @@ private:
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
 
-    virtual void DataChanged( const DataChangedEvent& );
-    virtual void Paint(const Rectangle&);
-    virtual void KeyInput(const KeyEvent& rKEvt);
-    virtual void Command(const CommandEvent& rCEvt);
-    virtual void StateChanged( StateChangedType eChanged );
+    virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType eChanged ) SAL_OVERRIDE;
     DECL_LINK(MenuSelectHdl, Menu *);
 
 private:
@@ -92,10 +92,10 @@ public:
     ~SmGraphicWindow();
 
     // Window
-    virtual void    MouseButtonDown(const MouseEvent &rMEvt);
-    virtual void    MouseMove(const MouseEvent &rMEvt);
-    virtual void    GetFocus();
-    virtual void    LoseFocus();
+    virtual void    MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
+    virtual void    MouseMove(const MouseEvent &rMEvt) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void    LoseFocus() SAL_OVERRIDE;
 
     SmViewShell *   GetView()   { return pViewShell; }
 
@@ -113,7 +113,7 @@ public:
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
     // for Accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     using   Window::GetAccessible;
     SmGraphicAccessible *   GetAccessible_Impl()  { return pAccessible; }
@@ -129,7 +129,7 @@ public:
     SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
     virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
-                              const SfxPoolItem* pState);
+                              const SfxPoolItem* pState) SAL_OVERRIDE;
 };
 
 /**************************************************************************/
@@ -147,7 +147,7 @@ public:
 
     virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
-                              const SfxPoolItem* pState);
+                              const SfxPoolItem* pState) SAL_OVERRIDE;
 };
 
 /**************************************************************************/
@@ -165,16 +165,16 @@ class SmCmdBoxWindow : public SfxDockingWindow
 protected :
 
     // Window
-    virtual void    GetFocus();
-    virtual void Resize();
-    virtual void Paint(const Rectangle& rRect);
-    virtual void StateChanged( StateChangedType nStateChange );
+    virtual void    GetFocus() SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    virtual Size CalcDockingSize(SfxChildAlignment eAlign);
+    virtual Size CalcDockingSize(SfxChildAlignment eAlign) SAL_OVERRIDE;
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
-                                             SfxChildAlignment eWish);
+                                             SfxChildAlignment eWish) SAL_OVERRIDE;
 
-    virtual void    ToggleFloatingMode();
+    virtual void    ToggleFloatingMode() SAL_OVERRIDE;
 
 public:
     SmCmdBoxWindow(SfxBindings    *pBindings,
@@ -233,7 +233,7 @@ class SmViewShell: public SfxViewShell
     bool                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMAND
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
@@ -256,23 +256,23 @@ protected:
                   sal_uInt16        MaxWidth);
 
     virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
-    virtual SfxPrinter *GetPrinter(bool bCreate = false);
+    virtual SfxPrinter *GetPrinter(bool bCreate = false) SAL_OVERRIDE;
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
-                              sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
+                              sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
 
     void Insert( SfxMedium& rMedium );
     void InsertFrom(SfxMedium &rMedium);
 
-    virtual bool HasPrintOptionsPage() const;
+    virtual bool HasPrintOptionsPage() const SAL_OVERRIDE;
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
-                                               const SfxItemSet &rOptions);
-    virtual void Deactivate(bool IsMDIActivate);
-    virtual void Activate(bool IsMDIActivate);
-    virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
-    virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize);
-    virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize);
-    virtual void QueryObjAreaPixel( Rectangle& rRect ) const;
-    virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY );
+                                               const SfxItemSet &rOptions) SAL_OVERRIDE;
+    virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize) SAL_OVERRIDE;
+    virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize) SAL_OVERRIDE;
+    virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) SAL_OVERRIDE;
+    virtual void QueryObjAreaPixel( Rectangle& rRect ) const SAL_OVERRIDE;
+    virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();

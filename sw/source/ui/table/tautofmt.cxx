@@ -53,9 +53,9 @@ public:
 
     void DetectRTL(SwWrtShell* pWrtShell);
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 protected:
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     SwTableAutoFmt          aCurData;

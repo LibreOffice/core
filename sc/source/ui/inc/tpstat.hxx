@@ -39,8 +39,8 @@ private:
             ~ScDocStatPage();
 
 protected:
-    virtual bool    FillItemSet( SfxItemSet& rSet );
-    virtual void    Reset      ( const SfxItemSet& rSet );
+    virtual bool    FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void    Reset      ( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 private:
     FixedText*       m_pFtTables;

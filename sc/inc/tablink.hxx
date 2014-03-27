@@ -48,11 +48,11 @@ public:
     ScTableLink( SfxObjectShell* pShell, const OUString& rFile,
                     const OUString& rFilter, const OUString& rOpt, sal_uLong nRefresh );
     virtual ~ScTableLink();
-    virtual void Closed();
+    virtual void Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
-    virtual void    Edit( Window*, const Link& rEndEditHdl );
+    virtual void    Edit( Window*, const Link& rEndEditHdl ) SAL_OVERRIDE;
 
     bool    Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     const OUString* pNewOptions /* = NULL */, sal_uLong nNewRefresh );

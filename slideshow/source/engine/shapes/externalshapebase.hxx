@@ -63,34 +63,34 @@ namespace slideshow
             virtual ~ExternalShapeBase();
 
             virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const;
+                ::com::sun::star::drawing::XShape > getXShape() const SAL_OVERRIDE;
 
             // animation methods
 
 
-            virtual void play();
-            virtual void stop();
-            virtual void pause();
-            virtual bool isPlaying() const;
-            virtual void setMediaTime(double);
+            virtual void play() SAL_OVERRIDE;
+            virtual void stop() SAL_OVERRIDE;
+            virtual void pause() SAL_OVERRIDE;
+            virtual bool isPlaying() const SAL_OVERRIDE;
+            virtual void setMediaTime(double) SAL_OVERRIDE;
 
             // render methods
 
 
-            virtual bool update() const;
-            virtual bool render() const;
-            virtual bool isContentChanged() const;
+            virtual bool update() const SAL_OVERRIDE;
+            virtual bool render() const SAL_OVERRIDE;
+            virtual bool isContentChanged() const SAL_OVERRIDE;
 
 
             // Shape attributes
 
 
-            virtual ::basegfx::B2DRectangle getBounds() const;
-            virtual ::basegfx::B2DRectangle getDomBounds() const;
-            virtual ::basegfx::B2DRectangle getUpdateArea() const;
-            virtual bool   isVisible() const;
-            virtual double getPriority() const;
-            virtual bool   isBackgroundDetached() const;
+            virtual ::basegfx::B2DRectangle getBounds() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getDomBounds() const SAL_OVERRIDE;
+            virtual ::basegfx::B2DRectangle getUpdateArea() const SAL_OVERRIDE;
+            virtual bool   isVisible() const SAL_OVERRIDE;
+            virtual double getPriority() const SAL_OVERRIDE;
+            virtual bool   isBackgroundDetached() const SAL_OVERRIDE;
 
         protected:
             const ::com::sun::star::uno::Reference<

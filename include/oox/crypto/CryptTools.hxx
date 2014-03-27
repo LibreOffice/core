@@ -95,7 +95,7 @@ public:
     virtual sal_uInt32 update(
                     std::vector<sal_uInt8>& output,
                     std::vector<sal_uInt8>& input,
-                    sal_uInt32 inputLength = 0);
+                    sal_uInt32 inputLength = 0) SAL_OVERRIDE;
 
 
     static sal_uInt32 aes128ecb(
@@ -114,7 +114,7 @@ public:
     virtual sal_uInt32 update(
                     std::vector<sal_uInt8>& output,
                     std::vector<sal_uInt8>& input,
-                    sal_uInt32 inputLength = 0);
+                    sal_uInt32 inputLength = 0) SAL_OVERRIDE;
 };
 
 class Digest

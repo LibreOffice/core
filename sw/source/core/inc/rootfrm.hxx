@@ -143,7 +143,7 @@ class SwRootFrm: public SwLayoutFrm
 
 protected:
 
-    virtual void MakeAll();
+    virtual void MakeAll() SAL_OVERRIDE;
 
 public:
 
@@ -186,22 +186,22 @@ public:
           void     SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
 
     virtual bool  GetCrsrOfst( SwPosition *, Point&,
-                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
 
     virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
-    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) SAL_OVERRIDE;
 #ifdef DBG_UTIL
-    virtual void Cut();
-    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+    virtual void Cut() SAL_OVERRIDE;
+    virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 #endif
 
-    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
     Point  GetNextPrevCntntPos( const Point &rPoint, sal_Bool bNext ) const;
 
-    virtual Size ChgSize( const Size& aNewSize );
+    virtual Size ChgSize( const Size& aNewSize ) SAL_OVERRIDE;
 
     void SetIdleFlags()
     {

@@ -125,11 +125,11 @@ public:
      */
     void    SetWrapText(sal_Bool wrap);
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
-    virtual sal_Bool Equal(IXFStyle *pStyle);
+    virtual sal_Bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
 
-    virtual void ToXml(IXFStream *pStrm);
+    virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     OUString   m_strDataStyle;

@@ -38,10 +38,10 @@ public:
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLength,
-                                         const ThumbnailItemAttributes *pAttrs);
+                                         const ThumbnailItemAttributes *pAttrs) SAL_OVERRIDE;
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
-                        const ThumbnailItemAttributes *pAttrs);
+                        const ThumbnailItemAttributes *pAttrs) SAL_OVERRIDE;
 
     sal_uInt16    mnRegionId;
     sal_uInt16    mnDocId;

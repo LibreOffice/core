@@ -36,7 +36,7 @@ public:
     void SetImage(Image img);
     void SetCusEnable(bool bEnable);
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
 protected:
     VirtualDevice*  pVDev;

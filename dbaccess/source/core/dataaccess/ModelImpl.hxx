@@ -130,9 +130,9 @@ public:
     */
     VosMutexFacade( ::osl::Mutex& _rMutex );
 
-    virtual void acquire();
-    virtual void release();
-    virtual bool tryToAcquire();
+    virtual void acquire() SAL_OVERRIDE;
+    virtual void release() SAL_OVERRIDE;
+    virtual bool tryToAcquire() SAL_OVERRIDE;
 
 private:
     ::osl::Mutex&   m_rMutex;
@@ -378,11 +378,11 @@ public:
 
     /** @see osl_incrementInterlockedCount.
      */
-    virtual oslInterlockedCount SAL_CALL acquire();
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
 
     /** @see osl_decrementInterlockedCount.
      */
-    virtual oslInterlockedCount SAL_CALL release();
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
     /// returns a all known data source settings, including their default values
     static const AsciiPropertyValue* getDefaultDataSourceSettings();
@@ -475,18 +475,18 @@ public:
 
 public:
     // IMacroDocumentAccess overridables
-    virtual sal_Int16 getCurrentMacroExecMode() const;
-    virtual bool setCurrentMacroExecMode( sal_uInt16 );
-    virtual OUString getDocumentLocation() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign();
-    virtual bool documentStorageHasMacros() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
-    virtual sal_Int16 getScriptingSignatureState();
-    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor );
-    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
+    virtual sal_Int16 getCurrentMacroExecMode() const SAL_OVERRIDE;
+    virtual bool setCurrentMacroExecMode( sal_uInt16 ) SAL_OVERRIDE;
+    virtual OUString getDocumentLocation() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign() SAL_OVERRIDE;
+    virtual bool documentStorageHasMacros() const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
+    virtual sal_Int16 getScriptingSignatureState() SAL_OVERRIDE;
+    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) SAL_OVERRIDE;
+    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const SAL_OVERRIDE;
 
     // IModifiableDocument
-    virtual void storageIsModified();
+    virtual void storageIsModified() SAL_OVERRIDE;
 
     // don't use directly, use the ModifyLock class instead
     void    lockModify()              { m_bModificationLock = true; }

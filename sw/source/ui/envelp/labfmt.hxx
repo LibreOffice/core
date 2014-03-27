@@ -55,9 +55,9 @@ class SwLabPreview : public Window
 
     SwLabItem aItem;
 
-    virtual void Paint(const Rectangle&);
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE;
 
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void DrawArrow(const Point& rP1, const Point& rP2, bool bArrow);
 
@@ -109,11 +109,11 @@ public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
             void FillItem(SwLabItem& rItem);
-    virtual bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet& rSet) SAL_OVERRIDE;
 
     SwLabDlg* GetParentSwLabDlg() {return (SwLabDlg*)GetParentDialog();}
 };

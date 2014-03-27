@@ -51,18 +51,18 @@ class DataBrowser : public ::svt::EditBrowseBox
 {
 protected:
     // EditBrowseBox overridables
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const;
-    virtual bool SeekRow( long nRow );
-    virtual bool IsTabAllowed( bool bForward ) const;
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-    virtual bool SaveModified();
-    virtual void CursorMoved();
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const SAL_OVERRIDE;
+    virtual bool SeekRow( long nRow ) SAL_OVERRIDE;
+    virtual bool IsTabAllowed( bool bForward ) const SAL_OVERRIDE;
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
+    virtual bool SaveModified() SAL_OVERRIDE;
+    virtual void CursorMoved() SAL_OVERRIDE;
     // called whenever the control of the current cell has been modified
-    virtual void CellModified();
-    virtual void ColumnResized( sal_uInt16 nColId );
-    virtual void EndScroll();
-    virtual void MouseButtonDown( const BrowserMouseEvent& rEvt );
+    virtual void CellModified() SAL_OVERRIDE;
+    virtual void ColumnResized( sal_uInt16 nColId ) SAL_OVERRIDE;
+    virtual void EndScroll() SAL_OVERRIDE;
+    virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) SAL_OVERRIDE;
 
     void SetDirty();
 
@@ -78,7 +78,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long nRow, sal_uInt16 nColId) const;
+    virtual OUString  GetCellText(long nRow, sal_uInt16 nColId) const SAL_OVERRIDE;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan
@@ -88,7 +88,7 @@ public:
     bool isDateString( const OUString& aInputString, double& fOutDateValue );
 
     // Window
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 
     /// @return old state
     bool SetReadOnly( bool bNewState );

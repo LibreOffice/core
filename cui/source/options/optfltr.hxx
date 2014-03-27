@@ -46,8 +46,8 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 class OfaMSFilterTabPage2 : public SfxTabPage
@@ -62,9 +62,9 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
         void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
     protected:
-        virtual void    SetTabs();
-        virtual void    HBarClick();
-        virtual void    KeyInput( const KeyEvent& rKEvt );
+        virtual void    SetTabs() SAL_OVERRIDE;
+        virtual void    HBarClick() SAL_OVERRIDE;
+        virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     public:
         MSFltrSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = 0)
@@ -95,8 +95,8 @@ public:
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 

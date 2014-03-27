@@ -46,9 +46,9 @@ namespace dbaccess
     {
         ::rtl::Reference< ::connectivity::OSQLColumns>  m_aColumns;
     protected:
-        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName);
-        virtual void impl_refresh() throw(RuntimeException) {}
-        virtual Reference< XPropertySet > createDescriptor()
+        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+        virtual void impl_refresh() throw(RuntimeException) SAL_OVERRIDE {}
+        virtual Reference< XPropertySet > createDescriptor() SAL_OVERRIDE
         {
             return NULL;
         }
@@ -70,7 +70,7 @@ namespace dbaccess
             ::osl::Mutex& _rMutex
         );
 
-        virtual void SAL_CALL disposing(void);
+        virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
     };
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
 
@@ -79,9 +79,9 @@ namespace dbaccess
     {
         OSQLTables  m_aTables;
     protected:
-        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName);
-        virtual void impl_refresh() throw(RuntimeException) {}
-        virtual Reference< XPropertySet > createDescriptor()
+        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
+        virtual void impl_refresh() throw(RuntimeException) SAL_OVERRIDE {}
+        virtual Reference< XPropertySet > createDescriptor() SAL_OVERRIDE
         {
             return NULL;
         }
@@ -95,7 +95,7 @@ namespace dbaccess
                         ,m_aTables(_rTables)
         {
         }
-        virtual void SAL_CALL disposing(void)
+        virtual void SAL_CALL disposing(void) SAL_OVERRIDE
         {
             clear_NoDispose();
                 // we're not owner of the objects we're holding, instead the object we got in our ctor is

@@ -22,7 +22,7 @@ class Test : public SwModelTestBase
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ww8export/data/", "MS Word 97") {}
 
-    bool mustTestImportOf(const char* filename) const
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE
     {
         // If the testcase is stored in some other format, it's pointless to test.
         return OString(filename).endsWith(".doc");

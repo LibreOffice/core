@@ -26,22 +26,22 @@ namespace writerfilter {
             public:
                 RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
                 virtual ~RTFLookahead();
-                virtual int dispatchDestination(RTFKeyword nKeyword);
-                virtual int dispatchFlag(RTFKeyword nKeyword);
-                virtual int dispatchSymbol(RTFKeyword nKeyword);
-                virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
-                virtual int dispatchValue(RTFKeyword nKeyword, int nParam);
-                virtual int resolveChars(char ch);
-                virtual int pushState();
-                virtual int popState();
-                virtual RTFDestinationState getDestinationState();
-                virtual void setDestinationState(RTFDestinationState nDestinationState);
-                virtual RTFInternalState getInternalState();
-                virtual void setInternalState(RTFInternalState nInternalState);
-                virtual bool getSkipUnknown();
-                virtual void setSkipUnknown(bool bSkipUnknown);
-                virtual void finishSubstream();
-                virtual bool isSubstream() const;
+                virtual int dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
+                virtual int dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
+                virtual int dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
+                virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
+                virtual int dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
+                virtual int resolveChars(char ch) SAL_OVERRIDE;
+                virtual int pushState() SAL_OVERRIDE;
+                virtual int popState() SAL_OVERRIDE;
+                virtual RTFDestinationState getDestinationState() SAL_OVERRIDE;
+                virtual void setDestinationState(RTFDestinationState nDestinationState) SAL_OVERRIDE;
+                virtual RTFInternalState getInternalState() SAL_OVERRIDE;
+                virtual void setInternalState(RTFInternalState nInternalState) SAL_OVERRIDE;
+                virtual bool getSkipUnknown() SAL_OVERRIDE;
+                virtual void setSkipUnknown(bool bSkipUnknown) SAL_OVERRIDE;
+                virtual void finishSubstream() SAL_OVERRIDE;
+                virtual bool isSubstream() const SAL_OVERRIDE;
                 bool hasTable();
             private:
                 boost::shared_ptr<RTFTokenizer> m_pTokenizer;

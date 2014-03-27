@@ -58,25 +58,25 @@ namespace dbaui
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);
 
-        bool SaveModified();
-        bool IsModified() const;
+        bool SaveModified() SAL_OVERRIDE;
+        bool IsModified() const SAL_OVERRIDE;
 
         const IndexFields&  GetSavedValue() const { return m_aSavedValue; }
         void                SaveValue() { m_aSavedValue = m_aFields; }
 
         void SetModifyHdl(const Link& _rHdl) { m_aModifyHdl = _rHdl; }
         Link GetModifyHdl() const { return m_aModifyHdl; }
-        virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const;
+        virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const SAL_OVERRIDE;
 
     protected:
         // EditBrowseBox overridables
-        virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const;
-        virtual bool SeekRow(long nRow);
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
-        virtual bool IsTabAllowed(bool bForward) const;
+        virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const SAL_OVERRIDE;
+        virtual bool SeekRow(long nRow) SAL_OVERRIDE;
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
+        virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
 
-        ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId);
-        void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
+        ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId) SAL_OVERRIDE;
+        void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId) SAL_OVERRIDE;
 
     protected:
         OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;

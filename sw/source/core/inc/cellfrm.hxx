@@ -33,20 +33,20 @@ class SwCellFrm: public SwLayoutFrm
     const SwTableBox* pTabBox;
 
 protected:
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:
     SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
     ~SwCellFrm();
 
-    virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+    virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
     virtual void Paint( SwRect const&,
-                        SwPrintData const*const pPrintData = NULL ) const;
-    virtual void CheckDirection( bool bVert );
+                        SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
+    virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
     // #i103961#
-    virtual void Cut();
+    virtual void Cut() SAL_OVERRIDE;
 
     const SwTableBox *GetTabBox() const { return pTabBox; }
 

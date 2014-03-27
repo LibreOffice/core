@@ -120,8 +120,8 @@ class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XDispatchResultLis
 public:
     sal_Bool    bFinished;
     sal_Bool    bSuccess;
-    virtual void SAL_CALL   dispatchFinished( const DispatchResultEvent& Event ) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL   disposing( const EventObject& Source ) throw(RuntimeException, std::exception);
+    virtual void SAL_CALL   dispatchFinished( const DispatchResultEvent& Event ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   disposing( const EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
                             SfxOpenDocStatusListener_Impl()
                                 : bFinished( sal_False )
                                 , bSuccess( sal_False )
@@ -157,9 +157,9 @@ public:
                             mxStorage( rxStorage ) {}
 
     virtual ::comphelper::DocPasswordVerifierResult
-                        verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData );
+                        verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData ) SAL_OVERRIDE;
     virtual ::comphelper::DocPasswordVerifierResult
-                        verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData );
+                        verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData ) SAL_OVERRIDE;
 
 
 private:

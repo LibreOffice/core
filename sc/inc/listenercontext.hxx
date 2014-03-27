@@ -66,8 +66,8 @@ class PurgeListenerAction : public ColumnSpanSet::Action, boost::noncopyable
 public:
     PurgeListenerAction( ScDocument& rDoc );
 
-    virtual void startColumn( SCTAB nTab, SCCOL nCol );
-    virtual void execute( const ScAddress& rPos, SCROW nLength, bool bVal );
+    virtual void startColumn( SCTAB nTab, SCCOL nCol ) SAL_OVERRIDE;
+    virtual void execute( const ScAddress& rPos, SCROW nLength, bool bVal ) SAL_OVERRIDE;
 };
 
 }

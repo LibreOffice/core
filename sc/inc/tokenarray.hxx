@@ -83,9 +83,9 @@ public:
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
-    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef);
-    virtual void CheckToken( const formula::FormulaToken& r );
-    virtual formula::FormulaToken* AddOpCode( OpCode eCode );
+    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef) SAL_OVERRIDE;
+    virtual void CheckToken( const formula::FormulaToken& r ) SAL_OVERRIDE;
+    virtual formula::FormulaToken* AddOpCode( OpCode eCode ) SAL_OVERRIDE;
     /** ScSingleRefToken with ocPush. */
     formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );
     /** ScSingleRefOpToken with ocMatRef. */
@@ -99,7 +99,7 @@ public:
     formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
     formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
-    virtual formula::FormulaToken* MergeArray( );
+    virtual formula::FormulaToken* MergeArray( ) SAL_OVERRIDE;
 
     /** Merge very last SingleRef+ocRange+SingleRef combination into DoubleRef
         and adjust pCode array, or do nothing if conditions not met.

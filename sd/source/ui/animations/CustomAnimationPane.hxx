@@ -82,16 +82,16 @@ public:
     void remove( CustomAnimationEffectPtr& pEffect );
 
     // Control
-    virtual void StateChanged( StateChangedType nStateChange );
-    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     // ICustomAnimationListController
-    virtual void onSelect();
-    virtual void onDoubleClick();
-    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry );
+    virtual void onSelect() SAL_OVERRIDE;
+    virtual void onDoubleClick() SAL_OVERRIDE;
+    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
     // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent);
+    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     void addUndo();
 

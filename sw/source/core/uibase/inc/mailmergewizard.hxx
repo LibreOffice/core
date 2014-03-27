@@ -58,12 +58,12 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
     using svt::OWizardMachine::skipUntil;
 
 protected:
-    virtual svt::OWizardPage*       createPage(WizardState _nState);
-    virtual void                    enterState( WizardState _nState );
+    virtual svt::OWizardPage*       createPage(WizardState _nState) SAL_OVERRIDE;
+    virtual void                    enterState( WizardState _nState ) SAL_OVERRIDE;
 
 // roadmap feature ??
 //    virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
-    virtual OUString                getStateDisplayName( WizardState _nState ) const;
+    virtual OUString                getStateDisplayName( WizardState _nState ) const SAL_OVERRIDE;
 
 public:
     SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);
@@ -89,8 +89,8 @@ public:
 
     void                    updateRoadmapItemLabel( WizardState _nState );
 
-    virtual short           Execute();
-    virtual void            StartExecuteModal( const Link& rEndDialogHdl );
+    virtual short           Execute() SAL_OVERRIDE;
+    virtual void            StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
 };
 #endif
 

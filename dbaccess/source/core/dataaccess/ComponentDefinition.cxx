@@ -62,13 +62,13 @@ protected:
 public:
     OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( m_pComponent )
             m_pComponent->notifyDataSourceModified();
     }
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception)
+    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
     }
     void clear() { m_pComponent = NULL; }

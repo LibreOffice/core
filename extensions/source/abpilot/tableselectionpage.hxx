@@ -42,15 +42,15 @@ namespace abp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage() SAL_OVERRIDE;
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) SAL_OVERRIDE;
 
         // TabDialog overridables
-        virtual void        ActivatePage();
-        virtual void        DeactivatePage();
+        virtual void        ActivatePage() SAL_OVERRIDE;
+        virtual void        DeactivatePage() SAL_OVERRIDE;
 
         // OImportPage overridables
-        virtual bool        canAdvance() const;
+        virtual bool        canAdvance() const SAL_OVERRIDE;
 
     private:
         DECL_LINK( OnTableSelected, void* );

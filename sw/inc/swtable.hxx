@@ -124,7 +124,7 @@ protected:
 
     bool IsModifyLocked(){ return bModifyLocked;}
 
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
     enum SearchType
@@ -302,7 +302,7 @@ public:
                             SwSelBoxes& rBoxes, bool bToTop = true ) const;
 
     // Get information from client.
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     // Search in format for registered table.
     static SwTable * FindTable( SwFrmFmt const*const pFmt );

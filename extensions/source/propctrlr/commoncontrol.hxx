@@ -205,7 +205,7 @@ namespace pcr
         inline virtual void SAL_CALL disposing();
 
         // IModifyListener
-        inline virtual void modified();
+        inline virtual void modified() SAL_OVERRIDE;
 
         /// returns a typed pointer to our control window
               WindowType* getTypedControlWindow()       { return static_cast< WindowType* >      ( m_aImplControl.getVclControlWindow() ); }

@@ -97,7 +97,7 @@ friend class SvxConfigGroupListBox;
     SvTreeListEntry*                    m_pDraggingEntry;
 
     DECL_LINK(TimerHdl, void *);
-    virtual void                    MouseMove( const MouseEvent& rMEvt );
+    virtual void                    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
 public:
     SvxConfigFunctionListBox(Window* pParent, WinBits nStyle);
@@ -109,12 +109,12 @@ public:
     void                            FunctionSelected();
 
     // drag n drop methods
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
 
     virtual DragDropMode    NotifyStartDrag(
-        TransferDataContainer&, SvTreeListEntry* );
+        TransferDataContainer&, SvTreeListEntry* ) SAL_OVERRIDE;
 
-    virtual void        DragFinished( sal_Int8 );
+    virtual void        DragFinished( sal_Int8 ) SAL_OVERRIDE;
 };
 
 class SvxConfigGroupListBox : public SvTreeListBox
@@ -156,7 +156,7 @@ private:
     );
 
 protected:
-    virtual void    RequestingChildren( SvTreeListEntry *pEntry);
+    virtual void    RequestingChildren( SvTreeListEntry *pEntry) SAL_OVERRIDE;
     virtual sal_Bool    Expand( SvTreeListEntry* pParent );
 
 public:

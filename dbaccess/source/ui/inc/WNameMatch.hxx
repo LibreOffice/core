@@ -33,7 +33,7 @@ namespace dbaui
     {
         sal_Bool m_bReadOnly;
     protected:
-        virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
+        virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind) SAL_OVERRIDE;
 
     public:
         OColumnTreeBox( Window* pParent, const ResId& rResId );
@@ -70,10 +70,10 @@ namespace dbaui
         DECL_LINK( TableListRightSelectHdl, void* );
 
     public:
-        virtual void            Reset ( );
-        virtual void            ActivatePage();
-        virtual sal_Bool        LeavePage();
-        virtual OUString        GetTitle() const ;
+        virtual void            Reset ( ) SAL_OVERRIDE;
+        virtual void            ActivatePage() SAL_OVERRIDE;
+        virtual sal_Bool        LeavePage() SAL_OVERRIDE;
+        virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OWizNameMatching(Window* pParent);
         virtual ~OWizNameMatching();

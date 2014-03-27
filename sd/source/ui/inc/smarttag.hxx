@@ -79,7 +79,7 @@ protected:
     virtual void deselect();
     virtual bool getContext( SdrViewContext& rContext );
 
-    virtual void disposing();
+    virtual void disposing() SAL_OVERRIDE;
 
     ::sd::View& mrView;
     bool mbSelected;

@@ -34,9 +34,9 @@ public:
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame);
     virtual ~PanelLayout();
 
-    virtual Size GetOptimalSize() const;
-    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
-    virtual void queue_resize();
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
+    virtual void queue_resize() SAL_OVERRIDE;
 
 };
 

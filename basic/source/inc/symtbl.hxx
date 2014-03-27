@@ -185,8 +185,8 @@ class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
 public:
     SbiProcDef( SbiParser*, const OUString&, bool bProcDecl=false );
     virtual ~SbiProcDef();
-    virtual SbiProcDef* GetProcDef();
-    virtual void SetType( SbxDataType );
+    virtual SbiProcDef* GetProcDef() SAL_OVERRIDE;
+    virtual void SetType( SbxDataType ) SAL_OVERRIDE;
     SbiSymPool& GetParams()         { return aParams;  }
     SbiSymPool& GetLabels()         { return aLabels;  }
     SbiSymPool& GetLocals()         { return GetPool();}
@@ -221,7 +221,7 @@ class SbiConstDef : public SbiSymDef
 public:
     SbiConstDef( const OUString& );
     virtual ~SbiConstDef();
-    virtual SbiConstDef* GetConstDef();
+    virtual SbiConstDef* GetConstDef() SAL_OVERRIDE;
     void Set( double, SbxDataType );
     void Set( const OUString& );
     double GetValue()           { return nVal; }

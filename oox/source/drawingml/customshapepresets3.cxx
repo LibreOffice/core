@@ -25,7 +25,7 @@ namespace
 {
 class ShapeCstar6 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -242,7 +242,7 @@ class ShapeCstar6 : public CustomShapeProvider
 
 class ShapeCround2SameRect : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -509,7 +509,7 @@ class ShapeCround2SameRect : public CustomShapeProvider
 
 class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -718,7 +718,7 @@ class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
 
 class ShapeCdiamond : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -833,7 +833,7 @@ class ShapeCdiamond : public CustomShapeProvider
 
 class ShapeCcallout2 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -1170,7 +1170,7 @@ class ShapeCcallout2 : public CustomShapeProvider
 
 class ShapeCellipseRibbon : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -1756,7 +1756,7 @@ class ShapeCellipseRibbon : public CustomShapeProvider
 
 class ShapeCpie : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -1935,7 +1935,7 @@ class ShapeCpie : public CustomShapeProvider
 
 class ShapeCstar4 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -2120,7 +2120,7 @@ class ShapeCstar4 : public CustomShapeProvider
 
 class ShapeCflowChartPredefinedProcess : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -2308,7 +2308,7 @@ class ShapeCflowChartPredefinedProcess : public CustomShapeProvider
 
 class ShapeCflowChartPunchedTape : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -2473,7 +2473,7 @@ class ShapeCflowChartPunchedTape : public CustomShapeProvider
 
 class ShapeCcurvedConnector2 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -2584,7 +2584,7 @@ class ShapeCcurvedConnector2 : public CustomShapeProvider
 
 class ShapeCbentConnector3 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -2737,7 +2737,7 @@ class ShapeCbentConnector3 : public CustomShapeProvider
 
 class ShapeCcornerTabs : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -2902,7 +2902,7 @@ class ShapeCcornerTabs : public CustomShapeProvider
 
 class ShapeChexagon : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -3090,7 +3090,7 @@ class ShapeChexagon : public CustomShapeProvider
 
 class ShapeCflowChartConnector : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -3242,7 +3242,7 @@ class ShapeCflowChartConnector : public CustomShapeProvider
 
 class ShapeCflowChartMagneticDisk : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -3457,7 +3457,7 @@ class ShapeCflowChartMagneticDisk : public CustomShapeProvider
 
 class ShapeCheart : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -3593,7 +3593,7 @@ class ShapeCheart : public CustomShapeProvider
 
 class ShapeCribbon2 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -4247,7 +4247,7 @@ class ShapeCribbon2 : public CustomShapeProvider
 
 class ShapeCbracePair : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -4670,7 +4670,7 @@ class ShapeCbracePair : public CustomShapeProvider
 
 class ShapeCflowChartExtract : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -4788,7 +4788,7 @@ class ShapeCflowChartExtract : public CustomShapeProvider
 
 class ShapeCactionButtonHome : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -5229,7 +5229,7 @@ class ShapeCactionButtonHome : public CustomShapeProvider
 
 class ShapeCaccentBorderCallout3 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -5652,7 +5652,7 @@ class ShapeCaccentBorderCallout3 : public CustomShapeProvider
 
 class ShapeCflowChartOfflineStorage : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -5817,7 +5817,7 @@ class ShapeCflowChartOfflineStorage : public CustomShapeProvider
 
 class ShapeCirregularSeal1 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -6045,7 +6045,7 @@ class ShapeCirregularSeal1 : public CustomShapeProvider
 
 class ShapeCquadArrow : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -6400,7 +6400,7 @@ class ShapeCquadArrow : public CustomShapeProvider
 
 class ShapeCleftBrace : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -6727,7 +6727,7 @@ class ShapeCleftBrace : public CustomShapeProvider
 
 class ShapeCleftBracket : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -6947,7 +6947,7 @@ class ShapeCleftBracket : public CustomShapeProvider
 
 class ShapeCblockArc : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -7207,7 +7207,7 @@ class ShapeCblockArc : public CustomShapeProvider
 
 class ShapeCcurvedConnector3 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -7379,7 +7379,7 @@ class ShapeCcurvedConnector3 : public CustomShapeProvider
 
 class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -7717,7 +7717,7 @@ class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
 
 class ShapeCactionButtonMovie : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -8195,7 +8195,7 @@ class ShapeCactionButtonMovie : public CustomShapeProvider
 
 class ShapeCflowChartOnlineStorage : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -8340,7 +8340,7 @@ class ShapeCflowChartOnlineStorage : public CustomShapeProvider
 
 class ShapeCgear6 : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -8799,7 +8799,7 @@ class ShapeCgear6 : public CustomShapeProvider
 
 class ShapeChalfFrame : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 
@@ -9019,7 +9019,7 @@ class ShapeChalfFrame : public CustomShapeProvider
 
 class ShapeCsnip2SameRect : public CustomShapeProvider
 {
-  virtual PropertyMap getProperties()
+  virtual PropertyMap getProperties() SAL_OVERRIDE
   {
     PropertyMap aPropertyMap;
 

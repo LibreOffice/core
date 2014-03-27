@@ -60,21 +60,21 @@ class SmEditWindow : public Window, public DropTargetHelper
                     aCursorMoveTimer;
     ESelection      aOldSelection;
 
-    virtual void KeyInput(const KeyEvent& rKEvt);
-    virtual void Command(const CommandEvent& rCEvt);
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(ModifyTimerHdl, Timer *);
     DECL_LINK(CursorMoveTimerHdl, Timer *);
 
-    virtual void DataChanged( const DataChangedEvent& );
-    virtual void Resize();
-    virtual void MouseMove(const MouseEvent &rEvt);
-    virtual void MouseButtonUp(const MouseEvent &rEvt);
-    virtual void MouseButtonDown(const MouseEvent &rEvt);
+    virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent &rEvt) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent &rEvt) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void Paint(const Rectangle& rRect);
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
 
     DECL_LINK(EditStatusHdl ,EditStatus *);
     DECL_LINK(ScrollHdl, ScrollBar *);
@@ -98,10 +98,10 @@ public:
     SfxItemPool *   GetEditEngineItemPool();
 
     // Window
-    virtual void        SetText(const OUString &rText);
-    virtual OUString    GetText() const;
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
+    virtual void        SetText(const OUString &rText) SAL_OVERRIDE;
+    virtual OUString    GetText() const SAL_OVERRIDE;
+    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
 
     ESelection          GetSelection() const;
     void                SetSelection(const ESelection &rSel);
@@ -131,7 +131,7 @@ public:
     void                StartCursorMove();
 
     // for Accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     using Window::GetAccessible;
     SmEditAccessible *   GetAccessible()  { return pAccessible; }

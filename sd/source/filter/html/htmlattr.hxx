@@ -34,7 +34,7 @@ public:
     SdHtmlAttrPreview( Window* pParent, const ResId& rResId );
     ~SdHtmlAttrPreview();
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void    SetColors( Color& aBack, Color& aText, Color& aLink,
                        Color& aVLink, Color& aALink );

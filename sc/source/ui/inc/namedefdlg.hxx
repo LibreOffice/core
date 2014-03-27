@@ -70,7 +70,7 @@ private:
     DECL_LINK( AssignGetFocusHdl, void * );
 
 protected:
-    virtual void    RefInputDone( bool bForced = false );
+    virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
     ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -79,11 +79,11 @@ public:
 
     virtual ~ScNameDefDlg() {};
 
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual bool    IsRefInputMode() const;
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
+    virtual bool    IsRefInputMode() const SAL_OVERRIDE;
 
-    virtual void    SetActive();
-    virtual bool    Close();
+    virtual void    SetActive() SAL_OVERRIDE;
+    virtual bool    Close() SAL_OVERRIDE;
 
     void GetNewData( OUString& rName, OUString& rScope );
 };

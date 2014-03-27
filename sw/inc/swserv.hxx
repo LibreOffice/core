@@ -62,7 +62,7 @@ public:
 
     virtual bool GetData( ::com::sun::star::uno::Any & rData,
                             const OUString & rMimeType,
-                            bool bSynchron = false );
+                            bool bSynchron = false ) SAL_OVERRIDE;
 
     sal_Bool SetData( const OUString & rMimeType,
                     const ::com::sun::star::uno::Any& rData );

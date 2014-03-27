@@ -72,9 +72,9 @@ public:
         const PopupMenuProvider& rPopupMenuProvider);
     virtual ~TabBar (void);
 
-    virtual void Paint (const Rectangle& rUpdateArea);
-    virtual void DataChanged (const DataChangedEvent& rDataChangedEvent);
-    virtual bool Notify (NotifyEvent& rEvent);
+    virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) SAL_OVERRIDE;
+    virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
     static sal_Int32 GetDefaultWidth (void);
 

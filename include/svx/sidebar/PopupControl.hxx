@@ -40,7 +40,7 @@ public :
         const ResId& rResId);
     virtual ~PopupControl (void);
 
-    virtual void Paint (const Rectangle& rect);
+    virtual void Paint (const Rectangle& rect) SAL_OVERRIDE;
 };
 
 } } // end of namespace svx::sidebar

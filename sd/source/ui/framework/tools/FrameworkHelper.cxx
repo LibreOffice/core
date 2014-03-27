@@ -95,13 +95,13 @@ public:
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
     virtual ~CallbackCaller (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
     // XEventListener
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     // XConfigurationChangeListener
     virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     OUString msEventType;
@@ -133,17 +133,17 @@ public:
     explicit LifetimeController (::sd::ViewShellBase& rBase);
     virtual ~LifetimeController (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     /** XEventListener.  This method is called when the frame::XController
         is being destroyed.
     */
     virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This method is called when the ViewShellBase is being destroyed.
     */
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
 
 private:
     ::sd::ViewShellBase& mrBase;
@@ -315,10 +315,10 @@ public:
     DisposeListener (const ::boost::shared_ptr<FrameworkHelper>& rpHelper);
     ~DisposeListener (void);
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing (const lang::EventObject& rEventObject)
-        throw(RuntimeException, std::exception);
+        throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ::boost::shared_ptr<FrameworkHelper> mpHelper;

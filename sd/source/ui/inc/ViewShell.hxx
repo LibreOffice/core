@@ -541,8 +541,8 @@ protected:
     virtual void UpdateHRuler();
     virtual void UpdateVRuler();
 
-    virtual void Activate(bool IsMDIActivate);
-    virtual void Deactivate(bool IsMDIActivate);
+    virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;
+    virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );

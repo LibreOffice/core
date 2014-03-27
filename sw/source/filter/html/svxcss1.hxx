@@ -251,13 +251,13 @@ protected:
     // zuletzt angelegten Styles kopiert.
     // Diese Methode sollte in abgleiteten Parsern nicht mehr
     // ueberladen werden!
-    virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst );
+    virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst ) SAL_OVERRIDE;
 
     // Diese Methode wird fuer jede geparste Property aufgerufen
     // sie fuegt das Item in den ItemSet 'pItemSet' ein
     // Sie sollte in abgeleiteten Parsern nicht mehr ueberladen werden!
     virtual sal_Bool DeclarationParsed( const OUString& rProperty,
-                                    const CSS1Expression *pExpr );
+                                    const CSS1Expression *pExpr ) SAL_OVERRIDE;
 
 public:
 

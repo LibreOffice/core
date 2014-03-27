@@ -85,22 +85,22 @@ namespace slideshow
 
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
-                                       bool                         bRedrawLayer );
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer );
-            virtual bool clearAllViewLayers();
+                                       bool                         bRedrawLayer ) SAL_OVERRIDE;
+            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) SAL_OVERRIDE;
+            virtual bool clearAllViewLayers() SAL_OVERRIDE;
 
 
             // ExternalShapeBase methods
 
 
-            virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const;
-            virtual void implViewChanged( const UnoViewSharedPtr& rView );
-            virtual void implViewsChanged();
-            virtual bool implStartIntrinsicAnimation();
-            virtual bool implEndIntrinsicAnimation();
-            virtual bool implPauseIntrinsicAnimation();
-            virtual bool implIsIntrinsicAnimationPlaying() const;
-            virtual void implSetIntrinsicAnimationTime(double);
+            virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const SAL_OVERRIDE;
+            virtual void implViewChanged( const UnoViewSharedPtr& rView ) SAL_OVERRIDE;
+            virtual void implViewsChanged() SAL_OVERRIDE;
+            virtual bool implStartIntrinsicAnimation() SAL_OVERRIDE;
+            virtual bool implEndIntrinsicAnimation() SAL_OVERRIDE;
+            virtual bool implPauseIntrinsicAnimation() SAL_OVERRIDE;
+            virtual bool implIsIntrinsicAnimationPlaying() const SAL_OVERRIDE;
+            virtual void implSetIntrinsicAnimationTime(double) SAL_OVERRIDE;
 
             const OUString                           maServiceName;
             const char**                                    mpPropCopyTable;

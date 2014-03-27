@@ -72,7 +72,7 @@ namespace frm
         }
 
         // ICommandImageProvider
-        virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const;
+        virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const SAL_OVERRIDE;
 
     private:
         void    impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument );

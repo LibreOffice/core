@@ -66,7 +66,7 @@ namespace sw { namespace sidebar {
             const sal_uInt16 nSId,
             const SfxItemState eState,
             const SfxPoolItem* pState,
-            const bool bIsEnabled);
+            const bool bIsEnabled) SAL_OVERRIDE;
 
         SfxBindings* GetBindings() const
         {

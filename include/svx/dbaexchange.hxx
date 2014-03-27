@@ -146,8 +146,8 @@ namespace svx
 
     protected:
         // TransferableHelper overridables
-        virtual void        AddSupportedFormats();
-        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
 
         static sal_uInt32   getDescriptorFormatId();
 
@@ -224,9 +224,9 @@ namespace svx
                         extractObjectDescriptor(const TransferableDataHelper& _rData);
 
     protected:
-        virtual void        AddSupportedFormats();
-        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        ObjectReleased();
+        virtual void        AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+        virtual void        ObjectReleased() SAL_OVERRIDE;
 
     protected:
         const   ODataAccessDescriptor&  getDescriptor() const   { return m_aDescriptor; }
@@ -274,9 +274,9 @@ namespace svx
         static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
 
     protected:
-        virtual void        AddSupportedFormats();
-        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        ObjectReleased();
+        virtual void        AddSupportedFormats() SAL_OVERRIDE;
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+        virtual void        ObjectReleased() SAL_OVERRIDE;
         static sal_uInt32   getDescriptorFormatId();
     };
 

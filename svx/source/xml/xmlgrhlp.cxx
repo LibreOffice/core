@@ -73,11 +73,11 @@ class SvXMLGraphicInputStream : public::cppu::WeakImplHelper1< XInputStream >
 {
 private:
 
-    virtual sal_Int32   SAL_CALL    readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception);
-    virtual sal_Int32   SAL_CALL    readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception);
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception);
-    virtual sal_Int32   SAL_CALL    available() throw(NotConnectedException, RuntimeException, std::exception);
-    virtual void        SAL_CALL    closeInput() throw(NotConnectedException, RuntimeException, std::exception);
+    virtual sal_Int32   SAL_CALL    readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL    readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL    available() throw(NotConnectedException, RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL    closeInput() throw(NotConnectedException, RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
 
@@ -204,9 +204,9 @@ class SvXMLGraphicOutputStream : public::cppu::WeakImplHelper1< XOutputStream >
 private:
 
     // XOutputStream
-    virtual void SAL_CALL           writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception );
-    virtual void SAL_CALL           flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception );
-    virtual void SAL_CALL           closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception );
+    virtual void SAL_CALL           writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL           flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL           closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
 
@@ -923,33 +923,33 @@ public:
 protected:
     // is called from WeakComponentImplHelper when XComponent::dispose() was
     // called from outside
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     // ____ XInitialization ____
     // one argument is allowed, which is the XStorage
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw (Exception,
-               RuntimeException, std::exception);
+               RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XGraphicObjectResolver ____
     virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XBinaryStreamResolver ____
     virtual Reference< io::XInputStream > SAL_CALL getInputStream( const OUString& aURL )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< io::XOutputStream > SAL_CALL createOutputStream()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception);
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     SvXMLGraphicHelperMode              m_eGraphicHelperMode;

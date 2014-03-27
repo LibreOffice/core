@@ -68,15 +68,15 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl);
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() throw(std::exception);
-        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception);
+        OUString SAL_CALL getImplementationName() throw(std::exception) SAL_OVERRIDE;
+        virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
         // need by registration
         static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -84,17 +84,17 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // ::com::sun::star::frame::XDispatch
-        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
-        virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
+        virtual FmXGridPeer*    imp_CreatePeer(Window* pParent) SAL_OVERRIDE;
     };
 
     // SbaXGridPeer
@@ -110,29 +110,29 @@ namespace dbaui
         virtual ~SbaXGridPeer();
 
         // UNO
-        virtual void SAL_CALL  acquire() throw() { FmXGridPeer::acquire(); }
-        virtual void SAL_CALL release() throw() { FmXGridPeer::release(); }
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL  acquire() throw() SAL_OVERRIDE { FmXGridPeer::acquire(); }
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE { FmXGridPeer::release(); }
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 > & rId ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 > & rId ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         static SbaXGridPeer* getImplementation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxIFace);
 
         // ::com::sun::star::frame::XDispatch
-        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // ::com::sun::star::frame::XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
-        virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
+        virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle) SAL_OVERRIDE;
 #ifdef _MSC_VER
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlistener_type;
@@ -179,15 +179,15 @@ namespace dbaui
     protected:
 
         // FmGridHeader overridables
-        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
-        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu) SAL_OVERRIDE;
+        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) SAL_OVERRIDE;
 
     private:
         // DragSourceHelper overridables
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
 
         // Window overridables
-        virtual void MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
         sal_Bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
 
@@ -237,13 +237,13 @@ namespace dbaui
         SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
         virtual ~SbaGridControl();
 
-        virtual void Command( const CommandEvent& rCEvt );
-        virtual void Select();
+        virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+        virtual void Select() SAL_OVERRIDE;
 
         void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true);
-        virtual void DeactivateCell(bool bUpdate = true);
+        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true) SAL_OVERRIDE;
+        virtual void DeactivateCell(bool bUpdate = true) SAL_OVERRIDE;
         void ActivateCell() { FmGridControl::ActivateCell(); }
 
         sal_Bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
@@ -258,9 +258,9 @@ namespace dbaui
             @return
                 The description of the specified object.
         */
-        virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+        virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const SAL_OVERRIDE;
 
-        virtual void DeleteSelectedRows();
+        virtual void DeleteSelectedRows() SAL_OVERRIDE;
         /** copies the currently selected rows to the clipboard
             @precond
                 at least one row is selected
@@ -269,25 +269,25 @@ namespace dbaui
 
     protected:
         // DragSourceHelper overridables
-        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
 
         // BrowseBox overridables
-        virtual void    CursorMoved();
-        virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
-        virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
-        virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt);
+        virtual void    CursorMoved() SAL_OVERRIDE;
+        virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+        virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt) SAL_OVERRIDE;
 
         // EditBrowseBox overridables
-        virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent);
-        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol);
+        virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
+        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
 
         // DbGridControl overridables
-        virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu);
-        virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+        virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu) SAL_OVERRIDE;
+        virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) SAL_OVERRIDE;
 
         // DbGridControl overridables
-        virtual void onRowChange();
-        virtual void onColumnChange();
+        virtual void onRowChange() SAL_OVERRIDE;
+        virtual void onColumnChange() SAL_OVERRIDE;
 
         // my own overridables
         virtual void BeforeDrop();

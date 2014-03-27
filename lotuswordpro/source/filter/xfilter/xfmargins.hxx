@@ -84,7 +84,7 @@ public:
     double  GetTop();
     double  GetBottom();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
     friend bool operator==(XFMargins& indent1, XFMargins& indent2);
     friend bool operator!=(XFMargins& indent1, XFMargins& indent2);

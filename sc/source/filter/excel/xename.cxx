@@ -89,13 +89,13 @@ public:
     bool                IsMacroCall( bool bVBasic, bool bFunc ) const;
 
     /** Writes the entire NAME record to the passed stream. */
-    virtual void        Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Writes the body of the NAME record to the passed stream. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
     OUString            maOrigName;     /// The original user-defined name.

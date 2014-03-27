@@ -410,12 +410,12 @@ private:
 public:
     WW8PLCFx_PCDAttrs(ww::WordVersion eVersion, WW8PLCFx_PCD* pPLCFx_PCD,
         const WW8ScannerBase* pBase );
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nI );
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_FC Where();
-    virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual void advance();
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nI ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
+    virtual void GetSprms( WW8PLCFxDesc* p ) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
 
     WW8PLCFpcd_Iter* GetIter() const { return pPcdI; }
 };
@@ -436,12 +436,12 @@ public:
         WW8_CP nStartCp, bool bVer67P);
     virtual ~WW8PLCFx_PCD();
     virtual sal_uLong GetIMax() const;
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nI );
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_FC Where();
-    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
-    virtual void advance();
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nI ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
+    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen ) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
     void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
@@ -573,13 +573,13 @@ public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL );
     virtual ~WW8PLCFx_Fc_FKP();
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nIdx );
-    virtual bool SeekPos(WW8_FC nFcPos);
-    virtual WW8_FC Where();
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nIdx ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_FC nFcPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
     sal_uInt8* GetSprmsAndPos( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen );
-    virtual void advance();
-    virtual sal_uInt16 GetIstd() const;
+    virtual void advance() SAL_OVERRIDE;
+    virtual sal_uInt16 GetIstd() const SAL_OVERRIDE;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     const sal_uInt8* HasSprm( sal_uInt16 nId );
     bool HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult);
@@ -609,14 +609,14 @@ public:
     sal_uLong GetPCDIMax() const;
     sal_uLong GetPCDIdx() const;
     void SetPCDIdx( sal_uLong nIdx );
-    virtual sal_uLong GetIdx2() const;
-    virtual void  SetIdx2( sal_uLong nIdx );
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_CP Where();
-    virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual void advance();
-    virtual void Save( WW8PLCFxSave1& rSave ) const;
-    virtual void Restore( const WW8PLCFxSave1& rSave );
+    virtual sal_uLong GetIdx2() const SAL_OVERRIDE;
+    virtual void  SetIdx2( sal_uLong nIdx ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_CP Where() SAL_OVERRIDE;
+    virtual void GetSprms( WW8PLCFxDesc* p ) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
+    virtual void Save( WW8PLCFxSave1& rSave ) const SAL_OVERRIDE;
+    virtual void Restore( const WW8PLCFxSave1& rSave ) SAL_OVERRIDE;
 };
 
 /// Iterator for Piece Table Exceptions of Sepx
@@ -638,13 +638,13 @@ public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, const WW8Fib& rFib,
         WW8_CP nStartCp );
     virtual ~WW8PLCFx_SEPX();
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nIdx );
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nIdx ) SAL_OVERRIDE;
     long GetIMax() const { return ( pPLCF ) ? pPLCF->GetIMax() : 0; }
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_FC Where();
-    virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual void advance();
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
+    virtual void GetSprms( WW8PLCFxDesc* p ) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
     const sal_uInt8* HasSprm( sal_uInt16 nId ) const;
     const sal_uInt8* HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
     const sal_uInt8* HasSprm( sal_uInt16 nId, const sal_uInt8* pOtherSprms,
@@ -668,10 +668,10 @@ public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
     long nFcRef, long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
     virtual ~WW8PLCFx_SubDoc();
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nIdx );
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_FC Where();
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nIdx ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
 
     // liefert Reference Descriptoren
     const void* GetData( long nIdx = -1 ) const
@@ -681,8 +681,8 @@ public:
 
     //liefert Angabe, wo Kopf und Fusszeilen-Text zu finden ist
     bool Get(long& rStart, void*& rpValue) const;
-    virtual void GetSprms(WW8PLCFxDesc* p);
-    virtual void advance();
+    virtual void GetSprms(WW8PLCFxDesc* p) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
 
@@ -699,12 +699,12 @@ private:
 public:
     WW8PLCFx_FLD(SvStream* pSt, const WW8Fib& rMyFib, short nType);
     virtual ~WW8PLCFx_FLD();
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nIdx );
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_FC Where();
-    virtual void GetSprms(WW8PLCFxDesc* p);
-    virtual void advance();
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nIdx ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
+    virtual void GetSprms(WW8PLCFxDesc* p) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
     bool StartPosIsFieldStart();
     bool EndPosIsFieldEnd(WW8_CP&);
     bool GetPara(long nIdx, WW8FieldDesc& rF);
@@ -731,14 +731,14 @@ public:
     WW8PLCFx_Book(SvStream* pTblSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_Book();
     long GetIMax() const { return nIMax; }
-    virtual sal_uLong GetIdx() const;
-    virtual void SetIdx( sal_uLong nI );
-    virtual sal_uLong GetIdx2() const;
-    virtual void SetIdx2( sal_uLong nIdx );
-    virtual bool SeekPos(WW8_CP nCpPos);
-    virtual WW8_FC Where();
-    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen );
-    virtual void advance();
+    virtual sal_uLong GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nI ) SAL_OVERRIDE;
+    virtual sal_uLong GetIdx2() const SAL_OVERRIDE;
+    virtual void SetIdx2( sal_uLong nIdx ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
+    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
     const OUString* GetName() const;
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }

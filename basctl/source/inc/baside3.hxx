@@ -60,20 +60,20 @@ private:
     OUString            aCurPath;
 
 protected:
-    virtual void        Paint( const Rectangle& );
-    virtual void        Resize();
+    virtual void        Paint( const Rectangle& ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        LoseFocus();
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        LoseFocus() SAL_OVERRIDE;
 
     DECL_LINK( NotifyUndoActionHdl, SfxUndoAction * );
-    virtual void        DoInit();
-    virtual void        DoScroll( ScrollBar* pCurScrollBar );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DoInit() SAL_OVERRIDE;
+    virtual void        DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void                InitSettings(bool bFont, bool bForeground, bool bBackground);
 
 public:
@@ -82,8 +82,8 @@ public:
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
 
-    virtual void        ExecuteCommand( SfxRequest& rReq );
-    virtual void        GetState( SfxItemSet& );
+    virtual void        ExecuteCommand( SfxRequest& rReq ) SAL_OVERRIDE;
+    virtual void        GetState( SfxItemSet& ) SAL_OVERRIDE;
     DlgEditor&          GetEditor() const   { return *pEditor; }
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const;
     DlgEdModel&         GetModel() const;
@@ -95,28 +95,28 @@ public:
     bool                SaveDialog();
     bool                ImportDialog();
 
-    virtual OUString             GetTitle();
-    virtual EntryDescriptor      CreateEntryDescriptor();
-    virtual void        SetReadOnly (bool bReadOnly);
-    virtual bool        IsReadOnly();
+    virtual OUString             GetTitle() SAL_OVERRIDE;
+    virtual EntryDescriptor      CreateEntryDescriptor() SAL_OVERRIDE;
+    virtual void        SetReadOnly (bool bReadOnly) SAL_OVERRIDE;
+    virtual bool        IsReadOnly() SAL_OVERRIDE;
 
-    virtual void        StoreData();
-    virtual bool        IsModified();
-    virtual bool        IsPasteAllowed();
+    virtual void        StoreData() SAL_OVERRIDE;
+    virtual bool        IsModified() SAL_OVERRIDE;
+    virtual bool        IsPasteAllowed() SAL_OVERRIDE;
 
-    virtual svl::IUndoManager* GetUndoManager();
+    virtual svl::IUndoManager* GetUndoManager() SAL_OVERRIDE;
     // return number of pages to be printed
-    virtual sal_Int32 countPages( Printer* pPrinter );
+    virtual sal_Int32 countPages( Printer* pPrinter ) SAL_OVERRIDE;
     // print page
-    virtual void        printPage (sal_Int32 nPage, Printer*);
+    virtual void        printPage (sal_Int32 nPage, Printer*) SAL_OVERRIDE;
 
-    virtual void        Activating ();
-    virtual void        Deactivating ();
+    virtual void        Activating () SAL_OVERRIDE;
+    virtual void        Deactivating () SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
-    virtual char const* GetHid () const;
-    virtual ItemType GetType () const;
+    virtual char const* GetHid () const SAL_OVERRIDE;
+    virtual ItemType GetType () const SAL_OVERRIDE;
 };
 
 
@@ -133,14 +133,14 @@ public:
     void DisablePropertyBrowser ();
 public:
     // Layout:
-    virtual void Activating (BaseWindow&);
-    virtual void Deactivating ();
-    virtual void ExecuteGlobal (SfxRequest&);
-    virtual void GetState (SfxItemSet&, unsigned nWhich);
-    virtual void UpdateDebug (bool){};
+    virtual void Activating (BaseWindow&) SAL_OVERRIDE;
+    virtual void Deactivating () SAL_OVERRIDE;
+    virtual void ExecuteGlobal (SfxRequest&) SAL_OVERRIDE;
+    virtual void GetState (SfxItemSet&, unsigned nWhich) SAL_OVERRIDE;
+    virtual void UpdateDebug (bool) SAL_OVERRIDE {};
 protected:
     // Layout:
-    virtual void OnFirstSize (long nWidth, long nHeight);
+    virtual void OnFirstSize (long nWidth, long nHeight) SAL_OVERRIDE;
 
 private:
     // child window

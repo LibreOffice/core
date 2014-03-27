@@ -97,13 +97,13 @@ public:
 
 
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return getCppuType( static_cast<T*>( NULL ) );
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return hasItems();
     }
@@ -117,7 +117,7 @@ public:
         const OUString& rName )
         throw( com::sun::star::container::NoSuchElementException,
                com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception )
+               com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         typename map_t::const_iterator aIter = findItem( rName );
         if( aIter == maItems.end() )
@@ -127,7 +127,7 @@ public:
     }
 
     virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getElementNames()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         com::sun::star::uno::Sequence<OUString> aSequence( maItems.size() );
         typename map_t::const_iterator aIter = maItems.begin();
@@ -145,7 +145,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& rName )
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return hasItem( rName );
     }
@@ -161,7 +161,7 @@ public:
         throw( com::sun::star::lang::IllegalArgumentException,
                com::sun::star::container::NoSuchElementException,
                com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception)
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         T aItem;
         if( aElement >>= aItem )
@@ -184,7 +184,7 @@ public:
         throw( com::sun::star::lang::IllegalArgumentException,
                com::sun::star::container::ElementExistException,
                com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception )
+               com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         T aItem;
         if( aElement >>= aItem )
@@ -200,7 +200,7 @@ public:
         const OUString& rName )
         throw( com::sun::star::container::NoSuchElementException,
                com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception)
+               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if( hasByName( rName ) )
             remove( rName );

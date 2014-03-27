@@ -64,8 +64,8 @@ protected:
 
 protected:
     // Window:
-    virtual void Resize ();
-    virtual void DataChanged (DataChangedEvent const& rDCEvt);
+    virtual void Resize () SAL_OVERRIDE;
+    virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
     // new:
     virtual void OnFirstSize (long nWidth, long nHeight) = 0;
 

@@ -337,11 +337,11 @@ public:
     void finalizeDrawingImport();
 
     /// Allow the threaded importer to override our progress bar impl.
-    virtual ISegmentProgressBarRef getRowProgress()
+    virtual ISegmentProgressBarRef getRowProgress() SAL_OVERRIDE
     {
         return mxRowProgress;
     }
-    virtual void setCustomRowProgress( const ISegmentProgressBarRef &rxRowProgress )
+    virtual void setCustomRowProgress( const ISegmentProgressBarRef &rxRowProgress ) SAL_OVERRIDE
     {
         mxRowProgress = rxRowProgress;
         mbFastRowProgress = true;

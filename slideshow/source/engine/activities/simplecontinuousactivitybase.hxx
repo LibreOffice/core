@@ -39,8 +39,8 @@ namespace slideshow
         public:
             SimpleContinuousActivityBase( const ActivityParameters& rParms );
 
-            virtual double calcTimeLag() const;
-            virtual bool perform();
+            virtual double calcTimeLag() const SAL_OVERRIDE;
+            virtual bool perform() SAL_OVERRIDE;
 
         protected:
             /** Hook for derived classes
@@ -58,7 +58,7 @@ namespace slideshow
             */
             virtual void simplePerform( double nSimpleTime, sal_uInt32 nRepeatCount ) const = 0;
 
-            virtual void startAnimation();
+            virtual void startAnimation() SAL_OVERRIDE;
 
         private:
             /// Time elapsed since activity started

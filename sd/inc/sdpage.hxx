@@ -138,7 +138,7 @@ protected:
     /** a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > mpMainSequence;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 
     SfxItemSet* mpItems;
 
@@ -159,17 +159,17 @@ public:
     SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage=sal_False);
     SdPage(const SdPage& rSrcPage);
     ~SdPage();
-    virtual SdrPage* Clone() const;
-    virtual SdrPage* Clone(SdrModel* pNewModel) const;
+    virtual SdrPage* Clone() const SAL_OVERRIDE;
+    virtual SdrPage* Clone(SdrModel* pNewModel) const SAL_OVERRIDE;
 
-    virtual void    SetSize(const Size& aSize);
-    virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
-    virtual void    SetLftBorder(sal_Int32 nBorder);
-    virtual void    SetRgtBorder(sal_Int32 nBorder);
-    virtual void    SetUppBorder(sal_Int32 nBorder);
-    virtual void    SetLwrBorder(sal_Int32 nBorder);
-    virtual void    SetModel(SdrModel* pNewModel);
-    virtual bool    IsReadOnly() const;
+    virtual void    SetSize(const Size& aSize) SAL_OVERRIDE;
+    virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr) SAL_OVERRIDE;
+    virtual void    SetLftBorder(sal_Int32 nBorder) SAL_OVERRIDE;
+    virtual void    SetRgtBorder(sal_Int32 nBorder) SAL_OVERRIDE;
+    virtual void    SetUppBorder(sal_Int32 nBorder) SAL_OVERRIDE;
+    virtual void    SetLwrBorder(sal_Int32 nBorder) SAL_OVERRIDE;
+    virtual void    SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
+    virtual bool    IsReadOnly() const SAL_OVERRIDE;
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
@@ -198,14 +198,14 @@ public:
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
 
     virtual void       NbcInsertObject(SdrObject* pObj, sal_uLong nPos=CONTAINER_APPEND,
-                                       const SdrInsertReason* pReason=NULL);
-    virtual SdrObject* NbcRemoveObject(sal_uLong nObjNum);
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
+                                       const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
+    virtual SdrObject* NbcRemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* RemoveObject(sal_uLong nObjNum) SAL_OVERRIDE;
 
     /** Also overload ReplaceObject methods to realize when
     objects are removed with this mechanism instead of RemoveObject*/
-    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
+    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum) SAL_OVERRIDE;
+    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum) SAL_OVERRIDE;
 
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const OUString& rStr );
 
@@ -258,10 +258,10 @@ public:
     void        setTransitionDuration( double fTranstionDuration );
 
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
-                         const Rectangle& rOldBoundRect);
+                         const Rectangle& rOldBoundRect) SAL_OVERRIDE;
 
     void            SetLayoutName(const OUString& aName);
-    virtual OUString GetLayoutName() const       { return maLayoutName; }
+    virtual OUString GetLayoutName() const SAL_OVERRIDE       { return maLayoutName; }
 
     void            SetFileName(const OUString& aName) { maFileName = aName; }
     virtual OUString GetFileName() const       { return maFileName; }
@@ -291,10 +291,10 @@ public:
 
     void    SetPaperBin(sal_uInt16 nBin) { mnPaperBin = nBin; }
     sal_uInt16  GetPaperBin() const { return mnPaperBin; }
-    virtual void        SetOrientation(Orientation eOrient);
-    virtual Orientation GetOrientation() const;
+    virtual void        SetOrientation(Orientation eOrient) SAL_OVERRIDE;
+    virtual Orientation GetOrientation() const SAL_OVERRIDE;
 
-    virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
+    virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const SAL_OVERRIDE;
 
     sal_Bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
     void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
@@ -337,7 +337,7 @@ public:
     virtual bool checkVisibility(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
-        bool bEdit );
+        bool bEdit ) SAL_OVERRIDE;
 
     /** callback from the sd::View when a new paragraph for one object on this page is created */
     void onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj );

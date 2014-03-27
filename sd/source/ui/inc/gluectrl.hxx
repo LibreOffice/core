@@ -35,7 +35,7 @@ public:
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                  ~GlueEscDirLB();
 
-    virtual void Select();
+    virtual void Select() SAL_OVERRIDE;
 
     void         Fill();
 };
@@ -50,8 +50,8 @@ private:
 
 public:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+                                const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 
             SFX_DECL_TOOLBOX_CONTROL();
 

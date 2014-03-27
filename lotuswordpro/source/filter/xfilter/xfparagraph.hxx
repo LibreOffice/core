@@ -81,9 +81,9 @@ public:
 public:
     sal_Bool    HasContents();
 
-    virtual enumXFContent   GetContentType();
+    virtual enumXFContent   GetContentType() SAL_OVERRIDE;
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 };
 

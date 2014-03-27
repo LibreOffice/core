@@ -63,9 +63,9 @@ public:
     ~SvxFillToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState );
+                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
     void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
+    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 };
 
 
@@ -84,12 +84,12 @@ private:
     DECL_LINK( DelayHdl, void * );
     DECL_LINK( SelectFillTypeHdl, ListBox * );
     DECL_LINK( SelectFillAttrHdl, ListBox * );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
     FillControl( Window* pParent, WinBits nStyle = 0 );
     ~FillControl();
 
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_FILLCTRL_HXX

@@ -43,15 +43,15 @@ class Printer;
 // class SwEnvPreview ---------------------------------------------------------
 class SwEnvPreview : public Window
 {
-    void Paint(const Rectangle&);
+    void Paint(const Rectangle&) SAL_OVERRIDE;
 
 public:
 
     SwEnvPreview(Window * pParent, WinBits nStyle);
 
 protected:
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-    virtual Size GetOptimalSize() const;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 // class SwEnvDlg -----------------------------------------------------------
@@ -69,8 +69,8 @@ friend class SwEnvPreview;
     SfxItemSet      *pSenderSet;
     sal_uInt16      m_nEnvPrintId;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual short   Ok();
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
+    virtual short   Ok() SAL_OVERRIDE;
 
 public:
      SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert);
@@ -110,11 +110,11 @@ public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
-    virtual void ActivatePage(const SfxItemSet& rSet);
-    virtual int  DeactivatePage(SfxItemSet* pSet = 0);
+    virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
             void FillItem(SwEnvItem& rItem);
-    virtual bool FillItemSet(SfxItemSet& rSet);
-    virtual void Reset(const SfxItemSet& rSet);
+    virtual bool FillItemSet(SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet& rSet) SAL_OVERRIDE;
 };
 
 #endif

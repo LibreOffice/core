@@ -65,8 +65,8 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 class SwCaptionOptDlg : public SfxSingleTabDialog
@@ -78,7 +78,7 @@ public:
 class CaptionComboBox : public SwComboBox
 {
 protected:
-    virtual void KeyInput( const KeyEvent& );
+    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
 
 public:
     CaptionComboBox(Window* pParent, WinBits nStyle)
@@ -95,8 +95,8 @@ public:
     SwCaptionPreview( Window* pParent, WinBits nStyle );
     void Init();
     void SetPreviewText( const OUString& rText );
-    virtual void Paint( const Rectangle& rRect );
-    virtual Size GetOptimalSize() const;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class SwCaptionOptPage : public SfxTabPage
@@ -166,8 +166,8 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
 #endif

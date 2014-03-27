@@ -29,8 +29,8 @@ public:
     SwColumnFrm( SwFrmFmt*, SwFrm* );
     ~SwColumnFrm();
 
-    virtual void PaintBreak() const;
-    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+    virtual void PaintBreak() const SAL_OVERRIDE;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwColumnFrm)
 };

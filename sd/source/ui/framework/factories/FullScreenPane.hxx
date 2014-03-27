@@ -54,22 +54,22 @@ public:
         const ::Window* pViewShellWindow);
     virtual ~FullScreenPane (void) throw();
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     //----- XPane -------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL isVisible (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setAccessible (
         const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
-        throw (cssu::RuntimeException, std::exception);
+        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
 
@@ -79,7 +79,7 @@ public:
 protected:
     virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
         CreateCanvas (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

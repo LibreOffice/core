@@ -145,10 +145,10 @@ public:
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
     virtual ~SelectionIteratorImpl (void);
 
-    virtual void GotoNextText (void);
-    virtual const IteratorPosition& GetPosition (void);
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const;
-    virtual bool operator== (const IteratorImplBase& rIterator) const;
+    virtual void GotoNextText (void) SAL_OVERRIDE;
+    virtual const IteratorPosition& GetPosition (void) SAL_OVERRIDE;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
+    virtual bool operator== (const IteratorImplBase& rIterator) const SAL_OVERRIDE;
 
 private:
     const ::std::vector<SdrObjectWeakRef>& mrObjectList;
@@ -163,7 +163,7 @@ private:
         @return
             Returns <TRUE/> when both iterators point to the same object.
     */
-    virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
+    virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const SAL_OVERRIDE;
 
     IteratorImplBase& operator= (const IteratorImplBase& rIterator);
 };
@@ -194,9 +194,9 @@ public:
         EditMode eEditMode);
     virtual ~ViewIteratorImpl (void);
 
-    virtual void GotoNextText (void);
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const;
-    virtual void Reverse (void);
+    virtual void GotoNextText (void) SAL_OVERRIDE;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
+    virtual void Reverse (void) SAL_OVERRIDE;
 
 protected:
     /// Number of pages in the view that is specified by <member>maPosition</member>.
@@ -248,8 +248,8 @@ public:
         bool bDirectionIsForward);
     virtual ~DocumentIteratorImpl (void);
 
-    virtual void GotoNextText (void);
-    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const;
+    virtual void GotoNextText (void) SAL_OVERRIDE;
+    virtual IteratorImplBase* Clone (IteratorImplBase* pObject) const SAL_OVERRIDE;
 
 private:
     sal_Int32 mnPageCount;

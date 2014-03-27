@@ -60,12 +60,12 @@ public:
      */
     void enableOpenCL();
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
             const OUString &rUserData, unsigned int nFilterFlags,
-            unsigned int nClipboardID, unsigned int nFilterVersion);
+            unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     void testSharedFormulaXLS();
 #if 0
     void testSharedFormulaXLSGroundWater();

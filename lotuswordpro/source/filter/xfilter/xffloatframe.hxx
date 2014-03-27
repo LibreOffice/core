@@ -78,7 +78,7 @@ public:
     XFFloatFrame(sal_Int32 start, sal_Int32 end, sal_Bool all=sal_False);
 
 public:
-    void    ToXml(IXFStream *pStrm);
+    void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
     sal_Int32   m_nStart;

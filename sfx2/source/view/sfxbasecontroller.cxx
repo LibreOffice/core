@@ -207,13 +207,13 @@ public:
                                 --m_refCount;
                             }
 
-    virtual void SAL_CALL   start(const OUString& aText, sal_Int32 nRange) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL   end(void) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL   setText(const OUString& aText) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL   setValue(sal_Int32 nValue) throw(RuntimeException, std::exception);
-    virtual void SAL_CALL   reset() throw(RuntimeException, std::exception);
+    virtual void SAL_CALL   start(const OUString& aText, sal_Int32 nRange) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   end(void) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   setText(const OUString& aText) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   setValue(sal_Int32 nValue) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   reset() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL   disposing( const lang::EventObject& Source ) throw(RuntimeException, std::exception);
+    virtual void SAL_CALL   disposing( const lang::EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 void SAL_CALL SfxStatusIndicator::start(const OUString& aText, sal_Int32 nRange) throw(RuntimeException, std::exception)
@@ -315,8 +315,8 @@ class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper1< fr
 public:
     IMPL_SfxBaseController_ListenerHelper(  SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_ListenerHelper() ;
-    virtual void SAL_CALL frameAction( const frame::FrameActionEvent& aEvent ) throw (RuntimeException, std::exception) ;
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) ;
+    virtual void SAL_CALL frameAction( const frame::FrameActionEvent& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE ;
 
 private:
 
@@ -330,9 +330,9 @@ public:
     IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_CloseListenerHelper() ;
     virtual void SAL_CALL queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw (RuntimeException, util::CloseVetoException, std::exception) ;
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) ;
-    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) ;
+        throw (RuntimeException, util::CloseVetoException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE ;
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE ;
 
 private:
 

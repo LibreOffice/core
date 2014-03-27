@@ -38,14 +38,14 @@ class DocShell: public SfxObjectShell
 
 protected:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          sal_uInt16 nAspect = ASPECT_CONTENT );
+                          sal_uInt16 nAspect = ASPECT_CONTENT ) SAL_OVERRIDE;
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
                                OUString * pAppName,
                                OUString * pFullTypeName,
                                OUString * pShortTypeName,
                                sal_Int32 nVersion,
-                               bool bTemplate = false ) const;
+                               bool bTemplate = false ) const SAL_OVERRIDE;
 
 public:
                         TYPEINFO_OVERRIDE();

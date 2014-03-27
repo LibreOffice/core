@@ -52,20 +52,20 @@ private:
     SVX_DLLPRIVATE void             InitSettings();
 
     // Window
-    SVX_DLLPRIVATE virtual void     Paint(const Rectangle& rRect);
-    SVX_DLLPRIVATE virtual Size     GetOptimalSize() const;
-    SVX_DLLPRIVATE virtual void     MouseButtonDown(const MouseEvent& rMEvt);
-    SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt);
-    SVX_DLLPRIVATE virtual void     KeyInput( const KeyEvent& rKEvt );
-    SVX_DLLPRIVATE virtual void     DataChanged( const DataChangedEvent& rDCEvt );
+    SVX_DLLPRIVATE virtual void     Paint(const Rectangle& rRect) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual Size     GetOptimalSize() const SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void     MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void     KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void     DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 
     // DropTargetHelper
-    SVX_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    SVX_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+    SVX_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     // DragSourceHelper
-    SVX_DLLPRIVATE virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    SVX_DLLPRIVATE virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
                         DECL_LINK( MenuSelectHdl, Menu* );
 
@@ -91,20 +91,20 @@ private:
     void                InitSettings();
 
     // ValueSet
-    virtual void        UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void        UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     // Window
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
     // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
 public:
 
@@ -126,20 +126,20 @@ private:
     void                InitSettings();
 
     // BrowseBox
-    virtual bool        SeekRow( long nRow );
-    virtual void        PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const;
-    virtual void        DoubleClick( const BrowserMouseEvent& rEvt );
-    virtual void        Select();
-    virtual sal_Int8    AcceptDrop( const BrowserAcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual bool        SeekRow( long nRow ) SAL_OVERRIDE;
+    virtual void        PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const SAL_OVERRIDE;
+    virtual void        DoubleClick( const BrowserMouseEvent& rEvt ) SAL_OVERRIDE;
+    virtual void        Select() SAL_OVERRIDE;
+    virtual sal_Int8    AcceptDrop( const BrowserAcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8    ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     // Window
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // DragSourceHelper
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
 public:
 
@@ -156,11 +156,11 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const SAL_OVERRIDE;
 
     // from IAccessibleTableProvider
-    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
-    virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
+    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) SAL_OVERRIDE;
+    virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_GALCTRL_HXX

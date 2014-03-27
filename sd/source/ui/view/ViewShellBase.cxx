@@ -206,8 +206,8 @@ class FocusForwardingWindow : public ::Window
 public:
     FocusForwardingWindow (::Window& rParentWindow, ViewShellBase& rBase);
     virtual ~FocusForwardingWindow (void);
-    virtual void KeyInput (const KeyEvent& rEvent);
-    virtual void Command (const CommandEvent& rEvent);
+    virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
+    virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 
 private:
     ViewShellBase& mrBase;

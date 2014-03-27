@@ -64,21 +64,21 @@ public:
     ScDatabaseDPData(ScDocument* pDoc, const ScDPCache& rCache);
     virtual ~ScDatabaseDPData();
 
-    virtual long                    GetColumnCount();
-    virtual OUString                getDimensionName(long nColumn);
-    virtual bool                    getIsDataLayoutDimension(long nColumn);
-    virtual bool                    IsDateDimension(long nDim);
-    virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
+    virtual long                    GetColumnCount() SAL_OVERRIDE;
+    virtual OUString                getDimensionName(long nColumn) SAL_OVERRIDE;
+    virtual bool                    getIsDataLayoutDimension(long nColumn) SAL_OVERRIDE;
+    virtual bool                    IsDateDimension(long nDim) SAL_OVERRIDE;
+    virtual void                    DisposeData() SAL_OVERRIDE;
+    virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) SAL_OVERRIDE;
 
-    virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
+    virtual void                    CreateCacheTable() SAL_OVERRIDE;
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) SAL_OVERRIDE;
     virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const ::boost::unordered_set<sal_Int32>& rCatDims,
-                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
-    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
-    virtual const ScDPFilteredCache&   GetCacheTable() const;
-    virtual void ReloadCacheTable();
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) SAL_OVERRIDE;
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) SAL_OVERRIDE;
+    virtual const ScDPFilteredCache&   GetCacheTable() const SAL_OVERRIDE;
+    virtual void ReloadCacheTable() SAL_OVERRIDE;
 };
 
 

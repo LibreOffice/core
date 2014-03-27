@@ -76,7 +76,7 @@ class LwpDLVListHeadHolder : public LwpObject
 public:
     LwpDLVListHeadHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     ~LwpDLVListHeadHolder(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpObjectID* GetHeadID() { return &m_DLVHead;}
 private:
     LwpObjectID m_DLVHead;
@@ -90,7 +90,7 @@ class LwpDLVListHeadTailHolder : public LwpObject
 public:
     LwpDLVListHeadTailHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     ~LwpDLVListHeadTailHolder(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpObjectID* GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID* GetTail(){ return m_HeadTail.GetTail();}
 protected:
@@ -105,7 +105,7 @@ class LwpObjectHolder : public LwpDLVList
 public:
     LwpObjectHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     ~LwpObjectHolder(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpObjectID* GetObject(){return &m_Object;}
 protected:
     LwpObjectID m_Object;
@@ -120,7 +120,7 @@ class LwpListList : public LwpObjectHolder
 public:
     LwpListList(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     ~LwpListList(){}
-    void Read();
+    void Read() SAL_OVERRIDE;
     LwpObjectID* GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID* GetTail(){ return m_HeadTail.GetTail();}
 protected:

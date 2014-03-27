@@ -195,7 +195,7 @@ public:
         m_pObj (pObj)
     {}
 
-    virtual void Update( Graphic& aGraphic )
+    virtual void Update( Graphic& aGraphic ) SAL_OVERRIDE
     {
         SdrPageView* pPageView = m_pView->GetSdrPageView();
         if( pPageView )

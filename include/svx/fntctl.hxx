@@ -39,14 +39,14 @@ private:
     SVX_DLLPRIVATE void         FillMenu();
     DECL_LINK( MenuSelect, FontNameMenu * );
     SVX_DLLPRIVATE virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-    SVX_DLLPRIVATE virtual void     Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+                                  const SfxPoolItem* pState ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void     Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 public:
     SvxFontMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
     ~SvxFontMenuControl();
 
-    virtual PopupMenu*  GetPopup() const;
+    virtual PopupMenu*  GetPopup() const SAL_OVERRIDE;
 
     SFX_DECL_MENU_CONTROL();
 };

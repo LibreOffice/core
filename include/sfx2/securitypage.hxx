@@ -36,8 +36,8 @@ protected:
     SfxSecurityPage( Window* pParent, const SfxItemSet& );
     virtual ~SfxSecurityPage();
 
-    virtual bool            FillItemSet( SfxItemSet& );
-    virtual void            Reset( const SfxItemSet& );
+    virtual bool            FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual void            Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );

@@ -29,8 +29,8 @@ public:
 
     void GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
                      sal_uInt32* pValues );
-    virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit() SAL_OVERRIDE;
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 
 #endif

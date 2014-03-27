@@ -69,8 +69,8 @@ private:
     void localResolve(Id Name, writerfilter::Reference<Properties>::Pointer_t pProperties);
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;
+    virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
 public:
     TDefTableHandler( bool bOOXML );
