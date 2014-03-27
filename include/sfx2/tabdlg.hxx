@@ -94,7 +94,7 @@ friend class SfxTabDialogController;
     sal_uInt32          nResId;
     sal_uInt16          nAppPageId;
     bool                bItemsReset;
-    sal_Bool            bFmt;
+    sal_Bool            bFmt; // sal_True, sal_False or 2(some kind of hack)
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
