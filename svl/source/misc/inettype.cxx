@@ -779,46 +779,66 @@ bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
 }
 
 // static
-bool INetContentTypes::parse(OUString const & rMediaType,
-                             OUString & rType, OUString & rSubType,
-                             INetContentTypeParameterList * pParameters)
+sal_Unicode const * INetContentTypes::scan(
+    sal_Unicode const * pBegin, sal_Unicode const * pEnd, OUString * pType,
+    OUString * pSubType, INetContentTypeParameterList * pParameters)
 {
-    sal_Unicode const * p = rMediaType.getStr();
-    sal_Unicode const * pEnd = p + rMediaType.getLength();
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    sal_Unicode const * pToken = p;
-    bool bDowncase = false;
+    sal_Unicode const * p = INetMIME::skipLinearWhiteSpaceComment(pBegin, pEnd);
+    sal_Unicode const * pTypeBegin = p;
     while (p != pEnd && INetMIME::isTokenChar(*p))
     {
-        bDowncase = bDowncase || rtl::isAsciiUpperCase(*p);
         ++p;
     }
-    if (p == pToken)
-        return false;
-    rType = OUString(pToken, p - pToken);
-    if (bDowncase)
-        rType= rType.toAsciiLowerCase();
+    if (p == pTypeBegin)
+        return 0;
+    sal_Unicode const * pTypeEnd = p;
 
     p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
     if (p == pEnd || *p++ != '/')
-        return false;
+        return 0;
 
     p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    pToken = p;
-    bDowncase = false;
+    sal_Unicode const * pSubTypeBegin = p;
     while (p != pEnd && INetMIME::isTokenChar(*p))
     {
-        bDowncase = bDowncase || rtl::isAsciiUpperCase(*p);
         ++p;
     }
-    if (p == pToken)
-        return false;
-    rSubType = OUString(pToken, p - pToken);
-    if (bDowncase)
-        rSubType = rSubType.toAsciiLowerCase();
+    if (p == pSubTypeBegin)
+        return 0;
+    sal_Unicode const * pSubTypeEnd = p;
 
-    return INetMIME::scanParameters(p, pEnd, pParameters) == pEnd;
+    if (pType != 0)
+    {
+        *pType = OUString(pTypeBegin, pTypeEnd - pTypeBegin).toAsciiLowerCase();
+    }
+    if (pSubType != 0)
+    {
+        *pSubType = OUString(pSubTypeBegin, pSubTypeEnd - pSubTypeBegin)
+            .toAsciiLowerCase();
+    }
+
+    return INetMIME::scanParameters(p, pEnd, pParameters);
+}
+
+bool INetContentTypes::parse(
+    OUString const & rMediaType, OUString & rType, OUString & rSubType,
+    INetContentTypeParameterList * pParameters)
+{
+    sal_Unicode const * b = rMediaType.getStr();
+    sal_Unicode const * e = b + rMediaType.getLength();
+    OUString t;
+    OUString s;
+    INetContentTypeParameterList p;
+    if (scan(b, e, &t, &s, pParameters == 0 ? 0 : &p) == e) {
+        rType = t;
+        rSubType = s;
+        if (pParameters != 0) {
+            *pParameters = p;
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
