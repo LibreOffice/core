@@ -20,7 +20,7 @@
 
 #include "comphelper/propertysetinfo.hxx"
 #include "comphelper/propertysethelper.hxx"
-
+#include <boost/scoped_array.hpp>
 
 
 using namespace ::rtl;
@@ -141,7 +141,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
 
     if( nCount )
     {
-        PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
+        boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
         pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
@@ -154,9 +154,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
         }
 
         if( !bUnknown )
-            _setPropertyValues( (const PropertyMapEntry**)pEntries, aValues.getConstArray() );
-
-        delete[] pEntries;
+            _setPropertyValues( (const PropertyMapEntry**)pEntries.get(), aValues.getConstArray() );
 
         if( bUnknown )
             throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
@@ -170,7 +168,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< O
     Sequence< Any > aValues;
     if( nCount )
     {
-        PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
+        boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
         pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
@@ -185,10 +183,8 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< O
         if( !bUnknown )
         {
             aValues.realloc(nCount);
-            _getPropertyValues( (const PropertyMapEntry**)pEntries, aValues.getArray() );
+            _getPropertyValues( (const PropertyMapEntry**)pEntries.get(), aValues.getArray() );
         }
-
-        delete[] pEntries;
 
         if( bUnknown )
             throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
@@ -241,7 +237,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
 
         bool bUnknown = false;
 
-        PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
+        boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
 
         sal_Int32 n;
         for( n = 0; !bUnknown && (n < nCount); n++, pNames++ )
@@ -253,9 +249,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
         pEntries[nCount] = NULL;
 
         if( !bUnknown )
-            _getPropertyStates( (const PropertyMapEntry**)pEntries, aStates.getArray() );
-
-        delete[] pEntries;
+            _getPropertyStates( (const PropertyMapEntry**)pEntries.get(), aStates.getArray() );
 
         if( bUnknown )
             throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );

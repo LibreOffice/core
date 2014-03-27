@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <set>
+#include <boost/scoped_array.hpp>
 
 
 namespace comphelper
@@ -517,9 +518,9 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
     }
     else
     {
-        sal_Int32* pHandles = new sal_Int32[nLen];
-         ::com::sun::star::uno::Any* pNewValues = new  ::com::sun::star::uno::Any[nLen];
-         ::com::sun::star::uno::Any* pOldValues = new  ::com::sun::star::uno::Any[nLen];
+        boost::scoped_array<sal_Int32> pHandles(new sal_Int32[nLen]);
+        boost::scoped_array< ::com::sun::star::uno::Any> pNewValues(new ::com::sun::star::uno::Any[nLen]);
+        boost::scoped_array< ::com::sun::star::uno::Any> pOldValues(new ::com::sun::star::uno::Any[nLen]);
 
         const  ::com::sun::star::beans::PropertyChangeEvent* pEvents = _rEvents.getConstArray();
         sal_Int32 nDest = 0;
@@ -536,11 +537,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
         }
 
         if (nDest)
-            fire(pHandles, pNewValues, pOldValues, nDest, sal_False);
-
-        delete[] pHandles;
-        delete[] pNewValues;
-        delete[] pOldValues;
+            fire(pHandles.get(), pNewValues.get(), pOldValues.get(), nDest, sal_False);
     }
 }
 
@@ -775,9 +772,6 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         else
         {
             const  ::com::sun::star::uno::Any* pValues = _rValues.getConstArray();
-             ::com::sun::star::uno::Any* pConvertedValues = NULL;
-             ::com::sun::star::uno::Any* pOldValues = NULL;
-            sal_Int32*  pHandles = NULL;
 
             try
             {
@@ -815,18 +809,17 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 // reset, needed below
                 pDelValues = DelValues.getArray();
 
-                pHandles = new sal_Int32[ nLen - nAggCount ];
+                boost::scoped_array<sal_Int32> pHandles(new sal_Int32[ nLen - nAggCount ]);
 
                 // get the map table
                 cppu::IPropertyArrayHelper& rPH2 = getInfoHelper();
 
                 // fill the handle array
-                sal_Int32 nHitCount = rPH2.fillHandles( pHandles, DelPropertyNames );
+                sal_Int32 nHitCount = rPH2.fillHandles( pHandles.get(), DelPropertyNames );
                 if (nHitCount != 0)
                 {
-
-                     pConvertedValues = new  ::com::sun::star::uno::Any[ nHitCount ];
-                     pOldValues = new  ::com::sun::star::uno::Any[ nHitCount ];
+                    boost::scoped_array< ::com::sun::star::uno::Any> pConvertedValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
+                    boost::scoped_array< ::com::sun::star::uno::Any> pOldValues(new  ::com::sun::star::uno::Any[ nHitCount ]);
                     nHitCount = 0;
                     sal_Int32 i;
 
@@ -855,7 +848,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                     }
 
                     // fire vetoable events
-                    fire( pHandles, pConvertedValues, pOldValues, nHitCount, sal_True );
+                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, sal_True );
 
                     // setting the agg Properties
                     m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
@@ -873,7 +866,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                     }
 
                     // fire change events
-                    fire( pHandles, pConvertedValues, pOldValues, nHitCount, sal_False );
+                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, sal_False );
                 }
                 else
                     m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
@@ -881,15 +874,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             }
             catch(::com::sun::star::uno::Exception&)
             {
-                delete [] pHandles;
-                delete [] pOldValues;
-                delete [] pConvertedValues;
                 throw;
             }
-
-            delete [] pHandles;
-            delete [] pOldValues;
-            delete [] pConvertedValues;
         }
     }
 }
