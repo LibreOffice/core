@@ -337,14 +337,6 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                     break;
             }
             break;
-        default:
-            //fStandard;nL;
-            nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_NUMBER, eLanguage );
-            aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, false, false, nL, 1);
-            nIndex1 = 0;
-            break;
     }
 
     // Format in Table schieben
