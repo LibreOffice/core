@@ -41,37 +41,6 @@
 #endif
 #endif
 
-
-
-// Macro for the Call-Profiler under WinNT
-// with S_CAP a measurement can be started, and stopped with E_CAP
-#if defined( WNT ) && defined( PROFILE )
-
-extern "C" {
-    void StartCAP();
-    void StopCAP();
-    void DumpCAP();
-};
-
-#define S_CAP()   StartCAP();
-#define E_CAP()   StopCAP(); DumpCAP();
-
-struct _Capper
-{
-    _Capper() { S_CAP(); }
-    ~_Capper() { E_CAP(); }
-};
-
-#define CAP _Capper _aCap_
-
-#else
-
-#define S_CAP()
-#define E_CAP()
-#define CAP
-
-#endif
-
 #ifndef DBG
 #ifdef DBG_UTIL
 #define DBG(statement) statement

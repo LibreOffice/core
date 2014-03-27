@@ -27,15 +27,6 @@
 
 #include <stdio.h>
 
-#if (defined(WNT) && defined(PROFILE))
-extern "C"
-{
-    void StartCAP (void);
-    void StopCAP  (void);
-    void DumpCAP  (void);
-}
-#endif /* PROFILE */
-
 /*========================================================================
  *
  * Internals.
@@ -213,11 +204,7 @@ sal_Bool DirectoryTraveller::visit (const iter& it)
  *======================================================================*/
 int SAL_CALL main (int argc, char **argv)
 {
-#if (defined(WNT) && defined(PROFILE))
-    StartCAP();
-#else
     OTime aMainStartTime (OTime::getSystemTime());
-#endif /* PROFILE */
 
     store::OStoreFile aFile;
     storeError eErrCode = store_E_None;
@@ -557,10 +544,6 @@ int SAL_CALL main (int argc, char **argv)
     // Done.
     aFile.close();
 
-#if (defined(WNT) && defined(PROFILE))
-    StopCAP();
-    DumpCAP();
-#endif /* PROFILE */
 #ifndef PROFILE
     OTime aDelta (OTime::getSystemTime() - aMainStartTime);
 

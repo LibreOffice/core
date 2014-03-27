@@ -37,21 +37,6 @@ class Bitmap;
 class SfxItemSet;
 class Color;
 
-// Macro for call profiler (WinNT)
-// S_CAP starts a measurement, E_CAP stops it
-#if defined( WNT ) && defined( PROFILE )
-
-extern "C" {
-    void StartCAP();
-    void StopCAP();
-    void DumpCAP();
-};
-
-#define S_CAP   StartCAP();
-#define E_CAP   StopCAP(); DumpCAP();
-
-#endif
-
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
 
