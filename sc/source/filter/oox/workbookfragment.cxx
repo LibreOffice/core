@@ -444,8 +444,9 @@ void WorkbookFragment::finalizeImport()
                             case SHEETTYPE_CHARTSHEET:
                                 xFragment.set( new ChartsheetFragment( *xSheetGlob, aFragmentPath ) );
                             break;
-                            default:
-                                OSL_ENSURE( false, "WorkbookFragment::finalizeImport - unexpected sheet type" );
+                            case SHEETTYPE_EMPTYSHEET:
+                            case SHEETTYPE_MODULESHEET:
+                                break;
                         }
 
                         // insert the fragment into the map
