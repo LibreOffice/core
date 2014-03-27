@@ -334,9 +334,7 @@ int SAL_CALL main (int argc, char **argv)
         pBuffer[_DEMOSTOR_BUFSIZ - 1] = '\0';
 
         // Load/Save.
-#ifndef PROFILE
         OTime aStartTime (OTime::getSystemTime());
-#endif /* PROFILE */
 
         for (int i = 0; i < _DEMOSTOR_LOOPS; i++)
         {
@@ -401,7 +399,6 @@ int SAL_CALL main (int argc, char **argv)
 
             aStream.close();
 
-#ifndef PROFILE
             if (((i + 1) % (_DEMOSTOR_LOOPS/10)) == 0)
             {
                 OTime aDelta (OTime::getSystemTime() - aStartTime);
@@ -412,17 +409,14 @@ int SAL_CALL main (int argc, char **argv)
                 printf ("%d: %12.4g[usec]\n", (i+1),
                         (double)(nDelta)/(double)(i+1));
             }
-#endif /* PROFILE */
         }
 
-#ifndef PROFILE
         OTime aDelta (OTime::getSystemTime() - aStartTime);
 
         sal_uInt32 nDelta = aDelta.Seconds * 1000000;
         nDelta += (aDelta.Nanosec / 1000);
 
         printf ("Total(rd,wr): %d[usec]\n", (unsigned int)(nDelta));
-#endif /* PROFILE */
     }
 
     // Link/Rename.
@@ -478,9 +472,7 @@ int SAL_CALL main (int argc, char **argv)
     // Directory iteration.
     if (nOptions & OPTION_ITER)
     {
-#ifndef PROFILE
         OTime aStartTime (OTime::getSystemTime());
-#endif /* PROFILE */
         OUString aEmpty;
 
         // Root directory.
@@ -519,14 +511,12 @@ int SAL_CALL main (int argc, char **argv)
             printf ("Error: can't open directory: \"/\"\n");
         }
 
-#ifndef PROFILE
         OTime aDelta (OTime::getSystemTime() - aStartTime);
 
         sal_uInt32 nDelta = aDelta.Seconds * 1000000;
         nDelta += (aDelta.Nanosec / 1000);
 
         printf ("Total(iter): %d[usec]\n", (unsigned int)(nDelta));
-#endif /* PROFILE */
     }
 
     if (nOptions & OPTION_PAUSE)
@@ -544,14 +534,12 @@ int SAL_CALL main (int argc, char **argv)
     // Done.
     aFile.close();
 
-#ifndef PROFILE
     OTime aDelta (OTime::getSystemTime() - aMainStartTime);
 
     sal_uInt32 nDelta = aDelta.Seconds * 1000000;
     nDelta += (aDelta.Nanosec / 1000);
 
     printf ("Total: %d[usec]\n", (unsigned int)(nDelta));
-#endif /* PROFILE */
 
     return 0;
 }
