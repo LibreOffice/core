@@ -130,8 +130,6 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
                     xPropSet->setPropertyValue(aOrientation, aAny);
                 }
                 break;
-            default:
-                break;
         }
     }
 }
