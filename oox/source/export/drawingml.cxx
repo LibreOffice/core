@@ -69,6 +69,7 @@
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/unoshape.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1320,7 +1321,8 @@ void DrawingML::WriteText( Reference< XInterface > rXIface  )
 
     sal_Bool bHasWrap = sal_False;
     sal_Bool bWrap = sal_False;
-    if( GETA( TextWordWrap ) ) {
+    // Only custom shapes obey the TextWordWrap option, normal text always wraps.
+    if( dynamic_cast<SvxCustomShape*>(rXIface.get()) && GETA( TextWordWrap ) ) {
         mAny >>= bWrap;
         bHasWrap = sal_True;
     }
