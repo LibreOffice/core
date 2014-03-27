@@ -77,12 +77,27 @@ XMLGradientStyleImport::~XMLGradientStyleImport()
 {
 }
 
-sal_Bool XMLGradientStyleImport::importXML(
+bool XMLGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
-    sal_Bool bRet           = sal_False;
+    static const SvXMLTokenMapEntry aGradientAttrTokenMap[] =
+    {
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
+        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
+        { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
+        { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
+        { XML_NAMESPACE_DRAW, XML_START_COLOR, XML_TOK_GRADIENT_STARTCOLOR },
+        { XML_NAMESPACE_DRAW, XML_END_COLOR, XML_TOK_GRADIENT_ENDCOLOR },
+        { XML_NAMESPACE_DRAW, XML_START_INTENSITY, XML_TOK_GRADIENT_STARTINT },
+        { XML_NAMESPACE_DRAW, XML_END_INTENSITY, XML_TOK_GRADIENT_ENDINT },
+        { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE },
+        { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER },
+        XML_TOKEN_MAP_END
+    };
+
     sal_Bool bHasName       = sal_False;
     sal_Bool bHasStyle      = sal_False;
     sal_Bool bHasStartColor = sal_False;
@@ -96,23 +111,6 @@ sal_Bool XMLGradientStyleImport::importXML(
     aGradient.EndIntensity = 100;
     aGradient.Angle = 0;
     aGradient.Border = 0;
-
-    {
-        static const SvXMLTokenMapEntry aGradientAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
-    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
-    { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
-    { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
-    { XML_NAMESPACE_DRAW, XML_START_COLOR, XML_TOK_GRADIENT_STARTCOLOR },
-    { XML_NAMESPACE_DRAW, XML_END_COLOR, XML_TOK_GRADIENT_ENDCOLOR },
-    { XML_NAMESPACE_DRAW, XML_START_INTENSITY, XML_TOK_GRADIENT_STARTINT },
-    { XML_NAMESPACE_DRAW, XML_END_INTENSITY, XML_TOK_GRADIENT_ENDINT },
-    { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE },
-    { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER },
-    XML_TOKEN_MAP_END
-};
 
     SvXMLTokenMap aTokenMap( aGradientAttrTokenMap );
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
@@ -205,9 +203,7 @@ sal_Bool XMLGradientStyleImport::importXML(
         rStrName = aDisplayName;
     }
 
-    bRet = bHasName && bHasStyle && bHasStartColor && bHasEndColor;
-
-    }
+    bool bRet = bHasName && bHasStyle && bHasStartColor && bHasEndColor;
 
     return bRet;
 }
@@ -224,11 +220,11 @@ XMLGradientStyleExport::~XMLGradientStyleExport()
 {
 }
 
-sal_Bool XMLGradientStyleExport::exportXML(
+bool XMLGradientStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     awt::Gradient aGradient;
 
     if( !rStrName.isEmpty() )
@@ -241,7 +237,7 @@ sal_Bool XMLGradientStyleExport::exportXML(
             // Style
             if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
             {
-                bRet = sal_False;
+                bRet = false;
             }
             else
             {

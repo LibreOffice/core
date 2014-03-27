@@ -42,7 +42,7 @@ public:
     XMLHatchStyleImport( SvXMLImport& rImport );
     ~XMLHatchStyleImport();
 
-    sal_Bool importXML(
+    bool importXML(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         ::com::sun::star::uno::Any& rValue,
@@ -57,7 +57,7 @@ public:
     XMLHatchStyleExport( SvXMLExport& rExport );
     ~XMLHatchStyleExport();
 
-    sal_Bool exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
+    bool exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
 };
 
 #endif // _XMLOFF_HATCHELEMENT_HXX

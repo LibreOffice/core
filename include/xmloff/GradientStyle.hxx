@@ -42,7 +42,7 @@ public:
     XMLGradientStyleImport( SvXMLImport& rImport );
     ~XMLGradientStyleImport();
 
-    sal_Bool importXML(
+    bool importXML(
         const ::com::sun::star::uno::Reference<
            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
@@ -58,7 +58,7 @@ public:
     XMLGradientStyleExport( SvXMLExport& rExport );
     ~XMLGradientStyleExport();
 
-    sal_Bool exportXML(
+    bool exportXML(
         const OUString& rStrName,
         const ::com::sun::star::uno::Any& rValue );
 };

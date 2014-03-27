@@ -68,17 +68,26 @@ XMLHatchStyleImport::~XMLHatchStyleImport()
 {
 }
 
-sal_Bool XMLHatchStyleImport::importXML(
+bool XMLHatchStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
-    sal_Bool bRet = sal_False;
+    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+    {
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
+        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
+        { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
+        { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE },
+        { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
+        XML_TOKEN_MAP_END
+    };
 
-    sal_Bool bHasName  = sal_False;
-    sal_Bool bHasStyle = sal_False;
-    sal_Bool bHasColor = sal_False;
-    sal_Bool bHasDist  = sal_False;
+    bool bHasName  = false;
+    bool bHasStyle = false;
+    bool bHasColor = false;
+    bool bHasDist  = false;
     OUString aDisplayName;
 
     drawing::Hatch aHatch;
@@ -86,18 +95,6 @@ sal_Bool XMLHatchStyleImport::importXML(
     aHatch.Color = 0;
     aHatch.Distance = 0;
     aHatch.Angle = 0;
-
-    {
-        static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
-    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
-    { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
-    { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE },
-    { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
-    XML_TOKEN_MAP_END
-};
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
     SvXMLNamespaceMap rNamespaceMap = rImport.GetNamespaceMap();
@@ -116,7 +113,7 @@ sal_Bool XMLHatchStyleImport::importXML(
             case XML_TOK_HATCH_NAME:
                 {
                     rStrName = rStrValue;
-                    bHasName = sal_True;
+                    bHasName = true;
                 }
                 break;
             case XML_TOK_HATCH_DISPLAY_NAME:
@@ -163,9 +160,7 @@ sal_Bool XMLHatchStyleImport::importXML(
         rStrName = aDisplayName;
     }
 
-    bRet = bHasName && bHasStyle && bHasColor && bHasDist;
-
-    }
+    bool bRet = bHasName && bHasStyle && bHasColor && bHasDist;
 
     return bRet;
 }
@@ -181,11 +176,11 @@ XMLHatchStyleExport::~XMLHatchStyleExport()
 {
 }
 
-sal_Bool XMLHatchStyleExport::exportXML(
+bool XMLHatchStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     drawing::Hatch aHatch;
 
     if( !rStrName.isEmpty() )
@@ -201,7 +196,7 @@ sal_Bool XMLHatchStyleExport::exportXML(
             // Style
             if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
             {
-                bRet = sal_False;
+                bRet = false;
             }
             else
             {

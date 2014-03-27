@@ -48,13 +48,13 @@ XMLMarkerStyleImport::~XMLMarkerStyleImport()
 {
 }
 
-sal_Bool XMLMarkerStyleImport::importXML(
+bool XMLMarkerStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
-    sal_Bool bHasViewBox    = sal_False;
-    sal_Bool bHasPathData   = sal_False;
+    bool bHasViewBox    = false;
+    bool bHasPathData   = false;
     OUString aDisplayName;
 
     SdXMLImExViewBox* pViewBox = NULL;
@@ -83,13 +83,13 @@ sal_Bool XMLMarkerStyleImport::importXML(
         else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
         {
             pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
-            bHasViewBox = sal_True;
+            bHasViewBox = true;
 
         }
         else if( IsXMLToken( aStrAttrName, XML_D ) )
         {
             strPathData = aStrValue;
-            bHasPathData = sal_True;
+            bHasPathData = true;
         }
     }
 
@@ -153,12 +153,10 @@ XMLMarkerStyleExport::~XMLMarkerStyleExport()
 {
 }
 
-sal_Bool XMLMarkerStyleExport::exportXML(
+void XMLMarkerStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    sal_Bool bRet(sal_False);
-
     if(!rStrName.isEmpty())
     {
         drawing::PolyPolygonBezierCoords aBezier;
@@ -206,8 +204,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER, sal_True, sal_False );
         }
     }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

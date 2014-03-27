@@ -85,7 +85,7 @@ XMLDashStyleImport::~XMLDashStyleImport()
 {
 }
 
-sal_Bool XMLDashStyleImport::importXML(
+void XMLDashStyleImport::importXML(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
@@ -203,8 +203,6 @@ sal_Bool XMLDashStyleImport::importXML(
                                      rStrName, aDisplayName );
         rStrName = aDisplayName;
     }
-
-    return sal_True;
 }
 
 // Export
@@ -218,11 +216,11 @@ XMLDashStyleExport::~XMLDashStyleExport()
 {
 }
 
-sal_Bool XMLDashStyleExport::exportXML(
+bool XMLDashStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     SvXMLUnitConverter & rUnitConverter = rExport.GetMM100UnitConverter();
 

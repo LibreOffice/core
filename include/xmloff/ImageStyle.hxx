@@ -37,14 +37,14 @@ public:
     XMLImageStyle();
     ~XMLImageStyle();
 
-    sal_Bool exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport );
-    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
+    void exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport );
+    bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
 
 private:
 
-    SAL_DLLPRIVATE sal_Bool ImpExportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
+    SAL_DLLPRIVATE void ImpExportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
                            SvXMLExport& rExport );
-    SAL_DLLPRIVATE sal_Bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+    SAL_DLLPRIVATE bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                            ::com::sun::star::uno::Any& rValue, OUString& rStrName,
                            SvXMLImport& rImport );
 };

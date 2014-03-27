@@ -55,15 +55,13 @@ XMLImageStyle::~XMLImageStyle()
 {
 }
 
-sal_Bool XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
+void XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
 {
-    return ImpExportXML( rStrName, rValue, rExport );
+    ImpExportXML( rStrName, rValue, rExport );
 }
 
-sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rValue, SvXMLExport& rExport )
+void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rValue, SvXMLExport& rExport )
 {
-    sal_Bool bRet = sal_False;
-
     OUString sImageURL;
 
     if( !rStrName.isEmpty() )
@@ -99,36 +97,32 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
             }
         }
     }
-
-    return bRet;
 }
 
-sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
+bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
 {
     return ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
-sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
                                       uno::Any& rValue, OUString& rStrName,
                                       SvXMLImport& rImport )
 {
-    sal_Bool bRet     = sal_False;
-    sal_Bool bHasHRef = sal_False;
-    sal_Bool bHasName = sal_False;
+    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+    {
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
+        { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
+        { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
+        { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
+        { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
+        XML_TOKEN_MAP_END
+    };
+
+    bool bHasHRef = false;
+    bool bHasName = false;
     OUString aStrURL;
     OUString aDisplayName;
-
-    {
-        static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
-    { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
-    { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
-    XML_TOKEN_MAP_END
-};
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
 
@@ -145,7 +139,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
             case XML_TOK_IMAGE_NAME:
                 {
                     rStrName = rStrValue;
-                    bHasName = sal_True;
+                    bHasName = true;
                 }
                 break;
             case XML_TOK_IMAGE_DISPLAY_NAME:
@@ -156,7 +150,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
             case XML_TOK_IMAGE_URL:
                 {
                     aStrURL = rImport.ResolveGraphicObjectURL( rStrValue, sal_False );
-                    bHasHRef = sal_True;
+                    bHasHRef = true;
                 }
                 break;
             case XML_TOK_IMAGE_TYPE:
@@ -183,9 +177,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
         rStrName = aDisplayName;
     }
 
-    bRet = bHasName && bHasHRef;
-
-    }
+    bool bRet = bHasName && bHasHRef;
 
     return bRet;
 }

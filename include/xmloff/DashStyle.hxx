@@ -41,7 +41,7 @@ public:
     XMLDashStyleImport( SvXMLImport& rImport );
     ~XMLDashStyleImport();
 
-    sal_Bool importXML(
+    void importXML(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
@@ -57,7 +57,7 @@ public:
     XMLDashStyleExport( SvXMLExport& rExport );
     ~XMLDashStyleExport();
 
-    sal_Bool exportXML( const OUString& rStrName,
+    bool exportXML( const OUString& rStrName,
                         const ::com::sun::star::uno::Any& rValue );
 };
 
