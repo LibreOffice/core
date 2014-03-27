@@ -16,6 +16,24 @@
       "revId": "0b634d90ed870d6a4c3dd8775ca59f1feca02ce6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_3236b604",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2014-03-27T12:21:46Z",
+      "side": 1,
+      "message": "Good call - I only did that for consistency with the surrounding code, will update it.",
+      "parentUuid": "da86d52c_f2e17e9b",
+      "revId": "0b634d90ed870d6a4c3dd8775ca59f1feca02ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
