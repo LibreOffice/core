@@ -63,8 +63,8 @@ namespace dbaccess
 
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-        inline virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OFilteredContainer::acquire();}
-        inline virtual void SAL_CALL release() throw() SAL_OVERRIDE { OFilteredContainer::release();}
+        virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OFilteredContainer::acquire();}
+        virtual void SAL_CALL release() throw() SAL_OVERRIDE { OFilteredContainer::release();}
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
