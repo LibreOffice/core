@@ -24,6 +24,14 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
 
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+#define LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion \
+    true
+#else
+#define LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion \
+    false
+#endif
+
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
@@ -40,6 +48,14 @@ inline bool isExternCContext(clang::DeclContext const & ctxt) {
         }
     }
     return false;
+#endif
+}
+
+inline bool isFirstDecl(clang::FunctionDecl const & decl) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+    return decl.isFirstDecl();
+#else
+    return decl.isFirstDeclaration();
 #endif
 }
 
