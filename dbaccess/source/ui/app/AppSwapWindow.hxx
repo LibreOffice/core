@@ -46,13 +46,13 @@ namespace dbaui
         // window overloads
         virtual void Resize() SAL_OVERRIDE;
 
-        inline sal_Bool isCutAllowed() SAL_OVERRIDE      { return sal_False; }
-        inline sal_Bool isCopyAllowed() SAL_OVERRIDE     { return sal_False; }
-        inline sal_Bool isPasteAllowed() SAL_OVERRIDE    { return sal_False; }
+        sal_Bool isCutAllowed() SAL_OVERRIDE      { return sal_False; }
+        sal_Bool isCopyAllowed() SAL_OVERRIDE     { return sal_False; }
+        sal_Bool isPasteAllowed() SAL_OVERRIDE    { return sal_False; }
         virtual sal_Bool hasChildPathFocus() SAL_OVERRIDE { return HasChildPathFocus(); }
-        inline void copy() SAL_OVERRIDE  { }
-        inline void cut() SAL_OVERRIDE   { }
-        inline void paste() SAL_OVERRIDE { }
+        void copy() SAL_OVERRIDE  { }
+        void cut() SAL_OVERRIDE   { }
+        void paste() SAL_OVERRIDE { }
 
         inline sal_uLong                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
         inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl.GetEntry(nPos); }
