@@ -622,9 +622,6 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
         sal_uInt16 nPoolId;
         switch (i)
         {
-            default:
-                OSL_ENSURE(i == 0, "Impossible");
-                //fallthrough
             case 0:
                 nPoolId = RES_POOLFRM_FRAME;
                 break;
