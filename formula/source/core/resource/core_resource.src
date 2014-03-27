@@ -385,6 +385,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_WEEK { Text = "ISOWEEKNUM" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "ORG.OPENOFFICE.EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
+    String SC_OPCODE_NETWORKDAYS_MS { Text = "COM.MICROSOFT.NETWORKDAYS.INTL" ; };
+    String SC_OPCODE_WORKDAY_MS { Text = "COM.MICROSOFT.WORKDAY.INTL" ; };
     String SC_OPCODE_NO_NAME { Text = "#NAME!" ; };
     String SC_OPCODE_STYLE { Text = "ORG.OPENOFFICE.STYLE" ; };
     String SC_OPCODE_DDE { Text = "DDE" ; };
@@ -786,6 +788,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
+    String SC_OPCODE_NETWORKDAYS_MS { Text = "NETWORKDAYS.INTL" ; };
+    String SC_OPCODE_WORKDAY_MS { Text = "WORKDAY.INTL" ; };
     String SC_OPCODE_NO_NAME { Text = "#NAME!" ; };
     String SC_OPCODE_STYLE { Text = "STYLE" ; };
     String SC_OPCODE_DDE { Text = "DDE" ; };
@@ -1189,6 +1193,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
+    String SC_OPCODE_NETWORKDAYS_MS { Text = "NETWORKDAYS.INTL" ; };
+    String SC_OPCODE_WORKDAY_MS { Text = "WORKDAY.INTL" ; };
     String SC_OPCODE_NO_NAME { Text = "#NAME!" ; };
     String SC_OPCODE_STYLE { Text = "STYLE" ; };
     String SC_OPCODE_DDE { Text = "DDE" ; };
@@ -2605,6 +2611,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_GET_DAY_OF_WEEK
     {
         Text [ en-US ] = "WEEKDAY" ;
+    };
+    String SC_OPCODE_NETWORKDAYS_MS
+    {
+        Text [ en-US ] = "NETWORKDAYS.INTL" ;
+    };
+    String SC_OPCODE_WORKDAY_MS
+    {
+        Text [ en-US ] = "WORKDAY.INTL" ;
     };
     String SC_OPCODE_NO_NAME
     {

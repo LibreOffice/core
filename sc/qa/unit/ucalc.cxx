@@ -2374,6 +2374,7 @@ void Test::testFunctionLists()
         "HOUR",
         "MINUTE",
         "MONTH",
+        "NETWORKDAYS.INTL",
         "NOW",
         "SECOND",
         "TIME",
@@ -2381,6 +2382,7 @@ void Test::testFunctionLists()
         "TODAY",
         "WEEKDAY",
         "WEEKNUM",
+        "WORKDAY.INTL",
         "YEAR",
         0
     };
