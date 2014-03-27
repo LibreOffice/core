@@ -1635,9 +1635,6 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                                 RHA_CENTER, RVA_BASELINE);
                 aPos.Y() -= nDist;
                 break;
-            default :
-                SAL_WARN("starmath", "unknown case");
-                break;
         }
 
         pSubSup->MoveTo(aPos);
