@@ -143,7 +143,7 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
 }
 
-sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
+bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 {
     const Rectangle aRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
@@ -188,7 +188,7 @@ sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
     execute( aArgs );
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

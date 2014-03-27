@@ -44,8 +44,8 @@ public:
 
     virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void  Paint( const UserDrawEvent& rEvt );
-    virtual sal_Bool  MouseButtonDown( const MouseEvent & );
-    virtual sal_Bool  MouseMove( const MouseEvent & rEvt );
+    virtual bool  MouseButtonDown( const MouseEvent & );
+    virtual bool  MouseMove( const MouseEvent & rEvt );
 };
 
 #endif

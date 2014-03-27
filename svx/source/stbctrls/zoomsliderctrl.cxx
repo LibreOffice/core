@@ -325,10 +325,10 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
 
 
 
-sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
+bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 {
     if ( !mpImpl->mbValuesSet )
-        return sal_True;
+        return true;
 
     const Rectangle aControlRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
@@ -358,7 +358,7 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
         mpImpl->mnCurrentZoom = mpImpl->mnMaxZoom;
 
     if ( nOldZoom == mpImpl->mnCurrentZoom )
-        return sal_True;
+        return true;
 
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
@@ -379,15 +379,15 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 
     mpImpl->mbOmitPaint = false;
 
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
+bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 {
     if ( !mpImpl->mbValuesSet )
-        return sal_True;
+        return true;
 
     const short nButtons = rEvt.GetButtons();
 
@@ -424,7 +424,7 @@ sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -109,7 +109,7 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 
 
-sal_Bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
+bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     CaptureMouse();
     SelectionTypePopup aPop( mnState );
@@ -136,7 +136,7 @@ sal_Bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     }
     ReleaseMouse();
 
-    return sal_True;
+    return true;
 }
 
 

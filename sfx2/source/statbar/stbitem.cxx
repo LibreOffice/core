@@ -459,7 +459,7 @@ void SfxStatusBarControl::StateChanged
 
 
 
-sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
+bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
 /*  [Description]
 
@@ -481,12 +481,12 @@ sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 */
 
 {
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
+bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
 /*  [Description]
 
@@ -508,12 +508,12 @@ sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 */
 
 {
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
+bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 /*  [Description]
 
@@ -535,7 +535,7 @@ sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 */
 
 {
-    return sal_False;
+    return false;
 }
 
 

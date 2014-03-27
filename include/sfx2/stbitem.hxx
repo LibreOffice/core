@@ -42,7 +42,7 @@ struct SfxStbCtrlFactory
 {
     SfxStatusBarControlCtor pCtor;
     TypeId                  nTypeId;
-    sal_uInt16                  nSlotId;
+    sal_uInt16              nSlotId;
 
     SfxStbCtrlFactory( SfxStatusBarControlCtor pTheCtor,
             TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
@@ -60,8 +60,8 @@ class UserDrawEvent;
 
 class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 {
-    sal_uInt16          nSlotId;
-    sal_uInt16          nId;
+    sal_uInt16      nSlotId;
+    sal_uInt16      nId;
     StatusBar*      pBar;
 
 protected:
@@ -101,9 +101,9 @@ protected:
     virtual void    Click();
     virtual void    DoubleClick();
     virtual void    Command( const CommandEvent& rCEvt );
-    virtual sal_Bool    MouseButtonDown( const MouseEvent & );
-    virtual sal_Bool    MouseMove( const MouseEvent & );
-    virtual sal_Bool    MouseButtonUp( const MouseEvent & );
+    virtual bool    MouseButtonDown( const MouseEvent & );
+    virtual bool    MouseMove( const MouseEvent & );
+    virtual bool    MouseButtonUp( const MouseEvent & );
     virtual void    Paint( const UserDrawEvent &rUDEvt );
 
     static sal_uInt16   convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons );
@@ -112,8 +112,8 @@ public:
                     SfxStatusBarControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar& rBar );
     virtual         ~SfxStatusBarControl();
 
-    sal_uInt16          GetSlotId() const { return nSlotId; }
-    sal_uInt16          GetId() const { return nId; }
+    sal_uInt16      GetSlotId() const { return nSlotId; }
+    sal_uInt16      GetId() const { return nId; }
     StatusBar&      GetStatusBar() const { return *pBar; }
     void            CaptureMouse();
     void            ReleaseMouse();
