@@ -2400,11 +2400,6 @@ void ChartView::impl_refreshAddIn()
 
 void ChartView::createShapes()
 {
-#if OSL_DEBUG_LEVEL > 0
-    clock_t nStart = clock();
-    OSL_TRACE( "\nPPPPPPPPP>>>>>>>>>>>> chart view :: createShapes()" );
-#endif
-
     osl::ResettableMutexGuard aTimedGuard(maTimeMutex);
     if(mrChartModel.isTimeBased())
     {
@@ -2646,13 +2641,6 @@ void ChartView::createShapes()
     {
         maTimeBased.nFrame++;
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    clock_t nEnd = clock();
-    double fDuration =(double(nEnd-nStart)*1000.0)/double(CLOCKS_PER_SEC);
-
-    OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< chart view :: createShapes():: needed %f msec", fDuration );
-#endif
 }
 
 // util::XEventListener (base of XCloseListener)
