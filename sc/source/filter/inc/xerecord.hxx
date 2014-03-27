@@ -207,7 +207,7 @@ public:
 
 private:
     /** Writes the body of the record. */
-    inline virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE { rStrm << maValue; }
+    virtual void WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE { rStrm << maValue; }
     // inlining prevents warning in wntmsci10
 
 private:
@@ -369,14 +369,14 @@ public:
     inline void         RemoveAllRecords() { maRecs.clear(); }
 
     /** Writes the complete record list. */
-    inline virtual void Save( XclExpStream& rStrm ) SAL_OVERRIDE
+    virtual void Save( XclExpStream& rStrm ) SAL_OVERRIDE
     {
         // inlining prevents warning in wntmsci10
         for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
             (*aIt)->Save( rStrm );
     }
 
-    inline virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE
     {
         // inlining prevents warning in wntmsci10
         for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
