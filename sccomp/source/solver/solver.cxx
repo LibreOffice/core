@@ -37,13 +37,12 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vector>
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 #include <tools/resmgr.hxx>
 
 using namespace com::sun::star;
 
-#define C2U(constAsciiStr) (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) ))
 
 #define STR_NONNEGATIVE   "NonNegative"
 #define STR_INTEGER       "Integer"
@@ -51,20 +50,20 @@ using namespace com::sun::star;
 #define STR_EPSILONLEVEL  "EpsilonLevel"
 #define STR_LIMITBBDEPTH  "LimitBBDepth"
 
-// -----------------------------------------------------------------------
+
 //  Resources from tools are used for translated strings
 
 static ResMgr* pSolverResMgr = NULL;
 
-OUString lcl_GetResourceString( sal_uInt32 nId )
+static OUString lcl_GetResourceString( sal_uInt32 nId )
 {
     if (!pSolverResMgr)
-        pSolverResMgr = ResMgr::CreateResMgr( "solver" );
+        pSolverResMgr = ResMgr::CreateResMgr("solver");
 
-    return ResId( nId, *pSolverResMgr );
+    return ResId(nId, *pSolverResMgr).toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace
 {
@@ -78,7 +77,7 @@ namespace
     };
 }
 
-// -----------------------------------------------------------------------
+
 
 // hash map for the coefficients of a dependent cell (objective or constraint)
 // The size of each vector is the number of columns (variable cells) plus one, first entry is initial value.
@@ -104,11 +103,11 @@ struct ScSolverCellEqual
     }
 };
 
-typedef std::unordered_map< table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
+typedef boost::unordered_map< table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
-// -----------------------------------------------------------------------
 
-uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
+
+static uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                                           const table::CellAddress& rPos )
 {
     uno::Reference<container::XIndexAccess> xSheets( xDoc->getSheets(), uno::UNO_QUERY );
@@ -116,19 +115,19 @@ uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadshe
     return xSheet->getCellByPosition( rPos.Column, rPos.Row );
 }
 
-void lcl_SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
+static void lcl_SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                    const table::CellAddress& rPos, double fValue )
 {
     lcl_GetCell( xDoc, rPos )->setValue( fValue );
 }
 
-double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
+static double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                      const table::CellAddress& rPos )
 {
     return lcl_GetCell( xDoc, rPos )->getValue();
 }
 
-// -------------------------------------------------------------------------
+
 
 SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& /* rSMgr */ ) :
     OPropertyContainer( GetBroadcastHelper() ),
@@ -142,11 +141,11 @@ SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& 
     mfResultValue( 0.0 )
 {
     // for XPropertySet implementation:
-    registerProperty( C2U(STR_NONNEGATIVE),  PROP_NONNEGATIVE,  0, &mbNonNegative,  getCppuType( &mbNonNegative )  );
-    registerProperty( C2U(STR_INTEGER),      PROP_INTEGER,      0, &mbInteger,      getCppuType( &mbInteger )      );
-    registerProperty( C2U(STR_TIMEOUT),      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
-    registerProperty( C2U(STR_EPSILONLEVEL), PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
-    registerProperty( C2U(STR_LIMITBBDEPTH), PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
+    registerProperty( STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,  getCppuType( &mbNonNegative )  );
+    registerProperty( STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,      getCppuType( &mbInteger )      );
+    registerProperty( STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
+    registerProperty( STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
+    registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
 }
 
 SolverComponent::~SolverComponent()
@@ -289,15 +288,13 @@ uno::Sequence<double> SAL_CALL SolverComponent::getSolution() throw(uno::Runtime
     return maSolution;
 }
 
-// -------------------------------------------------------------------------
-
 void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::exception)
 {
     uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY );
     if ( !xModel.is() )
         throw uno::RuntimeException();
 
-    maStatus = OUString();
+    maStatus = "";
     mbSuccess = false;
 
     xModel->lockControllers();
@@ -374,7 +371,7 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::excepti
 
     xModel->unlockControllers();
 
-    if ( maStatus.getLength() )
+    if ( !maStatus.isEmpty() )
         return;
 
     //
@@ -583,13 +580,13 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::excepti
 uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
 {
     uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = OUString::createFromAscii( "com.sun.star.sheet.Solver" );
+    aServiceNames[ 0 ] = "com.sun.star.sheet.Solver";
     return aServiceNames;
 }
 
 OUString SolverComponent_getImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.Calc.CoinMPSolver" );
+    return OUString("com.sun.star.comp.Calc.CoinMPSolver");
 }
 
 OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeException, std::exception)
@@ -599,7 +596,7 @@ OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeExc
 
 sal_Bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)

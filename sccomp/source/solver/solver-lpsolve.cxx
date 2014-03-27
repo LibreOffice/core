@@ -578,7 +578,7 @@ uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
 
 OUString SolverComponent_getImplementationName()
 {
-    return OUString("com.sun.star.comp.Calc.Solver" );
+    return OUString("com.sun.star.comp.Calc.Solver");
 }
 
 OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeException, std::exception)
