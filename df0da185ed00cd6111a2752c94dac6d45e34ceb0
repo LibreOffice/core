@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_52124a63",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T15:19:18Z",
+      "side": 1,
+      "message": "Can we please have this sensibly indented? ;-)",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_d2055a15",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T15:19:18Z",
+      "side": 1,
+      "message": "This should also check if it is a valid character (either \u00270\u0027 or \u00271\u0027 are allowed) and if not generate an error (errIllegalArgument).",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_f2025e0a",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T15:19:18Z",
+      "side": 1,
+      "message": "If the string is not 0 or exactly 7 characters long an error should be generated (errIllegalArgument).",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1dff0303",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T15:19:18Z",
+      "side": 1,
+      "message": "Up to here calculation of weekend and holidays appears to be identical to ScNetWorkdays_MS() so both could be factored out to a common function.",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_3d04c714",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T15:19:18Z",
+      "side": 1,
+      "message": "Good question.. I don\u0027t know yet. Probably have to try saving a document in LibO and open in Excel.",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
