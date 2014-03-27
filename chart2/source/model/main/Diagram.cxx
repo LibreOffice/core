@@ -31,6 +31,8 @@
 #include "SceneProperties.hxx"
 #include "DisposeHelper.hxx"
 #include "BaseGFXHelper.hxx"
+#include <unonames.hxx>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -104,7 +106,7 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "SortByXValues",
+        Property( CHART_UNONAME_SORT_BY_XVALUES,
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -199,7 +201,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEVOID ));
 
    rOutProperties.push_back(
-        Property( "RoundedEdge",
+        Property( CHART_UNONAME_ROUNDED_EDGE,
                   PROP_DIAGRAM_ROUNDED_EDGE,
                   ::getCppuBooleanType(),
                   beans::PropertyAttribute::MAYBEVOID));

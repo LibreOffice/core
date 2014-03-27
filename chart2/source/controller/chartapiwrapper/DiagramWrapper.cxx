@@ -47,6 +47,7 @@
 #include <comphelper/InlineContainer.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
 #include "CommonConverters.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -230,7 +231,7 @@ void lcl_AddPropertiesToVector(
 
     //new for XY charts
     rOutProperties.push_back(
-        Property( "SortByXValues",
+        Property( CHART_UNONAME_SORT_BY_XVALUES,
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
@@ -447,7 +448,7 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-         Property( "RoundedEdge",
+         Property( CHART_UNONAME_ROUNDED_EDGE,
                    PROP_DIAGRAM_ROUNDED_EDGE,
                    ::getCppuBooleanType(),
                    beans::PropertyAttribute::BOUND

@@ -10,6 +10,7 @@
 #include "GL3DBarChartType.hxx"
 #include <servicenames_charttypes.hxx>
 #include <PropertyHelper.hxx>
+#include <unonames.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -59,7 +60,7 @@ struct InfoHelperInitializer
         uno::Sequence<beans::Property> aRet(1);
 
         aRet[0] = beans::Property(
-            "RoundedEdge",
+            CHART_UNONAME_ROUNDED_EDGE,
             PROP_GL3DCHARTTYPE_ROUNDED_EDGE,
             ::getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);

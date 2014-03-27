@@ -47,6 +47,7 @@
 #include "DataSeriesHelper.hxx"
 #include "DateHelper.hxx"
 #include "defines.hxx"
+#include <unonames.hxx>
 
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
@@ -141,7 +142,7 @@ void debugGL3DOutput( ChartModel& rModel )
     {
         uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
         bool bRoundedEdge = false;
-        xPropSet->getPropertyValue("RoundedEdge") >>= bRoundedEdge;
+        xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= bRoundedEdge;
 
         fprintf(stdout, "GL3D: rounded edge = %d\n", bRoundedEdge);
     }
@@ -628,7 +629,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     try
     {
         uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
-        xDiaProp->getPropertyValue( "SortByXValues" ) >>= bSortByXValues;
+        xDiaProp->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= bSortByXValues;
         xDiaProp->getPropertyValue( "ConnectBars" ) >>= bConnectBars;
         xDiaProp->getPropertyValue( "GroupBarsPerAxis" ) >>= bGroupBarsPerAxis;
         xDiaProp->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;

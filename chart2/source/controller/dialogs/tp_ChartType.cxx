@@ -26,6 +26,7 @@
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
 #include "GL3DBarChartDialogController.hxx"
+#include <unonames.hxx>
 
 #include <svtools/controldims.hrc>
 
@@ -832,8 +833,8 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
     try
     {
         uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-        xPropSet->getPropertyValue("SortByXValues") >>= aParameter.bSortByXValues;
-        xPropSet->getPropertyValue("RoundedEdge") >>= aParameter.mbRoundedEdge;
+        xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+        xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aParameter.mbRoundedEdge;
     }
     catch ( const uno::Exception& ex )
     {
@@ -899,8 +900,8 @@ void ChartTypeTabPage::selectMainType()
         try
         {
             uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-            xPropSet->getPropertyValue("SortByXValues") >>= aParameter.bSortByXValues;
-            xPropSet->getPropertyValue("RoundedEdge") >>= aParameter.mbRoundedEdge;
+            xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+            xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aParameter.mbRoundedEdge;
         }
         catch ( const uno::Exception& ex )
         {
@@ -984,8 +985,8 @@ void ChartTypeTabPage::initializePage()
             try
             {
                 uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-                xPropSet->getPropertyValue("SortByXValues") >>= aParameter.bSortByXValues;
-                xPropSet->getPropertyValue("RoundedEdge") >>= aParameter.mbRoundedEdge;
+                xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
+                xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aParameter.mbRoundedEdge;
             }
             catch (const uno::Exception& ex)
             {

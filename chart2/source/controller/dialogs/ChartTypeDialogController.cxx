@@ -27,6 +27,7 @@
 #include "DiagramHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AxisHelper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/PieChartOffsetMode.hpp>
@@ -341,8 +342,8 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         uno::Reference<beans::XPropertySet> xDiaProp(xDiagram, uno::UNO_QUERY);
         if (xDiaProp.is())
         {
-            xDiaProp->setPropertyValue("SortByXValues" , uno::makeAny(rParameter.bSortByXValues));
-            xDiaProp->setPropertyValue("RoundedEdge", uno::makeAny(rParameter.mbRoundedEdge));
+            xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::makeAny(rParameter.bSortByXValues));
+            xDiaProp->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(rParameter.mbRoundedEdge));
         }
     }
     return false;
