@@ -1576,6 +1576,45 @@ void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyPropert
         rFlyProperties.push_back(std::make_pair<OString, OString>("shadowOffsetY", OString(aOffsetY)));
 }
 
+void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrmFmt& rFrmFmt)
+{
+    const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
+
+    // Relative size of the Text Frame.
+    if (rSize.GetWidthPercent())
+    {
+        rFlyProperties.push_back(std::make_pair<OString, OString>("pctHoriz", OString::number(rSize.GetWidthPercent() * 10)));
+
+        OString aRelation;
+        switch (rSize.GetWidthPercentRelation())
+        {
+        case text::RelOrientation::PAGE_FRAME:
+            aRelation = "1"; // page
+            break;
+        default:
+            aRelation = "0"; // margin
+            break;
+        }
+        rFlyProperties.push_back(std::make_pair("sizerelh", aRelation));
+    }
+    if (rSize.GetHeightPercent())
+    {
+        rFlyProperties.push_back(std::make_pair<OString, OString>("pctVert", OString::number(rSize.GetHeightPercent() * 10)));
+
+        OString aRelation;
+        switch (rSize.GetHeightPercentRelation())
+        {
+        case text::RelOrientation::PAGE_FRAME:
+            aRelation = "1"; // page
+            break;
+        default:
+            aRelation = "0"; // margin
+            break;
+        }
+        rFlyProperties.push_back(std::make_pair("sizerelv", aRelation));
+    }
+}
+
 void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& /*rNdTopLeft*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
@@ -1610,6 +1649,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
 
             const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
             lcl_TextFrameShadow(m_aFlyProperties, rFrmFmt);
+            lcl_TextFrameRelativeSize(m_aFlyProperties, rFrmFmt);
 
             for (size_t i = 0; i < m_aFlyProperties.size(); ++i)
             {
