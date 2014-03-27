@@ -92,11 +92,11 @@ public:
     SfxStack( const char *pName )
     {
         ++nLevel;
-        SAL_LOG("sfx", "STACK: enter " << nLevel << " " << pName);
+        SAL_INFO("sfx.control", "STACK: enter " << nLevel << " " << pName);
     }
     ~SfxStack()
     {
-        SAL_LOG("sfx", "STACK: leave " << nLevel);
+        SAL_INFO("sfx.control", "STACK: leave " << nLevel);
         --nLevel;
     }
 };
