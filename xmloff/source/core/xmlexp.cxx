@@ -2005,7 +2005,7 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
 {
     if (!mpProgressBarHelper)
     {
-        mpProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, sal_True);
+        mpProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, true);
 
         if (mxExportInfo.is())
         {

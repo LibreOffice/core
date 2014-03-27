@@ -24,7 +24,7 @@ using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 
-sal_Bool SinglePropertySetInfoCache::hasProperty(
+bool SinglePropertySetInfoCache::hasProperty(
         const Reference< XPropertySet >& rPropSet,
         Reference< XPropertySetInfo >& rPropSetInfo )
 {

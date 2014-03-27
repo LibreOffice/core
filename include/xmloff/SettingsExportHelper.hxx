@@ -59,7 +59,7 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
     void CallTypeFunction(const com::sun::star::uno::Any& rAny,
                         const OUString& rName) const;
 
-    void exportBool(const sal_Bool bValue, const OUString& rName) const;
+    void exportBool(const bool bValue, const OUString& rName) const;
     void exportByte(const sal_Int8 nValue, const OUString& rName) const;
     void exportShort(const sal_Int16 nValue, const OUString& rName) const;
     void exportInt(const sal_Int32 nValue, const OUString& rName) const;
@@ -75,7 +75,7 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
         const OUString& rName) const;
     void exportMapEntry(const com::sun::star::uno::Any& rAny,
                         const OUString& rName,
-                        const sal_Bool bNameAccess) const;
+                        const bool bNameAccess) const;
     void exportNameAccess(
         const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& aNamed,
         const OUString& rName) const;

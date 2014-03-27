@@ -180,7 +180,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
     }
 }
 
-void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const OUString& rName) const
+void XMLSettingsExportHelper::exportBool(const bool bValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
@@ -360,7 +360,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
 
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
                                         const OUString& rName,
-                                        const sal_Bool bNameAccess) const
+                                        const bool bNameAccess) const
 {
     DBG_ASSERT((bNameAccess && !rName.isEmpty()) || !bNameAccess, "no name");
     uno::Sequence<beans::PropertyValue> aProps;
@@ -390,7 +390,7 @@ void XMLSettingsExportHelper::exportNameAccess(
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED, sal_True );
         uno::Sequence< OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
-            exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], sal_True);
+            exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], true);
         m_rContext.EndElement( sal_True );
     }
 }
@@ -410,7 +410,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
         sal_Int32 nCount = aIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            exportMapEntry(aIndexed->getByIndex(i), sEmpty, sal_False);
+            exportMapEntry(aIndexed->getByIndex(i), sEmpty, false);
         }
         m_rContext.EndElement( sal_True );
     }

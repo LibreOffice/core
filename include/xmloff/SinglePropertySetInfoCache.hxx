@@ -39,13 +39,13 @@ public:
     inline SinglePropertySetInfoCache( const OUString& rName );
     ~SinglePropertySetInfoCache() {};
 
-    sal_Bool hasProperty(
+    bool hasProperty(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySetInfo >& rPropSetInfo );
 
-    inline sal_Bool hasProperty(
+    inline bool hasProperty(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet>& rPropSet );
 };
@@ -56,7 +56,7 @@ inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
 {
 }
 
-inline sal_Bool SinglePropertySetInfoCache::hasProperty(
+inline bool SinglePropertySetInfoCache::hasProperty(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet>& rPropSet )
 {

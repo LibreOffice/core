@@ -28,15 +28,15 @@ using namespace ::com::sun::star;
 static const sal_Int32 nDefaultProgressBarRange = 1000000;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
-                                    const sal_Bool bTempStrict)
+                                    const bool bTempStrict)
 : xStatusIndicator(xTempStatusIndicator)
 , nRange(nDefaultProgressBarRange)
 , nReference(100)
 , nValue(0)
 , bStrict(bTempStrict)
-, bRepeat(sal_True)
+, bRepeat(true)
 #ifdef DBG_UTIL
-, bFailure(sal_False)
+, bFailure(false)
 #endif
 {
 }
@@ -101,7 +101,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
         else if (!bFailure)
         {
             OSL_FAIL("tried to set a wrong value on the progressbar");
-            bFailure = sal_True;
+            bFailure = true;
         }
 #endif
     }

@@ -36,23 +36,23 @@ class XMLOFF_DLLPUBLIC ProgressBarHelper
             sal_Int32                                                                       nRange;
             sal_Int32                                                                       nReference;
             sal_Int32                                                                       nValue;
-            sal_Bool                                                                        bStrict;
+            bool                                                                            bStrict;
             // #96469#; if the value goes over the Range the progressbar starts again
-            sal_Bool                                                                        bRepeat;
+            bool                                                                            bRepeat;
 
 #ifdef DBG_UTIL
-            sal_Bool                                                                        bFailure;
+            bool                                                                            bFailure;
 #endif
 public:
             ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xStatusIndicator,
-                                const sal_Bool bStrict);
+                                const bool bStrict);
             ~ProgressBarHelper();
 
             void SetText(OUString& rText) { if (xStatusIndicator.is()) xStatusIndicator->setText(rText); }
             void SetRange(sal_Int32 nVal) { nRange = nVal; }
             void SetReference(sal_Int32 nVal) { nReference = nVal; }
             void SetValue(sal_Int32 nValue);
-            void SetRepeat(sal_Bool bValue) { bRepeat = bValue; }
+            void SetRepeat(bool bValue) { bRepeat = bValue; }
             inline void Increment(sal_Int32 nInc = 1) { SetValue( nValue+nInc ); }
             void End() { if (xStatusIndicator.is()) xStatusIndicator->end(); }
 
@@ -62,7 +62,7 @@ public:
 
             sal_Int32 GetReference() { return nReference; }
             sal_Int32 GetValue() { return nValue; }
-            sal_Bool GetRepeat() { return bRepeat; }
+            bool GetRepeat() { return bRepeat; }
 };
 
 #endif

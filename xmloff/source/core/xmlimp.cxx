@@ -829,7 +829,7 @@ void SAL_CALL SvXMLImport::unknown( const OUString& )
 
 void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
 {
-    GetProgressBarHelper()->SetRepeat(sal_False);
+    GetProgressBarHelper()->SetRepeat(false);
     GetProgressBarHelper()->SetReference(0);
 }
 
@@ -1398,7 +1398,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
 {
     if (!mpProgressBarHelper)
     {
-        mpProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, sal_False);
+        mpProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, false);
 
         if (mxImportInfo.is())
         {
