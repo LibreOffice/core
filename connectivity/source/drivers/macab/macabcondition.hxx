@@ -47,9 +47,9 @@ class MacabConditionConstant : public MacabCondition
 
     public:
         MacabConditionConstant(const sal_Bool bValue);
-        virtual sal_Bool isAlwaysTrue() const;
-        virtual sal_Bool isAlwaysFalse() const;
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool isAlwaysTrue() const SAL_OVERRIDE;
+        virtual sal_Bool isAlwaysFalse() const SAL_OVERRIDE;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionColumn : public MacabCondition
@@ -61,8 +61,8 @@ class MacabConditionColumn : public MacabCondition
         MacabConditionColumn(
             const MacabHeader *header,
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
-        virtual sal_Bool isAlwaysTrue() const;
-        virtual sal_Bool isAlwaysFalse() const;
+        virtual sal_Bool isAlwaysTrue() const SAL_OVERRIDE;
+        virtual sal_Bool isAlwaysFalse() const SAL_OVERRIDE;
 };
 
 class MacabConditionNull : public MacabConditionColumn
@@ -71,7 +71,7 @@ class MacabConditionNull : public MacabConditionColumn
         MacabConditionNull(
             const MacabHeader *header,
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionNotNull : public MacabConditionColumn
@@ -80,7 +80,7 @@ class MacabConditionNotNull : public MacabConditionColumn
         MacabConditionNotNull(
             const MacabHeader *header,
             const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionCompare : public MacabConditionColumn
@@ -102,7 +102,7 @@ class MacabConditionEqual : public MacabConditionCompare
             const MacabHeader *header,
             const OUString &sColumnName,
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionDifferent : public MacabConditionCompare
@@ -112,7 +112,7 @@ class MacabConditionDifferent : public MacabConditionCompare
             const MacabHeader *header,
             const OUString &sColumnName,
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionSimilar : public MacabConditionCompare
@@ -122,7 +122,7 @@ class MacabConditionSimilar : public MacabConditionCompare
             const MacabHeader *header,
             const OUString &sColumnName,
             const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionBoolean : public MacabCondition
@@ -139,18 +139,18 @@ class MacabConditionOr : public MacabConditionBoolean
 {
     public:
         MacabConditionOr(MacabCondition *pLeft, MacabCondition *pRight);
-        virtual sal_Bool isAlwaysTrue() const;
-        virtual sal_Bool isAlwaysFalse() const;
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool isAlwaysTrue() const SAL_OVERRIDE;
+        virtual sal_Bool isAlwaysFalse() const SAL_OVERRIDE;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
 class MacabConditionAnd : public MacabConditionBoolean
 {
     public:
         MacabConditionAnd(MacabCondition *pLeft, MacabCondition *pRight);
-        virtual sal_Bool isAlwaysTrue() const;
-        virtual sal_Bool isAlwaysFalse() const;
-        virtual sal_Bool eval(const MacabRecord *aRecord) const;
+        virtual sal_Bool isAlwaysTrue() const SAL_OVERRIDE;
+        virtual sal_Bool isAlwaysFalse() const SAL_OVERRIDE;
+        virtual sal_Bool eval(const MacabRecord *aRecord) const SAL_OVERRIDE;
 };
 
     }
