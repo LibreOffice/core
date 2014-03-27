@@ -1661,7 +1661,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                 else if (cChar == CH_TXT_ATR_FORMELEMENT)
                 {
                     SwPosition aPos(*pCrsr->GetMark());
-                    bField = pMySh->GetDoc()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                    bField = pMySh->GetDoc()->getIDocumentMarkAccess()->getDropDownFor(aPos);
                 }
 
                 LanguageType eCurLanguage = lcl_GetLanguage(*GetSh());

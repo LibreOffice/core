@@ -249,6 +249,7 @@ class IDocumentMarkAccess
         virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& pos) const =0;
 
+        virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition& pos) const=0;
         virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const=0;
 
         // Marks exclusive annotation marks

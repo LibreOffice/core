@@ -1013,6 +1013,14 @@ namespace sw { namespace mark
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
 
+    IFieldmark* MarkManager::getDropDownFor(const SwPosition& rPos) const
+    {
+        IFieldmark *pMark = getFieldmarkFor(rPos);
+        if (!pMark || pMark->GetFieldname() != ODF_FORMDROPDOWN)
+            return NULL;
+        return pMark;
+    }
+
     std::vector<IFieldmark*> MarkManager::getDropDownsFor(const SwPaM &rPaM) const
     {
         std::vector<IFieldmark*> aRet;
