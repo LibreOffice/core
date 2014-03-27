@@ -593,11 +593,19 @@ void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
     {
         OUString aServiceName = aFullName.copy( 0, nPos );
 
-        uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-        uno::Reference<uno::XInterface> xInterface( xServiceFactory->createInstance( aServiceName ) );
+        try
+        {
+            uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
+            uno::Reference<uno::XInterface> xInterface( xServiceFactory->createInstance( aServiceName ) );
 
-        if (xInterface.is())
-            UpdateFromAddIn( xInterface, aServiceName );
+            if (xInterface.is())
+                UpdateFromAddIn( xInterface, aServiceName );
+        }
+        catch (const uno::Exception &)
+        {
+            SAL_WARN ("sc", "Failed to create addin component '"
+                      << aServiceName << "'");
+        }
     }
 }
 
