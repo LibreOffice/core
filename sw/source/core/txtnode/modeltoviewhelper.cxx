@@ -17,25 +17,46 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <modeltoviewhelper.hxx>
+#include <tools/multisel.hxx>
+#include <doc.hxx>
+#include <IMark.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <fmtftn.hxx>
+#include <modeltoviewhelper.hxx>
 #include <ndtxt.hxx>
+#include <pam.hxx>
 #include <txatbase.hxx>
 #include <txtfld.hxx>
 #include <txtftn.hxx>
-
-#include <tools/multisel.hxx>
-
 #include <scriptinfo.hxx>
+#include <set>
+#include <vector>
+
+struct FieldResult
+{
+    sal_Int32 m_nFieldPos;
+    OUString m_sExpand;
+};
+
+class sortfieldresults :
+    public std::binary_function<const FieldResult&, const FieldResult&, bool>
+{
+public:
+    bool operator()(const FieldResult &rOne, const FieldResult &rTwo) const
+    {
+        return rOne.m_nFieldPos < rTwo.m_nFieldPos;
+    }
+};
+
+typedef std::set<FieldResult, sortfieldresults> FieldResultSet;
 
 struct block
 {
     sal_Int32 m_nStart;
     sal_Int32 m_nLen;
     bool m_bVisible;
-    std::vector<const SwTxtAttr*> m_aAttrs;
+    FieldResultSet m_aAttrs;
     block(sal_Int32 nStart, sal_Int32 nLen, bool bVisible)
         : m_nStart(nStart), m_nLen(nLen), m_bVisible(bVisible)
     {
@@ -100,6 +121,8 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
 
     if (eMode & EXPANDFIELDS)
     {
+        //first the normal fields, get their position in the node and what the text they expand
+        //to is
         const SwpHints* pSwpHints2 = rNode.GetpSwpHints();
         for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
         {
@@ -109,11 +132,57 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                 const sal_Int32 nDummyCharPos = *pAttr->GetStart();
                 if (aHiddenMulti.IsSelected(nDummyCharPos))
                     continue;
-                std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(), containsPos(nDummyCharPos));
+                std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(),
+                    aBlocks.end(), containsPos(nDummyCharPos));
                 if (aFind != aBlocks.end())
                 {
-                    aFind->m_aAttrs.push_back(pAttr);
+                    FieldResult aFieldResult;
+                    aFieldResult.m_nFieldPos = nDummyCharPos;
+                    switch (pAttr->Which())
+                    {
+                        case RES_TXTATR_FIELD:
+                        case RES_TXTATR_ANNOTATION:
+                            aFieldResult.m_sExpand =
+                                static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
+                                    ->ExpandField(true);
+                            break;
+                        case RES_TXTATR_FTN:
+                            {
+                                const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
+                                const SwDoc *pDoc = rNode.GetDoc();
+                                aFieldResult.m_sExpand = rFtn.GetViewNumStr(*pDoc);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    aFind->m_aAttrs.insert(aFieldResult);
                 }
+            }
+        }
+
+        //now get the dropdown formfields, get their position in the node and what the text they expand
+        //to is
+        SwPaM aPaM(rNode, 0, rNode, rNode.Len());
+        std::vector<sw::mark::IFieldmark*> aDropDowns =
+            rNode.GetDoc()->getIDocumentMarkAccess()->getDropDownsFor(aPaM);
+
+        for (std::vector<sw::mark::IFieldmark*>::iterator aI = aDropDowns.begin(), aEnd = aDropDowns.end();
+            aI != aEnd; ++aI)
+        {
+            sw::mark::IFieldmark *pMark = *aI;
+            const sal_Int32 nDummyCharPos = pMark->GetMarkPos().nContent.GetIndex()-1;
+            if (aHiddenMulti.IsSelected(nDummyCharPos))
+                continue;
+            std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(),
+                containsPos(nDummyCharPos));
+            if (aFind != aBlocks.end())
+            {
+                FieldResult aFieldResult;
+                aFieldResult.m_nFieldPos = nDummyCharPos;
+                aFieldResult.m_sExpand = sw::mark::ExpandFieldmark(pMark);
+                aFind->m_aAttrs.insert(aFieldResult);
             }
         }
     }
@@ -132,32 +201,11 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
         }
         else
         {
-            for (std::vector<const SwTxtAttr*>::iterator j = i->m_aAttrs.begin(); j != i->m_aAttrs.end(); ++j)
+            for (FieldResultSet::iterator j = i->m_aAttrs.begin(); j != i->m_aAttrs.end(); ++j)
             {
-                const SwTxtAttr* pAttr = *j;
-                const sal_Int32 nFieldPos = *pAttr->GetStart();
-                OUString aExpand;
-                switch (pAttr->Which())
-                {
-                    case RES_TXTATR_FIELD:
-                    case RES_TXTATR_ANNOTATION:
-                        aExpand =
-                            static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
-                                ->ExpandField(true);
-                        break;
-                    case RES_TXTATR_FTN:
-                        {
-                            const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
-                            const SwDoc *pDoc = rNode.GetDoc();
-                            aExpand = rFtn.GetViewNumStr(*pDoc);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                m_aRetText = m_aRetText.replaceAt( nOffset + nFieldPos, 1, aExpand );
-                m_aMap.push_back( ConversionMapEntry( nFieldPos, nOffset + nFieldPos ) );
-                nOffset += aExpand.getLength() - 1;
+                m_aRetText = m_aRetText.replaceAt( nOffset + j->m_nFieldPos, 1, j->m_sExpand );
+                m_aMap.push_back( ConversionMapEntry( j->m_nFieldPos, nOffset + j->m_nFieldPos ) );
+                nOffset += j->m_sExpand.getLength() - 1;
             }
         }
     }

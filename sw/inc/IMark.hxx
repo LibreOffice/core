@@ -156,6 +156,8 @@ namespace sw { namespace mark
 #endif
     };
 
+    OUString ExpandFieldmark(IFieldmark* pBM);
+
 }}
 #endif
 

@@ -873,9 +873,8 @@ void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-namespace {
-    using namespace sw::mark;
-    static OUString getCurrentListIndex(IFieldmark* pBM)
+namespace sw { namespace mark {
+    OUString ExpandFieldmark(IFieldmark* pBM)
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
@@ -893,7 +892,7 @@ namespace {
         }
         return OUString();
     }
-}
+} }
 
 /*************************************************************************
  *                      SwTxtFormatter::WhichTxtPor()
@@ -944,7 +943,7 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
                         }
                         else if (pBM->GetFieldname( ) == ODF_FORMDROPDOWN)
                         {
-                            pPor = new SwFieldFormDropDownPortion(getCurrentListIndex(pBM));
+                            pPor = new SwFieldFormDropDownPortion(sw::mark::ExpandFieldmark(pBM));
                         }
                         else
                         {

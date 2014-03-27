@@ -242,6 +242,7 @@ void SwDocTest::testModelToViewHelper()
         //set character attribute hidden on range
         SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
         m_pDoc->InsertPoolItem(aPaM, aHidden, 0 );
+        aPaM.DeleteMark();
 
         //turn on red-lining and show changes
         m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
@@ -254,6 +255,7 @@ void SwDocTest::testModelToViewHelper()
         //set end of selection to second last B
         aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
         m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
+        aPaM.DeleteMark();
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
@@ -306,6 +308,27 @@ void SwDocTest::testModelToViewHelper()
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAACCCCC foo DDDDD");
+        }
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, OUString("AAAAA"));
+        IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
+        sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
+                pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN));
+        CPPUNIT_ASSERT(pFieldmark);
+        uno::Sequence< OUString > vListEntries(1);
+        vListEntries[0] = "BBBBB";
+        (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
+        (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
+        m_pDoc->InsertString(aPaM, OUString("CCCCC"));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == 11);
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            fprintf(stderr, "string is %s\n", OUStringToOString(sViewText, RTL_TEXTENCODING_UTF8).getStr());
+            CPPUNIT_ASSERT(sViewText == "AAAAABBBBBCCCCC");
         }
     }
 }

@@ -290,7 +290,7 @@ public:
        something protected. */
     bool HasReadonlySel( bool bFormView, bool bAnnotationMode = false ) const;
 
-    bool ContainsPosition(const SwPosition & rPos)
+    bool ContainsPosition(const SwPosition & rPos) const
     {
         return *Start() <= rPos && rPos <= *End();
     }

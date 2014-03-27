@@ -1013,6 +1013,28 @@ namespace sw { namespace mark
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
 
+    std::vector<IFieldmark*> MarkManager::getDropDownsFor(const SwPaM &rPaM) const
+    {
+        std::vector<IFieldmark*> aRet;
+
+        for (IDocumentMarkAccess::const_iterator_t aI = m_vFieldmarks.begin(),
+            aEnd = m_vFieldmarks.end(); aI != aEnd; ++aI)
+        {
+            boost::shared_ptr<IMark> xI = *aI;
+            const SwPosition &rStart = xI->GetMarkPos();
+            if (!rPaM.ContainsPosition(rStart))
+                continue;
+
+            IFieldmark *pMark = dynamic_cast<IFieldmark*>(xI.get());
+            if (!pMark || pMark->GetFieldname() != ODF_FORMDROPDOWN)
+                continue;
+
+            aRet.push_back(pMark);
+        }
+
+        return aRet;
+    }
+
     IFieldmark* MarkManager::getFieldmarkAfter(const SwPosition& rPos) const
         { return dynamic_cast<IFieldmark*>(lcl_getMarkAfter(m_vFieldmarks, rPos)); }
 
