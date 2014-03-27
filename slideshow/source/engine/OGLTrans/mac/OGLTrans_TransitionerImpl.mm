@@ -151,18 +151,18 @@ public:
 
     // XTransition
     virtual void SAL_CALL update( double nTime )
-    throw (uno::RuntimeException);
+    throw (uno::RuntimeException) SAL_OVERRIDE;
     virtual void SAL_CALL viewChanged( const Reference< presentation::XSlideShowView >& rView,
                        const Reference< rendering::XBitmap >& rLeavingBitmap,
                        const Reference< rendering::XBitmap >& rEnteringBitmap )
-    throw (uno::RuntimeException);
+    throw (uno::RuntimeException) SAL_OVERRIDE;
     
 protected:
     void disposeContextAndWindow();
     void disposeTextures();
 
     // WeakComponentImplHelperBase
-    virtual void SAL_CALL disposing();
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
     
     bool isDisposed() const
     {
@@ -929,7 +929,7 @@ public:
     {}
 
     // XTransitionFactory
-    virtual ::sal_Bool SAL_CALL hasTransition( ::sal_Int16 transitionType, ::sal_Int16 transitionSubType ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasTransition( ::sal_Int16 transitionType, ::sal_Int16 transitionSubType ) throw (uno::RuntimeException) SAL_OVERRIDE
     {
         if( transitionType == animations::TransitionType::MISCSHAPEWIPE ) {
             switch( transitionSubType )
@@ -971,7 +971,7 @@ public:
         const uno::Reference< presentation::XSlideShowView >& view, 
         const uno::Reference< rendering::XBitmap >&           leavingBitmap, 
         const uno::Reference< rendering::XBitmap >&           enteringBitmap )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException) SAL_OVERRIDE
     {
         if( !hasTransition( transitionType, transitionSubType ) )
             return uno::Reference< presentation::XTransition >();

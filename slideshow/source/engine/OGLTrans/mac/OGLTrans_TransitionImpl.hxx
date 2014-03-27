@@ -198,9 +198,9 @@ class Iris : public SceneObject
 public:
     Iris ();
 
-    virtual void prepare();
-    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
-    virtual void finish();
+    virtual void prepare() SAL_OVERRIDE;
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight) SAL_OVERRIDE;
+    virtual void finish() SAL_OVERRIDE;
 
 private:
 
@@ -324,8 +324,8 @@ public:
 class SRotate: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    virtual SRotate* clone();
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale) SAL_OVERRIDE;
+    virtual SRotate* clone() SAL_OVERRIDE;
 
     /** Constructor
 
@@ -369,8 +369,8 @@ private:
 class SScale: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    SScale* clone();
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale) SAL_OVERRIDE;
+    SScale* clone() SAL_OVERRIDE;
 
     /** Constructor
 
@@ -402,8 +402,8 @@ private:
 class STranslate: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    STranslate* clone();
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale) SAL_OVERRIDE;
+    STranslate* clone() SAL_OVERRIDE;
 
     /** Constructor
 
@@ -433,8 +433,8 @@ private:
 class SEllipseTranslate: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    SEllipseTranslate* clone();
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale) SAL_OVERRIDE;
+    SEllipseTranslate* clone() SAL_OVERRIDE;
 
     /** Constructor
 
@@ -469,8 +469,8 @@ private:
 class RotateAndScaleDepthByWidth: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    RotateAndScaleDepthByWidth* clone();
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale) SAL_OVERRIDE;
+    RotateAndScaleDepthByWidth* clone() SAL_OVERRIDE;
 
     RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByWidth(){}
@@ -485,8 +485,8 @@ private:
 class RotateAndScaleDepthByHeight: public Operation
 {
 public:
-    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
-    RotateAndScaleDepthByHeight* clone();
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale) SAL_OVERRIDE;
+    RotateAndScaleDepthByHeight* clone() SAL_OVERRIDE;
 
     RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByHeight(){}
