@@ -2000,6 +2000,8 @@ awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
     return aRet;
 }
 
+namespace {
+
 double lcl_getPageLayoutDistancePercentage()
 {
     return 0.02;
@@ -2363,6 +2365,8 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
                 xParent->remove( xShape );
         }
     }
+}
+
 }
 
 bool ChartView::impl_AddInDrawsAllByItself()
