@@ -147,7 +147,6 @@ void SvxParaPrevWindow::DrawParagraph( bool bAll )
             long nLW;
             switch( i )
             {
-                default:
                 case 3: nLW = aLineSiz.Width() * 8 / 10;    break;
                 case 4: nLW = aLineSiz.Width() * 9 / 10;    break;
                 case 5: nLW = aLineSiz.Width() / 2;         break;
