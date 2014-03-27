@@ -103,7 +103,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <functional>
 
-#if defined(DBG_UTIL) && defined(WNT)
+#if defined(DBG_UTIL)
 unsigned SfxStack::nLevel = 0;
 #endif
 

@@ -82,7 +82,7 @@ struct _Capper
 
 
 
-#if defined(DBG_UTIL) && defined(WNT)
+#if defined(DBG_UTIL)
 
 class SfxStack
 {
