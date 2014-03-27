@@ -386,12 +386,19 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         bool bSurrogate = ((nCharCode >= 0xD800) && (nCharCode <= 0xDFFF));
         if( bSurrogate )
         {
-            if( nCharCode >= 0xDC00 ) // this part of a surrogate pair was already processed
+            // ignore high surrogates, they were already processed with their low surrogates
+            if( nCharCode >= 0xDC00 )
                 continue;
-            nCharCode = 0x10000 + ((pCodes[0] - 0xD800) << 10) + (pCodes[1] - 0xDC00);
-    }
+            // check the second half of the surrogate pair
+            bSurrogate &= (0xDC00 <= pCodes[1]) && (pCodes[1] <= 0xDFFF);
+            // calculate the UTF-32 code of valid surrogate pairs
+            if( bSurrogate )
+                nCharCode = 0x10000 + ((pCodes[0] - 0xD800) << 10) + (pCodes[1] - 0xDC00);
+            else // or fall back to a replacement character
+                nCharCode = '?';
+        }
 
-        // get the advance width for the current UCS-4 code point
+        // get the advance width for the current UTF-32 code point
         int nGlyphWidth = mrWinFontEntry.GetCachedGlyphWidth( nCharCode );
         if( nGlyphWidth == -1 )
         {
@@ -409,7 +416,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         mpGlyphAdvances[ i ] = nGlyphWidth;
         mnWidth += nGlyphWidth;
 
-        // remaining codes of surrogate pair get a zero width
+        // the second half of surrogate pair gets a zero width
         if( bSurrogate && ((i+1) < mnGlyphCount) )
             mpGlyphAdvances[ i+1 ] = 0;
 
