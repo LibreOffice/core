@@ -238,6 +238,11 @@ struct WW8_BRCVer6  // BoRder Code (WW6 version)
 //  sal_uInt16 ico : 5;         // 07C0 color code (see chp.ico)
 //  sal_uInt16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
+    WW8_BRCVer6()
+    {
+        memset(aBits1, 0, sizeof(aBits1));
+    }
+
     sal_uInt8 dxpLineWidth() const
         { return aBits1[0] & 0x07; }
     sal_uInt8 brcType() const
