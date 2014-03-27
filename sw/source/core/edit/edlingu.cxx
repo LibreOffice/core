@@ -1658,6 +1658,11 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                             break;
                     }
                 }
+                else if (cChar == CH_TXT_ATR_FORMELEMENT)
+                {
+                    SwPosition aPos(*pCrsr->GetMark());
+                    bField = pMySh->GetDoc()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                }
 
                 LanguageType eCurLanguage = lcl_GetLanguage(*GetSh());
                 bool bRedline = aNextRedline.nLeft == pCrsr->GetPoint()->nContent.GetIndex();
