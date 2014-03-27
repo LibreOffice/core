@@ -600,6 +600,12 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
         case 3:         // 3=exact/365
             nDaysInYear = 365;
             break;
+#ifdef _MSC_VER
+        // Coverity complains this is dead code, but MSVC thinks nDaysInYear
+        // is uninitialized if it's missing.
+        default:
+            throw lang::IllegalArgumentException();
+#endif
     }
 
     return double( nDayDiff ) / nDaysInYear;
