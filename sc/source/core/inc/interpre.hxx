@@ -32,6 +32,7 @@
 #include "token.hxx"
 
 #include <map>
+#include <vector>
 
 class ScDocument;
 class SbxVariable;
@@ -589,6 +590,10 @@ void ScGetDay();
 void ScGetDayOfWeek();
 void ScGetWeekOfYear();
 void ScEasterSunday();
+sal_uInt16 GetWeekendAndHolidayMasks( const Date& aNullDate, size_t& nMax,
+        ::std::vector<double>& nSortArray, OUString& aWeekendDays, bool* bWeekendMask );
+void ScNetWorkdays_MS();
+void ScWorkday_MS();
 void ScGetHour();
 void ScGetMin();
 void ScGetSec();

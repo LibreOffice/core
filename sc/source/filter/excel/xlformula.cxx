@@ -486,7 +486,9 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR( ocNegBinomDist_MS,  4,  4,  0,  "NEGBINOM.DIST" ),
     EXC_FUNCENTRY_V_VR( ocZTest_MS,         2,  3,  0,  "Z.TEST" ),
     EXC_FUNCENTRY_V_VR( ocCeil_MS,          2,  2,  0,  "CEILING.PRECISE" ),
-    EXC_FUNCENTRY_V_VR( ocFloor_MS,         2,  2,  0,  "FLOOR.PRECISE" )
+    EXC_FUNCENTRY_V_VR( ocFloor_MS,         2,  2,  0,  "FLOOR.PRECISE" ),
+    EXC_FUNCENTRY_V_VR( ocNetWorkdays_MS,   2,  4,  0,  "NETWORKDAYS.INTL" ),
+    EXC_FUNCENTRY_V_VR( ocWorkday_MS,       2,  4,  0,  "WORKDAY.INTL" )
 };
 
 /** Functions new in Excel 2013.

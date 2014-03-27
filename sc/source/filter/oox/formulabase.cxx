@@ -802,7 +802,10 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.NEGBINOM.DIST",          "NEGBINOM.DIST",       NOID,   NOID,    4,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.Z.TEST",                 "Z.TEST",              NOID,   NOID,    2,  3,  V, { RX, VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.CEILING.PRECISE",        "CEILING.PRECISE",     NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.FLOOR.PRECISE",          "FLOOR.PRECISE",       NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.FLOOR.PRECISE",          "FLOOR.PRECISE",       NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+// fdo73147 is RR, RR, VR, RX correct?
+    { "COM.MICROSOFT.NETWORKDAYS.INTL",       "NETWORKDAYS.INTL",    NOID,    NOID,   2,  4,  V, { RR, RR, VR, RX }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.WORKDAY.INTL",           "WORKDAY.INTL",        NOID,    NOID,   2,  4,  V, { RR, RR, VR, RX }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions new in Excel 2013.
