@@ -61,10 +61,11 @@ class SwTxtNode;
     0111: expanding fields + hiding hiddens + hiding redlines gives: AAAABB foo CCCCC foo DDDDD
 */
 
-#define PASSTHROUGH   0x0000
-#define EXPANDFIELDS  0x0001
-#define HIDEINVISIBLE 0x0002
-#define HIDEREDLINED  0x0004
+#define PASSTHROUGH    0x0000
+#define EXPANDFIELDS   0x0001
+#define EXPANDFOOTNOTE 0x0002
+#define HIDEINVISIBLE  0x0004
+#define HIDEREDLINED   0x0008
 
 class ModelToViewHelper
 {
@@ -98,7 +99,7 @@ public:
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode = EXPANDFIELDS);
+    ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode = EXPANDFIELDS | EXPANDFOOTNOTE);
     ModelToViewHelper() //pass through filter, view == model
     {
     }

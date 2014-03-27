@@ -119,7 +119,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
     if (nTrailingShownLen)
         aBlocks.push_back(block(nShownStart, nTrailingShownLen, true));
 
-    if (eMode & EXPANDFIELDS)
+    if (eMode & EXPANDFIELDS || eMode & EXPANDFOOTNOTE)
     {
         //first the normal fields, get their position in the node and what the text they expand
         //to is
@@ -142,11 +142,15 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                     {
                         case RES_TXTATR_FIELD:
                         case RES_TXTATR_ANNOTATION:
-                            aFieldResult.m_sExpand =
-                                static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
-                                    ->ExpandField(true);
+                            if (eMode & EXPANDFIELDS)
+                            {
+                                aFieldResult.m_sExpand =
+                                    static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
+                                        ->ExpandField(true);
+                            }
                             break;
                         case RES_TXTATR_FTN:
+                            if (eMode & EXPANDFOOTNOTE)
                             {
                                 const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
                                 const SwDoc *pDoc = rNode.GetDoc();
@@ -156,33 +160,35 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                         default:
                             break;
                     }
-
                     aFind->m_aAttrs.insert(aFieldResult);
                 }
             }
         }
 
-        //now get the dropdown formfields, get their position in the node and what the text they expand
-        //to is
-        SwPaM aPaM(rNode, 0, rNode, rNode.Len());
-        std::vector<sw::mark::IFieldmark*> aDropDowns =
-            rNode.GetDoc()->getIDocumentMarkAccess()->getDropDownsFor(aPaM);
-
-        for (std::vector<sw::mark::IFieldmark*>::iterator aI = aDropDowns.begin(), aEnd = aDropDowns.end();
-            aI != aEnd; ++aI)
+        if (eMode & EXPANDFIELDS)
         {
-            sw::mark::IFieldmark *pMark = *aI;
-            const sal_Int32 nDummyCharPos = pMark->GetMarkPos().nContent.GetIndex()-1;
-            if (aHiddenMulti.IsSelected(nDummyCharPos))
-                continue;
-            std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(),
-                containsPos(nDummyCharPos));
-            if (aFind != aBlocks.end())
+            //now get the dropdown formfields, get their position in the node and what the text they expand
+            //to is
+            SwPaM aPaM(rNode, 0, rNode, rNode.Len());
+            std::vector<sw::mark::IFieldmark*> aDropDowns =
+                rNode.GetDoc()->getIDocumentMarkAccess()->getDropDownsFor(aPaM);
+
+            for (std::vector<sw::mark::IFieldmark*>::iterator aI = aDropDowns.begin(), aEnd = aDropDowns.end();
+                aI != aEnd; ++aI)
             {
-                FieldResult aFieldResult;
-                aFieldResult.m_nFieldPos = nDummyCharPos;
-                aFieldResult.m_sExpand = sw::mark::ExpandFieldmark(pMark);
-                aFind->m_aAttrs.insert(aFieldResult);
+                sw::mark::IFieldmark *pMark = *aI;
+                const sal_Int32 nDummyCharPos = pMark->GetMarkPos().nContent.GetIndex()-1;
+                if (aHiddenMulti.IsSelected(nDummyCharPos))
+                    continue;
+                std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(),
+                    containsPos(nDummyCharPos));
+                if (aFind != aBlocks.end())
+                {
+                    FieldResult aFieldResult;
+                    aFieldResult.m_nFieldPos = nDummyCharPos;
+                    aFieldResult.m_sExpand = sw::mark::ExpandFieldmark(pMark);
+                    aFind->m_aAttrs.insert(aFieldResult);
+                }
             }
         }
     }

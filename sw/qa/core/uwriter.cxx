@@ -265,9 +265,15 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAAA BBBBB foo CCCCC foo DDDDD");
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
+            OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT(sViewText == "AAAAA BBBBB  CCCCC  DDDDD");
         }
 
         {
@@ -283,13 +289,13 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAAA CCCCC foo DDDDD");
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAABB foo CCCCC foo DDDDD");
         }
@@ -305,7 +311,7 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAACCCCC foo DDDDD");
         }
@@ -325,7 +331,7 @@ void SwDocTest::testModelToViewHelper()
         CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == 11);
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             fprintf(stderr, "string is %s\n", OUStringToOString(sViewText, RTL_TEXTENCODING_UTF8).getStr());
             CPPUNIT_ASSERT(sViewText == "AAAAABBBBBCCCCC");
