@@ -95,7 +95,7 @@ public:
     const OUString& getTableStyleName() const { return m_sTableStyleName; }
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getCurrentTablePosition();
 
-    inline virtual void cellProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void cellProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -103,7 +103,7 @@ public:
            DomainMapperTableManager_Base_t::cellProps( pProps );
     };
 
-    inline virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -111,7 +111,7 @@ public:
            DomainMapperTableManager_Base_t::cellPropsByCell( i, pProps );
     };
 
-    inline virtual void insertRowProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void insertRowProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
@@ -119,7 +119,7 @@ public:
            DomainMapperTableManager_Base_t::insertRowProps( pProps );
     };
 
-    inline virtual void insertTableProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
+    virtual void insertTableProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
     {
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
