@@ -2020,6 +2020,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 
 endif # SYSTEM_LPSOLVE
 
+else
+
+gb_LinkTarget__use_lpsolve :=
+
 endif # ENABLE_LPSOLVE
 
 ifneq ($(ENABLE_COINMP),)
@@ -2051,6 +2055,10 @@ endef
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	coinmp \
 ))
+
+else
+
+gb_LinkTarget__use_coinmp :=
 
 endif # ENABLE_COINMP
 

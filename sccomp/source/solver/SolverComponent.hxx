@@ -22,12 +22,37 @@
 
 #include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
+
+#include <boost/unordered_map.hpp>
+
+class ResMgr;
+
+// hash map for the coefficients of a dependent cell (objective or constraint)
+// The size of each vector is the number of columns (variable cells) plus one, first entry is initial value.
+
+struct ScSolverCellHash
+{
+    size_t operator()( const css::table::CellAddress& rAddress ) const;
+};
+
+inline bool AddressEqual( const css::table::CellAddress& rAddr1, const css::table::CellAddress& rAddr2 )
+{
+    return rAddr1.Sheet == rAddr2.Sheet && rAddr1.Column == rAddr2.Column && rAddr1.Row == rAddr2.Row;
+}
+
+struct ScSolverCellEqual
+{
+    bool operator()( const css::table::CellAddress& rAddr1, const css::table::CellAddress& rAddr2 ) const;
+};
+
+typedef boost::unordered_map< css::table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
 typedef cppu::WeakImplHelper3<
                 com::sun::star::sheet::XSolver,
@@ -40,6 +65,9 @@ class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
                         public comphelper::OPropertyArrayUsageHelper< SolverComponent >,
                         public SolverComponent_Base
 {
+protected:
+    static ResMgr* pSolverResMgr;
+
     // settings
     com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument > mxDoc;
     com::sun::star::table::CellAddress                                            maObjective;
@@ -58,9 +86,19 @@ class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
     com::sun::star::uno::Sequence< double >                                       maSolution;
     OUString                                                                 maStatus;
 
+    static OUString GetResourceString( sal_uInt32 nId );
+    static css::uno::Reference<css::table::XCell> GetCell(
+            const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
+            const css::table::CellAddress& rPos );
+    static void SetValue(
+            const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
+            const css::table::CellAddress& rPos, double fValue );
+    static double GetValue(
+            const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
+            const css::table::CellAddress& rPos );
+
 public:
-                            SolverComponent( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XComponentContext >& rxMSF );
+                            SolverComponent();
     virtual                 ~SolverComponent();
 
     DECLARE_XINTERFACE()
@@ -98,7 +136,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getSolution()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL solve() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL solve() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
 
                             // XSolverDescription
     virtual OUString SAL_CALL getComponentDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -108,7 +146,7 @@ public:
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                throw(::com::sun::star::uno::RuntimeException, std::exception) = 0;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()

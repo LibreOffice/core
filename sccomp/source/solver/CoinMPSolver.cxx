@@ -19,276 +19,34 @@
 
 #include <CoinMP.h>
 
-#include "solver.hxx"
+#include "SolverComponent.hxx"
 #include "solver.hrc"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <vector>
-#include <boost/unordered_map.hpp>
-
-#include <tools/resmgr.hxx>
 
 using namespace com::sun::star;
 
-
-#define STR_NONNEGATIVE   "NonNegative"
-#define STR_INTEGER       "Integer"
-#define STR_TIMEOUT       "Timeout"
-#define STR_EPSILONLEVEL  "EpsilonLevel"
-#define STR_LIMITBBDEPTH  "LimitBBDepth"
-
-
-//  Resources from tools are used for translated strings
-
-static ResMgr* pSolverResMgr = NULL;
-
-static OUString lcl_GetResourceString( sal_uInt32 nId )
+class CoinMPSolver : public SolverComponent
 {
-    if (!pSolverResMgr)
-        pSolverResMgr = ResMgr::CreateResMgr("solver");
+public:
+    CoinMPSolver() {}
+    virtual ~CoinMPSolver() SAL_OVERRIDE {}
 
-    return ResId(nId, *pSolverResMgr).toString();
-}
-
-
-
-namespace
-{
-    enum
+private:
+    virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName()
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        PROP_NONNEGATIVE,
-        PROP_INTEGER,
-        PROP_TIMEOUT,
-        PROP_EPSILONLEVEL,
-        PROP_LIMITBBDEPTH
-    };
-}
-
-
-
-// hash map for the coefficients of a dependent cell (objective or constraint)
-// The size of each vector is the number of columns (variable cells) plus one, first entry is initial value.
-
-struct ScSolverCellHash
-{
-    size_t operator()( const table::CellAddress& rAddress ) const
-    {
-        return ( rAddress.Sheet << 24 ) | ( rAddress.Column << 16 ) | rAddress.Row;
+        return OUString("com.sun.star.comp.Calc.CoinMPSolver");
     }
 };
 
-inline bool AddressEqual( const table::CellAddress& rAddr1, const table::CellAddress& rAddr2 )
-{
-    return rAddr1.Sheet == rAddr2.Sheet && rAddr1.Column == rAddr2.Column && rAddr1.Row == rAddr2.Row;
-}
-
-struct ScSolverCellEqual
-{
-    bool operator()( const table::CellAddress& rAddr1, const table::CellAddress& rAddr2 ) const
-    {
-        return AddressEqual( rAddr1, rAddr2 );
-    }
-};
-
-typedef boost::unordered_map< table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
-
-
-
-static uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                                          const table::CellAddress& rPos )
-{
-    uno::Reference<container::XIndexAccess> xSheets( xDoc->getSheets(), uno::UNO_QUERY );
-    uno::Reference<sheet::XSpreadsheet> xSheet( xSheets->getByIndex( rPos.Sheet ), uno::UNO_QUERY );
-    return xSheet->getCellByPosition( rPos.Column, rPos.Row );
-}
-
-static void lcl_SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                   const table::CellAddress& rPos, double fValue )
-{
-    lcl_GetCell( xDoc, rPos )->setValue( fValue );
-}
-
-static double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                     const table::CellAddress& rPos )
-{
-    return lcl_GetCell( xDoc, rPos )->getValue();
-}
-
-
-
-SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& /* rSMgr */ ) :
-    OPropertyContainer( GetBroadcastHelper() ),
-    mbMaximize( sal_True ),
-    mbNonNegative( sal_False ),
-    mbInteger( sal_False ),
-    mnTimeout( 100 ),
-    mnEpsilonLevel( 0 ),
-    mbLimitBBDepth( sal_True ),
-    mbSuccess( sal_False ),
-    mfResultValue( 0.0 )
-{
-    // for XPropertySet implementation:
-    registerProperty( STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,  getCppuType( &mbNonNegative )  );
-    registerProperty( STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,      getCppuType( &mbInteger )      );
-    registerProperty( STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,      getCppuType( &mnTimeout )      );
-    registerProperty( STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, getCppuType( &mnEpsilonLevel ) );
-    registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, getCppuType( &mbLimitBBDepth ) );
-}
-
-SolverComponent::~SolverComponent()
-{
-}
-
-IMPLEMENT_FORWARD_XINTERFACE2( SolverComponent, SolverComponent_Base, OPropertyContainer )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SolverComponent, SolverComponent_Base, OPropertyContainer )
-
-cppu::IPropertyArrayHelper* SolverComponent::createArrayHelper() const
-{
-    uno::Sequence<beans::Property> aProps;
-    describeProperties( aProps );
-    return new cppu::OPropertyArrayHelper( aProps );
-}
-
-cppu::IPropertyArrayHelper& SAL_CALL SolverComponent::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
-uno::Reference<beans::XPropertySetInfo> SAL_CALL SolverComponent::getPropertySetInfo() throw(uno::RuntimeException, std::exception)
-{
-    return createPropertySetInfo( getInfoHelper() );
-}
-
-// XSolverDescription
-
-OUString SAL_CALL SolverComponent::getComponentDescription() throw (uno::RuntimeException, std::exception)
-{
-    return lcl_GetResourceString( RID_COINMP_SOLVER_COMPONENT );
-}
-
-OUString SAL_CALL SolverComponent::getStatusDescription() throw (uno::RuntimeException, std::exception)
-{
-    return maStatus;
-}
-
-OUString SAL_CALL SolverComponent::getPropertyDescription( const OUString& rPropertyName ) throw (uno::RuntimeException, std::exception)
-{
-    sal_uInt32 nResId = 0;
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-    switch (nHandle)
-    {
-        case PROP_NONNEGATIVE:
-            nResId = RID_PROPERTY_NONNEGATIVE;
-            break;
-        case PROP_INTEGER:
-            nResId = RID_PROPERTY_INTEGER;
-            break;
-        case PROP_TIMEOUT:
-            nResId = RID_PROPERTY_TIMEOUT;
-            break;
-        case PROP_EPSILONLEVEL:
-            nResId = RID_PROPERTY_EPSILONLEVEL;
-            break;
-        case PROP_LIMITBBDEPTH:
-            nResId = RID_PROPERTY_LIMITBBDEPTH;
-            break;
-        default:
-            {
-                // unknown - leave empty
-            }
-    }
-    OUString aRet;
-    if ( nResId )
-        aRet = lcl_GetResourceString( nResId );
-    return aRet;
-}
-
-// XSolver: settings
-
-uno::Reference<sheet::XSpreadsheetDocument> SAL_CALL SolverComponent::getDocument() throw(uno::RuntimeException, std::exception)
-{
-    return mxDoc;
-}
-
-void SAL_CALL SolverComponent::setDocument( const uno::Reference<sheet::XSpreadsheetDocument>& _document )
-                                throw(uno::RuntimeException, std::exception)
-{
-    mxDoc = _document;
-}
-
-table::CellAddress SAL_CALL SolverComponent::getObjective() throw(uno::RuntimeException, std::exception)
-{
-    return maObjective;
-}
-
-void SAL_CALL SolverComponent::setObjective( const table::CellAddress& _objective ) throw(uno::RuntimeException, std::exception)
-{
-    maObjective = _objective;
-}
-
-uno::Sequence<table::CellAddress> SAL_CALL SolverComponent::getVariables() throw(uno::RuntimeException, std::exception)
-{
-    return maVariables;
-}
-
-void SAL_CALL SolverComponent::setVariables( const uno::Sequence<table::CellAddress>& _variables )
-                                throw(uno::RuntimeException, std::exception)
-{
-    maVariables = _variables;
-}
-
-uno::Sequence<sheet::SolverConstraint> SAL_CALL SolverComponent::getConstraints() throw(uno::RuntimeException, std::exception)
-{
-    return maConstraints;
-}
-
-void SAL_CALL SolverComponent::setConstraints( const uno::Sequence<sheet::SolverConstraint>& _constraints )
-                                throw(uno::RuntimeException, std::exception)
-{
-    maConstraints = _constraints;
-}
-
-sal_Bool SAL_CALL SolverComponent::getMaximize() throw(uno::RuntimeException, std::exception)
-{
-    return mbMaximize;
-}
-
-void SAL_CALL SolverComponent::setMaximize( sal_Bool _maximize ) throw(uno::RuntimeException, std::exception)
-{
-    mbMaximize = _maximize;
-}
-
-// XSolver: get results
-
-sal_Bool SAL_CALL SolverComponent::getSuccess() throw(uno::RuntimeException, std::exception)
-{
-    return mbSuccess;
-}
-
-double SAL_CALL SolverComponent::getResultValue() throw(uno::RuntimeException, std::exception)
-{
-    return mfResultValue;
-}
-
-uno::Sequence<double> SAL_CALL SolverComponent::getSolution() throw(uno::RuntimeException, std::exception)
-{
-    return maSolution;
-}
-
-void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::exception)
+void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
 {
     uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY );
     if ( !xModel.is() )
@@ -327,46 +85,46 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::excepti
     std::vector<table::CellAddress>::const_iterator aVarIter;
     for ( aVarIter = aVariableCells.begin(); aVarIter != aVariableCells.end(); ++aVarIter )
     {
-        lcl_SetValue( mxDoc, *aVarIter, 0.0 );
+        SolverComponent::SetValue( mxDoc, *aVarIter, 0.0 );
     }
 
     // read initial values from all dependent cells
     ScSolverCellHashMap::iterator aCellsIter;
     for ( aCellsIter = aCellsHash.begin(); aCellsIter != aCellsHash.end(); ++aCellsIter )
     {
-        double fValue = lcl_GetValue( mxDoc, aCellsIter->first );
+        double fValue = SolverComponent::GetValue( mxDoc, aCellsIter->first );
         aCellsIter->second.push_back( fValue );                         // store as first element, as-is
     }
 
     // loop through variables
     for ( aVarIter = aVariableCells.begin(); aVarIter != aVariableCells.end(); ++aVarIter )
     {
-        lcl_SetValue( mxDoc, *aVarIter, 1.0 );      // set to 1 to examine influence
+        SolverComponent::SetValue( mxDoc, *aVarIter, 1.0 );      // set to 1 to examine influence
 
         // read value change from all dependent cells
         for ( aCellsIter = aCellsHash.begin(); aCellsIter != aCellsHash.end(); ++aCellsIter )
         {
-            double fChanged = lcl_GetValue( mxDoc, aCellsIter->first );
+            double fChanged = SolverComponent::GetValue( mxDoc, aCellsIter->first );
             double fInitial = aCellsIter->second.front();
             aCellsIter->second.push_back( fChanged - fInitial );
         }
 
-        lcl_SetValue( mxDoc, *aVarIter, 2.0 );      // minimal test for linearity
+        SolverComponent::SetValue( mxDoc, *aVarIter, 2.0 );      // minimal test for linearity
 
         for ( aCellsIter = aCellsHash.begin(); aCellsIter != aCellsHash.end(); ++aCellsIter )
         {
             double fInitial = aCellsIter->second.front();
             double fCoeff   = aCellsIter->second.back();       // last appended: coefficient for this variable
-            double fTwo     = lcl_GetValue( mxDoc, aCellsIter->first );
+            double fTwo     = SolverComponent::GetValue( mxDoc, aCellsIter->first );
 
             bool bLinear = rtl::math::approxEqual( fTwo, fInitial + 2.0 * fCoeff ) ||
                            rtl::math::approxEqual( fInitial, fTwo - 2.0 * fCoeff );
             // second comparison is needed in case fTwo is zero
             if ( !bLinear )
-                maStatus = lcl_GetResourceString( RID_ERROR_NONLINEAR );
+                maStatus = SolverComponent::GetResourceString( RID_ERROR_NONLINEAR );
         }
 
-        lcl_SetValue( mxDoc, *aVarIter, 0.0 );      // set back to zero for examining next variable
+        SolverComponent::SetValue( mxDoc, *aVarIter, 0.0 );      // set back to zero for examining next variable
     }
 
     xModel->unlockControllers();
@@ -565,9 +323,9 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::excepti
     {
         int nSolutionStatus = CoinGetSolutionStatus( hProb );
         if ( nSolutionStatus == 1 )
-            maStatus = lcl_GetResourceString( RID_ERROR_INFEASIBLE );
+            maStatus = SolverComponent::GetResourceString( RID_ERROR_INFEASIBLE );
         else if ( nSolutionStatus == 2 )
-            maStatus = lcl_GetResourceString( RID_ERROR_UNBOUNDED );
+            maStatus = SolverComponent::GetResourceString( RID_ERROR_UNBOUNDED );
         // TODO: detect timeout condition and report as RID_ERROR_TIMEOUT
         // (currently reported as infeasible)
     }
@@ -575,65 +333,12 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException, std::excepti
     CoinUnloadProblem( hProb );
 }
 
-// XServiceInfo
-
-uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_Calc_CoinMPSolver_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = "com.sun.star.sheet.Solver";
-    return aServiceNames;
-}
-
-OUString SolverComponent_getImplementationName()
-{
-    return OUString("com.sun.star.comp.Calc.CoinMPSolver");
-}
-
-OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeException, std::exception)
-{
-    return SolverComponent_getImplementationName();
-}
-
-sal_Bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException, std::exception)
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
-{
-    return SolverComponent_getSupportedServiceNames();
-}
-
-uno::Reference<uno::XInterface> SolverComponent_createInstance( const uno::Reference<uno::XComponentContext>& rSMgr )
-    throw(uno::Exception)
-{
-    return (cppu::OWeakObject*) new SolverComponent( rSMgr );
-}
-
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL coinmp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-    {
-        OUString    aImplName( OUString::createFromAscii( pImplName ) );
-        void*       pRet = 0;
-
-        if( pServiceManager )
-        {
-            uno::Reference< lang::XSingleComponentFactory > xFactory;
-            if( aImplName.equals( SolverComponent_getImplementationName() ) )
-                xFactory = cppu::createSingleComponentFactory(
-                        SolverComponent_createInstance,
-                        OUString::createFromAscii( pImplName ),
-                        SolverComponent_getSupportedServiceNames() );
-
-            if( xFactory.is() )
-            {
-                xFactory->acquire();
-                pRet = xFactory.get();
-            }
-        }
-        return pRet;
-    }
+    return cppu::acquire(new CoinMPSolver());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

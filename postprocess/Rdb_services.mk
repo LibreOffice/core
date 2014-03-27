@@ -113,7 +113,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		sccomp/source/solver/coinmpsolver \
 	) \
 	$(if $(ENABLE_LPSOLVE), \
-		sccomp/source/solver/solver \
+		sccomp/source/solver/lpsolvesolver \
 	) \
 	writerfilter/util/writerfilter \
 	writerperfect/source/draw/wpftdraw \

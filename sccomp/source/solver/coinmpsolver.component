@@ -7,9 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="coinmp"
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Calc.CoinMPSolver">
+  <implementation name="com.sun.star.comp.Calc.CoinMPSolver"
+      constructor="com_sun_star_comp_Calc_CoinMPSolver_get_implementation">
     <service name="com.sun.star.sheet.Solver"/>
   </implementation>
 </component>

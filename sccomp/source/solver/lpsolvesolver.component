@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="solver" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Calc.Solver">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Calc.LpsolveSolver"
+      constructor="com_sun_star_comp_Calc_LpsolveSolver_get_implementation">
     <service name="com.sun.star.sheet.Solver"/>
   </implementation>
 </component>
