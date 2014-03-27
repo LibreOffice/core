@@ -163,7 +163,6 @@ void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLin
 
     switch ( nLine )
     {
-        default:
         case 0: aBL.SetBorderLineStyle(table::BorderLineStyle::NONE); break;
         case 1: aBL.SetWidth( DEF_LINE_WIDTH_1 ); break;
         case 2: aBL.SetWidth( DEF_LINE_WIDTH_2 ); break;
