@@ -371,10 +371,6 @@ void SwVbaListHelper::CreateOutlineNumberForType1() throw( css::uno::RuntimeExce
                 sSuffix = OUString( '.' );
                 break;
             }
-            default:
-            {
-                throw uno::RuntimeException();
-            }
         }
         setOrAppendPropertyValue( aPropertyValues, OUString(UNO_NAME_NUMBERING_TYPE ), uno::makeAny( nNumberingType ) );
         setOrAppendPropertyValue( aPropertyValues, OUString(UNO_NAME_PREFIX ), uno::makeAny( sPrefix ) );
