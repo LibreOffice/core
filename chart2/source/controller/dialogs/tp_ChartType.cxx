@@ -37,27 +37,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-namespace
-{
-    sal_Bool lcl_getSortByXValues( const uno::Reference< chart2::XChartDocument >& xChartDoc )
-    {
-        sal_Bool bRet = sal_False;
-        if( xChartDoc.is() )
-        {
-            try
-            {
-                uno::Reference< beans::XPropertySet > xDiaProp( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-                xDiaProp->getPropertyValue( "SortByXValues" ) >>= bRet;
-            }
-            catch( const uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-        }
-        return bRet;
-    }
-}
-
 #define POS_3DSCHEME_SIMPLE    0
 #define POS_3DSCHEME_REALISTIC 1
 
@@ -848,8 +827,18 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
         commitToModel( aParameter );
 
     //detect the new ThreeDLookScheme
-    aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
-    aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
+    uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme(xDiagram);
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
+        xPropSet->getPropertyValue("SortByXValues") >>= aParameter.bSortByXValues;
+        xPropSet->getPropertyValue("RoundedEdge") >>= aParameter.mbRoundedEdge;
+    }
+    catch ( const uno::Exception& ex )
+    {
+        ASSERT_EXCEPTION(ex);
+    }
     //the controls have to be enabled/disabled accordingly
     this->fillAllControls( aParameter );
 
@@ -906,7 +895,18 @@ void ChartTypeTabPage::selectMainType()
         if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
             aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
 
-        aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
+        uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+        try
+        {
+            uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
+            xPropSet->getPropertyValue("SortByXValues") >>= aParameter.bSortByXValues;
+            xPropSet->getPropertyValue("RoundedEdge") >>= aParameter.mbRoundedEdge;
+        }
+        catch ( const uno::Exception& ex )
+        {
+            ASSERT_EXCEPTION(ex);
+        }
+
         this->fillAllControls( aParameter );
         uno::Reference< beans::XPropertySet > xTemplateProps( this->getCurrentTemplate(), uno::UNO_QUERY );
         m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
@@ -981,7 +981,16 @@ void ChartTypeTabPage::initializePage()
             if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
                 aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
 
-            aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
+            try
+            {
+                uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
+                xPropSet->getPropertyValue("SortByXValues") >>= aParameter.bSortByXValues;
+                xPropSet->getPropertyValue("RoundedEdge") >>= aParameter.mbRoundedEdge;
+            }
+            catch (const uno::Exception& ex)
+            {
+                ASSERT_EXCEPTION(ex);
+            }
 
             this->fillAllControls( aParameter );
             if( m_pCurrentMainType )
