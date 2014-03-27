@@ -1614,44 +1614,34 @@ short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 short SwFrmPage::GetAlignment(FrmMap *pMap, sal_Int32 nMapPos,
         ListBox &/*rAlignLB*/, ListBox &rRelationLB)
 {
-    short nAlign = 0;
-
     if (!pMap || nMapPos < 0)
-        return nAlign;
+        return 0;
 
-    size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
+    const size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
 
     if (static_cast<size_t>(nMapPos) >= nMapCount)
-        return nAlign;
+        return 0;
 
     // i#22341 special handling also for map <aVCharMap>,
     // because it contains ambigous items for alignment
-    if ( pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
-         pMap == aVCharMap )
+    if ( pMap != aVAsCharHtmlMap && pMap != aVAsCharMap && pMap != aVCharMap )
+        return pMap[nMapPos].nAlign;
+
+    if (rRelationLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+        return 0;
+
+    const RelationMap *const pRelationMap = (const RelationMap *const )
+        rRelationLB.GetEntryData(rRelationLB.GetSelectEntryPos());
+    const sal_uLong nRel = pRelationMap->nLBRelation;
+    const SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
+
+    for (size_t i = 0; i < nMapCount; ++i)
     {
-        if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-        {
-            sal_uLong  nRel = ((RelationMap *)rRelationLB.GetEntryData(rRelationLB.GetSelectEntryPos()))->nLBRelation;
-            SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
-
-            for (size_t i = 0; i < nMapCount; i++)
-            {
-                if (pMap[i].eStrId == eStrId)
-                {
-                    sal_uLong nLBRelations = pMap[i].nLBRelations;
-                    if (nLBRelations & nRel)
-                    {
-                        nAlign = pMap[i].nAlign;
-                        break;
-                    }
-                }
-            }
-        }
+        if (pMap[i].eStrId == eStrId && (pMap[i].nLBRelations & nRel))
+            return pMap[i].nAlign;
     }
-    else if (pMap)
-        nAlign = pMap[nMapPos].nAlign;
 
-    return nAlign;
+    return 0;
 }
 
 sal_Int32 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
