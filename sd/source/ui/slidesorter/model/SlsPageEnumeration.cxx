@@ -37,12 +37,12 @@ public:
     /** Create a copy of the called enumeration object.
     */
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    virtual inline ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
+    virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void) SAL_OVERRIDE;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    virtual inline bool HasMoreElements (void) const SAL_OVERRIDE;
-    virtual inline SharedPageDescriptor GetNextElement (void) SAL_OVERRIDE;
-    virtual inline void Rewind (void) SAL_OVERRIDE;
+    virtual bool HasMoreElements (void) const SAL_OVERRIDE;
+    virtual SharedPageDescriptor GetNextElement (void) SAL_OVERRIDE;
+    virtual void Rewind (void) SAL_OVERRIDE;
 
 private:
     const SlideSorterModel& mrModel;
