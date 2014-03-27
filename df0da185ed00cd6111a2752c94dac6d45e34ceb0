@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_dd33abf4",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T19:10:10Z",
+      "side": 1,
+      "message": "No, it is either a number (1..17) or a string of length 7 (with \u00270\u0027 or \u00271\u0027). At least that is what the Excel documentation says.. just tried, passing \"12\" results in error.",
+      "parentUuid": "da86d52c_bd0fd72d",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_1dff0303",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 1
@@ -142,6 +160,23 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_1d4d4373",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T19:10:10Z",
+      "side": 1,
+      "message": "My latest comment in sc/source/filter/oox/formulabase.cxx reminded me that here we may have to adapt token classes.",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_3d04c714",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 1
@@ -171,6 +206,24 @@
       "side": 1,
       "message": "I hope here lies the cause for the problem with exporting to xlsx and reopening..",
       "parentUuid": "da86d52c_3d04c714",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_fd306fea",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T19:10:10Z",
+      "side": 1,
+      "message": "No, the token classes are only used in .xls BIFF, not in .xlsx OOXML. For BIFF the sc/source/filter/excel/xlformula.cxx tables are used. The BIFF parts here in oox/... were provided in case we wanted to unify BIFF and OOXML import/export.",
+      "parentUuid": "da86d52c_fd194f7a",
       "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
