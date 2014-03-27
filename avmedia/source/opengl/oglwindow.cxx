@@ -18,6 +18,7 @@ OGLWindow::OGLWindow( OGLPlayer& rPlayer )
     : m_rPlayer( rPlayer )
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
 {
+    (void) m_rPlayer;
 }
 
 OGLWindow::~OGLWindow()

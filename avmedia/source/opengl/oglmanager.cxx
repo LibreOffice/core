@@ -20,6 +20,7 @@ namespace avmedia { namespace ogl {
 OGLManager::OGLManager( const uno::Reference< lang::XMultiServiceFactory >& rMgr )
     : m_xMgr( rMgr )
 {
+    (void) m_xMgr;
 }
 
 OGLManager::~OGLManager()
