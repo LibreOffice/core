@@ -22,7 +22,7 @@ namespace {
 
 enum
 {
-    PROP_GL3DCHARTTYPE_ROUNDED_RECTANGLE
+    PROP_GL3DCHARTTYPE_ROUNDED_EDGE
 };
 
 struct DefaultsInitializer
@@ -40,7 +40,7 @@ private:
 
     void addDefaults( tPropertyValueMap & rOutMap )
     {
-        PropertyHelper::setPropertyValueDefault(rOutMap, PROP_GL3DCHARTTYPE_ROUNDED_RECTANGLE, false);
+        PropertyHelper::setPropertyValueDefault(rOutMap, PROP_GL3DCHARTTYPE_ROUNDED_EDGE, false);
     }
 };
 
@@ -59,8 +59,8 @@ struct InfoHelperInitializer
         uno::Sequence<beans::Property> aRet(1);
 
         aRet[0] = beans::Property(
-            "RoundedRectangle",
-            PROP_GL3DCHARTTYPE_ROUNDED_RECTANGLE,
+            "RoundedEdge",
+            PROP_GL3DCHARTTYPE_ROUNDED_EDGE,
             ::getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 

@@ -80,7 +80,7 @@ public:
     ThreeDLookScheme    eThreeDLookScheme;
     bool                bSortByXValues;
 
-    bool mbGLRoundedEdge;
+    bool mbRoundedEdge;
 };
 
 typedef ::comphelper::MakeMap< OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;

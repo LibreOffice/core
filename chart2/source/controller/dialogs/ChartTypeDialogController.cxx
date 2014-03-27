@@ -60,7 +60,7 @@ ChartTypeParameter::ChartTypeParameter()
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
                     , bSortByXValues(false)
-                    , mbGLRoundedEdge(false)
+                    , mbRoundedEdge(false)
 {
 }
 
@@ -80,7 +80,7 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
                     , bSortByXValues(false)
-                    , mbGLRoundedEdge(false)
+                    , mbRoundedEdge(false)
 {
 }
 ChartTypeParameter::~ChartTypeParameter()
@@ -214,7 +214,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 CurveStyle       eCurveStyle = rParameter.eCurveStyle;
                 sal_Int32        nGeometry3D = rParameter.nGeometry3D;
                 bool             bSortByXValues = rParameter.bSortByXValues;
-                bool bGLRoundedEdge = rParameter.mbGLRoundedEdge;
+                bool bRoundedEdge = rParameter.mbRoundedEdge;
 
                 rParameter = (*aIter).second;
 
@@ -225,7 +225,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 rParameter.eCurveStyle = eCurveStyle;
                 rParameter.nGeometry3D = nGeometry3D;
                 rParameter.bSortByXValues = bSortByXValues;
-                rParameter.mbGLRoundedEdge = bGLRoundedEdge;
+                rParameter.mbRoundedEdge = bRoundedEdge;
 
                 bFoundSomeMatch = true;
                 break;
@@ -338,11 +338,11 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         if( rParameter.b3DLook )
             ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
 
-        //SortByXValues
+        uno::Reference<beans::XPropertySet> xDiaProp(xDiagram, uno::UNO_QUERY);
+        if (xDiaProp.is())
         {
-            uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
-            if( xDiaProp.is() )
-                xDiaProp->setPropertyValue( "SortByXValues" , uno::makeAny( rParameter.bSortByXValues ) );
+            xDiaProp->setPropertyValue("SortByXValues" , uno::makeAny(rParameter.bSortByXValues));
+            xDiaProp->setPropertyValue("RoundedEdge", uno::makeAny(rParameter.mbRoundedEdge));
         }
     }
     return false;

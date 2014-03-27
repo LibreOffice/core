@@ -137,7 +137,9 @@ enum
     PROP_DIAGRAM_DATATABLEHBORDER,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
-    PROP_DIAGRAM_EXTERNALDATA
+    PROP_DIAGRAM_EXTERNALDATA,
+
+    PROP_DIAGRAM_ROUNDED_EDGE
 };
 
 void lcl_AddPropertiesToVector(
@@ -444,6 +446,12 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
+    rOutProperties.push_back(
+         Property( "RoundedEdge",
+                   PROP_DIAGRAM_ROUNDED_EDGE,
+                   ::getCppuBooleanType(),
+                   beans::PropertyAttribute::BOUND
+                   | beans::PropertyAttribute::MAYBEVOID));
 }
 
 struct StaticDiagramWrapperPropertyArray_Initializer

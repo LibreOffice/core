@@ -296,12 +296,15 @@ public:
     void fillParameter( ChartTypeParameter& rParam );
 
 private:
+    DECL_LINK( SettingChangedHdl, void* );
+private:
     CheckBox* m_pCB_RoundedEdge;
 };
 
 GL3DResourceGroup::GL3DResourceGroup( VclBuilderContainer* pWindow )
 {
     pWindow->get(m_pCB_RoundedEdge, "rounded-edge");
+    m_pCB_RoundedEdge->SetToggleHdl( LINK(this, GL3DResourceGroup, SettingChangedHdl) );
 }
 
 void GL3DResourceGroup::showControls( bool bShow )
@@ -311,12 +314,19 @@ void GL3DResourceGroup::showControls( bool bShow )
 
 void GL3DResourceGroup::fillControls( const ChartTypeParameter& rParam )
 {
-    m_pCB_RoundedEdge->Check(rParam.mbGLRoundedEdge);
+    m_pCB_RoundedEdge->Check(rParam.mbRoundedEdge);
 }
 
 void GL3DResourceGroup::fillParameter( ChartTypeParameter& rParam )
 {
-    rParam.mbGLRoundedEdge = m_pCB_RoundedEdge->IsChecked();
+    rParam.mbRoundedEdge = m_pCB_RoundedEdge->IsChecked();
+}
+
+IMPL_LINK_NOARG( GL3DResourceGroup, SettingChangedHdl )
+{
+    if (m_pChangeListener)
+        m_pChangeListener->stateChanged(this);
+    return 0;
 }
 
 class SplinePropertiesDialog : public ModalDialog
