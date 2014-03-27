@@ -2991,6 +2991,20 @@ DECLARE_OOXMLEXPORT_TEST(test76317_2K10, "test76317_2K10.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]", "name", "adj");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
+{
+    /* Numbered list was not preserve after RT.
+     * In numbering.xml, when NumberingType is "decimal" and level is zero,
+     * w:val of w:lvlText was empty.
+     * It should be <w:lvlText w:val="%1" />
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","%1" );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
