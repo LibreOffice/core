@@ -548,8 +548,10 @@ void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
 void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText )
 {
     SolarMutexGuard aGuard;
-    // Replace the '~' character with '_'.
-    OUString aText = rText.replace( '~', '_' );
+    // Escape all underscores so that they don't get interpreted as hotkeys
+    OUString aText = rText.replaceAll( "_", "__" );
+    // Replace the LibreOffice hotkey identifier with an underscore
+    aText = aText.replace( '~', '_' );
     OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
 
     // Update item text only when necessary.
