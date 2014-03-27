@@ -62,23 +62,23 @@ TYPEINIT1( XMLTextMasterPageContext, SvXMLStyleContext );
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        sal_Bool bOverwrite )
+        bool bOverwrite )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
 ,   sIsPhysical( "IsPhysical" )
 ,   sPageStyleLayout( "PageStyleLayout" )
 ,   sFollowStyle( "FollowStyle" )
-,   bInsertHeader( sal_False )
-,   bInsertFooter( sal_False )
-,   bInsertHeaderLeft( sal_False )
-,   bInsertFooterLeft( sal_False )
-,   bInsertHeaderFirst( sal_False )
-,   bInsertFooterFirst( sal_False )
-,   bHeaderInserted( sal_False )
-,   bFooterInserted( sal_False )
-,   bHeaderLeftInserted( sal_False )
-,   bFooterLeftInserted( sal_False )
-,   bHeaderFirstInserted( sal_False )
-,   bFooterFirstInserted( sal_False )
+,   bInsertHeader( false )
+,   bInsertFooter( false )
+,   bInsertHeaderLeft( false )
+,   bInsertFooterLeft( false )
+,   bInsertHeaderFirst( false )
+,   bInsertFooterFirst( false )
+,   bHeaderInserted( false )
+,   bFooterInserted( false )
+,   bHeaderLeftInserted( false )
+,   bFooterLeftInserted( false )
+,   bHeaderFirstInserted( false )
+,   bFooterFirstInserted( false )
 {
     OUString sName, sDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -163,9 +163,9 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         if( xMultiStates.is() )
             xMultiStates->setAllPropertiesToDefault();
 
-        bInsertHeader = bInsertFooter = sal_True;
-        bInsertHeaderLeft = bInsertFooterLeft = sal_True;
-        bInsertHeaderFirst = bInsertFooterFirst = sal_True;
+        bInsertHeader = bInsertFooter = true;
+        bInsertHeaderLeft = bInsertFooterLeft = true;
+        bInsertHeaderFirst = bInsertFooterFirst = true;
     }
 }
 
@@ -190,14 +190,14 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
         if( bInsertHeader && !bHeaderInserted )
         {
             bInsert = sal_True;
-            bHeaderInserted = sal_True;
+            bHeaderInserted = true;
         }
         break;
     case XML_TOK_TEXT_MP_FOOTER:
         if( bInsertFooter && !bFooterInserted )
         {
             bInsert = bFooter = sal_True;
-            bFooterInserted = sal_True;
+            bFooterInserted = true;
         }
         break;
     case XML_TOK_TEXT_MP_HEADER_LEFT:

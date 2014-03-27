@@ -158,7 +158,7 @@ void XMLEventsImportContext::SetEvents(
     }
 }
 
-sal_Bool XMLEventsImportContext::GetEventSequence(
+bool XMLEventsImportContext::GetEventSequence(
     const OUString& rName,
     Sequence<PropertyValue> & rSequence )
 {
@@ -174,7 +174,7 @@ sal_Bool XMLEventsImportContext::GetEventSequence(
     }
 
     // if we're not at the end, set the sequence
-    sal_Bool bRet = (aIter != aCollectEvents.end());
+    bool bRet = (aIter != aCollectEvents.end());
     if (bRet)
         rSequence = aIter->second;
 

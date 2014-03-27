@@ -93,7 +93,7 @@ void XMLEventExport::AddTranslationTable(
 }
 
 void XMLEventExport::Export( Reference<XEventsSupplier> & rSupplier,
-                             sal_Bool bWhitespace)
+                             bool bWhitespace)
 {
     if (rSupplier.is())
     {
@@ -104,14 +104,14 @@ void XMLEventExport::Export( Reference<XEventsSupplier> & rSupplier,
 }
 
 void XMLEventExport::Export( Reference<XNameReplace> & rReplace,
-                             sal_Bool bWhitespace)
+                             bool bWhitespace)
 {
     Reference<XNameAccess> xAccess(rReplace, UNO_QUERY);
     Export(xAccess, bWhitespace);
 }
 
 void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
-                             sal_Bool bWhitespace)
+                             bool bWhitespace)
 {
     // early out if we don't actually get any events
     if (!rAccess.is())
@@ -120,7 +120,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
     }
 
     // have we already processed an element?
-    sal_Bool bStarted = sal_False;
+    bool bStarted = false;
 
     // iterate over all event types
     Sequence<OUString> aNames = rAccess->getElementNames();
@@ -160,7 +160,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
 }
 
 void XMLEventExport::ExportExt( Reference<XNameAccess> & rAccess,
-                                sal_Bool bWhitespace )
+                                bool bWhitespace )
 {
     // set bExtNamespace flag to use XML_NAMESPACE_OFFICE_EXT namespace
     // for events element (not for child elements)
@@ -173,7 +173,7 @@ void XMLEventExport::ExportExt( Reference<XNameAccess> & rAccess,
 void XMLEventExport::ExportSingleEvent(
     Sequence<PropertyValue>& rEventValues,
     const OUString& rApiEventName,
-    sal_Bool bUseWhitespace )
+    bool bUseWhitespace )
 {
     // translate the name
     NameMap::iterator aIter = aNameTranslationMap.find(rApiEventName);
@@ -182,7 +182,7 @@ void XMLEventExport::ExportSingleEvent(
         const XMLEventName& rXmlName = aIter->second;
 
         // export the event ...
-        sal_Bool bStarted = sal_False;
+        bool bStarted = false;
         ExportEvent( rEventValues, rXmlName, bUseWhitespace, bStarted );
 
         // ... and close the container element (if necessary)
@@ -207,8 +207,8 @@ void XMLEventExport::ExportSingleEvent(
 void XMLEventExport::ExportEvent(
     Sequence<PropertyValue>& rEventValues,
     const XMLEventName& rXmlEventName,
-    sal_Bool bUseWhitespace,
-    sal_Bool& rExported )
+    bool bUseWhitespace,
+    bool& rExported )
 {
     // search for EventType value and then delegate to EventHandler
     sal_Int32 nValues = rEventValues.getLength();
@@ -228,7 +228,7 @@ void XMLEventExport::ExportEvent(
                 {
                     // OK, we have't yet exported the enclosing
                     // element. So we do that now.
-                    rExported = sal_True;
+                    rExported = true;
                     StartElement(bUseWhitespace);
                 }
 
@@ -258,7 +258,7 @@ void XMLEventExport::ExportEvent(
 }
 
 
-void XMLEventExport::StartElement(sal_Bool bWhitespace)
+void XMLEventExport::StartElement(bool bWhitespace)
 {
     if (bWhitespace)
     {
@@ -270,7 +270,7 @@ void XMLEventExport::StartElement(sal_Bool bWhitespace)
                           bWhitespace);
 }
 
-void XMLEventExport::EndElement(sal_Bool bWhitespace)
+void XMLEventExport::EndElement(bool bWhitespace)
 {
     sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
                                           : XML_NAMESPACE_OFFICE;

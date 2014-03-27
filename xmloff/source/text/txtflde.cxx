@@ -1023,7 +1023,7 @@ void XMLTextFieldExport::ExportField(
             Any aAny = xRangePropSet->getPropertyValue(sHyperLinkEvents);
             Reference<XNameReplace> xName;
             aAny >>= xName;
-            GetExport().GetEventExport().Export(xName, sal_False);
+            GetExport().GetEventExport().Export(xName, false);
         }
     }
 
@@ -2308,7 +2308,7 @@ void XMLTextFieldExport::ExportMacro(
     }
 
     // 2) export the sequence
-    GetExport().GetEventExport().ExportSingleEvent( aSeq, sOnClick, sal_False );
+    GetExport().GetEventExport().ExportSingleEvent( aSeq, sOnClick, false );
 
     // and finally, the field presentation
     GetExport().Characters(rContent);

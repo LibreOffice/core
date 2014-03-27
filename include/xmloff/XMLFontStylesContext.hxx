@@ -67,7 +67,7 @@ public:
         return *pFontStyleAttrTokenMap;
     }
 
-    sal_Bool FillProperties( const OUString& rName,
+    bool FillProperties( const OUString& rName,
                          ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
                          sal_Int32 nStyleNameIdx,

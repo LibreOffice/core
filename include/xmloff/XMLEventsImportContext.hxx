@@ -106,7 +106,7 @@ public:
 
     /// if the import operates indelayed mode, you can use this method
     /// to obtain the value sequence for a specific event
-    sal_Bool GetEventSequence(
+    bool GetEventSequence(
         const OUString& rName,
         ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue> & rSequence );

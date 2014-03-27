@@ -1257,7 +1257,7 @@ void ODBExport::_ExportContent()
 
 void ODBExport::_ExportMasterStyles()
 {
-    GetPageExport()->exportMasterStyles( sal_True );
+    GetPageExport()->exportMasterStyles( true );
 }
 
 void ODBExport::_ExportAutoStyles()

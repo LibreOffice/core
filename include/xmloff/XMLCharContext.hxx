@@ -41,7 +41,7 @@ public:
             const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_Unicode c,
-            sal_Bool bCount );
+            bool bCount );
     XMLCharContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,

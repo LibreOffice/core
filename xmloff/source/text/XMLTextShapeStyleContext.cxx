@@ -128,7 +128,7 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
     {
           if( IsXMLToken( rValue, XML_TRUE ) )
-            bAutoUpdate = sal_True;
+            bAutoUpdate = true;
     }
     else
     {
@@ -142,11 +142,11 @@ XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-        sal_Bool /*bDefaultStyle*/ ) :
+        bool /*bDefaultStyle*/ ) :
     XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
                           nFamily ),
     sIsAutoUpdate( "IsAutoUpdate" ),
-    bAutoUpdate( sal_False )
+    bAutoUpdate( false )
 {
 }
 

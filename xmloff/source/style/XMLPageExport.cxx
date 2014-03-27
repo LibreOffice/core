@@ -40,7 +40,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-sal_Bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
+bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
 {
     for( ::std::vector< XMLPageExportNameEntry >::const_iterator pEntry = aNameVector.begin();
             pEntry != aNameVector.end(); ++pEntry )
@@ -48,10 +48,10 @@ sal_Bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString
         if( pEntry->sStyleName == rStyleName )
         {
             rPMName = pEntry->sPageMasterName;
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void XMLPageExport::collectPageMasterAutoStyle(
@@ -79,9 +79,9 @@ void XMLPageExport::exportMasterPageContent(
 
 }
 
-sal_Bool XMLPageExport::exportStyle(
+bool XMLPageExport::exportStyle(
             const Reference< XStyle >& rStyle,
-            sal_Bool bAutoStyles )
+            bool bAutoStyles )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -92,7 +92,7 @@ sal_Bool XMLPageExport::exportStyle(
     {
         Any aAny = xPropSet->getPropertyValue( sIsPhysical );
         if( !*(sal_Bool *)aAny.getValue() )
-            return sal_False;
+            return false;
     }
 
     if( bAutoStyles )
@@ -146,7 +146,7 @@ sal_Bool XMLPageExport::exportStyle(
         exportMasterPageContent( xPropSet, false );
     }
 
-    return sal_True;
+    return true;
 }
 
 XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
@@ -192,7 +192,7 @@ XMLPageExport::~XMLPageExport()
 {
 }
 
-void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
+void XMLPageExport::exportStyles( bool bUsed, bool bAutoStyles )
 {
     if( xPageStyles.is() )
     {

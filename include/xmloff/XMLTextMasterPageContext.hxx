@@ -39,18 +39,18 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 
     ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > xStyle;
 
-    sal_Bool bInsertHeader;
-    sal_Bool bInsertFooter;
-    sal_Bool bInsertHeaderLeft;
-    sal_Bool bInsertFooterLeft;
-    sal_Bool bInsertHeaderFirst;
-    sal_Bool bInsertFooterFirst;
-    sal_Bool bHeaderInserted;
-    sal_Bool bFooterInserted;
-    sal_Bool bHeaderLeftInserted;
-    sal_Bool bFooterLeftInserted;
-    sal_Bool bHeaderFirstInserted;
-    sal_Bool bFooterFirstInserted;
+    bool bInsertHeader;
+    bool bInsertFooter;
+    bool bInsertHeaderLeft;
+    bool bInsertFooterLeft;
+    bool bInsertHeaderFirst;
+    bool bInsertFooterFirst;
+    bool bHeaderInserted;
+    bool bFooterInserted;
+    bool bHeaderLeftInserted;
+    bool bFooterLeftInserted;
+    bool bHeaderFirstInserted;
+    bool bFooterFirstInserted;
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference <
         ::com::sun::star::style::XStyle > Create();
@@ -65,7 +65,7 @@ public:
             const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            sal_Bool bOverwrite );
+            bool bOverwrite );
     virtual ~XMLTextMasterPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(

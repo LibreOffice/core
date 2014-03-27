@@ -192,7 +192,7 @@ void SwXMLExport::_ExportAutoStyles()
 
     // exported in _ExportMasterStyles
     if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
-        GetPageExport()->collectAutoStyles( sal_False );
+        GetPageExport()->collectAutoStyles( false );
 
     // if we don't export styles (i.e. in content stream only, but not
     // in single-stream case), then we can save ourselves a bit of
@@ -244,7 +244,7 @@ XMLPageExport* SwXMLExport::CreatePageExport()
 void SwXMLExport::_ExportMasterStyles()
 {
     // export master styles
-    GetPageExport()->exportMasterStyles( sal_False );
+    GetPageExport()->exportMasterStyles( false );
 }
 
 class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP

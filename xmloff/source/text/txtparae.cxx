@@ -3397,7 +3397,7 @@ void XMLTextParagraphExport::exportTextRange(
             if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
             {
                 Reference< XNameReplace > xName( xPropSet->getPropertyValue( sHyperLinkEvents ), uno::UNO_QUERY );
-                GetExport().GetEventExport().Export( xName, sal_False );
+                GetExport().GetEventExport().Export( xName, false );
             }
 
             exportTextRangeSpan( rTextRange, xPropSet, xPropSetInfo, bIsUICharStyle, bHasAutoStyle, sStyle, rPrevCharIsSpace, openFieldMark );

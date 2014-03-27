@@ -25,9 +25,9 @@
 
 class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext : public XMLShapeStyleContext
 {
-    const OUString       sIsAutoUpdate;
+    const OUString        sIsAutoUpdate;
 
-    sal_Bool    bAutoUpdate : 1;
+    bool                  bAutoUpdate : 1;
 
     SvXMLImportContextRef xEventContext;
 
@@ -46,7 +46,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-            sal_Bool bDefaultStyle = sal_False );
+            bool bDefaultStyle = false );
     virtual ~XMLTextShapeStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -54,7 +54,7 @@ public:
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    sal_Bool IsAutoUpdate() const { return bAutoUpdate; }
+    bool IsAutoUpdate() const { return bAutoUpdate; }
 
     virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
 

@@ -185,14 +185,14 @@ void XMLSettingsExportHelper::exportBool(const bool bValue, const OUString& rNam
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BOOLEAN );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUString sValue;
     if (bValue)
         sValue = GetXMLToken(XML_TRUE);
     else
         sValue = GetXMLToken(XML_FALSE);
     m_rContext.Characters( sValue );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const OUString& rName) const
@@ -208,11 +208,11 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const OUString
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUStringBuffer sBuffer;
 	::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const OUString& rName) const
@@ -220,11 +220,11 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const OUString& 
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_INT );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUStringBuffer sBuffer;
 	::sax::Converter::convertNumber(sBuffer, nValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const OUString& rName) const
@@ -232,10 +232,10 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const OUString&
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_LONG );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUString sValue(OUString::number(nValue));
     m_rContext.Characters( sValue );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportDouble(const double fValue, const OUString& rName) const
@@ -243,11 +243,11 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const OUString& 
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DOUBLE );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     OUStringBuffer sBuffer;
 	::sax::Converter::convertDouble(sBuffer, fValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportString(const OUString& sValue, const OUString& rName) const
@@ -255,10 +255,10 @@ void XMLSettingsExportHelper::exportString(const OUString& sValue, const OUStrin
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_STRING );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     if (!sValue.isEmpty())
         m_rContext.Characters( sValue );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const OUString& rName) const
@@ -268,9 +268,9 @@ void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const
     m_rContext.AddAttribute( XML_TYPE, XML_DATETIME );
     OUStringBuffer sBuffer;
     ::sax::Converter::convertDateTime(sBuffer, aValue, 0);
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     m_rContext.Characters( sBuffer.makeStringAndClear() );
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportSequencePropertyValue(
@@ -282,10 +282,10 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
     if(nLength)
     {
         m_rContext.AddAttribute( XML_NAME, rName );
-        m_rContext.StartElement( XML_CONFIG_ITEM_SET, sal_True );
+        m_rContext.StartElement( XML_CONFIG_ITEM_SET, true );
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
-        m_rContext.EndElement( sal_True );
+        m_rContext.EndElement( true );
     }
 }
 void XMLSettingsExportHelper::exportSymbolDescriptors(
@@ -348,14 +348,14 @@ void XMLSettingsExportHelper::exportbase64Binary(
     sal_Int32 nLength(aProps.getLength());
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BASE64BINARY );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
+    m_rContext.StartElement( XML_CONFIG_ITEM, true );
     if(nLength)
     {
         OUStringBuffer sBuffer;
 		::sax::Converter::encodeBase64(sBuffer, aProps);
         m_rContext.Characters( sBuffer.makeStringAndClear() );
     }
-    m_rContext.EndElement( sal_False );
+    m_rContext.EndElement( false );
 }
 
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
@@ -370,10 +370,10 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
     {
         if (bNameAccess)
             m_rContext.AddAttribute( XML_NAME, rName );
-        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_ENTRY, sal_True );
+        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_ENTRY, true );
         for (sal_Int32 i = 0; i < nLength; i++)
             CallTypeFunction(aProps[i].Value, aProps[i].Name);
-        m_rContext.EndElement( sal_True );
+        m_rContext.EndElement( true );
     }
 }
 
@@ -387,11 +387,11 @@ void XMLSettingsExportHelper::exportNameAccess(
     if(aNamed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
-        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED, sal_True );
+        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED, true );
         uno::Sequence< OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
             exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], true);
-        m_rContext.EndElement( sal_True );
+        m_rContext.EndElement( true );
     }
 }
 
@@ -406,13 +406,13 @@ void XMLSettingsExportHelper::exportIndexAccess(
     if(aIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
-        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_INDEXED, sal_True );
+        m_rContext.StartElement( XML_CONFIG_ITEM_MAP_INDEXED, true );
         sal_Int32 nCount = aIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             exportMapEntry(aIndexed->getByIndex(i), sEmpty, false);
         }
-        m_rContext.EndElement( sal_True );
+        m_rContext.EndElement( true );
     }
 }
 

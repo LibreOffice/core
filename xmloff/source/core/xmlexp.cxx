@@ -156,8 +156,8 @@ public:
                                   enum ::xmloff::token::XMLTokenEnum i_eValue ) SAL_OVERRIDE;
 
     virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                  const sal_Bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
-    virtual void    EndElement(   const sal_Bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
+                                  const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
+    virtual void    EndElement(   const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
 
     virtual void    Characters( const OUString& i_rCharacters ) SAL_OVERRIDE;
 
@@ -178,14 +178,14 @@ void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eN
     m_rExport.AddAttribute( XML_NAMESPACE_CONFIG, i_eName, i_eValue );
 }
 
-void SettingsExportFacade::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace )
+void SettingsExportFacade::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const bool i_bIgnoreWhitespace )
 {
     const OUString sElementName( m_rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_CONFIG, GetXMLToken( i_eName ) ) );
     m_rExport.StartElement( sElementName, i_bIgnoreWhitespace );
     m_aElements.push( sElementName );
 }
 
-void SettingsExportFacade::EndElement( const sal_Bool i_bIgnoreWhitespace )
+void SettingsExportFacade::EndElement( const bool i_bIgnoreWhitespace )
 {
     const OUString sElementName( m_aElements.top() );
     m_rExport.EndElement( sElementName, i_bIgnoreWhitespace );
@@ -1570,7 +1570,7 @@ void SvXMLExport::_ExportScripts()
 
     // export document events
     Reference< document::XEventsSupplier > xEvents( GetModel(), UNO_QUERY );
-    GetEventExport().Export( xEvents, sal_True );
+    GetEventExport().Export( xEvents, true );
 }
 
 void SvXMLExport::_ExportFontDecls()

@@ -121,7 +121,7 @@ void XMLTextParagraphExport::exportTextFootnote(
                 Any a = rPropSet->getPropertyValue(sHyperLinkEvents);
                 Reference<XNameReplace> xName;
                 a >>= xName;
-                GetExport().GetEventExport().Export(xName, sal_False);
+                GetExport().GetEventExport().Export(xName, false);
             }
         }
 

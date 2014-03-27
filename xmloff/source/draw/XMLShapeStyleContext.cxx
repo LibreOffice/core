@@ -51,7 +51,7 @@ XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
 :   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
-    m_bIsNumRuleAlreadyConverted( sal_False )
+    m_bIsNumRuleAlreadyConverted( false )
 {
 }
 
@@ -125,7 +125,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 {
     if( !m_bIsNumRuleAlreadyConverted )
     {
-        m_bIsNumRuleAlreadyConverted = sal_True;
+        m_bIsNumRuleAlreadyConverted = true;
 
         // for compatibility to beta files, search for CTF_SD_NUMBERINGRULES_NAME to
         // import numbering rules from the style:properties element

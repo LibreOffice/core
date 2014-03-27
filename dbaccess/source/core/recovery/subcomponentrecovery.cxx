@@ -196,8 +196,8 @@ namespace dbaccess
     public:
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue ) SAL_OVERRIDE;
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, enum ::xmloff::token::XMLTokenEnum i_eValue ) SAL_OVERRIDE;
-        virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
-        virtual void    EndElement  ( const sal_Bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
+        virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
+        virtual void    EndElement  ( const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
         virtual void    Characters( const OUString& i_rCharacters ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
@@ -225,7 +225,7 @@ namespace dbaccess
         m_rDelegator.addAttribute( impl_prefix( i_eName ), ::xmloff::token::GetXMLToken( i_eValue ) );
     }
 
-    void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace )
+    void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
             m_rDelegator.ignorableWhitespace( " " );
@@ -233,7 +233,7 @@ namespace dbaccess
         m_rDelegator.startElement( impl_prefix( i_eName ) );
     }
 
-    void SettingsExportContext::EndElement( const sal_Bool i_bIgnoreWhitespace )
+    void SettingsExportContext::EndElement( const bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
             m_rDelegator.ignorableWhitespace( " " );

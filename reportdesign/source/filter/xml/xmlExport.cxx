@@ -1293,7 +1293,7 @@ void ORptExport::_ExportContent()
 
 void ORptExport::_ExportMasterStyles()
 {
-    GetPageExport()->exportMasterStyles( sal_True );
+    GetPageExport()->exportMasterStyles( true );
 }
 
 void ORptExport::collectComponentStyles()
@@ -1356,7 +1356,7 @@ void ORptExport::_ExportAutoStyles()
     }
     // exported in _ExportMasterStyles
     if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
-        GetPageExport()->collectAutoStyles( sal_False );
+        GetPageExport()->collectAutoStyles( false );
     if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
         GetPageExport()->exportAutoStyles();
 }

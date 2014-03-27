@@ -61,7 +61,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
         ::com::sun::star::container::XNameAccess > xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > aNameVector;
-    SAL_DLLPRIVATE sal_Bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
+    SAL_DLLPRIVATE bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
 
     UniReference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
     UniReference < XMLPropertySetMapper > xPageMasterPropSetMapper;
@@ -81,20 +81,20 @@ protected:
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
                  bool bAutoStyles );
 
-    sal_Bool exportStyle(
+    bool exportStyle(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::style::XStyle >& rStyle,
-                sal_Bool bAutoStyles );
+                bool bAutoStyles );
 
-    void exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles );
+    void exportStyles( bool bUsed, bool bAutoStyles );
 
 public:
     XMLPageExport( SvXMLExport& rExp );
     ~XMLPageExport();
 
-    void    collectAutoStyles( sal_Bool bUsed )     { exportStyles( bUsed, sal_True ); }
+    void    collectAutoStyles( bool bUsed )     { exportStyles( bUsed, true ); }
     void    exportAutoStyles();
-    void    exportMasterStyles( sal_Bool bUsed )    { exportStyles( bUsed, sal_False ); }
+    void    exportMasterStyles( bool bUsed )    { exportStyles( bUsed, false ); }
 
     //text grid enhancement for better CJK support
     void exportDefaultStyle();

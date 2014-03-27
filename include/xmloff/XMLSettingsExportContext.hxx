@@ -41,8 +41,8 @@ namespace xmloff
                                       enum ::xmloff::token::XMLTokenEnum i_eValue ) = 0;
 
         virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                      const sal_Bool i_bIgnoreWhitespace ) = 0;
-        virtual void    EndElement(   const sal_Bool i_bIgnoreWhitespace ) = 0;
+                                      const bool i_bIgnoreWhitespace ) = 0;
+        virtual void    EndElement(   const bool i_bIgnoreWhitespace ) = 0;
 
         virtual void    Characters( const OUString& i_rCharacters ) = 0;
 

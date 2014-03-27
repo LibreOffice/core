@@ -375,7 +375,7 @@ XMLFontStylesContext::~XMLFontStylesContext()
     delete pFontStyleAttrTokenMap;
 }
 
-sal_Bool XMLFontStylesContext::FillProperties( const OUString& rName,
+bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
                          sal_Int32 nStyleNameIdx,

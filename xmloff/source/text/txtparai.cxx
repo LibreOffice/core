@@ -74,7 +74,7 @@ XMLCharContext::XMLCharContext(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Unicode c,
-        sal_Bool bCount ) :
+        bool bCount ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_nControl(0)
     ,m_nCount(1)
@@ -1585,7 +1585,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_TAB_STOP:
         pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
-                                               0x0009, sal_False );
+                                               0x0009, false );
         rIgnoreLeadingSpace = sal_False;
         break;
 
@@ -1599,7 +1599,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_S:
         pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
-                                               0x0020, sal_True );
+                                               0x0020, true );
         break;
 
     case XML_TOK_TEXT_HYPERLINK:

@@ -192,7 +192,7 @@ void XMLAutoTextEventExport::exportEvents()
 {
     DBG_ASSERT(hasEvents(), "no events to export!");
 
-    GetEventExport().Export(xEvents, sal_True);
+    GetEventExport().Export(xEvents, true);
 }
 
 
