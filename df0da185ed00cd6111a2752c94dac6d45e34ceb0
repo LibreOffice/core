@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_7d0e3f36",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-03-27T15:36:51Z",
+      "side": 1,
+      "message": "Yes, of course, but these lines are not meant to be included in the final patch.\n\n_If_ you think the extra information provided by the lines is useful, I want to make separate patch for this, which will be properly indented ;-)",
+      "parentUuid": "da86d52c_52124a63",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_d2055a15",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-03-27T15:19:18Z",
       "side": 1,
       "message": "This should also check if it is a valid character (either \u00270\u0027 or \u00271\u0027 are allowed) and if not generate an error (errIllegalArgument).",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_9d121357",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-03-27T15:36:51Z",
+      "side": 1,
+      "message": "Good point; will correct this in next patch set.",
+      "parentUuid": "da86d52c_d2055a15",
       "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_bd0fd72d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-03-27T15:36:51Z",
+      "side": 1,
+      "message": "Well, the string can be 1 or 2 characters too (the else-part), but I will add a proper check for this in the next patch set.",
+      "parentUuid": "da86d52c_f2025e0a",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_1dff0303",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_dd1c8b6d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-03-27T15:36:51Z",
+      "side": 1,
+      "message": "Good point again; I will extend lcl_GetWeekendMask to something like lcl_GetWeekendAndHolidayMasks.",
+      "parentUuid": "da86d52c_1dff0303",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_3d04c714",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2014-03-27T15:19:18Z",
       "side": 1,
       "message": "Good question.. I don\u0027t know yet. Probably have to try saving a document in LibO and open in Excel.",
+      "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_fd194f7a",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-03-27T15:36:51Z",
+      "side": 1,
+      "message": "I hope here lies the cause for the problem with exporting to xlsx and reopening..",
+      "parentUuid": "da86d52c_3d04c714",
       "revId": "df0da185ed00cd6111a2752c94dac6d45e34ceb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
