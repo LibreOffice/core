@@ -4953,7 +4953,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         aBuffer.append( pPrev, pIt - pPrev );
 
     // If bullet char is empty, set lvlText as empty
-    if ( aText.equals ( OUString(sal_Unicode(0)) ) )
+    OUString sNumberingType= OStringToOUString(aFmt, RTL_TEXTENCODING_UTF8);
+    if ( aText.equals ( OUString(sal_Unicode(0)) ) && ("bullet" == sNumberingType) )
     {
         m_pSerializer->singleElementNS( XML_w, XML_lvlText, FSNS( XML_w, XML_val ), "", FSEND );
     }
