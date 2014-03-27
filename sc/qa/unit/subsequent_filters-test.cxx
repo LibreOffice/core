@@ -465,7 +465,7 @@ void ScFiltersTest::testFunctionsExcel2010()
         { 40, true  },
         { 41, true  },
         { 42, true  },
-        { 43, false },
+        { 43, false }, // fdo73147 to be set to true
         { 44, true  },
         { 45, true  },
         { 46, true  },
@@ -494,7 +494,7 @@ void ScFiltersTest::testFunctionsExcel2010()
         { 69, true  },
         { 70, true  },
         { 71, true  },
-        { 72, false },
+        { 72, false }, // fdo73147 to be set to true
         { 73, true  }
     };
 
@@ -505,12 +505,24 @@ void ScFiltersTest::testFunctionsExcel2010()
             // Column A is description, B is formula, C is Excel result, D is
             // comparison.
             SCROW nRow = aTests[i].nRow - 1;    // 0-based
+
+            OString aStr = OString::number( aTests[i].nRow) +
+                ", function name=[ " +
+                OUStringToOString( pDoc->GetString( ScAddress( 0, nRow, 0)), RTL_TEXTENCODING_UTF8 ) +
+                " ], result=" +
+                OString::number( pDoc->GetValue( ScAddress( 1, nRow, 0)) ) +
+                ", expected=" +
+                OString::number( pDoc->GetValue( ScAddress( 2, nRow, 0)) );
+
+            ScFormulaCell* pFC = pDoc->GetFormulaCell( ScAddress( 1, nRow, 0) );
+            if ( pFC && pFC->GetErrCode() != 0 )
+                aStr += ", error code =" + OString::number( pFC->GetErrCode() );
+
             CPPUNIT_ASSERT_MESSAGE( OString( "Expected a formula cell without error at row " +
-                    OString::number( aTests[i].nRow)).getStr(),
-                    isFormulaWithoutError( *pDoc, ScAddress( 1, nRow, 0)));
+                    aStr ).getStr(), isFormulaWithoutError( *pDoc, ScAddress( 1, nRow, 0)));
             CPPUNIT_ASSERT_MESSAGE( OString( "Expected a TRUE value at row " +
-                    OString::number( aTests[i].nRow)).getStr(),
-                    0 != pDoc->GetValue( ScAddress( 3, nRow, 0)));
+                    aStr ).getStr(), 0 != pDoc->GetValue( ScAddress( 3, nRow, 0)));
+
         }
     }
 
