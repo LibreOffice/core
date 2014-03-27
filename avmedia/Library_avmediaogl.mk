@@ -13,6 +13,8 @@ $(eval $(call gb_Library_set_componentfile,avmediaogl,avmedia/source/opengl/avme
 
 $(eval $(call gb_Library_use_sdk_api,avmediaogl))
 
+$(eval $(call gb_Library_use_external,avmediaogl,boost_headers))
+
 $(eval $(call gb_Library_use_libraries,avmediaogl,\
     comphelper \
     cppu \
