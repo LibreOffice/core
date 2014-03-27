@@ -66,6 +66,7 @@ public:
     void testN862510_1();
     void testN862510_2();
     void testN862510_3();
+    void testFdo71961();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testN862510_1);
     CPPUNIT_TEST(testN862510_2);
     CPPUNIT_TEST(testN862510_3);
+    CPPUNIT_TEST(testFdo71961);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -623,6 +625,39 @@ void SdFiltersTest::testStrictOOXML()
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+}
+
+void SdFiltersTest::testFdo71961()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71961.odp"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // Export to .pptx changes all text frames to custom shape objects, which obey TextWordWrap property
+    // (which is false for text frames otherwise and is ignored). Check that frames that should wrap still do.
+    SdrObjCustomShape *pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 1 ));
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( OUString( "Text to be always wrapped" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+
+    pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 2 ));
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape non-wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    CPPUNIT_ASSERT_EQUAL( false, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+
+    pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 3 ));
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
