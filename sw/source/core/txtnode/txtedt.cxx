@@ -1983,14 +1983,14 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     const ModelToViewHelper aConversionMap(*this, EXPANDFIELDS | EXPANDFOOTNOTE | HIDEINVISIBLE | HIDEREDLINED);
     OUString aExpandText = aConversionMap.getViewText();
 
-    // map start and end points onto the ConversionMap
-    const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
-    const sal_Int32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
-
     if (aExpandText.isEmpty() && !bCountNumbering)
     {
         return false;
     }
+
+    // map start and end points onto the ConversionMap
+    const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
+    const sal_Int32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
 
     //do the count
     // all counts exclude hidden paras and hidden+redlined within para

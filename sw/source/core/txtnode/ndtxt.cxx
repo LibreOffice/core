@@ -3109,10 +3109,16 @@ OUString SwTxtNode::GetExpandTxt(  const sal_Int32 nIdx,
                                    const bool bWithFtn ) const
 
 {
-    OUStringBuffer aTxt(
-        (nLen == -1) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
-    sal_Int32 nTxtStt = nIdx;
-    Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true, bWithFtn );
+    sal_uInt16 eMode = EXPANDFIELDS;
+    if (bWithFtn)
+        eMode |= EXPANDFOOTNOTE;
+
+    ModelToViewHelper aConversionMap(*this, eMode);
+    OUString aExpandText = aConversionMap.getViewText();
+    const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nIdx );
+    sal_Int32 nEnd = nLen == -1 ? GetTxt().getLength() : nIdx + nLen;
+    const sal_Int32 nExpandEnd = aConversionMap.ConvertToViewPosition( nEnd );
+    OUStringBuffer aTxt(aExpandText.copy(nExpandBegin, nExpandEnd-nExpandBegin));
 
     // remove dummy characters of Input Fields
     comphelper::string::remove(aTxt, CH_TXT_ATR_INPUTFIELDSTART);
