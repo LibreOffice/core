@@ -1538,6 +1538,7 @@ namespace xmloff { namespace token {
         TOKEN( "rotation-align",                  XML_ROTATION_ALIGN ),
         TOKEN( "rotation-angle",                  XML_ROTATION_ANGLE ),
         TOKEN( "round",                           XML_ROUND ),
+        TOKEN( "rounded-edge",                    XML_ROUNDED_EDGE ),
         TOKEN( "row",                             XML_ROW ),
         TOKEN( "row-height",                      XML_ROW_HEIGHT ),
         TOKEN( "row-number",                      XML_ROW_NUMBER ),

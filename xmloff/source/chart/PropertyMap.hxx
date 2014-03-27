@@ -143,6 +143,9 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY_ODF_EXT( "BuiltInUnit", LO_EXT, XML_CHART_DUNITS_BUILTINUNIT, XML_TYPE_STRING ),
     MAP_ENTRY_ODF_EXT( "ExternalData", LO_EXT, XML_EXTERNALDATA, XML_TYPE_STRING),
 
+    // OpenGL 3D chart flags
+    MAP_ENTRY_ODF_EXT( "RoundedEdge", LO_EXT, XML_ROUNDED_EDGE, XML_TYPE_BOOL),
+
     MAP_ENTRY( "ScaleText", CHART, XML_SCALE_TEXT, XML_TYPE_BOOL ),
 
     // spline settings
