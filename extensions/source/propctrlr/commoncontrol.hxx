@@ -205,7 +205,8 @@ namespace pcr
         inline virtual void SAL_CALL disposing();
 
         // IModifyListener
-        inline virtual void modified() SAL_OVERRIDE;
+        virtual void modified() SAL_OVERRIDE
+        { m_aImplControl.setModified(); }
 
         /// returns a typed pointer to our control window
               WindowType* getTypedControlWindow()       { return static_cast< WindowType* >      ( m_aImplControl.getVclControlWindow() ); }
@@ -305,13 +306,6 @@ namespace pcr
     inline void SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::disposing()
     {
         m_aImplControl.dispose();
-    }
-
-
-    template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
-    inline void CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::modified()
-    {
-        m_aImplControl.setModified();
     }
 
 
