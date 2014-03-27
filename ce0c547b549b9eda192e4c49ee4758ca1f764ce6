@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_7d5c7f26",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T20:10:52Z",
+      "side": 1,
+      "message": "nMax doesn\u0027t need to be an extra parameter, the caller can obtain the size from the nSortArray vector out parameter.\n\nBtw, when passing parameters by reference we have the convention to prefix the variable name with r, so it would be rNullDate, rSortArray and rWeekendDays. And as a completely useless nitpick I\u0027d use pbWeekendMask to clarify that it\u0027s a pointer and not a bool ;-) or better pass the array by reference and even better include the size as it known and fixed so the compiler can check accesses like bWeekendMask[ MONDAY ]",
+      "revId": "ce0c547b549b9eda192e4c49ee4758ca1f764ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_5d57bb02",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T20:10:52Z",
+      "side": 1,
+      "message": "Attention, MustHaveParamCount() already pushes an error if the argument count doesn\u0027t match the prerequisites (which is why all functions can bail out early in that case withtou pushing anything). This must not be called in a common function that otherwise only returns a value but does not push anything.",
+      "revId": "ce0c547b549b9eda192e4c49ee4758ca1f764ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_bd3d17be",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T20:10:52Z",
+      "side": 1,
+      "message": "Use prefix operator++ instead of postfix operator++, so\n\n ++Date1;\n\nThat at least avoids creating a temporary date and returning that and discarding it again.\n\nPerformance-wise I\u0027m not convinced of this loop because even with ++Date1 internally it converts every increment to year/month/day to check roll-overs and things, and obtaining the day of week for each date isn\u0027t the fastest either. I\u0027d rather initially convert all involved dates to date serial numbers and operate on those, obtaining the day of week of the start date once so all others are just modulo 7 plus offset to check weekend days. The holidays then just need to be checked against weekends and can be subtracted at once without having to check each date if it is a holiday. Similar for the weekend days, for whole weeks in the date range just subtract weeks*weekend days and check only for partial begin/end weeks if there are weekend days.\n\nHowever, this can be done in a follow-up patch, no need to let this hold up patch submission.",
+      "revId": "ce0c547b549b9eda192e4c49ee4758ca1f764ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_9d405337",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T20:10:52Z",
+      "side": 1,
+      "message": "Why is nRef sal_Int16 instead of size_t? (in which case a check for nMax\u003e0 would be needed)",
+      "revId": "ce0c547b549b9eda192e4c49ee4758ca1f764ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_dd4acb54",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-27T20:10:52Z",
+      "side": 1,
+      "message": "Also here for all involved loops use prefix instead of postfix operator++ and operator--\n\nSame performance considerations for the entire loops as in ScNetWorkdays_MS() apply, but this case is a little more hairy because the interval isn\u0027t known but to be computed. The general approach to operate with serial date numbers instead of dates would be applicable though, I think.",
+      "revId": "ce0c547b549b9eda192e4c49ee4758ca1f764ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
