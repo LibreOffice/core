@@ -710,13 +710,19 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
         insertRowProps(pPropMap);
     }
-    else if (pCellWidths->size() > 0 && m_nLayoutType == NS_ooxml::LN_Value_wordprocessingml_ST_TblLayout_fixed)
+    else if ( pCellWidths->size() > 0 &&
+               ( m_nLayoutType == NS_ooxml::LN_Value_wordprocessingml_ST_TblLayout_fixed
+                 || pCellWidths->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) )
+             )
     {
         // If we're here, then the number of cells does not equal to the amount
         // defined by the grid, even after taking care of
         // gridSpan/gridBefore/gridAfter. Handle this by ignoring the grid and
         // providing the separators based on the provided cell widths, as long
-        // as we have a fixed layout.
+        // as we have a fixed layout;
+        // On the other hand even if the layout is not fixed, but the cell widths
+        // provided equal the total number of cells, and there are no after/before cells
+        // then use the cell widths to calculate the column separators.
         uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nSum = 0;

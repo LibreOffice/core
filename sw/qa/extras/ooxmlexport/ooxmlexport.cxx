@@ -2983,6 +2983,22 @@ DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
     //            "xmlns:ns0='http://purl.org/dc/elements/1.1/' xmlns:ns1='http://schemas.openxmlformats.org/package/2006/metadata/core-properties'");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
+{
+    /*
+     * In the test file gridCol had only one value for entire table width
+     * while there are two cells in a table row.
+     * So the table was not imported with the correct cell widths
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    // there is only one table in the test file
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[1]", "w", "1601");
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
+}
 
 #endif
 
