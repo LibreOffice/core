@@ -63,23 +63,23 @@ public:
 public:
 
     // SalBitmap methods
-    bool            Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    bool            Create( const SalBitmap& rSalBmp );
-    bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics );
-    bool            Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount );
+    bool            Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal ) SAL_OVERRIDE;
+    bool            Create( const SalBitmap& rSalBmp ) SAL_OVERRIDE;
+    bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics ) SAL_OVERRIDE;
+    bool            Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount ) SAL_OVERRIDE;
     virtual bool    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                             Size& rSize,
-                            bool bMask = false );
+                            bool bMask = false ) SAL_OVERRIDE;
 
-    void            Destroy();
+    void            Destroy() SAL_OVERRIDE;
 
-    Size            GetSize() const;
-    sal_uInt16          GetBitCount() const;
+    Size            GetSize() const SAL_OVERRIDE;
+    sal_uInt16          GetBitCount() const SAL_OVERRIDE;
 
-    BitmapBuffer   *AcquireBuffer( bool bReadOnly );
-    void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
+    BitmapBuffer   *AcquireBuffer( bool bReadOnly ) SAL_OVERRIDE;
+    void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
 
-    bool            GetSystemData( BitmapSystemData& rData );
+    bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
 private:
     // quartz helper

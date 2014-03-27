@@ -58,10 +58,10 @@ public:
     AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice();
 
-    virtual SalGraphics*            AcquireGraphics();
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual bool                    SetSize( long nNewDX, long nNewDY );
-    virtual void                       GetSize( long& rWidth, long& rHeight );
+    virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE;
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual bool                    SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual void                       GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALVD_H

@@ -33,8 +33,8 @@ class AquaSalTimer : public SalTimer
     AquaSalTimer();
     virtual ~AquaSalTimer();
 
-    void Start( sal_uLong nMS );
-    void Stop();
+    void Start( sal_uLong nMS ) SAL_OVERRIDE;
+    void Stop() SAL_OVERRIDE;
 
     static void handleStartTimerEvent( NSEvent* pEvent );
 
