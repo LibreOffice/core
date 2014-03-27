@@ -65,7 +65,7 @@ namespace dbaui
 
         virtual ~TExportColumnFindFunctor() {}
 
-        inline bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
+        bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
         {
             return m_pColumns->find(_sColumnName) != m_pColumns->end();
         }
@@ -85,7 +85,7 @@ namespace dbaui
 
         virtual ~TMultiListBoxEntryFindFunctor() {}
 
-        inline bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
+        bool operator()(const OUString& _sColumnName) const SAL_OVERRIDE
         {
             return ::std::find_if(m_pVector->begin(),m_pVector->end(),
                 ::std::bind2nd(m_aCase, _sColumnName)) != m_pVector->end();
