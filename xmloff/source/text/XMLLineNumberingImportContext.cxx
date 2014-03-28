@@ -210,7 +210,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
     }
 }
 
-void XMLLineNumberingImportContext::CreateAndInsert(sal_Bool)
+void XMLLineNumberingImportContext::CreateAndInsert(bool)
 {
     // insert and block mode is handled in insertStyleFamily
 

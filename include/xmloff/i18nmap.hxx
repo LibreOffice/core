@@ -36,13 +36,13 @@ public:
     {
     }
 
-    sal_Bool operator==( const SvI18NMapEntry_Key& r ) const
+    bool operator==( const SvI18NMapEntry_Key& r ) const
     {
         return nKind == r.nKind &&
                aName == r.aName;
     }
 
-    sal_Bool operator<( const SvI18NMapEntry_Key& r ) const
+    bool operator<( const SvI18NMapEntry_Key& r ) const
     {
         return nKind < r.nKind ||
                ( nKind == r.nKind &&

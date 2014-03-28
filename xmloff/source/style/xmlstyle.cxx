@@ -185,7 +185,7 @@ void SvXMLStyleContext::SetDefaults()
 {
 }
 
-void SvXMLStyleContext::CreateAndInsert( sal_Bool /*bOverwrite*/ )
+void SvXMLStyleContext::CreateAndInsert( bool /*bOverwrite*/ )
 {
 }
 
@@ -848,7 +848,7 @@ void SvXMLStylesContext::CopyAutoStylesToDoc()
             pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_PARAGRAPH  &&
             pStyle->GetFamily() != XML_STYLE_FAMILY_TABLE_CELL ) )
             continue;
-        pStyle->CreateAndInsert( sal_False );
+        pStyle->CreateAndInsert( false );
     }
 }
 

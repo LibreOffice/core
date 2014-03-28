@@ -2489,7 +2489,7 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        sal_uInt16 nPrefix)
 {
     OUString sQValue =
-        GetExport().GetNamespaceMap().GetQNameByKey( nValuePrefix, sValue, sal_False );
+        GetExport().GetNamespaceMap().GetQNameByKey( nValuePrefix, sValue, false );
     ProcessString( eName, sQValue, bOmitEmpty, nPrefix );
 }
 

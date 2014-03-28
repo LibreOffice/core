@@ -56,7 +56,7 @@ public:
 
     bool IsAutoUpdate() const { return bAutoUpdate; }
 
-    virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
+    virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
 
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 };

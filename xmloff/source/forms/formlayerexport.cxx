@@ -55,7 +55,7 @@ namespace xmloff
         m_pImpl = NULL;
     }
 
-    sal_Bool OFormLayerXMLExport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    bool OFormLayerXMLExport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         return m_pImpl->seekPage(_rxDrawPage);
     }

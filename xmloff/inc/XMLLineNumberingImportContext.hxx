@@ -102,7 +102,7 @@ protected:
         enum LineNumberingToken eToken,
         const OUString& sValue);
 
-    virtual void CreateAndInsert(sal_Bool bOverwrite) SAL_OVERRIDE;
+    virtual void CreateAndInsert(bool bOverwrite) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,

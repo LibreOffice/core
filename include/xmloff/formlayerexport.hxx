@@ -74,7 +74,7 @@ namespace xmloff
             @see getControlId
             @see examineForms
         */
-        sal_Bool seekPage(
+        bool seekPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
         /** get the id for the given control

@@ -432,7 +432,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         OUString sQValue =
             GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOW,
-                                                         sCond, sal_False );
+                                                         sCond, false );
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_CONDITION, sQValue);
         eDisplay = XML_CONDITION;
 

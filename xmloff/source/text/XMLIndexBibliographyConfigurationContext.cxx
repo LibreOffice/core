@@ -221,7 +221,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
                                                   xAttrList);
 }
 
-void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
+void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
 {
     // (code almost the same as export...)
 

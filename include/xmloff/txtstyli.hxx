@@ -92,7 +92,7 @@ public:
     const OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
     const OUString& GetDataStyleName() const { return sDataStyleName; }
 
-    virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
+    virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
     virtual void SetDefaults() SAL_OVERRIDE;
 

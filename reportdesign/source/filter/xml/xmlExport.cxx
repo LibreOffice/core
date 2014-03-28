@@ -846,7 +846,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             if ( nCellType == util::NumberFormat::TEXT )
                                 aHelper.SetNumberFormatAttributes(sEmpty, sEmpty);
                             else
-                                aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, sal_False);
+                                aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
                         }
                     }
                     SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_False);

@@ -66,7 +66,7 @@ public:
             const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily = 0,
-            sal_Bool bDefaultStyle=sal_False );
+            bool bDefaultStyle=false );
     virtual ~XMLPropStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -90,7 +90,7 @@ public:
 
     virtual void SetDefaults() SAL_OVERRIDE;
 
-    virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
+    virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 };
 

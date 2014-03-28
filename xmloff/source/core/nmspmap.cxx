@@ -189,7 +189,7 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
 
 OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                             const OUString& rLocalName,
-                            sal_Bool bCache) const
+                            bool bCache) const
 {
     // We always want to return at least the rLocalName...
 
@@ -271,7 +271,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
 sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName(
                             const OUString& rAttrName,
                             OUString *pLocalName,
-                            sal_Bool bCache) const
+                            bool bCache) const
 {
     return _GetKeyByAttrName( rAttrName, 0, pLocalName, 0, bCache );
 }
@@ -280,7 +280,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
                                             OUString *pNamespace,
-                                            sal_Bool bCache) const
+                                            bool bCache) const
 {
     sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
 
@@ -379,10 +379,10 @@ sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
     return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
 }
 
-sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix,
+bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix,
                                     const OUString& rName, sal_uInt16 nKey )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
@@ -392,7 +392,7 @@ sal_Bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPr
     if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
     {
         _Add( rPrefix, rName, nKey );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -442,16 +442,16 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
 }
 
-sal_Bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )
+bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )
 {
     // try OASIS + W3 URI normalization
-    sal_Bool bSuccess = NormalizeOasisURN( rName );
+    bool bSuccess = NormalizeOasisURN( rName );
     if( ! bSuccess )
         bSuccess = NormalizeW3URI( rName );
     return bSuccess;
 }
 
-sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
+bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
 {
     // check if URI matches:
     // http://www.w3.org/[0-9]*/[:letter:]*
@@ -459,7 +459,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
     // For the following WG/standards names:
     // - xforms
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     const OUString sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
     if( rName.startsWith( sURIPrefix ) )
     {
@@ -469,13 +469,13 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
         {
             // found W3 prefix, and xforms suffix
             rName = GetXMLToken( XML_N_XFORMS_1_0 );
-            bSuccess = sal_True;
+            bSuccess = true;
         }
     }
     return bSuccess;
 }
 
-sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
+bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
 {
     // #i38644#
     // we exported the wrong namespace for smil, so we correct this here on load
@@ -483,18 +483,18 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
     if( IsXMLToken( rName, ::xmloff::token::XML_N_SVG ) )
     {
         rName = GetXMLToken( ::xmloff::token::XML_N_SVG_COMPAT );
-        return sal_True;
+        return true;
     }
     else if( IsXMLToken( rName, ::xmloff::token::XML_N_FO ) )
     {
         rName = GetXMLToken( ::xmloff::token::XML_N_FO_COMPAT );
-        return sal_True;
+        return true;
     }
     else if( IsXMLToken( rName, ::xmloff::token::XML_N_SMIL ) ||
                IsXMLToken( rName, ::xmloff::token::XML_N_SMIL_OLD )  )
     {
         rName = GetXMLToken( ::xmloff::token::XML_N_SMIL_COMPAT );
-        return sal_True;
+        return true;
     }
 
 
@@ -507,45 +507,45 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
     // :urn:oasis:names:tc.*
     const OUString& rOasisURN = GetXMLToken( XML_URN_OASIS_NAMES_TC );
     if( !rName.startsWith( rOasisURN ) )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:.*
     sal_Int32 nPos = rOasisURN.getLength();
     if( nPos >= nNameLen || rName[nPos] != ':' )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:[^:]:.*
     sal_Int32 nTCIdStart = nPos+1;
     sal_Int32 nTCIdEnd = rName.indexOf( ':', nTCIdStart );
     if( -1 == nTCIdEnd )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns.*
     nPos = nTCIdEnd + 1;
     OUString sTmp( rName.copy( nPos ) );
     const OUString& rXMLNS = GetXMLToken( XML_XMLNS );
     if( !sTmp.startsWith( rXMLNS ) )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:.*
     nPos += rXMLNS.getLength();
     if( nPos >= nNameLen || rName[nPos] != ':' )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:.*
     nPos = rName.indexOf( ':', nPos+1 );
     if( -1 == nPos )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:[^:][^:][^:][^:]*
     sal_Int32 nVersionStart = nPos+1;
     if( nVersionStart+2 >= nNameLen ||
         -1 != rName.indexOf( ':', nVersionStart ) )
-        return sal_False;
+        return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:1\.[^:][^:]*
     if( rName[nVersionStart] != '1' || rName[nVersionStart+1] != '.' )
-        return sal_False;
+        return false;
 
     // replace [tcid] with current TCID and version with current version.
 
@@ -554,7 +554,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
             rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) +
             GetXMLToken( XML_1_0 );
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

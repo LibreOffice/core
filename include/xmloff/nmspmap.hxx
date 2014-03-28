@@ -52,8 +52,7 @@ public:
 
 struct OUStringEqFunc
 {
-    sal_Bool operator()( const OUString &r1,
-                         const OUString &r2) const
+    bool operator()( const OUString &r1, const OUString &r2) const
     {
         return r1 == r2;
     }
@@ -61,8 +60,7 @@ struct OUStringEqFunc
 
 struct uInt32lt
 {
-    sal_Bool operator()( const sal_uInt32 &r1,
-                         const sal_uInt32 &r2) const
+    bool operator()( const sal_uInt32 &r1, const sal_uInt32 &r2) const
     {
         return r1 < r2;
     }
@@ -116,7 +114,7 @@ public:
 
     OUString GetQNameByKey( sal_uInt16 nKey,
                            const OUString& rLocalName,
-                           sal_Bool bCache = sal_True) const;
+                           bool bCache = true) const;
 
     OUString GetAttrNameByKey( sal_uInt16 nKey ) const;
 
@@ -125,12 +123,12 @@ public:
                              OUString *pPrefix,
                              OUString *pLocalName,
                              OUString *pNamespace = 0,
-                             sal_Bool bCache = sal_True) const;
+                             bool bCache = true) const;
 
     /* This will replace the version with the unused 3rd default parameter */
     sal_uInt16 _GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pLocalName = 0,
-                             sal_Bool bCache = sal_True) const;
+                             bool bCache = true) const;
 
     sal_uInt16 GetFirstKey() const;
     sal_uInt16 GetNextKey( sal_uInt16 nOldKey ) const;
@@ -140,11 +138,11 @@ public:
        This might be replaced by a better interface later. */
     const NameSpaceHash& GetAllEntries() const { return aNameHash; }
 
-    static sal_Bool NormalizeOasisURN( OUString& rName );
-    static sal_Bool NormalizeW3URI( OUString& rName );
-    static sal_Bool NormalizeURI( OUString& rName );
+    static bool NormalizeOasisURN( OUString& rName );
+    static bool NormalizeW3URI( OUString& rName );
+    static bool NormalizeURI( OUString& rName );
 
-/* deprecated */ sal_Bool AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
+/* deprecated */ bool AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
                      const OUString& rName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
 /* deprecated */ sal_uInt16 GetIndexByKey( sal_uInt16 nKey ) const;
 /* deprecated */ sal_uInt16 GetIndexByPrefix( const OUString& rPrefix ) const;

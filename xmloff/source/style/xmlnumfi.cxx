@@ -1513,7 +1513,7 @@ sal_Int32 SvXMLNumFormatContext::GetKey()
     {
         // reset bRemoveAfterUse before CreateAndInsert, so AddKey is called without bRemoveAfterUse set
         bRemoveAfterUse = sal_False;
-        CreateAndInsert(sal_True);
+        CreateAndInsert(true);
         return nKey;
     }
 }
@@ -1526,7 +1526,7 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
         return nKey;
     else
     {
-        CreateAndInsert(sal_True);
+        CreateAndInsert(true);
         return nKey;
     }
 }
@@ -1550,7 +1550,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert( com::sun::star::uno::Reference
         return nKey;
 }
 
-void SvXMLNumFormatContext::CreateAndInsert(sal_Bool /*bOverwrite*/)
+void SvXMLNumFormatContext::CreateAndInsert(bool /*bOverwrite*/)
 {
     if (!(nKey > -1))
         CreateAndInsert(pData->GetNumberFormatter());

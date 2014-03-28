@@ -1231,7 +1231,7 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
 sal_Bool XMLTransformerBase::AddNamespacePrefix( OUString& rName,
                              sal_uInt16 nPrefix ) const
 {
-    rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName, sal_False );
+    rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName, false );
     return sal_True;
 }
 
@@ -1240,7 +1240,7 @@ sal_Bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
 {
     OUString aLocalName;
     sal_uInt16 nPrefix =
-        GetNamespaceMap()._GetKeyByAttrName( rName, &aLocalName, sal_False );
+        GetNamespaceMap()._GetKeyByAttrName( rName, &aLocalName, false );
     sal_Bool bRet = XML_NAMESPACE_UNKNOWN != nPrefix &&
                     (USHRT_MAX == nPrefixOnly || nPrefix == nPrefixOnly);
     if( bRet )

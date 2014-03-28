@@ -200,7 +200,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
+void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
 {
     XMLPropStyleContext::CreateAndInsert( bOverwrite );
     Reference < XStyle > xStyle = GetStyle();

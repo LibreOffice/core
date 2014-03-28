@@ -458,7 +458,8 @@ public:
             sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
-       virtual void CreateAndInsert( sal_Bool bOverwrite ) SAL_OVERRIDE;
+    virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
+
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
@@ -574,7 +575,7 @@ SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
     delete pItemSet;
 }
 
-void SwXMLItemSetStyleContext_Impl::CreateAndInsert( sal_Bool bOverwrite )
+void SwXMLItemSetStyleContext_Impl::CreateAndInsert( bool bOverwrite )
 {
     if( pTextStyle )
         pTextStyle->CreateAndInsert( bOverwrite );

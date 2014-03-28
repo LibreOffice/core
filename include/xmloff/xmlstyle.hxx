@@ -133,7 +133,7 @@ public:
 
     // This method is called for every style. It must create it and insert
     // it into the document.
-    virtual void CreateAndInsert( sal_Bool bOverwrite );
+    virtual void CreateAndInsert( bool bOverwrite );
 
     // This method is called for every style. It must create it and insert
     // it into the document if this hasn't happened already in CreateAndInsert().

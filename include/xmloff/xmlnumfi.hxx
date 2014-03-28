@@ -175,7 +175,7 @@ public:
                                     const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
-    virtual void CreateAndInsert(sal_Bool bOverwrite) SAL_OVERRIDE;
+    virtual void CreateAndInsert(bool bOverwrite) SAL_OVERRIDE;
     virtual void Finish(bool bOverwrite) SAL_OVERRIDE;
 
     SvXMLNumImpData* GetData() const                { return pData; }

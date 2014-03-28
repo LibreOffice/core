@@ -66,7 +66,7 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-        sal_Bool bDefault )
+        bool bDefault )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
 ,   msIsPhysical(  "IsPhysical"  )
 ,   msFollowStyle(  "FollowStyle"  )
@@ -170,7 +170,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
 
 typedef ::std::set < OUString > PropertyNameSet;
 
-void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
+void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 {
     if( ((SvXMLStylesContext *)&mxStyles)->IsAutomaticStyle()
         && ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )

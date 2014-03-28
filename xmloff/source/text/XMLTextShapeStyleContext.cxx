@@ -199,7 +199,7 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTextShapeStyleContext::CreateAndInsert( sal_Bool bOverwrite )
+void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
 {
     XMLShapeStyleContext::CreateAndInsert( bOverwrite );
     Reference < XStyle > xStyle = GetStyle();

@@ -36,7 +36,7 @@ struct XMLNumberFormat
     OUString   sCurrency;
     sal_Int32       nNumberFormat;
     sal_Int16       nType;
-    sal_Bool        bIsStandard : 1;
+    bool            bIsStandard : 1;
     XMLNumberFormat() : nNumberFormat(0), nType(0) {}
     XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat,
         sal_Int16 nTempType) : sCurrency(sTempCurrency), nNumberFormat(nTempFormat),
@@ -45,7 +45,7 @@ struct XMLNumberFormat
 
 struct LessNumberFormat
 {
-    sal_Bool operator() (const XMLNumberFormat& rValue1, const XMLNumberFormat& rValue2) const
+    bool operator() (const XMLNumberFormat& rValue1, const XMLNumberFormat& rValue2) const
     {
         return rValue1.nNumberFormat < rValue2.nNumberFormat;
     }
@@ -81,35 +81,35 @@ public :
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
                                 const OUString& rCurrencySymbol,
-                                sal_Bool bExportValue = sal_True);
-    static sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol,
+                                bool bExportValue = true);
+    static bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol,
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
-    static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard,
+    static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard,
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const sal_Int32 nNumberFormat,
                                           const double& rValue,
-                                          sal_Bool bExportValue = sal_True);
+                                          bool bExportValue = true);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const OUString& rValue,
                                           const OUString& rCharacters,
-                                          sal_Bool bExportValue = sal_True,
-                                          sal_Bool bExportTypeAttribute = sal_True);
+                                          bool bExportValue = true,
+                                          bool bExportTypeAttribute = true);
 
-    sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol);
+    bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol);
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard);
     void WriteAttributes(const sal_Int16 nTypeKey,
                                           const double& rValue,
                                           const OUString& rCurrencySymbol,
-                                          sal_Bool bExportValue = sal_True, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
+                                          bool bExportValue = true, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
                                           const double& rValue,
-                                          sal_Bool bExportValue = sal_True,
+                                          bool bExportValue = true,
                                           sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE, bool bExportCurrencySymbol = true);
     void SetNumberFormatAttributes(const OUString& rValue,
                                           const OUString& rCharacters,
-                                          sal_Bool bExportValue = sal_True,
-                                          sal_Bool bExportTypeAttribute = sal_True,
+                                          bool bExportValue = true,
+                                          bool bExportTypeAttribute = true,
                                           sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
 };
 

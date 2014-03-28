@@ -807,7 +807,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                 {
                     OUString sQValue =
                         GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_OOOW, sCellFormula, sal_False );
+                                XML_NAMESPACE_OOOW, sCellFormula, false );
                     // formula
                     AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue );
                 }
@@ -834,7 +834,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
-                                 sal_True );
+                                 true );
                     }
                     // else: invalid key; ignore
 
