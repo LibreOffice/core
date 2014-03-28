@@ -387,7 +387,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
             }
             else
             {
-                m_pOwnStg = new Storage( m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+                m_pOwnStg = new Storage( m_aName, nMode, false );
                 SetError( ERRCODE_IO_NOTSUPPORTED );
             }
         }
