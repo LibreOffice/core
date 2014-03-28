@@ -934,7 +934,7 @@ void
 PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
                        pspath_t eType, sal_Int32& nColumn)
 {
-    sal_Char  pPath[48];
+    sal_Char  pPath[48] = {0};
     sal_Int32 nChar;
 
     // create the hex representation of the dx and dy path shift, store the field
