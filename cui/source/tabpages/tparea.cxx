@@ -617,7 +617,6 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     //UUUU
     mbOfferImportButton(false),
-    mbPositionsAdapted(false),
     mbDirectGraphicSet(false),
     maDirectGraphic()
 {

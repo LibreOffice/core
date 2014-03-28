@@ -262,7 +262,6 @@ private:
 
     //UUUU
     bool                mbOfferImportButton;
-    bool                mbPositionsAdapted;
     bool                mbDirectGraphicSet;
     Graphic             maDirectGraphic;
     OUString            maDirectName;
