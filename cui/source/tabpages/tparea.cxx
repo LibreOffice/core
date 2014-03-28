@@ -2193,7 +2193,7 @@ IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
 {
     ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg("Import");
-    aDlg.EnableLink(sal_False);
+    aDlg.EnableLink(false);
 
     if(!aDlg.Execute())
     {
@@ -2444,7 +2444,7 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
     //UUUU
-    SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT, sal_False);
+    SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT, false);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());
