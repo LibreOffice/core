@@ -259,7 +259,7 @@ public:
     {
     }
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
 };
 
 #endif

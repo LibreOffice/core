@@ -82,8 +82,8 @@ namespace sw {
             virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const SAL_OVERRIDE;
             virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const SAL_OVERRIDE;
 
-            virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const;
-            virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const;
+            virtual ::sw::mark::IFieldmark* getDropDownFor(const SwPosition &rPos) const SAL_OVERRIDE;
+            virtual std::vector< ::sw::mark::IFieldmark* > getDropDownsFor(const SwPaM &rPaM) const SAL_OVERRIDE;
 
             void dumpAsXml(xmlTextWriterPtr w);
 
