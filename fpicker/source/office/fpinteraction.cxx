@@ -33,24 +33,17 @@ namespace svt
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::ucb;
 
-
-    //= OFilePickerInteractionHandler
-
-    DBG_NAME( OFilePickerInteractionHandler )
-
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster )
         :m_xMaster( _rxMaster )
         ,m_bUsed( sal_False )
         ,m_eInterceptions( OFilePickerInteractionHandler::E_NOINTERCEPTION )
     {
-        DBG_CTOR( OFilePickerInteractionHandler, NULL );
         DBG_ASSERT( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
 
     OFilePickerInteractionHandler::~OFilePickerInteractionHandler( )
     {
-        DBG_DTOR( OFilePickerInteractionHandler, NULL );
     }
 
 

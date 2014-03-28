@@ -69,17 +69,10 @@ namespace
     };
 }
 
-
-// SvtFileDialogFilter_Impl
-
-
-DBG_NAME( SvtFileDialogFilter_Impl )
 SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType )
     :m_aName( rName )
     ,m_aType( rType )
 {
-    DBG_CTOR( SvtFileDialogFilter_Impl, NULL );
-
     m_aType = m_aType.toAsciiLowerCase();
 }
 
@@ -87,7 +80,6 @@ SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const
 
 SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 {
-    DBG_DTOR( SvtFileDialogFilter_Impl, NULL );
 }
 
 

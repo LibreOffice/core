@@ -28,13 +28,6 @@
 
 namespace svt
 {
-
-
-
-    //= AsyncPickerAction
-
-    DBG_NAME( AsyncPickerAction )
-
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
         :m_refCount ( 0        )
         ,m_eAction  ( _eAction )
@@ -42,7 +35,6 @@ namespace svt
         ,m_pDialog  ( _pDialog )
         ,m_bRunning ( false    )
     {
-        DBG_CTOR( AsyncPickerAction, NULL );
         DBG_ASSERT( m_pDialog, "AsyncPickerAction::AsyncPickerAction: invalid dialog!" );
         DBG_ASSERT( m_pView, "AsyncPickerAction::AsyncPickerAction: invalid view!" );
     }
@@ -50,7 +42,6 @@ namespace svt
 
     AsyncPickerAction::~AsyncPickerAction()
     {
-        DBG_DTOR( AsyncPickerAction, NULL );
     }
 
 
