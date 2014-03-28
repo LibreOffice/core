@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_1d82a352",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-03-28T09:18:34Z",
+      "side": 1,
+      "message": "I know the reason, it\u0027s not history. nRef is used as an index and is decremented until it\u0027s no longer an index. Also, I must be able to know if there is an element of nSortArray to be evaluated. For that purpose I use the ability of nRef to be negative.\nSuugestions to overcome this are welcome, in the mean time I will keep nRef sal_Int16.",
+      "parentUuid": "da86d52c_9dae93e6",
+      "revId": "ce0c547b549b9eda192e4c49ee4758ca1f764ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_dd4acb54",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 2
