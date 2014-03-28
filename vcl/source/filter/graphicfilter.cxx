@@ -2280,10 +2280,7 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     else
         nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
 
-#ifdef DBG_UTIL
-    if( nRes )
-        DBG_WARNING2( "GrafikFehler [%d] - [%s]", nRes, rPath.getStr() );
-#endif
+    SAL_WARN_IF( nRes, "vcl.filter", "GrafikFehler [" << nRes << "] - [" << rPath << "]" );
 
     return nRes;
 }
