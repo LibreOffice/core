@@ -3182,28 +3182,16 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     SwHyperlinkIter_Impl aHIter( pTxtFrm );
-    //SwAccessibleAutoRecognizerHelper_Impl aARHelper( pTxtFrm );
-    sal_Int32 nARCount = 0;
-    sal_Int32 nARIndex = 0;
     sal_Int32 nTIndex = -1;
     SwTOXSortTabBase* pTBase = GetTOXSortTabBase();
     SwTxtAttr* pHt = (SwTxtAttr*)(aHIter.next());
     while( (nLinkIndex < getHyperLinkCount()) && nTIndex < nLinkIndex)
     {
         sal_Int32 nHStt = -1;
-        sal_Int32 nAStt = -1;
         sal_Bool bH = sal_False;
-        sal_Bool bA = sal_False;
 
         if( pHt )
             nHStt = *pHt->GetStart();
-        if( nARIndex < nARCount )
-        {
-            /*
-            sal_Int32 nAEnd;
-            aARHelper.getPosition( nARIndex, nAStt, nAEnd );
-            */
-        }
         sal_Bool bTOC = sal_False;
         // Inside TOC & get the first link
         if( pTBase && nTIndex == -1 )
@@ -3211,26 +3199,11 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
             nTIndex++;
             bTOC = sal_True;
         }
-        else
+        else if( nHStt >= 0 )
         {
-            if( nHStt >=0 && nAStt >=0 )
-            {   // both hyperlink and smart tag available
-                nTIndex++;
-                if( nHStt <= nAStt )
-                    bH = sal_True;
-                else
-                    bA = sal_True;
-            }
-            else if( nHStt >= 0 )
-            {   // only hyperlink available
-                nTIndex++;
-                bH = sal_True;
-            }
-            else if( nAStt >= 0 )
-            {   // only smart tag available
-                nTIndex++;
-                bA = sal_True;
-            }
+              // only hyperlink available
+            nTIndex++;
+            bH = sal_True;
         }
 
         if( nTIndex == nLinkIndex )
@@ -3239,72 +3212,35 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
             {   // it's a hyperlink
                 if( pHt )
                 {
-//                    const SwField* pFFld = pHt->GetFld().GetFld();
+                    if( !pHyperTextData )
+                        pHyperTextData = new SwAccessibleHyperTextData;
+                    SwAccessibleHyperTextData::iterator aIter =
+                        pHyperTextData ->find( pHt );
+                    if( aIter != pHyperTextData->end() )
                     {
-                        if( !pHyperTextData )
-                            pHyperTextData = new SwAccessibleHyperTextData;
-                        SwAccessibleHyperTextData::iterator aIter =
-                            pHyperTextData ->find( pHt );
+                        xRet = (*aIter).second;
+                    }
+                    if( !xRet.is() )
+                    {
+                        {
+                            const sal_Int32 nTmpHStt= GetPortionData().GetAccessiblePosition(
+                                max( aHIter.startIdx(), *pHt->GetStart() ) );
+                            const sal_Int32 nTmpHEnd= GetPortionData().GetAccessiblePosition(
+                                min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
+                            xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
+                                this, nTmpHStt, nTmpHEnd );
+                        }
                         if( aIter != pHyperTextData->end() )
                         {
-                            xRet = (*aIter).second;
+                            (*aIter).second = xRet;
                         }
-                        if( !xRet.is() )
+                        else
                         {
-                            {
-                                const sal_Int32 nTmpHStt= GetPortionData().GetAccessiblePosition(
-                                    max( aHIter.startIdx(), *pHt->GetStart() ) );
-                                const sal_Int32 nTmpHEnd= GetPortionData().GetAccessiblePosition(
-                                    min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
-                                xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
-                                    this, nTmpHStt, nTmpHEnd );
-                            }
-                            if( aIter != pHyperTextData->end() )
-                            {
-                                (*aIter).second = xRet;
-                            }
-                            else
-                            {
-                                SwAccessibleHyperTextData::value_type aEntry( pHt, xRet );
-                                pHyperTextData->insert( aEntry );
-                            }
+                            SwAccessibleHyperTextData::value_type aEntry( pHt, xRet );
+                            pHyperTextData->insert( aEntry );
                         }
                     }
                 }
-            }
-            else if( bTOC )
-            {
-                //xRet = new SwAccessibleTOCLink( this );
-            }
-            else if( bA )
-            {
-                /*
-                // it's a smart tag
-                if( !pAutoRecognizerData )
-                    pAutoRecognizerData = new SwAccessibleAutoRecognizerData;
-                SwAccessibleAutoRecognizerData::iterator aIter =
-                    pAutoRecognizerData ->find( nARIndex );
-                if( aIter != pAutoRecognizerData->end() )
-                {
-                    xRet = (*aIter).second;
-                }
-                if( !xRet.is() )
-                {
-                    sal_Int32 nAStt = 0;
-                    sal_Int32 nAEnd = 0;
-                    //aARHelper.getPosition( nARIndex, nAStt, nAEnd );
-                    xRet = new SwAccessibleAutoRecognizer( this, nAStt, nAEnd );
-                    if( aIter != pAutoRecognizerData->end() )
-                    {
-                        (*aIter).second = xRet;
-                    }
-                    else
-                    {
-                        SwAccessibleAutoRecognizerData::value_type aEntry( nARIndex, xRet );
-                        pAutoRecognizerData->insert( aEntry );
-                    }
-                }
-                */
             }
             break;
         }
@@ -3313,54 +3249,12 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         if( bH )
             // iterate next hyperlink
             pHt = (SwTxtAttr*)(aHIter.next());
-        else if( bA )
-            // iterate next smart tag
-            nARIndex++;
         else if(bTOC)
             continue;
         else
             // no candidate, exit
             break;
     }
-    /*
-    {
-        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
-        SwHyperlinkIter_Impl aHIter( pTxtFrm );
-        while( nLinkIndex-- )
-            aHIter.next();
-
-        const SwTxtAttr *pHt = aHIter.next();
-        if( pHt )
-        {
-            if( !pHyperTextData )
-                pHyperTextData = new SwAccessibleHyperTextData;
-            SwAccessibleHyperTextData::iterator aIter =
-                pHyperTextData ->find( pHt );
-            if( aIter != pHyperTextData->end() )
-            {
-                xRet = (*aIter).second;
-            }
-            if( !xRet.is() )
-            {
-                const sal_Int32 nHStt= GetPortionData().GetAccessiblePosition(
-                                max( aHIter.startIdx(), *pHt->GetStart() ) );
-                const sal_Int32 nHEnd= GetPortionData().GetAccessiblePosition(
-                                min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
-                xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
-                                                  this, nHStt, nHEnd );
-                if( aIter != pHyperTextData->end() )
-                {
-                    (*aIter).second = xRet;
-                }
-                else
-                {
-                    SwAccessibleHyperTextData::value_type aEntry( pHt, xRet );
-                    pHyperTextData->insert( aEntry );
-                }
-            }
-        }
-    }
-    */
     if( !xRet.is() )
         throw lang::IndexOutOfBoundsException();
 
