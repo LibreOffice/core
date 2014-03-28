@@ -23,41 +23,32 @@
 
 #include <qcoreapplication.h>
 #include <qeventloop.h>
-#include <qsocketnotifier.h>
-#include <unistd.h>
 
 namespace
 {
 
-class TestExcludeSocketNotifiers
+const QEvent::Type eventType = QEvent::User;
+
+class TestExcludePostedEvents
     : public QObject
 {
     Q_OBJECT
     public:
-        TestExcludeSocketNotifiers( const int* pipes );
-        ~TestExcludeSocketNotifiers();
-        bool received;
-    public slots:
-        void slotReceived();
-    private:
-        const int* pipes;
+        TestExcludePostedEvents();
+        virtual bool event( QEvent* e );
+        bool processed;
 };
 
-TestExcludeSocketNotifiers::TestExcludeSocketNotifiers( const int* pipes )
-    : received( false )
-    , pipes( pipes )
+TestExcludePostedEvents::TestExcludePostedEvents()
+    : processed( false )
 {
 }
 
-TestExcludeSocketNotifiers::~TestExcludeSocketNotifiers()
+bool TestExcludePostedEvents::event( QEvent* e )
 {
-    close( pipes[ 0 ] );
-    close( pipes[ 1 ] );
-}
-
-void TestExcludeSocketNotifiers::slotReceived()
-{
-    received = true;
+    if( e->type() == eventType )
+        processed = true;
+    return QObject::event( e );
 }
 
 }
@@ -65,20 +56,17 @@ void TestExcludeSocketNotifiers::slotReceived()
 #define QVERIFY(a) \
     if (!a) return 1;
 
-static int tst_processEventsExcludeSocket()
+static int tst_excludePostedEvents()
 {
-    int pipes[ 2 ];
-    if( pipe( pipes ) < 0 )
-        return 1;
-    TestExcludeSocketNotifiers test( pipes );
-    QSocketNotifier notifier( pipes[ 0 ], QSocketNotifier::Read );
-    QObject::connect( &notifier, SIGNAL( activated( int )), &test, SLOT( slotReceived()));
-    char dummy = 'a';
-    write( pipes[ 1 ], &dummy, 1 );
+    TestExcludePostedEvents test;
+    QCoreApplication::postEvent( &test, new QEvent( eventType ));
     QEventLoop loop;
-    loop.processEvents( QEventLoop::ExcludeSocketNotifiers );
-    QVERIFY( !test.received );
+    loop.processEvents(QEventLoop::ExcludeUserInputEvents
+        | QEventLoop::ExcludeSocketNotifiers
+//        | QEventLoop::WaitForMoreEvents
+        | QEventLoop::X11ExcludeTimers);
+    QVERIFY( !test.processed );
     loop.processEvents();
-    QVERIFY( test.received );
+    QVERIFY( test.processed );
     return 0;
 }

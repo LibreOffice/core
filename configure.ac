@@ -11240,6 +11240,8 @@ int main(int argc, char **argv) {
             AC_DEFINE(KDE_HAVE_GLIB,1)
             KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
+            qt4_fix_warning=
+
             AC_LANG_PUSH([C++])
             save_CXXFLAGS=$CXXFLAGS
             CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
@@ -11266,11 +11268,52 @@ int main(int argc, char *argv[])
                 AC_MSG_RESULT([yes])
             ],[
                 AC_MSG_RESULT([no])
-                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime - fix your Qt4 library!])
+                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime])
+                if test -z "$qt4_fix_warning"; then
+                    add_warning "native KDE4 file pickers will be disabled at runtime, Qt4 fixes needed"
+                fi
+                qt4_fix_warning=1
+                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-37380 (needed)"
             ])
 
             # Remove meta object data
             rm -f "${TSTBASE}."*
+
+            AC_MSG_CHECKING([whether Qt avoids QClipboard recursion caused by posted events])
+
+            # Prepare meta object data
+            TSTBASE="tst_exclude_posted_events"
+            TSTMOC="${SRC_ROOT}/vcl/unx/kde4/${TSTBASE}"
+            ln -fs "${TSTMOC}.hxx"
+            $MOC4 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
+
+            AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include "tst_exclude_posted_events.moc"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    exit(tst_excludePostedEvents());
+    return 0;
+}
+            ]])],[
+                AC_MSG_RESULT([yes])
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime])
+                if test -z "$qt4_fix_warning"; then
+                    add_warning "native KDE4 file pickers will be disabled at runtime, Qt4 fixes needed"
+                fi
+                qt4_fix_warning=1
+                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-34614 (needed)"
+            ])
+
+            # Remove meta object data
+            rm -f "${TSTBASE}."*
+
+            if test -n "$qt4_fix_warning"; then
+                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-38585 (recommended)"
+            fi
 
             LIBS=$save_LIBS
             CXXFLAGS=$save_CXXFLAGS
