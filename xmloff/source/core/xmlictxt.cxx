@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 
-DBG_NAME(SvXMLImportContext)
 TYPEINIT0( SvXMLImportContext );
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                               const OUString& rLName ) :
@@ -40,14 +39,10 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
     maLocalName( rLName ),
     mpRewindMap( 0 )
 {
-    DBG_CTOR(SvXMLImportContext,NULL);
-
 }
 
 SvXMLImportContext::~SvXMLImportContext()
 {
-
-    DBG_DTOR(SvXMLImportContext,NULL);
 }
 
 SvXMLImportContext *SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
