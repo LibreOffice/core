@@ -2428,9 +2428,6 @@ SwFrmFmt::SwFrmFmt(
         // will be derived from the parent style. In the future this
         // may be needed for more formats; all which use the
         // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
-#ifdef DBG_UTIL
-        bool bBla = true; // allow setting a breakpoint here in debug mode
-#endif
     }
     else
     {
@@ -2457,9 +2454,6 @@ SwFrmFmt::SwFrmFmt(
         // will be derived from the parent style. In the future this
         // may be needed for more formats; all which use the
         // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
-#ifdef DBG_UTIL
-        bool bBla = true; // allow setting a breakpoint here in debug mode
-#endif
     }
     else
     {
