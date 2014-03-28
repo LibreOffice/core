@@ -1325,6 +1325,12 @@ static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLin
 
     if( aBoxes.empty() )
         return 0;
+
+    //coverity#705106, help coverity out here
+    assert(nFirst != USHRT_MAX);
+    if (nFirst == USHRT_MAX)
+        return 0;
+
     SwTwips nHeight = 0;
     SwTwips* pLines = new SwTwips[ nLast + 1 - nFirst ];
     for( sal_uInt16 i = nFirst; i <= nLast; ++i )
