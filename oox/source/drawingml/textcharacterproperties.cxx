@@ -110,7 +110,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( maCharColor.isUsed() )
         rPropMap.setProperty( PROP_CharColor, maCharColor.getColor( rFilter.getGraphicHelper() ));
     if( maGradientProps.maGradientStops.size() > 0 )
-        rPropMap[ PROP_CharColor ] <<= maGradientProps.maGradientStops.begin()->second.getColor( rFilter.getGraphicHelper() );
+        rPropMap.setProperty( PROP_CharColor, maGradientProps.maGradientStops.begin()->second.getColor( rFilter.getGraphicHelper() ));
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {
