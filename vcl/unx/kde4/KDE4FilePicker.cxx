@@ -256,20 +256,28 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->setFilter(_filter);
     _dialog->filterWidget()->setEditable(false);
 
-    // We're entering a nested loop.
-    int result;
-    {
-        // Release the yield mutex to prevent deadlocks.
-        SalYieldMutexReleaser aReleaser;
-        result = _dialog->exec();
-    }
-
+    // At this point, SolarMutex is held. Opening the KDE file dialog here
+    // can lead to QClipboard asking for clipboard contents. If LO core
+    // is the owner of the clipboard content, this will block for 5 seconds
+    // and timeout, since the clipboard thread will not be able to acquire
+    // SolarMutex and thus won't be able to respond. If the event loops
+    // are properly integrated and QClipboard can use a nested event loop
+    // (see the KDE VCL plug), then this won't happen, but otherwise
+    // simply release the SolarMutex here. The KDE file dialog does not
+    // call back to the core, so this should be safe (and if it does,
+    // SolarMutex will need to be re-acquired).
+    long mutexrelease = 0;
+    if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
+        mutexrelease = Application::ReleaseSolarMutex();
+    //block and wait for user input
+    int result = _dialog->exec();
     // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
     // (such as the auto-extension flag), but that doesn't update KGlobal::config()
     // (which is probably a KDE bug), so force reading the new configuration,
     // otherwise the next opening of the dialog would use the old settings.
     KGlobal::config()->reparseConfiguration();
-
+    if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
+        Application::AcquireSolarMutex( mutexrelease );
     if( result == KFileDialog::Accepted)
         return ExecutableDialogResults::OK;
 

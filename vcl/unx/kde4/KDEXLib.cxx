@@ -286,16 +286,13 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
         return SalXLib::Yield( bWait, bHandleAllCurrentEvents );
     }
-
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
     if( qApp->thread() == QThread::currentThread())
         processYield( bWait, bHandleAllCurrentEvents );
     else
-    {
-        // we were called from another thread;
-        // release the yield lock to prevent deadlock.
-        SalYieldMutexReleaser aReleaser;
+    { // if this deadlocks, event processing needs to go into a separate thread
+      // or some other solution needs to be found
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
     }
 }
