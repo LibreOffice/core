@@ -286,6 +286,7 @@ protected:
     virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
                                                 const Point& rDestPt, const Size& rDestSize,
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel ) SAL_OVERRIDE;
+
     bool                        DrawTransformBitmapExDirect(
                                     const basegfx::B2DHomMatrix& aFullTransform,
                                     const BitmapEx& rBitmapEx) SAL_OVERRIDE;
@@ -299,6 +300,8 @@ protected:
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx ) SAL_OVERRIDE;
+
+    virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent ) SAL_OVERRIDE;
 
 public:
                                 Printer();
