@@ -881,6 +881,19 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
             }
 
             *aPointIter++ = mpImplPolygon->mpPointAry[ i++ ];
+
+            if (aPoints.size() >= SAL_MAX_UINT16)
+            {
+                OSL_ENSURE(aPoints.size() < SAL_MAX_UINT16,
+                    "Polygon::AdapativeSubdivision created polygon too many points;"
+                    " using original polygon instead");
+
+                // The resulting polygon can not hold all the points
+                // that we have created so far.  Stop the subdivision
+                // and return a copy of the unmodified polygon.
+                rResult = *this;
+                return;
+            }
         }
 
         // fill result polygon
