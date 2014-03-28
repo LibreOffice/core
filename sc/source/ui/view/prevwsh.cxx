@@ -479,7 +479,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             aRect.Left()    = aPos.X() - 8;
             aRect.Top()     = aMousePos.Y();
             aRect.Right()   = aRect.Left();
-            aRect.Top()     = aRect.Top();
+            aRect.Bottom()  = aRect.Top();
             nAlign          = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
             Help::ShowQuickHelp( pScroll->GetParent(), aRect, aHelpStr, nAlign );
         }
