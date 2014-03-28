@@ -213,14 +213,10 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
     return aControlModelSeq;
 }
 
-DBG_NAME(OGroupManager);
-
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
     :m_pCompGroup( new OGroup( OUString("AllComponentGroup") ) )
     ,m_xContainer(_rxContainer)
 {
-    DBG_CTOR(OGroupManager,NULL);
-
     increment(m_refCount);
     {
         _rxContainer->addContainerListener(this);
@@ -230,7 +226,6 @@ OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
 
 OGroupManager::~OGroupManager()
 {
-    DBG_DTOR(OGroupManager,NULL);
     // delete all Components and CompGroup
     delete m_pCompGroup;
 }
