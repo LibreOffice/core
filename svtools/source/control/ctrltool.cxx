@@ -518,7 +518,6 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
     if (!rStyleName.isEmpty())
     {
         bool                    bNotSynthetic = false;
-        bool                    bNoneAvailable = false;
         FontWeight              eWeight = rInfo.GetWeight();
         FontItalic              eItalic = rInfo.GetItalic();
         ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
@@ -534,11 +533,7 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
             pFontInfo = pFontInfo->mpNext;
         }
 
-        if ( bNoneAvailable )
-        {
-            return OUString();
-        }
-        else if ( !bNotSynthetic )
+        if ( !bNotSynthetic )
         {
             if (maMapStyleNotAvailable.isEmpty())
                 ((FontList*)this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
