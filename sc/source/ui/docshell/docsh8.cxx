@@ -677,7 +677,7 @@ void lcl_GetColumnTypes(
             else if ( nFieldLen > 19 )
                 nFieldLen = 19;     // dBaseIII numeric field length limit: 19
             if ( nPrecision && nFieldLen < nPrecision + 2 )
-                nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
+                nFieldLen = nPrecision + 2;     // 0. must fit into
             // 538 MUST: Sdb internal representation adds 2 to the field length!
             // To give the user what he wants we must substract it here.
              //! CAVEAT! There is no way to define a numeric field with a length
