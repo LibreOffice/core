@@ -255,6 +255,7 @@ public:
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
+    void testCopyPasteMultiRange();
     void testCopyPasteSkipEmpty();
     void testCopyPasteSkipEmptyConditionalFormatting();
     void testUndoCut();
@@ -435,6 +436,7 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
+    CPPUNIT_TEST(testCopyPasteMultiRange);
     CPPUNIT_TEST(testCopyPasteSkipEmpty);
     //CPPUNIT_TEST(testCopyPasteSkipEmptyConditionalFormatting);
     CPPUNIT_TEST(testUndoCut);

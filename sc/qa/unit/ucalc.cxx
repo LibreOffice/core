@@ -3414,6 +3414,54 @@ void Test::testCopyPasteTranspose()
 
 }
 
+void Test::testCopyPasteMultiRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Fill A2:B6 with numbers.
+    for (SCROW nRow = 1; nRow <= 5; ++nRow)
+    {
+        for (SCCOL nCol = 0; nCol <= 1; ++nCol)
+        {
+            ScAddress aPos(nCol,nRow,0);
+            m_pDoc->SetValue(aPos, nRow+nCol);
+        }
+    }
+
+    // Fill D9:E11 with numbers.
+    for (SCROW nRow = 8; nRow <= 10; ++nRow)
+    {
+        for (SCCOL nCol = 3; nCol <= 4; ++nCol)
+        {
+            ScAddress aPos(nCol,nRow,0);
+            m_pDoc->SetValue(aPos, 10.0);
+        }
+    }
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+
+    // Copy A2:B2, A4:B4, and A6:B6 to clipboard.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScClipParam aClipParam;
+    aClipParam.maRanges.Append(ScRange(0,1,0,1,1,0)); // A2:B2
+    aClipParam.maRanges.Append(ScRange(0,3,0,1,3,0)); // A4:B4
+    aClipParam.maRanges.Append(ScRange(0,5,0,1,5,0)); // A6:B6
+    aClipParam.meDirection = ScClipParam::Row;
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+
+    // Paste to D9:E11, and make sure it won't crash (rhbz#1080196).
+    m_pDoc->CopyMultiRangeFromClip(ScAddress(3,8,0), aMark, IDF_CONTENTS, &aClipDoc);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3,8,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,8,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,9,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(4,9,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3,10,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(4,10,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyPasteSkipEmpty()
 {
     struct Check
