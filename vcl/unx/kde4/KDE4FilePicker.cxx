@@ -38,6 +38,7 @@
 
 #include "KDE4FilePicker.hxx"
 #include "FPServiceInfo.hxx"
+#include "VCLKDEApplication.hxx"
 
 /* ********* Hack, but needed because of conflicting types... */
 #define Region QtXRegion
@@ -260,21 +261,11 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->setFilter(_filter);
     _dialog->filterWidget()->setEditable(false);
 
-    // We're entering a nested loop.
-    int result;
-    {
-        // Release the yield mutex to prevent deadlocks.
-        SalYieldMutexReleaser aReleaser;
-        result = _dialog->exec();
-    }
-
-    // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
-    // (such as the auto-extension flag), but that doesn't update KGlobal::config()
-    // (which is probably a KDE bug), so force reading the new configuration,
-    // otherwise the next opening of the dialog would use the old settings.
-    KGlobal::config()->reparseConfiguration();
-
-    if( result == KFileDialog::Accepted)
+    VCLKDEApplication::preDialogSetup();
+    //block and wait for user input
+    int result = _dialog->exec();
+    VCLKDEApplication::postDialogCleanup();
+    if( result == KFileDialog::Accepted )
         return ExecutableDialogResults::OK;
 
     return ExecutableDialogResults::CANCEL;

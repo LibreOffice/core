@@ -30,6 +30,8 @@ class VCLKDEApplication : public KApplication
     public:
         VCLKDEApplication();
         virtual bool x11EventFilter(XEvent* event);
+        static void preDialogSetup();
+        static void postDialogCleanup();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
