@@ -3528,7 +3528,7 @@ void PopupMenu::SelectEntry( sal_uInt16 nId )
         {
             size_t nPos = 0;
             MenuItemData* pData = GetItemList()->GetData( nId, nPos );
-            if ( pData->pSubMenu )
+            if (pData && pData->pSubMenu)
                 ImplGetFloatingWindow()->ChangeHighlightItem( nPos, true );
             else
                 ImplGetFloatingWindow()->EndExecute( nId );
