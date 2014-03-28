@@ -91,8 +91,6 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-DBG_NAME(ChartController)
-// ChartController Constructor and Destructor
 
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
     m_aLifeTimeManager( NULL ),
@@ -115,13 +113,11 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_aDispatchContainer( m_xCC, this ),
     m_eDrawMode( CHARTDRAW_SELECT )
 {
-    DBG_CTOR(ChartController,NULL);
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
 
 ChartController::~ChartController()
 {
-    DBG_DTOR(ChartController,NULL);
     stopDoubleClickWaiting();
 }
 

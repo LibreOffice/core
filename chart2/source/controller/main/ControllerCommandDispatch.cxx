@@ -456,8 +456,6 @@ bool ModelState::HasAnyTitle() const
 
 } // namespace impl
 
-DBG_NAME(ControllerCommandDispatch)
-
 ControllerCommandDispatch::ControllerCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
     ChartController* pController, CommandDispatchContainer* pContainer ) :
@@ -470,13 +468,10 @@ ControllerCommandDispatch::ControllerCommandDispatch(
         m_apControllerState( new impl::ControllerState() ),
         m_pDispatchContainer( pContainer )
 {
-    DBG_CTOR(ControllerCommandDispatch,NULL);
 }
 
 ControllerCommandDispatch::~ControllerCommandDispatch()
 {
-
-    DBG_DTOR(ControllerCommandDispatch,NULL);
 }
 
 void ControllerCommandDispatch::initialize()
