@@ -39,7 +39,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -178,7 +177,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
 #if OSL_DEBUG_LEVEL >= 1
                 fprintf( stderr,"generated rtti for %s\n", rttiName );
                 const OString aCUnoName = OUStringToOString( unoName, RTL_TEXTENCODING_UTF8);
-                DBG_WARNING1( "TypeInfo for \"%s\" not found and cannot be generated.\n", aCUnoName.getStr());
+                OSL_TRACE( "TypeInfo for \"%s\" not found and cannot be generated.\n", aCUnoName.getStr());
 #endif
 #if 0 // TODO: enable it again when the generated class_type_infos always work.
       // Forcing the toolchain to create authentic typeinfos is much better though
