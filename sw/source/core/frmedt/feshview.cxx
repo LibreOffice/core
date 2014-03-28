@@ -2673,6 +2673,7 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
     if ( rChain.GetNext() )
         return SW_CHAIN_SOURCE_CHAINED;
 
+    int nRet = SW_CHAIN_NOT_FOUND;
     if( Imp()->HasDrawView() )
     {
         SdrObject* pObj;
@@ -2689,11 +2690,11 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
             // Target and source should not be equal and the list
             // should not be cyclic
             SwFrmFmt *pFmt = pFly->GetFmt();
-            return GetDoc()->Chainable(rSource, *pFmt);
+            nRet = GetDoc()->Chainable(rSource, *pFmt);
         }
         pDView->SetHitTolerancePixel( nOld );
     }
-    return SW_CHAIN_NOT_FOUND;
+    return nRet;
 }
 
 int SwFEShell::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
