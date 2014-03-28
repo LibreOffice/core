@@ -1199,7 +1199,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     }
 #else
     (void)pWindow; (void)bAccept; (void)bBeforeRealize;
-#  warning FIXME: No set_accept_focus impl
+    //FIXME: No set_accept_focus impl
 #endif
 }
 
@@ -1234,7 +1234,7 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
     }
 #else
     (void)i_pWindow; (void)i_nTime;
-#  warning FIXME: no lcl_set_user_time impl.
+    //FIXME: no lcl_set_user_time impl.
 #endif
 };
 
@@ -1398,7 +1398,7 @@ GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
     return aWindow;
 #else
     (void)aWindow;
-# warning FIXME: no findToplevelSystemWindow
+    //FIXME: no findToplevelSystemWindow
     return 0;
 #endif
 }
@@ -1453,7 +1453,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
                          0, 0 );
     }
 #else
-#warning Handling embedded windows, is going to be fun ...
+    //FIXME: Handling embedded windows, is going to be fun ...
 #endif
 }
 
@@ -1480,7 +1480,7 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     GetGenericData()->ErrorTrapPop();
 #else
     (void)i_nTimeCode;
-#warning FIXME: no askForXEmbedFocus for gtk3 yet
+    //FIXME: no askForXEmbedFocus for gtk3 yet
 #endif
 }
 
@@ -2747,7 +2747,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     }
 #else
     (void)bGrab; (void) bOwnerEvents;
-#warning FIXME: No GrabPointer implementation for gtk3 ...
+    //FIXME: No GrabPointer implementation for gtk3 ...
 #endif
 }
 
@@ -2801,9 +2801,9 @@ OUString GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 #if !GTK_CHECK_VERSION(3,0,0)
     return getDisplay()->GetKeyName( nKeyCode );
 #else
-  (void)nKeyCode;
-# warning FIXME - key names
-  return OUString();
+    (void)nKeyCode;
+    //FIXME: key names
+    return OUString();
 #endif
 }
 
@@ -3038,7 +3038,7 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
     return true;
 #else
     (void)pSysParent;
-#warning FIXME: no SetPluginParent impl. for gtk3
+    //FIXME: no SetPluginParent impl. for gtk3
     return false;
 #endif
 }
@@ -3635,7 +3635,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
     }
 #else
     (void)pWidget; (void)bSetFocus;
-#  warning FIXME no set input focus ...
+    //FIXME: no set input focus ...
 #endif
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );

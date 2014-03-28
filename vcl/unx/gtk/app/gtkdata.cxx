@@ -171,7 +171,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
     return aFilterReturn;
 #else
     (void) sys_event;
-#warning FIXME: implement filterGdkEvent ...
+    //FIXME: implement filterGdkEvent ...
     return GDK_FILTER_CONTINUE;
 #endif
 }
@@ -714,7 +714,7 @@ void GtkData::Init()
     gdk_error_trap_pop();
     GetGtkDisplay()->SetKbdExtension( pKbdExtension );
 #else
-#  warning unwind keyboard extension bits
+    //FIXME: unwind keyboard extension bits
 #endif
 
     // add signal handler to notify screen size changes

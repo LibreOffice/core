@@ -218,7 +218,7 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 #else
     (void)pWindowData;
-#warning FIXME: Missing CreateObject functionality ...
+    //FIXME: Missing CreateObject functionality ...
 #endif
 
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
