@@ -494,7 +494,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
 {
     const OUString& rSep = pFormatter->GetNumThousandSep();
     // Is it an ordinary space instead of a non-breaking space?
-    bool bSpaceBreak = rSep[0] == (sal_Unicode)0xa0 && rString[0] == (sal_Unicode)0x20 &&
+    bool bSpaceBreak = rSep[0] == cNonBreakingSpace && rString[0] == (sal_Unicode)0x20 &&
         rSep.getLength() == 1 && rString.getLength() == 1;
     if (!((rString == rSep || bSpaceBreak) &&      // nothing else
            nStringPos < nAnzStrings - 1 &&         // safety first!
