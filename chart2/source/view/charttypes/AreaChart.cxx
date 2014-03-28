@@ -30,6 +30,7 @@
 #include "Clipping.hxx"
 #include "Stripe.hxx"
 #include "DateHelper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -76,9 +77,9 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
     {
         if( m_xChartTypeModelProps.is() )
         {
-            m_xChartTypeModelProps->getPropertyValue("CurveStyle") >>= m_eCurveStyle;
-            m_xChartTypeModelProps->getPropertyValue("CurveResolution") >>= m_nCurveResolution;
-            m_xChartTypeModelProps->getPropertyValue("SplineOrder") >>= m_nSplineOrder;
+            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_CURVE_STYLE) >>= m_eCurveStyle;
+            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) >>= m_nCurveResolution;
+            m_xChartTypeModelProps->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) >>= m_nSplineOrder;
         }
     }
     catch( uno::Exception& e )

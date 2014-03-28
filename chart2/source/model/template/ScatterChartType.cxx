@@ -25,6 +25,8 @@
 #include "CartesianCoordinateSystem.hxx"
 #include "AxisHelper.hxx"
 #include "AxisIndexDefines.hxx"
+#include <unonames.hxx>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
@@ -51,20 +53,20 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( "CurveStyle",
+        Property( CHART_UNONAME_CURVE_STYLE,
                   PROP_SCATTERCHARTTYPE_CURVE_STYLE,
                   ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "CurveResolution",
+        Property( CHART_UNONAME_CURVE_RESOLUTION,
                   PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( "SplineOrder",
+        Property( CHART_UNONAME_SPLINE_ORDER,
                   PROP_SCATTERCHARTTYPE_SPLINE_ORDER,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND

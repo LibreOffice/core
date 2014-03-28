@@ -212,16 +212,16 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
     rList.push_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );
     rList.push_back(
         new WrappedSplineProperty<sal_Int32>(
-            CHART_UNONAME_SPLINE_ORDER, "SplineOrder", // same name ?
+            CHART_UNONAME_SPLINE_ORDER, CHART_UNONAME_SPLINE_ORDER,
             uno::makeAny(sal_Int32(3)), spChart2ModelContact));
     rList.push_back(
         new WrappedSplineProperty<sal_Int32>(
-            CHART_UNONAME_SPLINE_RESOLUTION, "CurveResolution",
+            CHART_UNONAME_SPLINE_RESOLUTION, CHART_UNONAME_CURVE_RESOLUTION,
             uno::makeAny(sal_Int32(20)), spChart2ModelContact));
 }
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-    : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, "CurveStyle", uno::makeAny(sal_Int32(0)), spChart2ModelContact )
+    : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, uno::makeAny(sal_Int32(0)), spChart2ModelContact )
 {
 }
 WrappedSplineTypeProperty::~WrappedSplineTypeProperty()

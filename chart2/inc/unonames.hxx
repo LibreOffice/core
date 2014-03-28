@@ -15,6 +15,8 @@
 #define CHART_UNONAME_SPLINE_TYPE           "SplineType"
 #define CHART_UNONAME_SPLINE_ORDER          "SplineOrder"
 #define CHART_UNONAME_SPLINE_RESOLUTION     "SplineResolution"
+#define CHART_UNONAME_CURVE_STYLE           "CurveStyle"
+#define CHART_UNONAME_CURVE_RESOLUTION      "CurveResolution"
 
 #endif
 

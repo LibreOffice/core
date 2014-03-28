@@ -25,10 +25,12 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
+#include "PropertyHelper.hxx"
+#include <unonames.hxx>
+
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include "PropertyHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>
@@ -56,19 +58,19 @@ void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( "CurveStyle",
+        Property( CHART_UNONAME_CURVE_STYLE,
                   PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE,
                   ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( "CurveResolution",
+        Property( CHART_UNONAME_CURVE_RESOLUTION,
                   PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( "SplineOrder",
+        Property( CHART_UNONAME_SPLINE_ORDER,
                   PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
@@ -307,9 +309,9 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
             uno::Reference< beans::XPropertySet > xChartTypeProp(
                 DiagramHelper::getChartTypeByIndex( xDiagram, 0 ),
                 uno::UNO_QUERY_THROW );
-            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue("CurveStyle") );
-            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue("CurveResolution") );
-            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue("SplineOrder") );
+            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_STYLE) );
+            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION, xChartTypeProp->getPropertyValue(CHART_UNONAME_CURVE_RESOLUTION) );
+            setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER, xChartTypeProp->getPropertyValue(CHART_UNONAME_SPLINE_ORDER) );
         }
         catch( const uno::Exception & ex )
         {
@@ -335,11 +337,11 @@ Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( 
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                "CurveStyle", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+                CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
             xCTProp->setPropertyValue(
-                "CurveResolution", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+                CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
             xCTProp->setPropertyValue(
-                "SplineOrder", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+                CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
         }
     }
     catch( const uno::Exception & ex )
@@ -369,11 +371,11 @@ Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeF
         if( xCTProp.is())
         {
             xCTProp->setPropertyValue(
-                "CurveStyle", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+                CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
             xCTProp->setPropertyValue(
-                "CurveResolution", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+                CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
             xCTProp->setPropertyValue(
-                "SplineOrder", getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+                CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
         }
     }
     catch( const uno::Exception & ex )

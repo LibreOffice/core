@@ -39,6 +39,7 @@
 #include "WrappedSplineProperties.hxx"
 #include "WrappedStockProperties.hxx"
 #include "WrappedSceneProperty.hxx"
+#include "WrappedGL3DProperties.hxx"
 #include "RelativePositionHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
@@ -471,6 +472,7 @@ private:
         WrappedSplineProperties::addProperties( aProperties );
         WrappedStockProperties::addProperties( aProperties );
         WrappedAutomaticPositionProperties::addProperties( aProperties );
+        WrappedGL3DProperties::addProperties(aProperties);
 
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
@@ -2045,6 +2047,7 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     WrappedSplineProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedStockProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
+    WrappedGL3DProperties::addWrappedProperties(aWrappedProperties, m_spChart2ModelContact);
 
     aWrappedProperties.push_back( new WrappedDataRowSourceProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedStackingProperty( StackMode_Y_STACKED,m_spChart2ModelContact ) );

@@ -146,9 +146,9 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
     {
         try
         {
-            xTemplateProps->getPropertyValue( "CurveStyle" ) >>= aRet.eCurveStyle;
-            xTemplateProps->getPropertyValue( "CurveResolution" ) >>= aRet.nCurveResolution;
-            xTemplateProps->getPropertyValue( "SplineOrder" ) >>= aRet.nSplineOrder;
+            xTemplateProps->getPropertyValue( CHART_UNONAME_CURVE_STYLE ) >>= aRet.eCurveStyle;
+            xTemplateProps->getPropertyValue( CHART_UNONAME_CURVE_RESOLUTION ) >>= aRet.nCurveResolution;
+            xTemplateProps->getPropertyValue( CHART_UNONAME_SPLINE_ORDER ) >>= aRet.nSplineOrder;
         }
         catch( uno::Exception & ex )
         {
@@ -291,9 +291,9 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
             {
                 try
                 {
-                    xTemplateProps->setPropertyValue( "CurveStyle" , uno::makeAny(rParameter.eCurveStyle) );
-                    xTemplateProps->setPropertyValue( "CurveResolution" , uno::makeAny(rParameter.nCurveResolution) );
-                    xTemplateProps->setPropertyValue( "SplineOrder" , uno::makeAny(rParameter.nSplineOrder) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_STYLE , uno::makeAny(rParameter.eCurveStyle) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_RESOLUTION , uno::makeAny(rParameter.nCurveResolution) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_SPLINE_ORDER , uno::makeAny(rParameter.nSplineOrder) );
                 }
                 catch( uno::Exception & ex )
                 {

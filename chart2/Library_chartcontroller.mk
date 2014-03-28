@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/chartapiwrapper/WrappedCharacterHeightProperty \
     chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties \
     chart2/source/controller/chartapiwrapper/WrappedGapwidthProperty \
+    chart2/source/controller/chartapiwrapper/WrappedGL3DProperties \
     chart2/source/controller/chartapiwrapper/WrappedNumberFormatProperty \
     chart2/source/controller/chartapiwrapper/WrappedScaleProperty \
     chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties \
