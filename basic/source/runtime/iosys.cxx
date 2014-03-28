@@ -313,8 +313,8 @@ class OslStream : public SvStream
 public:
                         OslStream( const OUString& rName, short nStrmMode );
                        ~OslStream();
-    virtual sal_uInt64 GetData( void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 PutData( const void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
+    virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual void        FlushData() SAL_OVERRIDE;
     virtual void        SetSize( sal_uInt64 nSize) SAL_OVERRIDE;
@@ -357,16 +357,16 @@ OslStream::~OslStream()
     maFile.close();
 }
 
-sal_uInt64 OslStream::GetData( void* pData, sal_uInt64 nSize )
+sal_Size OslStream::GetData(void* pData, sal_Size nSize)
 {
-    sal_uInt64 nBytesRead = nSize;
+    sal_Size nBytesRead = nSize;
     maFile.read( pData, nBytesRead, nBytesRead );
     return nBytesRead;
 }
 
-sal_uInt64 OslStream::PutData( const void* pData, sal_uInt64 nSize )
+sal_Size OslStream::PutData(const void* pData, sal_Size nSize)
 {
-    sal_uInt64 nBytesWritten;
+    sal_Size nBytesWritten;
     maFile.write( pData, nSize, nBytesWritten );
     return nBytesWritten;
 }
@@ -407,8 +407,8 @@ public:
                         UCBStream( Reference< XInputStream > & xIS );
                         UCBStream( Reference< XStream > & xS );
                        ~UCBStream();
-    virtual sal_uInt64 GetData( void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
-    virtual sal_uInt64 PutData( const void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
+    virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual void        FlushData() SAL_OVERRIDE;
     virtual void        SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
@@ -450,7 +450,7 @@ UCBStream::~UCBStream()
     }
 }
 
-sal_uInt64 UCBStream::GetData( void* pData, sal_uInt64 nSize )
+sal_Size UCBStream::GetData(void* pData, sal_Size nSize)
 {
     try
     {
@@ -481,7 +481,7 @@ sal_uInt64 UCBStream::GetData( void* pData, sal_uInt64 nSize )
     return 0;
 }
 
-sal_uInt64 UCBStream::PutData( const void* pData, sal_uInt64 nSize )
+sal_Size UCBStream::PutData(const void* pData, sal_Size nSize)
 {
     try
     {
