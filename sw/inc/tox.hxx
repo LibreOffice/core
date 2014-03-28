@@ -382,10 +382,8 @@ public:
     void    SetPattern(sal_uInt16 nLevel, const String& rStr);
     const SwFormTokens& GetPattern(sal_uInt16 nLevel) const;
 
-    // fill tab stop positions from template to pattern
-    // #i21237#
-    void                    AdjustTabStops(SwDoc& rDoc,
-                                           sal_Bool bInsertNewTabStops = sal_False);
+    // fill tab stop positions from template to pattern- #i21237#
+    void AdjustTabStops( SwDoc& rDoc );
 
     inline TOXTypes GetTOXType() const;
     inline sal_uInt16   GetFormMax() const;
@@ -601,9 +599,14 @@ public:
 
     const String&   GetSortAlgorithm()const {return sSortAlgorithm;}
     void            SetSortAlgorithm(const String& rSet) {sSortAlgorithm = rSet;}
+
     // #i21237#
-    void AdjustTabStops(SwDoc & rDoc, sal_Bool bDefaultRightTabStop);
-    SwTOXBase&          operator=(const SwTOXBase& rSource);
+    inline void AdjustTabStops( SwDoc & rDoc )
+    {
+        aForm.AdjustTabStops( rDoc );
+    }
+
+    SwTOXBase& operator=(const SwTOXBase& rSource);
     void RegisterToTOXType( SwTOXType& rMark );
 };
 
@@ -753,11 +756,6 @@ inline const String& SwTOXBase::GetTypeName() const
 
 inline const SwForm& SwTOXBase::GetTOXForm() const
     { return aForm; }
-
-inline void SwTOXBase::AdjustTabStops(SwDoc & rDoc, sal_Bool bDefaultRightTabStop)
-{
-    aForm.AdjustTabStops(rDoc, bDefaultRightTabStop);
-}
 
 inline void SwTOXBase::SetCreate(sal_uInt16 nCreate)
     { nCreateType = nCreate; }

@@ -3446,16 +3446,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
                         {
                             SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
-
-                            SwFormTokens::iterator new_end=remove_if(aPattern.begin(), aPattern.end(),
-                                      SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
-
-                            aPattern.erase (new_end, aPattern.end() ); // #124710#: table index imported with wrong page number format
-
-                            aForm.SetPattern(nLevel, aPattern);
-
-                            aForm.SetTemplate( nLevel,
-                                aOldForm.GetTemplate(nLevel));
+                            SwFormTokens::iterator new_end =
+                                remove_if(aPattern.begin(), aPattern.end(), SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
+                            aPattern.erase(new_end, aPattern.end() ); // #124710#: table index imported with wrong page number format
+                            aForm.SetPattern( nLevel, aPattern );
+                            aForm.SetTemplate( nLevel, aOldForm.GetTemplate(nLevel) );
                         }
                         // <- #i21237#
 
@@ -3475,17 +3470,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
         break;
     } // ToxBase fertig
 
-    // no Update of TOC anymore as its actual content is imported and kept.
-    //rDoc.SetUpdateTOX(true);
+    // #i21237# - propagate tab stops from paragraph styles used in TOX to patterns of the TOX
+    pBase->AdjustTabStops( rDoc );
 
-    // #i21237#
-    // propagate tab stops from paragraph styles used in TOX to
-    // patterns of the TOX
-    pBase->AdjustTabStops(rDoc, sal_True);
-
-    //#i10028# inserting a toc implicltly acts like a parabreak
-    //in word and writer
-
+    //#i10028# inserting a toc implicltly acts like a parabreak in word and writer
     if ( pPaM->End() &&
          pPaM->End()->nNode.GetNode().GetTxtNode() &&
          pPaM->End()->nNode.GetNode().GetTxtNode()->Len() != 0 )
