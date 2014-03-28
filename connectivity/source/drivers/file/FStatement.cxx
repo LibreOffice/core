@@ -50,8 +50,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
-DBG_NAME( file_OStatement_Base )
-
 
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     :OStatement_BASE(m_aMutex)
@@ -75,7 +73,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,rBHelper(OStatement_BASE::rBHelper)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::OStatement_Base" );
-    DBG_CTOR( file_OStatement_Base, NULL );
 
     m_pConnection->acquire();
 
@@ -98,8 +95,6 @@ OStatement_Base::~OStatement_Base()
     osl_atomic_increment( &m_refCount );
     disposing();
     delete m_pSQLAnalyzer;
-
-    DBG_DTOR( file_OStatement_Base, NULL );
 }
 
 void OStatement_BASE2::disposing()

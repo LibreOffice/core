@@ -51,20 +51,16 @@ using namespace com::sun::star;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbc.driver.file.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-DBG_NAME( file_OPreparedStatement )
-
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::OPreparedStatement" );
-    DBG_CTOR( file_OPreparedStatement, NULL );
 }
 
 
 OPreparedStatement::~OPreparedStatement()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::~OPreparedStatement" );
-    DBG_DTOR( file_OPreparedStatement, NULL );
 }
 
 

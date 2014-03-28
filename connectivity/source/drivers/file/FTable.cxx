@@ -37,7 +37,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-DBG_NAME( file_OFileTable )
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
@@ -48,7 +47,6 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
                 ,m_bWriteable(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
-    DBG_CTOR( file_OFileTable, NULL );
     construct();
     m_aColumns = new OSQLColumns();
 }
@@ -73,7 +71,6 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
     , m_bWriteable(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
-    DBG_CTOR( file_OFileTable, NULL );
     m_aColumns = new OSQLColumns();
     construct();
     //  refreshColumns();
@@ -81,7 +78,6 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
 
 OFileTable::~OFileTable( )
 {
-    DBG_DTOR( file_OFileTable, NULL );
 }
 
 void OFileTable::refreshColumns()

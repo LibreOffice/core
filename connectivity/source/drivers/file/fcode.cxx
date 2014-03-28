@@ -57,16 +57,12 @@ TYPEINIT1(ONthOperator, OOperator);
 TYPEINIT1(OBinaryOperator, OOperator);
 TYPEINIT1(OUnaryOperator, OOperator);
 
-
-DBG_NAME(OCode )
 OCode::OCode()
 {
-    DBG_CTOR(OCode ,NULL);
 }
 
 OCode::~OCode()
 {
-    DBG_DTOR(OCode,NULL);
 }
 
 

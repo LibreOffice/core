@@ -34,14 +34,11 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-DBG_NAME( file_OSQLAnalyzer )
-
 OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
                :m_pConnection(_pConnection)
                ,m_bHasSelectionCode(sal_False)
                ,m_bSelectionFirstTime(sal_True)
 {
-    DBG_CTOR( file_OSQLAnalyzer, NULL );
     m_aCompiler = new OPredicateCompiler(this);
     m_aInterpreter = new OPredicateInterpreter(m_aCompiler);
 }
@@ -49,7 +46,6 @@ OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
 
 OSQLAnalyzer::~OSQLAnalyzer()
 {
-    DBG_DTOR( file_OSQLAnalyzer, NULL );
 }
 
 

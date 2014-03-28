@@ -43,21 +43,17 @@ using namespace com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star;
 
-DBG_NAME(OPredicateCompiler)
-
 OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs)
                      : m_pAnalyzer(pAnalyzer)
                      , m_nParamCounter(0)
                      , m_bORCondition(sal_False)
 {
-    DBG_CTOR(OPredicateCompiler,NULL);
 }
 
 
 OPredicateCompiler::~OPredicateCompiler()
 {
     Clean();
-    DBG_DTOR(OPredicateCompiler,NULL);
 }
 
 void OPredicateCompiler::dispose()

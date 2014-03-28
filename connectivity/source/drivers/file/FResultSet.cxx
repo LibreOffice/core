@@ -73,7 +73,6 @@ namespace
 }
 
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
-DBG_NAME( file_OResultSet )
 
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
@@ -110,7 +109,6 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_bIsCount(sal_False)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::OResultSet" );
-    DBG_CTOR( file_OResultSet, NULL );
     osl_atomic_increment( &m_refCount );
     m_bIsCount = (m_pParseTree &&
             m_pParseTree->count() > 2                                                       &&
@@ -132,7 +130,6 @@ OResultSet::~OResultSet()
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::~OResultSet" );
     osl_atomic_increment( &m_refCount );
     disposing();
-    DBG_DTOR( file_OResultSet, NULL );
 }
 
 void OResultSet::construct()

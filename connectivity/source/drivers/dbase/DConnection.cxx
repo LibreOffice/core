@@ -40,17 +40,13 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(ODbaseConnection)
-
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {
-    DBG_CTOR(ODbaseConnection,NULL);
     m_aFilenameExtension = "dbf";
 }
 
 ODbaseConnection::~ODbaseConnection()
 {
-    DBG_DTOR(ODbaseConnection,NULL);
 }
 
 // XServiceInfo

@@ -44,17 +44,14 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-DBG_NAME( file_ODatabaseMetaData )
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_pConnection(_pCon)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::ODatabaseMetaData" );
-    DBG_CTOR( file_ODatabaseMetaData, NULL );
 }
 
 ODatabaseMetaData::~ODatabaseMetaData()
 {
-    DBG_DTOR( file_ODatabaseMetaData, NULL );
 }
 
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
