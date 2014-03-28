@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_3da047f4",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-28T07:02:25Z",
+      "side": 1,
+      "message": "In other places GetSdrObjectFromXShape() is used instead: http://opengrok.libreoffice.org/xref/core/oox/source/export/shapes.cxx#300",
+      "revId": "4ed6af7fc31a58903eea7f58db015ca2bc395385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
