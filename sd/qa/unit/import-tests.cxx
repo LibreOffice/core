@@ -66,6 +66,7 @@ public:
     void testN862510_1();
     void testN862510_2();
     void testN862510_3();
+    void testN862510_4();
     void testFdo71961();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testN862510_1);
     CPPUNIT_TEST(testN862510_2);
     CPPUNIT_TEST(testN862510_3);
+    CPPUNIT_TEST(testN862510_4);
     CPPUNIT_TEST(testFdo71961);
 
     CPPUNIT_TEST_SUITE_END();
@@ -305,6 +307,31 @@ void SdFiltersTest::testN862510_3()
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );
         CPPUNIT_ASSERT( pObj );
         CPPUNIT_ASSERT_MESSAGE( "Left Spacing is wrong! check attribute anchorCtr", pObj->GetTextLeftDistance() < 30);
+    }
+}
+
+void SdFiltersTest::testN862510_4()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage( 1 );
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        std::vector<EECharAttrib> rLst;
+        SdrObject *pObj = pPage->GetObj( 0 );
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT( pTxtObj );
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        aEdit.GetCharAttribs( 0, rLst );
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it != rLst.rend(); ++it )
+        {
+            const SvxColorItem *pC = dynamic_cast<const SvxColorItem *>( (*it).pAttr );
+            CPPUNIT_ASSERT_MESSAGE( "gradfill for text color not handled!", !( pC && pC->GetValue().GetColor() == 0 ) );
+        }
     }
 }
 
