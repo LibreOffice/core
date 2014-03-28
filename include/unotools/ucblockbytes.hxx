@@ -132,8 +132,8 @@ public:
 
     // SvLockBytes
     virtual void            SetSynchronMode (bool bSynchron) SAL_OVERRIDE;
-    virtual ErrCode         ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const SAL_OVERRIDE;
-    virtual ErrCode         WriteAt ( sal_uLong, const void*, sal_uLong, sal_uLong *pWritten) SAL_OVERRIDE;
+    virtual ErrCode         ReadAt(sal_uInt64 nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const SAL_OVERRIDE;
+    virtual ErrCode         WriteAt(sal_uInt64, const void*, sal_uLong, sal_uLong *pWritten) SAL_OVERRIDE;
     virtual ErrCode         Flush (void) const SAL_OVERRIDE;
     virtual ErrCode         SetSize (sal_uLong) SAL_OVERRIDE;
     virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const SAL_OVERRIDE;

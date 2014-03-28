@@ -138,14 +138,14 @@ inline sal_uInt32 SvDataPipe_Impl::getReadPosition() const
 TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *)
+ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uInt64, void *, sal_uLong, sal_uLong*)
     const
 {
     return ERRCODE_IO_CANTREAD;
 }
 
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffer,
+ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uInt64 const nPos, void const * pBuffer,
                                              sal_uLong nCount, sal_uLong * pWritten)
 {
     if (nPos != m_nPosition)
@@ -215,13 +215,13 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
 }
 
 // virtual
-sal_uLong SvOutputStreamOpenLockBytes::Tell() const
+sal_uInt64 SvOutputStreamOpenLockBytes::Tell() const
 {
     return m_nPosition;
 }
 
 // virtual
-sal_uLong SvOutputStreamOpenLockBytes::Seek(sal_uLong)
+sal_uInt64 SvOutputStreamOpenLockBytes::Seek(sal_uInt64)
 {
     return m_nPosition;
 }
@@ -293,8 +293,7 @@ SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
     while (nSize < nBytesToRead)
     {
         sal_Size nCount;
-        ErrCode nError = m_xLockBytes->ReadAt(static_cast<sal_Size>(
-                                                  m_nPosition),
+        ErrCode nError = m_xLockBytes->ReadAt(m_nPosition,
                                               rData.getArray() + nSize,
                                               nBytesToRead - nSize, &nCount);
         if (nError != ERRCODE_NONE && nError != ERRCODE_IO_PENDING)
@@ -327,7 +326,7 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
         ErrCode nError;
         do
         {
-            nError = m_xLockBytes->ReadAt(static_cast<sal_Size>(m_nPosition),
+            nError = m_xLockBytes->ReadAt(m_nPosition,
                                           rData.getArray(),
                                           nMaxBytesToRead < 0 ?
                                               0 : nMaxBytesToRead,

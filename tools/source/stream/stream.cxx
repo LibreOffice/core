@@ -173,7 +173,7 @@ void SvLockBytes::close()
 TYPEINIT0(SvLockBytes);
 
 // virtual
-ErrCode SvLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
+ErrCode SvLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, sal_Size nCount,
                             sal_Size * pRead) const
 {
     if (!m_pStream)
@@ -190,7 +190,7 @@ ErrCode SvLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
 }
 
 // virtual
-ErrCode SvLockBytes::WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
+ErrCode SvLockBytes::WriteAt(sal_uInt64 const nPos, const void * pBuffer, sal_Size nCount,
                              sal_Size * pWritten)
 {
     if (!m_pStream)
@@ -258,7 +258,7 @@ TYPEINIT1(SvOpenLockBytes, SvLockBytes);
 TYPEINIT1(SvAsyncLockBytes, SvOpenLockBytes);
 
 // virtual
-ErrCode SvAsyncLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
+ErrCode SvAsyncLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, sal_Size nCount,
                                  sal_Size * pRead) const
 {
     if (m_bTerminated)
@@ -274,7 +274,7 @@ ErrCode SvAsyncLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
 }
 
 // virtual
-ErrCode SvAsyncLockBytes::WriteAt(sal_Size nPos, const void * pBuffer,
+ErrCode SvAsyncLockBytes::WriteAt(sal_uInt64 const nPos, const void * pBuffer,
                                   sal_Size nCount, sal_Size * pWritten)
 {
     if (m_bTerminated)
@@ -304,7 +304,7 @@ ErrCode SvAsyncLockBytes::FillAppend(const void * pBuffer, sal_Size nCount,
 }
 
 // virtual
-sal_Size SvAsyncLockBytes::Seek(sal_Size nPos)
+sal_uInt64 SvAsyncLockBytes::Seek(sal_uInt64 const nPos)
 {
     if (nPos != STREAM_SEEK_TO_END)
         m_nSize = nPos;

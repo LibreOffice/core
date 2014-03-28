@@ -47,10 +47,9 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
     ::osl::MutexGuard aGuard( m_aMutex );
     aData.realloc(nBytesToRead);
 
-    sal_Size nRead;
+    sal_Size nRead(0);
     ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, (void*)aData.getArray(), nBytesToRead, &nRead);
-    // FIXME  nRead could be truncated on 64-bit arches
-    m_nActPos += (sal_uInt32)nRead;
+    m_nActPos += nRead;
 
     if (nError != ERRCODE_NONE)
         throw stario::IOException(OUString(), static_cast<staruno::XWeak*>(this));
@@ -65,9 +64,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
 void SAL_CALL OInputStreamHelper::seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // cast is truncating, but position would be truncated as soon as
-    // put into SvLockBytes anyway
-    m_nActPos = sal::static_int_cast<sal_uInt32>(location);
+    m_nActPos = location;
 }
 
 sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)

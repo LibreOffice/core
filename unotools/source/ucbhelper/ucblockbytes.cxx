@@ -1374,7 +1374,8 @@ void UcbLockBytes::SetSynchronMode (bool bSynchron)
 }
 
 
-ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
+ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
+        void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
 {
     if ( IsSynchronMode() )
     {
@@ -1442,7 +1443,8 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
 }
 
 
-ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong nCount, sal_uLong *pWritten)
+ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
+        sal_uLong nCount, sal_uLong *pWritten)
 {
     if ( pWritten )
         *pWritten = 0;

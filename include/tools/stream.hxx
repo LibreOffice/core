@@ -129,9 +129,9 @@ public:
     virtual void    SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
     virtual bool    IsSynchronMode() const { return m_bSync; }
 
-    virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
+    virtual ErrCode ReadAt(sal_uInt64 nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
-    virtual ErrCode WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
+    virtual ErrCode WriteAt(sal_uInt64 nPos, const void * pBuffer, sal_Size nCount,
                             sal_Size * pWritten);
 
     virtual ErrCode Flush() const;
@@ -157,9 +157,9 @@ public:
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
                                sal_Size * pWritten) = 0;
 
-    virtual sal_Size Tell() const = 0;
+    virtual sal_uInt64 Tell() const = 0;
 
-    virtual sal_Size Seek(sal_Size nPos) = 0;
+    virtual sal_uInt64 Seek(sal_uInt64 nPos) = 0;
 
     virtual void    Terminate() = 0;
 };
@@ -170,7 +170,7 @@ SV_DECL_IMPL_REF(SvOpenLockBytes);
 
 class SvAsyncLockBytes: public SvOpenLockBytes
 {
-    sal_Size m_nSize;
+    sal_uInt64 m_nSize;
     bool m_bTerminated;
 
 public:
@@ -179,17 +179,17 @@ public:
     SvAsyncLockBytes(SvStream * pStream, bool bOwner):
         SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(false) {}
 
-    virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
+    virtual ErrCode ReadAt(sal_uInt64 nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const SAL_OVERRIDE;
-    virtual ErrCode WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
+    virtual ErrCode WriteAt(sal_uInt64 nPos, const void * pBuffer, sal_Size nCount,
                             sal_Size * pWritten) SAL_OVERRIDE;
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
                                sal_Size * pWritten) SAL_OVERRIDE;
 
-    virtual sal_Size Tell() const SAL_OVERRIDE { return m_nSize; }
+    virtual sal_uInt64 Tell() const SAL_OVERRIDE { return m_nSize; }
 
-    virtual sal_Size Seek(sal_Size nPos) SAL_OVERRIDE;
+    virtual sal_uInt64 Seek(sal_uInt64 nPos) SAL_OVERRIDE;
 
     virtual void    Terminate() SAL_OVERRIDE { m_bTerminated = true; }
 };

@@ -47,8 +47,8 @@ public:
                         ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
-    virtual ErrCode     ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const SAL_OVERRIDE;
-    virtual ErrCode     WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten ) SAL_OVERRIDE;
+    virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, sal_Size nCount, sal_Size * pRead ) const SAL_OVERRIDE;
+    virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, sal_Size nCount, sal_Size * pWritten ) SAL_OVERRIDE;
     virtual ErrCode     Flush() const SAL_OVERRIDE;
     virtual ErrCode     SetSize( sal_Size nSize ) SAL_OVERRIDE;
     virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const SAL_OVERRIDE;
@@ -94,9 +94,8 @@ ImgProdLockBytes::~ImgProdLockBytes()
 {
 }
 
-
-
-ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const
+ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
+        void* pBuffer, sal_Size nCount, sal_Size * pRead) const
 {
     if( GetStream() )
     {
@@ -125,9 +124,8 @@ ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount,
     }
 }
 
-
-
-ErrCode ImgProdLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten )
+ErrCode ImgProdLockBytes::WriteAt(sal_uInt64 const nPos,
+        const void* pBuffer, sal_Size nCount, sal_Size * pWritten)
 {
     if( GetStream() )
         return SvLockBytes::WriteAt( nPos, pBuffer, nCount, pWritten );

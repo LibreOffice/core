@@ -43,13 +43,13 @@ class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public InputStreamHelper_Base
 {
     ::osl::Mutex    m_aMutex;
     SvLockBytesRef  m_xLockBytes;
-    sal_uInt32      m_nActPos;
+    sal_uInt64      m_nActPos;
     sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
 
 public:
     OInputStreamHelper(const SvLockBytesRef& _xLockBytes,
                        sal_uInt32 _nAvailable,
-                       sal_uInt32 _nPos = 0)
+                       sal_uInt64 _nPos = 0)
         :m_xLockBytes(_xLockBytes)
         ,m_nActPos(_nPos)
         ,m_nAvailable(_nAvailable){}

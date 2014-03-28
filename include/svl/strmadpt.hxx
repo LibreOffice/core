@@ -32,7 +32,7 @@ class SVL_DLLPUBLIC SvOutputStreamOpenLockBytes: public SvOpenLockBytes
 {
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         m_xOutputStream;
-    sal_uInt32 m_nPosition;
+    sal_uInt64 m_nPosition;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -43,10 +43,10 @@ public:
                 rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
-    virtual ErrCode ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *) const SAL_OVERRIDE;
+    virtual ErrCode ReadAt(sal_uInt64, void *, sal_uLong, sal_uInt64 *) const SAL_OVERRIDE;
 
-    virtual ErrCode WriteAt(sal_uLong nPos, const void * pBuffer, sal_uLong nCount,
-                            sal_uLong * pWritten) SAL_OVERRIDE;
+    virtual ErrCode WriteAt(sal_uInt64 nPos, const void * pBuffer, sal_uLong nCount,
+                            sal_uInt64 * pWritten) SAL_OVERRIDE;
 
     virtual ErrCode Flush() const SAL_OVERRIDE;
 
@@ -57,9 +57,9 @@ public:
     virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
                                sal_uLong * pWritten) SAL_OVERRIDE;
 
-    virtual sal_uLong Tell() const SAL_OVERRIDE;
+    virtual sal_uInt64 Tell() const SAL_OVERRIDE;
 
-    virtual sal_uLong Seek(sal_uLong) SAL_OVERRIDE;
+    virtual sal_uInt64 Seek(sal_uInt64) SAL_OVERRIDE;
 
     virtual void Terminate() SAL_OVERRIDE;
 };
