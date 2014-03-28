@@ -889,8 +889,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     aNewSection.maSep.ccolM1 = ReadSprm(pSep, pIds[3], 0 );
     if ( aNewSection.maSep.ccolM1 >= MAX_NO_OF_SEP_COLUMNS )
     {
-        // fallback to one column
-        aNewSection.maSep.ccolM1 = 0;
+        // clip to max
+        aNewSection.maSep.ccolM1 = MAX_NO_OF_SEP_COLUMNS-1;
     }
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
