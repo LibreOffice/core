@@ -30,7 +30,6 @@
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
 #include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
-#include <com/sun/star/document/LockedOnSavingRequest.hpp>
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -888,7 +887,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& a
             xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
                 document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
         }
-        else
+        else /*logically therefore bIsLoading is set */
         {
             if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
             {
@@ -905,17 +904,8 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& a
                 }
             }
 
-            if ( bIsLoading )
-            {
-                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                    document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
-            }
-            else
-            {
-                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                    document::LockedOnSavingRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
-
-            }
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
         }
 
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
