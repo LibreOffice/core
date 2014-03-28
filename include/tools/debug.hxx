@@ -28,8 +28,7 @@
 /** The facilities provided by this header are deprecated.  True assertions
     (that detect broken program logic) should use standard assert (which aborts
     if an assertion fails, and is controlled by the standard NDEBUG macro).
-    Logging of warnings (e.g., about malformed input) and traces (e.g., about
-    steps taken while executing some protocol) should use the facilities
+    Logging of warnings (e.g., about malformed input) should use the facilities
     provided by sal/log.hxx.
 
     Because the assertion macro (DBG_ASSERT) has been used for
@@ -46,13 +45,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 typedef void (*DbgTestSolarMutexProc)();
 
 #define DBG_BUF_MAXLEN              16384
-
-#define DBG_TEST_XTOR               (0x00000FFF)
-#define DBG_TEST_XTOR_THIS          (0x00000001)
-#define DBG_TEST_XTOR_FUNC          (0x00000002)
-#define DBG_TEST_XTOR_EXIT          (0x00000004)
-#define DBG_TEST_XTOR_REPORT        (0x00000008)
-#define DBG_TEST_XTOR_TRACE         (0x00000010)
 
 #define DBG_TEST_RESOURCE           (0x02000000)
 #define DBG_TEST_DIALOG             (0x04000000)
@@ -76,7 +68,6 @@ struct DbgData
 {
     sal_uIntPtr       nTestFlags;
     bool              bOverwrite;
-    sal_uIntPtr       nTraceOut;
     sal_uIntPtr       nErrorOut;
     sal_Char    aDebugName[260];
     sal_Char    aInclFilter[512];
@@ -99,7 +90,6 @@ struct DbgDataType
 #define DBG_FUNC_SAVEDATA           5
 #define DBG_FUNC_SETPRINTMSGBOX     6
 #define DBG_FUNC_SETPRINTWINDOW     7
-#define DBG_FUNC_XTORINFO           10
 #define DBG_FUNC_COREDUMP           12
 #define DBG_FUNC_ALLERROROUT        13
 #define DBG_FUNC_SETTESTSOLARMUTEX  14
@@ -146,7 +136,6 @@ typedef sal_uInt16 DbgChannelId;
         the function for emitting the diagnostic messages
     @return
         a unique number for this channel, which can be used for ->DbgData::nErrorOut
-        and ->DbgData::nTraceOut
     @see DBG_OUT_USER_CHANNEL_0
 
     (In theory, this function could replace the other hard-coded channels. Well, at least
@@ -205,11 +194,6 @@ inline sal_uIntPtr DbgIsBoldAppFont()
         return sal_False;
 }
 
-inline void DbgXtorInfo( sal_Char* pBuf )
-{
-    DbgFunc( DBG_FUNC_XTORINFO, (void*)pBuf );
-}
-
 inline void DbgCoreDump()
 {
     DbgFunc( DBG_FUNC_COREDUMP );
@@ -230,84 +214,11 @@ inline void DbgPrintFile( const sal_Char* pLine )
     DbgFunc( DBG_FUNC_PRINTFILE, (void*)(sal_Char*)pLine );
 }
 
-// Dbg output
-#define DBG_OUT_TRACE               1
-#define DBG_OUT_ERROR               2
-
 TOOLS_DLLPUBLIC void DbgPrintShell(char const * message);
-TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ... );
-
-// Dbg test functions
-
-#define DBG_XTOR_CTOR               1
-#define DBG_XTOR_DTOR               2
-#define DBG_XTOR_CHKTHIS            3
-#define DBG_XTOR_CHKOBJ             4
-#define DBG_XTOR_DTOROBJ            0x8000
-
-TOOLS_DLLPUBLIC void DbgXtor( DbgDataType* pDbgData,
-              sal_uInt16 nAction, const void* pThis, DbgUsr fDbgUsr );
-
-class DbgXtorObj
-{
-private:
-    DbgDataType*    pDbgData;
-    const void*     pThis;
-    DbgUsr          fDbgUsr;
-    sal_uInt16      nAction;
-
-public:
-                    DbgXtorObj( DbgDataType* pData,
-                                sal_uInt16 nAct, const void* pThs, DbgUsr fUsr )
-                    {
-                        DbgXtor( pData, nAct, pThs, fUsr );
-                        pDbgData = pData;
-                        nAction  = nAct;
-                        pThis    = pThs;
-                        fDbgUsr  = fUsr;
-                    }
-
-                    ~DbgXtorObj()
-                    {
-                        DbgXtor( pDbgData, nAction | DBG_XTOR_DTOROBJ,
-                                 pThis, fDbgUsr );
-                    }
-};
-
-// (internally used) defines
-
-#define DBG_FUNC( aName )                   DbgName_##aName()
-#define DBG_NAME( aName )                   static DbgDataType aImpDbgData_##aName = { 0, #aName }; \
-                                            DbgDataType* DBG_FUNC( aName ) { return &aImpDbgData_##aName; }
-#define DBG_NAMEEX_VISIBILITY( aName, vis ) vis DbgDataType* DBG_FUNC( aName );
-#define DBG_NAMEEX( aName )                 DBG_NAMEEX_VISIBILITY( aName, )
-
-// (externally used) defines
+TOOLS_DLLPUBLIC void DbgOutTypef( const sal_Char* pFStr, ... );
 
 #define DBG_DEBUGSTART()                    DbgDebugStart()
 #define DBG_DEBUGEND()                      DbgDebugEnd()
-
-#define DBG_CTOR( aName, fTest )                    \
-    DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
-                            DBG_XTOR_CTOR,          \
-                            (const void*)this,      \
-                            fTest )
-
-#define DBG_DTOR( aName, fTest )                    \
-    DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
-                            DBG_XTOR_DTOR,          \
-                            (const void*)this,      \
-                            fTest )
-
-#define DBG_CHKTHIS( aName, fTest )                 \
-    DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
-                            DBG_XTOR_CHKTHIS,       \
-                            (const void*)this,      \
-                            fTest )
-
-#define DBG_CHKOBJ( pObj, aName, fTest )            \
-    DbgXtor( DBG_FUNC( aName ), DBG_XTOR_CHKOBJ,    \
-             (const void*)pObj, (DbgUsr)fTest )
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
     SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", aWarning)
@@ -325,14 +236,6 @@ public:
 do                                          \
 {                                           \
     DbgTestSolarMutex();                    \
-} while(false)
-
-// en-/disable debug defines
-
-#define DBG_INSTOUTTRACE( nOut )            \
-do                                          \
-{                                           \
-    DbgGetData()->nTraceOut = nOut;         \
 } while(false)
 
 #define DBG_INSTOUTERROR( nOut )            \
@@ -353,15 +256,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_DEBUGSTART() ((void)0)
 #define DBG_DEBUGEND() ((void)0)
 
-#define DBG_NAME( aName )
-#define DBG_NAMEEX( aName )
-#define DBG_NAMEEX_VISIBILITY( aName, vis )
-
-#define DBG_CTOR( aName, fTest ) ((void)0)
-#define DBG_DTOR( aName, fTest ) ((void)0)
-#define DBG_CHKTHIS( aName, fTest ) ((void)0)
-#define DBG_CHKOBJ( pObj, aName, fTest ) ((void)0)
-
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
 #define DBG_WARNING( aWarning ) ((void)0)
@@ -369,7 +263,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
 
-#define DBG_INSTOUTTRACE( nOut ) ((void)0)
 #define DBG_INSTOUTERROR( nOut ) ((void)0)
 
 #endif

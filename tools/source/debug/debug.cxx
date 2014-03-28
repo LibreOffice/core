@@ -47,54 +47,6 @@
 
 #ifdef DBG_UTIL
 
-void DbgOutf( const sal_Char* pFStr, ... );
-
-// PointerList
-
-#define PBLOCKCOUNT     1024
-
-struct PBlock
-{
-    void*       aData[PBLOCKCOUNT];
-    sal_uInt16  nCount;
-    PBlock*     pPrev;
-    PBlock*     pNext;
-};
-
-class PointerList
-{
-private:
-    PBlock*     pFirst;
-    PBlock*     pLast;
-    sal_uIntPtr nCount;
-
-public:
-                PointerList() { pFirst = NULL; pLast = NULL; nCount = 0; }
-                ~PointerList();
-
-    void        Add( const void* p );
-    bool        Remove( const void* p );
-
-    const void* Get( sal_uIntPtr nPos ) const;
-    bool        IsIn( const void* p ) const;
-    sal_uIntPtr Count() const { return nCount; }
-};
-
-// data types
-
-#define DBG_MAXNAME     28
-
-struct XtorType
-{
-    sal_uIntPtr             nCtorCalls;
-    sal_uIntPtr             nDtorCalls;
-    sal_uIntPtr             nMaxCount;
-    sal_uIntPtr             nStatics;
-    sal_Char                aName[DBG_MAXNAME+1];
-    bool                    bTest;
-    PointerList             aThisList;
-};
-
 struct DebugData
 {
     DbgData                 aDbgData;
@@ -104,7 +56,6 @@ struct DebugData
     DbgPrintLine            pDbgAbort;
     ::std::vector< DbgPrintLine >
                             aDbgPrintUserChannels;
-    PointerList*            pXtorList;
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
 
     DebugData()
@@ -112,12 +63,10 @@ struct DebugData
         ,pDbgPrintMsgBox( NULL )
         ,pDbgPrintWindow( NULL )
         ,pDbgAbort( NULL )
-        ,pXtorList( NULL )
         ,pDbgTestSolarMutex( NULL )
     {
         aDbgData.nTestFlags = DBG_TEST_RESOURCE;
         aDbgData.bOverwrite = true;
-        aDbgData.nTraceOut = DBG_OUT_NULL;
 #ifdef UNX
         aDbgData.nErrorOut = DBG_OUT_SHELL;
 #else
@@ -131,11 +80,6 @@ struct DebugData
         aDbgData.aDbgWinState[0] = 0;
     }
 };
-
-#define DBG_TEST_XTOR_EXTRA (DBG_TEST_XTOR_THIS |  DBG_TEST_XTOR_FUNC |               \
-                             DBG_TEST_XTOR_EXIT |  DBG_TEST_XTOR_REPORT )
-
-// static maintenance variables
 
 static DebugData aDebugData;
 static sal_Char aCurPath[260];
@@ -224,7 +168,6 @@ namespace
         eOutput,
         eMemory,
         eGUI,
-        eObjects,
         eTest,
 
         eUnknown
@@ -243,7 +186,6 @@ namespace
             case eOutput    : pSectionName = "output";  break;
             case eMemory    : pSectionName = "memory";  break;
             case eGUI       : pSectionName = "gui";     break;
-            case eObjects   : pSectionName = "objects"; break;
             case eTest      : pSectionName = "test";    break;
             case eUnknown:
                 OSL_ASSERT(false);
@@ -260,8 +202,6 @@ namespace
             return eMemory;
         if ( strncmp( _pSectionName, "gui",     _nSectionNameLength < 3 ? _nSectionNameLength : 3 ) == 0 )
             return eGUI;
-        if ( strncmp( _pSectionName, "objects", _nSectionNameLength < 7 ? _nSectionNameLength : 7 ) == 0 )
-            return eObjects;
         if ( strncmp( _pSectionName, "test",    _nSectionNameLength < 4 ? _nSectionNameLength : 4 ) == 0 )
             return eTest;
         return eUnknown;
@@ -377,144 +317,6 @@ namespace
     }
 }
 
-PointerList::~PointerList()
-{
-    PBlock* pBlock = pFirst;
-    while ( pBlock )
-    {
-        PBlock* pNextBlock = pBlock->pNext;
-        delete pBlock;
-        pBlock = pNextBlock;
-    }
-}
-
-void PointerList::Add( const void* p )
-{
-    if ( !pFirst )
-    {
-        pFirst = new PBlock;
-        memset( pFirst->aData, 0, PBLOCKCOUNT * sizeof( void* ) );
-        pFirst->nCount = 0;
-        pFirst->pPrev  = NULL;
-        pFirst->pNext  = NULL;
-        pLast = pFirst;
-    }
-
-    PBlock* pBlock = pFirst;
-    while ( pBlock && (pBlock->nCount == PBLOCKCOUNT) )
-        pBlock = pBlock->pNext;
-
-    if ( !pBlock )
-    {
-        pBlock = new PBlock;
-        memset( pBlock->aData, 0, PBLOCKCOUNT * sizeof( void* ) );
-        pBlock->nCount = 0;
-        pBlock->pPrev  = pLast;
-        pBlock->pNext  = NULL;
-        pLast->pNext   = pBlock;
-        pLast          = pBlock;
-    }
-
-    sal_uInt16 i = 0;
-    while ( pBlock->aData[i] )
-        i++;
-
-    pBlock->aData[i] = (void*)p;
-    pBlock->nCount++;
-    nCount++;
-}
-
-bool PointerList::Remove( const void* p )
-{
-    if ( !p )
-       return false;
-
-    PBlock* pBlock = pFirst;
-    while ( pBlock )
-    {
-        sal_uInt16 i = 0;
-        while ( i < PBLOCKCOUNT )
-        {
-            if ( ((sal_uIntPtr)p) == ((sal_uIntPtr)pBlock->aData[i]) )
-            {
-                pBlock->aData[i] = NULL;
-                pBlock->nCount--;
-                nCount--;
-
-                if ( !pBlock->nCount )
-                {
-                    if ( pBlock->pPrev )
-                        pBlock->pPrev->pNext = pBlock->pNext;
-                    if ( pBlock->pNext )
-                        pBlock->pNext->pPrev = pBlock->pPrev;
-                    if ( pBlock == pFirst )
-                        pFirst = pBlock->pNext;
-                    if ( pBlock == pLast )
-                        pLast = pBlock->pPrev;
-                    delete pBlock;
-                }
-
-                return true;
-            }
-            i++;
-        }
-
-        pBlock = pBlock->pNext;
-    }
-
-    return false;
-}
-
-const void* PointerList::Get( sal_uIntPtr nPos ) const
-{
-    if ( nCount <= nPos )
-        return NULL;
-
-    PBlock* pBlock = pFirst;
-    sal_uIntPtr   nStart = 0;
-    while ( pBlock )
-    {
-        sal_uInt16 i = 0;
-        while ( i < PBLOCKCOUNT )
-        {
-            if ( pBlock->aData[i] )
-            {
-                nStart++;
-                if ( (nStart-1) == nPos )
-                    return pBlock->aData[i];
-            }
-
-            i++;
-        }
-
-        pBlock = pBlock->pNext;
-    }
-
-    return NULL;
-}
-
-bool PointerList::IsIn( const void* p ) const
-{
-    if ( !p )
-       return false;
-
-    PBlock* pBlock = pFirst;
-    while ( pBlock )
-    {
-        sal_uInt16 i = 0;
-        while ( i < PBLOCKCOUNT )
-        {
-            if ( ((sal_uIntPtr)p) == ((sal_uIntPtr)pBlock->aData[i]) )
-                return true;
-            i++;
-        }
-
-        pBlock = pBlock->pNext;
-    }
-
-    return false;
-}
-
 static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
 {
 #if defined( UNX )
@@ -589,7 +391,6 @@ static DebugData* GetDebugData()
                     lcl_tryReadConfigString( pLine, nLineLength, "exclude", aDebugData.aDbgData.aExclFilter, sizeof( aDebugData.aDbgData.aExclFilter ) );
                     lcl_tryReadConfigString( pLine, nLineLength, "include_class", aDebugData.aDbgData.aInclClassFilter, sizeof( aDebugData.aDbgData.aInclClassFilter ) );
                     lcl_tryReadConfigString( pLine, nLineLength, "exclude_class", aDebugData.aDbgData.aExclClassFilter, sizeof( aDebugData.aDbgData.aExclClassFilter ) );
-                    lcl_tryReadOutputChannel( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTraceOut );
                     lcl_tryReadOutputChannel( pLine, nLineLength, "error", &aDebugData.aDbgData.nErrorOut );
                 }
 
@@ -597,16 +398,6 @@ static DebugData* GetDebugData()
                 if ( eCurrentSection == eGUI )
                 {
                     lcl_tryReadConfigString( pLine, nLineLength, "debug_window_state", aDebugData.aDbgData.aDbgWinState, sizeof( aDebugData.aDbgData.aDbgWinState ) );
-                }
-
-                // elements of the [objects] section
-                if ( eCurrentSection == eObjects )
-                {
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "check_this", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_THIS );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "check_function", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_FUNC );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "check_exit", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_EXIT );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "generate_report", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_REPORT );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTestFlags, DBG_TEST_XTOR_TRACE );
                 }
 
                 // elements of the [test] section
@@ -624,7 +415,6 @@ static DebugData* GetDebugData()
         }
         else
         {
-            lcl_matchOutputChannel( getenv( "DBGSV_TRACE_OUT" ), &aDebugData.aDbgData.nTraceOut );
             lcl_matchOutputChannel( getenv( "DBGSV_ERROR_OUT" ), &aDebugData.aDbgData.nErrorOut );
 
         }
@@ -634,10 +424,6 @@ static DebugData* GetDebugData()
         {
             OSL_TRACE( "getcwd failed with error %s", strerror(errno) );
         }
-
-        // initialize debug data
-        if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
-            aDebugData.pXtorList = new PointerList;
     }
 
     return &aDebugData;
@@ -773,111 +559,16 @@ static void DebugInit()
 
 static void DebugDeInit()
 {
-    DebugData*  pData = GetDebugData();
-    sal_uIntPtr       i;
-    sal_uIntPtr       nCount;
-    sal_uIntPtr       nOldOut;
-
-    // Output statistics trace data to file
-    nOldOut = pData->aDbgData.nTraceOut;
-    pData->aDbgData.nTraceOut = DBG_OUT_FILE;
-
-    // output Xtor list
-    if ( pData->pXtorList && pData->pXtorList->Count() &&
-         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_REPORT) )
-    {
-        DbgOutf( "------------------------------------------------------------------------------" );
-        DbgOutf( "Object Report" );
-        DbgOutf( "------------------------------------------------------------------------------" );
-        DbgOutf( "%-27s : %-9s : %-9s : %-7s : %-3s : %-6s :",
-                 "XTor-List", "Ctor", "Dtor", "MaxInst", "St.", "Diff." );
-        DbgOutf( "----------------------------:-----------:-----------:---------:----:---------:" );
-        for( i = 0, nCount = pData->pXtorList->Count(); i < nCount; i++ )
-        {
-            XtorType* pXtorData = (XtorType*)pData->pXtorList->Get( i );
-            if ( pXtorData->bTest )
-            {
-                // Add static objects
-                pXtorData->nDtorCalls += pXtorData->nStatics;
-                if ( pXtorData->nStatics && (pXtorData->nDtorCalls > pXtorData->nCtorCalls) )
-                    pXtorData->nDtorCalls = pXtorData->nCtorCalls;
-                DbgOutf( "%-27s : %9lu : %9lu : %7lu : %3lu : %4lu %-1s :",
-                         pXtorData->aName, pXtorData->nCtorCalls, pXtorData->nDtorCalls,
-                         pXtorData->nMaxCount, pXtorData->nStatics,
-                         pXtorData->nCtorCalls - pXtorData->nDtorCalls,
-                         (pXtorData->nCtorCalls - pXtorData->nDtorCalls) ? "!" : " " );
-            }
-        }
-        DbgOutf( "==============================================================================" );
-    }
-
-    // free XtorList
-    if ( pData->pXtorList )
-    {
-        for( i = 0, nCount = pData->pXtorList->Count(); i < nCount; i++ )
-        {
-            XtorType* pXtorData = (XtorType*)pData->pXtorList->Get( i );
-            delete pXtorData;
-        }
-        delete pData->pXtorList;
-        pData->pXtorList = NULL;
-    }
-
     // Set everything to false, as global variables
     // may cause a system crash otherwise.
     // Maintain memory flags, as otherwise new/delete calls
     // for global variables will crash,
     // as pointer alignment won't work then.
-    pData->aDbgData.nTraceOut   = nOldOut;
+    DebugData*  pData = GetDebugData();
     pData->aDbgData.nTestFlags = 0;
     pData->aDbgPrintUserChannels.clear();
     pData->pDbgPrintWindow      = NULL;
     ImplDbgDeInitLock();
-}
-
-void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... )
-{
-    va_list pList;
-
-    va_start( pList, pFStr );
-    sal_Char aBuf[DBG_BUF_MAXLEN];
-    vsprintf( aBuf, pFStr, pList );
-    va_end( pList );
-
-    strcat( pBuf, aBuf );
-    strcat( pBuf, "\n" );
-}
-
-static void DebugXTorInfo( sal_Char* pBuf )
-{
-    DebugData*  pData = GetDebugData();
-    sal_uIntPtr       i;
-    sal_uIntPtr       nCount;
-
-    // output Xtor list
-    if ( pData->pXtorList && pData->pXtorList->Count() &&
-         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_REPORT) )
-    {
-        ImpDbgOutfBuf( pBuf, "------------------------------------------------------------------------------" );
-        ImpDbgOutfBuf( pBuf, "Object Report" );
-        ImpDbgOutfBuf( pBuf, "------------------------------------------------------------------------------" );
-        ImpDbgOutfBuf( pBuf, "%-27s : %-9s : %-9s : %-7s : %-3s : %-6s :",
-                       "XTor-List", "Ctor", "Dtor", "MaxInst", "St.", "Diff." );
-        ImpDbgOutfBuf( pBuf, "----------------------------:-----------:-----------:---------:----:---------:" );
-        for( i = 0, nCount = pData->pXtorList->Count(); i < nCount; i++ )
-        {
-            XtorType* pXtorData = (XtorType*)pData->pXtorList->Get( i );
-            if ( pXtorData->bTest )
-            {
-                ImpDbgOutfBuf( pBuf, "%-27s : %9lu : %9lu : %7lu : %3lu : %6lu :",
-                               pXtorData->aName, pXtorData->nCtorCalls, pXtorData->nDtorCalls,
-                               pXtorData->nMaxCount, pXtorData->nStatics,
-                               pXtorData->nCtorCalls - pXtorData->nDtorCalls );
-            }
-        }
-        ImpDbgOutfBuf( pBuf, "==============================================================================" );
-        ImpDbgOutfBuf( pBuf, "" );
-    }
 }
 
 bool ImplDbgFilterMessage( const sal_Char* pMsg )
@@ -937,20 +628,11 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 lcl_writeConfigString( pIniFile, "exclude", pData->aExclFilter );
                 lcl_writeConfigString( pIniFile, "include_class", pData->aInclClassFilter );
                 lcl_writeConfigString( pIniFile, "exclude_class", pData->aExclClassFilter );
-                lcl_writeConfigOutChannel( pIniFile, "trace", pData->nTraceOut );
                 lcl_writeConfigOutChannel( pIniFile, "error", pData->nErrorOut );
 
                 lcl_lineFeed( pIniFile );
                 lcl_startSection( pIniFile, eGUI );
                 lcl_writeConfigString( pIniFile, "debug_window_state", pData->aDbgWinState );
-
-                lcl_lineFeed( pIniFile );
-                lcl_startSection( pIniFile, eObjects );
-                lcl_writeConfigFlag( pIniFile, "check_this", pData->nTestFlags, DBG_TEST_XTOR_THIS );
-                lcl_writeConfigFlag( pIniFile, "check_function", pData->nTestFlags, DBG_TEST_XTOR_FUNC );
-                lcl_writeConfigFlag( pIniFile, "check_exit", pData->nTestFlags, DBG_TEST_XTOR_EXIT );
-                lcl_writeConfigFlag( pIniFile, "generate_report", pData->nTestFlags, DBG_TEST_XTOR_REPORT );
-                lcl_writeConfigFlag( pIniFile, "trace", pData->nTestFlags, DBG_TEST_XTOR_TRACE );
 
                 lcl_lineFeed( pIniFile );
                 lcl_startSection( pIniFile, eTest );
@@ -960,10 +642,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 
                 FileClose( pIniFile );
                 }
-                break;
-
-            case DBG_FUNC_XTORINFO:
-                DebugXTorInfo( (sal_Char*)pParam );
                 break;
 
             case DBG_FUNC_COREDUMP:
@@ -1001,160 +679,7 @@ DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc )
     return (DbgChannelId)( pData->aDbgPrintUserChannels.size() - 1 + DBG_OUT_USER_CHANNEL_0 );
 }
 
-void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
-              DbgUsr fDbgUsr )
-{
-    DebugData* pData = ImplGetDebugData();
-
-    // quick test
-    if ( !(pData->aDbgData.nTestFlags & DBG_TEST_XTOR) )
-        return;
-
-    XtorType* pXtorData = (XtorType*)pDbgData->pData;
-    if ( !pXtorData )
-    {
-        pDbgData->pData = (void*)new XtorType;
-        pXtorData = (XtorType*)pDbgData->pData;
-        strncpy( pXtorData->aName, pDbgData->pName, DBG_MAXNAME );
-        pXtorData->aName[DBG_MAXNAME] = '\0';
-        pXtorData->nCtorCalls   = 0;
-        pXtorData->nDtorCalls   = 0;
-        pXtorData->nMaxCount    = 0;
-        pXtorData->nStatics     = 0;
-        pXtorData->bTest        = true;
-        pData->pXtorList->Add( (void*)pXtorData );
-
-        if ( !ImplDbgFilter( pData->aDbgData.aInclClassFilter, pXtorData->aName, true ) )
-            pXtorData->bTest = false;
-        if ( ImplDbgFilter( pData->aDbgData.aExclClassFilter, pXtorData->aName, false ) )
-            pXtorData->bTest = false;
-    }
-    if ( !pXtorData->bTest )
-        return;
-
-    sal_uInt16      nAct = nAction & ~DBG_XTOR_DTOROBJ;
-
-    SAL_INFO_IF(
-        ((pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE)
-         && !(nAction & DBG_XTOR_DTOROBJ) && nAct != DBG_XTOR_CHKOBJ),
-        "tools.debug",
-        (nAct == DBG_XTOR_CTOR ? "Enter Ctor from class "
-         : nAct == DBG_XTOR_DTOR ? "Enter Dtor from class "
-         : "Enter method from class ") << pDbgData->pName);
-
-    // If some Xtor-tests are still tracing
-    if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXTRA )
-    {
-        // call DBG_CTOR before all other DBG_XTOR calls
-        if ( ((nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR) && !pDbgData->pData )
-        {
-            SAL_WARN(
-                "tools.debug",
-                "DBG_DTOR() or DBG_CHKTHIS() without DBG_CTOR(): "
-                    << pDbgData->pName);
-            return;
-        }
-
-        // Test if the pointer is still valid
-        if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_THIS )
-        {
-            if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXIT) ||
-                 !(nAction & DBG_XTOR_DTOROBJ) )
-            {
-                // This-Pointer == NULL
-                if ( !pThis )
-                {
-                    SAL_WARN(
-                        "tools.debug",
-                        "this == NULL in class " << pDbgData->pName);
-                    return;
-                }
-
-                if ( (nAction & ~DBG_XTOR_DTOROBJ) != DBG_XTOR_CTOR )
-                {
-                    SAL_WARN_IF(
-                        !pXtorData->aThisList.IsIn(pThis), "tools.debug",
-                        "invalid this-Pointer %p in class " << pDbgData->pName);
-                }
-            }
-        }
-
-        // execute function test and update maintenance data
-        const sal_Char* pMsg = NULL;
-        switch ( nAction & ~DBG_XTOR_DTOROBJ )
-        {
-            case DBG_XTOR_CTOR:
-                if ( nAction & DBG_XTOR_DTOROBJ )
-                {
-                    if ( fDbgUsr &&
-                         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXIT) &&
-                         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_FUNC) )
-                        pMsg = fDbgUsr( pThis );
-                }
-                else
-                {
-                    pXtorData->nCtorCalls++;
-                    if ( !bDbgImplInMain )
-                        pXtorData->nStatics++;
-                    if ( (pXtorData->nCtorCalls-pXtorData->nDtorCalls) > pXtorData->nMaxCount )
-                        pXtorData->nMaxCount = pXtorData->nCtorCalls - pXtorData->nDtorCalls;
-
-                    if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_THIS )
-                        pXtorData->aThisList.Add( pThis );
-                }
-                break;
-
-            case DBG_XTOR_DTOR:
-                if ( nAction & DBG_XTOR_DTOROBJ )
-                {
-                    pXtorData->nDtorCalls++;
-                    if ( pData->aDbgData.nTestFlags & DBG_TEST_XTOR_THIS )
-                        pXtorData->aThisList.Remove( pThis );
-                }
-                else
-                {
-                    if ( fDbgUsr &&
-                         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_FUNC) )
-                        pMsg = fDbgUsr( pThis );
-                }
-                break;
-
-            case DBG_XTOR_CHKTHIS:
-            case DBG_XTOR_CHKOBJ:
-                if ( nAction & DBG_XTOR_DTOROBJ )
-                {
-                    if ( fDbgUsr &&
-                         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_EXIT) &&
-                         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_FUNC) )
-                        pMsg = fDbgUsr( pThis );
-                }
-                else
-                {
-                    if ( fDbgUsr &&
-                         (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_FUNC) )
-                        pMsg = fDbgUsr( pThis );
-                }
-                break;
-        }
-
-        SAL_WARN_IF(
-            pMsg, "tools.debug",
-            "Error-Msg from Object " << pThis << " in class "
-                << pDbgData->pName << ": " << pMsg);
-    }
-
-    SAL_INFO_IF(
-        ((pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE)
-         && (nAction & DBG_XTOR_DTOROBJ) && nAct != DBG_XTOR_CHKOBJ),
-        "tools.debug",
-        (nAct == DBG_XTOR_CTOR
-         ? "Leave Ctor from class "
-         : nAct == DBG_XTOR_DTOR
-         ? "Leave Dtor from class "
-         : "Leave method from class ") << pDbgData->pName);
-}
-
-void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut )
+void DbgOut( const sal_Char* pMsg )
 {
     static bool bIn = false;
     if ( bIn )
@@ -1166,16 +691,8 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut )
     sal_uIntPtr       nOut;
     int         nBufLen = 0;
 
-    if ( nDbgOut == DBG_OUT_ERROR )
-    {
-        nOut = pData->aDbgData.nErrorOut;
-        pStr = "Error: ";
-    }
-    else
-    {
-        nOut = pData->aDbgData.nTraceOut;
-        pStr = NULL;
-    }
+    nOut = pData->aDbgData.nErrorOut;
+    pStr = "Error: ";
 
     if ( nOut == DBG_OUT_NULL )
     {
@@ -1275,7 +792,7 @@ void DbgPrintShell(char const * message) {
 #endif
 }
 
-void DbgOutTypef( sal_uInt16 nDbgOut, const sal_Char* pFStr, ... )
+void DbgOutTypef( const sal_Char* pFStr, ... )
 {
     va_list pList;
 
@@ -1284,28 +801,14 @@ void DbgOutTypef( sal_uInt16 nDbgOut, const sal_Char* pFStr, ... )
     vsprintf( aBuf, pFStr, pList );
     va_end( pList );
 
-    DbgOut( aBuf, nDbgOut );
-}
-
-void DbgOutf( const sal_Char* pFStr, ... )
-{
-    va_list pList;
-
-    va_start( pList, pFStr );
-    sal_Char aBuf[DBG_BUF_MAXLEN];
-    vsprintf( aBuf, pFStr, pList );
-    va_end( pList );
-
-    DbgOut( aBuf, DBG_OUT_TRACE );
+    DbgOut( aBuf );
 }
 
 #else
 
 void* DbgFunc( sal_uInt16, void* ) { return NULL; }
 
-void DbgXtor( DbgDataType*, sal_uInt16, const void*, DbgUsr ) {}
-
-void DbgOutTypef( sal_uInt16, const sal_Char*, ... ) {}
+void DbgOutTypef( const sal_Char*, ... ) {}
 
 #endif
 

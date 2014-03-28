@@ -100,13 +100,6 @@ static const sal_Char* pDbgHelpText[] =
 "sufficient for other systems or other system settings. With very narrow "
 "fonts the dialogs are made wider because they otherwise appear too narrow.\n",
 "\n",
-"Trace output\n",
-"DBG_TRACE() can be use to produce TRACE output. DBG_TRACEFILE() also outputs "
-"the file and line number where the macro is located. DBG_TRACE1() to "
-"DBG_TRACE5() can be used to produce formatted output (printf format string) "
-"Trace output is enabled when the corresponding option is selected in the "
-"dropdown list.\n"
-"\n",
 "Warnings\n",
 "DBG_WARNING() can be used to output warnings. DBG_WARNING1() to "
 "DBG_WARNING3() can be used to produce formatted output (printf format string). "
@@ -356,13 +349,6 @@ public:
 class DbgDialog : public ModalDialog
 {
 private:
-    CheckBox        maXtorThis;
-    CheckBox        maXtorFunc;
-    CheckBox        maXtorExit;
-    CheckBox        maXtorReport;
-    CheckBox        maXtorTrace;
-    GroupBox        maBox1;
-
     CheckBox        maRes;
     CheckBox        maDialog;
     CheckBox        maBoldAppFont;
@@ -378,15 +364,12 @@ private:
     Edit            maInclFilter;
     FixedText       maExclText;
     Edit            maExclFilter;
-    FixedText       maTraceText;
-    ListBox         maTraceBox;
     FixedText       maErrorText;
     ListBox         maErrorBox;
     GroupBox        maBox4;
 
     OKButton        maOKButton;
     CancelButton    maCancelButton;
-    PushButton      maInfoButton;
     HelpButton      maHelpButton;
     sal_uInt16          mnErrorOff;
 
@@ -397,7 +380,6 @@ public:
     void            RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
-static sal_Char aDbgInfoBuf[12288];
 static sal_Char aDbgOutBuf[DBG_BUF_MAXLEN];
 
 DbgWindow::DbgWindow() :
@@ -540,12 +522,6 @@ void DbgWindow::InsertLine( const OUString& rLine )
 
 DbgDialog::DbgDialog() :
     ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
-    maXtorThis( this ),
-    maXtorFunc( this ),
-    maXtorExit( this ),
-    maXtorReport( this ),
-    maXtorTrace( this ),
-    maBox1( this ),
     maRes( this ),
     maDialog( this ),
     maBoldAppFont( this ),
@@ -560,71 +536,16 @@ DbgDialog::DbgDialog() :
     maInclFilter( this ),
     maExclText( this ),
     maExclFilter( this ),
-    maTraceText( this ),
-    maTraceBox( this, WB_DROPDOWN ),
     maErrorText( this ),
     maErrorBox( this, WB_DROPDOWN ),
     maBox4( this ),
     maOKButton( this, WB_DEFBUTTON ),
     maCancelButton( this ),
-    maInfoButton( this ),
     maHelpButton( this )
 {
     DbgData*    pData = DbgGetData();
     MapMode     aAppMap( MAP_APPFONT );
     Size        aButtonSize = LogicToPixel( Size( 60, 12 ), aAppMap );
-
-    {
-    maXtorThis.Show();
-    maXtorThis.SetText("T~his");
-    if ( pData->nTestFlags & DBG_TEST_XTOR_THIS )
-        maXtorThis.Check( true );
-    maXtorThis.SetPosSizePixel( LogicToPixel( Point( 10, 15 ), aAppMap ),
-                                aButtonSize );
-    }
-
-    {
-    maXtorFunc.Show();
-    maXtorFunc.SetText("~Function");
-    if ( pData->nTestFlags & DBG_TEST_XTOR_FUNC )
-        maXtorFunc.Check( true );
-    maXtorFunc.SetPosSizePixel( LogicToPixel( Point( 75, 15 ), aAppMap ),
-                                aButtonSize );
-    }
-
-    {
-    maXtorExit.Show();
-    maXtorExit.SetText("E~xit");
-    if ( pData->nTestFlags & DBG_TEST_XTOR_EXIT )
-        maXtorExit.Check( true );
-    maXtorExit.SetPosSizePixel( LogicToPixel( Point( 140, 15 ), aAppMap ),
-                                aButtonSize );
-    }
-
-    {
-    maXtorReport.Show();
-    maXtorReport.SetText("~Report");
-    if ( pData->nTestFlags & DBG_TEST_XTOR_REPORT )
-        maXtorReport.Check( true );
-    maXtorReport.SetPosSizePixel( LogicToPixel( Point( 205, 15 ), aAppMap ),
-                                  aButtonSize );
-    }
-
-    {
-    maXtorTrace.Show();
-    maXtorTrace.SetText("~Trace");
-    if ( pData->nTestFlags & DBG_TEST_XTOR_TRACE )
-        maXtorTrace.Check( true );
-    maXtorTrace.SetPosSizePixel( LogicToPixel( Point( 270, 15 ), aAppMap ),
-                                 aButtonSize );
-    }
-
-    {
-    maBox1.Show();
-    maBox1.SetText("Object Tests");
-    maBox1.SetPosSizePixel( LogicToPixel( Point( 5, 5 ), aAppMap ),
-                            LogicToPixel( Size( 330, 30 ), aAppMap ) );
-    }
 
     {
     maRes.Show();
@@ -739,29 +660,6 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    maTraceText.Show();
-    maTraceText.SetText("~Trace");
-    maTraceText.SetPosSizePixel( LogicToPixel( Point( 10, 210 ), aAppMap ),
-                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    maTraceBox.InsertEntry(OUString("None"));
-    maTraceBox.InsertEntry(OUString("File"));
-    maTraceBox.InsertEntry(OUString("Window"));
-    maTraceBox.InsertEntry(OUString("Shell"));
-    maTraceBox.InsertEntry(OUString("MessageBox"));
-    maTraceBox.InsertEntry(OUString("TestTool"));
-    maTraceBox.InsertEntry(OUString("Debugger"));
-    maTraceBox.InsertEntry(OUString("Abort"));
-    ImplAppendUserDefinedChannels( maTraceBox );
-    ImplSelectChannel( maTraceBox, pData->nTraceOut, 0 );
-    maTraceBox.Show();
-    maTraceBox.SetPosSizePixel( LogicToPixel( Point( 10, 220 ), aAppMap ),
-                                LogicToPixel( Size( 95, 80 ), aAppMap ) );
-    }
-
-    {
     maErrorText.Show();
     maErrorText.SetText("~Error");
     maErrorText.SetPosSizePixel( LogicToPixel( Point( 220, 210 ), aAppMap ),
@@ -809,13 +707,6 @@ DbgDialog::DbgDialog() :
                                     LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
     {
-    maInfoButton.Show();
-    maInfoButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maInfoButton.SetText("~Info...");
-    maInfoButton.SetPosSizePixel( LogicToPixel( Point( 130, 260 ), aAppMap ),
-                                  LogicToPixel( Size( 50, 15 ), aAppMap ) );
-    }
-    {
     maHelpButton.Show();
     maHelpButton.SetPosSizePixel( LogicToPixel( Point( 190, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
@@ -836,7 +727,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         memcpy( &aData, DbgGetData(), sizeof( DbgData ) );
         aData.nTestFlags = 0;
 
-        aData.nTraceOut   = ImplGetChannelId( maTraceBox, 0 );
         aData.nErrorOut   = ImplGetChannelId( maErrorBox, mnErrorOff );
 
         strncpy( aData.aDebugName, OUStringToOString(maDebugName.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aDebugName ) );
@@ -852,21 +742,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 
         aData.bOverwrite = maOverwrite.IsChecked() ? true : false;
 
-        if ( maXtorThis.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_XTOR_THIS;
-
-        if ( maXtorFunc.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_XTOR_FUNC;
-
-        if ( maXtorExit.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_XTOR_EXIT;
-
-        if ( maXtorReport.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_XTOR_REPORT;
-
-        if ( maXtorTrace.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_XTOR_TRACE;
-
         if ( maRes.IsChecked() )
             aData.nTestFlags |= DBG_TEST_RESOURCE;
 
@@ -880,7 +755,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         DbgSaveData( aData );
 
         // Umschalten der Laufzeitwerte
-        DBG_INSTOUTTRACE( aData.nTraceOut );
         DBG_INSTOUTERROR( aData.nErrorOut );
 
         DbgData* pData = DbgGetData();
@@ -913,16 +787,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
             aBox.Execute();
         }
         EndDialog( RET_OK );
-    }
-    else if ( pButton == &maInfoButton )
-    {
-        DbgInfoDialog aInfoDialog( this );
-        aDbgInfoBuf[0] = '\0';
-        DbgXtorInfo( aDbgInfoBuf );
-        OUString aInfoText( aDbgInfoBuf, strlen(aDbgInfoBuf), RTL_TEXTENCODING_UTF8 );
-        aInfoDialog.SetText( "Debug InfoReport" );
-        aInfoDialog.SetInfoText( aInfoText );
-        aInfoDialog.Execute();
     }
 
     return 0;
@@ -1095,7 +959,7 @@ void DbgDialogTest( Window* pWindow )
                     if ( pChild->IsVisible() )
                     {
                         if ( aAccelBuf[cAccel] )
-                            DbgOutTypef( DBG_OUT_ERROR, "Double mnemonic char: %c", cAccel );
+                            DbgOutTypef( "Double mnemonic char: %c", cAccel );
                         else
                             aAccelBuf[cAccel] = true;
                     }
@@ -1121,7 +985,7 @@ void DbgDialogTest( Window* pWindow )
                     else
                         pClass = "Dontknow";
                     if( !cAccel )
-                        DbgOutTypef( DBG_OUT_ERROR,
+                        DbgOutTypef(
                                  "%s should have a mnemonic char (~): %s",
                                  pClass,
                                  OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
@@ -1143,7 +1007,7 @@ void DbgDialogTest( Window* pWindow )
                         default: break;
                     }
                     if( pChild->IsVisible() && pChild->GetSizePixel().Width() < aWidth )
-                        DbgOutTypef( DBG_OUT_ERROR,
+                        DbgOutTypef(
                                  "%s exceeds window width: %s",
                                  pClass,
                                  OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
@@ -1153,8 +1017,7 @@ void DbgDialogTest( Window* pWindow )
             if ( pChild->GetType() == WINDOW_FIXEDLINE )
             {
                 if ( pChild->GetSizePixel().Width() < pChild->GetTextWidth( aText ) )
-                    DbgOutTypef( DBG_OUT_ERROR,
-                                 "FixedLine exceeds window width: %s",
+                    DbgOutTypef( "FixedLine exceeds window width: %s",
                                  OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
             }
 
@@ -1163,8 +1026,7 @@ void DbgDialogTest( Window* pWindow )
                 if ( (pChild->GetSizePixel().Height() >= pChild->GetTextHeight()*2) &&
                      !(pChild->GetStyle() & WB_WORDBREAK) )
                 {
-                    DbgOutTypef( DBG_OUT_ERROR,
-                                 "FixedText greater than one line, but WordBreak is not set: %s",
+                    DbgOutTypef( "FixedText greater than one line, but WordBreak is not set: %s",
                                  OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                 }
 
@@ -1181,8 +1043,7 @@ void DbgDialogTest( Window* pWindow )
 
                     if ( pChild->GetSizePixel().Width() < aWidth && !(pChild->GetStyle() & WB_WORDBREAK) )
                         {
-                            DbgOutTypef( DBG_OUT_ERROR,
-                                         "FixedText exceeds window width: %s",
+                            DbgOutTypef( "FixedText exceeds window width: %s",
                                          OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                 }
@@ -1211,14 +1072,12 @@ void DbgDialogTest( Window* pWindow )
                     {
                         if ( !cAccel )
                         {
-                            DbgOutTypef( DBG_OUT_ERROR,
-                                         "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): %s",
+                            DbgOutTypef( "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): %s",
                                          OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                         if ( !pTempChild->IsEnabled() && pChild->IsEnabled() )
                         {
-                            DbgOutTypef( DBG_OUT_ERROR,
-                                         "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: %s",
+                            DbgOutTypef( "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: %s",
                                          OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                     }
@@ -1305,8 +1164,7 @@ void DbgDialogTest( Window* pWindow )
                 }
                 if ( bMaxWarning )
                 {
-                    DbgOutTypef( DBG_OUT_ERROR,
-                                 "No Max-Value is set: %s",
+                    DbgOutTypef( "No Max-Value is set: %s",
                                  OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                 }
 
@@ -1346,8 +1204,7 @@ void DbgDialogTest( Window* pWindow )
                     {
                         if ( (aNewPos.X() <= aTabPos.X()) && (aNewPos.Y() <= aTabPos.Y()) )
                         {
-                            DbgOutTypef( DBG_OUT_ERROR,
-                                         "Possible wrong childorder for dialogcontrol: %s",
+                            DbgOutTypef( "Possible wrong childorder for dialogcontrol: %s",
                                          OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                         aTabPos = aNewPos;
@@ -1358,8 +1215,7 @@ void DbgDialogTest( Window* pWindow )
                         if ( ((pRectAry[j].Right() != 0) || (pRectAry[j].Bottom() != 0)) &&
                              aChildRect.IsOver( pRectAry[j] ) )
                         {
-                            DbgOutTypef( DBG_OUT_ERROR,
-                                         "Window overlaps with sibling window: %s",
+                            DbgOutTypef( "Window overlaps with sibling window: %s",
                                          OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                     }
