@@ -46,8 +46,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.Wall" );
-
 struct StaticWallDefaults_Initializer
 {
     ::chart::tPropertyValueMap* operator()()
@@ -216,17 +214,6 @@ void Wall::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-uno::Sequence< OUString > Wall::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart2.Wall";
-    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( Wall, lcl_aServiceName );
 
 using impl::Wall_Base;
 
