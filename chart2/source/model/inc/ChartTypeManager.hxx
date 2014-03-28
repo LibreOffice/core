@@ -21,11 +21,12 @@
 
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include "ServiceMacros.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
 
@@ -33,7 +34,8 @@ namespace chart
 {
 
 class ChartTypeManager :
-        public ::cppu::WeakImplHelper2<
+        public ::cppu::WeakImplHelper3<
+        css::lang::XServiceInfo,
         ::com::sun::star::lang::XMultiServiceFactory,
         ::com::sun::star::chart2::XChartTypeManager >
 {
@@ -43,16 +45,18 @@ public:
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ChartTypeManager();
 
-    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        SAL_OVERRIDE;
     static OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
