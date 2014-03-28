@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_9dc3f389",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-03-28T11:51:31Z",
+      "side": 1,
+      "message": "The old code is \"makeStringAndClear\" which means sOut is empty after that. The new code doesn\u0027t clear sOut, so introduces a bug. I didn\u0027t check the rest of these, so this is not a exhaustive review, just stopped at the first one I noticed.",
+      "revId": "4385d735acb1db929f420e871160b3c932f8769d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
