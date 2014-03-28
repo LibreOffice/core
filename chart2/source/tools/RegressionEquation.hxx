@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_TOOLS_REGRESSIONEQUATION_HXX
 #define INCLUDED_CHART2_SOURCE_TOOLS_REGRESSIONEQUATION_HXX
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -30,7 +31,7 @@
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart
@@ -38,7 +39,8 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper5<
+        css::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener,
@@ -57,16 +59,18 @@ public:
             ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~RegressionEquation();
 
-    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        SAL_OVERRIDE;
     static OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
