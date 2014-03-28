@@ -395,10 +395,10 @@ void ScPivotLayoutDlg::AddField( size_t nFromIndex, ScPivotFieldType eToType, co
     if (!bAllowed)
         return;
 
+    size_t nAt = 0;
     ScDPFieldControlBase* toWnd = GetFieldWindow(eToType);
     if (!toWnd)
         return;
-    size_t nAt = 0;
     ScDPFieldControlBase* rmWnd1 = NULL;
     ScDPFieldControlBase* rmWnd2 = NULL;
     GetOtherFieldWindows(eToType, rmWnd1, rmWnd2);
@@ -454,6 +454,8 @@ void ScPivotLayoutDlg::AppendField(size_t nFromIndex, ScPivotFieldType eToType)
 
     size_t nAt = 0;
     ScDPFieldControlBase* toWnd = GetFieldWindow(eToType);
+    if (!toWnd)
+        return;
     ScDPFieldControlBase* rmWnd1 = NULL;
     ScDPFieldControlBase* rmWnd2 = NULL;
     GetOtherFieldWindows(eToType, rmWnd1, rmWnd2);
