@@ -97,10 +97,8 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
                 pRetval = maPageVectorStandard[nPgNum];
             else
             {
-                DBG_ASSERT(nPgNum <= maPageVectorStandard.size(),
-                    "ImpPageListWatcher::GetSdPage(PK_STANDARD): access out of range");
-                DBG_WARNING2 ("    %d  > %d",
-                    nPgNum, nPgNum<maPageVectorStandard.size());
+                SAL_WARN( "sd.core",
+                          "ImpPageListWatcher::GetSdPage(PK_STANDARD): page number " << nPgNum << " >= " << maPageVectorStandard.size() );
             }
             break;
         }
@@ -110,10 +108,8 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
                 pRetval = maPageVectorNotes[nPgNum];
             else
             {
-                DBG_ASSERT(nPgNum <= maPageVectorNotes.size(),
-                    "ImpPageListWatcher::GetSdPage(PK_NOTES): access out of range");
-                DBG_WARNING2("    %d > %d",
-                    nPgNum, nPgNum<maPageVectorNotes.size());
+                SAL_WARN( "sd.core",
+                          "ImpPageListWatcher::GetSdPage(PK_NOTES): page number " << nPgNum << " >= " << maPageVectorStandard.size() );
             }
             break;
         }

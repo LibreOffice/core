@@ -122,6 +122,7 @@ certain functionality.
 @section Draw
 
 @li @c sd
+@li @c sd.core
 @li @c sd.filter
 @li @c sd.fwk
 @li @c sd.slideshow
@@ -451,6 +452,7 @@ certain functionality.
 @li @c configmgr
 @li @c cppcanvas
 @li @c cppcanvas.emf
+@li @c drawinglayer
 @li @c helpcompiler
 @li @c linguistic
 @li @c oox

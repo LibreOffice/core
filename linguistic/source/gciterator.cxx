@@ -860,10 +860,8 @@ throw (uno::RuntimeException, std::exception)
         }
         catch (const ::uno::Exception &rE)
         {
-             (void) rE;
-             // ignore
-             DBG_WARNING1("processLinguServiceEvent: exception:\n%s",
-                 OUStringToOString(rE.Message, RTL_TEXTENCODING_UTF8).getStr());
+            // ignore
+            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << rE.Message);
         }
     }
 }

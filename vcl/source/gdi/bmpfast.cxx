@@ -446,16 +446,10 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
             return ImplConvertToBitmap<BMP_FORMAT_32BIT_TC_RGBA>( aSrcType, rDst, rSrc );
     }
 
-#ifdef DEBUG
     static int nNotAccelerated = 0;
-    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
-        if( ++nNotAccelerated == 100 )
-        {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
-            DBG_WARNING2( "ImplConvertFromBitmap for not accelerated case (0x%04X->0x%04X)",
-                rSrc.mnFormat, rDst.mnFormat );
-        }
-#endif
+    SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
+                 "vcl.gdi",
+                 "ImplConvertFromBitmap for not accelerated case (" << std::hex << rSrc.mnFormat << "->" << rDst.mnFormat << ")" );
 
     return false;
 }
@@ -561,17 +555,10 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
             return ImplConvertFromBitmap<BMP_FORMAT_32BIT_TC_RGBA>( rDst, rSrc );
     }
 
-#ifdef DEBUG
     static int nNotAccelerated = 0;
-    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
-    {
-        if( ++nNotAccelerated == 100 )
-        {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
-            DBG_WARNING2( "ImplFastBitmapConversion for not accelerated case (0x%04X->0x%04X)", rSrc.mnFormat, rDst.mnFormat );
-        }
-    }
-#endif
+    SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
+                 "vcl.gdi",
+                 "ImplFastBitmapConversion for not accelerated case (" << std::hex << rSrc.mnFormat << "->" << rDst.mnFormat << ")" );
 
     return false;
 }
@@ -696,17 +683,10 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
             return ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_RGBA>( aSrcType, rDst, rSrc, rMsk );
     }
 
-#ifdef DEBUG
     static int nNotAccelerated = 0;
-    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
-        if( ++nNotAccelerated == 100 )
-        {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
-            DBG_WARNING3( "ImplBlendFromBitmap for not accelerated case (0x%04X*0x%04X->0x%04X)",
-                rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
-        }
-#endif
-
+    SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
+                 "vcl.gdi",
+                 "ImplBlendFromBitmap for not accelerated case (" << std::hex << rSrc.mnFormat << "*" << rMsk.mnFormat << "->" << rDst.mnFormat );
     return false;
 }
 
@@ -819,16 +799,10 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
             return ImplBlendFromBitmap<BMP_FORMAT_32BIT_TC_RGBA>( rDst, rSrc, rMsk );
     }
 
-#ifdef DEBUG
     static int nNotAccelerated = 0;
-    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
-        if( ++nNotAccelerated == 100 )
-        {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
-            DBG_WARNING3( "ImplFastBlend for not accelerated case (0x%04X*0x%04X->0x%04X)",
-                rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
-        }
-#endif
+    SAL_WARN_IF( rSrc.mnWidth * rSrc.mnHeight >= 4000 && ++nNotAccelerated == 100,
+                 "vcl.gdi",
+                 "ImplFastBlend for not accelerated case (" << std::hex << rSrc.mnFormat << "*" << rMsk.mnFormat << "->" << rDst.mnFormat << ")" );
 
     return false;
 }

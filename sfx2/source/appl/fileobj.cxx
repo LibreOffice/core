@@ -357,23 +357,13 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
     if( pStream && ERRCODE_IO_PENDING == pStream->GetError() )
         pStream->ResetError();
 
-#ifdef DBG_UTIL
     if( nRes )
     {
         if( xMed.Is() && !pStream )
-        {
-            DBG_WARNING3( "Graphic error [%d] - [%s] URL[%s]",
-                            nRes,
-                            xMed->GetPhysicalName().getStr(),
-                            sFileNm.getStr() );
-        }
+            SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << xMed->GetPhysicalName() << "] URL[" << sFileNm << "]" );
         else
-        {
-            DBG_WARNING2( "Graphic error [%d] - [%s]",
-                            nRes, sFileNm.getStr() );
-        }
+            SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << sFileNm << "]" );
     }
-#endif
 
     return GRFILTER_OK == nRes;
 }

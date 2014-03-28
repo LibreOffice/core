@@ -526,8 +526,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
                 &io_rd, io_rdt, o_rIsDateTime, &o_rTimeZone, i_text)) {
         return true;
     } else {
-        DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
-            OUStringToOString(i_text, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sfx.doc", "Invalid date: " << i_text );
         return false;
     }
 }
@@ -539,8 +538,7 @@ textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
     if (::sax::Converter::parseDateTime(io_rdt, 0, i_text)) {
         return true;
     } else {
-        DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
-            OUStringToOString(i_text, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sfx.doc", "Invalid date: " << i_text);
         return false;
     }
 }
@@ -592,8 +590,7 @@ throw ()
     if (::sax::Converter::convertDuration(io_rDur, i_rText)) {
         return true;
     } else {
-        DBG_WARNING1("SfxDocumentMetaData: invalid duration: %s",
-            OUStringToOString(i_rText, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sfx.doc", "Invalid duration: " << i_rText );
         return false;
     }
 }
@@ -998,9 +995,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             as.push_back(std::make_pair(vt,
                 OUString("float")));
         } else {
-            DBG_WARNING1("SfxDocumentMetaData: unsupported property type: %s",
-                OUStringToOString(any.getValueTypeName(),
-                    RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN("sfx.doc", "Unsupported property type: " << any.getValueTypeName() );
             continue;
         }
         attrs.push_back(as);
@@ -1294,8 +1289,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             if (::sax::Converter::convertDouble(d, text)) {
                 any <<= d;
             } else {
-                DBG_WARNING1("SfxDocumentMetaData: invalid float: %s",
-                    OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("sfx.doc", "Invalid float: " << text);
                 continue;
             }
         } else if ( type == "date" ) {
@@ -1319,8 +1313,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                     }
                 }
             } else {
-                DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
-                    OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("sfx.doc", "Invalid date: " << text);
                 continue;
             }
         } else if ( type == "time" ) {
@@ -1328,8 +1321,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             if (textToDuration(ud, text)) {
                 any <<= ud;
             } else {
-                DBG_WARNING1("SfxDocumentMetaData: invalid time: %s",
-                    OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("sfx.doc", "Invalid time: " << text);
                 continue;
             }
         } else if ( type == "boolean" ) {
@@ -1337,8 +1329,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             if (::sax::Converter::convertBool(b, text)) {
                 any <<= b;
             } else {
-                DBG_WARNING1("SfxDocumentMetaData: invalid boolean: %s",
-                    OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_WARN("sfx.doc", "Invalid boolean: " << text);
                 continue;
             }
         } else if ( type == "string" || true) { // default
@@ -1348,8 +1339,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             m_xUserDefined->addProperty(name,
                 css::beans::PropertyAttribute::REMOVABLE, any);
         } catch (const css::beans::PropertyExistException &) {
-            DBG_WARNING1("SfxDocumentMetaData: duplicate: %s",
-                    OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN("sfx.doc", "Duplicate: " << name);
             // ignore; duplicate
         } catch (const css::beans::IllegalTypeException &) {
             OSL_TRACE("SfxDocumentMetaData: illegal type: %s",
@@ -1746,8 +1736,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, 
         if (!::sax::Converter::convertNumber(val, text, 0,
                 std::numeric_limits<sal_Int32>::max()) || (val < 0)) {
             val = 0;
-            DBG_WARNING1("SfxDocumentMetaData: invalid number: %s",
-                OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN("sfx.doc", "Invalid number: " << text);
         }
         any <<= val;
         stat.Value = any;
@@ -1778,9 +1767,7 @@ SfxDocumentMetaData::setDocumentStatistics(
                     attributes.push_back(std::make_pair(s_stdStatAttrs[j],
                                 buf.makeStringAndClear()));
                 } else {
-                    DBG_WARNING1("SfxDocumentMetaData: invalid statistic: %s",
-                        OUStringToOString(name, RTL_TEXTENCODING_UTF8)
-                            .getStr());
+                    SAL_WARN("sfx.doc", "Invalid statistic: " << name);
                 }
                 break;
             }
@@ -2217,9 +2204,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
             throw;
         } catch (const css::uno::Exception & e) {
             // ignore
-            DBG_WARNING1("SfxDocumentMetaData::setModified: exception:\n%s",
-                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-            (void) e;
+            SAL_WARN("sfx.doc", "setModified: exception: " << e.Message);
         }
     } else {
         if (xMB.is()) {
