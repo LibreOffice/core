@@ -28,17 +28,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-
-//= OInputStreamWrapper
-
-DBG_NAME(OInputStreamWrapper)
-
 OInputStreamWrapper::OInputStreamWrapper( SvStream& _rStream )
                  :m_pSvStream(&_rStream)
                  ,m_bSvStreamOwner(false)
 {
-    DBG_CTOR(OInputStreamWrapper,NULL);
-
 }
 
 
@@ -46,8 +39,6 @@ OInputStreamWrapper::OInputStreamWrapper( SvStream* pStream, bool bOwner )
                  :m_pSvStream( pStream )
                  ,m_bSvStreamOwner( bOwner )
 {
-    DBG_CTOR(OInputStreamWrapper,NULL);
-
 }
 
 
@@ -55,8 +46,6 @@ OInputStreamWrapper::~OInputStreamWrapper()
 {
     if( m_bSvStreamOwner )
         delete m_pSvStream;
-
-    DBG_DTOR(OInputStreamWrapper,NULL);
 }
 
 

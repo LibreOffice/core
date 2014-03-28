@@ -66,10 +66,6 @@ namespace utl
         }
     }
 
-
-    //= CloseableComponentImpl
-
-    DBG_NAME( CloseableComponentImpl )
     typedef ::cppu::WeakImplHelper1 <   XCloseListener
                                     >   CloseableComponentImpl_Base;
     class CloseableComponentImpl : public CloseableComponentImpl_Base
@@ -117,7 +113,6 @@ namespace utl
     CloseableComponentImpl::CloseableComponentImpl( const Reference< XInterface >& _rxComponent )
         :m_xCloseable( _rxComponent, UNO_QUERY )
     {
-        DBG_CTOR( CloseableComponentImpl, NULL );
         DBG_ASSERT( m_xCloseable.is() || !_rxComponent.is(), "CloseableComponentImpl::CloseableComponentImpl: component is not an XCloseable!" );
         impl_nf_switchListening( true );
     }
@@ -125,7 +120,6 @@ namespace utl
     CloseableComponentImpl::~CloseableComponentImpl()
     {
         nf_closeComponent();
-        DBG_DTOR( CloseableComponentImpl, NULL );
     }
 
 
@@ -212,15 +206,9 @@ namespace utl
             // same reasoning for this assertion as in ->notifyClosing
     }
 
-
-    //= CloseableComponentImpl
-
-    DBG_NAME( CloseableComponent )
-
     CloseableComponent::CloseableComponent( const Reference< XInterface >& _rxComponent )
         :m_pImpl( new CloseableComponentImpl( _rxComponent ) )
     {
-        DBG_CTOR( CloseableComponent, NULL );
     }
 
 
@@ -228,7 +216,6 @@ namespace utl
     {
         // close the component, deliver ownership to anybody who wants to veto the close
         m_pImpl->nf_closeComponent();
-        DBG_DTOR( CloseableComponent, NULL );
     }
 
 
