@@ -50,20 +50,6 @@ public:
     explicit StockBar( bool bRisingCourse );
     virtual ~StockBar();
 
-    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
-    virtual OUString SAL_CALL
-        getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
-    static OUString getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString >
-        getSupportedServiceNames_Static();
-
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 

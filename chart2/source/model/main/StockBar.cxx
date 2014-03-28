@@ -41,8 +41,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.StockBar" );
-
 struct StaticStockBarInfoHelper_Initializer
 {
     ::cppu::OPropertyArrayHelper* operator()()
@@ -223,17 +221,6 @@ void StockBar::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-uno::Sequence< OUString > StockBar::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = "com.sun.star.chart2.StockBar";
-    aServices[ 1 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( StockBar, lcl_aServiceName );
 
 using impl::StockBar_Base;
 
