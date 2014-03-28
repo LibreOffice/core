@@ -144,7 +144,7 @@ void SvxParaPrevWindow::DrawParagraph( bool bAll )
 
         if ( (3 <= i) && (5 >= i) )
         {
-            long nLW;
+            long nLW = long();
             switch( i )
             {
                 case 3: nLW = aLineSiz.Width() * 8 / 10;    break;
