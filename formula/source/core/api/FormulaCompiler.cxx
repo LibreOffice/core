@@ -525,7 +525,6 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
 
 // class FormulaCompiler
 
-DBG_NAME(FormulaCompiler)
 FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
         pArr( &rArr ),
@@ -543,7 +542,6 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         glSubTotal( false )
 
 {
-    DBG_CTOR(FormulaCompiler, NULL);
 }
 
 FormulaCompiler::FormulaCompiler()
@@ -559,12 +557,10 @@ FormulaCompiler::FormulaCompiler()
         bIgnoreErrors( false )
 
 {
-    DBG_CTOR(FormulaCompiler, NULL);
 }
 
 FormulaCompiler::~FormulaCompiler()
 {
-    DBG_DTOR(FormulaCompiler, NULL);
 }
 
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLanguage ) const
