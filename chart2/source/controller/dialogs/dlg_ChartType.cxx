@@ -43,7 +43,13 @@ ChartTypeDialog::ChartTypeDialog( Window* pParent
     , m_xChartModel(xChartModel)
     , m_xCC( xContext )
 {
-    m_pChartTypeTabPage = new ChartTypeTabPage(get_content_area(),uno::Reference< XChartDocument >::query(m_xChartModel),m_xCC,true/*live update*/,true/*hide title description*/);
+    m_pChartTypeTabPage = new ChartTypeTabPage(
+        get_content_area(),
+        uno::Reference<XChartDocument>::query(m_xChartModel),
+        m_xCC,
+        true/*live update*/,
+        true/*hide title description*/);
+
     m_pChartTypeTabPage->initializePage();
     m_pChartTypeTabPage->Show();
  }
