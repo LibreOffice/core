@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_9df853c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-28T19:04:31Z",
+      "side": 1,
+      "message": "oh, and it\u0027s not necessary to enumerate all the changed files in the commit message, in this case something like \"in the basic module\" would be sufficient.",
+      "revId": "cd6978d870af348bd35e7eaa8b7b37465f8b6bce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
