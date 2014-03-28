@@ -69,8 +69,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
 	vcl/unx/kde/UnxNotifyThread \
 ))
 
-$(eval $(call gb_Library_set_warnings_not_errors,vclplug_kde))
-
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_kde,\
 	-lm \

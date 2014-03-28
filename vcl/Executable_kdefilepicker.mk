@@ -34,8 +34,6 @@ $(eval $(call gb_Executable_add_generated_cxxobjects,kdefilepicker,\
 	CustomTarget/vcl/unx/kde/fpicker/kdefilepicker.moc \
 ))
 
-$(eval $(call gb_Executable_set_warnings_not_errors,kdefilepicker))
-
 # KDE/Qt consider -Wshadow more trouble than benefit
 $(eval $(call gb_Executable_add_cxxflags,kdefilepicker,\
 	-Wno-shadow \
