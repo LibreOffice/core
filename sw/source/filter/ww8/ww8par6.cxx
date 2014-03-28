@@ -804,7 +804,9 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     {
         void* pData;
         WW8_CP nTest;
-        pWkb->Get(nTest, pData);
+        bool bSuccess = pWkb->Get(nTest, pData);
+        if (!bSuccess)
+            return;
         OUString sSectionName = mrReader.aLinkStringMap[SVBT16ToShort( ((WW8_WKB*)pData)->nLinkId) ];
         sSectionName = mrReader.ConvertFFileName(sSectionName);
         SwSectionData aSection(FILE_LINK_SECTION, sSectionName);
