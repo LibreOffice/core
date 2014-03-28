@@ -19,7 +19,11 @@
 
 $(eval $(call gb_Library_Library,vclplug_gtk3))
 
-$(eval $(call gb_Library_set_warnings_not_errors,vclplug_gtk3))
+# Silence deprecation warnings wholesale as long as vcl/unx/gtk3/*.cxx just
+# forward to vcl/unx/gtk/*.cxx:
+$(eval $(call gb_Library_add_cxxflags,vclplug_gtk3, \
+    -Wno-deprecated-declarations \
+))
 
 $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
