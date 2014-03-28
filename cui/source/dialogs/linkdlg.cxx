@@ -373,8 +373,12 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                         Links().FirstSelected() :
                         Links().NextSelected( pEntry );
                     DBG_ASSERT(pEntry,"Where is the entry?");
+                    if (!pEntry)
+                        continue;
                     pLink = (SvBaseLink*)pEntry->GetUserData();
                     DBG_ASSERT(pLink,"Where is the link?");
+                    if (!pLink)
+                        continue;
                     pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
                     INetURLObject aUrl_(sFile);
                     INetURLObject aUrl2(aPath, INET_PROT_FILE);
