@@ -137,7 +137,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
                 return;
             }
         }
-        else if ( !eOpCode && pLocale )
+        else if ( pLocale )
         {
             LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, aLanguageTag);
             if ( eLevel == LOCALE_MATCH_ALL )
