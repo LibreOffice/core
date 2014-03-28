@@ -44,14 +44,6 @@ namespace basctl
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-
-
-// BaseWindow
-
-
-
-DBG_NAME( BaseWindow )
-
 TYPEINIT0( BaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
@@ -61,7 +53,6 @@ BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, const 
     ,m_aLibName( aLibName )
     ,m_aName( aName )
 {
-    DBG_CTOR( BaseWindow, 0 );
     pShellHScrollBar = 0;
     pShellVScrollBar = 0;
     nStatus = 0;
@@ -69,7 +60,6 @@ BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, const 
 
 BaseWindow::~BaseWindow()
 {
-    DBG_DTOR( BaseWindow, 0 );
     if ( pShellVScrollBar )
         pShellVScrollBar->SetScrollHdl( Link() );
     if ( pShellHScrollBar )
@@ -80,7 +70,6 @@ BaseWindow::~BaseWindow()
 
 void BaseWindow::Init()
 {
-    DBG_CHKTHIS( BaseWindow, 0 );
     if ( pShellVScrollBar )
         pShellVScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
     if ( pShellHScrollBar )
@@ -97,7 +86,6 @@ void BaseWindow::DoInit()
 
 void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 {
-    DBG_CHKTHIS( BaseWindow, 0 );
     pShellHScrollBar = pHScroll;
     pShellVScrollBar = pVScroll;
 //  Init(); // does not make sense, leads to flickering and errors...
@@ -107,7 +95,6 @@ void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 
 IMPL_LINK_INLINE_START( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 {
-    DBG_CHKTHIS( BaseWindow, 0 );
     DoScroll( pCurScrollBar );
     return 0;
 }
@@ -153,7 +140,6 @@ bool BaseWindow::Notify( NotifyEvent& rNEvt )
 
 void BaseWindow::DoScroll( ScrollBar* )
 {
-    DBG_CHKTHIS( BaseWindow, 0 );
 }
 
 

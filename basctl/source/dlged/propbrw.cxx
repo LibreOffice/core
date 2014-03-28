@@ -79,18 +79,12 @@ const long WIN_BORDER = 2;
 
 } // namespace
 
-
-DBG_NAME(PropBrw)
-
-
 PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     DockingWindow(&rLayout_),
     m_bInitialStateChange(true),
     m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
     pView(0)
 {
-    DBG_CTOR(PropBrw,NULL);
-
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetMinOutputSizePixel(Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
@@ -198,8 +192,6 @@ PropBrw::~PropBrw()
 {
     if ( m_xBrowserController.is() )
         ImplDestroyController();
-
-    DBG_DTOR(PropBrw,NULL);
 }
 
 

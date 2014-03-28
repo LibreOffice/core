@@ -71,8 +71,6 @@ char const FilterMask_All[] = "*.*";
 char const FilterMask_All[] = "*";
 #endif
 
-DBG_NAME( DialogWindow )
-
 TYPEINIT1( DialogWindow, BaseWindow );
 
 DialogWindow::DialogWindow (
@@ -706,7 +704,6 @@ static OUString aResourceResolverPropName( "ResourceResolver" );
 
 bool DialogWindow::SaveDialog()
 {
-    DBG_CHKTHIS( DialogWindow, 0 );
     bool bDone = false;
 
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
@@ -1246,8 +1243,6 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
 
 bool DialogWindow::ImportDialog()
 {
-    DBG_CHKTHIS( DialogWindow, 0 );
-
     const ScriptDocument& rDocument = GetDocument();
     OUString aLibName = GetLibName();
     return implImportDialog( this, aCurPath, rDocument, aLibName );

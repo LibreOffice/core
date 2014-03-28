@@ -92,9 +92,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace utl;
 using namespace comphelper;
 
-
-DBG_NAME( ModulWindow )
-
 TYPEINIT1( ModulWindow , BaseWindow );
 
 namespace
@@ -205,7 +202,6 @@ ModulWindow::ModulWindow (
     aXEditorWindow(this),
     m_aModule(aModule)
 {
-    DBG_CTOR( ModulWindow, 0 );
     aXEditorWindow.Show();
     SetBackground();
 }
@@ -238,7 +234,6 @@ SbModuleRef ModulWindow::XModule()
 
 ModulWindow::~ModulWindow()
 {
-    DBG_DTOR( ModulWindow, 0 );
     nValid = 0;
 
     StarBASIC::Stop();
@@ -249,15 +244,12 @@ void ModulWindow::GetFocus()
 {
     if (nValid != ValidWindow)
         return;
-    DBG_CHKTHIS( ModulWindow, 0 );
     aXEditorWindow.GetEdtWindow().GrabFocus();
     // don't call basic calls because focus is somewhere else...
 }
 
 void ModulWindow::DoInit()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     if ( GetVScrollBar() )
         GetVScrollBar()->Hide();
     GetHScrollBar()->Show();
@@ -278,8 +270,6 @@ void ModulWindow::Resize()
 
 void ModulWindow::CheckCompileBasic()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     if ( XModule().Is() )
     {
         // never compile while running!
@@ -320,8 +310,6 @@ void ModulWindow::CheckCompileBasic()
 
 bool ModulWindow::BasicExecute()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     // #116444# check security settings before macro execution
     ScriptDocument aDocument( GetDocument() );
     if ( aDocument.isDocument() )
@@ -389,7 +377,6 @@ bool ModulWindow::BasicExecute()
 
 bool ModulWindow::CompileBasic()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     CheckCompileBasic();
 
     return XModule().Is() && xModule->IsCompiled();
@@ -397,15 +384,12 @@ bool ModulWindow::CompileBasic()
 
 bool ModulWindow::BasicRun()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     aStatus.nBasicFlags = 0;
     return BasicExecute();
 }
 
 bool ModulWindow::BasicStepOver()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     aStatus.nBasicFlags = SbDEBUG_STEPINTO | SbDEBUG_STEPOVER;
     return BasicExecute();
 }
@@ -413,16 +397,12 @@ bool ModulWindow::BasicStepOver()
 
 bool ModulWindow::BasicStepInto()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     aStatus.nBasicFlags = SbDEBUG_STEPINTO;
     return BasicExecute();
 }
 
 bool ModulWindow::BasicStepOut()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     aStatus.nBasicFlags = SbDEBUG_STEPOUT;
     return BasicExecute();
 }
@@ -431,15 +411,12 @@ bool ModulWindow::BasicStepOut()
 
 void ModulWindow::BasicStop()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     GetBasic()->Stop();
     aStatus.bIsRunning = false;
 }
 
 bool ModulWindow::LoadBasic()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     bool bDone = false;
 
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -485,7 +462,6 @@ bool ModulWindow::LoadBasic()
 
 bool ModulWindow::SaveBasicSource()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     bool bDone = false;
 
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -599,7 +575,6 @@ void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 
 bool ModulWindow::BasicToggleBreakPoint()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
 
     TextSelection aSel = GetEditView()->GetSelection();
@@ -621,7 +596,6 @@ bool ModulWindow::BasicToggleBreakPoint()
 
 void ModulWindow::BasicToggleBreakPointEnabled()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
 
     ExtTextView* pView = GetEditView();
@@ -656,7 +630,6 @@ void ModulWindow::ManageBreakPoints()
 
 bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     GoOnTop();
 
     // ReturnWert: BOOL
@@ -693,8 +666,6 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
 
 long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     // #i69280 Required in Window despite normal usage in next command!
     (void)pBasic;
 
@@ -738,7 +709,6 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 
 void ModulWindow::BasicAddWatch()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
     bool bAdd = true;
     if ( !GetEditView()->HasSelection() )
@@ -766,7 +736,6 @@ void ModulWindow::BasicAddWatch()
 
 void ModulWindow::EditMacro( const OUString& rMacroName )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
     if ( XModule().Is() )
@@ -811,7 +780,6 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
 
 void ModulWindow::StoreData()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     // StoreData is called when the BasicManager is destroyed or
     // this window is closed.
     // => interrupts undesired!
@@ -820,7 +788,6 @@ void ModulWindow::StoreData()
 
 bool ModulWindow::CanClose()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     return true;
 }
 
@@ -833,7 +800,6 @@ bool ModulWindow::AllowUndo()
 
 void ModulWindow::UpdateData()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
     // UpdateData is called when the source has changed from outside
     // => interrupts undesired!
@@ -871,8 +837,6 @@ void ModulWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
 */
 sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-
     AssertValidEditEngine();
 
     MapMode eOldMapMode( pPrinter->GetMapMode() );
@@ -942,7 +906,6 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
 void ModulWindow::ExecuteCommand (SfxRequest& rReq)
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
     switch (rReq.GetSlot())
     {
@@ -1117,7 +1080,6 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
 
 void ModulWindow::GetState( SfxItemSet &rSet )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
     {
@@ -1193,7 +1155,6 @@ void ModulWindow::GetState( SfxItemSet &rSet )
 
 void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
     {
         // don't scroll with the value but rather use the Thumb-Pos for the VisArea:
@@ -1555,7 +1516,6 @@ void ModulWindowLayout::BasicAddWatch (OUString const& rWatchStr)
 
 void ModulWindowLayout::BasicRemoveWatch ()
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
     aWatchWindow.RemoveSelectedWatch();
 }
 

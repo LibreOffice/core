@@ -47,13 +47,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-DBG_NAME( AccessibleDialogWindow )
-
-
-
-// class ChildDescriptor
-
-
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
     ,rxAccessible( 0 )
@@ -116,7 +109,6 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
     , m_pDlgEditor(NULL)
     , m_pDlgEdModel(NULL)
 {
-    DBG_CTOR( AccessibleDialogWindow, NULL );
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 
     if ( m_pDialogWindow )
@@ -147,7 +139,6 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
 
 AccessibleDialogWindow::~AccessibleDialogWindow()
 {
-    DBG_DTOR( AccessibleDialogWindow, NULL );
     if ( m_pDialogWindow )
         m_pDialogWindow->RemoveEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
 
@@ -355,8 +346,6 @@ void AccessibleDialogWindow::SortChildren()
 
 IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_CHKTHIS( AccessibleDialogWindow, 0 );
-
     if (VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>(pEvent))
     {
         DBG_ASSERT(pWinEvent->GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!");

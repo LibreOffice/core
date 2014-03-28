@@ -24,24 +24,19 @@
 namespace basctl
 {
 
-DBG_NAME(DlgEdModel)
-
 TYPEINIT1(DlgEdModel,SdrModel);
 
 DlgEdModel::DlgEdModel()
     :SdrModel()
 {
-    DBG_CTOR(DlgEdModel,0);
 }
 
 DlgEdModel::~DlgEdModel()
 {
-    DBG_DTOR(DlgEdModel,0);
 }
 
 SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
 {
-    DBG_CHKTHIS(DlgEdModel, 0);
     return new DlgEdPage(*this, bMasterPage);
 }
 

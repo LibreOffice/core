@@ -50,7 +50,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 
 TYPEINIT1(DlgEdObj, SdrUnoObj);
-DBG_NAME(DlgEdObj);
 
 DlgEditor& DlgEdObj::GetDialogEditor ()
 {
@@ -65,7 +64,6 @@ DlgEdObj::DlgEdObj()
           ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
-    DBG_CTOR(DlgEdObj, NULL);
 }
 
 DlgEdObj::DlgEdObj(const OUString& rModelName,
@@ -74,13 +72,10 @@ DlgEdObj::DlgEdObj(const OUString& rModelName,
           ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
-    DBG_CTOR(DlgEdObj, NULL);
 }
 
 DlgEdObj::~DlgEdObj()
 {
-    DBG_DTOR(DlgEdObj, NULL);
-
     if ( isListening() )
         EndListening();
 }
@@ -1213,17 +1208,14 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
 }
 
 TYPEINIT1(DlgEdForm, DlgEdObj);
-DBG_NAME(DlgEdForm);
 
 DlgEdForm::DlgEdForm (DlgEditor& rDlgEditor_) :
     rDlgEditor(rDlgEditor_)
 {
-    DBG_CTOR(DlgEdForm, NULL);
 }
 
 DlgEdForm::~DlgEdForm()
 {
-    DBG_DTOR(DlgEdForm, NULL);
 }
 
 void DlgEdForm::SetRectFromProps()
