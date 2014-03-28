@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_ddbd6b04",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-03-28T11:55:45Z",
+      "side": 1,
+      "message": "The old code called makeStringAndClear which empties sOut, the new code doesn\u0027t which is troubling",
+      "revId": "f2e1ed6b43ed360d9173d19981dc50d2249bc957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
