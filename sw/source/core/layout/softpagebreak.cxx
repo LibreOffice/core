@@ -47,7 +47,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
             {
                 // No soft page break if I'm in a table but the first content frame
                 // at my page is not in a table
-                if( !pFirst2->IsInTab() )
+                if( !pFirst2 || !pFirst2->IsInTab() )
                     continue;
                 const SwLayoutFrm *pRow = pFrm->GetUpper();
                 // Looking for the "most upper" row frame,
