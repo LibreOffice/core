@@ -243,16 +243,6 @@ static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const pXML_FillStyle_Enum[] =
-{
-    { XML_NONE,     drawing::FillStyle_NONE },
-    { XML_SOLID,    drawing::FillStyle_SOLID },
-    { XML_BITMAP,   drawing::FillStyle_BITMAP },
-    { XML_GRADIENT, drawing::FillStyle_GRADIENT },
-    { XML_HATCH,    drawing::FillStyle_HATCH },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
