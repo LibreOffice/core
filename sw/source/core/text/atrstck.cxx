@@ -610,15 +610,20 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
     if ( pTopAt )
     {
+        const SfxPoolItem* pItemNext(NULL);
+
         // check if top attribute is collection of attributes
         if ( RES_TXTATR_INETFMT == pTopAt->Which() ||
              RES_TXTATR_CHARFMT == pTopAt->Which() ||
              RES_TXTATR_AUTOFMT == pTopAt->Which() )
         {
             const SfxItemSet* pSet = CharFmt::GetItemSet( pTopAt->GetAttr() );
-            const SfxPoolItem* pItemNext;
-            pSet->GetItemState( nAttr, RES_TXTATR_AUTOFMT != pTopAt->Which(), &pItemNext );
+            if (pSet)
+                pSet->GetItemState( nAttr, RES_TXTATR_AUTOFMT != pTopAt->Which(), &pItemNext );
+        }
 
+        if (pItemNext)
+        {
             Color aColor;
             if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, mpShell, &aColor ) )
             {
