@@ -9,6 +9,7 @@
  */
 
 #include "oox/crypto/CryptTools.hxx"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 namespace oox {
 namespace core {
@@ -86,14 +87,17 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
             break;
     }
 
-    PK11SlotInfo* aSlot( PK11_GetBestSlot( mechanism, NULL ) );
+    PK11SlotInfo* pSlot( PK11_GetBestSlot( mechanism, NULL ) );
+
+    if (!pSlot)
+        throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
 
     SECItem keyItem;
     keyItem.type = siBuffer;
     keyItem.data = &key[0];
     keyItem.len  = key.size();
 
-    mSymKey = PK11_ImportSymKey( aSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL );
+    mSymKey = PK11_ImportSymKey( pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL );
     mSecParam = PK11_ParamFromIV( mechanism, pIvItem );
     mContext = PK11_CreateContextBySymKey( mechanism, operation, mSymKey, mSecParam );
 }
