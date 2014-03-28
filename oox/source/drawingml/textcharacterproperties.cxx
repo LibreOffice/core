@@ -60,6 +60,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moItalic.assignIfUsed( rSourceProps.moItalic );
     moUnderlineLineFollowText.assignIfUsed( rSourceProps.moUnderlineLineFollowText );
     moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
+    maGradientProps.assignUsed( rSourceProps.maGradientProps );
 }
 
 void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, bool bUseOptional ) const
@@ -93,6 +94,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
     if( maCharColor.isUsed() )
         rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
+    if( maGradientProps.maGradientStops.size() > 0 )
+        rPropMap[ PROP_CharColor ] <<= maGradientProps.maGradientStops.begin()->second.getColor( rFilter.getGraphicHelper() );
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {
