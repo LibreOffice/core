@@ -512,8 +512,8 @@ void lcl_GetColumnTypes(
         OUString aFieldName;
         OUString aString;
 
-        // Feldname[,Type[,Width[,Prec]]]
-        // Typ etc.: L; D; C[,W]; N[,W[,P]]
+        // Fieldname[,Type[,Width[,Prec]]]
+        // Type etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
             aString = pDoc->GetString(nCol, nFirstRow, nTab);
@@ -570,11 +570,12 @@ void lcl_GetColumnTypes(
             else
                 aFieldName = aString;
 
-            // Feldnamen pruefen und ggbf. gueltigen Feldnamen erzeugen.
-            // Erstes Zeichen muss Buchstabe sein,
-            // weitere nur alphanumerisch und Unterstrich erlaubt,
-            // "_DBASELOCK" ist reserviert (obsolet weil erstes Zeichen kein Buchstabe),
-            // keine doppelten Namen.
+            // Check field name and generate valid field name if necessary.
+            // First character has to be alphabetical, subsequent characters
+            // have to be alphanumerical or underscore.
+            // "_DBASELOCK" is reserved (obsolete because first character is
+            // not alphabetical).
+            // No duplicated names.
             if ( !IsAsciiAlpha( aFieldName[0] ) )
                 aFieldName = "N" + aFieldName;
             OUString aTmpStr;
@@ -591,7 +592,7 @@ void lcl_GetColumnTypes(
                 aFieldName = aFieldName.copy(0,  10);
 
             if (!aFieldNames.insert(aFieldName).second)
-            {   // doppelter Feldname, numerisch erweitern
+            {   // Duplicated field name, append numeric suffix.
                 sal_uInt16 nSub = 1;
                 OUString aFixPart( aFieldName );
                 do
@@ -611,7 +612,7 @@ void lcl_GetColumnTypes(
         }
 
         if ( !bTypeDefined )
-        {   // Feldtyp
+        {   // Field type.
             ScRefCellValue aCell;
             aCell.assign(*pDoc, ScAddress(nCol, nFirstDataRow, nTab));
             if (aCell.isEmpty() || aCell.hasString())
@@ -641,31 +642,31 @@ void lcl_GetColumnTypes(
         }
         bool bSdbLenAdjusted = false;
         bool bSdbLenBad = false;
-        // Feldlaenge
+        // Field length.
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
-        {   // maximale Feldbreite bestimmen
+        {   // Determine maximum field width.
             nFieldLen = pDoc->GetMaxStringLen( nTab, nCol, nFirstDataRow,
                 nLastRow, eCharSet );
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
         }
         else if ( nDbType == sdbc::DataType::DECIMAL )
-        {   // maximale Feldbreite und Nachkommastellen bestimmen
+        {   // Determine maximum field width and precision.
             sal_Int32 nLen;
             sal_uInt16 nPrec;
             nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
                 nFirstDataRow, nLastRow );
-            // dBaseIII Limit Nachkommastellen: 15
+            // dBaseIII precision limit: 15
             if ( nPrecision > 15 )
                 nPrecision = 15;
             if ( nPrec > 15 )
                 nPrec = 15;
             if ( bPrecDefined && nPrecision != nPrec )
-            {   // Laenge auf vorgegebene Nachkommastellen anpassen
+            {   // Adjust length to predefined precision.
                 if ( nPrecision )
                     nLen = nLen + ( nPrecision - nPrec );
                 else
-                    nLen -= nPrec+1;            // auch den . mit raus
+                    nLen -= nPrec+1;            // also remove the decimal separator
             }
             if ( nLen > nFieldLen && !bTypeDefined )
                 nFieldLen = nLen;
@@ -674,7 +675,7 @@ void lcl_GetColumnTypes(
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
             else if ( nFieldLen > 19 )
-                nFieldLen = 19;     // dBaseIII Limit Feldlaenge numerisch: 19
+                nFieldLen = 19;     // dBaseIII numeric field length limit: 19
             if ( nPrecision && nFieldLen < nPrecision + 2 )
                 nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
             // 538 MUST: Sdb internal representation adds 2 to the field length!
@@ -689,13 +690,13 @@ void lcl_GetColumnTypes(
         if ( nFieldLen > 254 )
         {
             if ( nDbType == sdbc::DataType::VARCHAR )
-            {   // zu lang fuer normales Textfeld => Memofeld
+            {   // Too long for a normal text field => memo field.
                 nDbType = sdbc::DataType::LONGVARCHAR;
                 nFieldLen = 10;
                 bHasMemo = true;
             }
             else
-                nFieldLen = 254;                    // dumm gelaufen..
+                nFieldLen = 254;                    // bad luck..
         }
 
         pColNames[nField] = aFieldName;
