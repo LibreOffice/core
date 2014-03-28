@@ -653,13 +653,19 @@ OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
         RID_EMBOSSED,
         RID_ENGRAVED,
         RID_OUTSET,
-        RID_INSET
+        RID_INSET,
+        RID_FINE_DASHED,
+        RID_DOUBLE_THIN,
+        RID_DASH_DOT,
+        RID_DASH_DOT_DOT
     };
-    sal_uInt16 nResId = aStyleIds[m_nStyle];
     OUString aStr = "(" + ::GetColorString( aColor ) + OUString(cpDelim);
 
-    if ( nResId )
+    if ( m_nStyle < sizeof(aStyleIds)/sizeof(*aStyleIds) )
+    {
+        sal_uInt16 nResId = aStyleIds[m_nStyle];
         aStr += EE_RESSTR(nResId);
+    }
     else
     {
         OUString sMetric = EE_RESSTR(GetMetricId( eDestUnit ));

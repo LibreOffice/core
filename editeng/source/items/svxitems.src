@@ -588,6 +588,22 @@ String RID_OUTSET
 {
     Text [ en-US ] = "Outset" ;
 };
+String RID_FINE_DASHED
+{
+    Text [ en-US ] = "Single, fine dashed";
+};
+String RID_DOUBLE_THIN
+{
+    Text [ en-US ] = "Double, fixed thin lines";
+};
+String RID_DASH_DOT
+{
+    Text [ en-US ] = "Single, dash-dot";
+};
+String RID_DASH_DOT_DOT
+{
+    Text [ en-US ] = "Single, dash-dot-dot";
+};
 String RID_SVXITEMS_METRIC_MM
 {
     Text [ en-US ] = "mm" ;
