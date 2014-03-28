@@ -174,8 +174,12 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
                 pEntry = i == 0 ? pSvTabListBox->FirstSelected() :
                                     pSvTabListBox->NextSelected(pEntry);
                 DBG_ASSERT(pEntry, "Wo ist der Entry?");
+                if (!pEntry)
+                    continue;
                 pLink = (SvBaseLink*)pEntry->GetUserData();
                 DBG_ASSERT(pLink, "Wo ist der Link?");
+                if (!pLink)
+                    continue;
                 if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
                     pSvTabListBox->Select( pEntry, false );
 
