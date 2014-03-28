@@ -179,7 +179,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
 
 // Caution: This method is nearly the same as
 // void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
-// so when changes are made here do not forget to make change sthere, too
+// so when changes are made here do not forget to make changes there, too
 
 void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
 {
