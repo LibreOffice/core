@@ -37,6 +37,7 @@
 using namespace svt;
 
 const sal_Unicode cNoBreakSpace = 0xA0;
+const sal_Unicode cNarrowNoBreakSpace = 0x202F;
 
 namespace
 {
@@ -1530,9 +1531,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 
     // If the group separator is a No-Break Space (French) continue with a
     // normal space instead so queries on space work correctly.
+    // The same for Narrow No-Break Space just in case some locale uses it.
     // The format string is adjusted to allow both.
     // For output of the format code string the LocaleData characters are used.
-    if ( sOldThousandSep[0] == cNoBreakSpace && sOldThousandSep.getLength() == 1 )
+    if ( (sOldThousandSep[0] == cNoBreakSpace || sOldThousandSep[0] == cNarrowNoBreakSpace) &&
+            sOldThousandSep.getLength() == 1 )
     {
         sOldThousandSep = " ";
     }
@@ -2712,7 +2715,9 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         if (((eScannedType & NUMBERFORMAT_DATE) == 0) &&
                             (StringEqualsChar( pFormatter->GetNumThousandSep(), c) ||
                              StringEqualsChar( pFormatter->GetNumDecimalSep(), c) ||
-                             (c == ' ' && StringEqualsChar( pFormatter->GetNumThousandSep(), cNoBreakSpace))))
+                             (c == ' ' &&
+                              (StringEqualsChar( pFormatter->GetNumThousandSep(), cNoBreakSpace) ||
+                               StringEqualsChar( pFormatter->GetNumThousandSep(), cNarrowNoBreakSpace)))))
                         {
                             rString += sStrArray[i];
                         }

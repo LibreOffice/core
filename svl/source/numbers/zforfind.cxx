@@ -66,6 +66,7 @@ const sal_uInt8 ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
 #define NF_RECOGNIZE_ISO8601_TIMEZONES 0
 
 static const sal_Unicode cNoBreakSpace = 0xA0;
+static const sal_Unicode cNarrowNoBreakSpace = 0x202F;
 
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
@@ -461,7 +462,7 @@ inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
     if ( nPos < rString.getLength() )
     {
         const sal_Unicode* p = rString.getStr() + nPos;
-        while ( *p == ' ' || *p == cNoBreakSpace )
+        while ( *p == ' ' || *p == cNoBreakSpace || *p == cNarrowNoBreakSpace )
         {
             nPos++;
             p++;
@@ -494,7 +495,8 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
 {
     const OUString& rSep = pFormatter->GetNumThousandSep();
     // Is it an ordinary space instead of a no-break space?
-    bool bSpaceBreak = rSep[0] == cNoBreakSpace && rString[0] == (sal_Unicode)0x20 &&
+    bool bSpaceBreak = (rSep[0] == cNoBreakSpace || rSep[0] == cNarrowNoBreakSpace) &&
+        rString[0] == (sal_Unicode)0x20 &&
         rSep.getLength() == 1 && rString.getLength() == 1;
     if (!((rString == rSep || bSpaceBreak) &&      // nothing else
            nStringPos < nAnzStrings - 1 &&         // safety first!

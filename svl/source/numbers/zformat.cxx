@@ -724,12 +724,17 @@ SvNumberformat::SvNumberformat(OUString& rString,
 
     // If the group (AKA thousand) separator is a No-Break Space (French)
     // replace all occurrences by a simple space.
+    // The same for Narrow No-Break Space just in case some locale uses it.
     // The tokens will be changed to the LocaleData separator again later on.
-    const sal_Unicode cNBSp = 0xA0;
     const OUString& rThSep = GetFormatter().GetNumThousandSep();
-    if ( rThSep.getLength() == 1 && rThSep[0] == cNBSp )
+    if ( rThSep.getLength() == 1)
     {
-        sBuff.replace( cNBSp, ' ');
+        const sal_Unicode cNBSp = 0xA0;
+        const sal_Unicode cNNBSp = 0x202F;
+        if (rThSep[0] == cNBSp )
+            sBuff.replace( cNBSp, ' ');
+        else if (rThSep[0] == cNNBSp )
+            sBuff.replace( cNNBSp, ' ');
     }
 
     if (rScan.GetConvertMode())
