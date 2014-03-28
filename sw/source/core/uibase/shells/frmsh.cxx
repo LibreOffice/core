@@ -1244,7 +1244,7 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
 
             if(pSdrView)
             {
-                pSdrView->SetDefaultAttr(*pArgs, sal_False);
+                pSdrView->SetDefaultAttr(*pArgs, false);
             }
         }
     }
