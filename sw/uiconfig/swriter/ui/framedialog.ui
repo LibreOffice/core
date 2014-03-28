@@ -160,13 +160,27 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="background">
+              <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Background</property>
+                <property name="label" translatable="yes">Area</property>
               </object>
               <packing>
                 <property name="position">5</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="transparence">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Transparency</property>
+              </object>
+              <packing>
+                <property name="position">6</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -180,7 +194,7 @@
                 <property name="label" translatable="yes">Columns</property>
               </object>
               <packing>
-                <property name="position">6</property>
+                <property name="position">7</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -194,7 +208,7 @@
                 <property name="label" translatable="yes">Macro</property>
               </object>
               <packing>
-                <property name="position">7</property>
+                <property name="position">8</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
