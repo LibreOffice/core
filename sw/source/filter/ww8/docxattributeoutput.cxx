@@ -4179,10 +4179,17 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             {
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
-                for( unsigned nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex )
+                const OUString& rName = rFrame.GetFrmFmt().GetName();
+                unsigned nSize = m_aFramesOfParagraph.size();
+                for( unsigned nIndex = 0; nIndex < nSize; ++nIndex )
                 {
-                    if( rFrame.GetFrmFmt().GetName() == m_aFramesOfParagraph[nIndex].GetFrmFmt().GetName() )
-                        bDuplicate = true;
+                    const OUString& rNameExisting = m_aFramesOfParagraph[nIndex].GetFrmFmt().GetName();
+
+                    if (!rName.isEmpty() && !rNameExisting.isEmpty())
+                    {
+                        if (rName == rNameExisting)
+                            bDuplicate = true;
+                    }
                 }
 
                 if( !bDuplicate )
