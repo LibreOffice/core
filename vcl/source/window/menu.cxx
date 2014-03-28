@@ -1442,6 +1442,9 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
 
         MenuItemData* pData = rMenu.GetItemList()->GetData( nId );
 
+        if (!pData)
+            return;
+
         if ( eType == MENUITEM_STRINGIMAGE )
             pThis->InsertItem( nId, pData->aText, pData->aImage, pData->nBits, pData->sIdent, nNewPos );
         else if ( eType == MENUITEM_STRING )
