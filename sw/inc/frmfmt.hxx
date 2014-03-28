@@ -135,7 +135,7 @@ public:
     void RegisterToFormat( SwFmt& rFmt );
 
     //UUUU
-    virtual FillAttributesPtr getFillAttributes() const;
+    virtual FillAttributesPtr getFillAttributes() const SAL_OVERRIDE;
 };
 
 // The FlyFrame-Format
