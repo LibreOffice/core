@@ -670,7 +670,9 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             }
             else
             {
-                  const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
+                const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
+                if (!pEntry)
+                    throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
