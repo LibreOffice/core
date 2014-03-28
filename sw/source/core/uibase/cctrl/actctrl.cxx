@@ -90,15 +90,6 @@ void NoSpaceEdit::Modify()
     Edit::Modify();
 }
 
-ReturnActionEdit::ReturnActionEdit(Window* pParent, const ResId& rResId)
-    : Edit(pParent, rResId)
-{
-}
-
-ReturnActionEdit::~ReturnActionEdit()
-{
-}
-
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 {
     const KeyCode aKeyCode = rEvt.GetKeyCode();
