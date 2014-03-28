@@ -137,22 +137,6 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
                 return;
             }
         }
-        else if ( !eOpCode && pLocale )
-        {
-            LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, aLanguageTag);
-            if ( eLevel == LOCALE_MATCH_ALL )
-            {
-                // Name with matching locale preferred.
-                rName = OUString::createFromAscii( itrList->mpName );
-                return;
-            }
-            else if ( eLevel > eLocaleMatchLevel )
-            {
-                // Name with a better matching locale.
-                eLocaleMatchLevel = eLevel;
-                aBestMatchName = itrList->mpName;
-            }
-        }
     }
 
     // No preferred strings found.  Return the best matching name.
