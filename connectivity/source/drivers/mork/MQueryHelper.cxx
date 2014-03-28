@@ -231,6 +231,8 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     }
     MorkTableMap::iterator tableIter;
     MorkTableMap *Tables = xMork->getTables( 0x80 );
+    if (!Tables)
+        return -1;
     MorkRowMap *Rows = 0;
     MorkRowMap::iterator rowIter;
 
