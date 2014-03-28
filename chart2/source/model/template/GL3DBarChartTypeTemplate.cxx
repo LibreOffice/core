@@ -125,6 +125,27 @@ uno::Reference<chart2::XChartType> GL3DBarChartTypeTemplate::getChartTypeForInde
     return xResult;
 }
 
+sal_Bool SAL_CALL GL3DBarChartTypeTemplate::matchesTemplate(
+    const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
+    sal_Bool bAdaptProperties )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    bool bResult = ChartTypeTemplate::matchesTemplate(xDiagram, bAdaptProperties);
+
+    if (bResult && bAdaptProperties)
+    {
+        uno::Reference<chart2::XChartType> xChartType = DiagramHelper::getChartTypeByIndex(xDiagram, 0);
+        uno::Reference<beans::XPropertySet> xPS(xChartType, uno::UNO_QUERY);
+        if (xPS.is())
+        {
+            setFastPropertyValue_NoBroadcast(
+                PROP_GL3DCHARTTYPE_ROUNDED_EDGE, xPS->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE));
+        }
+    }
+
+    return bResult;
+}
+
 uno::Reference<chart2::XChartType>
 GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Reference<chart2::XChartType> >& /*xOldChartTypes*/ )
     throw (::css::uno::RuntimeException, ::std::exception)

@@ -38,6 +38,11 @@ public:
 
     // XChartTypeTemplate
 
+    virtual sal_Bool SAL_CALL matchesTemplate(
+        const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
+        sal_Bool bAdaptProperties )
+        throw (css::uno::RuntimeException, std::exception);
+
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes )
             throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
