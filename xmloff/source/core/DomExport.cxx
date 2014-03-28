@@ -256,12 +256,12 @@ void DomExport::element( const Reference<XElement>& xElement )
     }
 
     // write name
-    mrExport.StartElement( qualifiedName( xElement ), sal_False );
+    mrExport.StartElement( qualifiedName( xElement ), false );
 }
 
 void DomExport::endElement( const Reference<XElement>& xElement )
 {
-    mrExport.EndElement( qualifiedName( xElement ), sal_False );
+    mrExport.EndElement( qualifiedName( xElement ), false );
     popNamespace();
 }
 

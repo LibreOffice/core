@@ -161,7 +161,7 @@ void XMLIndexMarkExport::ExportIndexMark(
             SvXMLElementExport aElem(rExport,
                                      XML_NAMESPACE_TEXT,
                                      pElements[nElementNo],
-                                     sal_False, sal_False);
+                                     false, false);
         }
     }
 }

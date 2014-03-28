@@ -75,7 +75,7 @@ void SvXMLMetaExport::SimpleStringElement( const OUString& rText,
 {
     if ( !rText.isEmpty() ) {
         SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
-                                  sal_True, sal_False );
+                                  true, false );
         mrExport.Characters( rText );
     }
 }
@@ -87,7 +87,7 @@ void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
         OUString sValue = GetISODateTimeString( rDate );
         if ( !sValue.isEmpty() ) {
             SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
-                                      sal_True, sal_False );
+                                      true, false );
             mrExport.Characters( sValue );
         }
     }
@@ -98,7 +98,7 @@ void SvXMLMetaExport::_MExport()
     //  generator
     {
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_GENERATOR,
-                                  sal_True, sal_True );
+                                  true, true );
         mrExport.Characters( ::utl::DocInfoHelper::GetGeneratorString() );
     }
 
@@ -136,7 +136,7 @@ void SvXMLMetaExport::_MExport()
     const uno::Sequence< OUString > keywords = mxDocProps->getKeywords();
     for (sal_Int32 i = 0; i < keywords.getLength(); ++i) {
         SvXMLElementExport aKwElem( mrExport, XML_NAMESPACE_META, XML_KEYWORD,
-                                    sal_True, sal_False );
+                                    true, false );
         mrExport.Characters( keywords[i] );
     }
 
@@ -145,7 +145,7 @@ void SvXMLMetaExport::_MExport()
         OUString sValue = LanguageTag( mxDocProps->getLanguage()).getBcp47( false);
         if (!sValue.isEmpty()) {
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DC, XML_LANGUAGE,
-                                      sal_True, sal_False );
+                                      true, false );
             mrExport.Characters( sValue );
         }
     }
@@ -154,7 +154,7 @@ void SvXMLMetaExport::_MExport()
     {
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_CYCLES,
-                                  sal_True, sal_False );
+                                  true, false );
         mrExport.Characters( OUString::number(
             mxDocProps->getEditingCycles() ) );
     }
@@ -165,7 +165,7 @@ void SvXMLMetaExport::_MExport()
         sal_Int32 secs = mxDocProps->getEditingDuration();
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_DURATION,
-                                  sal_True, sal_False );
+                                  true, false );
         OUStringBuffer buf;
         ::sax::Converter::convertDuration(buf, util::Duration(
                     false, 0, 0, 0, secs/3600, (secs%3600)/60, secs%60, 0));
@@ -185,7 +185,7 @@ void SvXMLMetaExport::_MExport()
 
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META,XML_HYPERLINK_BEHAVIOUR,
-                                  sal_True, sal_False );
+                                  true, false );
     }
 
     //  auto-reload
@@ -203,7 +203,7 @@ void SvXMLMetaExport::_MExport()
             buf.makeStringAndClear());
 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_AUTO_RELOAD,
-                                  sal_True, sal_False );
+                                  true, false );
     }
 
     //  template
@@ -226,7 +226,7 @@ void SvXMLMetaExport::_MExport()
                 GetISODateTimeString( mxDocProps->getTemplateDate() ) );
 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_TEMPLATE,
-                                  sal_True, sal_False );
+                                  true, false );
     }
 
     //  user defined fields
@@ -245,7 +245,7 @@ void SvXMLMetaExport::_MExport()
         mrExport.AddAttribute( XML_NAMESPACE_META, XML_VALUE_TYPE,
                               sType.makeStringAndClear() );
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META,
-                                  XML_USER_DEFINED, sal_True, sal_False );
+                                  XML_USER_DEFINED, true, false );
         mrExport.Characters( sValueBuffer.makeStringAndClear() );
     }
 
@@ -291,7 +291,7 @@ void SvXMLMetaExport::_MExport()
             }
         }
         SvXMLElementExport aElem( mrExport,
-            XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True );
+            XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, true, true );
     }
 }
 
@@ -340,7 +340,7 @@ void SvXMLMetaExport::Export()
     } else {
         // office:meta
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_OFFICE, XML_META,
-                                  sal_True, sal_True );
+                                  true, true );
         // fall back to using public interface of XDocumentProperties
         _MExport();
     }
@@ -457,7 +457,7 @@ SvXMLMetaExport::endElement(const OUString & i_rName)
         return;
     }
     DBG_ASSERT( m_level >= 0, "SvXMLMetaExport: level error" );
-    mrExport.EndElement(i_rName, sal_False);
+    mrExport.EndElement(i_rName, false);
 }
 
 void SAL_CALL

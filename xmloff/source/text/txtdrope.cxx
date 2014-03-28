@@ -87,7 +87,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_DROP_CAP,
-                              sal_False, sal_False );
+                              false, false );
 }
 
 

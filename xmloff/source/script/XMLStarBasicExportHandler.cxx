@@ -49,7 +49,7 @@ void XMLStarBasicExportHandler::Export(
     SvXMLExport& rExport,
     const OUString& rEventQName,
     Sequence<PropertyValue> & rValues,
-    sal_Bool bUseWhitespace)
+    bool bUseWhitespace)
 {
     rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
                          rExport.GetNamespaceMap().GetQNameByKey(
@@ -92,7 +92,7 @@ void XMLStarBasicExportHandler::Export(
 
     SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT,
                                    XML_EVENT_LISTENER,
-                                   bUseWhitespace, sal_False);
+                                   bUseWhitespace, false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

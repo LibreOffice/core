@@ -201,7 +201,7 @@ void XMLMarkerStyleExport::exportXML(
             rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
 
             // Do Write
-            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER, sal_True, sal_False );
+            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER, true, false );
         }
     }
 }

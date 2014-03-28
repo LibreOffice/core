@@ -831,7 +831,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                 AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, pInfo->GetLayoutName());
 
                 // write draw-style attributes
-                SvXMLElementExport aDSE(*this, XML_NAMESPACE_STYLE, XML_PRESENTATION_PAGE_LAYOUT, sal_True, sal_True);
+                SvXMLElementExport aDSE(*this, XML_NAMESPACE_STYLE, XML_PRESENTATION_PAGE_LAYOUT, true, true);
 
                 // write presentation placeholders
                 switch(pInfo->GetLayoutType())
@@ -1250,7 +1250,7 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
     AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
     // write presentation-placeholder
-    SvXMLElementExport aPPL(*this, XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, sal_True, sal_True);
+    SvXMLElementExport aPPL(*this, XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, true, true);
 }
 
 ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( Reference< XDrawPage > xMasterPage )
@@ -1348,7 +1348,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
             AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sString);
 
             // write page-layout
-            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT, sal_True, sal_True);
+            SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT, true, true);
 
             // prepare style:properties inside page-master
             GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
@@ -1387,7 +1387,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
                 AddAttribute(XML_NAMESPACE_STYLE, XML_PRINT_ORIENTATION, XML_LANDSCAPE);
 
             // write style:properties
-            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_PROPERTIES, sal_True, sal_True);
+            SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_PROPERTIES, true, true);
         }
     }
 }
@@ -1561,7 +1561,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             sBuffer.append( nIndex );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
-            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL, sal_True, sal_True);
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL, true, true);
             Characters((*aIter));
         }
     }
@@ -1578,7 +1578,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             sBuffer.append( nIndex );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
-            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, sal_False, sal_False);
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, false, false);
             Characters((*aIter));
         }
     }
@@ -1602,7 +1602,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             if( !rDecl.mbFixed )
                 AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, getDataStyleName( rDecl.mnFormat ) );
 
-            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, sal_False, sal_False);
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, false, false);
             if( rDecl.mbFixed )
                 Characters(rDecl.maStrText);
         }
@@ -1890,7 +1890,7 @@ void SdXMLExport::_ExportContent()
             }
 
             // write page
-            SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, sal_True, sal_True);
+            SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, true, true);
 
             // write optional office:forms
             exportFormsElement( xDrawPage );
@@ -1934,7 +1934,7 @@ void SdXMLExport::_ExportContent()
                             ImplExportHeaderFooterDeclAttributes( maDrawNotesPagesHeaderFooterSettings[nPageInd] );
 
                             // write presentation notes
-                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, sal_True, sal_True);
+                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
 
                             // write optional office:forms
                             exportFormsElement( xNotesPage );
@@ -2092,7 +2092,7 @@ void SdXMLExport::exportPresentationSettings()
 
         if( bHasAttr || nShowCount != 0 )
         {
-            SvXMLElementExport aSettings(*this, XML_NAMESPACE_PRESENTATION, XML_SETTINGS, sal_True, sal_True);
+            SvXMLElementExport aSettings(*this, XML_NAMESPACE_PRESENTATION, XML_SETTINGS, true, true);
 
             if( nShowCount == 0 )
                 return;
@@ -2128,7 +2128,7 @@ void SdXMLExport::exportPresentationSettings()
                 if( !sTmp.isEmpty() )
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAGES, sTmp.makeStringAndClear() );
 
-                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, XML_SHOW, sal_True, sal_True);
+                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, XML_SHOW, true, true);
             }
         }
     }
@@ -2405,7 +2405,7 @@ void SdXMLExport::_ExportMasterStyles()
                 ImplExportHeaderFooterDeclAttributes( maHandoutPageHeaderFooterSettings );
 
                 // write masterpage
-                SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, sal_True, sal_True);
+                SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, true, true);
 
                 // write graphic objects on this master page (if any)
                 Reference< drawing::XShapes > xShapes(xHandoutPage, UNO_QUERY);
@@ -2449,7 +2449,7 @@ void SdXMLExport::_ExportMasterStyles()
                         maMasterPagesStyleNames[nMPageId]);
 
             // write masterpage
-            SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_MASTER_PAGE, sal_True, sal_True);
+            SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_MASTER_PAGE, true, true);
 
             // write optional office:forms
             exportFormsElement( xMasterPage );
@@ -2479,7 +2479,7 @@ void SdXMLExport::_ExportMasterStyles()
                             }
 
                             // write presentation notes
-                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, sal_True, sal_True);
+                            SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, true, true);
 
                             // write optional office:forms
                             exportFormsElement( xNotesPage );
@@ -2554,7 +2554,7 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     }
 }
 
-void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat )
+void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat )
 {
     sal_Int32 nFormat = nNumberFormat;
     if( (nNumberFormat > 1) && (nNumberFormat <= 0x0f) )
@@ -2594,7 +2594,7 @@ void SdXMLExport::exportAutoDataStyles()
         GetFormExport()->exportAutoControlNumberStyles();
 }
 
-OUString SdXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat ) const
+OUString SdXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat ) const
 {
     if( bTimeFormat )
     {
@@ -2702,13 +2702,13 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 }
 
                 // annotation element + content
-                SvXMLElementExport aElem(*this, XML_NAMESPACE_OFFICE_EXT, XML_ANNOTATION, sal_False, sal_True);
+                SvXMLElementExport aElem(*this, XML_NAMESPACE_OFFICE_EXT, XML_ANNOTATION, false, true);
 
                 // author
                 OUString aAuthor( xAnnotation->getAuthor() );
                 if( !aAuthor.isEmpty() )
                 {
-                    SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC, XML_CREATOR, sal_True, sal_False );
+                    SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC, XML_CREATOR, true, false );
                     this->Characters(aAuthor);
                 }
 
@@ -2716,7 +2716,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                     // date time
                     com::sun::star::util::DateTime aDate( xAnnotation->getDateTime() );
                     ::sax::Converter::convertDateTime(sStringBuffer, aDate, 0, true);
-                    SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, sal_True, sal_False );
+                    SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, true, false );
                     Characters(sStringBuffer.makeStringAndClear());
                 }
 

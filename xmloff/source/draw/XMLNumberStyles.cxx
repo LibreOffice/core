@@ -329,7 +329,7 @@ static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumb
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TEXTUAL, XML_TRUE );
     }
 
-    SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.meNumberStyle, sal_True, sal_False );
+    SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.meNumberStyle, true, false );
     if( rElement.mpText )
     {
         OUString sAttrValue( OUString::createFromAscii( rElement.mpText ) );
@@ -353,7 +353,7 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_AUTOMATIC_ORDER, XML_TRUE );
     }
 
-    SvXMLElementExport aElement( rExport, XML_NAMESPACE_NUMBER, pStyle->mbDateStyle ? XML_DATE_STYLE : XML_TIME_STYLE, sal_True, sal_True );
+    SvXMLElementExport aElement( rExport, XML_NAMESPACE_NUMBER, pStyle->mbDateStyle ? XML_DATE_STYLE : XML_TIME_STYLE, true, true );
 
     do
     {

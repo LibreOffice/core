@@ -229,7 +229,7 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE,
-                                  sal_True, sal_True );
+                                  true, true );
         if( !sURL.isEmpty() )
         {
             // optional office:binary-data

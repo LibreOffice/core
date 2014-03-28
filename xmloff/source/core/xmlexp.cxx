@@ -243,11 +243,11 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
     uno::Reference< uri::XUriReferenceFactory >         mxUriReferenceFactory;
-    OUString                                       msPackageURI;
-    OUString                                       msPackageURIScheme;
+    OUString                                            msPackageURI;
+    OUString                                            msPackageURIScheme;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-    sal_Bool                                            mbOutlineStyleAsNormalListStyle;
-    sal_Bool                                            mbSaveBackwardCompatibleODF;
+    bool                                                mbOutlineStyleAsNormalListStyle;
+    bool                                                mbSaveBackwardCompatibleODF;
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
@@ -267,8 +267,8 @@ public:
 
     ::std::auto_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
 
-    sal_Bool                                            mbExportTextNumberElement;
-    sal_Bool                                            mbNullDateInitialized;
+    bool                                                mbExportTextNumberElement;
+    bool                                                mbNullDateInitialized;
 
     void SetSchemeOf( const OUString& rOrigFileName )
     {
@@ -281,13 +281,13 @@ public:
 SvXMLExport_Impl::SvXMLExport_Impl()
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     : mbOutlineStyleAsNormalListStyle( false )
-        ,mbSaveBackwardCompatibleODF( sal_True )
+        ,mbSaveBackwardCompatibleODF( true )
         ,mStreamName()
         ,mNamespaceMaps()
         ,mDepth(0)
         ,mpRDFaHelper() // lazy
-        ,mbExportTextNumberElement( sal_False )
-        ,mbNullDateInitialized( sal_False )
+        ,mbExportTextNumberElement( false )
+        ,mbNullDateInitialized( false )
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create( comphelper::getProcessComponentContext() );
 }
@@ -445,12 +445,12 @@ SvXMLExport::SvXMLExport(
     mpEventExport( NULL ),
     mpImageMapExport( NULL ),
     mpXMLErrors( NULL ),
-    mbExtended( sal_False ),
+    mbExtended( false ),
     meClass( eClass ),
     mnExportFlags( nExportFlags ),
     mnErrorFlags( ERROR_NO ),
     msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(sal_True)
+    mbSaveLinkedSections(true)
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     _InitCtor();
@@ -476,12 +476,12 @@ SvXMLExport::SvXMLExport(
     mpEventExport( NULL ),
     mpImageMapExport( NULL ),
     mpXMLErrors( NULL ),
-    mbExtended( sal_False ),
+    mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( 0 ),
     mnErrorFlags( ERROR_NO ),
     msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(sal_True)
+    mbSaveLinkedSections(true)
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
@@ -515,12 +515,12 @@ SvXMLExport::SvXMLExport(
     mpEventExport( NULL ),
     mpImageMapExport( NULL ),
     mpXMLErrors( NULL ),
-    mbExtended( sal_False ),
+    mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( 0 ),
     mnErrorFlags( ERROR_NO ),
     msWS( GetXMLToken(XML_WS) ),
-    mbSaveLinkedSections(sal_True)
+    mbSaveLinkedSections(true)
 {
     SAL_WARN_IF(!xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
@@ -1142,7 +1142,7 @@ void SvXMLExport::ImplExportSettings()
         SvXMLElementExport aElem( *this,
                                 nSettingsCount != 0,
                                 XML_NAMESPACE_OFFICE, XML_SETTINGS,
-                                sal_True, sal_True );
+                                true, true );
 
         SettingsExportFacade aSettingsExportContext( *this );
         XMLSettingsExportHelper aSettingsExportHelper( aSettingsExportContext );
@@ -1162,14 +1162,14 @@ void SvXMLExport::ImplExportSettings()
     }
 }
 
-void SvXMLExport::ImplExportStyles( sal_Bool )
+void SvXMLExport::ImplExportStyles( bool )
 {
     CheckAttrList();
 
     {
         // <style:styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_STYLES,
-                                sal_True, sal_True );
+                                true, true );
 
         _ExportStyles( false );
     }
@@ -1192,7 +1192,7 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
     }
 }
 
-void SvXMLExport::ImplExportAutoStyles( sal_Bool )
+void SvXMLExport::ImplExportAutoStyles( bool )
 {
     // transfer style names (+ families) FROM other components (if appropriate)
     OUString sStyleNames( "StyleNames" );
@@ -1212,18 +1212,18 @@ void SvXMLExport::ImplExportAutoStyles( sal_Bool )
     {
         // <style:automatic-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
-                                  XML_AUTOMATIC_STYLES, sal_True, sal_True );
+                                  XML_AUTOMATIC_STYLES, true, true );
 
         _ExportAutoStyles();
     }
 }
 
-void SvXMLExport::ImplExportMasterStyles( sal_Bool )
+void SvXMLExport::ImplExportMasterStyles( bool )
 {
     {
         // <style:master-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,
-                                sal_True, sal_True );
+                                true, true );
 
         _ExportMasterStyles();
     }
@@ -1238,7 +1238,7 @@ void SvXMLExport::ImplExportContent()
 
     {
         SvXMLElementExport aElemrnt( *this, XML_NAMESPACE_OFFICE, XML_BODY,
-                                  sal_True, sal_True );
+                                  true, true );
         {
             XMLTokenEnum eClass = meClass;
             if( XML_TEXT_GLOBAL == eClass )
@@ -1253,7 +1253,7 @@ void SvXMLExport::ImplExportContent()
             SetBodyAttributes();
             SvXMLElementExport aElem( *this, meClass != XML_TOKEN_INVALID,
                                       XML_NAMESPACE_OFFICE, eClass,
-                                        sal_True, sal_True );
+                                        true, true );
 
             _ExportContent();
         }
@@ -1453,7 +1453,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             }
         }
 
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, sal_True, sal_True );
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, true, true );
 
         // meta information
         if( mnExportFlags & EXPORT_META )
@@ -1473,15 +1473,15 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
         // styles
         if( mnExportFlags & EXPORT_STYLES )
-            ImplExportStyles( sal_False );
+            ImplExportStyles( false );
 
         // autostyles
         if( mnExportFlags & EXPORT_AUTOSTYLES )
-            ImplExportAutoStyles( sal_False );
+            ImplExportAutoStyles( false );
 
         // masterstyles
         if( mnExportFlags & EXPORT_MASTERSTYLES )
-            ImplExportMasterStyles( sal_False );
+            ImplExportMasterStyles( false );
 
         // contnt
         if( mnExportFlags & EXPORT_CONTENT )
@@ -1527,12 +1527,12 @@ void SvXMLExport::_ExportMeta()
     } else {
         // office:meta
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
-                                sal_True, sal_True );
+                                true, true );
         {
     // BM: #i60323# export generator even if xInfoProp is empty (which is the
     // case for charts). The generator does not depend on xInfoProp
             SvXMLElementExport anElem( *this, XML_NAMESPACE_META, XML_GENERATOR,
-                                      sal_True, sal_True );
+                                      true, true );
             Characters(generator);
         }
     }
@@ -1540,7 +1540,7 @@ void SvXMLExport::_ExportMeta()
 
 void SvXMLExport::_ExportScripts()
 {
-    SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, sal_True, sal_True );
+    SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, true, true );
 
     // export Basic macros (only for FlatXML)
     if ( mnExportFlags & EXPORT_EMBEDDED )
@@ -1549,7 +1549,7 @@ void SvXMLExport::_ExportScripts()
         aValue += ":Basic";
         AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, sal_True, sal_True );
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, true, true );
 
         // initialize Basic
         if ( mxModel.is() )
@@ -1873,7 +1873,7 @@ sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >
     return 0;
 }
 
-void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool /*bTimeFormat*/ )
+void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, bool /*bTimeFormat*/ )
 {
     if(mpNumExport)
         mpNumExport->SetUsed(nNumberFormat);
@@ -1894,7 +1894,7 @@ void SvXMLExport::exportAutoDataStyles()
         mxFormExport->exportAutoControlNumberStyles();
 }
 
-OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool /*bTimeFormat*/ ) const
+OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, bool /*bTimeFormat*/ ) const
 {
     OUString sTemp;
     if(mpNumExport)
@@ -1929,9 +1929,9 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     return sRet;
 }
 
-sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
+bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( (getExportFlags() & EXPORT_EMBEDDED) != 0 &&
         rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
@@ -1970,9 +1970,9 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
     return sRet;
 }
 
-sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
+bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( (rEmbeddedObjectURL.startsWith( msEmbeddedObjectProtocol ) ||
          rEmbeddedObjectURL.startsWith( msGraphicObjectProtocol ) ) &&
         mxEmbeddedResolver.is() )
@@ -2115,7 +2115,7 @@ sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& r
     return 0;
 }
 
-sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
+bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 {
     OUString sFilterService;
 
@@ -2142,7 +2142,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     SAL_WARN_IF( !sFilterService.getLength(), "xmloff.core", "no export filter for own object" );
 
     if( sFilterService.isEmpty() )
-        return sal_False;
+        return false;
 
     Reference < XDocumentHandler > xHdl =
         new XMLEmbeddedObjectExportFilter( mxHandler );
@@ -2155,7 +2155,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
         UNO_QUERY);
     SAL_WARN_IF( !xExporter.is(), "xmloff.core", "can't instantiate export filter component for own object" );
     if( !xExporter.is() )
-        return sal_False;
+        return false;
 
     xExporter->setSourceDocument( rComp );
 
@@ -2202,14 +2202,14 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 
 void SvXMLExport::StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
-                        sal_Bool bIgnWSOutside )
+                        bool bIgnWSOutside )
 {
     StartElement(_GetNamespaceMap().GetQNameByKey( nPrefix,
         GetXMLToken(eName) ), bIgnWSOutside);
 }
 
 void SvXMLExport::StartElement(const OUString& rName,
-                        sal_Bool bIgnWSOutside )
+                        bool bIgnWSOutside )
 {
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
@@ -2263,14 +2263,14 @@ void SvXMLExport::Characters(const OUString& rChars)
 
 void SvXMLExport::EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
-                        sal_Bool bIgnWSInside )
+                        bool bIgnWSInside )
 {
     EndElement(_GetNamespaceMap().GetQNameByKey( nPrefix, GetXMLToken(eName) ),
         bIgnWSInside);
 }
 
 void SvXMLExport::EndElement(const OUString& rName,
-                        sal_Bool bIgnWSInside )
+                        bool bIgnWSInside )
 {
     // decrement nesting depth counter & (maybe) restore namespace map
     --mpImpl->mDepth;
@@ -2375,7 +2375,7 @@ void SvXMLExport::DisposingModel()
 }
 
 // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-sal_Bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
+bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
 {
     return mpImpl->mbOutlineStyleAsNormalListStyle;
 }
@@ -2491,12 +2491,12 @@ SvXMLExport::AddAttributesRDFa(
     mpImpl->mpRDFaHelper->AddRDFa(xMeta);
 }
 
-sal_Bool SvXMLExport::exportTextNumberElement() const
+bool SvXMLExport::exportTextNumberElement() const
 {
     return mpImpl->mbExportTextNumberElement;
 }
 
-sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
+bool SvXMLExport::SetNullDateOnUnitConverter()
 {
     // if the null date has already been set, don't set it again (performance)
     if (!mpImpl->mbNullDateInitialized)
@@ -2510,7 +2510,7 @@ sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
 void SvXMLElementExport::StartElement(
     const sal_uInt16 nPrefixKey,
     const OUString& rLName,
-    const sal_Bool bIgnoreWhitespaceOutside )
+    const bool bIgnoreWhitespaceOutside )
 {
     maElementName = mrExport.GetNamespaceMap().GetQNameByKey(nPrefixKey, rLName);
     mrExport.StartElement(maElementName, bIgnoreWhitespaceOutside);
@@ -2520,12 +2520,12 @@ SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
     sal_uInt16 nPrefixKey,
     const sal_Char *pLName,
-    sal_Bool bIWSOutside,
-    sal_Bool bIWSInside )
+    bool bIWSOutside,
+    bool bIWSInside )
     : mrExport( rExp )
     , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
-    , mbDoSomething( sal_True )
+    , mbDoSomething( true )
 {
     const OUString sLName( OUString::createFromAscii( pLName ) );
     StartElement( nPrefixKey, sLName, bIWSOutside );
@@ -2535,12 +2535,12 @@ SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
     sal_uInt16 nPrefixKey,
     const OUString& rLName,
-    sal_Bool bIWSOutside,
-    sal_Bool bIWSInside )
+    bool bIWSOutside,
+    bool bIWSInside )
     : mrExport( rExp )
     , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
-    , mbDoSomething( sal_True )
+    , mbDoSomething( true )
 {
     StartElement( nPrefixKey, rLName, bIWSOutside );
 }
@@ -2549,23 +2549,23 @@ SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
     sal_uInt16 nPrefixKey,
     enum XMLTokenEnum eLName,
-    sal_Bool bIWSOutside,
-    sal_Bool bIWSInside )
+    bool bIWSOutside,
+    bool bIWSInside )
     : mrExport( rExp )
     , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
-    , mbDoSomething( sal_True )
+    , mbDoSomething( true )
 {
     StartElement( nPrefixKey, GetXMLToken(eLName), bIWSOutside );
 }
 
 SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
-    sal_Bool bDoSth,
+    bool bDoSth,
     sal_uInt16 nPrefixKey,
     enum XMLTokenEnum eLName,
-    sal_Bool bIWSOutside,
-    sal_Bool bIWSInside )
+    bool bIWSOutside,
+    bool bIWSInside )
     : mrExport( rExp )
     , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
@@ -2578,12 +2578,12 @@ SvXMLElementExport::SvXMLElementExport(
 SvXMLElementExport::SvXMLElementExport(
     SvXMLExport& rExp,
     const OUString& rQName,
-    sal_Bool bIWSOutside,
-    sal_Bool bIWSInside )
+    bool bIWSOutside,
+    bool bIWSInside )
     : mrExport( rExp )
     , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
-    , mbDoSomething( sal_True )
+    , mbDoSomething( true )
 {
     maElementName = rQName;
     rExp.StartElement( rQName, bIWSOutside );

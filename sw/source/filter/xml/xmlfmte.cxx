@@ -126,7 +126,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, XML_STYLE,
-                                  sal_True, sal_True );
+                                  true, true );
 
         SvXMLItemMapEntriesRef xItemMap;
         XMLTokenEnum ePropToken = XML_TABLE_PROPERTIES;

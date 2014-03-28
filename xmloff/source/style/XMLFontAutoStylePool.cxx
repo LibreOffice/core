@@ -222,7 +222,7 @@ void XMLFontAutoStylePool::exportXML()
 {
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
                               XML_FONT_FACE_DECLS,
-                              sal_True, sal_True );
+                              true, true );
     Any aAny;
     OUString sTmp;
     XMLFontFamilyNamePropHdl aFamilyNameHdl;
@@ -268,7 +268,7 @@ void XMLFontAutoStylePool::exportXML()
 
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_FONT_FACE,
-                                  sal_True, sal_True );
+                                  true, true );
 
         if( tryToEmbedFonts )
         {

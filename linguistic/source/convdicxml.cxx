@@ -332,7 +332,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
     //!! block necessary in order to have SvXMLElementExport d-tor called
     //!! before the call to endDocument
     {
-        SvXMLElementExport aRoot( *this, XML_NAMESPACE_TCD, "text-conversion-dictionary", sal_True, sal_True );
+        SvXMLElementExport aRoot( *this, XML_NAMESPACE_TCD, "text-conversion-dictionary", true, true );
         _ExportContent();
     }
 
@@ -368,7 +368,7 @@ void ConvDicXMLExport::_ExportContent()
             AddAttribute( XML_NAMESPACE_TCD, "property-type", OUString::number(  nPropertyType ) );
         }
         SvXMLElementExport aEntryMain( *this, XML_NAMESPACE_TCD,
-                "entry" , sal_True, sal_True );
+                "entry" , true, true );
 
         pair< ConvMap::iterator, ConvMap::iterator > aRange =
                 rDic.aFromLeft.equal_range( *aKeyIt );
@@ -377,7 +377,7 @@ void ConvDicXMLExport::_ExportContent()
             DBG_ASSERT( *aKeyIt == (*aIt).first, "key <-> entry mismatch" );
             OUString aRightText( (*aIt).second );
             SvXMLElementExport aEntryRightText( *this, XML_NAMESPACE_TCD,
-                    "right-text" , sal_True, sal_False );
+                    "right-text" , true, false );
             Characters( aRightText );
         }
     }

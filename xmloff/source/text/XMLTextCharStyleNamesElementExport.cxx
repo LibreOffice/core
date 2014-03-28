@@ -58,7 +58,7 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
                 {
                     rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                           rExport.EncodeStyleName( *pName ) );
-                    rExport.StartElement( aName, sal_False );
+                    rExport.StartElement( aName, false );
                     ++pName;
                 }
             }
@@ -72,7 +72,7 @@ XMLTextCharStyleNamesElementExport::~XMLTextCharStyleNamesElementExport()
     {
         sal_Int32 i = nCount;
         while( --i )
-            rExport.EndElement( aName, sal_False );
+            rExport.EndElement( aName, false );
     }
 }
 

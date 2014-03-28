@@ -88,7 +88,7 @@ void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rVal
             }
 
             // Do Write
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, true, true );
 
             if( !sImageURL.isEmpty() )
             {

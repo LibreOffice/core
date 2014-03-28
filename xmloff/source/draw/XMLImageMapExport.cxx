@@ -240,7 +240,7 @@ void XMLImageMapExport::ExportMapEntry(
         rPropertySet->getPropertyValue(msTitle) >>= sTitle;
         if(!sTitle.isEmpty())
         {
-            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, mbWhiteSpace, sal_False);
+            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, mbWhiteSpace, false);
             mrExport.Characters(sTitle);
         }
 
@@ -249,7 +249,7 @@ void XMLImageMapExport::ExportMapEntry(
         rPropertySet->getPropertyValue(msDescription) >>= sDescription;
         if (!sDescription.isEmpty())
         {
-            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, mbWhiteSpace, sal_False);
+            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, mbWhiteSpace, false);
             mrExport.Characters(sDescription);
         }
 

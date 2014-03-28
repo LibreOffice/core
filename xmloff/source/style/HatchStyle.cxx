@@ -229,7 +229,7 @@ bool XMLHatchStyleExport::exportXML(
 
                 // Do Write
                 SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_HATCH,
-                                          sal_True, sal_False );
+                                          true, false );
             }
         }
     }

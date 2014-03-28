@@ -305,7 +305,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         const sal_Int32 rowCount = xIndexAccess->getCount();
         const sal_Int32 columnCount = xIndexAccessCols->getCount();
 
-        SvXMLElementExport tableElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True );
+        SvXMLElementExport tableElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, true, true );
 
         // export table columns
         ExportTableColumns( xIndexAccessCols, pTableInfo );
@@ -332,7 +332,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             }
 
             // write row element
-            SvXMLElementExport tableRowElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
+            SvXMLElementExport tableRowElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true );
 
             for ( sal_Int32 columnIndex = 0; columnIndex < columnCount; columnIndex++ )
             {
@@ -375,7 +375,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
              // TODO: All columns first have to be checked if some ones
              // have identical properties. If yes, attr table:number-columns-repeated
              // has to be written.
-             SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
+             SvXMLElementExport tableColumnElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true );
          }
      }
  }
@@ -425,7 +425,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, OUString::number( nRowSpan ) );
 
      // <table:table-cell> or <table:covered-table-cell>
-    SvXMLElementExport tableCellElement( mrExport, XML_NAMESPACE_TABLE, bIsMerged ? XML_COVERED_TABLE_CELL : XML_TABLE_CELL, sal_True, sal_True );
+    SvXMLElementExport tableCellElement( mrExport, XML_NAMESPACE_TABLE, bIsMerged ? XML_COVERED_TABLE_CELL : XML_TABLE_CELL, true, true );
 
     // export cells text content
     ImpExportText( xCell );
@@ -507,7 +507,7 @@ void XMLTableExport::exportTableTemplates()
             Reference< XNameAccess > xStyleNames( xTableStyle, UNO_QUERY_THROW );
 
             mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
-             SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, sal_True, sal_True );
+             SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
 
             const TableStyleElement* pElements = getTableStyleMap();
             while( pElements->meElement != XML_TOKEN_END )
@@ -518,7 +518,7 @@ void XMLTableExport::exportTableTemplates()
                     if( xStyle.is() )
                     {
                         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, GetExport().EncodeStyleName( xStyle->getName() ) );
-                         SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, sal_True, sal_True );
+                         SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, true, true );
                     }
                 }
                 catch(const Exception&)

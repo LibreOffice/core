@@ -351,7 +351,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
-                                  sal_True, sal_True );
+                                  true, true );
 
         OUStringBuffer sBuffer;
         if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
@@ -469,7 +469,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
         {
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
-                                      XML_LIST_LEVEL_PROPERTIES, sal_True, sal_True );
+                                      XML_LIST_LEVEL_PROPERTIES, true, true );
 
             /* Check, if properties for position-and-space-mode LABEL_ALIGNMENT
                are allowed to be exported. (#i89178#)
@@ -519,7 +519,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
                 SvXMLElementExport aLabelAlignmentElement( GetExport(), XML_NAMESPACE_STYLE,
                                              XML_LIST_LEVEL_LABEL_ALIGNMENT,
-                                             sal_True, sal_True );
+                                             true, true );
             }
         }
 
@@ -605,7 +605,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         if( GetExport().GetAttrList().getLength() > 0 )
         {
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
-                                      XML_TEXT_PROPERTIES, sal_True, sal_True );
+                                      XML_TEXT_PROPERTIES, true, true );
         }
         if( NumberingType::BITMAP == eType && !sImageURL.isEmpty() )
         {
@@ -691,7 +691,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
 
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_LIST_STYLE ,
-                                  sal_True, sal_True );
+                                  true, true );
         exportLevelStyles( rNumRule );
     }
 }
@@ -784,7 +784,7 @@ void SvxXMLNumRuleExport::exportOutline()
                     }
                 }
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                          XML_OUTLINE_STYLE, sal_True, sal_True );
+                                          XML_OUTLINE_STYLE, true, true );
                 exportLevelStyles( xNumRule, sal_True );
             }
         }

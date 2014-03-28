@@ -87,7 +87,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     }
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMNS,
-                              sal_True, sal_True );
+                              true, true );
 
     if( xPropSet.is() )
     {
@@ -159,7 +159,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             // style:column-sep
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_COLUMN_SEP,
-                                      sal_True, sal_True );
+                                      true, true );
         }
     }
 
@@ -185,7 +185,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
         // style:column
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMN,
-                                  sal_True, sal_True );
+                                  true, true );
         pColumns++;
     }
 }

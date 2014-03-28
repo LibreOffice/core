@@ -181,7 +181,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
         // and finally, the element
         SvXMLElementExport rElem(rExport, XML_NAMESPACE_TEXT,
                                  XML_NOTES_CONFIGURATION,
-                                 sal_True, sal_True);
+                                 true, true);
     }
 }
 

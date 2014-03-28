@@ -72,8 +72,7 @@ sal_Bool XMLBase64Export::exportElement(
             sal_uInt16 nNamespace,
             enum ::xmloff::token::XMLTokenEnum eName )
 {
-    SvXMLElementExport aElem( GetExport(), nNamespace, eName, sal_True,
-                              sal_True );
+    SvXMLElementExport aElem( GetExport(), nNamespace, eName, true, true );
     return exportXML( rIn );
 }
 

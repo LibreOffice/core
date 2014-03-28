@@ -666,11 +666,11 @@ void SvXMLExportPropertyMapper::ContextFilter(
 //  1.Number of elements equal ?
 //  2.Index of each element equal ? (So I know whether the propertynames are the same)
 //  3.Value of each element equal ?
-sal_Bool SvXMLExportPropertyMapper::Equals(
+bool SvXMLExportPropertyMapper::Equals(
         const vector< XMLPropertyState >& aProperties1,
         const vector< XMLPropertyState >& aProperties2 ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     sal_uInt32 nCount = aProperties1.size();
 
     if( nCount == aProperties2.size() )
@@ -699,13 +699,13 @@ sal_Bool SvXMLExportPropertyMapper::Equals(
                 }
             }
             else
-                bRet = sal_False;
+                bRet = false;
 
             nIndex++;
         }
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }
@@ -769,7 +769,7 @@ void SvXMLExportPropertyMapper::exportXML(
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE,
                                   aPropTokens[i].eToken,
                                   (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0,
-                                  sal_False );
+                                  false );
 
                 exportElementItems( rExport, rProperties, nFlags, aIndexArray );
             }

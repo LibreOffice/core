@@ -71,7 +71,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 
     {
         // the following object will write all collected attributes in its dtor
-        SvXMLElementExport aRoot( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_LIST, sal_True, sal_True );
+        SvXMLElementExport aRoot( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_LIST, true, true );
 
         for ( sal_Int32 n=0; n<maVersions.getLength(); n++ )
         {
@@ -92,7 +92,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
             AddAttribute( XML_NAMESPACE_DC, xmloff::token::XML_DATE_TIME, aDateStr );
 
             // the following object will write all collected attributes in its dtor
-            SvXMLElementExport aEntry( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_ENTRY, sal_True, sal_True );
+            SvXMLElementExport aEntry( *this, XML_NAMESPACE_FRAMEWORK, xmloff::token::XML_VERSION_ENTRY, true, true );
         }
     }
     GetDocHandler()->endDocument();

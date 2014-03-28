@@ -59,7 +59,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
 
     OUString sTmp;
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER_SET, sal_True, sal_True );
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_LAYER_SET, true, true );
 
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
@@ -70,13 +70,13 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             if(!sTmp.isEmpty())
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, sTmp );
 
-            SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, sal_True, sal_True );
+            SvXMLElementExport aEle( rExport, XML_NAMESPACE_DRAW, XML_LAYER, true, true );
 
             // title property (as <svg:title> element)
             xLayer->getPropertyValue(strTitle) >>= sTmp;
             if(!sTmp.isEmpty())
             {
-                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SVG, XML_TITLE, sal_True, sal_False);
+                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SVG, XML_TITLE, true, false);
                 rExport.Characters(sTmp);
             }
 
@@ -84,7 +84,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
             xLayer->getPropertyValue(strDescription) >>= sTmp;
             if(!sTmp.isEmpty())
             {
-                SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC, sal_True, sal_False);
+                SvXMLElementExport aDesc(rExport, XML_NAMESPACE_SVG, XML_DESC, true, false);
                 rExport.Characters(sTmp);
             }
         }

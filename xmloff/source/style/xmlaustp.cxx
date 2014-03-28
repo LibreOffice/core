@@ -240,7 +240,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         {
             SvXMLElementExport aElem(
                 GetExport(), XML_NAMESPACE_STYLE, XML_HEADER_STYLE,
-                sal_True, sal_True );
+                true, true );
 
             rPropExp.exportXML(
                 GetExport(), rProperties,
@@ -251,7 +251,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         {
             SvXMLElementExport aElem(
                 GetExport(), XML_NAMESPACE_STYLE, XML_FOOTER_STYLE,
-                sal_True, sal_True );
+                true, true );
 
             rPropExp.exportXML(
                 GetExport(), rProperties,
@@ -281,7 +281,7 @@ void SvXMLAutoStylePoolP::AddFamily(
         const OUString& rStrName,
         SvXMLExportPropertyMapper* pMapper,
         const OUString& aStrPrefix,
-        sal_Bool bAsFamily )
+        bool bAsFamily )
 {
     UniReference <SvXMLExportPropertyMapper> xTmp = pMapper;
     AddFamily( nFamily, rStrName, xTmp, aStrPrefix, bAsFamily );
@@ -292,7 +292,7 @@ void SvXMLAutoStylePoolP::AddFamily(
         const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
         const OUString& rStrPrefix,
-        sal_Bool bAsFamily )
+        bool bAsFamily )
 {
     pImpl->AddFamily( nFamily, rStrName, rMapper, rStrPrefix, bAsFamily );
 }
@@ -350,12 +350,12 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
     return sName;
 }
 
-sal_Bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
+bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
 {
     return pImpl->Add(rName, nFamily, rParent, rProperties);
 }
 
-sal_Bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
+bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
                                         const ::std::vector< XMLPropertyState >& rProperties )
 
 {

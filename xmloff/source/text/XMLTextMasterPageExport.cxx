@@ -148,7 +148,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        XML_HEADER, sal_True, sal_True );
+                                        XML_HEADER, true, true );
             exportHeaderFooterContent( xHeaderText, false );
         }
 
@@ -158,7 +158,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        XML_HEADER_FIRST, sal_True, sal_True );
+                                        XML_HEADER_FIRST, true, true );
             exportHeaderFooterContent( xHeaderTextFirst, false );
         }
 
@@ -168,7 +168,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        XML_HEADER_LEFT, sal_True, sal_True );
+                                        XML_HEADER_LEFT, true, true );
             exportHeaderFooterContent( xHeaderTextLeft, false );
         }
 
@@ -196,7 +196,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        XML_FOOTER, sal_True, sal_True );
+                                        XML_FOOTER, true, true );
             exportHeaderFooterContent( xFooterText, false );
         }
 
@@ -206,7 +206,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        XML_FOOTER_FIRST, sal_True, sal_True );
+                                        XML_FOOTER_FIRST, true, true );
             exportHeaderFooterContent( xFooterTextFirst, false );
         }
 
@@ -216,7 +216,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                        XML_FOOTER_LEFT, sal_True, sal_True );
+                                        XML_FOOTER_LEFT, true, true );
             exportHeaderFooterContent( xFooterTextLeft, false );
         }
     }

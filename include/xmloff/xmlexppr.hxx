@@ -122,7 +122,7 @@ public:
                     { return _Filter(rPropSet, true, bEnableFoFontFamily); }
 
     /** Compare to arrays of XMLPropertyState */
-    sal_Bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
+    bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
                      const ::std::vector< XMLPropertyState >& aProperties2 ) const;
 
     /** fills the given attribute list with the items in the given set */

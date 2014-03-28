@@ -716,7 +716,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
             SvXMLElementExport aElem( GetExport(),
                                       XML_NAMESPACE_STYLE, sName,
-                                      sal_True, sal_True );
+                                      true, true );
 
             sal_Int32 nStart(-1);
             sal_Int32 nEnd(-1);

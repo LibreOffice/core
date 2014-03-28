@@ -169,7 +169,7 @@ void exportXFormsModel( SvXMLExport& rExport,
 
     lcl_export( xModelPropSet, rExport, aXFormsModelTable );
     SvXMLElementExport aModelElement( rExport, XML_NAMESPACE_XFORMS, XML_MODEL,
-                                      sal_True, sal_True );
+                                      true, true );
 
     // instances
     Reference<XIndexAccess> xInstances( xModel->getInstances(),
@@ -241,7 +241,7 @@ void exportXFormsInstance( SvXMLExport& rExport,
         rExport.AddAttribute( XML_NAMESPACE_NONE, XML_SRC, sURL );
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_XFORMS, XML_INSTANCE,
-                              sal_True, sal_True );
+                              true, true );
     rExport.IgnorableWhitespace();
     if( xDoc.is() )
     {
@@ -360,7 +360,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     }
 
     SvXMLElementExport aElement( rExport, XML_NAMESPACE_XFORMS, XML_BIND,
-                                 sal_True, sal_True );
+                                 true, true );
 }
 
 
@@ -393,7 +393,7 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 {
     lcl_export( xSubmission, rExport, aXFormsSubmissionTable );
     SvXMLElementExport aElement( rExport, XML_NAMESPACE_XFORMS, XML_SUBMISSION,
-                                 sal_True, sal_True );
+                                 true, true );
 }
 
 
@@ -458,7 +458,7 @@ static void lcl_exportDataTypeFacets( SvXMLExport& rExport,
                     rExport,
                     pCurrent->nNamespace,
                     static_cast<XMLTokenEnum>( pCurrent->nToken ),
-                    sal_True, sal_True );
+                    true, true );
             }
         }
     }
@@ -542,7 +542,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
     rExport.AddAttribute( XML_NAMESPACE_NONE, XML_NAME, sName );
     SvXMLElementExport aSimpleType( rExport,
                                     XML_NAMESPACE_XSD, XML_SIMPLETYPE,
-                                    sal_True, sal_True );
+                                    true, true );
 
     // <xsd:restriction base="xsd:...">
     rExport.AddAttribute( XML_NAMESPACE_NONE, XML_BASE,
@@ -550,7 +550,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
     SvXMLElementExport aRestriction( rExport,
                                      XML_NAMESPACE_XSD,
                                      XML_RESTRICTION,
-                                     sal_True, sal_True );
+                                     true, true );
 
     // export facets
     lcl_exportDataTypeFacets( rExport,
@@ -564,7 +564,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
     // TODO: for now, we'll fake this...
     {
         SvXMLElementExport aSchemaElem( rExport, XML_NAMESPACE_XSD, XML_SCHEMA,
-                                        sal_True, sal_True );
+                                        true, true );
 
         // now get data type repositry, and export
         Reference<XEnumerationAccess> xTypes( xModel->getDataTypeRepository(),

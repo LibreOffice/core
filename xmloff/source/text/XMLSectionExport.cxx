@@ -261,7 +261,7 @@ void XMLSectionExport::ExportSectionEnd(
             {
                 // index end: close index body element
                 GetExport().EndElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY,
-                                        sal_True );
+                                        true );
                 GetExport().IgnorableWhitespace();
 
                 switch (MapSectionType(xIndex->getServiceName()))
@@ -316,7 +316,7 @@ void XMLSectionExport::ExportSectionEnd(
             GetExport().CheckAttrList();
 
             // element surrounded by whitespace
-            GetExport().EndElement( XML_NAMESPACE_TEXT, eElement, sal_True);
+            GetExport().EndElement( XML_NAMESPACE_TEXT, eElement, true);
             GetExport().IgnorableWhitespace();
         }
         else
@@ -378,7 +378,7 @@ void XMLSectionExport::ExportIndexHeaderStart(
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xName->getName());
 
     // format already handled -> export only start element
-    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_TITLE, sal_True );
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_TITLE, true );
     GetExport().IgnorableWhitespace();
 }
 
@@ -472,7 +472,7 @@ void XMLSectionExport::ExportRegularSectionStart(
 
     // export element
     GetExport().IgnorableWhitespace();
-    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_SECTION, sal_True );
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_SECTION, true );
 
     // data source
     // unfortunately, we have to test all relevant strings for non-zero length
@@ -508,7 +508,7 @@ void XMLSectionExport::ExportRegularSectionStart(
 
         SvXMLElementExport aElem(GetExport(),
                                  XML_NAMESPACE_TEXT, XML_SECTION_SOURCE,
-                                 sal_True, sal_True);
+                                 true, true);
     }
     else
     {
@@ -548,7 +548,7 @@ void XMLSectionExport::ExportRegularSectionStart(
 
                 SvXMLElementExport aElem(GetExport(),
                                          XML_NAMESPACE_OFFICE,
-                                         XML_DDE_SOURCE, sal_True, sal_True);
+                                         XML_DDE_SOURCE, true, true);
             }
             // else: no DDE data source
         }
@@ -789,7 +789,7 @@ void XMLSectionExport::ExportBaseIndexStart(
 
     // index  Element start
     GetExport().IgnorableWhitespace();
-    GetExport().StartElement( XML_NAMESPACE_TEXT, eElement, sal_False );
+    GetExport().StartElement( XML_NAMESPACE_TEXT, eElement, false );
 }
 
 static const XMLTokenEnum aTypeSourceElementNameMap[] =
@@ -840,7 +840,7 @@ void XMLSectionExport::ExportBaseIndexSource(
                              GetXMLToken(
                                  aTypeSourceElementNameMap[
                                     eType - TEXT_SECTION_TYPE_TOC]),
-                             sal_True, sal_True);
+                             true, true);
 
     // scope for title template (all indices)
     {
@@ -856,7 +856,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         SvXMLElementExport aHeaderTemplate(GetExport(),
                                            XML_NAMESPACE_TEXT,
                                            XML_INDEX_TITLE_TEMPLATE,
-                                           sal_True, sal_False);
+                                           true, false);
 
         // title as element content
         aAny = rPropertySet->getPropertyValue(sTitle);
@@ -919,7 +919,7 @@ void XMLSectionExport::ExportBaseIndexBody(
 
     // start surrounded by whitespace
     GetExport().IgnorableWhitespace();
-    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY, sal_True );
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_INDEX_BODY, true );
 }
 
 void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
@@ -1097,7 +1097,7 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
         SvXMLElementExport aLevelTemplate(GetExport(),
                                           XML_NAMESPACE_TEXT,
                                           GetXMLToken(eElementName),
-                                          sal_True, sal_True);
+                                          true, true);
 
         // export sequence
         sal_Int32 nTemplateCount = rValues.getLength();
@@ -1536,7 +1536,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
         // export template
         SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,
                                             GetXMLToken(eElement),
-                                            sal_True, sal_False)
+                                            true, false)
             ;
 
         // entry text or span element: write text
@@ -1574,7 +1574,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
             SvXMLElementExport aParaStyles(GetExport(),
                                            XML_NAMESPACE_TEXT,
                                            XML_INDEX_SOURCE_STYLES,
-                                           sal_True, sal_True);
+                                           true, true);
 
             // iterate over styles in this level
             for(sal_Int32 nName = 0; nName < nNamesCount; nName++)
@@ -1588,7 +1588,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
                 SvXMLElementExport aParaStyle(GetExport(),
                                               XML_NAMESPACE_TEXT,
                                               XML_INDEX_SOURCE_STYLE,
-                                              sal_True, sal_False);
+                                              true, false);
             }
         }
     }
@@ -1695,7 +1695,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             // configuration element
             SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,
                                         XML_BIBLIOGRAPHY_CONFIGURATION,
-                                        sal_True, sal_True);
+                                        true, true);
 
             // sort keys
             aAny = xPropSet->getPropertyValue(sSortKeys);
@@ -1736,7 +1736,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 
                 SvXMLElementExport aKeyElem(rExport,
                                             XML_NAMESPACE_TEXT, XML_SORT_KEY,
-                                            sal_True, sal_True);
+                                            true, true);
             }
         }
     }
@@ -1890,7 +1890,7 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL,
                                         sTmp.makeStringAndClear() );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_H,
-                                        sal_True, sal_False );
+                                        true, false );
         }
     }
 

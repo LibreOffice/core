@@ -110,7 +110,7 @@ void XMLTextParagraphExport::exportTextFootnote(
         }
         SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
                                        XML_NAMESPACE_TEXT, XML_A,
-                                       sal_False, sal_False );
+                                       false, false );
 
         if( bHasHyperlink )
         {
@@ -136,7 +136,7 @@ void XMLTextParagraphExport::exportTextFootnote(
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                           GetExport().EncodeStyleName( sStyle ) );
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                          XML_SPAN, sal_False, sal_False );
+                                          XML_SPAN, false, false );
                 exportTextFootnoteHelper(xFootnote, xText, rText,
                                          bAutoStyles, bIsEndnote, bIsProgress );
             }
@@ -179,7 +179,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
                                                           : XML_FOOTNOTE ) );
 
         SvXMLElementExport aNote(GetExport(), XML_NAMESPACE_TEXT,
-                                 XML_NOTE, sal_False, sal_False);
+                                 XML_NOTE, false, false);
         {
             // handle label vs. automatic numbering
             OUString sLabel = rFootnote->getLabel();
@@ -191,13 +191,13 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
             // else: automatic numbering -> no attribute
 
             SvXMLElementExport aCite(GetExport(), XML_NAMESPACE_TEXT,
-                                     XML_NOTE_CITATION, sal_False, sal_False);
+                                     XML_NOTE_CITATION, false, false);
             GetExport().Characters(rTextString);
         }
 
         {
             SvXMLElementExport aBody(GetExport(), XML_NAMESPACE_TEXT,
-                                     XML_NOTE_BODY, sal_False, sal_False);
+                                     XML_NOTE_BODY, false, false);
             exportText(rText, bAutoStyles, bIsProgress, true );
         }
     }
@@ -345,7 +345,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     SvXMLElementExport aFootnoteConfigElement(
         GetExport(), XML_NAMESPACE_TEXT,
         XML_NOTES_CONFIGURATION,
-        sal_True, sal_True);
+        true, true);
 
     // two element for footnote content
     if (!bIsEndnote)
@@ -360,7 +360,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         {
             SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD,
-                                     sal_True, sal_False);
+                                     true, false);
             GetExport().Characters(sTmp);
         }
 
@@ -372,7 +372,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         {
             SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD,
-                                     sal_True, sal_False);
+                                     true, false);
             GetExport().Characters(sTmp);
         }
     }

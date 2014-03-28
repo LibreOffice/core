@@ -579,13 +579,13 @@ void SmXMLExport::_ExportContent()
         // text mode, the default display="inline" value will be used.
         AddAttribute(XML_NAMESPACE_MATH, XML_DISPLAY, XML_BLOCK);
     }
-    SvXMLElementExport aEquation(*this, XML_NAMESPACE_MATH, XML_MATH, sal_True, sal_True);
+    SvXMLElementExport aEquation(*this, XML_NAMESPACE_MATH, XML_MATH, true, true);
     SvXMLElementExport *pSemantics=0;
 
     if (!aText.isEmpty())
     {
         pSemantics = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-            XML_SEMANTICS, sal_True, sal_True);
+            XML_SEMANTICS, true, true);
     }
 
     ExportNodes(pTree, 0);
@@ -607,7 +607,7 @@ void SmXMLExport::_ExportContent()
         AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING,
             OUString("StarMath 5.0"));
         SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH,
-            XML_ANNOTATION, sal_True, sal_False);
+            XML_ANNOTATION, true, false);
         GetDocHandler()->characters( aText );
     }
     delete pSemantics;
@@ -709,7 +709,7 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
     sal_uLong nGroup = pNode->GetToken().nGroup;
 
     SvXMLElementExport* pRow = new SvXMLElementExport(*this,
-        XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
+        XML_NAMESPACE_MATH, XML_MROW, true, true);
 
     // Unfold the binary tree structure as long as the nodes are SmBinHorNode
     // with the same nGroup. This will reduce the number of nested <mrow>
@@ -753,7 +753,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
     // #i115443: nodes of type expression always need to be grouped with mrow statement
     if (!bNoMrowContainer &&
         (nSize > 1 || pNode->GetType() == NEXPRESSION))
-        pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
+        pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
 
     for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
@@ -781,7 +781,7 @@ void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
         AddAttribute(XML_NAMESPACE_MATH, XML_DENOMALIGN,
             pDenom->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
     }
-    SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, sal_True, sal_True);
+    SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, true, true);
     ExportNodes(pNum, nLevel);
     ExportNodes(pDenom, nLevel);
 }
@@ -796,7 +796,7 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
         // export the node as <mfrac bevelled="true">
         AddAttribute(XML_NAMESPACE_MATH, XML_BEVELLED, XML_TRUE);
         SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC,
-            sal_True, sal_True);
+            true, true);
         ExportNodes(pNode->GetSubNode(0), nLevel);
         ExportNodes(pNode->GetSubNode(1), nLevel);
     }
@@ -805,13 +805,13 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
         // widebslash
         // We can not use <mfrac> to a backslash, so just use <mo>\</mo>
         SvXMLElementExport *pRow = new SvXMLElementExport(*this,
-            XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
+            XML_NAMESPACE_MATH, XML_MROW, true, true);
 
         ExportNodes(pNode->GetSubNode(0), nLevel);
 
         { // Scoping for <mo> creation
         SvXMLElementExport aMo(*this, XML_NAMESPACE_MATH, XML_MO,
-            sal_True,sal_True);
+            true, true);
         sal_Unicode nArse[2] = {MS_BACKSLASH,0x00};
         GetDocHandler()->characters(nArse);
         }
@@ -844,7 +844,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     // try to avoid creating a mtable element when the formula consists only
     // of a single output line
     if (nLevel || (nSize >1))
-        pTable = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
+        pTable = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true);
 
     for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
@@ -853,7 +853,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
             SvXMLElementExport *pCell=0;
             if (pTable)
             {
-                pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, sal_True, sal_True);
+                pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
                 SmTokenType eAlign = TALIGNC;
                 if (pTemp->GetType() == NALIGN)
                 {
@@ -879,7 +879,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
                     AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
                         eAlign == TALIGNL ? XML_LEFT : XML_RIGHT);
                 }
-                pCell = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
+                pCell = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, true, true);
             }
             ExportNodes(pTemp, nLevel+1);
             delete pCell;
@@ -897,7 +897,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     if (pNode->GetType() == NMATH || pNode->GetType() == NGLYPH_SPECIAL)
     {
         // Export NMATH and NGLYPH_SPECIAL symbols as <mo> elements
-        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
+        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, true, false);
     }
     else
     {
@@ -910,7 +910,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
         // placeholders but they won't be visible in most MathML rendering
         // engines so let's use an empty square for NPLACE instead.
         AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
-        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
+        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false);
     }
     sal_Unicode nArse[2];
     nArse[0] = pTemp->GetText()[0];
@@ -940,14 +940,14 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_ITALIC);
             else if ((pTemp->GetText().getLength() == 1) && !bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
-            pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI,sal_True,sal_False);
+            pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false);
             break;
         }
         case TNUMBER:
-            pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MN,sal_True,sal_False);
+            pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MN, true, false);
             break;
         case TTEXT:
-            pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTEXT,sal_True,sal_False);
+            pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTEXT, true, false);
             break;
         }
     GetDocHandler()->characters(pTemp->GetText());
@@ -975,7 +975,7 @@ void SmXMLExport::ExportBlank(const SmNode *pNode, int /*nLevel*/)
     SvXMLElementExport *pText;
 
     pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSPACE,
-        sal_True, sal_False);
+        true, false);
 
     GetDocHandler()->characters( OUString() );
     delete pText;
@@ -1001,24 +1001,24 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
     if (pLSub || pLSup)
     {
         SvXMLElementExport aMultiScripts(*this, XML_NAMESPACE_MATH,
-            XML_MMULTISCRIPTS, sal_True, sal_True);
+            XML_MMULTISCRIPTS, true, true);
 
 
         if (NULL != (pCSub = pNode->GetSubNode(CSUB+1))
             && NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDEROVER, sal_True,sal_True);
+                XML_MUNDEROVER, true, true);
         }
         else if (NULL != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDER, sal_True,sal_True);
+                XML_MUNDER, true, true);
         }
         else if (NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MOVER, sal_True,sal_True);
+                XML_MOVER, true, true);
         }
 
         ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
@@ -1037,20 +1037,20 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
                 ExportNodes(pSub, nLevel+1);
             else
             {
-                SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE,sal_True,sal_True);
+                SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE, true, true);
             }
             if (pSup)
                 ExportNodes(pSup, nLevel+1);
             else
             {
-                SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE,sal_True,sal_True);
+                SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE, true, true);
             }
         }
 
         //Separator element between suffix and prefix sub/sup pairs
         {
             SvXMLElementExport aPrescripts(*this, XML_NAMESPACE_MATH,
-                XML_MPRESCRIPTS, sal_True,sal_True);
+                XML_MPRESCRIPTS, true, true);
         }
 
         if (pLSub)
@@ -1058,7 +1058,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
         else
         {
             SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE,
-                sal_True,sal_True);
+                true, true);
 
         }
         if (pLSup)
@@ -1066,7 +1066,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
         else
         {
             SvXMLElementExport aNone(*this, XML_NAMESPACE_MATH, XML_NONE,
-                sal_True,sal_True);
+                true, true);
 
         }
     }
@@ -1076,34 +1076,34 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
             NULL != (pSup = pNode->GetSubNode(RSUP+1)))
         {
             pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MSUBSUP, sal_True,sal_True);
+                XML_MSUBSUP, true, true);
         }
         else if (NULL != (pSub = pNode->GetSubNode(RSUB+1)))
         {
             pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUB,
-                sal_True,sal_True);
+                true, true);
         }
         else if (NULL != (pSup = pNode->GetSubNode(RSUP+1)))
         {
             pThing = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSUP,
-                sal_True,sal_True);
+                true, true);
         }
 
         if (NULL != (pCSub = pNode->GetSubNode(CSUB+1))
             && NULL != (pCSup=pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDEROVER, sal_True,sal_True);
+                XML_MUNDEROVER, true, true);
         }
         else if (NULL != (pCSub = pNode->GetSubNode(CSUB+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MUNDER, sal_True,sal_True);
+                XML_MUNDER, true, true);
         }
         else if (NULL != (pCSup = pNode->GetSubNode(CSUP+1)))
         {
             pThing2 = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-                XML_MOVER, sal_True,sal_True);
+                XML_MOVER, true, true);
         }
         ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
 
@@ -1138,7 +1138,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
 
     // <mrow>
     pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW,
-        sal_True, sal_True);
+        true, true);
 
     //   <mo fence="true"> opening-fence </mo>
     if (pLeft && (pLeft->GetToken().eType != TNONE))
@@ -1155,7 +1155,7 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     {
         // <mrow>
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
-            sal_True, sal_True);
+            true, true);
         ExportNodes(pTemp, nLevel+1);
         // </mrow>
     }
@@ -1179,15 +1179,15 @@ void SmXMLExport::ExportRoot(const SmNode *pNode, int nLevel)
 {
     if (pNode->GetSubNode(0))
     {
-        SvXMLElementExport aRoot(*this, XML_NAMESPACE_MATH, XML_MROOT,sal_True,
-            sal_True);
+        SvXMLElementExport aRoot(*this, XML_NAMESPACE_MATH, XML_MROOT, true,
+            true);
         ExportNodes(pNode->GetSubNode(2), nLevel+1);
         ExportNodes(pNode->GetSubNode(0), nLevel+1);
     }
     else
     {
-        SvXMLElementExport aSqrt(*this, XML_NAMESPACE_MATH, XML_MSQRT,sal_True,
-            sal_True);
+        SvXMLElementExport aSqrt(*this, XML_NAMESPACE_MATH, XML_MSQRT, true,
+            true);
         ExportNodes(pNode->GetSubNode(2), nLevel+1);
     }
 }
@@ -1197,7 +1197,7 @@ void SmXMLExport::ExportOperator(const SmNode *pNode, int nLevel)
     /*we need to either use content or font and size attributes
      *here*/
     SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
-        sal_True, sal_True);
+        true, true);
     ExportNodes(pNode->GetSubNode(0), nLevel+1);
     ExportNodes(pNode->GetSubNode(1), nLevel+1);
 }
@@ -1211,21 +1211,21 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
         AddAttribute(XML_NAMESPACE_MATH, XML_ACCENTUNDER,
             XML_TRUE);
         pElement = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDER,
-            sal_True,sal_True);
+            true, true);
     }
     else if (pNode->GetToken().eType == TOVERSTRIKE)
     {
         // export as <menclose notation="horizontalstrike">
         AddAttribute(XML_NAMESPACE_MATH, XML_NOTATION, XML_HORIZONTALSTRIKE);
         pElement = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
-            XML_MENCLOSE, sal_True, sal_True);
+            XML_MENCLOSE, true, true);
     }
     else
     {
         AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT,
             XML_TRUE);
         pElement = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MOVER,
-            sal_True,sal_True);
+            true, true);
     }
 
     ExportNodes(pNode->GetSubNode(1), nLevel+1);
@@ -1235,7 +1235,7 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
             {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
-                sal_True,sal_True);
+                true, true);
             sal_Unicode nArse[2] = {0xAF,0x00};
             GetDocHandler()->characters(nArse);
             }
@@ -1244,7 +1244,7 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
             {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
-                sal_True,sal_True);
+                true, true);
             sal_Unicode nArse[2] = {0x0332,0x00};
             GetDocHandler()->characters(nArse);
             }
@@ -1443,7 +1443,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         // <mrow> element. See #fdo 66283.
         SvXMLElementExport aElement(*this, XML_NAMESPACE_MATH,
             pNode->GetToken().eType == TPHANTOM ? XML_MPHANTOM : XML_MSTYLE,
-            sal_True, sal_True);
+            true, true);
         ExportExpression(pNode, nLevel, true);
     }
 }
@@ -1476,12 +1476,12 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
     }
 
     OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Vertical Brace");
-    SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
+    SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH,which, true, true);
     {//Scoping
         // using accents will draw the over-/underbraces too close to the base
         // see http://www.w3.org/TR/MathML2/chapter3.html#id.3.4.5.2
         // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribut here!
-        SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
+        SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, true, true);
         ExportNodes(pNode->GetSubNode(0), nLevel);
         AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
         ExportNodes(pNode->GetSubNode(1), nLevel);
@@ -1491,12 +1491,12 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
 {
-    SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
+    SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true);
     const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
     sal_uInt16 i=0;
     for (sal_uLong y = 0; y < pMatrix->GetNumRows(); y++)
     {
-        SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, sal_True, sal_True);
+        SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
         for (sal_uLong x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
@@ -1509,7 +1509,7 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
                         pTemp->GetToken().eType == TALIGNL ?
                         XML_LEFT : XML_RIGHT);
                 }
-                SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
+                SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, true, true);
                 ExportNodes(pTemp, nLevel+1);
             }
     }

@@ -154,7 +154,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
     }
 
     {
-        SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, sal_True, sal_True );
+        SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, true, true );
         if( !sURL.isEmpty() && GraphicLocation_NONE != ePos )
         {
             // optional office:binary-data

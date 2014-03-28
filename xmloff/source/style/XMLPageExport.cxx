@@ -141,7 +141,7 @@ bool XMLPageExport::exportStyle(
         }
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                  XML_MASTER_PAGE, sal_True, sal_True );
+                                  XML_MASTER_PAGE, true, true );
 
         exportMasterPageContent( xPropSet, false );
     }
@@ -162,7 +162,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
                                     xPageMasterPropSetMapper, rExp);
 
     rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( XML_STYLE_FAMILY_PAGE_MASTER_NAME ),
-        xPageMasterExportPropMapper, OUString( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ), sal_False );
+        xPageMasterExportPropMapper, OUString( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ), false );
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
                                                        UNO_QUERY );
@@ -252,7 +252,7 @@ void XMLPageExport::exportDefaultStyle()
                 //<style:default-page-layout>
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                           XML_DEFAULT_PAGE_LAYOUT,
-                                          sal_True, sal_True );
+                                          true, true );
 
                 xPageMasterExportPropMapper->exportXML( GetExport(), xPropStates,
                                              XML_EXPORT_FLAG_IGN_WS );

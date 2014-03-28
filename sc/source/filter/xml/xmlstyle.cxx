@@ -543,7 +543,7 @@ void ScXMLCellExportPropertyMapper::handleElementItem(
         sal_uInt32 nPropIndex = rProperty.mnIndex;
         sal_uInt16 nPrefix = getPropertySetMapper()->GetEntryNameSpace( nPropIndex );
         OUString sLocalName = getPropertySetMapper()->GetEntryXMLName( nPropIndex );
-        SvXMLElementExport aElem( rExport, nPrefix, sLocalName, sal_True, sal_True );
+        SvXMLElementExport aElem( rExport, nPrefix, sLocalName, true, true );
     }
 }
 
@@ -729,7 +729,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), pDoc, FormulaGrammar::CONV_OOO );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
-                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
+                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, true, true);
                                             }
                                             else
                                             {
@@ -782,7 +782,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument(), FormulaGrammar::CONV_OOO );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
-                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
+                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, true, true);
                                             }
                                         }
                                     }

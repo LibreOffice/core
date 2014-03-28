@@ -481,7 +481,7 @@ void ODBExport::exportDataSource()
         if ( aDelimiter.bUsed )
             m_aDelimiter.reset( new TDelimiter( aDelimiter ) );
 
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATASOURCE, sal_True, sal_True);
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATASOURCE, true, true);
 
         exportConnectionData();
         exportDriverSettings(aSettingsMap);
@@ -511,14 +511,14 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
-    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_APPLICATION_CONNECTION_SETTINGS, sal_True, sal_True);
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_APPLICATION_CONNECTION_SETTINGS, true, true);
 
     Reference<XPropertySet> xProp(getDataSource());
     Sequence< OUString> aValue;
     xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aValue;
     if ( aValue.getLength() )
     {
-        SvXMLElementExport aElem2(*this,XML_NAMESPACE_DB, XML_TABLE_FILTER, sal_True, sal_True);
+        SvXMLElementExport aElem2(*this,XML_NAMESPACE_DB, XML_TABLE_FILTER, true, true);
         exportSequence(aValue,XML_TABLE_INCLUDE_FILTER,XML_TABLE_FILTER_PATTERN);
     }
 
@@ -544,7 +544,7 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
         if ( aFind != _aSettings.end() )
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
-    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DRIVER_SETTINGS, sal_True, sal_True);
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DRIVER_SETTINGS, true, true);
     exportAutoIncrement();
     exportDelimiter();
     exportCharSet();
@@ -552,7 +552,7 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
 
 void ODBExport::exportConnectionData()
 {
-    SvXMLElementExport aConnData(*this,XML_NAMESPACE_DB, XML_CONNECTION_DATA, sal_True, sal_True);
+    SvXMLElementExport aConnData(*this,XML_NAMESPACE_DB, XML_CONNECTION_DATA, true, true);
 
     {
         OUString sValue;
@@ -560,7 +560,7 @@ void ODBExport::exportConnectionData()
         xProp->getPropertyValue(PROPERTY_URL) >>= sValue;
         if ( m_aTypeCollection.isFileSystemBased(sValue) )
         {
-            SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
+            SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, true, true);
             {
                 SvtPathOptions aPathOptions;
                 const OUString sOrigUrl = m_aTypeCollection.cutPrefix(sValue);
@@ -595,7 +595,7 @@ void ODBExport::exportConnectionData()
                 catch(const Exception&)
                 {
                 }
-                SvXMLElementExport aFileBasedDB(*this,XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE, sal_True, sal_True);
+                SvXMLElementExport aFileBasedDB(*this,XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE, true, true);
             }
         }
         else
@@ -605,7 +605,7 @@ void ODBExport::exportConnectionData()
             m_aTypeCollection.extractHostNamePort(sValue,sDatabaseName,sHostName,nPort);
             if ( sHostName.getLength() )
             {
-                SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
+                SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, true, true);
                 {
                     OUString sType = comphelper::string::stripEnd(m_aTypeCollection.getPrefix(sValue), ':');
                     AddAttribute(XML_NAMESPACE_DB,XML_TYPE,sType);
@@ -657,14 +657,14 @@ void ODBExport::exportConnectionData()
                         DBG_UNHANDLED_EXCEPTION();
                     }
 
-                    SvXMLElementExport aServerDB(*this,XML_NAMESPACE_DB, XML_SERVER_DATABASE, sal_True, sal_True);
+                    SvXMLElementExport aServerDB(*this,XML_NAMESPACE_DB, XML_SERVER_DATABASE, true, true);
                 }
             }
             else
             {
                 AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
                 AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
-                SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_CONNECTION_RESOURCE, sal_True, sal_True);
+                SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_CONNECTION_RESOURCE, true, true);
             }
         }
 
@@ -679,7 +679,7 @@ template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     OSequenceIterator< T > i( in->Value );
     while (i.hasMoreElements())
     {
-        SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
+        SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, true, false);
         // (no whitespace inside the tag)
         Characters(implConvertAny(i.nextElement()));
     }
@@ -690,7 +690,7 @@ void ODBExport::exportDataSourceSettings()
     if ( m_aDataSourceSettings.empty() )
         return;
 
-    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, sal_True, sal_True);
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, true, true);
     ::std::vector< TypedPropertyValue >::iterator aIter = m_aDataSourceSettings.begin();
     ::std::vector< TypedPropertyValue >::iterator aEnd = m_aDataSourceSettings.end();
     for ( ; aIter != aEnd; ++aIter )
@@ -717,11 +717,11 @@ void ODBExport::exportDataSourceSettings()
 
         AddAttribute( XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE, sTypeName );
 
-        SvXMLElementExport aDataSourceSetting( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING, sal_True, sal_True );
+        SvXMLElementExport aDataSourceSetting( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING, true, true );
 
         if ( !bIsSequence )
         {
-            SvXMLElementExport aDataValue( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False );
+            SvXMLElementExport aDataValue( *this, XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, true, false );
             // (no whitespace inside the tag)
             Characters( implConvertAny( aIter->Value ) );
         }
@@ -766,7 +766,7 @@ void ODBExport::exportCharSet()
     {
         AddAttribute(XML_NAMESPACE_DB, XML_ENCODING,m_sCharSet);
 
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_FONT_CHARSET, sal_True, sal_True);
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_FONT_CHARSET, true, true);
     }
 }
 
@@ -778,7 +778,7 @@ void ODBExport::exportDelimiter()
         AddAttribute(XML_NAMESPACE_DB, XML_STRING,m_aDelimiter->sText);
         AddAttribute(XML_NAMESPACE_DB, XML_DECIMAL,m_aDelimiter->sDecimal);
         AddAttribute(XML_NAMESPACE_DB, XML_THOUSAND,m_aDelimiter->sThousand);
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DELIMITER, sal_True, sal_True);
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DELIMITER, true, true);
     }
 }
 
@@ -788,7 +788,7 @@ void ODBExport::exportAutoIncrement()
     {
         AddAttribute(XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,m_aAutoIncrement->second);
         AddAttribute(XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,m_aAutoIncrement->first);
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_AUTO_INCREMENT, sal_True, sal_True);
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_AUTO_INCREMENT, true, true);
     }
 }
 
@@ -799,13 +799,13 @@ void ODBExport::exportSequence(const Sequence< OUString>& _aValue
     Reference<XPropertySet> xProp(getDataSource());
     if ( _aValue.getLength() )
     {
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, _eTokenFilter, sal_True, sal_True);
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, _eTokenFilter, true, true);
 
         const OUString* pIter = _aValue.getConstArray();
         const OUString* pEnd   = pIter + _aValue.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            SvXMLElementExport aDataSource(*this,XML_NAMESPACE_DB, _eTokenType, sal_True, sal_False);
+            SvXMLElementExport aDataSource(*this,XML_NAMESPACE_DB, _eTokenType, true, false);
             Characters(*pIter);
         }
     }
@@ -826,7 +826,7 @@ void ODBExport::exportLogin()
         AddAttribute(XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,bValue ? XML_TRUE : XML_FALSE);
     }
     if ( bAddLogin )
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_LOGIN, sal_True, sal_True);
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_LOGIN, true, true);
 }
 
 void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
@@ -840,7 +840,7 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
     {
         boost::scoped_ptr<SvXMLElementExport> pComponents;
         if ( _bExportContext )
-            pComponents.reset( new SvXMLElementExport(*this,XML_NAMESPACE_DB, _eComponents, sal_True, sal_True));
+            pComponents.reset( new SvXMLElementExport(*this,XML_NAMESPACE_DB, _eComponents, true, true));
         Sequence< OUString> aSeq = _xCollection->getElementNames();
         const OUString* pIter = aSeq.getConstArray();
         const OUString* pEnd   = pIter + aSeq.getLength();
@@ -876,7 +876,7 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     sal_Bool bAsTemplate = sal_False;
     _xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
     AddAttribute(XML_NAMESPACE_DB, XML_AS_TEMPLATE,bAsTemplate ? XML_TRUE : XML_FALSE);
-    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COMPONENT, sal_True, sal_True);
+    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COMPONENT, true, true);
 }
 
 void ODBExport::exportQuery(XPropertySet* _xProp)
@@ -895,7 +895,7 @@ void ODBExport::exportQuery(XPropertySet* _xProp)
 
     exportStyleName(_xProp,GetAttrList());
 
-    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_QUERY, sal_True, sal_True);
+    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_QUERY, true, true);
     Reference<XColumnsSupplier> xCol(_xProp,UNO_QUERY);
     exportColumns(xCol);
     exportFilter(_xProp,PROPERTY_FILTER,XML_FILTER_STATEMENT);
@@ -919,7 +919,7 @@ void ODBExport::exportTable(XPropertySet* _xProp)
 
     exportStyleName(_xProp,GetAttrList());
 
-    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_TABLE_REPRESENTATION, sal_True, sal_True);
+    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_TABLE_REPRESENTATION, true, true);
     Reference<XColumnsSupplier> xCol(_xProp,UNO_QUERY);
     exportColumns(xCol);
     exportFilter(_xProp,PROPERTY_FILTER,XML_FILTER_STATEMENT);
@@ -961,7 +961,7 @@ void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
 
         if ( _bUpdate )
         {
-            SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_UPDATE_TABLE, sal_True, sal_True);
+            SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_UPDATE_TABLE, true, true);
         }
     }
 }
@@ -976,7 +976,7 @@ void ODBExport::exportFilter(XPropertySet* _xProp
     if ( !sCommand.isEmpty() )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_COMMAND,sCommand);
-        SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, _eStatementType, sal_True, sal_True);
+        SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, _eStatementType, true, true);
     }
     OSL_POSTCOND(!GetAttrList().getLength(),"Invalid attribute length!");
 }
@@ -996,18 +996,18 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
             TTableColumnMap::iterator aFind = m_aTableDummyColumns.find(xComponent);
             if ( aFind != m_aTableDummyColumns.end() )
             {
-                SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
+                SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, true, true);
                 SvXMLAttributeList* pAtt = new SvXMLAttributeList;
                 Reference<XAttributeList> xAtt = pAtt;
                 exportStyleName(aFind->second.get(),*pAtt);
                 AddAttributeList(xAtt);
-                SvXMLElementExport aColumn(*this,XML_NAMESPACE_DB, XML_COLUMN, sal_True, sal_True);
+                SvXMLElementExport aColumn(*this,XML_NAMESPACE_DB, XML_COLUMN, true, true);
 
             }
             return;
         }
 
-        SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, sal_True, sal_True);
+        SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, true, true);
         Sequence< OUString> aSeq = xNameAccess->getElementNames();
         const OUString* pIter = aSeq.getConstArray();
         const OUString* pEnd   = pIter + aSeq.getLength();
@@ -1051,7 +1051,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                 if ( GetAttrList().getLength() )
                 {
-                    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COLUMN, sal_True, sal_True);
+                    SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COLUMN, true, true);
                 }
             }
         }

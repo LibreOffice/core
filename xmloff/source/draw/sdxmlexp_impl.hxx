@@ -193,10 +193,10 @@ public:
     sal_Bool IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
     void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = sal_True; }
 
-    virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) SAL_OVERRIDE;
+    virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) SAL_OVERRIDE;
     virtual void exportDataStyles() SAL_OVERRIDE;
     virtual void exportAutoDataStyles() SAL_OVERRIDE;
-    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const SAL_OVERRIDE;
+    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const SAL_OVERRIDE;
 };
 
 #endif  //  _SDXMLEXP_HXX

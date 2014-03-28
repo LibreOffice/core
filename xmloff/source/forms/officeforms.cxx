@@ -114,7 +114,7 @@ namespace xmloff
     {
         addModelAttributes(_rExp);
 
-        m_pImplElement = new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, sal_True, sal_True);
+        m_pImplElement = new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, true, true);
     }
 
     OFormsRootExport::~OFormsRootExport( )

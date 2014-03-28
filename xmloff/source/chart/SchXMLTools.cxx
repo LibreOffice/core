@@ -530,7 +530,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
 {
     SvXMLElementExport aPara( rExport, XML_NAMESPACE_TEXT,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_P ),
-                              sal_True, sal_False );
+                              true, false );
 
     if( bConvertTabsLFs )
     {
@@ -551,7 +551,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
 
                         SvXMLElementExport aElem( rExport, XML_NAMESPACE_TEXT,
                                                   ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ),
-                                                  sal_False, sal_False );
+                                                  false, false );
                     }
                     break;
 
@@ -563,7 +563,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
 
                         SvXMLElementExport aElem( rExport, XML_NAMESPACE_TEXT,
                                                   ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ),
-                                                  sal_False, sal_False );
+                                                  false, false );
                     }
                     break;
             }
@@ -598,10 +598,10 @@ void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue )
 
     SvXMLElementExport aEmptyShapeGroup( rExport, XML_NAMESPACE_DRAW,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_G ),
-                              sal_True, sal_False );
+                              true, false );
     SvXMLElementExport aDescription( rExport, XML_NAMESPACE_SVG,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_DESC ),
-                              sal_True, sal_False );
+                              true, false );
     rExport.GetDocHandler()->characters( rValue );
 }
 

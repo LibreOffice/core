@@ -301,7 +301,7 @@ bool XMLGradientStyleExport::exportXML(
 
                 // Do Write
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,
-                                      sal_True, sal_False );
+                                      true, false );
             }
         }
     }

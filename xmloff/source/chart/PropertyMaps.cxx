@@ -301,7 +301,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
                     SvXMLElementExport aElem( mrExport,
                                               getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                                               getPropertySetMapper()->GetEntryXMLName( nPropIndex ),
-                                              sal_True, sal_True );
+                                              true, true );
 
                     // export as Base64 embedded graphic
                     // if embedding is on
@@ -322,7 +322,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
                     SvXMLElementExport aElem( mrExport,
                                               getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
                                               getPropertySetMapper()->GetEntryXMLName( nPropIndex ),
-                                              sal_True, sal_True );
+                                              true, true );
 
                     SchXMLTools::exportText( mrExport, aSeparator, true );
                 }

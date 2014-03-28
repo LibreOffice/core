@@ -347,7 +347,7 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
     if ( _xFunction->getDeepTraversing() )
         AddAttribute( XML_NAMESPACE_REPORT, XML_DEEP_TRAVERSING , XML_TRUE );
 
-    SvXMLElementExport aFunction(*this,XML_NAMESPACE_REPORT, XML_FUNCTION, sal_True, sal_True);
+    SvXMLElementExport aFunction(*this,XML_NAMESPACE_REPORT, XML_FUNCTION, true, true);
 }
 
 void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet)
@@ -355,7 +355,7 @@ void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xR
     const uno::Sequence< OUString> aMasterFields = _xReportComponet->getMasterFields();
     if ( aMasterFields.getLength() )
     {
-        SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, sal_True, sal_True);
+        SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, true, true);
         const uno::Sequence< OUString> aDetailFields = _xReportComponet->getDetailFields();
 
         OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
@@ -368,7 +368,7 @@ void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xR
             AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , *pIter );
             if ( !pDetailFieldsIter->isEmpty() )
                 AddAttribute( XML_NAMESPACE_REPORT, XML_DETAIL , *pDetailFieldsIter );
-            SvXMLElementExport aPair(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD, sal_True, sal_True);
+            SvXMLElementExport aPair(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD, true, true);
         }
     }
 }
@@ -382,7 +382,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
 
         if ( _xReportDefinition->getReportHeaderOn() )
         {
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_HEADER, sal_True, sal_True);
+            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_HEADER, true, true);
             exportSection(_xReportDefinition->getReportHeader());
         }
         if ( _xReportDefinition->getPageHeaderOn() )
@@ -393,7 +393,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
             if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
                 AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
 
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_HEADER, sal_True, sal_True);
+            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_HEADER, true, true);
             exportSection(_xReportDefinition->getPageHeader(),true);
         }
 
@@ -406,12 +406,12 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
             const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
             if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
                 AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_FOOTER, sal_True, sal_True);
+            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_FOOTER, true, true);
             exportSection(_xReportDefinition->getPageFooter(),true);
         }
         if ( _xReportDefinition->getReportFooterOn() )
         {
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_FOOTER, sal_True, sal_True);
+            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_FOOTER, true, true);
             exportSection(_xReportDefinition->getReportFooter());
         }
     }
@@ -425,7 +425,7 @@ void ORptExport::exportComponent(const Reference<XReportComponent>& _xReportComp
 
     AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,_xReportComponent->getName());
 
-    SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_REPORT_COMPONENT, sal_False, sal_False);
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_REPORT_COMPONENT, false, false);
 }
 
 void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _xReportElement)
@@ -443,7 +443,7 @@ void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _x
             AddAttribute(XML_NAMESPACE_REPORT, XML_FORMULA,xCond->getFormula());
 
             exportStyleName(xCond.get(),GetAttrList(),m_sCellStyle);
-            SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_FORMAT_CONDITION, sal_True, sal_True);
+            SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_FORMAT_CONDITION, true, true);
         }
     }
     catch(uno::Exception&)
@@ -461,7 +461,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     if ( !_xReportElement->getPrintRepeatedValues() )
         AddAttribute(XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES,XML_FALSE);
 
-    SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT, sal_True, sal_True);
+    SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT, true, true);
     if ( _xReportElement->getCount() )
     {
         exportFormatConditions(_xReportElement);
@@ -471,7 +471,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     if ( !sExpr.isEmpty() )
     {
         exportFormula(XML_FORMULA,sExpr);
-        SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_True, sal_True);
+        SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, true, true);
     }
 
     // only export when parent exists
@@ -728,13 +728,13 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
     exportStyleName(_xSection.get(),GetAttrList(),m_sTableStyle);
 
     /// TODO export as table layout
-    SvXMLElementExport aComponents(*this,XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
+    SvXMLElementExport aComponents(*this,XML_NAMESPACE_TABLE, XML_TABLE, true, true);
 
     OUString sExpr = _xSection->getConditionalPrintExpression();
     if ( !sExpr.isEmpty() )
     {
         exportFormula(XML_FORMULA,sExpr);
-        SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_True, sal_False);
+        SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, true, false);
     }
 
     exportContainer(_xSection);
@@ -742,7 +742,7 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
 
 void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
 {
-    SvXMLElementExport aColumns(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, sal_True, sal_True);
+    SvXMLElementExport aColumns(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, true, true);
     TGridStyleMap::iterator aColFind = m_aColumnStyleNames.find(_xSection.get());
     OSL_ENSURE(aColFind != m_aColumnStyleNames.end(),"ORptExport::exportTableColumns: Section not found in m_aColumnStyleNames!");
     if ( aColFind == m_aColumnStyleNames.end() )
@@ -753,7 +753,7 @@ void ORptExport::exportTableColumns(const Reference< XSection>& _xSection)
     for (; aColIter != aColEnd; ++aColIter)
     {
         AddAttribute( m_sTableStyle,*aColIter );
-        SvXMLElementExport aColumn(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
+        SvXMLElementExport aColumn(*this,XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, true, true);
     }
 }
 
@@ -780,7 +780,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     for (sal_Int32 j = 0; aRowIter != aRowEnd; ++aRowIter,++j,++aHeightIter)
     {
         AddAttribute( m_sTableStyle,*aHeightIter );
-        SvXMLElementExport aRow(*this,XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
+        SvXMLElementExport aRow(*this,XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
         if ( aRowIter->first )
         {
             ::std::vector< TCell >::iterator aColIter = aRowIter->second.begin();
@@ -849,12 +849,12 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                 aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
                         }
                     }
-                    SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_False);
+                    SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, false);
 
                     if ( aColIter->xElement.is() )
                     {
                         // start <text:p>
-                        SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_True,sal_False);
+                        SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, true, false);
                         Reference<XServiceInfo> xElement(aColIter->xElement,uno::UNO_QUERY);
                         Reference<XReportComponent> xReportComponent = aColIter->xElement;
 
@@ -919,7 +919,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             //if ( !bPageSet )
                             {
                                 // start <report:eToken>
-                                SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, sal_False, sal_False);
+                                SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, false, false);
                                 if ( eToken == XML_FIXED_CONTENT )
                                     exportParagraph(xReportElement);
                                 if ( xReportElement.is() )
@@ -929,10 +929,10 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     exportContainer(xSection);
                                 else if ( eToken == XML_SUB_DOCUMENT && xReportDefinition.is() )
                                 {
-                                    SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY,sal_True, sal_True );
-                                    SvXMLElementExport aElem( *this, sal_True,
+                                    SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY, true, true );
+                                    SvXMLElementExport aElem( *this, true,
                                                             XML_NAMESPACE_OFFICE, XML_REPORT,
-                                                              sal_True, sal_True );
+                                                              true, true );
 
                                     exportReportAttributes(xReportDefinition);
                                     exportReport(xReportDefinition);
@@ -955,7 +955,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 {
                     for (sal_Int32 k = 0; k < nColSpan; ++k)
                     {
-                        SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, sal_True, sal_True);
+                        SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, true, true);
                     }
 
                 }
@@ -964,7 +964,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             {
                 {
                     AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nEmptyCellColSpan) );
-                    SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True);
+                    SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                     if ( !bShapeHandled )
                     {
                         bShapeHandled = true;
@@ -973,7 +973,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 }
                 for (sal_Int32 k = 0; k < nEmptyCellColSpan; ++k)
                 {
-                    SvXMLElementExport aCoveredCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, sal_True, sal_True);
+                    SvXMLElementExport aCoveredCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, true, true);
                 }
                 nEmptyCellColSpan = 0;
             }
@@ -985,7 +985,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             {
                 {
                     AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nEmptyCellColSpan) );
-                    SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True);
+                    SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                     if ( !bShapeHandled )
                     {
                         bShapeHandled = true;
@@ -994,7 +994,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 }
                 for (sal_Int32 k = 1; k < nEmptyCellColSpan; ++k)
                 {
-                    SvXMLElementExport aCoveredCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, sal_True, sal_True);
+                    SvXMLElementExport aCoveredCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, true, true);
                 }
                 nEmptyCellColSpan = 0;
             }
@@ -1096,14 +1096,14 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_KeepTogetherEnumMap ) )
                         AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER,sValue.makeStringAndClear());
 
-                    SvXMLElementExport aGroup(*this,XML_NAMESPACE_REPORT, XML_GROUP, sal_True, sal_True);
+                    SvXMLElementExport aGroup(*this,XML_NAMESPACE_REPORT, XML_GROUP, true, true);
                     exportFunctions(xGroup->getFunctions().get());
                     if ( xGroup->getHeaderOn() )
                     {
                         Reference<XSection> xSection = xGroup->getHeader();
                         if ( xSection->getRepeatSection() )
                             AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
-                        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_HEADER, sal_True, sal_True);
+                        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_HEADER, true, true);
                         exportSection(xSection);
                     }
                     exportGroup(_xReportDefinition,_nPos+1,_bExportAutoStyle);
@@ -1112,7 +1112,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                         Reference<XSection> xSection = xGroup->getFooter();
                         if ( xSection->getRepeatSection() )
                             AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
-                        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_FOOTER, sal_True, sal_True);
+                        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_FOOTER, true, true);
                         exportSection(xSection);
                     }
                 }
@@ -1123,7 +1123,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
             }
             else
             {
-                SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_DETAIL, sal_True, sal_True);
+                SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_DETAIL, true, true);
                 exportSection(_xReportDefinition->getDetail());
             }
         }
@@ -1410,7 +1410,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
 {
     OSL_PRECOND(_xReportElement.is(),"Element is null!");
     // start <text:p>
-    SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_False, sal_False);
+    SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, false, false);
     if ( Reference<XFormattedField>(_xReportElement,uno::UNO_QUERY).is() )
     {
         OUString sFieldData = _xReportElement->getDataField();
@@ -1432,12 +1432,12 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                     {
                         static const OUString s_sCurrent("current");
                         AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
-                        SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, sal_False, sal_False);
+                        SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, false, false);
                         Characters(OUString("1"));
                     }
                     else if ( sToken == s_sPageCount )
                     {
-                        SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, sal_False, sal_False);
+                        SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, false, false);
                         Characters(OUString("1"));
                     }
                     else
@@ -1478,7 +1478,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
     ::std::auto_ptr<SvXMLElementExport> pParagraphContent;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if ( _bAddParagraph )
-        pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False));
+        pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, true, false));
 
     awt::Point aRefPoint;
     aRefPoint.X = rptui::getStyleProperty<sal_Int32>(_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
@@ -1493,7 +1493,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             uno::Reference< frame::XModel> xModel(xShape->getPropertyValue("Model"),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {
-                pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));
+                pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, false, false));
                 exportMasterDetailFields(xShape.get());
                 exportReportElement(xShape.get());
             }

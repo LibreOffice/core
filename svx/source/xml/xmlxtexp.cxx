@@ -394,7 +394,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
                 break;
             }
 
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_OOO, pEleName, sal_True, sal_True );
+            SvXMLElementExport aElem( *this, XML_NAMESPACE_OOO, pEleName, true, true );
 
             Sequence< OUString > aNames = mxTable->getElementNames();
             const sal_Int32 nCount = aNames.getLength();
@@ -456,7 +456,7 @@ void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any&
     ::sax::Converter::convertColor( aOut, nColor );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aOut.makeStringAndClear() );
 
-    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_COLOR, sal_True, sal_True );
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_COLOR, true, true );
 }
 
 

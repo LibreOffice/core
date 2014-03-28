@@ -160,7 +160,7 @@ void XMLRedlineExport::ExportChangesList(
             // changes container element
             SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,
                                         XML_TRACKED_CHANGES,
-                                        sal_True, sal_True);
+                                        true, true);
 
             // iterate over changes list
             for( ChangesListType::iterator aIter = pChangesList->begin();
@@ -234,7 +234,7 @@ void XMLRedlineExport::ExportChangesListElements()
             // changes container element
             SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,
                                         XML_TRACKED_CHANGES,
-                                        sal_True, sal_True);
+                                        true, true);
 
             // get enumeration and iterate over elements
             Reference<XEnumeration> aEnum = aEnumAccess->createEnumeration();
@@ -355,7 +355,7 @@ void XMLRedlineExport::ExportChangeInline(
 
         // export the element (no whitespace because we're in the text body)
         SvXMLElementExport aChangeElem(rExport, XML_NAMESPACE_TEXT,
-                                       eElement, sal_False, sal_False);
+                                       eElement, false, false);
     }
 }
 
@@ -374,7 +374,7 @@ void XMLRedlineExport::ExportChangedRegion(
 
     // export change region element
     SvXMLElementExport aChangedRegion(rExport, XML_NAMESPACE_TEXT,
-                                      XML_CHANGED_REGION, sal_True, sal_True);
+                                      XML_CHANGED_REGION, true, true);
 
 
     // scope for (first) change element
@@ -383,7 +383,7 @@ void XMLRedlineExport::ExportChangedRegion(
         OUString sType;
         aAny >>= sType;
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
-                                   ConvertTypeName(sType), sal_True, sal_True);
+                                   ConvertTypeName(sType), true, true);
 
         ExportChangeInfo(rPropSet);
 
@@ -416,7 +416,7 @@ void XMLRedlineExport::ExportChangedRegion(
         // ExportChangeInfo(Sequence<PropertyValue>&).
         SvXMLElementExport aSecondChangeElem(
             rExport, XML_NAMESPACE_TEXT, XML_INSERTION,
-            sal_True, sal_True);
+            true, true);
 
         ExportChangeInfo(aSuccessorData);
     }
@@ -466,7 +466,7 @@ void XMLRedlineExport::ExportChangeInfo(
 {
 
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
-                                   XML_CHANGE_INFO, sal_True, sal_True);
+                                   XML_CHANGE_INFO, true, true);
 
     Any aAny = rPropSet->getPropertyValue(sRedlineAuthor);
     OUString sTmp;
@@ -474,8 +474,8 @@ void XMLRedlineExport::ExportChangeInfo(
     if (!sTmp.isEmpty())
     {
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
-                                          XML_CREATOR, sal_True,
-                                          sal_False );
+                                          XML_CREATOR, true,
+                                          false );
         rExport.Characters(sTmp);
     }
 
@@ -486,8 +486,8 @@ void XMLRedlineExport::ExportChangeInfo(
         OUStringBuffer sBuf;
         ::sax::Converter::convertDateTime(sBuf, aDateTime, 0);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
-                                          XML_DATE, sal_True,
-                                          sal_False );
+                                          XML_DATE, true,
+                                          false );
         rExport.Characters(sBuf.makeStringAndClear());
     }
 
@@ -542,7 +542,7 @@ void XMLRedlineExport::ExportChangeInfo(
 
     // finally write element
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
-                                   XML_CHANGE_INFO, sal_True, sal_True);
+                                   XML_CHANGE_INFO, true, true);
 
     WriteComment( sComment );
 }
@@ -610,7 +610,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
             rExport, XML_NAMESPACE_TEXT,
             bIsCollapsed ? XML_CHANGE :
                 ( bIsStart ? XML_CHANGE_START : XML_CHANGE_END ),
-            sal_True, sal_True);
+            true, true);
     }
 }
 
@@ -655,7 +655,7 @@ void XMLRedlineExport::WriteComment(const OUString& rComment)
         while (aEnumerator.getNextToken(aSubString))
         {
             SvXMLElementExport aParagraph(
-                rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+                rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
             rExport.Characters(aSubString);
         }
     }

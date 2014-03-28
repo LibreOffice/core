@@ -309,7 +309,7 @@ bool XMLDashStyleExport::exportXML(
             // do Write
             SvXMLElementExport rElem( rExport,
                                       XML_NAMESPACE_DRAW, XML_STROKE_DASH,
-                                      sal_True, sal_False );
+                                      true, false );
         }
     }
     return bRet;

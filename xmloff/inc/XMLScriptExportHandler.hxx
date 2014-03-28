@@ -45,7 +45,7 @@ public:
         const OUString& rEventName,
         ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rValues,
-        sal_Bool bUseWhitespace) SAL_OVERRIDE;
+        bool bUseWhitespace) SAL_OVERRIDE;
 };
 
 #endif

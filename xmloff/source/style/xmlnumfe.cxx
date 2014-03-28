@@ -343,7 +343,7 @@ void SvXMLNumFmtExport::FinishTextElement_Impl()
     if ( !sTextContent.isEmpty() )
     {
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_TEXT,
-                                  sal_True, sal_False );
+                                  true, false );
         rExport.Characters( sTextContent.makeStringAndClear() );
     }
 }
@@ -358,7 +358,7 @@ void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
                           aColStr.makeStringAndClear() );
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_TEXT_PROPERTIES,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
@@ -379,7 +379,7 @@ void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
 
     SvXMLElementExport aElem( rExport,
                               XML_NAMESPACE_NUMBER, XML_CURRENCY_SYMBOL,
-                              sal_True, sal_False );
+                              true, false );
     rExport.Characters( rString );
 }
 
@@ -388,7 +388,7 @@ void SvXMLNumFmtExport::WriteBooleanElement_Impl()
     FinishTextElement_Impl();
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_BOOLEAN,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteTextContentElement_Impl()
@@ -396,7 +396,7 @@ void SvXMLNumFmtExport::WriteTextContentElement_Impl()
     FinishTextElement_Impl();
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_TEXT_CONTENT,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 //  date elements
@@ -409,7 +409,7 @@ void SvXMLNumFmtExport::WriteDayElement_Impl( const OUString& rCalendar, sal_Boo
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_DAY,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteMonthElement_Impl( const OUString& rCalendar, sal_Bool bLong, sal_Bool bText )
@@ -421,7 +421,7 @@ void SvXMLNumFmtExport::WriteMonthElement_Impl( const OUString& rCalendar, sal_B
     AddTextualAttr_Impl( bText );   // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_MONTH,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteYearElement_Impl( const OUString& rCalendar, sal_Bool bLong )
@@ -432,7 +432,7 @@ void SvXMLNumFmtExport::WriteYearElement_Impl( const OUString& rCalendar, sal_Bo
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_YEAR,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteEraElement_Impl( const OUString& rCalendar, sal_Bool bLong )
@@ -443,7 +443,7 @@ void SvXMLNumFmtExport::WriteEraElement_Impl( const OUString& rCalendar, sal_Boo
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_ERA,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( const OUString& rCalendar, sal_Bool bLong )
@@ -454,7 +454,7 @@ void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( const OUString& rCalendar, s
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_DAY_OF_WEEK,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteWeekElement_Impl( const OUString& rCalendar )
@@ -464,7 +464,7 @@ void SvXMLNumFmtExport::WriteWeekElement_Impl( const OUString& rCalendar )
     AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_WEEK_OF_YEAR,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteQuarterElement_Impl( const OUString& rCalendar, sal_Bool bLong )
@@ -475,7 +475,7 @@ void SvXMLNumFmtExport::WriteQuarterElement_Impl( const OUString& rCalendar, sal
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_QUARTER,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 //  time elements
@@ -487,7 +487,7 @@ void SvXMLNumFmtExport::WriteHoursElement_Impl( sal_Bool bLong )
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_HOURS,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
@@ -497,14 +497,14 @@ void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_MINUTES,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
 {
     FinishTextElement_Impl();
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_LO_EXT, XML_FILL_CHARACTER,
-                                  sal_True, sal_False );
+                                  true, false );
     rExport.Characters( OUString( nChar ) );
 }
 
@@ -520,7 +520,7 @@ void SvXMLNumFmtExport::WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDe
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_SECONDS,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteAMPMElement_Impl()
@@ -528,7 +528,7 @@ void SvXMLNumFmtExport::WriteAMPMElement_Impl()
     FinishTextElement_Impl();
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_AM_PM,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 //  numbers
@@ -581,7 +581,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_NUMBER,
-                              sal_True, sal_True );
+                              true, true );
 
     //  number:embedded-text as child elements
 
@@ -594,7 +594,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
                                 OUString::number( pObj->nFormatPos ) );
         SvXMLElementExport aChildElem( rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
-                                          sal_True, sal_False );
+                                          true, false );
 
         //  text as element content
         OUString aContent( pObj->aText );
@@ -645,7 +645,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 
     SvXMLElementExport aElem( rExport,
                               XML_NAMESPACE_NUMBER, XML_SCIENTIFIC_NUMBER,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 void SvXMLNumFmtExport::WriteFractionElement_Impl(
@@ -688,7 +688,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FRACTION,
-                              sal_True, sal_False );
+                              true, false );
 }
 
 //  mapping (condition)
@@ -727,7 +727,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
                                                    sPrefix ) ) );
 
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_MAP,
-                                  sal_True, sal_False );
+                                  true, false );
     }
 }
 
@@ -1090,7 +1090,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     // The element
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, eType,
-                              sal_True, sal_True );
+                              true, true );
 
     //  color (properties element)
 
@@ -1565,7 +1565,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     {
         //  for an empty format, write an empty text element
         SvXMLElementExport aTElem( rExport, XML_NAMESPACE_NUMBER, XML_TEXT,
-                                   sal_True, sal_False );
+                                   true, false );
     }
 
     //  mapping (conditions) must be last elements

@@ -3994,7 +3994,7 @@ void ScXMLExport::WriteScenario()
         AddAttribute(XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES, sRangeListStr);
         if (!sComment.isEmpty())
             AddAttribute(XML_NAMESPACE_TABLE, XML_COMMENT, sComment);
-        SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, XML_SCENARIO, sal_True, sal_True);
+        SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, XML_SCENARIO, true, true);
     }
 }
 

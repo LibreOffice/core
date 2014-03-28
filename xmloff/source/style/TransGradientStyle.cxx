@@ -300,7 +300,7 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
                 // Do Write
                 SvXMLElementExport rElem( rExport,
                                           XML_NAMESPACE_DRAW, XML_OPACITY,
-                                          sal_True, sal_False );
+                                          true, false );
             }
         }
     }

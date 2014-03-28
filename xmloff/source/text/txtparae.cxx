@@ -440,8 +440,8 @@ void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& s
 {
     m_pExport->AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, sKey);
     m_pExport->AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, sValue);
-    m_pExport->StartElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
-    m_pExport->EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
+    m_pExport->StartElement(XML_NAMESPACE_FIELD, XML_PARAM, false);
+    m_pExport->EndElement(XML_NAMESPACE_FIELD, XML_PARAM, false);
 }
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
@@ -833,7 +833,7 @@ void XMLTextParagraphExport::exportListChange(
                 {
                     OUString aElem(pListElements->back());
                     pListElements->pop_back();
-                    GetExport().EndElement(aElem, sal_True);
+                    GetExport().EndElement(aElem, true);
                 }
 
                 // remove closed list from list stack
@@ -999,7 +999,7 @@ void XMLTextParagraphExport::exportListChange(
                                             XML_NAMESPACE_TEXT,
                                             GetXMLToken(eLName) ) );
                 GetExport().IgnorableWhitespace();
-                GetExport().StartElement(aElem, sal_False);
+                GetExport().StartElement(aElem, false);
 
                 if(!pListElements)
                     pListElements = new std::vector<OUString>;
@@ -1039,7 +1039,7 @@ void XMLTextParagraphExport::exportListChange(
                                             XML_NAMESPACE_TEXT,
                                             GetXMLToken(eLName) ) );
                 GetExport().IgnorableWhitespace();
-                GetExport().StartElement(aElem, sal_False);
+                GetExport().StartElement(aElem, false);
                 pListElements->push_back(aElem);
 
                 // export of <text:number> element for last opened <text:list-item>, if requested
@@ -1052,9 +1052,9 @@ void XMLTextParagraphExport::exportListChange(
                                       XML_NAMESPACE_TEXT,
                                       GetXMLToken(XML_NUMBER) ) );
                     GetExport().IgnorableWhitespace();
-                    GetExport().StartElement( aTextNumberElem, sal_False );
+                    GetExport().StartElement( aTextNumberElem, false );
                     GetExport().Characters( rNextInfo.ListLabelString() );
-                    GetExport().EndElement( aTextNumberElem, sal_True );
+                    GetExport().EndElement( aTextNumberElem, true );
                 }
                 --nListLevelsToBeOpened;
             } while ( nListLevelsToBeOpened > 0 );
@@ -1075,7 +1075,7 @@ void XMLTextParagraphExport::exportListChange(
     if (bEndElement)
     {
         // close previous list-item
-        GetExport().EndElement(pListElements->back(), sal_True );
+        GetExport().EndElement(pListElements->back(), true );
         pListElements->pop_back();
 
         // Only for sub lists (#i103745#)
@@ -1083,9 +1083,9 @@ void XMLTextParagraphExport::exportListChange(
              rNextInfo.GetLevel() != 1 )
         {
             // start new sub list respectively list on same list level
-            GetExport().EndElement(pListElements->back(), sal_True );
+            GetExport().EndElement(pListElements->back(), true );
             GetExport().IgnorableWhitespace();
-            GetExport().StartElement(pListElements->back(), sal_False);
+            GetExport().StartElement(pListElements->back(), false);
         }
 
         // open new list-item
@@ -1121,7 +1121,7 @@ void XMLTextParagraphExport::exportListChange(
                                 XML_NAMESPACE_TEXT,
                                 GetXMLToken(XML_LIST_ITEM) ) );
         GetExport().IgnorableWhitespace();
-        GetExport().StartElement(aElem, sal_False );
+        GetExport().StartElement(aElem, false );
         pListElements->push_back(aElem);
 
         // export of <text:number> element for <text:list-item>, if requested
@@ -1133,9 +1133,9 @@ void XMLTextParagraphExport::exportListChange(
                               XML_NAMESPACE_TEXT,
                               GetXMLToken(XML_NUMBER) ) );
             GetExport().IgnorableWhitespace();
-            GetExport().StartElement( aTextNumberElem, sal_False );
+            GetExport().StartElement( aTextNumberElem, false );
             GetExport().Characters( rNextInfo.ListLabelString() );
-            GetExport().EndElement( aTextNumberElem, sal_True );
+            GetExport().EndElement( aTextNumberElem, true );
         }
     }
 }
@@ -2168,7 +2168,7 @@ void XMLTextParagraphExport::exportParagraph(
         enum XMLTokenEnum eElem =
             0 < nOutlineLevel ? XML_H : XML_P;
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
-                                  sal_True, sal_False );
+                                  true, false );
         if( bHasContentEnum )
             bPrevCharIsSpace = !exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
@@ -2228,7 +2228,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 {
                     GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
                 }
-                SvXMLElementExport aElem( GetExport(), !bAutoStyles, XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, sal_False, sal_False );
+                SvXMLElementExport aElem( GetExport(), !bAutoStyles, XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, false, false );
             }
             else if( sType.equals( sFrame ) )
             {
@@ -2304,12 +2304,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                     }
 
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
                     if (xFormField.is())
                     {
                         FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
                     }
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
                 }
                 /* The OpenDocument standard does not include support for TextMarks for now, so use bookmarks instead. */
                 else
@@ -2333,7 +2333,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                 sName);
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                             XML_NAMESPACE_TEXT, XML_BOOKMARK_START,
-                            sal_False, sal_False );
+                            false, false );
                         const OUString sFieldType = xFormField->getFieldType();
                         if (sFieldType ==  ODF_FORMTEXT)
                         {
@@ -2358,7 +2358,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 {
                     SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                         XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
-                        sal_False, sal_False );
+                        false, false );
                 }
                 else
                 {
@@ -2381,7 +2381,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                 sName);
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                             XML_NAMESPACE_TEXT, XML_BOOKMARK_END,
-                            sal_False, sal_False );
+                            false, false );
                     }
                 }
             }
@@ -2399,12 +2399,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                     }
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
+                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
                     if (xFormField.is())
                     {
                         FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
                     }
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, sal_False);
+                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
                 }
                 else
                 {
@@ -2414,7 +2414,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                             XML_NAMESPACE_TEXT, XML_BOOKMARK,
-                            sal_False, sal_False );
+                            false, false );
                     }
                 }
             }
@@ -2495,8 +2495,8 @@ void XMLTextParagraphExport::exportSoftPageBreak(
     bool )
 {
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                              XML_SOFT_PAGE_BREAK, sal_False,
-                              sal_False );
+                              XML_SOFT_PAGE_BREAK, false,
+                              false );
 }
 
 void XMLTextParagraphExport::exportTextMark(
@@ -2545,7 +2545,7 @@ void XMLTextParagraphExport::exportTextMark(
         DBG_ASSERT(nElement <= 2, "illegal element number");
         SvXMLElementExport aElem(GetExport(),
                                  XML_NAMESPACE_TEXT, pElements[nElement],
-                                 sal_False, sal_False);
+                                 false, false);
     }
     // else: no styles. (see above)
 }
@@ -2854,13 +2854,13 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                                   GetExport().EncodeStyleName( sStyle ) );
             {
                 SvXMLElementExport aElem( GetExport(), !sStyle.isEmpty(),
-                    XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
+                    XML_NAMESPACE_TEXT, XML_SPAN, false, false );
                 {
                     SvXMLElementExport aElement( GetExport(),
                         FT_SHAPE != eType &&
                         addHyperlinkAttributes( xPropSet,
                                                 xPropState,xPropSetInfo ),
-                        XML_NAMESPACE_DRAW, XML_A, sal_False, sal_False );
+                        XML_NAMESPACE_DRAW, XML_A, false, false );
                     switch( eType )
                     {
                     case FT_TEXT:
@@ -2912,7 +2912,7 @@ void XMLTextParagraphExport::_exportTextFrame(
     addTextFrameAttributes(rPropSet, false, &aMinHeightValue, &sMinWidthValue);
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              XML_FRAME, sal_False, sal_True );
+                              XML_FRAME, false, true );
 
     if( !aMinHeightValue.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
@@ -2936,7 +2936,7 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     {
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
-                                  XML_TEXT_BOX, sal_True, sal_True );
+                                  XML_TEXT_BOX, true, true );
 
         // frame bound frames
         exportFramesBoundToFrame( xTxtFrame, bIsProgress );
@@ -3051,7 +3051,7 @@ void XMLTextParagraphExport::exportContour(
 
     // write object now
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, eElem,
-                              sal_True, sal_True );
+                              true, true );
 }
 
 void XMLTextParagraphExport::_exportTextGraphic(
@@ -3086,7 +3086,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     }
 
     // original content
-    SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, sal_False, sal_True);
+    SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, false, true);
 
     // replacement graphic for backwards compatibility, but
     // only for SVG currently
@@ -3118,7 +3118,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     {
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
-                                  XML_IMAGE, sal_False, sal_True );
+                                  XML_IMAGE, false, true );
 
         // optional office:binary-data
         GetExport().AddEmbeddedGraphicObjectAsBase64( sOrigURL );
@@ -3139,7 +3139,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
 
             // xlink:href for replacement, only written for Svg content
-            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, sal_False, sal_True);
+            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, false, true);
 
             // optional office:binary-data
             GetExport().AddEmbeddedGraphicObjectAsBase64(sReplacementURL);
@@ -3199,7 +3199,7 @@ void XMLTextParagraphExport::exportTitleAndDescription(
         if( !sObjTitle.isEmpty() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
-                                      XML_TITLE, sal_True, sal_False );
+                                      XML_TITLE, true, false );
             GetExport().Characters( sObjTitle );
         }
     }
@@ -3212,7 +3212,7 @@ void XMLTextParagraphExport::exportTitleAndDescription(
         if( !sObjDesc.isEmpty() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
-                                      XML_DESC, sal_True, sal_False );
+                                      XML_DESC, true, false );
             GetExport().Characters( sObjDesc );
         }
     }
@@ -3349,11 +3349,11 @@ void XMLTextParagraphExport::exportTextRangeSpan(
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( sStyle ) );
     }
     {
-        SvXMLElementExport aElement( GetExport(), !sStyle.isEmpty(), XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
+        SvXMLElementExport aElement( GetExport(), !sStyle.isEmpty(), XML_NAMESPACE_TEXT, XML_SPAN, false, false );
         const OUString aText( rTextRange->getString() );
         SvXMLElementExport aElem2( GetExport(), TEXT == openFieldMark,
             XML_NAMESPACE_TEXT, XML_TEXT_INPUT,
-            sal_False, sal_False );
+            false, false );
         exportText( aText, rPrevCharIsSpace );
         openFieldMark = NONE;
     }
@@ -3389,7 +3389,7 @@ void XMLTextParagraphExport::exportTextRange(
 
         if ( bHyperlink && bHyperlinkAttrsAdded )
         {
-            SvXMLElementExport aElem( GetExport(), sal_True, XML_NAMESPACE_TEXT, XML_A, sal_False, sal_False );
+            SvXMLElementExport aElem( GetExport(), true, XML_NAMESPACE_TEXT, XML_A, false, false );
 
             // export events (if supported)
             OUString sHyperLinkEvents(
@@ -3480,7 +3480,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
             }
 
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      XML_S, sal_False, sal_False );
+                                      XML_S, false, false );
 
             nSpaceChars = 0;
         }
@@ -3494,15 +3494,15 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
             case 0x0009:    // Tab
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                              XML_TAB, sal_False,
-                                              sal_False );
+                                              XML_TAB, false,
+                                              false );
                 }
                 break;
             case 0x000A:    // LF
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                              XML_LINE_BREAK, sal_False,
-                                              sal_False );
+                                              XML_LINE_BREAK, false,
+                                              false );
                 }
                 break;
             }
@@ -3543,7 +3543,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         }
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, XML_S,
-                                  sal_False, sal_False );
+                                  false, false );
     }
 }
 
@@ -3570,7 +3570,7 @@ void XMLTextParagraphExport::exportTextDeclarations()
                 SvXMLElementExport aAutoMarkElement(
                     GetExport(), XML_NAMESPACE_TEXT,
                     XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE,
-                    sal_True, sal_True );
+                    true, true );
             }
         }
     }
@@ -3686,10 +3686,10 @@ void XMLTextParagraphExport::exportRuby(
                                      XML_STYLE_NAME, sStyleName);
 
             // export <text:ruby> and <text:ruby-base> start elements
-            GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
+            GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY, false);
             GetExport().ClearAttrList();
             GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY_BASE,
-                                      sal_False );
+                                      false );
             bOpenRuby = true;
         }
         else
@@ -3703,7 +3703,7 @@ void XMLTextParagraphExport::exportRuby(
 
             // close <text:ruby-base>
             GetExport().EndElement(XML_NAMESPACE_TEXT, XML_RUBY_BASE,
-                                   sal_False);
+                                   false);
 
             // write the ruby text (with char style)
             {
@@ -3714,13 +3714,13 @@ void XMLTextParagraphExport::exportRuby(
 
                 SvXMLElementExport aRubyElement(
                     GetExport(), XML_NAMESPACE_TEXT, XML_RUBY_TEXT,
-                    sal_False, sal_False);
+                    false, false);
 
                 GetExport().Characters(sOpenRubyText);
             }
 
             // and finally, close the ruby
-            GetExport().EndElement(XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
+            GetExport().EndElement(XML_NAMESPACE_TEXT, XML_RUBY, false);
             bOpenRuby = false;
         }
     }
@@ -3758,7 +3758,7 @@ void XMLTextParagraphExport::exportMeta(
     }
 
     SvXMLElementExport aElem( GetExport(), doExport,
-        XML_NAMESPACE_TEXT, XML_META, sal_False, sal_False );
+        XML_NAMESPACE_TEXT, XML_META, false, false );
 
     // recurse to export content
     exportTextRangeEnumeration( xTextEnum, i_bAutoStyles, i_isProgress );

@@ -312,7 +312,7 @@ bool XMLStyleExport::exportStyle(
     {
         // <style:style>
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_STYLE,
-                                  sal_True, sal_True );
+                                  true, true );
 
         rPropMapper->SetStyleName( sName );
 
@@ -352,7 +352,7 @@ bool XMLStyleExport::exportDefaultStyle(
         // <style:style>
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_DEFAULT_STYLE,
-                                  sal_True, sal_True );
+                                  true, true );
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );

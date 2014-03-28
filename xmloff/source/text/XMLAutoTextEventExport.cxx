@@ -147,7 +147,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
             // container element
             SvXMLElementExport aContainerElement(
                 *this, XML_NAMESPACE_OOO, XML_AUTO_TEXT_EVENTS,
-                sal_True, sal_True);
+                true, true);
 
             exportEvents();
         }

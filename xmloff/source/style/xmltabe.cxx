@@ -85,7 +85,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     }
 
     SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOP,
-                              sal_True, sal_True );
+                              true, true );
 }
 
 
@@ -112,7 +112,7 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
         const sal_Int32 nTabs   = aSeq.getLength();
 
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
-                                  sal_True, sal_True );
+                                  true, true );
 
         for( sal_Int32 nIndex = 0; nIndex < nTabs; nIndex++ )
         {

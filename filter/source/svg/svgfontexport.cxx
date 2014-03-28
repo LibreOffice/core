@@ -186,7 +186,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
             const OUString              aEmbeddedFontStr( "EmbeddedFont_" );
 
             {
-                SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+                SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", true, true );
                 OUString     aCurIdStr( aEmbeddedFontStr );
                 OUString     aUnitsPerEM( OUString::number( nFontEM ) );
                 VirtualDevice       aVDev;
@@ -202,7 +202,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
 
                 {
-                    SvXMLElementExport  aExp2( mrExport, XML_NAMESPACE_NONE, "font", sal_True, sal_True );
+                    SvXMLElementExport  aExp2( mrExport, XML_NAMESPACE_NONE, "font", true, true );
                     OUString     aFontWeight;
                     OUString     aFontStyle;
                     const Size         aSize( nFontEM, nFontEM );
@@ -227,7 +227,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", OUString::number( aVDev.GetFontMetric().GetDescent() ) );
 
                     {
-                        SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", sal_True, sal_True );
+                        SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", true, true );
                     }
 
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::number( aSize.Width() ) );
@@ -239,7 +239,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                         mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aMissingGlyphPolyPoly, sal_False ) );
 
                         {
-                            SvXMLElementExport  aExp4( mrExport, XML_NAMESPACE_NONE, "missing-glyph", sal_True, sal_True );
+                            SvXMLElementExport  aExp4( mrExport, XML_NAMESPACE_NONE, "missing-glyph", true, true );
                         }
                     }
 
@@ -284,7 +284,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr
         }
 
         {
-            SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "glyph", sal_True, sal_True );
+            SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "glyph", true, true );
         }
     }
 }

@@ -172,7 +172,7 @@ void XMLLineNumberingExport::Export()
 
             SvXMLElementExport aConfigElem(rExport, XML_NAMESPACE_TEXT,
                                            XML_LINENUMBERING_CONFIGURATION,
-                                           sal_True, sal_True);
+                                           true, true);
 
             // line separator
             aAny = xLineNumbering->getPropertyValue(sSeparatorText);
@@ -192,7 +192,7 @@ void XMLLineNumberingExport::Export()
 
                 SvXMLElementExport aSeparatorElem(rExport, XML_NAMESPACE_TEXT,
                                                   XML_LINENUMBERING_SEPARATOR,
-                                                  sal_True, sal_False);
+                                                  true, false);
                 rExport.Characters(sSeparator);
             }
         }

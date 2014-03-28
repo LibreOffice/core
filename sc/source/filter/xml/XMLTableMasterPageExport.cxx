@@ -77,7 +77,7 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                 XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                      aName, sal_True, sal_True );
+                                      aName, true, true );
             if (!sCenter.isEmpty() && sLeft.isEmpty() && sRight.isEmpty())
                 exportHeaderFooterContent( xCenter, false, false );
             else
@@ -85,19 +85,19 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
                 if (!sLeft.isEmpty())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                XML_REGION_LEFT, sal_True, sal_True );
+                                                XML_REGION_LEFT, true, true );
                     exportHeaderFooterContent( xLeft, false, false );
                 }
                 if (!sCenter.isEmpty())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                XML_REGION_CENTER, sal_True, sal_True );
+                                                XML_REGION_CENTER, true, true );
                     exportHeaderFooterContent( xCenter, false, false );
                 }
                 if (!sRight.isEmpty())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                XML_REGION_RIGHT, sal_True, sal_True );
+                                                XML_REGION_RIGHT, true, true );
                     exportHeaderFooterContent( xRight, false, false );
                 }
             }

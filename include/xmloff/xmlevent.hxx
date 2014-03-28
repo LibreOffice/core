@@ -98,7 +98,7 @@ public:
         const OUString& rEventQName,     /// the XML name of the event
         ::com::sun::star::uno::Sequence<        /// the values for the event
             ::com::sun::star::beans::PropertyValue> & rValues,
-         sal_Bool bUseWhitespace) = 0;  /// create whitespace around elements?
+         bool bUseWhitespace) = 0;  /// create whitespace around elements?
 };
 
 

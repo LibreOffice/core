@@ -142,7 +142,7 @@ namespace xmloff
 
     void OElementExport::implStartElement(const sal_Char* _pName)
     {
-        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, sal_True, sal_True);
+        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
     }
 
     void OElementExport::implEndElement()
@@ -418,7 +418,7 @@ namespace xmloff
                             OAttributeMetaData::getCommonControlAttributeNamespace(CCA_LABEL),
                             OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL),
                             *pListItems);
-                        SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", sal_True, sal_True);
+                        SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", true, true);
                     }
                 }
             }
@@ -1352,7 +1352,7 @@ namespace xmloff
                     );
                 aDefaultSelection.erase(aDefaultSelectedPos);
             }
-            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", sal_True, sal_True);
+            SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", true, true);
         }
 
         // There may be more "selected" or "default-selected" items than there are in the lists in real,
@@ -1395,7 +1395,7 @@ namespace xmloff
                         sTrue
                         );
                 }
-                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", sal_True, sal_True);
+                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "option", true, true);
             }
         }
     }
@@ -1408,8 +1408,8 @@ namespace xmloff
                                ? new SvXMLElementExport(
                                         m_rContext.getGlobalContext(),
                                         XML_NAMESPACE_FORM,
-                                        pOuterElementName, sal_True,
-                                        sal_True)
+                                        pOuterElementName, true,
+                                        true)
                             : 0;
 
         // add the attributes for the inner element
@@ -2069,7 +2069,7 @@ namespace xmloff
                     sPropValue);
             if ( m_rContext.getGlobalContext().GetAttrList().getLength() )
             {
-                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, xmloff::token::XML_CONNECTION_RESOURCE, sal_True, sal_True);
+                SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, xmloff::token::XML_CONNECTION_RESOURCE, true, true);
             }
         }
 

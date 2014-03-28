@@ -41,13 +41,13 @@ bool SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) c
     return ( *(rCmp.pimpl) == *(pimpl) );
 }
 
-sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
+bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
                                           const OUString& rValue )
 {
     return pimpl->AddAttr(rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
+bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                           const OUString& rNamespace,
                                           const OUString& rLName,
                                           const OUString& rValue )
@@ -55,21 +55,21 @@ sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
     return pimpl->AddAttr(rPrefix, rNamespace, rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
+bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                           const OUString& rLName,
                                           const OUString& rValue )
 {
     return pimpl->AddAttr(rPrefix, rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
+bool SvXMLAttrContainerData::SetAt( size_t i,
                                         const OUString& rLName,
                                         const OUString& rValue )
 {
     return pimpl->SetAt(i, rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
+bool SvXMLAttrContainerData::SetAt( size_t i,
                                         const OUString& rPrefix,
                                         const OUString& rNamespace,
                                         const OUString& rLName,
@@ -78,7 +78,7 @@ sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
     return pimpl->SetAt(i, rPrefix, rNamespace, rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
+bool SvXMLAttrContainerData::SetAt( size_t i,
                                         const OUString& rPrefix,
                                         const OUString& rLName,
                                         const OUString& rValue )

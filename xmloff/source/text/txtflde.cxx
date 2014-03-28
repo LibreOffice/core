@@ -1012,7 +1012,7 @@ void XMLTextFieldExport::ExportField(
     }
     SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
                                    XML_NAMESPACE_TEXT, XML_A,
-                                   sal_False, sal_False );
+                                   false, false );
 
     if( bHasHyperlink )
     {
@@ -1045,7 +1045,7 @@ void XMLTextFieldExport::ExportField(
         }
         SvXMLElementExport aSpan( GetExport(), bHasStyle,
                                   XML_NAMESPACE_TEXT, XML_SPAN,
-                                  sal_False, sal_False);
+                                  false, false);
 
         // finally, export the field itself
         ExportFieldHelper( rTextField, xPropSet, xRangePropSet, nToken,
@@ -1685,7 +1685,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       sal_True, XML_NAMESPACE_OFFICE);
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, XML_A,
-                                     sal_False, sal_False);
+                                     false, false);
         GetExport().Characters(sPresentation);
         break;
     }
@@ -1729,15 +1729,15 @@ void XMLTextFieldExport::ExportFieldHelper(
         if (!aName.isEmpty())
             GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, aName);
         SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
-                                 XML_ANNOTATION, sal_False, sal_True);
+                                 XML_ANNOTATION, false, true);
 
         // author
         OUString aAuthor( GetStringProperty(sPropertyAuthor, rPropSet) );
         if( !aAuthor.isEmpty() )
         {
             SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_DC,
-                                              XML_CREATOR, sal_True,
-                                              sal_False );
+                                              XML_CREATOR, true,
+                                              false );
             GetExport().Characters(aAuthor);
         }
 
@@ -1747,8 +1747,8 @@ void XMLTextFieldExport::ExportFieldHelper(
             OUStringBuffer aBuffer;
             ::sax::Converter::convertDateTime(aBuffer, aDate, 0, true);
             SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
-                                              XML_DATE, sal_True,
-                                              sal_False );
+                                              XML_DATE, true,
+                                              false );
             GetExport().Characters(aBuffer.makeStringAndClear());
         }
 
@@ -1759,8 +1759,8 @@ void XMLTextFieldExport::ExportFieldHelper(
             if( !aInitials.isEmpty() )
             {
                 SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                        XML_SENDER_INITIALS, sal_True,
-                        sal_False );
+                        XML_SENDER_INITIALS, true,
+                        false );
                 GetExport().Characters(aInitials);
             }
         }
@@ -1826,7 +1826,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyTooltip, rPropSet), true);
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT, XML_DROPDOWN,
-                                  sal_False, sal_False );
+                                  false, false );
         ProcessStringSequence
             (GetStringSequenceProperty( sPropertyItems, rPropSet ),
              GetStringProperty( sPropertySelectedItem, rPropSet ) );
@@ -1837,19 +1837,19 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DRAW_HEADER:
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_HEADER, sal_False, sal_False );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_HEADER, false, false );
     }
     break;
 
     case FIELD_ID_DRAW_FOOTER:
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_FOOTER, sal_False, sal_False );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_FOOTER, false, false );
     }
     break;
 
     case FIELD_ID_DRAW_DATE_TIME:
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, sal_False, sal_False );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, false, false );
     }
     break;
 
@@ -1989,7 +1989,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
                                   XML_VARIABLE_DECLS,
-                                  sal_True, sal_True );
+                                  true, true );
 
         for (vector<OUString>::iterator aVarIter = aVarName.begin();
              aVarIter != aVarName.end();
@@ -2048,7 +2048,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
                                   XML_SEQUENCE_DECLS,
-                                  sal_True, sal_True );
+                                  true, true );
 
         for (vector<OUString>::iterator aSeqIter = aSeqName.begin();
              aSeqIter != aSeqName.end();
@@ -2090,7 +2090,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
                                   XML_USER_FIELD_DECLS,
-                                  sal_True, sal_True );
+                                  true, true );
 
         for (vector<OUString>::iterator aUserIter = aUserName.begin();
              aUserIter != aUserName.end();
@@ -2141,7 +2141,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         SvXMLElementExport aElem( GetExport(),
                                   XML_NAMESPACE_TEXT,
                                   XML_DDE_CONNECTION_DECLS,
-                                  sal_True, sal_True );
+                                  true, true );
 
         for (vector<OUString>::iterator aDdeIter = aDdeName.begin();
              aDdeIter != aDdeName.end();
@@ -2275,7 +2275,7 @@ void XMLTextFieldExport::ExportMacro(
 
     // the element
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                              XML_EXECUTE_MACRO, sal_False, sal_False );
+                              XML_EXECUTE_MACRO, false, false );
 
     // the <office:events>-macro:
 
@@ -2347,7 +2347,7 @@ void XMLTextFieldExport::ExportMetaField(
     }
 
     SvXMLElementExport aElem( GetExport(), doExport,
-        XML_NAMESPACE_TEXT, XML_META_FIELD, sal_False, sal_False );
+        XML_NAMESPACE_TEXT, XML_META_FIELD, false, false );
 
     // recurse to export content
     GetExport().GetTextParagraphExport()->
@@ -2562,7 +2562,7 @@ void XMLTextFieldExport::ProcessParagraphSequence(
     while (aEnumerator.getNextToken(aSubString))
     {
         SvXMLElementExport aParagraph(
-            GetExport(), XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+            GetExport(), XML_NAMESPACE_TEXT, XML_P, true, false);
         GetExport().Characters(aSubString);
     }
 }
@@ -2824,7 +2824,7 @@ void XMLTextFieldExport::ProcessStringSequence(
                                   XML_CURRENT_SELECTED, XML_TRUE );
         rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_VALUE, pSequence[i] );
         SvXMLElementExport aElement( rExport, XML_NAMESPACE_TEXT, XML_LABEL,
-                                     sal_False, sal_False );
+                                     false, false );
     }
 }
 
@@ -2860,7 +2860,7 @@ void XMLTextFieldExport::ExportDataBaseElement(
                               sDataBaseName );
     SvXMLElementExport aDataBaseElement( GetExport(),
                                          XML_NAMESPACE_TEXT, eElementName,
-                                         sal_False, sal_False );
+                                         false, false );
 
     // write URL as children
     if( !sDataBaseURL.isEmpty() )
@@ -2868,7 +2868,7 @@ void XMLTextFieldExport::ExportDataBaseElement(
         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sDataBaseURL );
         SvXMLElementExport aDataSourceElement(
             GetExport(), XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE,
-            sal_False, sal_False );
+            false, false );
     }
 
     // write presentation

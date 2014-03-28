@@ -53,7 +53,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
                   XML_LIST_NAME,
                   OUString (rBlockList.GetName()));
     {
-        SvXMLElementExport pRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, sal_True, sal_True);
+        SvXMLElementExport pRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
         sal_uInt16 nBlocks= rBlockList.GetCount();
         for ( sal_uInt16 i = 0; i < nBlocks; i++)
         {
@@ -70,7 +70,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
                           XML_UNFORMATTED_TEXT,
                           rBlockList.IsOnlyTextBlock(i) ? XML_TRUE : XML_FALSE );
 
-            SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, sal_True, sal_True);
+            SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, true, true);
         }
     }
     GetDocHandler()->endDocument();
@@ -116,15 +116,15 @@ sal_uInt32 SwXMLTextBlockExport::exportDoc(const OUString &rText)
                   XML_LIST_NAME,
                   OUString (rBlockList.GetName()));
     {
-        SvXMLElementExport aDocument (*this, XML_NAMESPACE_OFFICE, XML_DOCUMENT, sal_True, sal_True);
+        SvXMLElementExport aDocument (*this, XML_NAMESPACE_OFFICE, XML_DOCUMENT, true, true);
         {
-            SvXMLElementExport aBody (*this, XML_NAMESPACE_OFFICE, XML_BODY, sal_True, sal_True);
+            SvXMLElementExport aBody (*this, XML_NAMESPACE_OFFICE, XML_BODY, true, true);
             {
                 sal_Int32 nPos = 0;
                 do
                 {
                     OUString sTemp ( rText.getToken( 0, '\015', nPos ) );
-                    SvXMLElementExport aPara (*this, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+                    SvXMLElementExport aPara (*this, XML_NAMESPACE_TEXT, XML_P, true, false);
                     GetDocHandler()->characters(sTemp);
                 } while (-1 != nPos );
             }

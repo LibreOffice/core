@@ -143,7 +143,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     XMLImageMapExport* mpImageMapExport;
     XMLErrors*  mpXMLErrors;
 
-    sal_Bool                        mbExtended;     // Does document contain extens.
+    bool                        mbExtended;     // Does document contain extens.
 
     const enum ::xmloff::token::XMLTokenEnum meClass;
     SAL_DLLPRIVATE void _InitCtor();
@@ -163,10 +163,10 @@ private:
 
     SAL_DLLPRIVATE void ImplExportMeta(); // <office:meta>
     SAL_DLLPRIVATE void ImplExportSettings(); // <office:settings>
-    SAL_DLLPRIVATE void ImplExportStyles( sal_Bool bUsed ); // <office:styles>
-    SAL_DLLPRIVATE void ImplExportAutoStyles( sal_Bool bUsed );
+    SAL_DLLPRIVATE void ImplExportStyles( bool bUsed ); // <office:styles>
+    SAL_DLLPRIVATE void ImplExportAutoStyles( bool bUsed );
         // <office:automatic-styles>
-    SAL_DLLPRIVATE void ImplExportMasterStyles( sal_Bool bUsed );
+    SAL_DLLPRIVATE void ImplExportMasterStyles( bool bUsed );
         // <office:master-styles>
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
@@ -210,10 +210,10 @@ protected:
     // This method must be overloaded to export the content of <office:body>.
     virtual void _ExportContent() = 0;
 
-    void SetExtended( sal_Bool bSet=sal_True ) { mbExtended = bSet; }
+    void SetExtended( bool bSet=true ) { mbExtended = bSet; }
 
     // save linked sections? (may be false in global documents)
-    sal_Bool mbSaveLinkedSections;
+    bool mbSaveLinkedSections;
 
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
     virtual XMLShapeExport* CreateShapeExport();
@@ -417,10 +417,10 @@ public:
     // Export the document.
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
-    virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False );
+    virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false );
     virtual void exportDataStyles();
     virtual void exportAutoDataStyles();
-    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
+    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const;
     sal_Int32 dataStyleForceSystemLanguage(sal_Int32 nFormat) const;
 
     virtual void exportAnnotationMeta( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape);
@@ -475,24 +475,24 @@ public:
 
     OUString AddEmbeddedGraphicObject(
                             const OUString& rGraphicObjectURL );
-    sal_Bool AddEmbeddedGraphicObjectAsBase64(
+    bool AddEmbeddedGraphicObjectAsBase64(
                             const OUString& rGraphicObjectURL );
 
     OUString AddEmbeddedObject(
                             const OUString& rEmbeddedObjectURL );
-    sal_Bool AddEmbeddedObjectAsBase64(
+    bool AddEmbeddedObjectAsBase64(
                             const OUString& rEmbeddedObjectURL );
 
     OUString EncodeStyleName( const OUString& rName,
                                      sal_Bool *pEncoded=0 ) const;
 
     // save linked sections?
-    inline sal_Bool IsSaveLinkedSections() { return mbSaveLinkedSections; }
+    inline bool IsSaveLinkedSections() { return mbSaveLinkedSections; }
 
     // get export flags
     sal_uInt16 getExportFlags() const { return mnExportFlags; }
 
-    sal_Bool ExportEmbeddedOwnObject(
+    bool ExportEmbeddedOwnObject(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& rComp );
 
@@ -501,15 +501,15 @@ public:
     // methods for accessing the document handler and handling SAX errors
     void StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
-                        sal_Bool bIgnWSOutside );
+                        bool bIgnWSOutside );
     void StartElement(const OUString& rName,
-                        sal_Bool bIgnWSOutside );
+                        bool bIgnWSOutside );
     void Characters(const OUString& rChars);
     void EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
-                        sal_Bool bIgnWSInside );
+                        bool bIgnWSInside );
     void EndElement(const OUString& rName,
-                        sal_Bool bIgnWSInside );
+                        bool bIgnWSInside );
     void IgnorableWhitespace();
 
     /**
@@ -548,7 +548,7 @@ public:
     }
 
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-    sal_Bool writeOutlineStyleAsNormalListStyle() const;
+    bool writeOutlineStyleAsNormalListStyle() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
 
@@ -572,10 +572,10 @@ public:
     void AddAttributesRDFa( ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextContent> const & i_xTextContent);
 
-    sal_Bool exportTextNumberElement() const;
+    bool exportTextNumberElement() const;
 
     /// set null date from model to unit converter, if not already done
-    sal_Bool SetNullDateOnUnitConverter();
+    bool SetNullDateOnUnitConverter();
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
@@ -656,14 +656,14 @@ class XMLOFF_DLLPUBLIC SvXMLElementExport
 {
     SvXMLExport& mrExport;
     OUString maElementName;
-    const sal_Bool mbIgnoreWhitespaceInside :1;
-    const sal_Bool mbDoSomething :1;
+    const bool mbIgnoreWhitespaceInside :1;
+    const bool mbDoSomething :1;
 
     SAL_DLLPRIVATE
     void StartElement(
         const sal_uInt16 nPrefix,
         const OUString& rName,
-        const sal_Bool bIgnoreWhitespaceOutside );
+        const bool bIgnoreWhitespaceOutside );
 
 public:
 
@@ -671,21 +671,21 @@ public:
     // of the XMLExport instance attached.
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
                         const sal_Char *pName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
+                        bool bIgnWSOutside, bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
                         const OUString& rName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
+                        bool bIgnWSOutside, bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
+                        bool bIgnWSOutside, bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, const OUString& rQName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
+                        bool bIgnWSOutside, bool bIgnWSInside );
 
     // Thes constructors do nothing if bDoSomething is not set
-    SvXMLElementExport( SvXMLExport& rExp, sal_Bool bDoSomething,
+    SvXMLElementExport( SvXMLExport& rExp, bool bDoSomething,
                         sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
-                        sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
+                        bool bIgnWSOutside, bool bIgnWSInside );
 
     // The destructor prints an end tag.
     ~SvXMLElementExport();

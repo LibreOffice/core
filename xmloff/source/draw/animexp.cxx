@@ -438,7 +438,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 
     if( aIter != aEnd )
     {
-        SvXMLElementExport aElement( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, sal_True, sal_True );
+        SvXMLElementExport aElement( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, true, true );
 
         do
         {
@@ -455,7 +455,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                 ::sax::Converter::convertColor( sTmp, rEffect.maDimColor );
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, sTmp.makeStringAndClear() );
 
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_DIM, sal_True, sal_True );
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_DIM, true, true );
             }
             else if( rEffect.meKind == XMLE_PLAY )
             {
@@ -465,7 +465,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                     rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, sTmp.makeStringAndClear() );
                 }
 
-                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_PLAY, sal_True, sal_True );
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_PLAY, true, true );
             }
             else
             {
@@ -515,7 +515,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                         eLocalName = XML_HIDE_SHAPE;
                 }
 
-                SvXMLElementExport aEle( rExport, XML_NAMESPACE_PRESENTATION, eLocalName, sal_True, sal_True );
+                SvXMLElementExport aEle( rExport, XML_NAMESPACE_PRESENTATION, eLocalName, true, true );
                 if( !rEffect.maSoundURL.isEmpty() )
                 {
                     rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(rEffect.maSoundURL) );
@@ -525,7 +525,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                     if( rEffect.mbPlayFull )
                         rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PLAY_FULL, XML_TRUE );
 
-                    SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, sal_True, sal_True );
+                    SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, true, true );
                 }
             }
 

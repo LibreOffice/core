@@ -179,7 +179,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     // line-style
 
     SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
-                             XML_FOOTNOTE_SEP, sal_True, sal_True);
+                             XML_FOOTNOTE_SEP, true, true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

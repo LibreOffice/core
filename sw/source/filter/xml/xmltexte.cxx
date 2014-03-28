@@ -168,7 +168,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                 XML_APPLY_STYLE_NAME, aString );
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                              XML_MAP, sal_True, sal_True );
+                                              XML_MAP, true, true );
                 }
             }
         }
@@ -458,7 +458,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     addTextFrameAttributes( rPropSet, false );
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              XML_FRAME, sal_False, sal_True );
+                              XML_FRAME, false, true );
 
     switch (nType)
     {
@@ -625,7 +625,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
     {
         SvXMLElementExport aElementExport( rXMLExport, XML_NAMESPACE_DRAW, eElementName,
-                                      sal_False, sal_True );
+                                      false, true );
         switch( nType )
         {
         case SV_EMBEDDED_OWN:
@@ -669,7 +669,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                             aProp.Value >>= aStr;
                             rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
                             rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
+                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
                         }
                     }
                 }
@@ -695,7 +695,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                             aProp.Value >>= aStr;
                             rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
                             rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
+                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
                         }
                     }
                 }
@@ -716,7 +716,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
 
         SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,
-                                  XML_IMAGE, sal_False, sal_True );
+                                  XML_IMAGE, false, true );
 
         if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             GetExport().AddEmbeddedObjectAsBase64( sURL );

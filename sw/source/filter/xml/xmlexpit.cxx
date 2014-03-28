@@ -308,7 +308,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
         }
 
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, ePropToken,
-                                  sal_False, sal_False );
+                                  false, false );
         exportElementItems( rExport, rUnitConverter,
                             rSet, nFlags, aIndexArray );
     }

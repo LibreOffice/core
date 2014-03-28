@@ -93,7 +93,7 @@ namespace xmloff
             AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
             SvXMLElementExport aValueTag(
                 m_rContext.getGlobalContext(), XML_NAMESPACE_FORM,
-                token::XML_LIST_VALUE, sal_True, sal_False);
+                token::XML_LIST_VALUE, true, false);
         }
     }
 
@@ -123,7 +123,7 @@ namespace xmloff
 
                 // now that we have the first sub-tag we need the form:properties element
                 if (!pPropertiesTag)
-                    pPropertiesTag = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, sal_True, sal_True);
+                    pPropertiesTag = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, true, true);
 
                 // add the name attribute
                 AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, *aProperty);
@@ -177,7 +177,7 @@ namespace xmloff
                 SvXMLElementExport aValueTag1(m_rContext.getGlobalContext(),
                         XML_NAMESPACE_FORM,
                         bIsSequence ? token::XML_LIST_PROPERTY
-                                    : token::XML_PROPERTY, sal_True, sal_True);
+                                    : token::XML_PROPERTY, true, true);
 
                 if (!bIsSequence)
                     continue;

@@ -593,7 +593,7 @@ void AnimationsExporterImpl::exportTransitionNode()
             convertTiming( sTmp, Any( aEvent ) );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_BEGIN, sTmp.makeStringAndClear() );
 
-            SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_PAR, sal_True, sal_True );
+            SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_PAR, true, true );
 
             if( nTransition != 0 )
             {
@@ -627,13 +627,13 @@ void AnimationsExporterImpl::exportTransitionNode()
                     ::sax::Converter::convertColor( sTmp, nFadeColor );
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
                 }
-                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_TRANSITIONFILTER, sal_True, sal_True );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_TRANSITIONFILTER, true, true );
             }
 
             if( bStopSound )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, XML_STOP_AUDIO );
-                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
             }
             else if( !sSoundURL.isEmpty())
             {
@@ -644,7 +644,7 @@ void AnimationsExporterImpl::exportTransitionNode()
 
                 if( bLoopSound )
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
-                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, sal_True, sal_True );
+                SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, true, true );
             }
         }
     }
@@ -1075,7 +1075,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), invalid TimeContainerType!" );
             return;
         }
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, true, true );
 
         if( nContainerNodeType == EffectNodeType::TIMING_ROOT )
             exportTransitionNode();
@@ -1347,7 +1347,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         break;
         }
 
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, true, true );
 
     }
     catch (const Exception&)
@@ -1379,7 +1379,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
         if( nEndAfterSlide != 0 )
             mrExport.AddAttribute( );
 */
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, sal_True, sal_True );
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, true, true );
 
     }
     catch (const Exception&)
@@ -1406,7 +1406,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
 
 // todo virtual ::com::sun::star::uno::Any SAL_CALL getParameter() throw (::com::sun::star::uno::RuntimeException) = 0;
 
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
+        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, true, true );
 
     }
     catch (const Exception&)
