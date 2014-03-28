@@ -383,7 +383,11 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
 
 bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapWriteAccess* pAccAlpha, bool bTopDown, bool& rAlphaUsed)
 {
-    const sal_uLong nAlignedWidth = AlignedWidth4Bytes(rHeader.nWidth * rHeader.nBitCount);
+    const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(rHeader.nWidth) * static_cast<sal_Int64>(rHeader.nBitCount));
+    if (nBitsPerLine > SAL_MAX_UINT32)
+        return false;
+
+    const sal_uLong nAlignedWidth = AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine));
     sal_uInt32 nRMask(( rHeader.nBitCount == 16 ) ? 0x00007c00UL : 0x00ff0000UL);
     sal_uInt32 nGMask(( rHeader.nBitCount == 16 ) ? 0x000003e0UL : 0x0000ff00UL);
     sal_uInt32 nBMask(( rHeader.nBitCount == 16 ) ? 0x0000001fUL : 0x000000ffUL);
@@ -607,6 +611,13 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
     if(ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
     {
+        if (aHeader.nSize > nOffset)
+        {
+            // Header size claims to extend into the image data.
+            // Looks like an error.
+            return false;
+        }
+
         const sal_uInt16 nBitCount(discretizeBitcount(aHeader.nBitCount));
         const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
         BitmapPalette aDummyPal;
@@ -759,6 +770,9 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
     sal_uInt16  nTmp16 = 0;
     bool    bRet = false;
 
+    const sal_uLong nStreamLength (rIStm.Seek(STREAM_SEEK_TO_END));
+    rIStm.Seek(STREAM_SEEK_TO_BEGIN);
+
     rIStm.ReadUInt16( nTmp16 );
 
     if ( ( 0x4D42 == nTmp16 ) || ( 0x4142 == nTmp16 ) )
@@ -778,6 +792,14 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             rIStm.ReadUInt32( nTmp32 );            // read bfOffBits
             rOffset = nTmp32 - 14UL;    // adapt offset by sizeof(BITMAPFILEHEADER)
             bRet = ( rIStm.GetError() == 0UL );
+        }
+
+        if (rOffset >= nStreamLength)
+        {
+            // Offset claims that image starts past the end of the
+            // stream.  Unlikely.
+            rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
+            bRet = false;
         }
     }
     else
