@@ -25,16 +25,15 @@ public:
     GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~GL3DBarChartType();
 
-    //TODO: are these actually used (given they are not SAL_OVERRIDE)?
     virtual OUString SAL_CALL
         getImplementationName()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( ::com::sun::star::uno::RuntimeException, std::exception );
+            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     static OUString getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
