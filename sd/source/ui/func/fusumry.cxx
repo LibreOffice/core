@@ -183,40 +183,43 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         }
     }
 
-    if (pSummaryPage)
+    if (!pSummaryPage)
+        return;
+
+    SdrTextObj* pTextObj = (SdrTextObj*) pSummaryPage->GetPresObj(PRESOBJ_OUTLINE);
+
+    if (!pTextObj)
+        return;
+
+    // remove hard break- and character attributes
+    SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+    sal_Int32 nParaCount = pOutl->GetParagraphCount();
+
+    for (sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
     {
-        SdrTextObj* pTextObj = (SdrTextObj*) pSummaryPage->GetPresObj(PRESOBJ_OUTLINE);
+        pOutl->SetStyleSheet( nPara, pStyle );
+        pOutl->QuickRemoveCharAttribs(nPara);
+        pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
+        pOutl->SetDepth(pOutl->GetParagraph(nPara), 0);
+    }
 
-        // remove hard break- and character attributes
-        SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-        sal_Int32 nParaCount = pOutl->GetParagraphCount();
+    pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+    pTextObj->SetEmptyPresObj(false);
 
-        for (sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
-        {
-            pOutl->SetStyleSheet( nPara, pStyle );
-            pOutl->QuickRemoveCharAttribs(nPara);
-            pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
-            pOutl->SetDepth(pOutl->GetParagraph(nPara), 0);
-        }
+    // remove hard attributes (Flag to sal_True)
+    SfxItemSet aAttr(mpDoc->GetPool());
+    aAttr.Put(XLineStyleItem(XLINE_NONE));
+    aAttr.Put(XFillStyleItem(XFILL_NONE));
+    pTextObj->SetMergedItemSet(aAttr);
 
-        pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
-        pTextObj->SetEmptyPresObj(false);
+    if( bBegUndo )
+        mpView->EndUndo();
+    delete pOutl;
 
-        // remove hard attributes (Flag to sal_True)
-        SfxItemSet aAttr(mpDoc->GetPool());
-        aAttr.Put(XLineStyleItem(XLINE_NONE));
-        aAttr.Put(XFillStyleItem(XFILL_NONE));
-        pTextObj->SetMergedItemSet(aAttr);
-
-        if( bBegUndo )
-            mpView->EndUndo();
-        delete pOutl;
-
-        DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( mpViewShell );
-        if(pDrawViewShell)
-        {
-            pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNum() - 1) / 2);
-        }
+    DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( mpViewShell );
+    if(pDrawViewShell)
+    {
+        pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNum() - 1) / 2);
     }
 }
 
