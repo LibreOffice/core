@@ -463,7 +463,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
 
         if(IsModifyLocked())
         {
-            if( 0 != ( bRet = (0 != aSet.Put( aTempSet ))) )
+            if( ( bRet = aSet.Put( aTempSet ) ) )
             {
                 aSet.SetModifyAtAttr( this );
             }
@@ -472,7 +472,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
         {
             SwAttrSet aOld(*aSet.GetPool(), aSet.GetRanges()), aNew(*aSet.GetPool(), aSet.GetRanges());
 
-            bRet = 0 != aSet.Put_BC(aTempSet, &aOld, &aNew);
+            bRet = aSet.Put_BC(aTempSet, &aOld, &aNew);
 
             if(bRet)
             {
@@ -543,7 +543,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         const SfxPoolItem* pSource = 0;
 
-        if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND, sal_False, &pSource))
+        if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND, false, &pSource))
         {
             //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -557,7 +557,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 
             if(IsModifyLocked())
             {
-                if( 0 != ( bRet = (0 != aSet.Put( aTempSet ))) )
+                if( ( bRet = aSet.Put( aTempSet ) ) )
                 {
                     aSet.SetModifyAtAttr( this );
                 }
@@ -566,7 +566,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
             {
                 SwAttrSet aOld(*aSet.GetPool(), aSet.GetRanges()), aNew(*aSet.GetPool(), aSet.GetRanges());
 
-                bRet = 0 != aSet.Put_BC(aTempSet, &aOld, &aNew);
+                bRet = aSet.Put_BC(aTempSet, &aOld, &aNew);
 
                 if(bRet)
                 {
