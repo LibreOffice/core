@@ -1049,9 +1049,12 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
                         const SwPageFrm *pPg;
                         if ( pUp->GetUpper() != (pPg = pFly->FindPageFrm()) )
                             pUp = pPg->FindBodyCont();
-                        rRect = pUp->GetUpper()->Frm();
-                        (rRect.*fnRect->fnSetTop)( (pUp->*fnRect->fnGetPrtTop)() );
-                        (rRect.*fnRect->fnSetBottom)((pUp->*fnRect->fnGetPrtBottom)());
+                        if (pUp)
+                        {
+                            rRect = pUp->GetUpper()->Frm();
+                            (rRect.*fnRect->fnSetTop)( (pUp->*fnRect->fnGetPrtTop)() );
+                            (rRect.*fnRect->fnSetBottom)((pUp->*fnRect->fnGetPrtBottom)());
+                        }
                     }
                     else
                     {
