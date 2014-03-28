@@ -98,7 +98,22 @@ namespace param
     }
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( ParameterWrapper, UnoBase, PropertyBase )
+    IMPLEMENT_FORWARD_REFCOUNT( ParameterWrapper, UnoBase )
+
+    css::uno::Any ParameterWrapper::queryInterface(css::uno::Type const & aType)
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        css::uno::Any a(UnoBase::queryInterface(aType));
+        if (!a.hasValue()) {
+            a = PropertyBase::queryInterface(aType);
+            if (!a.hasValue()
+                && aType == cppu::UnoType<css::lang::XTypeProvider>::get())
+            {
+                a <<= css::uno::Reference<css::lang::XTypeProvider>(this);
+            }
+        }
+        return a;
+    }
 
 
     Sequence< Type > SAL_CALL ParameterWrapper::getTypes(   ) throw(RuntimeException, std::exception)
