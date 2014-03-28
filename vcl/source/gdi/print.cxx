@@ -250,6 +250,85 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
+
+void Printer::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
+                                       sal_uInt16 nTransparencePercent )
+{
+    // #110958# Disable alpha VDev, we perform the necessary
+    VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
+
+    // operation explicitly further below.
+    if( mpAlphaVDev )
+        mpAlphaVDev = NULL;
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = NULL;
+
+    mpMetaFile = pOldMetaFile;
+
+    // #110958# Restore disabled alpha VDev
+    mpAlphaVDev = pOldAlphaVDev;
+
+    Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
+    const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
+    const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
+    long            nMove;
+    const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
+        ( nTransparencePercent < 38 ) ? 25 :
+        ( nTransparencePercent < 63 ) ? 50 :
+        ( nTransparencePercent < 88 ) ? 75 : 100;
+
+    switch( nTrans )
+    {
+        case( 25 ): nMove = nBaseExtent * 3; break;
+        case( 50 ): nMove = nBaseExtent * 4; break;
+        case( 75 ): nMove = nBaseExtent * 6; break;
+
+            // #i112959#  very transparent (88 < nTransparencePercent <= 99)
+        case( 100 ): nMove = nBaseExtent * 8; break;
+
+            // #i112959# not transparent (nTransparencePercent < 13)
+        default:    nMove = 0; break;
+    }
+
+    Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
+    IntersectClipRegion(Region(rPolyPoly));
+    SetLineColor( GetFillColor() );
+    const bool bOldMap = mbMap;
+    EnableMapMode( false );
+
+    if(nMove)
+    {
+        Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
+        while( aRect.Top() <= aPolyRect.Bottom() )
+        {
+            DrawRect( aRect );
+            aRect.Move( 0, nMove );
+        }
+
+        aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
+        while( aRect.Left() <= aPolyRect.Right() )
+        {
+            DrawRect( aRect );
+            aRect.Move( nMove, 0 );
+        }
+    }
+    else
+    {
+        // #i112959# if not transparent, draw full rectangle in clip region
+        DrawRect( aPolyRect );
+    }
+
+    EnableMapMode( bOldMap );
+    Pop();
+
+    mpMetaFile = pOldMetaFile;
+
+    // #110958# Restore disabled alpha VDev
+    mpAlphaVDev = pOldAlphaVDev;
+}
+
+
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
