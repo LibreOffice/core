@@ -494,7 +494,7 @@ void SwXMLExport::_ExportContent()
         }
     }
 
-    GetTextParagraphExport()->exportTrackedChanges( sal_False );
+    GetTextParagraphExport()->exportTrackedChanges( false );
     GetTextParagraphExport()->exportTextDeclarations();
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();

@@ -198,12 +198,12 @@ void SwXMLExport::_ExportAutoStyles()
     // in single-stream case), then we can save ourselves a bit of
     // work and memory by not collecting field masters
     if( (getExportFlags() & EXPORT_STYLES ) == 0 )
-        GetTextParagraphExport()->exportUsedDeclarations( sal_False );
+        GetTextParagraphExport()->exportUsedDeclarations( false );
 
     // exported in _ExportContent
     if( (getExportFlags() & EXPORT_CONTENT) != 0 )
     {
-        GetTextParagraphExport()->exportTrackedChanges( sal_True );
+        GetTextParagraphExport()->exportTrackedChanges( true );
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
 

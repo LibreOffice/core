@@ -236,8 +236,7 @@ void XMLIndexTOCContext::StartElement(
         // finally, check for redlines that should start at
         // the section start node
         if( bValid )
-            GetImport().GetTextImport()->
-                RedlineAdjustStartNodeCursor(sal_True);
+            GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(true);
 
         if (pStyle != NULL)
         {
@@ -282,7 +281,7 @@ void XMLIndexTOCContext::EndElement()
                                          sEmpty, sal_True);
 
         // check for Redlines on our end node
-        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_False);
+        GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(false);
     }
 }
 

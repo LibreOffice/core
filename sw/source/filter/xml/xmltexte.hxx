@@ -62,7 +62,7 @@ protected:
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bProgress ) SAL_OVERRIDE;
+        bool bAutoStyles, bool bProgress ) SAL_OVERRIDE;
 
 public:
     SwXMLTextParagraphExport(

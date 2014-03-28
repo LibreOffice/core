@@ -309,7 +309,7 @@ protected:
     sal_Bool bFixed;
     sal_Bool bIsDate;           // is this a date?
                                 // (for XMLDateFieldImportContext, really)
-    sal_Bool bIsDefaultLanguage;
+    bool     bIsDefaultLanguage;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -618,7 +618,7 @@ class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
     sal_Bool bFormatOK;
     sal_Bool bIsDate;
     sal_Bool bHasDateTime;
-    sal_Bool bIsDefaultLanguage;
+    bool     bIsDefaultLanguage;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -670,7 +670,7 @@ class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
     const OUString sPropertyIsFixedLanguage;
     sal_Int32   nFormat;
     sal_Bool    bFormatOK;
-    sal_Bool    bIsDefaultLanguage;
+    bool        bIsDefaultLanguage;
 
 public:
     TYPEINFO_OVERRIDE();

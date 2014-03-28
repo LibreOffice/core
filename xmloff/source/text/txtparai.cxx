@@ -275,12 +275,12 @@ class XMLImpSpanContext_Impl : public SvXMLImportContext
 {
     const OUString sTextFrame;
 
-    XMLHints_Impl&  rHints;
+    XMLHints_Impl&      rHints;
     XMLStyleHint_Impl   *pHint;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    bool&                rIgnoreLeadingSpace;
 
-    sal_uInt8               nStarFontsConvFlags;
+    sal_uInt8            nStarFontsConvFlags;
 
 public:
 
@@ -292,8 +292,8 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
-            sal_Bool& rIgnLeadSpace
-    ,sal_uInt8              nSFConvFlags
+            bool& rIgnLeadSpace,
+            sal_uInt8 nSFConvFlags
                           );
 
     virtual ~XMLImpSpanContext_Impl();
@@ -303,8 +303,8 @@ public:
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nToken, XMLHints_Impl& rHnts,
-            sal_Bool& rIgnLeadSpace
-    ,sal_uInt8              nStarFontsConvFlags = 0
+            bool& rIgnLeadSpace,
+            sal_uInt8 nStarFontsConvFlags = 0
              );
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -318,7 +318,7 @@ class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
     XMLHints_Impl&  mrHints;
     XMLHyperlinkHint_Impl   *mpHint;
 
-    sal_Bool&       mrbIgnoreLeadingSpace;
+    bool&       mrbIgnoreLeadingSpace;
 
 public:
 
@@ -330,7 +330,7 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
-            sal_Bool& rIgnLeadSpace );
+            bool& rIgnLeadSpace );
 
     virtual ~XMLImpHyperlinkContext_Impl();
 
@@ -349,7 +349,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     const OUString& rLName,
     const Reference< xml::sax::XAttributeList > & xAttrList,
     XMLHints_Impl& rHnts,
-    sal_Bool& rIgnLeadSpace )
+    bool& rIgnLeadSpace )
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , mrHints( rHnts )
     , mpHint( new XMLHyperlinkHint_Impl( GetImport().GetTextImport()->GetCursorAsRange()->getStart() ) )
@@ -451,7 +451,7 @@ class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 {
     XMLHints_Impl&  rHints;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    bool&       rIgnoreLeadingSpace;
 
 public:
 
@@ -463,7 +463,7 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
-            sal_Bool& rIgnLeadSpace );
+            bool& rIgnLeadSpace );
 
     virtual ~XMLImpRubyBaseContext_Impl();
 
@@ -482,7 +482,7 @@ XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > &,
         XMLHints_Impl& rHnts,
-        sal_Bool& rIgnLeadSpace ) :
+        bool& rIgnLeadSpace ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rHints( rHnts ),
     rIgnoreLeadingSpace( rIgnLeadSpace )
@@ -515,7 +515,7 @@ class XMLImpRubyContext_Impl : public SvXMLImportContext
 {
     XMLHints_Impl&  rHints;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    bool&       rIgnoreLeadingSpace;
 
     Reference < XTextRange > m_xStart;
     OUString        m_sStyleName;
@@ -532,7 +532,7 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLHints_Impl& rHnts,
-            sal_Bool& rIgnLeadSpace );
+            bool& rIgnLeadSpace );
 
     virtual ~XMLImpRubyContext_Impl();
 
@@ -611,7 +611,7 @@ XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         XMLHints_Impl& rHnts,
-        sal_Bool& rIgnLeadSpace ) :
+        bool& rIgnLeadSpace ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rHints( rHnts ),
     rIgnoreLeadingSpace( rIgnLeadSpace )
@@ -683,7 +683,7 @@ class XMLMetaImportContextBase : public SvXMLImportContext
 {
     XMLHints_Impl&    m_rHints;
 
-    sal_Bool& m_rIgnoreLeadingSpace;
+    bool& m_rIgnoreLeadingSpace;
 
     /// start position
     Reference<XTextRange> m_xStart;
@@ -699,7 +699,7 @@ public:
         const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
-        sal_Bool & i_rIgnoreLeadingSpace );
+        bool & i_rIgnoreLeadingSpace );
 
     virtual ~XMLMetaImportContextBase();
 
@@ -728,7 +728,7 @@ XMLMetaImportContextBase::XMLMetaImportContextBase(
         const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
-        sal_Bool & i_rIgnoreLeadingSpace )
+        bool & i_rIgnoreLeadingSpace )
     : SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName )
     , m_rHints( i_rHints )
     , m_rIgnoreLeadingSpace( i_rIgnoreLeadingSpace )
@@ -818,7 +818,7 @@ public:
         const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
-        sal_Bool & i_rIgnoreLeadingSpace );
+        bool & i_rIgnoreLeadingSpace );
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue) SAL_OVERRIDE;
@@ -833,7 +833,7 @@ XMLMetaImportContext::XMLMetaImportContext(
         const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
-        sal_Bool & i_rIgnoreLeadingSpace )
+        bool & i_rIgnoreLeadingSpace )
     : XMLMetaImportContextBase( i_rImport, i_nPrefix, i_rLocalName,
             i_rHints, i_rIgnoreLeadingSpace )
     , m_bHaveAbout(false)
@@ -912,7 +912,7 @@ public:
         const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
-        sal_Bool & i_rIgnoreLeadingSpace );
+        bool & i_rIgnoreLeadingSpace );
 
     virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
         OUString const & i_rLocalName, OUString const & i_rValue) SAL_OVERRIDE;
@@ -927,7 +927,7 @@ XMLMetaFieldImportContext::XMLMetaFieldImportContext(
         const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
         XMLHints_Impl& i_rHints,
-        sal_Bool & i_rIgnoreLeadingSpace )
+        bool & i_rIgnoreLeadingSpace )
     : XMLMetaImportContextBase( i_rImport, i_nPrefix, i_rLocalName,
             i_rHints, i_rIgnoreLeadingSpace )
 {
@@ -966,7 +966,7 @@ void XMLMetaFieldImportContext::InsertMeta(
 
         if (!m_DataStyleName.isEmpty())
         {
-            sal_Bool isDefaultLanguage(sal_True);
+            bool isDefaultLanguage(true);
 
             const sal_Int32 nKey( GetImport().GetTextImport()->GetDataStyleKey(
                                    m_DataStyleName, & isDefaultLanguage) );
@@ -1518,8 +1518,8 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         XMLHints_Impl& rHnts,
-        sal_Bool& rIgnLeadSpace
-    ,sal_uInt8              nSFConvFlags
+        bool& rIgnLeadSpace,
+        sal_uInt8 nSFConvFlags
                                               )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   sTextFrame("TextFrame")
@@ -1565,8 +1565,8 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 nToken,
         XMLHints_Impl& rHints,
-        sal_Bool& rIgnoreLeadingSpace
-    ,sal_uInt8              nStarFontsConvFlags
+        bool& rIgnoreLeadingSpace,
+        sal_uInt8 nStarFontsConvFlags
      )
 {
     SvXMLImportContext *pContext = 0;
@@ -1586,14 +1586,14 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
                                                0x0009, false );
-        rIgnoreLeadingSpace = sal_False;
+        rIgnoreLeadingSpace = false;
         break;
 
     case XML_TOK_TEXT_LINE_BREAK:
         pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
                                                ControlCharacter::LINE_BREAK );
-        rIgnoreLeadingSpace = sal_False;
+        rIgnoreLeadingSpace = false;
         break;
 
     case XML_TOK_TEXT_S:
@@ -1625,7 +1625,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         {
             pContext = new XMLUrlFieldImportContext( rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName );
             //whitespace handling like other fields
-            rIgnoreLeadingSpace = sal_False;
+            rIgnoreLeadingSpace = false;
 
         }
         break;
@@ -1651,7 +1651,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                                      *rImport.GetTextImport().get(),
                                                      nPrefix, rLocalName );
         }
-        rIgnoreLeadingSpace = sal_False;
+        rIgnoreLeadingSpace = false;
         break;
 
     case XML_TOK_TEXT_REFERENCE:
@@ -1700,7 +1700,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                     pTextFrameContext, xAnchorPos ) );
             }
             pContext = pTextFrameContext;
-            rIgnoreLeadingSpace = sal_False;
+            rIgnoreLeadingSpace = false;
         }
         break;
     case XML_TOK_DRAW_A:
@@ -1794,7 +1794,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                 new SvXMLImportContext( rImport, nPrefix, rLocalName );
         }
         // Behind fields, shapes and any unknown content blanks aren't ignored
-        rIgnoreLeadingSpace = sal_False;
+        rIgnoreLeadingSpace = false;
     }
 
     return pContext;
@@ -1822,7 +1822,7 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
-                                                       sal_False, GetImport() );
+                                                       false, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
 }
 
@@ -1841,7 +1841,7 @@ XMLParaContext::XMLParaContext(
     pHints( 0 ),
     // Lost outline numbering in master document (#i73509#)
     mbOutlineLevelAttrFound( sal_False ),
-    bIgnoreLeadingSpace( sal_True ),
+    bIgnoreLeadingSpace( true ),
     bHeading( bHead ),
     bIsListHeader( false ),
     bIsRestart (false),
@@ -2018,9 +2018,9 @@ XMLParaContext::~XMLParaContext()
         */
         xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
                                       sCellParaStyleName,
-                                      sal_True,
-                                      sal_False, -1, // suppress outline handling
-                                      sal_False );   // suppress list attributes handling
+                                      true,
+                                      false, -1, // suppress outline handling
+                                      false );   // suppress list attributes handling
     }
 
     // #103445# for headings without style name, find the proper style
@@ -2031,7 +2031,7 @@ XMLParaContext::~XMLParaContext()
     // Add paramter <mbOutlineLevelAttrFound> (#i73509#)
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
                                                sStyleName,
-                                               sal_True,
+                                               true,
                                                mbOutlineLevelAttrFound,
                                                bHeading ? nOutlineLevel : -1 );
 
@@ -2093,7 +2093,7 @@ XMLParaContext::~XMLParaContext()
                     if( !rStyleName.isEmpty() )
                         xTxtImport->SetStyleAndAttrs( GetImport(),
                                                       xAttrCursor, rStyleName,
-                                                      sal_False );
+                                                      false );
                 }
                 break;
             case XML_HINT_REFERENCE:
@@ -2246,7 +2246,7 @@ void XMLParaContext::Characters( const OUString& rChars )
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
-                                                       sal_True, GetImport() );
+                                                       true, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
 }
 

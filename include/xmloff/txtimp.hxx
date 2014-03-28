@@ -442,15 +442,15 @@ public:
     bool IsProgress() const;
 
     OUString ConvertStarFonts( const OUString& rChars,
-                                      const OUString& rStyleName,
-                                      sal_uInt8& rFlags,
-                                      sal_Bool bPara,
-                                         SvXMLImport& rImport ) const;
+                               const OUString& rStyleName,
+                                     sal_uInt8& rFlags,
+                                     bool bPara,
+                                     SvXMLImport& rImport ) const;
     // insert a string without special whitespace processing enabled
     void InsertString( const OUString& rChars );
     // insert a string with special whitespace processing enabled
     void InsertString( const OUString& rChars,
-                       sal_Bool& rIgnoreLeadingSpace );
+                       bool& rIgnoreLeadingSpace );
     // Delete current paragraph
     void DeleteParagraph();
 
@@ -465,10 +465,10 @@ public:
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::text::XTextCursor >& rCursor,
             const OUString& rStyleName,
-            sal_Bool bPara,
-            sal_Bool bOutlineLevelAttrFound = sal_False,
+            bool bPara,
+            bool bOutlineLevelAttrFound = false,
             sal_Int8 nOutlineLevel = -1,
-            sal_Bool bSetListAttrs = sal_True );
+            bool bSetListAttrs = true );
 
     /** Find a suitable name for the given outline level.
      *  If rStyleName is empty, change it to a previously used or default style
@@ -482,7 +482,7 @@ public:
     void AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
                                    const OUString& rStyleName );
 
-    void SetOutlineStyles( sal_Bool bSetEmpty );
+    void SetOutlineStyles( bool bSetEmpty );
 
     void SetHyperlink(
             SvXMLImport& rImport,
@@ -506,7 +506,7 @@ public:
     /// return -1 if style is not found
     /// (may return whether data style uses the system language)
     sal_Int32 GetDataStyleKey( const OUString& sStyleName,
-                               sal_Bool* pIsSystemLanguage = NULL );
+                               bool* pIsSystemLanguage = NULL );
 
     const SvxXMLListStyleContext *FindAutoListStyle(
             const OUString& rName ) const;
@@ -537,7 +537,7 @@ public:
         ::com::sun::star::container::XIndexReplace > &
         GetChapterNumbering() const;
 
-    sal_Bool HasFrameByName( const OUString& rName ) const;
+    bool HasFrameByName( const OUString& rName ) const;
     void ConnectFrameChains( const OUString& rFrmName,
         const OUString& rNextFrmName,
         const ::com::sun::star::uno::Reference <
@@ -570,7 +570,7 @@ public:
             i_rpRDFaAttributes);
 
     /// process the start of a range reference
-    sal_Bool FindAndRemoveBookmarkStartRange(
+    bool FindAndRemoveBookmarkStartRange(
         const OUString & sName,
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & o_rRange,
@@ -615,8 +615,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet);
 
-    sal_Bool IsInFrame() const;
-    virtual sal_Bool IsInHeaderFooter() const;
+    bool IsInFrame() const;
+    virtual bool IsInHeaderFooter() const;
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
@@ -639,7 +639,7 @@ public:
         createAndInsertApplet(
             const OUString &rName,
             const OUString &rCode,
-            sal_Bool bMayScript,
+            bool bMayScript,
             const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
@@ -681,7 +681,7 @@ public:
             /// date+time
             const ::com::sun::star::util::DateTime& rDateTime,
             /// merge last paras
-            sal_Bool bMergeLastParagraph);
+            bool bMergeLastParagraph);
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
@@ -694,13 +694,13 @@ public:
         /// ID used to RedlineAdd() call
         const OUString& rId,
         /// start or end Cursor
-        sal_Bool bStart,
+        bool bStart,
         /// range is not within <text:p>
-        sal_Bool bIsOutsideOfParagraph);
+        bool bIsOutsideOfParagraph);
 
-    virtual void RedlineAdjustStartNodeCursor( sal_Bool bStart );
-    virtual void SetShowChanges( sal_Bool bShowChanges );
-    virtual void SetRecordChanges( sal_Bool bRecordChanges );
+    virtual void RedlineAdjustStartNodeCursor( bool bStart );
+    virtual void SetShowChanges( bool bShowChanges );
+    virtual void SetRecordChanges( bool bRecordChanges );
     virtual void SetChangesProtectionKey(
         const ::com::sun::star::uno::Sequence<sal_Int8> & rProtectionKey );
 

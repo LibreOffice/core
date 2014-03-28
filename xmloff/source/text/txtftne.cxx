@@ -66,7 +66,7 @@ using namespace ::xmloff::token;
 void XMLTextParagraphExport::exportTextFootnote(
     const Reference<XPropertySet> & rPropSet,
     const OUString& rText,
-    sal_Bool bAutoStyles, sal_Bool bIsProgress )
+    bool bAutoStyles, bool bIsProgress )
 {
     // get footnote and associated text
     Any aAny;
@@ -92,9 +92,9 @@ void XMLTextParagraphExport::exportTextFootnote(
     {
         // create span (for citation mark) if necessary; footnote content
         // wil be handled via exportTextFootnoteHelper, exportText
-        sal_Bool bHasHyperlink;
-        sal_Bool bIsUICharStyle = sal_False;
-        sal_Bool bHasAutoStyle = sal_False;
+        bool bHasHyperlink;
+        bool bIsUICharStyle = false;
+        bool bHasAutoStyle = false;
 
         OUString sStyle = FindTextStyleAndHyperlink( rPropSet, bHasHyperlink,
                                                      bIsUICharStyle, bHasAutoStyle );
@@ -154,13 +154,13 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
     const Reference<XFootnote> & rFootnote,
     const Reference<XText> & rText,
     const OUString& rTextString,
-    sal_Bool bAutoStyles,
-    sal_Bool bIsEndnote,
-    sal_Bool bIsProgress )
+    bool bAutoStyles,
+    bool bIsEndnote,
+    bool bIsProgress )
 {
     if (bAutoStyles)
     {
-        exportText(rText, bAutoStyles, bIsProgress, sal_True );
+        exportText(rText, bAutoStyles, bIsProgress, true );
     }
     else
     {
@@ -198,7 +198,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
         {
             SvXMLElementExport aBody(GetExport(), XML_NAMESPACE_TEXT,
                                      XML_NOTE_BODY, sal_False, sal_False);
-            exportText(rText, bAutoStyles, bIsProgress, sal_True );
+            exportText(rText, bAutoStyles, bIsProgress, true );
         }
     }
 }
@@ -211,14 +211,14 @@ void XMLTextParagraphExport::exportTextFootnoteConfiguration()
                                                      UNO_QUERY);
     Reference<XPropertySet> aFootnoteConfiguration(
         aFootnotesSupplier->getFootnoteSettings());
-    exportTextFootnoteConfigurationHelper(aFootnoteConfiguration, sal_False);
+    exportTextFootnoteConfigurationHelper(aFootnoteConfiguration, false);
 
     // endnote settings
     Reference<XEndnotesSupplier> aEndnotesSupplier(GetExport().GetModel(),
                                                    UNO_QUERY);
     Reference<XPropertySet> aEndnoteConfiguration(
         aEndnotesSupplier->getEndnoteSettings());
-    exportTextFootnoteConfigurationHelper(aEndnoteConfiguration, sal_True);
+    exportTextFootnoteConfigurationHelper(aEndnoteConfiguration, true);
 }
 
 
@@ -246,7 +246,7 @@ static void lcl_exportString(
 
 void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     const Reference<XPropertySet> & rFootnoteConfig,
-    sal_Bool bIsEndnote)
+    bool bIsEndnote)
 {
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
                              GetXMLToken( bIsEndnote ? XML_ENDNOTE

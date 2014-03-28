@@ -991,9 +991,9 @@ void XMLTextFieldExport::ExportField(
                     : 0;
 
     // find out whether we need to set the style or hyperlink
-    sal_Bool bHasHyperlink;
-    sal_Bool bIsUICharStyle;
-    sal_Bool bHasAutoStyle;
+    bool bHasHyperlink;
+    bool bIsUICharStyle;
+    bool bHasAutoStyle;
     OUString sStyle = GetExport().GetTextParagraphExport()->
         FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, bIsUICharStyle,
                                    bHasAutoStyle, pStates );

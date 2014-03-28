@@ -72,7 +72,7 @@ SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
 void SwXMLBodyContentContext_Impl::EndElement()
 {
     /* Code moved to SwXMLOmport::endDocument */
-    GetImport().GetTextImport()->SetOutlineStyles( sal_False );
+    GetImport().GetTextImport()->SetOutlineStyles( false );
 }
 
 SvXMLImportContext *SwXMLImport::CreateBodyContentContext(

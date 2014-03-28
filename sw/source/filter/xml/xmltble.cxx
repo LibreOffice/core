@@ -1142,7 +1142,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
 
 void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool _bProgress )
+        bool bAutoStyles, bool _bProgress )
 {
     sal_Bool bOldShowProgress = ((SwXMLExport&)GetExport()).IsShowProgress();
     ((SwXMLExport&)GetExport()).SetShowProgress( _bProgress );

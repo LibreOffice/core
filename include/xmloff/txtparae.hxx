@@ -88,14 +88,14 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     XMLRedlineExport            *pRedlineExport;
     std::vector<OUString>       *pHeadingStyles;
 
-    sal_Bool                    bProgress;
+    bool                        bProgress;
 
-    sal_Bool                    bBlock;
+    bool                        bBlock;
 
     // keep track of open rubies
-    OUString             sOpenRubyText;
-    OUString             sOpenRubyCharStyle;
-    sal_Bool                    bOpenRuby;
+    OUString                    sOpenRubyText;
+    OUString                    sOpenRubyCharStyle;
+    bool                        bOpenRuby;
 
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
@@ -110,8 +110,8 @@ public:
             const ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > & rTextRange,
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xPropSet,
             ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & xPropSetInfo,
-            const sal_Bool bIsUICharStyle,
-            const sal_Bool bHasAutoStyle,
+            const bool bIsUICharStyle,
+            const bool bHasAutoStyle,
             const OUString& sStyle,
             bool& rPrevCharIsSpace,
             FieldmarkType& openFieldMark);
@@ -241,11 +241,11 @@ public:
     OUString FindTextStyleAndHyperlink(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet > & rPropSet,
-            sal_Bool& rbHyperlink,
-            sal_Bool& rbHasCharStyle,
-            sal_Bool& rbHasAutoStyle,
+            bool& rbHyperlink,
+            bool& rbHasCharStyle,
+            bool& rbHasAutoStyle,
             const XMLPropertyState** pAddState = NULL) const;
-    sal_Bool addHyperlinkAttributes(
+    bool addHyperlinkAttributes(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet > & rPropSet,
         const ::com::sun::star::uno::Reference <
@@ -256,15 +256,15 @@ public:
     void exportTextRangeEnumeration(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::container::XEnumeration > & rRangeEnum,
-        sal_Bool bAutoStyles, sal_Bool bProgress,
-        sal_Bool bPrvChrIsSpc = sal_True );
+        bool bAutoStyles, bool bProgress,
+        bool bPrvChrIsSpc = true );
 
 protected:
 
     sal_Int32 addTextFrameAttributes(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
-        sal_Bool bShape,
+        bool bShape,
         OUString *pMinHeightValue = 0,
         OUString *pMinWidthValue = 0 );
 
@@ -272,63 +272,63 @@ protected:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle ) SAL_OVERRIDE;
 
-    void exportPageFrames( sal_Bool bAutoStyles, sal_Bool bProgress );
-    void exportFrameFrames( sal_Bool bAutoStyles, sal_Bool bProgress,
+    void exportPageFrames( bool bAutoStyles, bool bProgress );
+    void exportFrameFrames( bool bAutoStyles, bool bProgress,
             const ::com::sun::star::uno::Reference <
                     ::com::sun::star::text::XTextFrame > *pParentTxtFrame = 0 );
 
-    void exportNumStyles( sal_Bool bUsed );
+    void exportNumStyles( bool bUsed );
 
     void exportText(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
-        sal_Bool bAutoStyles, sal_Bool bProgress, sal_Bool bExportParagraph );
+        bool bAutoStyles, bool bProgress, bool bExportParagraph );
 
     void exportText(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rBaseSection,
-        sal_Bool bAutoStyles, sal_Bool bProgress, sal_Bool bExportParagraph );
+        bool bAutoStyles, bool bProgress, bool bExportParagraph );
 
-    sal_Bool exportTextContentEnumeration(
+    bool exportTextContentEnumeration(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::container::XEnumeration > & rContentEnum,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rBaseSection,
-        sal_Bool bProgress,
-        sal_Bool bExportParagraph = sal_True,
+        bool bProgress,
+        bool bExportParagraph = true,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0,
-        sal_Bool bExportLevels = sal_True );
+        bool bExportLevels = true );
     void exportParagraph(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bProgress,
-        sal_Bool bExportParagraph,
+        bool bAutoStyles, bool bProgress,
+        bool bExportParagraph,
         MultiPropertySetHelper& rPropSetHelper);
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bProgress );
+        bool bAutoStyles, bool bProgress );
 
     void exportTextField(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
-        sal_Bool bAutoStyles, sal_Bool bProgress );
+        bool bAutoStyles, bool bProgress );
 
     void exportTextField(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextField> & xTextField,
-        const sal_Bool bAutoStyles, const sal_Bool bProgress,
-        const sal_Bool bRecursive );
+        const bool bAutoStyles, const bool bProgress,
+        const bool bRecursive );
 
     void exportAnyTextFrame(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
         FrameType eTxpe,
-        sal_Bool bAutoStyles, sal_Bool bProgress, sal_Bool bExportContent,
+        bool bAutoStyles, bool bProgress, bool bExportContent,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0 );
     void _exportTextFrame(
@@ -336,17 +336,17 @@ protected:
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo,
-        sal_Bool bProgress );
+        bool bProgress );
     inline void exportTextFrame(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bProgress, sal_Bool bExportContent,
+        bool bAutoStyles, bool bProgress, bool bExportContent,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0 );
     inline void exportShape(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0  );
 
@@ -363,7 +363,7 @@ protected:
     inline void exportTextGraphic(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0  );
 
@@ -378,7 +378,7 @@ protected:
     inline void exportTextEmbedded(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0  );
     virtual void setTextEmbeddedGraphicURL(
@@ -391,7 +391,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropSet,
         const OUString& sString,
-        sal_Bool bAutoStyles, sal_Bool bProgress );
+        bool bAutoStyles, bool bProgress );
 
     /// helper for exportTextFootnote
     void exportTextFootnoteHelper(
@@ -400,8 +400,8 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XText> & rText,
         const OUString& sString,
-        sal_Bool bAutoStyles,
-        sal_Bool bIsEndnote, sal_Bool bProgress );
+        bool bAutoStyles,
+        bool bIsEndnote, bool bProgress );
 
     /// export footnote and endnote configuration elements
     void exportTextFootnoteConfiguration();
@@ -409,29 +409,29 @@ protected:
     void exportTextFootnoteConfigurationHelper(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rFootnoteSupplier,
-        sal_Bool bIsEndnote);
+        bool bIsEndnote);
 
     void exportTextMark(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet,
         const OUString& rProperty,
         const enum ::xmloff::token::XMLTokenEnum pElements[],
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
     void exportIndexMark(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
     void exportSoftPageBreak(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bAutoStyles);
+        bool bAutoStyles);
 
     void exportTextRange(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         bool& rPrevCharWasSpace,
         FieldmarkType& openFieldmarkType );
 
@@ -447,7 +447,7 @@ protected:
             ::com::sun::star::text::XTextSection > & rNewSection,
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
-        sal_Bool bAutoStyles );
+        bool bAutoStyles );
 
     /// overload for exportListAndSectionChange;
     /// takes new content rather than new section.
@@ -458,7 +458,7 @@ protected:
             ::com::sun::star::text::XTextContent > & rNewContent,
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
-        sal_Bool bAutoStyles );
+        bool bAutoStyles );
     void exportListAndSectionChange(
         ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rOldSection,
@@ -468,25 +468,25 @@ protected:
             ::com::sun::star::text::XTextContent > & rNewContent,
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
-        sal_Bool bAutoStyles );
+        bool bAutoStyles );
 
     /// export a redline text portion
     void exportChange(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropSet,
-        sal_Bool bAutoStyle);
+        bool bAutoStyle);
 
     /// export a ruby
     void exportRuby(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPortionPropSet,
-        sal_Bool bAutoStyles );
+        bool bAutoStyles );
 
     /// export a text:meta
     void exportMeta(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & i_xPortion,
-        sal_Bool i_bAutoStyles, sal_Bool i_isProgress );
+        bool i_bAutoStyles, bool i_isProgress );
 
 public:
 
@@ -527,8 +527,8 @@ public:
                                                 SvXMLExport& rExport);
 
     // This methods exports all (or all used) styles
-    void exportTextStyles( sal_Bool bUsed
-                           , sal_Bool bProg = sal_False
+    void exportTextStyles( bool bUsed
+                           , bool bProg = false
                          );
 
     /// This method exports (text field) declarations etc.
@@ -541,22 +541,22 @@ public:
 
     /// true: export only those declarations that are used;
     /// false: export all declarations
-    void exportUsedDeclarations( sal_Bool bOnlyUsed );
+    void exportUsedDeclarations( bool bOnlyUsed );
 
     /// Export the list of change information (enclosed by <tracked-changes>)
     /// (or the necessary automatic styles)
-    void exportTrackedChanges(sal_Bool bAutoStyle);
+    void exportTrackedChanges(bool bAutoStyle);
 
     /// Export the list of change information (enclosed by <tracked-changes>)
     /// (or the necessary automatic styles)
     void exportTrackedChanges(const ::com::sun::star::uno::Reference <
                                   ::com::sun::star::text::XText > & rText,
-                              sal_Bool bAutoStyle );
+                              bool bAutoStyle );
 
     /// Record tracked changes for this particular XText
     /// (empty reference stop recording)
     /// This should be used if tracked changes for e.g. footers are to
-    /// be exported separately via the exportTrackedChanges(sal_Bool,
+    /// be exported separately via the exportTrackedChanges(bool,
     /// Reference<XText>) method.
     void recordTrackedChangesForXText(
         const ::com::sun::star::uno::Reference <
@@ -578,10 +578,10 @@ public:
     void collectTextAutoStyles(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
-        sal_Bool bIsProgress = sal_False,
-        sal_Bool bExportParagraph = sal_True )
+        bool bIsProgress = false,
+        bool bExportParagraph = true )
     {
-        exportText( rText, sal_True, bIsProgress, bExportParagraph );
+        exportText( rText, true, bIsProgress, bExportParagraph );
     }
 
     void collectTextAutoStyles(
@@ -589,16 +589,16 @@ public:
             ::com::sun::star::text::XText > & rText,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rBaseSection,
-        sal_Bool bIsProgress = sal_False,
-        sal_Bool bExportParagraph = sal_True )
+        bool bIsProgress = false,
+        bool bExportParagraph = true )
     {
-        exportText( rText, rBaseSection, sal_True, bIsProgress, bExportParagraph );
+        exportText( rText, rBaseSection, true, bIsProgress, bExportParagraph );
     }
 
     // It the model implements the xAutoStylesSupplier interface, the automatic
     // styles can exported without iterating over the text portions
     bool collectTextAutoStylesOptimized(
-        sal_Bool bIsProgress = sal_False );
+        bool bIsProgress = false );
 
     // This method exports all automatic styles that have been collected.
     virtual void exportTextAutoStyles();
@@ -613,10 +613,10 @@ public:
     void exportText(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XText > & rText,
-        sal_Bool bIsProgress = sal_False,
-        sal_Bool bExportParagraph = sal_True)
+        bool bIsProgress = false,
+        bool bExportParagraph = true)
     {
-        exportText( rText, sal_False, bIsProgress, bExportParagraph );
+        exportText( rText, false, bIsProgress, bExportParagraph );
     }
 
     void exportText(
@@ -624,27 +624,27 @@ public:
             ::com::sun::star::text::XText > & rText,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rBaseSection,
-        sal_Bool bIsProgress = sal_False,
-        sal_Bool bExportParagraph = sal_True)
+        bool bIsProgress = false,
+        bool bExportParagraph = true)
     {
-        exportText( rText, rBaseSection, sal_False, bIsProgress, bExportParagraph );
+        exportText( rText, rBaseSection, false, bIsProgress, bExportParagraph );
     }
 
-    void exportFramesBoundToPage( sal_Bool bIsProgress = sal_False )
+    void exportFramesBoundToPage( bool bIsProgress = false )
     {
-        exportPageFrames( sal_False, bIsProgress );
+        exportPageFrames( false, bIsProgress );
     }
     void exportFramesBoundToFrame(
             const ::com::sun::star::uno::Reference <
                     ::com::sun::star::text::XTextFrame >& rParentTxtFrame,
-            sal_Bool bIsProgress = sal_False )
+            bool bIsProgress = false )
     {
-        exportFrameFrames( sal_False, bIsProgress, &rParentTxtFrame );
+        exportFrameFrames( false, bIsProgress, &rParentTxtFrame );
     }
     inline const XMLTextListAutoStylePool& GetListAutoStylePool() const;
 
-    void SetBlockMode( sal_Bool bSet ) { bBlock = bSet; }
-    sal_Bool IsBlockMode() const { return bBlock; }
+    void SetBlockMode( bool bSet ) { bBlock = bSet; }
+    bool IsBlockMode() const { return bBlock; }
 
 
     UniReference < SvXMLExportPropertyMapper > GetParagraphPropertyMapper() const
@@ -688,7 +688,7 @@ inline const XMLTextListAutoStylePool&
 inline void XMLTextParagraphExport::exportTextFrame(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bIsProgress, sal_Bool bExportContent,
+        bool bAutoStyles, bool bIsProgress, bool bExportContent,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet)
 {
@@ -699,34 +699,34 @@ inline void XMLTextParagraphExport::exportTextFrame(
 inline void XMLTextParagraphExport::exportTextGraphic(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet )
 {
-    exportAnyTextFrame( rTextContent, FT_GRAPHIC, bAutoStyles, sal_False,
-                        sal_True, pRangePropSet );
+    exportAnyTextFrame( rTextContent, FT_GRAPHIC, bAutoStyles, false,
+                        true, pRangePropSet );
 }
 
 inline void XMLTextParagraphExport::exportTextEmbedded(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet )
 {
-    exportAnyTextFrame( rTextContent, FT_EMBEDDED, bAutoStyles, sal_False,
-                        sal_True, pRangePropSet );
+    exportAnyTextFrame( rTextContent, FT_EMBEDDED, bAutoStyles, false,
+                        true, pRangePropSet );
 }
 
 inline void XMLTextParagraphExport::exportShape(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles,
+        bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet )
 {
-    exportAnyTextFrame( rTextContent, FT_SHAPE, bAutoStyles, sal_False,
-                        sal_True, pRangePropSet );
+    exportAnyTextFrame( rTextContent, FT_SHAPE, bAutoStyles, false,
+                        true, pRangePropSet );
 }
 
 #endif

@@ -60,7 +60,7 @@ class XMLValueImportHelper
     sal_Int32 nFormatKey;       /// format key (only valid of bFormatOK)
     OUString sFormula;   /// formula string
     OUString sDefault;   /// default (see bStringDefault/bFormulaDef.)
-    sal_Bool bIsDefaultLanguage;/// format (of nFormatKey) has system language?
+    bool bIsDefaultLanguage;/// format (of nFormatKey) has system language?
 
     sal_Bool bStringType;       /// is this a string (or a float) type?
     sal_Bool bFormatOK;         /// have we read a style:data-style-name attr.?

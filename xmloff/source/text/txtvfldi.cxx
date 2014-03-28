@@ -1260,7 +1260,7 @@ XMLValueImportHelper::XMLValueImportHelper(
 
         fValue(0.0),
         nFormatKey(0),
-        bIsDefaultLanguage(sal_True),
+        bIsDefaultLanguage(true),
 
         bStringType(sal_False),
         bFormatOK(sal_False),

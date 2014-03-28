@@ -74,9 +74,9 @@ void XMLChangeImportContext::StartElement(
 
             // call for bStart and bEnd (may both be true)
             if (bIsStart)
-                rHelper->RedlineSetCursor(sID,sal_True,bIsOutsideOfParagraph);
+                rHelper->RedlineSetCursor(sID, true, bIsOutsideOfParagraph);
             if (bIsEnd)
-                rHelper->RedlineSetCursor(sID,sal_False,bIsOutsideOfParagraph);
+                rHelper->RedlineSetCursor(sID, false, bIsOutsideOfParagraph);
 
             // outside of paragraph and still open? set open redline ID
             if (bIsOutsideOfParagraph)

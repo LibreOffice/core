@@ -72,17 +72,17 @@ public:
     /**
      * Returns true if the pointer to the element is valid.
      */
-    inline sal_Bool is() const;
+    inline bool is() const;
 
     /**
      * Return true if both elements refer to the same object.
      */
-    inline sal_Bool operator == ( const UniReference & rRef ) const;
+    inline bool operator == ( const UniReference & rRef ) const;
 
     /**
      * Return true if both elements does not refer to the same object.
      */
-    inline sal_Bool operator != ( const UniReference & rRef ) const;
+    inline bool operator != ( const UniReference & rRef ) const;
 
     /** Gets implementation pointer.
         This call does <b>not</b> acquire the implementation.
@@ -192,7 +192,7 @@ inline T* UniReference< T >::get () const
  * Returns true if the pointer to the interface is valid.
  */
 template< class T >
-inline sal_Bool UniReference< T >::is() const
+inline bool UniReference< T >::is() const
 {
     return (mpElement != 0);
 }
@@ -203,7 +203,7 @@ inline sal_Bool UniReference< T >::is() const
  * @param rRef      another interface reference
  */
 template< class T >
-inline sal_Bool UniReference< T >::operator == ( const UniReference & rRef ) const
+inline bool UniReference< T >::operator == ( const UniReference & rRef ) const
 {
     return ( mpElement == rRef.mpElement );
 }
@@ -214,7 +214,7 @@ inline sal_Bool UniReference< T >::operator == ( const UniReference & rRef ) con
  * @param rRef      another interface reference
  */
 template< class T >
-inline sal_Bool UniReference< T >::operator != ( const UniReference & rRef ) const
+inline bool UniReference< T >::operator != ( const UniReference & rRef ) const
 {
     return ( ! operator == ( rRef ) );
 }

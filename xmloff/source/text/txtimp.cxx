@@ -1081,7 +1081,7 @@ void XMLTextImportHelper::ResetCursor()
 }
 
 
-sal_Bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
+bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
 {
     return (m_pImpl->m_xTextFrames.is() &&
             m_pImpl->m_xTextFrames->hasByName(rName))
@@ -1103,7 +1103,7 @@ void XMLTextImportHelper::InsertString( const OUString& rChars )
 }
 
 void XMLTextImportHelper::InsertString( const OUString& rChars,
-                                        sal_Bool& rIgnoreLeadingSpace )
+                                        bool& rIgnoreLeadingSpace )
 {
     DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
     DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
@@ -1123,10 +1123,10 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
                 case 0x0d:
                     if( !rIgnoreLeadingSpace )
                         sChars.append( (sal_Unicode)0x20 );
-                    rIgnoreLeadingSpace = sal_True;
+                    rIgnoreLeadingSpace = true;
                     break;
                 default:
-                    rIgnoreLeadingSpace = sal_False;
+                    rIgnoreLeadingSpace = false;
                     sChars.append( c );
                     break;
             }
@@ -1201,7 +1201,7 @@ void XMLTextImportHelper::DeleteParagraph()
 OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                                 const OUString& rStyleName,
                                                 sal_uInt8& rFlags,
-                                                sal_Bool bPara,
+                                                bool bPara,
                                                 SvXMLImport& rImport ) const
 {
     OUStringBuffer sChars( rChars );
@@ -1402,11 +1402,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         SvXMLImport& rImport,
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
-        sal_Bool bPara,
-        sal_Bool bOutlineLevelAttrFound,
+        bool bPara,
+        bool bOutlineLevelAttrFound,
         sal_Int8 nOutlineLevel,
         // Numberings/Bullets in table not visible after save/reload (#i80724#)
-        sal_Bool bSetListAttrs )
+        bool bSetListAttrs )
 {
     static OUString s_ParaStyleName( "ParaStyleName");
     static OUString s_CharStyleName( "CharStyleName");
@@ -1911,7 +1911,7 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
     }
 }
 
-void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
+void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
 {
     static OUString s_NumberingStyleName( "NumberingStyleName");
     static OUString s_HeadingStyleName( "HeadingStyleName");
@@ -2346,7 +2346,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
 
 /// get data style key for use with NumberFormat property
 sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
-                                               sal_Bool* pIsSystemLanguage )
+                                               bool* pIsSystemLanguage )
 {
     const SvXMLStyleContext* pStyle =
         ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
@@ -2505,7 +2505,7 @@ void XMLTextImportHelper::InsertBookmarkStartRange(
     m_pImpl->m_BookmarkVector.push_back(sName);
 }
 
-sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
+bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     const OUString & sName,
     Reference<XTextRange> & o_rRange,
     OUString & o_rXmlId,
@@ -2528,11 +2528,11 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
         {
             m_pImpl->m_BookmarkVector.erase(it);
         }
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
@@ -2653,11 +2653,11 @@ void XMLTextImportHelper::ConnectFrameChains(
     }
 }
 
-sal_Bool XMLTextImportHelper::IsInFrame() const
+bool XMLTextImportHelper::IsInFrame() const
 {
     static OUString s_TextFrame( "TextFrame");
 
-    sal_Bool bIsInFrame = sal_False;
+    bool bIsInFrame = false;
 
     // are we currently in a text frame? yes, if the cursor has a
     // TextFrame property and it's non-NULL
@@ -2671,7 +2671,7 @@ sal_Bool XMLTextImportHelper::IsInFrame() const
 
             if (xFrame.is())
             {
-                bIsInFrame = sal_True;
+                bIsInFrame = true;
             }
         }
     }
@@ -2679,9 +2679,9 @@ sal_Bool XMLTextImportHelper::IsInFrame() const
     return bIsInFrame;
 }
 
-sal_Bool XMLTextImportHelper::IsInHeaderFooter() const
+bool XMLTextImportHelper::IsInHeaderFooter() const
 {
-    return sal_False;
+    return false;
 }
 
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
@@ -2709,7 +2709,7 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOOoLink(
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertApplet(
                                         const OUString& /*rCode*/,
                                         const OUString& /*rName*/,
-                                        sal_Bool /*bMayScript*/,
+                                        bool /*bMayScript*/,
                                         const OUString& /*rHRef*/,
                                         sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
 {
@@ -2745,7 +2745,7 @@ void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
                                       const OUString& /*rAuthor*/,
                                       const OUString& /*rComment*/,
                                       const util::DateTime& /*rDateTime*/,
-                                      sal_Bool /*bMergeLastPara*/)
+                                      bool /*bMergeLastPara*/)
 {
     // dummy implementation: do nothing
 }
@@ -2761,23 +2761,23 @@ Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
 
 void XMLTextImportHelper::RedlineSetCursor(
     const OUString& /*rId*/,
-    sal_Bool /*bStart*/,
-    sal_Bool /*bIsOutsideOfParagraph*/)
+    bool /*bStart*/,
+    bool /*bIsOutsideOfParagraph*/)
 {
     // dummy implementation: do nothing
 }
 
-void XMLTextImportHelper::RedlineAdjustStartNodeCursor(sal_Bool)
+void XMLTextImportHelper::RedlineAdjustStartNodeCursor(bool)
 {
     // dummy implementation: do nothing
 }
 
-void XMLTextImportHelper::SetShowChanges( sal_Bool )
+void XMLTextImportHelper::SetShowChanges( bool )
 {
     // dummy implementation: do nothing
 }
 
-void XMLTextImportHelper::SetRecordChanges( sal_Bool )
+void XMLTextImportHelper::SetRecordChanges( bool )
 {
     // dummy implementation: do nothing
 }

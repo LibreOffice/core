@@ -1084,7 +1084,7 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
 ,   bFormatOK(sal_False)
 ,   bFixed(sal_False)
 ,   bIsDate(sal_False)
-,   bIsDefaultLanguage( sal_True )
+,   bIsDefaultLanguage( true )
 {
     bValid = sal_True;  // always valid!
 }
@@ -1823,7 +1823,7 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
     , bFormatOK(sal_False)
     , bIsDate(false)
     , bHasDateTime(false)
-    , bIsDefaultLanguage(sal_True)
+    , bIsDefaultLanguage(true)
 {
     // we allow processing of EDIT_DURATION here, because import of actual
     // is not supported anyway. If it was, we'd need an extra import class
@@ -1932,7 +1932,7 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
     , sPropertyIsFixedLanguage(sAPI_is_fixed_language)
     , nFormat(0)
     , bFormatOK(sal_False)
-    , bIsDefaultLanguage( sal_True )
+    , bIsDefaultLanguage( true )
 {
     bValid = sal_False;
 }

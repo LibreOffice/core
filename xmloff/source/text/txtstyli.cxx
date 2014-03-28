@@ -82,18 +82,18 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         if( IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
         {
             if( IsXMLToken( rValue, XML_TRUE ) )
-                bAutoUpdate = sal_True;
+                bAutoUpdate = true;
         }
         else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
         {
             sListStyleName = rValue;
             // Inherited paragraph style lost information about unset numbering (#i69523#)
-            mbListStyleSet = sal_True;
+            mbListStyleSet = true;
         }
         else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
             sMasterPageName = rValue;
-            bHasMasterPageName = sal_True;
+            bHasMasterPageName = true;
         }
         else if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
         {
@@ -127,7 +127,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-        sal_Bool bDefaultStyle )
+        bool bDefaultStyle )
 :   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
 ,   sIsAutoUpdate( "IsAutoUpdate" )
 ,   sCategory( "Category" )
@@ -136,11 +136,11 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   sDropCapCharStyleName( "DropCapCharStyleName" )
 ,   sPageDescName( "PageDescName" )
 ,   nOutlineLevel( -1 )
-,   bAutoUpdate( sal_False )
-,   bHasMasterPageName( sal_False )
-,   bHasCombinedCharactersLetter( sal_False )
+,   bAutoUpdate( false )
+,   bHasMasterPageName( false )
+,   bHasCombinedCharactersLetter( false )
 // Inherited paragraph style lost information about unset numbering (#i69523#)
-,   mbListStyleSet( sal_False )
+,   mbListStyleSet( false )
 ,   pEventContext( NULL )
 {
 }

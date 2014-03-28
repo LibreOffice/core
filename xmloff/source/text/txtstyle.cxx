@@ -102,13 +102,13 @@ void XMLTextParagraphExport::exportStyleAttributes(
     }
 }
 
-void XMLTextParagraphExport::exportNumStyles( sal_Bool bUsed )
+void XMLTextParagraphExport::exportNumStyles( bool bUsed )
 {
     SvxXMLNumRuleExport aNumRuleExport( GetExport() );
     aNumRuleExport.exportStyles( bUsed, pListAutoPool, !IsBlockMode() );
 }
 
-void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
+void XMLTextParagraphExport::exportTextStyles( bool bUsed, bool bProg )
 {
     sal_Bool bOldProg = bProgress;
     bProgress = bProg;

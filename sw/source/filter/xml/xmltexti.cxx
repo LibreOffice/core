@@ -182,7 +182,7 @@ SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
                 (SwXMLImport&)rImport, nPrefix, rLocalName, xAttrList );
 }
 
-sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
+bool SwXMLTextImportHelper::IsInHeaderFooter() const
 {
     uno::Reference<XUnoTunnel> xCrsrTunnel(
             ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
@@ -615,7 +615,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         const OUString &rName,
         const OUString &rCode,
-        sal_Bool bMayScript,
+        bool bMayScript,
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
@@ -959,7 +959,7 @@ void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
-    sal_Bool bMergeLastPara)
+    bool bMergeLastPara)
 {
     // create redline helper on demand
     OSL_ENSURE(NULL != pRedlineHelper, "helper should have been created in constructor");
@@ -984,8 +984,8 @@ uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
 
 void SwXMLTextImportHelper::RedlineSetCursor(
     const OUString& rId,
-    sal_Bool bStart,
-    sal_Bool bIsOutsideOfParagraph)
+    bool bStart,
+    bool bIsOutsideOfParagraph)
 {
     if (NULL != pRedlineHelper) {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
@@ -996,7 +996,7 @@ void SwXMLTextImportHelper::RedlineSetCursor(
 }
 
 void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
-    sal_Bool bStart)
+    bool bStart)
 {
     OUString rId = GetOpenRedlineId();
     if ((NULL != pRedlineHelper) && !rId.isEmpty())
@@ -1008,13 +1008,13 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     // else: ignore redline (wasn't added before, or no open redline ID
 }
 
-void SwXMLTextImportHelper::SetShowChanges( sal_Bool bShowChanges )
+void SwXMLTextImportHelper::SetShowChanges( bool bShowChanges )
 {
     if ( NULL != pRedlineHelper )
         pRedlineHelper->SetShowChanges( bShowChanges );
 }
 
-void SwXMLTextImportHelper::SetRecordChanges( sal_Bool bRecordChanges )
+void SwXMLTextImportHelper::SetRecordChanges( bool bRecordChanges )
 {
     if ( NULL != pRedlineHelper )
         pRedlineHelper->SetRecordChanges( bRecordChanges );

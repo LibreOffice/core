@@ -455,7 +455,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
     if( !sAutoStyle.isEmpty() )
         rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );
-    addTextFrameAttributes( rPropSet, sal_False );
+    addTextFrameAttributes( rPropSet, false );
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               XML_FRAME, sal_False, sal_True );

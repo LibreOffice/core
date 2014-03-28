@@ -66,11 +66,11 @@ void XMLTextMasterPageExport::exportHeaderFooterContent(
                                                                bAutoStyles);
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()
-                ->collectTextAutoStyles( rText, sal_True, bExportParagraph );
+                ->collectTextAutoStyles( rText, true, bExportParagraph );
     else
     {
         GetExport().GetTextParagraphExport()->exportTextDeclarations( rText );
-        GetExport().GetTextParagraphExport()->exportText( rText, sal_True, bExportParagraph );
+        GetExport().GetTextParagraphExport()->exportText( rText, true, bExportParagraph );
     }
 
     // tracked changes (end of XText)

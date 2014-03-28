@@ -45,13 +45,13 @@ private:
 
     sal_Int8    nOutlineLevel;
 
-    sal_Bool    bAutoUpdate : 1;
-    sal_Bool    bHasMasterPageName : 1;
+    bool        bAutoUpdate : 1;
+    bool        bHasMasterPageName : 1;
 
-    sal_Bool bHasCombinedCharactersLetter : 1;
+    bool        bHasCombinedCharactersLetter : 1;
 
     // Introduce import of empty list style (#i69523#)
-    sal_Bool mbListStyleSet : 1;
+    bool        mbListStyleSet : 1;
 
     XMLEventsImportContext* pEventContext;
 
@@ -70,7 +70,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-            sal_Bool bDefaultStyle = sal_False );
+            bool bDefaultStyle = false );
     virtual ~XMLTextStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -78,17 +78,17 @@ public:
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    sal_Bool IsAutoUpdate() const { return bAutoUpdate; }
+    bool IsAutoUpdate() const { return bAutoUpdate; }
 
     const OUString& GetListStyle() const { return sListStyleName; }
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
-    sal_Bool IsListStyleSet() const
+    bool IsListStyleSet() const
     {
         return mbListStyleSet;
     }
 
     const OUString& GetMasterPageName() const { return sMasterPageName; }
-    sal_Bool HasMasterPageName() const { return bHasMasterPageName; }
+    bool HasMasterPageName() const { return bHasMasterPageName; }
     const OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
     const OUString& GetDataStyleName() const { return sDataStyleName; }
 
@@ -101,7 +101,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;
 
-    inline sal_Bool HasCombinedCharactersLetter()
+    inline bool HasCombinedCharactersLetter()
         { return bHasCombinedCharactersLetter; }
 
     const ::std::vector< XMLPropertyState > & _GetProperties() { return GetProperties(); }

@@ -294,7 +294,7 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
     {
         if ( rTokenMap.Get( nPrefix, rLocalName ) == XML_TOK_DOC_BODY )
         {
-            GetImport().GetTextImport()->SetOutlineStyles( sal_True );
+            GetImport().GetTextImport()->SetOutlineStyles( true );
         }
     }
 
@@ -849,7 +849,7 @@ void SwXMLImport::endDocument( void )
 
     /* Was called too early. Moved from SwXMLBodyContext_Impl::EndElement */
 
-    GetTextImport()->RedlineAdjustStartNodeCursor( sal_False );
+    GetTextImport()->RedlineAdjustStartNodeCursor( false );
 
     if( (getImportFlags() & IMPORT_CONTENT) != 0 ||
         ((getImportFlags() & IMPORT_MASTERSTYLES) != 0 && IsStylesOnlyMode()) )

@@ -809,7 +809,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
     case XML_STYLE_FAMILY_TABLE_ROW:
         pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                           xAttrList, *this, nFamily,
-                                          sal_True );
+                                          true );
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         // There are no writer specific defaults for graphic styles!

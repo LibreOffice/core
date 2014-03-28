@@ -66,7 +66,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const Reference<XTextContent> & rNextSectionContent,
     const XMLTextNumRuleInfo& rPrevRule,
     const XMLTextNumRuleInfo& rNextRule,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     Reference<XTextSection> xNextSection;
 
@@ -92,7 +92,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const Reference<XTextContent> & rNextSectionContent,
     const XMLTextNumRuleInfo& rPrevRule,
     const XMLTextNumRuleInfo& rNextRule,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     Reference<XTextSection> xNextSection;
 
@@ -119,7 +119,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const Reference<XTextSection> & rNextSection,
     const XMLTextNumRuleInfo& rPrevRule,
     const XMLTextNumRuleInfo& rNextRule,
-    sal_Bool bAutoStyles)
+    bool bAutoStyles)
 {
     // old != new? -> maybe we have to start or end a new section
     if (rPrevSection != rNextSection)
