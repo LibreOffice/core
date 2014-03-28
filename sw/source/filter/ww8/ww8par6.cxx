@@ -884,7 +884,14 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     // sprmSFBiDi
     aNewSection.maSep.fBiDi = eVer >= ww::eWW8 ? ReadBSprm(pSep, 0x3228, 0) : 0;
 
+    // Reading section property sprmSCcolumns - one less than the number of columns in the section.
+    // It must be less than MAX_NO_OF_SEP_COLUMNS according the WW8 specification.
     aNewSection.maSep.ccolM1 = ReadSprm(pSep, pIds[3], 0 );
+    if ( aNewSection.maSep.ccolM1 >= MAX_NO_OF_SEP_COLUMNS )
+    {
+        // fallback to one column
+        aNewSection.maSep.ccolM1 = 0;
+    }
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
     aNewSection.maSep.dxaColumns = ReadUSprm( pSep, pIds[4], 708 );
@@ -898,34 +905,34 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.fEvenlySpaced =
             sal_uInt8(ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false);
 
-        const sal_uInt8 numrgda = SAL_N_ELEMENTS(aNewSection.maSep.rgdxaColumnWidthSpacing);
         if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
         {
-            aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
-            int nCols = aNewSection.maSep.ccolM1 + 1;
-            int nIdx = 0;
-            for (int i = 0; i < nCols; ++i)
+            int nColumnDataIdx = 0;
+            aNewSection.maSep.rgdxaColumnWidthSpacing[nColumnDataIdx] = 0;
+
+            const sal_uInt16 nColumnWidthSprmId = ( eVer <= ww::eWW7 ? 136 : 0xF203 );
+            const sal_uInt16 nColumnSpacingSprmId = ( eVer <= ww::eWW7 ? 137 : 0xF204 );
+            const sal_uInt8 nColumnCount = static_cast< sal_uInt8 >(aNewSection.maSep.ccolM1 + 1);
+            for ( sal_uInt8 nColumn = 0; nColumn < nColumnCount; ++nColumn )
             {
                 //sprmSDxaColWidth
-                const sal_uInt8* pSW = pSep->HasSprm( (eVer <= ww::eWW7 ? 136 : 0xF203), sal_uInt8( i ) );
+                const sal_uInt8* pSW = pSep->HasSprm( nColumnWidthSprmId, nColumn );
 
                 OSL_ENSURE( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
                 sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
 
-                if (++nIdx < numrgda)
-                    aNewSection.maSep.rgdxaColumnWidthSpacing[nIdx] = nWidth;
+                aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
 
-                if (i < nCols-1)
+                if ( nColumn < nColumnCount - 1 )
                 {
                     //sprmSDxaColSpacing
-                    const sal_uInt8* pSD = pSep->HasSprm( (eVer <= ww::eWW7 ? 137 : 0xF204), sal_uInt8( i ) );
+                    const sal_uInt8* pSD = pSep->HasSprm( nColumnSpacingSprmId, nColumn );
 
                     OSL_ENSURE( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
                     if( pSD )
                     {
                         nWidth = SVBT16ToShort(pSD + 1);
-                        if (++nIdx < numrgda)
-                            aNewSection.maSep.rgdxaColumnWidthSpacing[nIdx] = nWidth;
+                        aNewSection.maSep.rgdxaColumnWidthSpacing[++nColumnDataIdx] = nWidth;
                     }
                 }
             }

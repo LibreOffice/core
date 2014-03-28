@@ -1005,6 +1005,9 @@ struct WW8_WKB
 #   pragma pack(pop)
 #endif
 
+// Maximum number of columns according the WW8 specification
+static const sal_uInt8 MAX_NO_OF_SEP_COLUMNS = 44;
+
 struct SEPr
 {
     SEPr();
@@ -1064,7 +1067,7 @@ struct SEPr
     sal_uInt32 dzaGutter;
     sal_uInt32 dyaHdrTop;
     sal_uInt32 dyaHdrBottom;
-    sal_Int16 ccolM1;
+    sal_Int16 ccolM1;   // have to be less than MAX_NO_OF_SEP_COLUMNS according the WW8 specification
     sal_Int8 fEvenlySpaced;
     sal_Int8 reserved3;
     sal_uInt8 fBiDi;
@@ -1072,7 +1075,13 @@ struct SEPr
     sal_uInt8 fRTLGutter;
     sal_uInt8 fRTLAlignment;
     sal_Int32 dxaColumns;
-    sal_Int32 rgdxaColumnWidthSpacing[89];
+
+    // Fixed array - two entries for each SEP column to store width of column and spacing to next column.
+    // At odd index values [1,3,5,...] the column widths are stored.
+    // At even index values [2,4,6,...] the spacings to the next columns are stored.
+    // Value at index 0 is initialized with 0 and used for easier interation on the array
+    sal_Int32 rgdxaColumnWidthSpacing[MAX_NO_OF_SEP_COLUMNS*2 + 1];
+
     sal_Int32 dxaColumnWidth;
     sal_uInt8 dmOrientFirst;
     sal_uInt8 fLayout;
