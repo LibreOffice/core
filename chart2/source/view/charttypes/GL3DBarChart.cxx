@@ -8,6 +8,7 @@
  */
 
 #include "GL3DBarChart.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
@@ -27,6 +28,18 @@ GL3DBarChart::~GL3DBarChart()
 
 void GL3DBarChart::createShapes()
 {
+    fprintf(stdout, "GL3DBarChart::createShapes:   type = '%s'\n",
+            rtl::OUStringToOString(m_xChartTypeModel->getChartType(), RTL_TEXTENCODING_UTF8).getStr());
+
+    uno::Reference<beans::XPropertySet> xPropSet(m_xChartTypeModel, uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        bool bRoundedEdge = false;
+        if (xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= bRoundedEdge)
+            fprintf(stdout, "GL3DBarChart::createShapes:   rounded edge = %d (%p)\n", bRoundedEdge, m_xChartTypeModel.get());
+    }
+
+#if 0
     if (m_pExplicitCategoriesProvider)
     {
         uno::Reference<chart2::data::XDataSequence> xCats = m_pExplicitCategoriesProvider->getOriginalCategories();
@@ -56,13 +69,11 @@ void GL3DBarChart::createShapes()
                 rtl::OUStringToOString(pSeries->getSeriesParticle(), RTL_TEXTENCODING_UTF8).getStr());
 
         uno::Sequence<double> aXValues = pSeries->getAllX();
-        for (size_t j = 0; j < aXValues.getLength(); ++j)
-            fprintf(stdout, "GL3DBarChart::createShapes:     x = %g\n", aXValues[j]);
-
         uno::Sequence<double> aYValues = pSeries->getAllY();
-        for (size_t j = 0; j < aYValues.getLength(); ++j)
-            fprintf(stdout, "GL3DBarChart::createShapes:     y = %g\n", aYValues[j]);
+        for (size_t j = 0; j < aXValues.getLength(); ++j)
+            fprintf(stdout, "GL3DBarChart::createShapes:     (x=%g,y=%g)\n", aXValues[j], aYValues[j]);
     }
+#endif
 }
 
 }

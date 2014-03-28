@@ -77,8 +77,7 @@ enum
     PROP_DIAGRAM_DATATABLEHBORDER,
     PROP_DIAGRAM_DATATABLEVBORDER,
     PROP_DIAGRAM_DATATABLEOUTLINE,
-    PROP_DIAGRAM_EXTERNALDATA,
-    PROP_DIAGRAM_ROUNDED_EDGE
+    PROP_DIAGRAM_EXTERNALDATA
 };
 
 void lcl_AddPropertiesToVector(
@@ -199,12 +198,6 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_EXTERNALDATA,
                   ::getCppuType( reinterpret_cast< const OUString   * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
-
-   rOutProperties.push_back(
-        Property( CHART_UNONAME_ROUNDED_EDGE,
-                  PROP_DIAGRAM_ROUNDED_EDGE,
-                  ::getCppuBooleanType(),
-                  beans::PropertyAttribute::MAYBEVOID));
 }
 
 struct StaticDiagramDefaults_Initializer
@@ -227,7 +220,6 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEHBORDER, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEVBORDER, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_ROUNDED_EDGE, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
          ::chart::SceneProperties::AddDefaultsToMap( rOutMap );

@@ -162,9 +162,15 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
         }
         catch( uno::Exception& ex )
         {
-            //not all templates need to support CGeometry3D
+            //not all templates need to support Geometry3D
             ex.Context.is();//to have debug information without compilation warnings
         }
+
+        try
+        {
+            xTemplateProps->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aRet.mbRoundedEdge;
+        }
+        catch ( const uno::Exception& ) {}
     }
     return aRet;
 }
@@ -303,6 +309,15 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                     //not all templates need to support Geometry3D
                     ex.Context.is();//to have debug information without compilation warnings
                 }
+
+                try
+                {
+                    xTemplateProps->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(rParameter.mbRoundedEdge));
+                }
+                catch ( const uno::Exception& )
+                {
+                }
+
                 try
                 {
                     this->setTemplateProperties( xTemplateProps );
@@ -343,7 +358,6 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         if (xDiaProp.is())
         {
             xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::makeAny(rParameter.bSortByXValues));
-            xDiaProp->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(rParameter.mbRoundedEdge));
         }
     }
     return false;

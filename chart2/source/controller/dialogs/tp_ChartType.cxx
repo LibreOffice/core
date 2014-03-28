@@ -834,7 +834,6 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
     {
         uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
         xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
-        xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aParameter.mbRoundedEdge;
     }
     catch ( const uno::Exception& ex )
     {
@@ -901,7 +900,6 @@ void ChartTypeTabPage::selectMainType()
         {
             uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
             xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
-            xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aParameter.mbRoundedEdge;
         }
         catch ( const uno::Exception& ex )
         {
@@ -986,7 +984,6 @@ void ChartTypeTabPage::initializePage()
             {
                 uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
                 xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
-                xPropSet->getPropertyValue(CHART_UNONAME_ROUNDED_EDGE) >>= aParameter.mbRoundedEdge;
             }
             catch (const uno::Exception& ex)
             {

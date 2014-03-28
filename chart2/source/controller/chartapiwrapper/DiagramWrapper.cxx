@@ -446,13 +446,6 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
-
-    rOutProperties.push_back(
-         Property( CHART_UNONAME_ROUNDED_EDGE,
-                   PROP_DIAGRAM_ROUNDED_EDGE,
-                   ::getCppuBooleanType(),
-                   beans::PropertyAttribute::BOUND
-                   | beans::PropertyAttribute::MAYBEVOID));
 }
 
 struct StaticDiagramWrapperPropertyArray_Initializer
