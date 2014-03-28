@@ -805,6 +805,7 @@ protected:
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     virtual long                ImplGetGradientStepCount( long nMinRect );
+
     /** Transform and draw a bitmap directly
 
      @param     aFullTransform      The B2DHomMatrix used for the transformation
@@ -839,6 +840,8 @@ protected:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx );
 
+    virtual void                EmulateDrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawInvisiblePolygon( const PolyPolygon& rPolyPoly );
 
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
@@ -852,7 +855,9 @@ private:
     SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf );
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
-    void DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
+    void                        DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
+
+    bool                        DrawTransparentNatively( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
 
 public:
     virtual                     ~OutputDevice();
