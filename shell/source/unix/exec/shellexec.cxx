@@ -258,12 +258,16 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #else
         aBuffer.makeStringAndClear();
 #endif
-    if ( 0 != pclose(popen(cmd.getStr(), "w")) )
+    FILE *pLaunch = popen(cmd.getStr(), "w");
+    if ( pLaunch != NULL )
     {
-        int nerr = errno;
-        throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
-            static_cast < XSystemShellExecute * > (this), nerr );
+        if ( 0 == pclose( pLaunch ) )
+            return;
     }
+
+    int nerr = errno;
+    throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
+        static_cast < XSystemShellExecute * > (this), nerr );
 }
 
 // XServiceInfo
