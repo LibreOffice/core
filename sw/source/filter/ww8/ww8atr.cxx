@@ -4266,6 +4266,15 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
                     case table::BorderLineStyle::INSET:
                         brcType = 27;
                         break;
+                    case table::BorderLineStyle::FINE_DASHED:
+                        brcType = 22;
+                        break;
+                    case table::BorderLineStyle::DASH_DOT:
+                        brcType = 8;
+                        break;
+                    case table::BorderLineStyle::DASH_DOT_DOT:
+                        brcType = 9;
+                        break;
                     default:
                         break;
                 }

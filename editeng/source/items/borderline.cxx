@@ -119,8 +119,6 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
         case  2: // thick line
         case  5: // hairline
         // and the unsupported special cases which we map to a single line
-        case  8:
-        case  9:
         case 20:
             return SOLID;
         case  6:
@@ -129,6 +127,10 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
             return DASHED;
         case 22:
             return FINE_DASHED;
+        case 8:
+            return DASH_DOT;
+        case 9:
+            return DASH_DOT_DOT;
         // then the shading beams which we represent by a double line
         case 23:
             return DOUBLE;
@@ -199,6 +201,8 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const i_fWidth,
 
         case DOTTED:
         case DASHED:
+        case DASH_DOT:
+        case DASH_DOT_DOT:
             return fWidth;
 
         // Display a minimum effective border width of 1pt
@@ -249,6 +253,8 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
         case DOTTED:
         case DASHED:
         case FINE_DASHED:
+        case DASH_DOT:
+        case DASH_DOT_DOT:
             return fWidth;
 
         // Double lines
