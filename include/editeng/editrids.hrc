@@ -282,6 +282,9 @@
 #define RID_ENGRAVED                        (RID_EDIT_START + 245)
 #define RID_OUTSET                          (RID_EDIT_START + 246)
 #define RID_INSET                           (RID_EDIT_START + 247)
+#define RID_FINE_DASHED                     (RID_EDIT_START + 248)
+#define RID_DOUBLE_THIN                     (RID_EDIT_START + 249)
+// border lines continue at RID_EDIT_START + 330
 
 // Metric-Text
 #define RID_SVXITEMS_METRIC_MM              (RID_EDIT_START + 250)
@@ -385,7 +388,11 @@
 #define RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION   (RID_EDIT_START + 328)
 #define RID_SVXSTR_A11Y_PARAGRAPH_NAME          (RID_EDIT_START + 329)
 
-#if 329 > (RID_EDIT_END-RID_EDIT_START)
+// Border lines (continued)
+#define RID_DASH_DOT                        (RID_EDIT_START + 330)
+#define RID_DASH_DOT_DOT                    (RID_EDIT_START + 331)
+
+#if 331 > (RID_EDIT_END-RID_EDIT_START)
 #error Resource-Ueberlauf in #line, #file
 #endif
 
