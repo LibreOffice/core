@@ -635,6 +635,9 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
             SwGlblDocContent* pCont = (*pSwGlblDocContents)[i];
             pEntry->SetUserData(pCont);
             pEntry = Next(pEntry);
+            assert(pEntry);
+            if (!pEntry)
+                break;
         }
     }
     else
