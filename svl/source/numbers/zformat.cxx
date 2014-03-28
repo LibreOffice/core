@@ -722,7 +722,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
 {
     OUStringBuffer sBuff(rString);
 
-    // If the group (AKA thousand) separator is a Non-Breaking Space (French)
+    // If the group (AKA thousand) separator is a No-Break Space (French)
     // replace all occurrences by a simple space.
     // The tokens will be changed to the LocaleData separator again later on.
     const sal_Unicode cNBSp = 0xA0;

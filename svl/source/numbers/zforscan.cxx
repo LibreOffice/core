@@ -36,7 +36,7 @@
 #include <svl/nfsymbol.hxx>
 using namespace svt;
 
-const sal_Unicode cNonBreakingSpace = 0xA0;
+const sal_Unicode cNoBreakSpace = 0xA0;
 
 namespace
 {
@@ -1528,11 +1528,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     sal_Unicode cOldKeyMI   = sKeyword[NF_KEY_MI][0];
     sal_Unicode cOldKeyS    = sKeyword[NF_KEY_S][0];
 
-    // If the group separator is a Non-Breaking Space (French) continue with a
+    // If the group separator is a No-Break Space (French) continue with a
     // normal space instead so queries on space work correctly.
     // The format string is adjusted to allow both.
     // For output of the format code string the LocaleData characters are used.
-    if ( sOldThousandSep[0] == cNonBreakingSpace && sOldThousandSep.getLength() == 1 )
+    if ( sOldThousandSep[0] == cNoBreakSpace && sOldThousandSep.getLength() == 1 )
     {
         sOldThousandSep = " ";
     }
@@ -1832,7 +1832,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             {
                                 // strange, those French..
                                 bool bFirst = true;
-                                //  set a hard Non-Breaking Space or ConvertMode
+                                //  set a hard No-Break Space or ConvertMode
                                 const OUString& rSepF = pFormatter->GetNumThousandSep();
                                 while ( i < nAnzStrings &&
                                         sStrArray[i] == sOldThousandSep &&
@@ -2712,7 +2712,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         if (((eScannedType & NUMBERFORMAT_DATE) == 0) &&
                             (StringEqualsChar( pFormatter->GetNumThousandSep(), c) ||
                              StringEqualsChar( pFormatter->GetNumDecimalSep(), c) ||
-                             (c == ' ' && StringEqualsChar( pFormatter->GetNumThousandSep(), cNonBreakingSpace))))
+                             (c == ' ' && StringEqualsChar( pFormatter->GetNumThousandSep(), cNoBreakSpace))))
                         {
                             rString += sStrArray[i];
                         }
