@@ -59,8 +59,8 @@ typedef std::map<sal_Int32,com::sun::star::uno::Reference< com::sun::star::drawi
 struct ConnectionHint
 {
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxConnector;
-    sal_Bool  bStart;
-    OUString aDestShapeId;
+    bool      bStart;
+    OUString  aDestShapeId;
     sal_Int32 nDestGlueId;
 };
 
@@ -101,10 +101,10 @@ struct XMLShapeImportHelperImpl
     std::vector<ConnectionHint> maConnections;
 
     // #88546# possibility to swich progress bar handling on/off
-    sal_Bool                    mbHandleProgressBar;
+    bool                        mbHandleProgressBar;
 
     // stores the capability of the current model to create presentation shapes
-    sal_Bool                    mbIsPresentationShapesSupported;
+    bool                        mbIsPresentationShapesSupported;
 };
 
 XMLShapeImportHelper::XMLShapeImportHelper(
@@ -140,7 +140,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpImpl->mpSortContext = 0;
 
     // #88546# init to sal_False
-    mpImpl->mbHandleProgressBar = sal_False;
+    mpImpl->mbHandleProgressBar = false;
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );
 
@@ -483,7 +483,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 {
     SdXMLShapeContext *pContext = 0L;
 
@@ -951,7 +951,7 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
 }
 
 void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
-                         sal_Bool bStart,
+                         bool bStart,
                          const OUString& rDestShapeId,
                          sal_Int32 nDestGlueId )
 {
@@ -1129,18 +1129,18 @@ rShapes
 
 // #88546#
 /** defines if the import should increment the progress bar or not */
-void XMLShapeImportHelper::enableHandleProgressBar( sal_Bool bEnable )
+void XMLShapeImportHelper::enableHandleProgressBar( bool bEnable )
 {
     mpImpl->mbHandleProgressBar = bEnable;
 }
 
-sal_Bool XMLShapeImportHelper::IsHandleProgressBarEnabled() const
+bool XMLShapeImportHelper::IsHandleProgressBarEnabled() const
 {
     return mpImpl->mbHandleProgressBar;
 }
 
 /** queries the capability of the current model to create presentation shapes */
-sal_Bool XMLShapeImportHelper::IsPresentationShapesSupported()
+bool XMLShapeImportHelper::IsPresentationShapesSupported()
 {
     return mpImpl->mbIsPresentationShapesSupported;
 }

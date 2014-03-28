@@ -200,7 +200,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPr
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )
 :   mrImport( rImporter ),
-    mbSetTransform( sal_False ),
+    mbSetTransform( false ),
     mxPrjMode(drawing::ProjectionMode_PERSPECTIVE),
     mnDistance(1000),
     mnFocalLength(1000),
@@ -211,9 +211,9 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
     maVRP(0.0, 0.0, 1.0),
     maVPN(0.0, 0.0, 1.0),
     maVUP(0.0, 1.0, 0.0),
-    mbVRPUsed(sal_False),
-    mbVPNUsed(sal_False),
-    mbVUPUsed(sal_False)
+    mbVRPUsed(false),
+    mbVPNUsed(false),
+    mbVUPUsed(false)
 {
 }
 
@@ -260,7 +260,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVRP)
             {
                 maVRP = aNewVec;
-                mbVRPUsed = sal_True;
+                mbVRPUsed = true;
             }
             return;
         }
@@ -272,7 +272,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVPN)
             {
                 maVPN = aNewVec;
-                mbVPNUsed = sal_True;
+                mbVPNUsed = true;
             }
             return;
         }
@@ -284,7 +284,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVUP)
             {
                 maVUP = aNewVec;
-                mbVUPUsed = sal_True;
+                mbVUPUsed = true;
             }
             return;
         }

@@ -121,9 +121,9 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 :   mrExport( rExp ),
     maShapesInfos(),
     maCurrentShapesIter(maShapesInfos.end()),
-    mbExportLayer( sal_False ),
+    mbExportLayer( false ),
     // #88546# init to sal_False
-    mbHandleProgressBar( sal_False ),
+    mbHandleProgressBar( false ),
     msZIndex( "ZOrder" ),
     msPrintable( "Printable" ),
     msVisible( "Visible" ),
@@ -1246,7 +1246,7 @@ void XMLShapeExport::ExportGraphicDefaults()
                 aStEx.exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );
 
                 // write graphic family styles
-                aStEx.exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx.exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
         catch(const lang::ServiceNotRegisteredException&)
@@ -1435,9 +1435,9 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     }
 }
 
-sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< beans::XPropertySet >& xPropSet, const OUString& rClass )
+bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< beans::XPropertySet >& xPropSet, const OUString& rClass )
 {
-    sal_Bool bIsEmpty = sal_False;
+    bool bIsEmpty = false;
 
     // write presentation class entry
     mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_CLASS, rClass);

@@ -164,13 +164,13 @@ private:
     UniReference< XMLAnimationsExporter >       mxAnimationsExporter;
     ShapesInfos                                 maShapesInfos;
     ShapesInfos::iterator                       maCurrentShapesIter;
-    sal_Bool                                    mbExportLayer;
+    bool                                        mbExportLayer;
     ImplXMLShapeExportInfoVector                maShapeInfos;
     ImplXMLShapeExportInfoVector::iterator      maCurrentInfo;
-    OUString                               msPresentationStylePrefix;
+    OUString                                    msPresentationStylePrefix;
 
     // #88546# possibility to swich progress bar handling on/off
-    sal_Bool                                    mbHandleProgressBar;
+    bool                                        mbHandleProgressBar;
 
     rtl::Reference< XMLTableExport >            mxShapeTableExport;
 
@@ -212,7 +212,7 @@ private:
     SAL_DLLPRIVATE void ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& rMatrix, const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet);
     SAL_DLLPRIVATE void ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMat, ::basegfx::B2DTuple& rTRScale, double& fTRShear, double& fTRRotate, ::basegfx::B2DTuple& rTRTranslate, com::sun::star::awt::Point* pRefPoint);
     SAL_DLLPRIVATE void ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTRScale, double fTRShear, double fTRRotate, ::basegfx::B2DTuple& rTRTranslate, const sal_Int32 nFeatures);
-    SAL_DLLPRIVATE sal_Bool ImpExportPresentationAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet, const OUString& rClass );
+    SAL_DLLPRIVATE bool ImpExportPresentationAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet, const OUString& rClass );
     SAL_DLLPRIVATE void ImpExportText( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     SAL_DLLPRIVATE void ImpExportEvents( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     SAL_DLLPRIVATE void ImpExportDescription( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ); // #i68101#
@@ -295,13 +295,13 @@ public:
     /// returns the export property mapper for external chaining
     static SvXMLExportPropertyMapper* CreateShapePropMapper( SvXMLExport& rExport );
 
-    void enableLayerExport( sal_Bool bEnable = sal_True ) { mbExportLayer = bEnable; }
-    sal_Bool IsLayerExportEnabled() const { return mbExportLayer; }
+    void enableLayerExport( bool bEnable = true ) { mbExportLayer = bEnable; }
+    bool IsLayerExportEnabled() const { return mbExportLayer; }
 
     // #88546#
     /** defines if the export should increment the progress bar or not */
-    void enableHandleProgressBar( sal_Bool bEnable = sal_True ) { mbHandleProgressBar = bEnable; }
-    sal_Bool IsHandleProgressBarEnabled() const { return mbHandleProgressBar; }
+    void enableHandleProgressBar( bool bEnable = true ) { mbHandleProgressBar = bEnable; }
+    bool IsHandleProgressBarEnabled() const { return mbHandleProgressBar; }
 
     void setPresentationStylePrefix( const OUString& rPrefix ) { msPresentationStylePrefix = rPrefix; }
 

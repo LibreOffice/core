@@ -69,7 +69,7 @@ private:
 
 protected:
 
-    virtual sal_Bool exportStyle(
+    virtual bool exportStyle(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::style::XStyle > & rStyle,
         const OUString& rXMLFamily,
@@ -94,16 +94,16 @@ public:
 //  void exportStyleFamily(
 //      const OUString& rFamily, const OUString& rXMLFamily,
 //      const UniReference < XMLPropertySetMapper >& rPropMapper,
-//      sal_Bool bUsed, sal_uInt16 nFamily = 0,
+//      bool bUsed, sal_uInt16 nFamily = 0,
 //      const OUString* pPrefix = 0L);
 
 //  void exportStyleFamily(
 //      const sal_Char *pFamily, const OUString& rXMLFamily,
 //      const UniReference < XMLPropertySetMapper >& rPropMapper,
-//      sal_Bool bUsed, sal_uInt16 nFamily = 0,
+//      bool bUsed, sal_uInt16 nFamily = 0,
 //      const OUString* pPrefix = 0L);
 
-    virtual sal_Bool exportDefaultStyle(
+    virtual bool exportDefaultStyle(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & xPropSet,
         const OUString& rXMLFamily,
@@ -112,13 +112,13 @@ public:
     void exportStyleFamily(
         const OUString& rFamily, const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-        sal_Bool bUsed, sal_uInt16 nFamily = 0,
+        bool bUsed, sal_uInt16 nFamily = 0,
         const OUString* pPrefix = 0L);
 
     void exportStyleFamily(
         const sal_Char *pFamily, const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-        sal_Bool bUsed, sal_uInt16 nFamily = 0,
+        bool bUsed, sal_uInt16 nFamily = 0,
         const OUString* pPrefix = 0L);
 };
 

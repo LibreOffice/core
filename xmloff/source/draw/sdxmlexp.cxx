@@ -1730,7 +1730,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                     aPrefix += "-";
                     aStEx.exportStyleFamily(xNamed->getName(),
                         OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
-                        aMapperRef, sal_False,
+                        aMapperRef, false,
                         XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
                 }
             }

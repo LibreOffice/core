@@ -78,7 +78,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& )
 {
 }
 
-sal_Bool XMLStyleExport::exportStyle(
+bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
         const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
@@ -96,7 +96,7 @@ sal_Bool XMLStyleExport::exportStyle(
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
         if( !*(sal_Bool *)aAny.getValue() )
-            return sal_False;
+            return false;
     }
 
     // <style:style ...>
@@ -330,10 +330,10 @@ sal_Bool XMLStyleExport::exportStyle(
         Reference<XEventsSupplier> xEventsSupp(rStyle, UNO_QUERY);
         GetExport().GetEventExport().Export(xEventsSupp);
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLStyleExport::exportDefaultStyle(
+bool XMLStyleExport::exportDefaultStyle(
         const Reference< XPropertySet >& xPropSet,
           const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper )
@@ -359,14 +359,14 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
         rPropMapper->exportXML( GetExport(), xPropStates,
                                      XML_EXPORT_FLAG_IGN_WS );
     }
-    return sal_True;
+    return true;
 }
 
 void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
     const OUString& rXMLFamily,
     const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
+    bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     const OUString sFamily(OUString::createFromAscii(pFamily ));
     exportStyleFamily( sFamily, rXMLFamily, rPropMapper, bUsed, nFamily,
@@ -376,7 +376,7 @@ void XMLStyleExport::exportStyleFamily(
 void XMLStyleExport::exportStyleFamily(
     const OUString& rFamily, const OUString& rXMLFamily,
     const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
+    bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );

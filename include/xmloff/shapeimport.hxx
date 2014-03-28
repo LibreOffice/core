@@ -194,8 +194,8 @@ public:
 
     sal_Int32 GetDiffuseColor() { return maDiffuseColor; }
     const ::basegfx::B3DVector& GetDirection() { return maDirection; }
-    sal_Bool GetEnabled() { return mbEnabled; }
-    sal_Bool GetSpecular() { return mbSpecular; }
+    bool GetEnabled() { return mbEnabled; }
+    bool GetSpecular() { return mbSpecular; }
 };
 
 
@@ -212,7 +212,7 @@ protected:
 
     // local parameters which need to be read
     com::sun::star::drawing::HomogenMatrix mxHomMat;
-    sal_Bool                        mbSetTransform;
+    bool                        mbSetTransform;
 
     com::sun::star::drawing::ProjectionMode mxPrjMode;
     sal_Int32                   mnDistance;
@@ -225,9 +225,9 @@ protected:
     ::basegfx::B3DVector        maVRP;
     ::basegfx::B3DVector        maVPN;
     ::basegfx::B3DVector        maVUP;
-    sal_Bool                        mbVRPUsed;
-    sal_Bool                        mbVPNUsed;
-    sal_Bool                        mbVUPUsed;
+    bool                        mbVRPUsed;
+    bool                        mbVPNUsed;
+    bool                        mbVUPUsed;
 
 public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
@@ -249,12 +249,12 @@ class SvXMLShapeContext : public SvXMLImportContext
 {
 protected:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
-    sal_Bool                                                            mbTemporaryShape;
+    bool                                                            mbTemporaryShape;
     OUString                                                       msHyperlink;
 
 public:
     SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
+        const OUString& rLName, bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
 
     TYPEINFO_OVERRIDE();
 
@@ -320,7 +320,7 @@ public:
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape = sal_False);
+        bool bTemporaryShape = false);
 
     SvXMLShapeContext* CreateFrameChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -378,7 +378,7 @@ public:
                                sal_Int32 nZIndex );
 
     void addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
-                             sal_Bool bStart,
+                             bool bStart,
                              const OUString& rDestShapeId,
                              sal_Int32 nDestGlueId );
 
@@ -415,11 +415,11 @@ public:
 
     // #88546#
     /** defines if the import should increment the progress bar or not */
-    void enableHandleProgressBar( sal_Bool bEnable = sal_True );
-    sal_Bool IsHandleProgressBarEnabled() const;
+    void enableHandleProgressBar( bool bEnable = true );
+    bool IsHandleProgressBarEnabled() const;
 
     /** queries the capability of the current model to create presentation shapes */
-    sal_Bool IsPresentationShapesSupported();
+    bool IsPresentationShapesSupported();
 
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
 

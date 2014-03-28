@@ -2021,9 +2021,9 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
             // add connection ids
             if( !maStartShapeId.isEmpty() )
-                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_True, maStartShapeId, mnStartGlueId );
+                GetImport().GetShapeImport()->addShapeConnection( mxShape, true, maStartShapeId, mnStartGlueId );
             if( !maEndShapeId.isEmpty() )
-                GetImport().GetShapeImport()->addShapeConnection( mxShape, sal_False, maEndShapeId, mnEndGlueId );
+                GetImport().GetShapeImport()->addShapeConnection( mxShape, false, maEndShapeId, mnEndGlueId );
 
             uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
             if( xProps.is() )
