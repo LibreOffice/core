@@ -1357,7 +1357,8 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 
     // select the new entry
     pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
-    TextSelection aEntrySel(TextPaM(nPara, nIndex), TextPaM(nPara, pAttrib->GetEnd()));
+    sal_uInt16 nEnd = pAttrib ? pAttrib->GetEnd() : nIndex;
+    TextSelection aEntrySel(TextPaM(nPara, nIndex), TextPaM(nPara, nEnd));
     pTextView->SetSelection(aEntrySel);
     Invalidate();
     Modify();
