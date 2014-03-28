@@ -959,7 +959,8 @@ void DbgDialogTest( Window* pWindow )
                     if ( pChild->IsVisible() )
                     {
                         if ( aAccelBuf[cAccel] )
-                            DbgOutTypef( "Double mnemonic char: %c", cAccel );
+                            SAL_WARN(
+                                "vcl.app", "Double mnemonic char: " << cAccel);
                         else
                             aAccelBuf[cAccel] = true;
                     }
@@ -984,11 +985,10 @@ void DbgDialogTest( Window* pWindow )
                         pClass = "PushButton";
                     else
                         pClass = "Dontknow";
-                    if( !cAccel )
-                        DbgOutTypef(
-                                 "%s should have a mnemonic char (~): %s",
-                                 pClass,
-                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                    SAL_WARN_IF(
+                        !cAccel, "vcl.app",
+                        pClass << " should have a mnemonic char (~): "
+                            << aErrorText);
 
                     // check text width
                     int aWidth=0;
@@ -1006,29 +1006,25 @@ void DbgDialogTest( Window* pWindow )
                             break;
                         default: break;
                     }
-                    if( pChild->IsVisible() && pChild->GetSizePixel().Width() < aWidth )
-                        DbgOutTypef(
-                                 "%s exceeds window width: %s",
-                                 pClass,
-                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                    SAL_WARN_IF(
+                        pChild->IsVisible() && pChild->GetSizePixel().Width() < aWidth,
+                        "vcl.app",
+                        pClass << " exceeds window width: " << aErrorText);
                 }
             }
 
-            if ( pChild->GetType() == WINDOW_FIXEDLINE )
-            {
-                if ( pChild->GetSizePixel().Width() < pChild->GetTextWidth( aText ) )
-                    DbgOutTypef( "FixedLine exceeds window width: %s",
-                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-            }
+            SAL_WARN_IF(
+                (pChild->GetType() == WINDOW_FIXEDLINE
+                 && pChild->GetSizePixel().Width() < pChild->GetTextWidth( aText )),
+                "vcl.app", "FixedLine exceeds window width: " << aErrorText);
 
             if ( pChild->GetType() == WINDOW_FIXEDTEXT )
             {
-                if ( (pChild->GetSizePixel().Height() >= pChild->GetTextHeight()*2) &&
-                     !(pChild->GetStyle() & WB_WORDBREAK) )
-                {
-                    DbgOutTypef( "FixedText greater than one line, but WordBreak is not set: %s",
-                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                }
+                SAL_WARN_IF(
+                    (pChild->GetSizePixel().Height() >= pChild->GetTextHeight()*2) && !(pChild->GetStyle() & WB_WORDBREAK),
+                    "vcl.app",
+                    "FixedText greater than one line, but WordBreak is not set: "
+                        << aErrorText);
 
                 if ( pChild->IsVisible() )
                 {
@@ -1041,11 +1037,10 @@ void DbgDialogTest( Window* pWindow )
                     else
                         aWidth = pChild->GetTextWidth( aText );
 
-                    if ( pChild->GetSizePixel().Width() < aWidth && !(pChild->GetStyle() & WB_WORDBREAK) )
-                        {
-                            DbgOutTypef( "FixedText exceeds window width: %s",
-                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                        }
+                    SAL_WARN_IF(
+                        pChild->GetSizePixel().Width() < aWidth && !(pChild->GetStyle() & WB_WORDBREAK),
+                        "vcl.app",
+                        "FixedText exceeds window width: " << aErrorText);
                 }
 
                 if ( (i+1 < nChildCount) && !aText.isEmpty() )
@@ -1070,16 +1065,15 @@ void DbgDialogTest( Window* pWindow )
                          (pTempChild->GetType() == WINDOW_DATEBOX) ||
                          (pTempChild->GetType() == WINDOW_TIMEBOX) )
                     {
-                        if ( !cAccel )
-                        {
-                            DbgOutTypef( "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): %s",
-                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                        }
-                        if ( !pTempChild->IsEnabled() && pChild->IsEnabled() )
-                        {
-                            DbgOutTypef( "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: %s",
-                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                        }
+                        SAL_WARN_IF(
+                            !cAccel, "vcl.app",
+                            "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): "
+                                << aErrorText);
+                        SAL_WARN_IF(
+                            !pTempChild->IsEnabled() && pChild->IsEnabled(),
+                            "vcl.app",
+                            "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: "
+                                << aErrorText);
                     }
                 }
             }
@@ -1162,11 +1156,9 @@ void DbgDialogTest( Window* pWindow )
                     if ( pBox->GetMax() == Date( 31, 12, 9999 ) )
                         bMaxWarning = true;
                 }
-                if ( bMaxWarning )
-                {
-                    DbgOutTypef( "No Max-Value is set: %s",
-                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                }
+                SAL_WARN_IF(
+                    bMaxWarning, "vcl.app",
+                    "No Max-Value is set: " << aErrorText);
 
                 if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
                      (pChild->GetType() == WINDOW_CHECKBOX) ||
@@ -1202,22 +1194,21 @@ void DbgDialogTest( Window* pWindow )
                     if ( cAccel || (pChild->GetStyle() & WB_TABSTOP) ||
                          (pChild->GetType() == WINDOW_RADIOBUTTON) )
                     {
-                        if ( (aNewPos.X() <= aTabPos.X()) && (aNewPos.Y() <= aTabPos.Y()) )
-                        {
-                            DbgOutTypef( "Possible wrong childorder for dialogcontrol: %s",
-                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                        }
+                        SAL_WARN_IF(
+                            (aNewPos.X() <= aTabPos.X()) && (aNewPos.Y() <= aTabPos.Y()),
+                            "vcl.app",
+                            "Possible wrong childorder for dialogcontrol: "
+                                << aErrorText);
                         aTabPos = aNewPos;
                     }
 
                     for ( sal_uInt16 j = 0; j < i; j++ )
                     {
-                        if ( ((pRectAry[j].Right() != 0) || (pRectAry[j].Bottom() != 0)) &&
-                             aChildRect.IsOver( pRectAry[j] ) )
-                        {
-                            DbgOutTypef( "Window overlaps with sibling window: %s",
-                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
-                        }
+                        SAL_WARN_IF(
+                            ((pRectAry[j].Right() != 0) || (pRectAry[j].Bottom() != 0)) && aChildRect.IsOver( pRectAry[j] ),
+                            "vcl.app",
+                            "Window overlaps with sibling window: "
+                                << aErrorText);
                     }
                     pRectAry[i] = aChildRect;
                 }
