@@ -667,11 +667,14 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 natNum = NativeNumberMode::NATNUM7;
                 locale.Language = "zh";
                 break;
-          case NUMBER_UPPER_ZH_TW:
-                locale.Country = "TW";
           case NUMBER_UPPER_ZH:
                 natNum = NativeNumberMode::NATNUM8;
                 locale.Language = "zh";
+                break;
+          case NUMBER_UPPER_ZH_TW:
+                natNum = NativeNumberMode::NATNUM8;
+                locale.Language = "zh";
+                locale.Country = "TW";
                 break;
           case NUMBER_TRADITIONAL_JA:
                 natNum = NativeNumberMode::NATNUM8;
