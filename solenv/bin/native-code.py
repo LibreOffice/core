@@ -143,6 +143,7 @@ draw_constructor_list = [
     ]
 
 writer_factory_list = [
+    ("libsblo.a", "sb_component_getFactory"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
@@ -186,7 +187,11 @@ extern "C" {
 if options.groups:
     for factory_group in options.groups:
         for (factory_name,factory_function) in factory_map[factory_group]:
+            if factory_function == 'sb_component_getFactory':
+                print ('#ifdef ANDROID')
             print ('void * '+factory_function+'( const char* , void* , void* );')
+            if factory_function == 'sb_component_getFactory':
+                print ('#endif')
 
 print ('')
 if options.groups:
@@ -203,7 +208,11 @@ lo_get_factory_map(void)
 if options.groups:
     for factory_group in options.groups:
         for (factory_name,factory_function) in factory_map[factory_group]:
+            if factory_function == 'sb_component_getFactory':
+                print ('#ifdef ANDROID')
             print ('        { "'+factory_name+'", '+factory_function+' },')
+            if factory_function == 'sb_component_getFactory':
+                print ('#endif')
 
 print ("""
         { 0, 0 }
