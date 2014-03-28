@@ -56,6 +56,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <unotools/syslocale.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace dbaui;
 using namespace dbtools;
@@ -453,7 +454,7 @@ sal_Bool ORTFImportExport::Write()
         m_pStream->WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
         m_pStream->WriteCharPtr( aTRRH );
 
-        OString* pHorzChar = new OString[nCount];
+        boost::scoped_array<OString> pHorzChar(new OString[nCount]);
 
         for ( sal_Int32 i=1; i <= nCount; ++i )
         {
@@ -527,7 +528,7 @@ sal_Bool ORTFImportExport::Write()
                 }
 
                 if ( bContinue )
-                    appendRow( pHorzChar, nCount, k, kk );
+                    appendRow( pHorzChar.get(), nCount, k, kk );
             }
         }
         else
@@ -535,10 +536,9 @@ sal_Bool ORTFImportExport::Write()
             m_xResultSet->beforeFirst(); // set back before the first row
             while(m_xResultSet->next())
             {
-                appendRow(pHorzChar,nCount,k,kk);
+                appendRow(pHorzChar.get(),nCount,k,kk);
             }
         }
-        delete [] pHorzChar;
     }
 
     m_pStream->WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
@@ -826,10 +826,10 @@ void OHTMLImportExport::WriteTables()
 
     if(m_xObject.is())
     {
-        sal_Int32* pFormat = new sal_Int32[aNames.getLength()];
+        boost::scoped_array<sal_Int32> pFormat(new sal_Int32[aNames.getLength()]);
 
-        const char **pHorJustify = new const char*[aNames.getLength()];
-        sal_Int32 *pColWidth = new sal_Int32[aNames.getLength()];
+        boost::scoped_array<const char *> pHorJustify(new const char*[aNames.getLength()]);
+        boost::scoped_array<sal_Int32> pColWidth(new sal_Int32[aNames.getLength()]);
 
         sal_Int32 nHeight = 0;
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
@@ -911,10 +911,6 @@ void OHTMLImportExport::WriteTables()
             ++j;
             TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
         }
-
-        delete [] pFormat;
-        delete [] pHorJustify;
-        delete [] pColWidth;
     }
     else
     {

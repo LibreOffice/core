@@ -43,6 +43,7 @@
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include "tools/getprocessworkingdir.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace desktop;
 using namespace ::com::sun::star::uno;
@@ -261,11 +262,11 @@ OUString CreateMD5FromString( const OUString& aMsg )
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
         sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
         sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
+        boost::scoped_array<sal_uInt8> pMD5KeyBuffer(new sal_uInt8[ nMD5KeyLen ]);
 
         rtl_digest_init( handle, pData, nSize );
         rtl_digest_update( handle, pData, nSize );
-        rtl_digest_get( handle, pMD5KeyBuffer, nMD5KeyLen );
+        rtl_digest_get( handle, pMD5KeyBuffer.get(), nMD5KeyLen );
         rtl_digest_destroy( handle );
 
         // Create hex-value string from the MD5 value to keep the string size minimal
@@ -273,7 +274,6 @@ OUString CreateMD5FromString( const OUString& aMsg )
         for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
             aBuffer.append( (sal_Int32)pMD5KeyBuffer[i], 16 );
 
-        delete [] pMD5KeyBuffer;
         return aBuffer.makeStringAndClear();
     }
 

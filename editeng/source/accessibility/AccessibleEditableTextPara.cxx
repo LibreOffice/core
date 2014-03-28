@@ -73,6 +73,7 @@ using namespace std;
 #include "editeng.hrc"
 #include <editeng/eerdll.hxx>
 #include <editeng/numitem.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1333,7 +1334,7 @@ namespace accessibility
         // build sorted index array
         sal_Int32 nLength = aRes.getLength();
         const beans::PropertyValue* pPairs = aRes.getConstArray();
-        sal_Int32* pIndices = new sal_Int32[nLength];
+        boost::scoped_array<sal_Int32> pIndices(new sal_Int32[nLength]);
         sal_Int32 i = 0;
         for( i = 0; i < nLength; i++ )
             pIndices[i] = i;
@@ -1345,7 +1346,6 @@ namespace accessibility
         {
             pNewValues[i] = pPairs[pIndices[i]];
         }
-        delete[] pIndices;
 
         return aNewValues;
         }
