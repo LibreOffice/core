@@ -34,6 +34,7 @@
 #include "vcl/layout.hxx"
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/settings.hxx"
+#include "vcl/bmpacc.hxx"
 
 #include <prex.h>
 #include <X11/Xatom.h>
@@ -193,12 +194,68 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     GetGenericData()->ErrorTrapPop();
 }
 
+typedef std::vector< unsigned long > NetWmIconData;
+
+static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
+{
+    const int sizes[ 3 ] = { 48, 32, 16 };
+    netwm_icon.resize( 48 * 48 + 32 * 32 + 16 * 16 + 3 * 2 );
+    int pos = 0;
+    for( int i = 0; i < 3; ++i )
+    {
+        int size = sizes[ i ];
+        sal_uInt16 nIconSizeOffset;
+        if( size >= 48 )
+            nIconSizeOffset = SV_ICON_SIZE48_START;
+        else if( size >= 32 )
+            nIconSizeOffset = SV_ICON_SIZE32_START;
+        else
+            nIconSizeOffset = SV_ICON_SIZE16_START;
+        BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
+        if( aIcon.IsEmpty())
+            continue;
+        Bitmap icon = aIcon.GetBitmap();
+        AlphaMask mask;
+        switch( aIcon.GetTransparentType())
+        {
+            case TRANSPARENT_NONE:
+            {
+                sal_uInt8 nTrans = 0;
+                mask = AlphaMask( icon.GetSizePixel(), &nTrans );
+            }
+            break;
+            case TRANSPARENT_COLOR:
+                mask = AlphaMask( icon.CreateMask( aIcon.GetTransparentColor() ) );
+            break;
+            case TRANSPARENT_BITMAP:
+                mask = aIcon.GetAlpha();
+            break;
+        }
+        BitmapReadAccess* iconData = icon.AcquireReadAccess();
+        BitmapReadAccess* maskData = mask.AcquireReadAccess();
+        netwm_icon[ pos++ ] = size; // width
+        netwm_icon[ pos++ ] = size; // height
+        for( int y = 0; y < size; ++y )
+            for( int x = 0; x < size; ++x )
+            {
+                BitmapColor col = iconData->GetColor( y, x );
+                BitmapColor alpha = maskData->GetColor( y, x );
+                netwm_icon[ pos++ ] = (((( 255 - alpha.GetBlue()) * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
+            }
+        icon.ReleaseAccess( iconData );
+        mask.ReleaseAccess( maskData );
+    }
+    netwm_icon.resize( pos );
+}
+
 static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen,
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
-                                         Pixmap& icon_pixmap, Pixmap& icon_mask)
+                                         Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
     if( ! ImplGetResMgr() )
         return false;
+
+    CreateNetWmAppIcon( nIcon, netwm_icon );
 
     sal_uInt16 nIconSizeOffset;
 
@@ -279,6 +336,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     XWMHints Hints;
     Hints.flags = InputHint;
     Hints.input = (nSalFrameStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ? False : True;
+    NetWmIconData netwm_icon;
 
     int x = 0, y = 0;
     unsigned int w = 500, h = 500;
@@ -480,7 +538,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                 bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
                                                mnIconID != 1 ? mnIconID :
                                                (mpParent ? mpParent->mnIconID : 1), 32,
-                                               Hints.icon_pixmap, Hints.icon_mask );
+                                               Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
             }
             catch( com::sun::star::uno::Exception& )
             {
@@ -679,6 +737,11 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                         SAL_FRAME_STYLE_PARTIAL_FULLSCREEN) )
              == SAL_FRAME_STYLE_DEFAULT )
             pDisplay_->getWMAdaptor()->maximizeFrame( this, true, true );
+
+        if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
+            XChangeProperty( GetXDisplay(), mhWindow,
+                GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
+                XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&netwm_icon.front(), netwm_icon.size());
     }
 
     m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
@@ -1009,15 +1072,16 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
         }
         pHints = &Hints;
 
+        NetWmIconData netwm_icon;
         bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
                                                 nIcon, iconSize,
-                                                pHints->icon_pixmap, pHints->icon_mask );
+                                                pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
         if ( !bOk )
         {
             // load default icon (0)
             bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
                                            0, iconSize,
-                                           pHints->icon_pixmap, pHints->icon_mask );
+                                           pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
         }
         if( bOk )
         {
@@ -1026,6 +1090,10 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                 pHints->flags |= IconMaskHint;
 
             XSetWMHints( GetXDisplay(), GetShellWindow(), pHints );
+            if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
+                XChangeProperty( GetXDisplay(), mhWindow,
+                    GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
+                    XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&netwm_icon.front(), netwm_icon.size());
         }
     }
 }

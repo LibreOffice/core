@@ -109,6 +109,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_CURRENT_DESKTOP", WMAdaptor::NET_CURRENT_DESKTOP },
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
     { "_NET_WM_DESKTOP", WMAdaptor::NET_WM_DESKTOP },
+    { "_NET_WM_ICON", WMAdaptor::NET_WM_ICON },
     { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
     { "_NET_WM_PING", WMAdaptor::NET_WM_PING },
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },

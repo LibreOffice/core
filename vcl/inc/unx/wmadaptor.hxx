@@ -76,6 +76,7 @@ public:
         NET_NUMBER_OF_DESKTOPS,
         NET_CURRENT_DESKTOP,
         NET_WORKAREA,
+        NET_WM_ICON,
 
         // atoms for Gnome WM hints
         WIN_SUPPORTING_WM_CHECK,
