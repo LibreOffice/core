@@ -103,11 +103,12 @@ namespace param
 
     Sequence< Type > SAL_CALL ParameterWrapper::getTypes(   ) throw(RuntimeException, std::exception)
     {
-        Sequence< Type > aTypes( 4 );
-        aTypes[ 1 ] = ::getCppuType( static_cast< Reference< XWeak >*             >( NULL ) );
-        aTypes[ 1 ] = ::getCppuType( static_cast< Reference< XPropertySet >*      >( NULL ) );
-        aTypes[ 2 ] = ::getCppuType( static_cast< Reference< XFastPropertySet >*  >( NULL ) );
-        aTypes[ 3 ] = ::getCppuType( static_cast< Reference< XMultiPropertySet >* >( NULL ) );
+        Sequence< Type > aTypes( 5 );
+        aTypes[ 0 ] = ::getCppuType( static_cast< Reference< XWeak >*             >( NULL ) );
+        aTypes[ 1 ] = ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) );
+        aTypes[ 2 ] = ::getCppuType( static_cast< Reference< XPropertySet >*      >( NULL ) );
+        aTypes[ 3 ] = ::getCppuType( static_cast< Reference< XFastPropertySet >*  >( NULL ) );
+        aTypes[ 4 ] = ::getCppuType( static_cast< Reference< XMultiPropertySet >* >( NULL ) );
         return aTypes;
     }
 
