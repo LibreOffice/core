@@ -39,10 +39,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
-DBG_NAME(ScAccessibleContextBase)
-
 ScAccessibleContextBase::ScAccessibleContextBase(
                                                  const uno::Reference<XAccessible>& rxParent,
                                                  const sal_Int16 aRole)
@@ -52,14 +48,11 @@ ScAccessibleContextBase::ScAccessibleContextBase(
     mnClientId(0),
     maRole(aRole)
 {
-    DBG_CTOR(ScAccessibleContextBase, NULL);
 }
 
 
 ScAccessibleContextBase::~ScAccessibleContextBase(void)
 {
-    DBG_DTOR(ScAccessibleContextBase, NULL);
-
     if (!IsDefunc() && !rBHelper.bInDispose)
     {
         // increment refcount to prevent double call off dtor

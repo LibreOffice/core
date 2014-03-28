@@ -48,11 +48,6 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-
-    //= OCellValueBinding
-
-    DBG_NAME( OCellValueBinding )
-
 #ifdef DBG_UTIL
     const char* OCellValueBinding::checkConsistency_static( const void* _pThis )
     {
@@ -81,8 +76,6 @@ namespace calc
         ,m_bInitialized( false )
         ,m_bListPos( _bListPos )
     {
-        DBG_CTOR( OCellValueBinding, checkConsistency_static );
-
         // register our property at the base class
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
@@ -105,8 +98,6 @@ namespace calc
             acquire();  // prevent duplicate dtor
             dispose();
         }
-
-        DBG_DTOR( OCellValueBinding, checkConsistency_static );
     }
 
 
@@ -118,8 +109,6 @@ namespace calc
 
     void SAL_CALL OCellValueBinding::disposing()
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-
         Reference<XModifyBroadcaster> xBroadcaster( m_xCell, UNO_QUERY );
         if ( xBroadcaster.is() )
         {
@@ -135,7 +124,6 @@ namespace calc
 
     Reference< XPropertySetInfo > SAL_CALL OCellValueBinding::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         return createPropertySetInfo( getInfoHelper() ) ;
     }
 
@@ -156,7 +144,6 @@ namespace calc
 
     void SAL_CALL OCellValueBinding::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         OSL_ENSURE( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
         (void)_nHandle;     // avoid warning in product version
@@ -170,7 +157,6 @@ namespace calc
 
     Sequence< Type > SAL_CALL OCellValueBinding::getSupportedValueTypes(  ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         checkDisposed( );
         checkInitialized( );
 
@@ -202,7 +188,6 @@ namespace calc
 
     sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         checkDisposed( );
         checkInitialized( );
 
@@ -220,7 +205,6 @@ namespace calc
 
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType ) throw (IncompatibleTypesException, RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         checkDisposed( );
         checkInitialized( );
         checkValueType( aType );
@@ -307,7 +291,6 @@ namespace calc
 
     void SAL_CALL OCellValueBinding::setValue( const Any& aValue ) throw (IncompatibleTypesException, NoSupportException, RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         checkDisposed( );
         checkInitialized( );
         if ( aValue.hasValue() )
@@ -469,8 +452,6 @@ namespace calc
 
     OUString SAL_CALL OCellValueBinding::getImplementationName(  ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-
         return OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
     }
 
@@ -481,8 +462,6 @@ namespace calc
 
     Sequence< OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-
         Sequence< OUString > aServices( m_bListPos ? 3 : 2 );
         aServices[ 0 ] = "com.sun.star.table.CellValueBinding";
         aServices[ 1 ] = "com.sun.star.form.binding.ValueBinding";
@@ -531,16 +510,12 @@ namespace calc
 
     void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-
         notifyModified();
     }
 
 
     void SAL_CALL OCellValueBinding::disposing( const EventObject& aEvent ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-
         Reference<XInterface> xCellInt( m_xCell, UNO_QUERY );
         if ( xCellInt == aEvent.Source )
         {

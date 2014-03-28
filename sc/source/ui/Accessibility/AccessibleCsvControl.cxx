@@ -80,11 +80,6 @@ const sal_Unicode cRulerLine        = '|';
 const sal_Int32 CSV_LINE_HEADER     = CSV_POS_INVALID;
 const sal_uInt32 CSV_COLUMN_HEADER  = CSV_COLUMN_INVALID;
 
-
-// CSV base control ===========================================================
-
-DBG_NAME( ScAccessibleCsvControl )
-
 ScAccessibleCsvControl::ScAccessibleCsvControl(
         const Reference< XAccessible >& rxParent,
         ScCsvControl& rControl,
@@ -92,12 +87,10 @@ ScAccessibleCsvControl::ScAccessibleCsvControl(
     ScAccessibleContextBase( rxParent, nRole ),
     mpControl( &rControl )
 {
-    DBG_CTOR( ScAccessibleCsvControl, NULL );
 }
 
 ScAccessibleCsvControl::~ScAccessibleCsvControl()
 {
-    DBG_DTOR( ScAccessibleCsvControl, NULL );
     implDispose();
 }
 
@@ -339,22 +332,14 @@ static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font&
     lcl_FillProperty( rSeq[ nIndex++ ], "CharLocale",        aLangItem,   MID_LANG_LOCALE );
 }
 
-
-
-
-
-DBG_NAME( ScAccessibleCsvRuler )
-
 ScAccessibleCsvRuler::ScAccessibleCsvRuler( ScCsvRuler& rRuler ) :
     ScAccessibleCsvControl( rRuler.GetAccessibleParentWindow()->GetAccessible(), rRuler, nRulerRole )
 {
-    DBG_CTOR( ScAccessibleCsvRuler, NULL );
     constructStringBuffer();
 }
 
 ScAccessibleCsvRuler::~ScAccessibleCsvRuler()
 {
-    DBG_DTOR( ScAccessibleCsvRuler, NULL );
     implDispose();
 }
 
@@ -881,20 +866,13 @@ static inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
     return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;
 }
 
-
-
-
-DBG_NAME( ScAccessibleCsvGrid )
-
 ScAccessibleCsvGrid::ScAccessibleCsvGrid( ScCsvGrid& rGrid ) :
     ScAccessibleCsvControl( rGrid.GetAccessibleParentWindow()->GetAccessible(), rGrid, nGridRole )
 {
-    DBG_CTOR( ScAccessibleCsvGrid, NULL );
 }
 
 ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 {
-    DBG_DTOR( ScAccessibleCsvGrid, NULL );
     implDispose();
 }
 
@@ -1424,11 +1402,6 @@ ScAccessibleCsvControl* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, 
     return new ScAccessibleCsvCell( implGetGrid(), implGetCellText( nRow, nColumn ), nRow, nColumn );
 }
 
-
-
-
-DBG_NAME( ScAccessibleCsvCell )
-
 ScAccessibleCsvCell::ScAccessibleCsvCell(
         ScCsvGrid& rGrid,
         const OUString& rCellText,
@@ -1440,13 +1413,11 @@ ScAccessibleCsvCell::ScAccessibleCsvCell(
     mnColumn( lcl_GetGridColumn( nColumn ) ),
     mnIndex( nRow * (rGrid.GetColumnCount() + 1) + nColumn )
 {
-    DBG_CTOR( ScAccessibleCsvCell, NULL );
     SetEditSource( implCreateEditSource() );
 }
 
 ScAccessibleCsvCell::~ScAccessibleCsvCell()
 {
-    DBG_DTOR( ScAccessibleCsvCell, NULL );
 }
 
 void SAL_CALL ScAccessibleCsvCell::disposing()

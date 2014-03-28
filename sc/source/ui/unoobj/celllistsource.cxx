@@ -44,11 +44,6 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-
-    //= OCellListSource
-
-    DBG_NAME( OCellListSource )
-
 #ifdef DBG_UTIL
     const char* OCellListSource::checkConsistency_static( const void* _pThis )
     {
@@ -73,8 +68,6 @@ namespace calc
         ,m_aListEntryListeners( m_aMutex )
         ,m_bInitialized( false )
     {
-        DBG_CTOR( OCellListSource, checkConsistency_static );
-
         OSL_PRECOND( m_xDocument.is(), "OCellListSource::OCellListSource: invalid document!" );
 
         // register our property at the base class
@@ -96,8 +89,6 @@ namespace calc
             acquire();  // prevent duplicate dtor
             dispose();
         }
-
-        DBG_DTOR( OCellListSource, checkConsistency_static );
     }
 
 
@@ -110,7 +101,6 @@ namespace calc
     void SAL_CALL OCellListSource::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xRange, UNO_QUERY );
         if ( xBroadcaster.is() )
@@ -129,7 +119,6 @@ namespace calc
 
     Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         return createPropertySetInfo( getInfoHelper() ) ;
     }
 
@@ -150,7 +139,6 @@ namespace calc
 
     void SAL_CALL OCellListSource::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         OSL_ENSURE( _nHandle == PROP_HANDLE_RANGE_ADDRESS, "OCellListSource::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
         (void)_nHandle;     // avoid warning in product version
@@ -220,7 +208,6 @@ namespace calc
     sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         checkDisposed();
         checkInitialized();
 
@@ -232,7 +219,6 @@ namespace calc
     OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         checkDisposed();
         checkInitialized();
 
@@ -246,7 +232,6 @@ namespace calc
     Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         checkDisposed();
         checkInitialized();
 
@@ -264,7 +249,6 @@ namespace calc
     void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         checkDisposed();
         checkInitialized();
 
@@ -278,7 +262,6 @@ namespace calc
     void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         checkDisposed();
         checkInitialized();
 
@@ -291,8 +274,6 @@ namespace calc
 
     void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
-
         notifyModified();
     }
 
@@ -324,8 +305,6 @@ namespace calc
 
     void SAL_CALL OCellListSource::disposing( const EventObject& aEvent ) throw (RuntimeException, std::exception)
     {
-        DBG_CHKTHIS( OCellListSource, checkConsistency_static );
-
         Reference<XInterface> xRangeInt( m_xRange, UNO_QUERY );
         if ( xRangeInt == aEvent.Source )
         {
