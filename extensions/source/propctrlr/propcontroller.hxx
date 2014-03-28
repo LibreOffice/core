@@ -70,14 +70,6 @@ namespace pcr
     class OPropertyEditor;
     struct OLineDescriptor;
 
-#if OSL_DEBUG_LEVEL > 0
-    const char* CheckPropertyBrowserInvariants( const void* pVoid );
-        // for dignostics with DBG_CHKTHIS
-#endif
-
-
-    //= OPropertyBrowserController
-
     // #95343#------------------------------------------------------------------------------------
     typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
