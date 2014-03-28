@@ -2703,7 +2703,6 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     bool bValChanged = false;
     bool bRefModified = false;
-    bool bRefSizeChanged = false;
     bool bRecompile = bCompile;
 
     if (bHasRefs)
@@ -2741,7 +2740,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
         bNewListening = (bRefModified || bRecompile
-                || (bValChanged && (bInDeleteUndo || bRefSizeChanged)) || bHasRelName);
+                || (bValChanged && bInDeleteUndo) || bHasRelName);
 
         if ( bNewListening )
             EndListeningTo(pDocument, pOldCode.get(), aOldPos);
