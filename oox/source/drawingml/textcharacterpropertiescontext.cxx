@@ -132,6 +132,10 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( hlinkClick ):     // CT_Hyperlink
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             return new HyperLinkContext( *this, rAttribs,  mrTextCharacterProperties.maHyperlinkPropertyMap );
+
+        case A_TOKEN( gradFill ):
+            return new GradientFillContext( *this, rAttribs, mrTextCharacterProperties.maGradientProps );
+
         case OOX_TOKEN( doc, rFonts ):
             if( rAttribs.hasAttribute(OOX_TOKEN(doc, ascii)) )
             {
