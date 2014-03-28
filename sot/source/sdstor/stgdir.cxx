@@ -827,7 +827,7 @@ StgDirStrm::StgDirStrm( StgIo& r )
         // temporarily use this instance as owner, so
         // the TOC pages can be removed.
         pEntry = (StgDirEntry*) this; // just for a bit pattern
-        SetupEntry( 0, pRoot );
+        SetupEntry(0, pRoot, nSize/STGENTRY_SIZE, 0);
         rIo.Revert( pEntry );
         pEntry = NULL;
     }
@@ -840,8 +840,26 @@ StgDirStrm::~StgDirStrm()
 
 // Recursively parse the directory tree during reading the TOC stream
 
-void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
+void StgDirStrm::SetupEntry (
+    const sal_Int32 n,
+    StgDirEntry* pUpper,
+    const sal_Int32 nEntryCount,
+    const sal_Int32 nDepth)
 {
+    if (nDepth >= nEntryCount)
+    {
+        // Tree grew higher than there are different nodes.  Looks like
+        // something is wrong with the file.  Return now to avoid
+        // infinite recursion.
+        return;
+    }
+    else if (n>=nEntryCount || (n<0 && n!=STG_FREE))
+    {
+        // n has an invalid value.  Don't access the corresponding
+        // stream content.
+        return;
+    }
+
     void* p = ( n == STG_FREE ) ? NULL : GetEntry( n );
     if( p )
     {
@@ -889,9 +907,9 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
                 delete pCur; pCur = NULL;
                 return;
             }
-            SetupEntry( nLeft, pUpper );
-            SetupEntry( nRight, pUpper );
-            SetupEntry( nLeaf, pCur );
+            SetupEntry( nLeft, pUpper, nEntryCount, nDepth+1);
+            SetupEntry( nRight, pUpper, nEntryCount, nDepth+1);
+            SetupEntry( nLeaf, pCur, nEntryCount, nDepth+1);
         }
     }
 }
