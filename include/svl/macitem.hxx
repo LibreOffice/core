@@ -34,12 +34,6 @@ class SvStream;
 #define SVX_MACRO_LANGUAGE_STARBASIC "StarBasic"
 #define SVX_MACRO_LANGUAGE_SF "Script"
 
-DBG_NAMEEX(SvxMacroItem)
-
-
-
-//Ein Macro
-
 enum ScriptType
 {
     STARBASIC,

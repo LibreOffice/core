@@ -21,10 +21,6 @@
 #include <sfx2/viewfac.hxx>
 #include <rtl/ustrbuf.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxViewFactory)
-
 SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldSh )
 {
     return (*fnCreate)(pFrame, pOldSh);

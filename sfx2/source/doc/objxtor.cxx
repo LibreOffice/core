@@ -108,10 +108,6 @@ using namespace ::com::sun::star::document;
 using ::basic::BasicManagerRepository;
 #include <uno/mapping.hxx>
 
-
-
-DBG_NAME(SfxObjectShell)
-
 #include "sfxslots.hxx"
 
 namespace {

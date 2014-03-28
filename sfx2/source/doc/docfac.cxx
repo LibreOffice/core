@@ -59,12 +59,6 @@ using namespace ::com::sun::star;
 
 typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
 
-
-
-DBG_NAME(SfxObjectFactory)
-
-
-
 struct SfxObjectFactory_Impl
 {
     SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s

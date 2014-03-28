@@ -468,10 +468,6 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const lang::Even
         m_pController->getFrame()->removeFrameActionListener( this ) ;
 }
 
-
-//  SfxBaseController -> constructor
-
-DBG_NAME(sfx2_SfxBaseController)
 SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     :   m_pData ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
 {

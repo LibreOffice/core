@@ -58,12 +58,6 @@ public:
     }
 };
 
-
-
-DBG_NAME(SfxShell)
-
-
-
 TYPEINIT0(SfxShell);
 
 

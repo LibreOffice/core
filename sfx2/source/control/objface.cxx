@@ -35,10 +35,6 @@
 #include <sfx2/objsh.hxx>
 #include <rtl/strbuf.hxx>
 
-DBG_NAME(SfxInterface)
-
-
-
 extern "C"
 #ifdef WNT
 int _cdecl

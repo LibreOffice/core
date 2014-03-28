@@ -33,8 +33,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-DBG_NAME( PolyPolygon )
-
 ImplPolyPolygon::ImplPolyPolygon( sal_uInt16 nInitSize )
 {
     mnRefCount  = 1;

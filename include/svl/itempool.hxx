@@ -33,8 +33,6 @@ struct SfxItemPool_Impl;
 
 #define SFX_WHICH_MAX 4999
 
-DBG_NAMEEX(SfxItemPool)
-
 #define SFX_ITEM_POOLABLE           0x0001
 #define SFX_ITEM_NOT_POOLABLE       0x0002
 

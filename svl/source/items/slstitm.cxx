@@ -24,12 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxStringListItem)
-
-
-
 TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
 
 class SfxImpStringList

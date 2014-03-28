@@ -62,8 +62,6 @@ namespace svtools
 SV_DECL_REF(SfxObjectShell)
 #endif
 
-
-DBG_NAMEEX(SfxViewFrame)
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
     struct SfxViewFrame_Impl*   pImp;

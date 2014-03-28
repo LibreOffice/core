@@ -71,8 +71,6 @@ class ObjectCatalog;
 class CodeCompleteListBox;
 class CodeCompleteWindow;
 
-DBG_NAMEEX( ModulWindow )
-
 // #108672 Helper functions to get/set text in TextEngine
 // using the stream interface (get/setText() only supports
 // tools Strings limited to 64K).

@@ -15,8 +15,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-DBG_NAME(SfxGrabBagItem)
-
 TYPEINIT1_AUTOFACTORY(SfxGrabBagItem, SfxPoolItem);
 
 using namespace com::sun::star;

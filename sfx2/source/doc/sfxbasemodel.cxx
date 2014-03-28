@@ -511,12 +511,6 @@ SfxSaveGuard::~SfxSaveGuard()
     }
 }
 
-
-
-
-//  constructor
-
-DBG_NAME(sfx2_SfxBaseModel)
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 : BaseMutex()
 , m_pData( new IMPL_SfxBaseModel_DataContainer( m_aMutex, pObjectShell ) )

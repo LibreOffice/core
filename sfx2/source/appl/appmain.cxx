@@ -43,14 +43,6 @@
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"
 
-DBG_NAME(SfxAppMainNewMenu)
-DBG_NAME(SfxAppMainBmkMenu)
-DBG_NAME(SfxAppMainWizMenu)
-DBG_NAME(SfxAppMainOLEReg)
-DBG_NAME(SfxAppMainCHAOSReg)
-
-
-
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
 

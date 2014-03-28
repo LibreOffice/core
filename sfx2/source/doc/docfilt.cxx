@@ -36,10 +36,6 @@
 
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxFilter)
-
 SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
     maFilterName(rFilterName),
     maProvider(rProvider),

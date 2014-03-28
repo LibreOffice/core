@@ -25,12 +25,6 @@
 
 #include <comphelper/extract.hxx>
 
-
-//  class SfxEnumItemInterface
-
-
-DBG_NAME(SfxEnumItemInterface)
-
 TYPEINIT1(SfxEnumItemInterface, SfxPoolItem)
 
 // virtual
@@ -118,12 +112,6 @@ bool SfxEnumItemInterface::GetBoolValue() const
 void SfxEnumItemInterface::SetBoolValue(sal_Bool)
 {}
 
-
-//  class SfxEnumItem
-
-
-DBG_NAME(SfxEnumItem)
-
 SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxEnumItemInterface(nWhich)
 {
@@ -157,12 +145,6 @@ void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
     DBG_ASSERT(GetRefCount() == 0, "SfxEnumItem::SetValue(): Pooled item");
     m_nValue = nTheValue;
 }
-
-
-//  class SfxBoolItem
-
-
-DBG_NAME(SfxBoolItem)
 
 TYPEINIT1_AUTOFACTORY(SfxBoolItem, SfxPoolItem);
 

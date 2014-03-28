@@ -33,10 +33,6 @@
 
 namespace svtools { class AsynchronLink; }
 
-
-
-DBG_NAMEEX(SfxObjectShell)
-
 class SfxViewFrame;
 struct MarkData_Impl
 {

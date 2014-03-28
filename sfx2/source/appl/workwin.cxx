@@ -142,8 +142,6 @@ static const ResIdToResName pToolBarResToName[] =
     { 0,        ""                     }
 };
 
-DBG_NAME(SfxWorkWindow)
-
 //SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
 
 

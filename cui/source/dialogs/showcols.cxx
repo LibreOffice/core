@@ -29,11 +29,6 @@
 #define CUIFM_PROP_HIDDEN "Hidden"
 #define CUIFM_PROP_LABEL  "Label"
 
-
-//  FmShowColsDialog
-
-DBG_NAME(FmShowColsDialog)
-
 FmShowColsDialog::FmShowColsDialog(Window* pParent)
     : ModalDialog(pParent, "ShowColDialog", "cui/ui/showcoldialog.ui")
 {

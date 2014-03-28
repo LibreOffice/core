@@ -58,8 +58,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 
-DBG_NAME(SfxVirtualMenu)
-
 class SfxMenuImageControl_Impl : public SfxControllerItem
 {
     SfxVirtualMenu*     pMenu;

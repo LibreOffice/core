@@ -43,8 +43,6 @@ c |= nSwapTmp;
 #include <osl/thread.h>
 #include <algorithm>
 
-DBG_NAME( Stream )
-
 // !!! Do not inline if already the operators <<,>> are inline
 inline static void SwapUShort( sal_uInt16& r )
     {   r = OSL_SWAPWORD(r);   }

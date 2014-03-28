@@ -59,8 +59,6 @@
 
 using namespace ::com::sun::star;
 
-DBG_NAME(outlinehdl)
-
 class SwNumNamesDlg : public ModalDialog
 {
     Edit*     m_pFormEdit;

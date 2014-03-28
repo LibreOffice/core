@@ -24,9 +24,6 @@
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 
-
-DBG_NAMEEX(SfxEnumItemInterface)
-
 class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem
 {
 protected:

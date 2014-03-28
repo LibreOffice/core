@@ -140,9 +140,6 @@ using ::com::sun::star::container::XIndexContainer;
 #include "../appl/app.hrc"
 #include "impviewframe.hxx"
 
-
-DBG_NAME(SfxViewFrame)
-
 #define SfxViewFrame
 #include "sfxslots.hxx"
 #undef SfxViewFrame

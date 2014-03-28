@@ -84,9 +84,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 
-
-DBG_NAME(SfxViewShell)
-
 #define SfxViewShell
 #include "sfxslots.hxx"
 

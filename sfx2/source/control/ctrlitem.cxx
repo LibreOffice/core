@@ -26,11 +26,6 @@
 #include "statcach.hxx"
 #include <sfx2/viewfrm.hxx>
 
-
-
-DBG_NAME(SfxControllerItem);
-
-
 #ifdef DBG_UTIL
 
 void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )

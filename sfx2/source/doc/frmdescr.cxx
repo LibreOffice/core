@@ -26,8 +26,6 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/app.hxx>
 
-DBG_NAME(SfxFrameDescriptor);
-
 struct SfxFrameDescriptor_Impl
 {
     Wallpaper*  pWallpaper;

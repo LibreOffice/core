@@ -41,8 +41,6 @@
 
 static const sal_uInt16 nVersion = 2;
 
-DBG_NAME(SfxChildWindow)
-
 struct SfxChildWindow_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;
