@@ -148,10 +148,6 @@ typedef sal_uInt16 SfxItemState;
 #define SFX_ITEM_OFF        SFX_ITEM_DEFAULT
 #define SFX_ITEM_ON         SFX_ITEM_SET
 
-DBG_NAMEEX_VISIBILITY(SfxPoolItem, SVL_DLLPUBLIC)
-DBG_NAMEEX(SfxVoidItem)
-DBG_NAMEEX(SfxItemHandle)
-
 class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;
@@ -188,12 +184,8 @@ public:
                              TYPEINFO();
     virtual                  ~SfxPoolItem();
 
-    void                     SetWhich( sal_uInt16 nId ) {
-                                DBG_CHKTHIS(SfxPoolItem, 0);
-                                m_nWhich = nId; }
-    sal_uInt16                   Which() const {
-                                 DBG_CHKTHIS(SfxPoolItem, 0);
-                                 return m_nWhich; }
+    void                     SetWhich( sal_uInt16 nId ) { m_nWhich = nId; }
+    sal_uInt16                   Which() const { return m_nWhich; }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
@@ -270,21 +262,18 @@ private:
 
 inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
-    DBG_CHKTHIS( SfxPoolItem, 0 );
     m_nRefCount = n;
     m_nKind = 0;
 }
 
 inline void SfxPoolItem::SetKind( sal_uInt16 n )
 {
-    DBG_CHKTHIS( SfxPoolItem, 0 );
     m_nRefCount = SFX_ITEMS_SPECIAL;
     m_nKind = n;
 }
 
 inline sal_uLong SfxPoolItem::AddRef( sal_uLong n ) const
 {
-    DBG_CHKTHIS( SfxPoolItem, 0 );
     DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
     DBG_ASSERT(ULONG_MAX - m_nRefCount > n, "AddRef: refcount overflow");
     return (const_cast<SfxPoolItem *>(this)->m_nRefCount += n);
@@ -292,7 +281,6 @@ inline sal_uLong SfxPoolItem::AddRef( sal_uLong n ) const
 
 inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 {
-    DBG_CHKTHIS( SfxPoolItem, 0 );
     DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
     DBG_ASSERT(m_nRefCount >= n, "AddRef: refcount underflow");
     const_cast<SfxPoolItem *>(this)->m_nRefCount -= n;

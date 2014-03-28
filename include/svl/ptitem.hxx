@@ -25,10 +25,6 @@
 
 class SvStream;
 
-DBG_NAMEEX_VISIBILITY(SfxPointItem, SVL_DLLPUBLIC)
-
-
-
 class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
 {
     Point                    aVal;
@@ -38,8 +34,7 @@ public:
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
                              SfxPointItem( const SfxPointItem& );
-                             ~SfxPointItem() {
-                                 DBG_DTOR(SfxPointItem, 0); }
+                             ~SfxPointItem() {}
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

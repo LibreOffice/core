@@ -32,11 +32,6 @@
 
 using ::com::sun::star::uno::Exception;
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxUndoAction)
-
-
 TYPEINIT0(SfxUndoAction);
 TYPEINIT0(SfxListUndoAction);
 TYPEINIT0(SfxLinkUndoAction);
@@ -61,8 +56,6 @@ void SfxUndoAction::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAc
 
 SfxUndoAction::~SfxUndoAction()
 {
-    DBG_DTOR(SfxUndoAction, 0);
-
     if(mpSfxLinkUndoAction)
     {
         mpSfxLinkUndoAction->LinkedSfxUndoActionDestructed(*this);
@@ -74,20 +67,17 @@ SfxUndoAction::~SfxUndoAction()
 SfxUndoAction::SfxUndoAction()
 :   mpSfxLinkUndoAction(0)
 {
-    DBG_CTOR(SfxUndoAction, 0);
 }
 
 
 bool SfxUndoAction::Merge( SfxUndoAction * )
 {
-    DBG_CHKTHIS(SfxUndoAction, 0);
     return false;
 }
 
 
 OUString SfxUndoAction::GetComment() const
 {
-    DBG_CHKTHIS(SfxUndoAction, 0);
     return OUString();
 }
 
@@ -95,14 +85,12 @@ OUString SfxUndoAction::GetComment() const
 
 sal_uInt16 SfxUndoAction::GetId() const
 {
-    DBG_CHKTHIS(SfxUndoAction, 0);
     return 0;
 }
 
 
 OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 {
-    DBG_CHKTHIS(SfxUndoAction, 0);
     return GetComment();
 }
 

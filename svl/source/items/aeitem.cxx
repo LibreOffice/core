@@ -21,10 +21,6 @@
 #include <svl/aeitem.hxx>
 #include <vector>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxAllEnumItem)
-
 TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 
 
@@ -61,7 +57,6 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     pValues( 0 ),
     pDisabledValues( 0 )
 {
-    DBG_CTOR(SfxAllEnumItem, 0);
     InsertValue( nVal );
 }
 
@@ -72,7 +67,6 @@ SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
     pValues( 0 ),
     pDisabledValues( 0 )
 {
-    DBG_CTOR(SfxAllEnumItem, 0);
     InsertValue( GetValue() );
 }
 
@@ -84,7 +78,6 @@ SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
     pValues( 0 ),
     pDisabledValues( 0 )
 {
-    DBG_CTOR(SfxAllEnumItem, 0);
 }
 
 
@@ -95,7 +88,6 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     pValues(0),
     pDisabledValues( 0 )
 {
-    DBG_CTOR(SfxAllEnumItem, 0);
     if ( !rCopy.pValues )
         return;
 
@@ -119,7 +111,6 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
 
 SfxAllEnumItem::~SfxAllEnumItem()
 {
-    DBG_DTOR(SfxAllEnumItem, 0);
     delete pValues;
     delete pDisabledValues;
 }
@@ -128,7 +119,6 @@ SfxAllEnumItem::~SfxAllEnumItem()
 
 sal_uInt16 SfxAllEnumItem::GetValueCount() const
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     return pValues ? pValues->size() : 0;
 }
 
@@ -136,7 +126,6 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
 
 OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
     return (*pValues)[nPos]->aText;
 }
@@ -145,7 +134,6 @@ OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
     return (*pValues)[nPos]->nValue;
 }
@@ -154,7 +142,6 @@ sal_uInt16 SfxAllEnumItem::GetValueByPos( sal_uInt16 nPos ) const
 
 SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     return new SfxAllEnumItem(*this);
 }
 
@@ -162,7 +149,6 @@ SfxPoolItem* SfxAllEnumItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     return new SfxAllEnumItem( Which(), rStream );
 }
 
@@ -179,8 +165,6 @@ sal_uInt16 SfxAllEnumItem::_GetPosByValue( sal_uInt16 nVal ) const
 */
 
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
-
     if ( !pValues )
         return 0;
 
@@ -204,8 +188,6 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 */
 
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
-
     if ( !pValues || pValues->empty() )
         return nValue;
 
@@ -216,7 +198,6 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
     pVal->nValue = nValue;
     pVal->aText = rValue;
@@ -233,7 +214,6 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
     pVal->nValue = nValue;
     pVal->aText = OUString::number(nValue);
@@ -245,7 +225,6 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
 
 void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     if ( !pDisabledValues )
         pDisabledValues = new std::vector<sal_uInt16>;
 
@@ -268,7 +247,6 @@ bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
 
 void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
 {
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
     sal_uInt16 nPos = GetPosByValue(nValue);
     DBG_ASSERT( nPos != USHRT_MAX, "removing value not in enum" );
     pValues->erase( pValues->begin() + nPos );

@@ -38,9 +38,6 @@ public:
     { return new SfxByteItem(*this); }
 };
 
-
-DBG_NAMEEX_VISIBILITY(SfxInt16Item, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
 {
     sal_Int16 m_nValue;
@@ -50,15 +47,15 @@ public:
 
     explicit SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
-    { DBG_CTOR(SfxInt16Item, 0); }
+    {}
 
     SfxInt16Item(sal_uInt16 nWhich, SvStream & rStream);
 
     SfxInt16Item(const SfxInt16Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    { DBG_CTOR(SfxInt16Item, 0); }
+    {}
 
-    virtual ~SfxInt16Item() { DBG_DTOR(SfxInt16Item, 0); }
+    virtual ~SfxInt16Item() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 

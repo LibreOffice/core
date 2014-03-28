@@ -23,18 +23,11 @@
 #include <tools/stream.hxx>
 #include <svl/custritm.hxx>
 
-
-//  class CntUnencodedStringItem
-
-
-DBG_NAME(CntUnencodedStringItem)
-
 TYPEINIT1_AUTOFACTORY(CntUnencodedStringItem, SfxPoolItem)
 
 // virtual
 bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rItem.ISA(CntUnencodedStringItem),
                "CntUnencodedStringItem::operator ==(): Bad type");
     return m_aValue
@@ -46,7 +39,6 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 {
     OSL_FAIL("CntUnencodedStringItem::Compare(): No international");
-    DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
                 "CntUnencodedStringItem::Compare(): Bad type");
     sal_Int32 nCmp = m_aValue.compareTo(
@@ -59,7 +51,6 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
                                     IntlWrapper const & rIntlWrapper)
     const
 {
-    DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
                "CntUnencodedStringItem::Compare(): Bad type");
     return rIntlWrapper.getCollator()->compareString( m_aValue,
@@ -72,7 +63,6 @@ CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                         SfxMapUnit, OUString & rText,
                                         const IntlWrapper *) const
 {
-    DBG_CHKTHIS(CntUnencodedStringItem, 0);
     rText = m_aValue;
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
@@ -102,7 +92,6 @@ bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
 // virtual
 SfxPoolItem * CntUnencodedStringItem::Clone(SfxItemPool *) const
 {
-    DBG_CHKTHIS(CntUnencodedStringItem, 0);
     return new CntUnencodedStringItem(*this);
 }
 

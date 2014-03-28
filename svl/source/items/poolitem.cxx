@@ -21,15 +21,6 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxPoolItem)
-DBG_NAME(SfxVoidItem)
-// @@@ DBG_NAME(SfxInvalidItem);
-DBG_NAME(SfxItemHandle)
-
-// RTTI ------------------------------------------------------------------
-
 TYPEINIT0(SfxPoolItem);
 TYPEINIT1(SfxVoidItem, SfxPoolItem);
 // @@@ TYPEINIT1(SfxInvalidItem, SfxPoolItem);
@@ -55,7 +46,6 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_nWhich(nWhich)
     , m_nKind(0)
 {
-    DBG_CTOR(SfxPoolItem, 0);
     DBG_ASSERT(nWhich <= SHRT_MAX, "invalid WhichId");
 #if OSL_DEBUG_LEVEL > 1
     ++nItemCount;
@@ -93,7 +83,6 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     , m_nWhich(rCpy.Which()) // call function because of ChkThis() (WTF does that mean?)
     , m_nKind( 0 )
 {
-    DBG_CTOR(SfxPoolItem, 0);
 #if OSL_DEBUG_LEVEL > 1
     ++nItemCount;
     if ( pw1 && nItemCount>=10000 )
@@ -127,7 +116,6 @@ SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
 
 SfxPoolItem::~SfxPoolItem()
 {
-    DBG_DTOR(SfxPoolItem, 0);
     DBG_ASSERT(m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF,
             "destroying item in use");
 #if OSL_DEBUG_LEVEL > 1
@@ -150,28 +138,24 @@ int SfxPoolItem::Compare( const SfxPoolItem& rWith, const IntlWrapper& ) const
 
 bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    DBG_CHKTHIS(SfxPoolItem, 0);
     return rCmp.Type() == Type();
 }
 
 
 SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
 {
-    DBG_CHKTHIS(SfxPoolItem, 0);
     return Clone(0);
 }
 
 
 sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxPoolItem, 0);
     return 0;
 }
 
 
 SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxPoolItem, 0);
     return rStream;
 }
 
@@ -263,14 +247,12 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
     SfxPoolItem(which)
 {
-    DBG_CTOR(SfxVoidItem, 0);
 }
 
 // SfxVoidItem ------------------------------------------------------------
 SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
     SfxPoolItem(rCopy)
 {
-    DBG_CTOR(SfxVoidItem, 0);
 }
 
 
@@ -280,7 +262,6 @@ rCmp
 #endif
 ) const
 {
-    DBG_CHKTHIS(SfxVoidItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
     return true;
 }
@@ -295,7 +276,6 @@ SfxItemPresentation SfxVoidItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    DBG_CHKTHIS(SfxVoidItem, 0);
     rText = "Void";
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
@@ -303,7 +283,6 @@ SfxItemPresentation SfxVoidItem::GetPresentation
 
 SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 {
-    DBG_CHKTHIS(SfxVoidItem, 0);
     return new SfxVoidItem(*this);
 }
 
@@ -314,7 +293,6 @@ SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
     pRef(new sal_uInt16(1)),
     pItem(rItem.Clone(0))
 {
-    DBG_CTOR(SfxItemHandle, 0);
 }
 
 
@@ -322,14 +300,12 @@ SfxItemHandle::SfxItemHandle(const SfxItemHandle &rCopy):
     pRef(rCopy.pRef),
     pItem(rCopy.pItem)
 {
-    DBG_CTOR(SfxItemHandle, 0);
     ++(*pRef);
 }
 
 
 const SfxItemHandle &SfxItemHandle::operator=(const SfxItemHandle &rCopy)
 {
-    DBG_CHKTHIS(SfxItemHandle, 0);
     if(&rCopy == this || pItem == rCopy.pItem)
         return *this;
     --(*pRef);
@@ -347,7 +323,6 @@ const SfxItemHandle &SfxItemHandle::operator=(const SfxItemHandle &rCopy)
 
 SfxItemHandle::~SfxItemHandle()
 {
-    DBG_DTOR(SfxItemHandle, 0);
     --(*pRef);
     if(!(*pRef)) {
         delete pRef; pRef = 0;
@@ -385,7 +360,6 @@ bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
 
 SfxVoidItem::~SfxVoidItem()
 {
-    DBG_DTOR(SfxVoidItem, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

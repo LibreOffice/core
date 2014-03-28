@@ -25,8 +25,6 @@
 
 class SvStream;
 
-DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 {
     sal_uInt16                   nVal;
@@ -37,8 +35,7 @@ public:
     explicit                 SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
                              SfxFlagItem( const SfxFlagItem& );
 
-                             ~SfxFlagItem() {
-                                DBG_DTOR(SfxFlagItem, 0); }
+                             ~SfxFlagItem() {}
 
     virtual sal_uInt8            GetFlagCount() const;
 

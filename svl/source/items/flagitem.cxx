@@ -22,10 +22,6 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxFlagItem)
-
 sal_uInt16 nSfxFlagVal[16] =
 {
     0x0001, 0x0002, 0x0004, 0x0008,
@@ -45,7 +41,6 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
     SfxPoolItem( nW ),
     nVal(nV)
 {
-    DBG_CTOR(SfxFlagItem, 0);
 }
 
 
@@ -54,14 +49,12 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
     SfxPoolItem( rItem ),
     nVal( rItem.nVal )
 {
-    DBG_CTOR(SfxFlagItem, 0);
 }
 
 
 
 SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 {
-    DBG_CHKTHIS(SfxFlagItem, 0);
     rStream.WriteUInt16( nVal );
     return rStream;
 }
@@ -77,7 +70,6 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    DBG_CHKTHIS(SfxFlagItem, 0);
     rText = OUString();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
         rText += GetFlag(nFlag) ? OUString("true") : OUString("false");
@@ -88,7 +80,6 @@ SfxItemPresentation SfxFlagItem::GetPresentation
 
 sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
-    DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_WARNING( "calling GetValueText(sal_uInt16) on SfxFlagItem -- overload!" );
     return 0;
 }
@@ -97,7 +88,6 @@ sal_uInt8 SfxFlagItem::GetFlagCount() const
 
 SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
 {
-    DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_WARNING( "calling Create() on SfxFlagItem -- overload!" );
     return 0;
 }
@@ -106,7 +96,6 @@ SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
 
 bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return (((SfxFlagItem&)rItem).nVal == nVal);
 }
@@ -116,7 +105,6 @@ bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 
 SfxPoolItem* SfxFlagItem::Clone(SfxItemPool *) const
 {
-    DBG_CHKTHIS(SfxFlagItem, 0);
     return new SfxFlagItem( *this );
 }
 

@@ -26,10 +26,6 @@
 
 class SvStream;
 
-DBG_NAMEEX_VISIBILITY(SfxRectangleItem, SVL_DLLPUBLIC)
-
-
-
 class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
 {
     Rectangle                aVal;
@@ -39,8 +35,7 @@ public:
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
                              SfxRectangleItem( const SfxRectangleItem& );
-                             ~SfxRectangleItem() {
-                                 DBG_DTOR(SfxRectangleItem, 0); }
+                             ~SfxRectangleItem() {}
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

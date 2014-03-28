@@ -25,9 +25,6 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
-
-DBG_NAMEEX_VISIBILITY(SfxVisibilityItem, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
 {
     ::com::sun::star::frame::status::Visibility m_nValue;
@@ -39,16 +36,15 @@ public:
         SfxPoolItem(which)
     {
         m_nValue.bVisible = bVisible;
-        DBG_CTOR(SfxVisibilityItem, 0);
     }
 
     SfxVisibilityItem(sal_uInt16 which, SvStream & rStream);
 
     SfxVisibilityItem(const SfxVisibilityItem & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    { DBG_CTOR(SfxVisibilityItem, 0); }
+    {}
 
-    virtual ~SfxVisibilityItem() { DBG_DTOR(SfxVisibilityItem, 0); }
+    virtual ~SfxVisibilityItem() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 

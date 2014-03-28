@@ -28,7 +28,6 @@
 #include <svl/brdcst.hxx>
 #include <algorithm>
 
-DBG_NAME(SfxBroadcaster)
 TYPEINIT0(SfxBroadcaster);
 
 
@@ -36,8 +35,6 @@ TYPEINIT0(SfxBroadcaster);
 
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 {
-    DBG_CHKTHIS(SfxBroadcaster, 0);
-
     // notify all registered listeners exactly once
     for (size_t n = 0; n < m_Listeners.size(); ++n)
     {
@@ -52,8 +49,6 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 
 SfxBroadcaster::~SfxBroadcaster()
 {
-    DBG_DTOR(SfxBroadcaster, 0);
-
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // remove all still registered listeners
@@ -71,7 +66,6 @@ SfxBroadcaster::~SfxBroadcaster()
 
 SfxBroadcaster::SfxBroadcaster()
 {
-    DBG_CTOR(SfxBroadcaster, 0);
 }
 
 
@@ -80,8 +74,6 @@ SfxBroadcaster::SfxBroadcaster()
 
 SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 {
-    DBG_CTOR(SfxBroadcaster, 0);
-
     for (size_t n = 0; n < rBC.m_Listeners.size(); ++n)
     {
         SfxListener *const pListener = rBC.m_Listeners[n];
@@ -96,8 +88,6 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
-    DBG_CHKTHIS(SfxBroadcaster, 0);
-
     for (size_t i = 0; i < m_Listeners.size(); ++i)
     {
         if (!m_Listeners[i]) // removed by RemoveListener?
@@ -114,7 +104,6 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
 
 void SfxBroadcaster::ListenersGone()
 {
-    DBG_CHKTHIS(SfxBroadcaster,0);
 }
 
 
@@ -136,7 +125,6 @@ void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 
 void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
-    {DBG_CHKTHIS(SfxBroadcaster, 0);}
     SfxListenerArr_Impl::iterator aIter = std::find(
             m_Listeners.begin(), m_Listeners.end(), &rListener);
     assert(aIter != m_Listeners.end()); // "RemoveListener: Listener unknown"

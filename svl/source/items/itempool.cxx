@@ -93,7 +93,6 @@ void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
 
 const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     const SfxPoolItem* pRet;
     if( IsInRange( nWhich ) )
         pRet = *(pImp->ppPoolDefaults + GetIndex_Impl( nWhich ));
@@ -185,8 +184,6 @@ SfxItemPool::SfxItemPool
     pItemInfos(pInfos),
     pImp( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
-    DBG_CTOR(SfxItemPool, 0);
-
     pImp->eDefMetric = SFX_MAPUNIT_TWIP;
     pImp->nVersion = 0;
     pImp->bStreaming = false;
@@ -230,7 +227,6 @@ SfxItemPool::SfxItemPool
     pItemInfos(rPool.pItemInfos),
     pImp( new SfxItemPool_Impl( this, rPool.pImp->aName, rPool.pImp->mnStart, rPool.pImp->mnEnd ) )
 {
-    DBG_CTOR(SfxItemPool, 0);
     pImp->eDefMetric = rPool.pImp->eDefMetric;
     pImp->nVersion = rPool.pImp->nVersion;
     pImp->bStreaming = false;
@@ -283,7 +279,6 @@ SfxItemPool::SfxItemPool
 
 void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT( pDefaults, "erst wollen, dann nichts geben..." );
     DBG_ASSERT( !pImp->ppStaticDefaults, "habe schon defaults" );
 
@@ -383,8 +378,6 @@ void SfxItemPool::ReleaseDefaults
 
 SfxItemPool::~SfxItemPool()
 {
-    DBG_DTOR(SfxItemPool, 0);
-
     if ( !pImp->maPoolItems.empty() && pImp->ppPoolDefaults )
         Delete();
 
@@ -494,8 +487,6 @@ void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfos)
 
 SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     return pImp->eDefMetric;
 }
 
@@ -503,8 +494,6 @@ SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 
 void SfxItemPool::SetDefaultMetric( SfxMapUnit eNewMetric )
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     pImp->eDefMetric = eNewMetric;
 }
 
@@ -524,7 +513,6 @@ SfxItemPresentation SfxItemPool::GetPresentation
     const IntlWrapper * pIntlWrapper
 )   const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     return rItem.GetPresentation(
         ePresent, GetMetric(rItem.Which()), eMetric, rText, pIntlWrapper );
 }
@@ -534,8 +522,6 @@ SfxItemPresentation SfxItemPool::GetPresentation
 
 SfxItemPool* SfxItemPool::Clone() const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     SfxItemPool *pPool = new SfxItemPool( *this );
     return pPool;
 }
@@ -544,8 +530,6 @@ SfxItemPool* SfxItemPool::Clone() const
 
 void SfxItemPool::Delete()
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     // schon deleted?
     if ( pImp->maPoolItems.empty() || !pImp->ppPoolDefaults )
         return;
@@ -635,7 +619,6 @@ void SfxItemPool::Delete()
 
 void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     if ( IsInRange(rItem.Which()) )
     {
         SfxPoolItem **ppOldDefault =
@@ -663,7 +646,6 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
  */
 void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     if ( IsInRange(nWhichId) )
     {
         SfxPoolItem **ppOldDefault =
@@ -690,7 +672,6 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
                 0 != &((const SfxSetItem&)rItem).GetItemSet(),
                 "SetItem without ItemSet" );
 
-    DBG_CHKTHIS(SfxItemPool, 0);
     if ( 0 == nWhich )
         nWhich = rItem.Which();
 
@@ -815,8 +796,6 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
 
 void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
                 0 != &((const SfxSetItem&)rItem).GetItemSet(),
                 "SetItem without ItemSet" );
@@ -896,8 +875,6 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
 const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     if ( !IsInRange(nWhich) )
     {
         if ( pImp->mpSecondary )
@@ -945,7 +922,6 @@ void SfxItemPool::FreezeIdRanges()
 
 void SfxItemPool::FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT( !pImp->mpPoolRanges, "GetFrozenRanges() would be faster!" );
 
     const SfxItemPool *pPool;
@@ -971,8 +947,6 @@ const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
 
 const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     if ( !IsInRange(nWhich) )
     {
         if ( pImp->mpSecondary )
@@ -996,8 +970,6 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
 
 sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     if ( !IsInRange(nWhich) )
     {
         if ( pImp->mpSecondary )

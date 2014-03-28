@@ -22,17 +22,10 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxSetItem)
-
-
-
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),
     pSet(rSet.Clone(sal_True))
 {
-    DBG_CTOR(SfxSetItem, 0);
 }
 
 
@@ -41,7 +34,6 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
     SfxPoolItem(which),
     pSet(pS)
 {
-    DBG_CTOR(SfxSetItem, 0);
     DBG_ASSERT(pS, "SfxSetItem without set constructed" );
 }
 
@@ -51,14 +43,12 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     SfxPoolItem(rCopy.Which()),
     pSet(rCopy.pSet->Clone(sal_True, pPool))
 {
-    DBG_CTOR(SfxSetItem, 0);
 }
 
 
 
 SfxSetItem::~SfxSetItem()
 {
-    DBG_DTOR(SfxSetItem, 0);
     delete pSet; pSet = 0;
 }
 
@@ -66,7 +56,6 @@ SfxSetItem::~SfxSetItem()
 
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {
-    DBG_CHKTHIS(SfxSetItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
     return *pSet == *(((const SfxSetItem &)rCmp).pSet);
 }
@@ -82,7 +71,6 @@ SfxItemPresentation SfxSetItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    DBG_CHKTHIS(SfxSetItem, 0);
     return SFX_ITEM_PRESENTATION_NONE;
 }
 

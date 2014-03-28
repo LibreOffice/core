@@ -22,18 +22,9 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxItemIter);
-
-
-
-
-
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     : _rSet( rItemSet )
 {
-    DBG_CTOR(SfxItemIter, 0);
     DBG_ASSERTWARNING( _rSet.Count(), "es gibt gar keine Attribute" );
 
     if ( !_rSet._nCount )
@@ -63,7 +54,6 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
 
 SfxItemIter::~SfxItemIter()
 {
-    DBG_DTOR(SfxItemIter, 0);
 }
 
 
@@ -71,7 +61,6 @@ SfxItemIter::~SfxItemIter()
 
 const SfxPoolItem* SfxItemIter::NextItem()
 {
-    DBG_CHKTHIS(SfxItemIter, 0);
     SfxItemArray ppFnd = _rSet._aItems;
 
     if( _nAkt < _nEnd )

@@ -26,19 +26,12 @@
 #include <svl/poolitem.hxx>
 #include <svl/memberid.hrc>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxSizeItem)
-
-
-
 TYPEINIT1_AUTOFACTORY(SfxSizeItem, SfxPoolItem);
 
 
 
 SfxSizeItem::SfxSizeItem()
 {
-    DBG_CTOR(SfxSizeItem, 0);
 }
 
 
@@ -47,7 +40,6 @@ SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
-    DBG_CTOR(SfxSizeItem, 0);
 }
 
 
@@ -56,7 +48,6 @@ SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
-    DBG_CTOR(SfxSizeItem, 0);
 }
 
 
@@ -70,7 +61,6 @@ SfxItemPresentation SfxSizeItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    DBG_CHKTHIS(SfxSizeItem, 0);
     rText = OUString::number(aVal.Width()) + ", " + OUString::number(aVal.Height()) + ", ";
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
@@ -79,7 +69,6 @@ SfxItemPresentation SfxSizeItem::GetPresentation
 
 bool SfxSizeItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_CHKTHIS(SfxSizeItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return ((SfxSizeItem&)rItem).aVal == aVal;
 }
@@ -88,7 +77,6 @@ bool SfxSizeItem::operator==( const SfxPoolItem& rItem ) const
 
 SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 {
-    DBG_CHKTHIS(SfxSizeItem, 0);
     return new SfxSizeItem( *this );
 }
 
@@ -96,7 +84,6 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 
 SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxSizeItem, 0);
     Size aStr;
     ReadPair( rStream, aStr );
     return new SfxSizeItem(Which(), aStr);
@@ -106,7 +93,6 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxSizeItem, 0);
     WritePair( rStream, aVal );
     return rStream;
 }

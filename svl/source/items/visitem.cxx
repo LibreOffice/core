@@ -21,18 +21,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 
-
-//  class SfxVisibilityItem
-
-
-DBG_NAME(SfxVisibilityItem)
-
 TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
 
 SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
-    DBG_CTOR(SfxVisibilityItem, 0);
     bool bValue = false;
     rStream.ReadCharAsBool( bValue );
     m_nValue.bVisible = bValue;
@@ -41,7 +34,6 @@ SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
 // virtual
 bool SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_CHKTHIS(SfxVisibilityItem, 0);
     DBG_ASSERT(SfxPoolItem::operator ==(rItem), "unequal type");
     return m_nValue.bVisible == (static_cast< const SfxVisibilityItem * >(&rItem))->
                         m_nValue.bVisible;
@@ -86,14 +78,12 @@ bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8
 // virtual
 SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
 {
-    DBG_CHKTHIS(SfxVisibilityItem, 0);
     return new SfxVisibilityItem(Which(), rStream);
 }
 
 // virtual
 SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    DBG_CHKTHIS(SfxVisibilityItem, 0);
     rStream.WriteUChar( m_nValue.bVisible );
     return rStream;
 }
@@ -101,7 +91,6 @@ SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
 // virtual
 SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
 {
-    DBG_CHKTHIS(SfxVisibilityItem, 0);
     return new SfxVisibilityItem(*this);
 }
 

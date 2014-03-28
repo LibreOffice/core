@@ -26,22 +26,18 @@
 #include <svl/lstner.hxx>
 #include <algorithm>
 
-DBG_NAME(SfxListener)
 TYPEINIT0(SfxListener);
 
 // simple ctor of class SfxListener
 
 SfxListener::SfxListener()
 {
-    DBG_CTOR(SfxListener, 0);
 }
 
 // copy ctor of class SfxListener
 
 SfxListener::SfxListener( const SfxListener &rListener )
 {
-    DBG_CTOR(SfxListener, 0);
-
     for ( sal_uInt16 n = 0; n < rListener.aBCs.size(); ++n )
         StartListening( *rListener.aBCs[n] );
 }
@@ -50,8 +46,6 @@ SfxListener::SfxListener( const SfxListener &rListener )
 
 SfxListener::~SfxListener()
 {
-    DBG_DTOR(SfxListener, 0);
-
     // unregister at all remaining broadcasters
     for ( sal_uInt16 nPos = 0; nPos < aBCs.size(); ++nPos )
     {
@@ -65,8 +59,6 @@ SfxListener::~SfxListener()
 
 void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
-    DBG_CHKTHIS(SfxListener, 0);
-
     aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
 }
 
@@ -75,8 +67,6 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 
 bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups )
 {
-    DBG_CHKTHIS(SfxListener, 0);
-
     if ( !bPreventDups || !IsListening( rBroadcaster ) )
     {
         rBroadcaster.AddListener(*this);
@@ -94,8 +84,6 @@ bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
 
 bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 {
-    DBG_CHKTHIS(SfxListener, 0);
-
     if ( !IsListening( rBroadcaster ) )
         return false;
 
@@ -113,8 +101,6 @@ bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 
 void SfxListener::EndListeningAll()
 {
-    DBG_CHKTHIS(SfxListener, 0);
-
     // MI: bei Optimierung beachten: Seiteneffekte von RemoveListener beachten!
     while ( !aBCs.empty() )
     {

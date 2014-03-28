@@ -21,16 +21,11 @@
 #include <svl/whiter.hxx>
 #include <svl/itemset.hxx>
 
-DBG_NAME(SfxWhichIter)
-
-
-
 SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt16 nToWh ):
     pRanges(rSet.GetRanges()),
     pStart(rSet.GetRanges()),
     nOfst(0), nFrom(nFromWh), nTo(nToWh)
 {
-    DBG_CTOR(SfxWhichIter, 0);
     if ( nFrom > 0 )
         FirstWhich();
 }
@@ -39,14 +34,12 @@ SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt
 
 SfxWhichIter::~SfxWhichIter()
 {
-    DBG_DTOR(SfxWhichIter, 0);
 }
 
 
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
-    DBG_CHKTHIS(SfxWhichIter, 0);
     while ( 0 != *pRanges )
     {
         const sal_uInt16 nLastWhich = *pRanges + nOfst;
@@ -67,7 +60,6 @@ sal_uInt16 SfxWhichIter::NextWhich()
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {
-    DBG_CHKTHIS(SfxWhichIter, 0);
     pRanges = pStart;
     nOfst = 0;
     if ( *pRanges >= nFrom && *pRanges <= nTo )

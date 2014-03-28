@@ -24,9 +24,6 @@
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 
-
-DBG_NAMEEX_VISIBILITY(CntUnencodedStringItem, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 {
     OUString m_aValue;
@@ -35,17 +32,17 @@ public:
     TYPEINFO_OVERRIDE();
 
     CntUnencodedStringItem(sal_uInt16 which = 0): SfxPoolItem(which)
-    { DBG_CTOR(CntUnencodedStringItem, 0); }
+    {}
 
     CntUnencodedStringItem(sal_uInt16 which, const OUString & rTheValue):
         SfxPoolItem(which), m_aValue(rTheValue)
-    { DBG_CTOR(CntUnencodedStringItem, 0); }
+    {}
 
     CntUnencodedStringItem(const CntUnencodedStringItem & rItem):
         SfxPoolItem(rItem), m_aValue(rItem.m_aValue)
-    { DBG_CTOR(CntUnencodedStringItem, 0); }
+    {}
 
-    virtual ~CntUnencodedStringItem() { DBG_DTOR(CntUnencodedStringItem, 0); }
+    virtual ~CntUnencodedStringItem() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 

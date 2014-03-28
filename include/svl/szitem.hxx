@@ -25,10 +25,6 @@
 
 class SvStream;
 
-DBG_NAMEEX(SfxSizeItem)
-
-
-
 class SfxSizeItem : public SfxPoolItem
 {
 private:
@@ -39,7 +35,7 @@ public:
                              SfxSizeItem();
                              SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
                              SfxSizeItem( const SfxSizeItem& );
-                             ~SfxSizeItem() { DBG_DTOR(SfxSizeItem, 0); }
+                             ~SfxSizeItem() {}
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

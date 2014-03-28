@@ -24,11 +24,6 @@
 #include <svl/itemset.hxx>
 #include <svl/poolcach.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxItemPoolCache)
-
-
 SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):
     pPool(pItemPool),
@@ -36,7 +31,6 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     pSetToPut( 0 ),
     pItemToPut( &pItemPool->Put(*pPutItem) )
 {
-    DBG_CTOR(SfxItemPoolCache, 0);
     DBG_ASSERT(pItemPool, "kein Pool angegeben");
 }
 
@@ -48,14 +42,12 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     pSetToPut( pPutSet ),
     pItemToPut( 0 )
 {
-    DBG_CTOR(SfxItemPoolCache, 0);
     DBG_ASSERT(pItemPool, "kein Pool angegeben");
 }
 
 
 SfxItemPoolCache::~SfxItemPoolCache()
 {
-    DBG_DTOR(SfxItemPoolCache, 0);
     for ( size_t nPos = 0; nPos < pCache->size(); ++nPos ) {
         pPool->Remove( *(*pCache)[nPos].pPoolItem );
         pPool->Remove( *(*pCache)[nPos].pOrigItem );
@@ -69,7 +61,6 @@ SfxItemPoolCache::~SfxItemPoolCache()
 
 const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool bNew )
 {
-    DBG_CHKTHIS(SfxItemPoolCache, 0);
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
     DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
                 "original not in pool" );

@@ -26,20 +26,12 @@
 #include <svl/poolitem.hxx>
 #include <svl/memberid.hrc>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxRectangleItem)
-
-
-
-
 TYPEINIT1_AUTOFACTORY(SfxRectangleItem, SfxPoolItem);
 
 
 
 SfxRectangleItem::SfxRectangleItem()
 {
-    DBG_CTOR(SfxRectangleItem, 0);
 }
 
 
@@ -48,7 +40,6 @@ SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
-    DBG_CTOR(SfxRectangleItem, 0);
 }
 
 
@@ -57,7 +48,6 @@ SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
-    DBG_CTOR(SfxRectangleItem, 0);
 }
 
 
@@ -71,7 +61,6 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    DBG_CHKTHIS(SfxRectangleItem, 0);
     rText = OUString::number(aVal.Top())    + ", " +
             OUString::number(aVal.Left())   + ", " +
             OUString::number(aVal.Bottom()) + ", " +
@@ -83,7 +72,6 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
 
 bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_CHKTHIS(SfxRectangleItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return ((SfxRectangleItem&)rItem).aVal == aVal;
 }
@@ -92,7 +80,6 @@ bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 
 SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 {
-    DBG_CHKTHIS(SfxRectangleItem, 0);
     return new SfxRectangleItem( *this );
 }
 
@@ -100,7 +87,6 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 
 SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxRectangleItem, 0);
     Rectangle aStr;
     ReadRectangle( rStream, aStr );
     return new SfxRectangleItem(Which(), aStr);
@@ -110,7 +96,6 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 
 SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_CHKTHIS(SfxRectangleItem, 0);
     WriteRectangle( rStream, aVal );
     return rStream;
 }

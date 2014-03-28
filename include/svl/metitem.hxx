@@ -22,10 +22,6 @@
 #include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
 
-DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)
-
-
-
 class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {
 public:
@@ -33,8 +29,7 @@ public:
     explicit                 SfxMetricItem( sal_uInt16 nWhich = 0, sal_uInt32 nValue = 0 );
                              SfxMetricItem( sal_uInt16 nWhich, SvStream & );
                              SfxMetricItem( const SfxMetricItem& );
-                             ~SfxMetricItem() {
-                                 DBG_DTOR(SfxMetricItem, 0); }
+                             ~SfxMetricItem() {}
 
     virtual bool             ScaleMetrics( long lMult, long lDiv ) SAL_OVERRIDE;
     virtual bool             HasMetrics() const SAL_OVERRIDE;

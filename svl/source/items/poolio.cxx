@@ -30,11 +30,6 @@
 #include "poolio.hxx"
 #include <boost/scoped_array.hpp>
 
-// STATIC DATA -----------------------------------------------------------
-
-DBG_NAME(SfxItemPool);
-
-
 const SfxItemPool* SfxItemPool::GetStoringPool()
 
 /*  [Beschreibung]
@@ -107,8 +102,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 */
 
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
-
     // Store-Master finden
     SfxItemPool *pStoreMaster = pImp->mpMaster != this ? pImp->mpMaster : 0;
     while ( pStoreMaster && !pStoreMaster->pImp->bStreaming )
@@ -466,7 +459,6 @@ void SfxItemPool_Impl::readTheItems (
 
 SvStream &SfxItemPool::Load(SvStream &rStream)
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT(pImp->ppStaticDefaults, "kein DefaultArray");
 
     // protect items by increasing ref count
@@ -710,7 +702,6 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
 sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT(nWhich >= pImp->mnStart && nWhich <= pImp->mnEnd, "Which-Id nicht im Pool-Bereich");
     return nWhich - pImp->mnStart;
 }
@@ -1160,7 +1151,6 @@ bool SfxItemPool::StoreSurrogate
 
 sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 {
-    DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT( pItem, "no 0-Pointer Surrogate" );
     DBG_ASSERT( !IsInvalidItem(pItem), "no Invalid-Item Surrogate" );
     DBG_ASSERT( !IsPoolDefaultItem(pItem), "no Pool-Default-Item Surrogate" );

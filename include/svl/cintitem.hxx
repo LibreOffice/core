@@ -24,9 +24,6 @@
 #include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 
-
-DBG_NAMEEX_VISIBILITY(CntByteItem, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
 {
     sal_uInt8 m_nValue;
@@ -35,13 +32,13 @@ public:
     TYPEINFO_OVERRIDE();
 
     CntByteItem(sal_uInt16 which = 0, sal_uInt8 nTheValue = 0):
-        SfxPoolItem(which), m_nValue(nTheValue) { DBG_CTOR(CntByteItem, 0); }
+        SfxPoolItem(which), m_nValue(nTheValue) {}
 
     CntByteItem(const CntByteItem & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    { DBG_CTOR(CntByteItem, 0); }
+    {}
 
-    virtual ~CntByteItem() { DBG_DTOR(CntByteItem, 0); }
+    virtual ~CntByteItem() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
@@ -83,9 +80,6 @@ inline void CntByteItem::SetValue(sal_uInt8 nTheValue)
     m_nValue = nTheValue;
 }
 
-
-DBG_NAMEEX_VISIBILITY(CntUInt16Item, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
 {
     sal_uInt16 m_nValue;
@@ -95,15 +89,15 @@ public:
 
     CntUInt16Item(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
-    { DBG_CTOR(CntUInt16Item, 0); }
+    {}
 
     CntUInt16Item(sal_uInt16 which, SvStream & rStream);
 
     CntUInt16Item(const CntUInt16Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    { DBG_CTOR(CntUInt16Item, 0); }
+    {}
 
-    virtual ~CntUInt16Item() { DBG_DTOR(CntUInt16Item, 0); }
+    virtual ~CntUInt16Item() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
@@ -145,9 +139,6 @@ inline void CntUInt16Item::SetValue(sal_uInt16 nTheValue)
     m_nValue = nTheValue;
 }
 
-
-DBG_NAMEEX_VISIBILITY(CntInt32Item, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
 {
     sal_Int32 m_nValue;
@@ -157,15 +148,15 @@ public:
 
     CntInt32Item(sal_uInt16 which = 0, sal_Int32 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
-    { DBG_CTOR(CntInt32Item, 0); }
+    {}
 
     CntInt32Item(sal_uInt16 which, SvStream & rStream);
 
     CntInt32Item(const CntInt32Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    { DBG_CTOR(CntInt32Item, 0); }
+    {}
 
-    virtual ~CntInt32Item() { DBG_DTOR(CntInt32Item, 0); }
+    virtual ~CntInt32Item() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
@@ -207,9 +198,6 @@ inline void CntInt32Item::SetValue(sal_Int32 nTheValue)
     m_nValue = nTheValue;
 }
 
-
-DBG_NAMEEX_VISIBILITY(CntUInt32Item, SVL_DLLPUBLIC)
-
 class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
 {
     sal_uInt32 m_nValue;
@@ -219,15 +207,15 @@ public:
 
     CntUInt32Item(sal_uInt16 which = 0, sal_uInt32 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
-    { DBG_CTOR(CntUInt32Item, 0); }
+    {}
 
     CntUInt32Item(sal_uInt16 nWhich, SvStream & rStream);
 
     CntUInt32Item(const CntUInt32Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    { DBG_CTOR(CntUInt32Item, 0); }
+    {}
 
-    virtual ~CntUInt32Item() { DBG_DTOR(CntUInt32Item, 0); }
+    virtual ~CntUInt32Item() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
