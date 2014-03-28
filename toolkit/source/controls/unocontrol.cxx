@@ -130,10 +130,6 @@ struct UnoControl_Data
     }
 };
 
-
-//  class UnoControl
-
-DBG_NAME( UnoControl )
 UnoControl::UnoControl() :
       maDisposeListeners( *this )
     , maWindowListeners( *this )
@@ -145,7 +141,6 @@ UnoControl::UnoControl() :
     , maModeChangeListeners( GetMutex() )
     , mpData( new UnoControl_Data )
 {
-    DBG_CTOR( UnoControl, NULL );
     mbDisposePeer = true;
     mbRefeshingPeer = false;
     mbCreatingPeer = false;
@@ -156,7 +151,6 @@ UnoControl::UnoControl() :
 UnoControl::~UnoControl()
 {
     DELETEZ( mpData );
-    DBG_DTOR( UnoControl, NULL );
 }
 
 OUString UnoControl::GetComponentServiceName()

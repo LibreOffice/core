@@ -56,21 +56,14 @@ namespace toolkit
         }
     }
 
-
-    //= VCLXSpinButton
-
-    DBG_NAME( VCLXSpinButton )
-
     VCLXSpinButton::VCLXSpinButton()
         :maAdjustmentListeners( *this )
     {
-        DBG_CTOR( VCLXSpinButton, NULL );
     }
 
 
     VCLXSpinButton::~VCLXSpinButton()
     {
-        DBG_DTOR( VCLXSpinButton, NULL );
     }
 
 

@@ -334,24 +334,14 @@ void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pW
     pWindow->GetBorder( rEvent.LeftInset, rEvent.TopInset, rEvent.RightInset, rEvent.BottomInset );
 }
 
-
-//  class VCLXWindow
-
-
-DBG_NAME(VCLXWindow);
-
 VCLXWindow::VCLXWindow( bool _bWithDefaultProps )
     :mpImpl( NULL )
 {
-    DBG_CTOR( VCLXWindow, 0 );
-
     mpImpl = new VCLXWindowImpl( *this, _bWithDefaultProps );
 }
 
 VCLXWindow::~VCLXWindow()
 {
-    DBG_DTOR( VCLXWindow, 0 );
-
     delete mpImpl;
 
     if ( GetWindow() )

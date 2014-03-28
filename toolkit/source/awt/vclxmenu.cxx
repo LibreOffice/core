@@ -36,25 +36,20 @@
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 
-DBG_NAME(VCLXMenu)
-
 VCLXMenu::VCLXMenu()
     : maMenuListeners( *this )
 {
-    DBG_CTOR( VCLXMenu, 0 );
     mpMenu = NULL;
 }
 
 VCLXMenu::VCLXMenu( Menu* pMenu )
     : maMenuListeners( *this )
 {
-    DBG_CTOR( VCLXMenu, 0 );
     mpMenu = pMenu;
 }
 
 VCLXMenu::~VCLXMenu()
 {
-    DBG_DTOR( VCLXMenu, 0 );
     for ( size_t n = maPopupMenuRefs.size(); n; ) {
         delete maPopupMenuRefs[ --n ];
     }
@@ -892,17 +887,13 @@ throw (css::uno::RuntimeException, std::exception)
     return rxGraphic;
 }
 
-DBG_NAME(VCLXMenuBar);
-
 VCLXMenuBar::VCLXMenuBar()
 {
-    DBG_CTOR( VCLXMenuBar, 0 );
     ImplCreateMenu( false );
 }
 
 VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
 {
-    DBG_CTOR( VCLXMenuBar, 0 );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -913,17 +904,13 @@ stardiv_Toolkit_VCLXMenuBar_get_implementation(
     return cppu::acquire(new VCLXMenuBar());
 }
 
-DBG_NAME(VCLXPopupMenu);
-
 VCLXPopupMenu::VCLXPopupMenu()
 {
-    DBG_CTOR( VCLXPopupMenu, 0 );
     ImplCreateMenu( true );
 }
 
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )
 {
-    DBG_CTOR( VCLXPopupMenu, 0 );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

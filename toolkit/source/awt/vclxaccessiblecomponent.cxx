@@ -42,15 +42,10 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-
-DBG_NAME(VCLXAccessibleComponent)
-
-
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
     : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
 {
-    DBG_CTOR( VCLXAccessibleComponent, 0 );
     mpVCLXindow = pVCLXindow;
     mxWindow = pVCLXindow;
 
@@ -69,8 +64,6 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
 
 VCLXAccessibleComponent::~VCLXAccessibleComponent()
 {
-    DBG_DTOR( VCLXAccessibleComponent, 0 );
-
     ensureDisposed();
 
     if ( mpVCLXindow && mpVCLXindow->GetWindow() )
@@ -111,8 +104,6 @@ uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() th
 
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_CHKTHIS(VCLXAccessibleComponent,0);
-
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
 
         /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
@@ -132,8 +123,6 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
 
 IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_CHKTHIS(VCLXAccessibleComponent,0);
-
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #i68079# */ )
     {
