@@ -41,19 +41,19 @@ public:
     virtual void copyArea( long nDestX, long nDestY,
                            long nSrcX, long nSrcY,
                            long nSrcWidth, long nSrcHeight,
-                           sal_uInt16 /*nFlags*/ );
+                           sal_uInt16 /*nFlags*/ ) SAL_OVERRIDE;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               const OUString& rCaption );
-    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
+                                               const OUString& rCaption ) SAL_OVERRIDE;
+    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart,
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
                                                     const ImplControlValue& aValue,
                                                     const OUString& rCaption,
                                                     Rectangle &rNativeBoundingRegion,
-                                                    Rectangle &rNativeContentRegion );
+                                                    Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );

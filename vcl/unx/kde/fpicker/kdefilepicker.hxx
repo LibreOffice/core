@@ -20,7 +20,10 @@
 #ifndef INCLUDED_VCL_UNX_KDE_FPICKER_KDEFILEPICKER_HXX
 #define INCLUDED_VCL_UNX_KDE_FPICKER_KDEFILEPICKER_HXX
 
+#include <sal/config.h>
+
 #include <config_vclplug.h>
+#include <sal/types.h>
 
 #if ENABLE_TDE
 #include <shell/tde_defines.h>
@@ -81,11 +84,11 @@ public:
     virtual ~KDEFileDialog();
 
 protected:
-    virtual void                resizeEvent( QResizeEvent *pEvent );
-    virtual void                showEvent( QShowEvent *pEvent );
+    virtual void                resizeEvent( QResizeEvent *pEvent ) SAL_OVERRIDE;
+    virtual void                showEvent( QShowEvent *pEvent ) SAL_OVERRIDE;
     void                        updateCustomWidgetLayout();
 
-    virtual void                customEvent( QCustomEvent *pEvent );
+    virtual void                customEvent( QCustomEvent *pEvent ) SAL_OVERRIDE;
 
 protected:
     void                        appendControl( const QString &rId, const QString &rType, const QString &rTitle );

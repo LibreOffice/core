@@ -20,7 +20,10 @@
 #ifndef INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX
 #define INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX
 
+#include <sal/config.h>
+
 #include <config_vclplug.h>
+#include <sal/types.h>
 
 #if ENABLE_TDE
 #include <shell/tde_defines.h>
@@ -41,7 +44,7 @@ public:
     KDEModalityFilter( WId nWinId );
     virtual ~KDEModalityFilter();
 
-    virtual bool eventFilter( QObject *pObject, QEvent *pEvent );
+    virtual bool eventFilter( QObject *pObject, QEvent *pEvent ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX

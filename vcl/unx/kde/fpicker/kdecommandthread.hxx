@@ -20,7 +20,10 @@
 #ifndef INCLUDED_VCL_UNX_KDE_FPICKER_KDECOMMANDTHREAD_HXX
 #define INCLUDED_VCL_UNX_KDE_FPICKER_KDECOMMANDTHREAD_HXX
 
+#include <sal/config.h>
+
 #include <config_vclplug.h>
+#include <sal/types.h>
 
 #if ENABLE_TDE
 #include <shell/tde_defines.h>
@@ -88,7 +91,7 @@ public:
     KDECommandThread( QWidget *pObject );
     virtual ~KDECommandThread();
 
-    virtual void                run();
+    virtual void                run() SAL_OVERRIDE;
 
 protected:
     void                        handleCommand( const QString &rString, bool &bQuit );

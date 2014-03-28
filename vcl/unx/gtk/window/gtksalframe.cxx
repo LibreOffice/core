@@ -382,7 +382,7 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 
     virtual ~DamageTracker() {}
 
-    virtual void damaged(const basegfx::B2IBox& rDamageRect) const
+    virtual void damaged(const basegfx::B2IBox& rDamageRect) const SAL_OVERRIDE
     {
         m_rFrame.damaged(rDamageRect);
     }
