@@ -60,12 +60,12 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(Run
     if ( pTabControl )
     {
         TabPage *pTabPage = pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >(  pTabControl->GetCurPageId( ) ) );
-        if ( pTabPage )
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+        if (pTabPage && pDev)
         {
             ::Point aPos( nX, nY );
             ::Size  aSize = pTabPage->GetSizePixel();
 
-            OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
             aPos  = pDev->PixelToLogic( aPos );
             aSize = pDev->PixelToLogic( aSize );
 
