@@ -186,10 +186,6 @@ SbxVariable* SbxArray::Get32( sal_uInt32 nIdx )
 
     if ( !rRef.Is() )
         rRef = new SbxVariable( eType );
-#ifdef DBG_UTIL
-    else
-        DBG_CHKOBJ( rRef, SbxBase, 0 );
-#endif
 
     return rRef;
 }
@@ -205,10 +201,6 @@ SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
 
     if ( !rRef.Is() )
         rRef = new SbxVariable( eType );
-#ifdef DBG_UTIL
-    else
-        DBG_CHKOBJ( rRef, SbxBase, 0 );
-#endif
 
     return rRef;
 }
@@ -268,12 +260,6 @@ static const OUString sEmpty("");
     {
         return sEmpty;
     }
-#ifdef DBG_UTIL
-    else
-    {
-        DBG_CHKOBJ( rRef, SbxBase, 0 );
-    }
-#endif
 
     return *rRef.pAlias;
 }

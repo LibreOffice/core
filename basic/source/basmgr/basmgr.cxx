@@ -99,7 +99,6 @@ static const char szCryptingKey[] = "CryptedBasic";
 static const char szScriptLanguage[] = "StarBasic";
 
 TYPEINIT1( BasicManager, SfxBroadcaster );
-DBG_NAME( BasicManager );
 
 StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL;
 StreamMode eStorageReadMode = STREAM_READ | STREAM_SHARE_DENYWRITE;
@@ -583,8 +582,6 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
 
 BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib, OUString* pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
-    DBG_CTOR( BasicManager, 0 );
-
     Init();
 
     if( pLibPath )
@@ -777,7 +774,6 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
 
 BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
-    DBG_CTOR( BasicManager, 0 );
     Init();
     DBG_ASSERT( pSLib, "BasicManager cannot be created with a NULL-Pointer!" );
 
@@ -826,9 +822,6 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
 
 void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadLibs )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
-
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
@@ -913,9 +906,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
 
 void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
-
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szOldManagerStream), eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
@@ -996,8 +986,6 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 
 BasicManager::~BasicManager()
 {
-    DBG_DTOR( BasicManager, 0 );
-
     // Notify listener if something needs to be saved
     Broadcast( SfxSimpleHint( SFX_HINT_DYING) );
 
@@ -1034,16 +1022,12 @@ bool BasicManager::HasExeCode( const OUString& sLib )
 
 void BasicManager::Init()
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     pLibs = new BasicLibs;
     mpImpl = new BasicManagerImpl();
 }
 
 BasicLibInfo* BasicManager::CreateLibInfo()
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pInf = new BasicLibInfo;
     pLibs->Insert( pInf );
     return pInf;
@@ -1051,8 +1035,6 @@ BasicLibInfo* BasicManager::CreateLibInfo()
 
 bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     DBG_ASSERT( pLibInfo, "LibInfo!?" );
 
     OUString aStorageName( pLibInfo->GetStorageName() );
@@ -1239,8 +1221,6 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference ) const
 
 StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( !aStorName.isEmpty(), "No Storage Name!" );
 
@@ -1292,8 +1272,6 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
 
 bool BasicManager::IsReference( sal_uInt16 nLib )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
     DBG_ASSERT( pLibInfo, "Lib?!" );
     if ( pLibInfo )
@@ -1311,7 +1289,6 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib )
 
 bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
     DBG_ASSERT( nLib, "Standard-Lib cannot be removed!" );
 
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
@@ -1389,13 +1366,11 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 
 sal_uInt16 BasicManager::GetLibCount() const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
     return (sal_uInt16)pLibs->Count();
 }
 
 StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
     BasicLibInfo* pInf = pLibs->GetObject( nLib );
     DBG_ASSERT( pInf, "Lib does not exist!" );
     if ( pInf )
@@ -1407,15 +1382,12 @@ StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
 
 StarBASIC* BasicManager::GetStdLib() const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
     StarBASIC* pLib = GetLib( 0 );
     return pLib;
 }
 
 StarBASIC* BasicManager::GetLib( const OUString& rName ) const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pInf = pLibs->First();
     while ( pInf )
     {
@@ -1430,8 +1402,6 @@ StarBASIC* BasicManager::GetLib( const OUString& rName ) const
 
 sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pInf = pLibs->First();
     while ( pInf )
     {
@@ -1446,8 +1416,6 @@ sal_uInt16 BasicManager::GetLibId( const OUString& rName ) const
 
 bool BasicManager::HasLib( const OUString& rName ) const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pInf = pLibs->First();
     while ( pInf )
     {
@@ -1462,8 +1430,6 @@ bool BasicManager::HasLib( const OUString& rName ) const
 
 bool BasicManager::SetLibName( sal_uInt16 nLib, const OUString& rName )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
     DBG_ASSERT( pLibInfo, "Lib?!" );
     if ( pLibInfo )
@@ -1482,8 +1448,6 @@ bool BasicManager::SetLibName( sal_uInt16 nLib, const OUString& rName )
 
 OUString BasicManager::GetLibName( sal_uInt16 nLib )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
     DBG_ASSERT( pLibInfo, "Lib?!" );
     if ( pLibInfo )
@@ -1495,8 +1459,6 @@ OUString BasicManager::GetLibName( sal_uInt16 nLib )
 
 bool BasicManager::LoadLib( sal_uInt16 nLib )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     bool bDone = false;
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
     DBG_ASSERT( pLibInfo, "Lib?!" );
@@ -1530,7 +1492,6 @@ bool BasicManager::LoadLib( sal_uInt16 nLib )
 
 StarBASIC* BasicManager::CreateLib( const OUString& rLibName )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
     if ( GetLib( rLibName ) )
     {
         return 0;
@@ -1580,7 +1541,6 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
 StarBASIC* BasicManager::CreateLibForLibContainer( const OUString& rLibName,
     const uno::Reference< script::XLibraryContainer >& xScriptCont )
 {
-    DBG_CHKTHIS( BasicManager, 0 );
     if ( GetLib( rLibName ) )
     {
         return 0;
@@ -1599,8 +1559,6 @@ StarBASIC* BasicManager::CreateLibForLibContainer( const OUString& rLibName,
 
 BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic ) const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pInf = ((BasicManager*)this)->pLibs->First();
     while ( pInf )
     {
@@ -1616,8 +1574,6 @@ BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic ) const
 
 bool BasicManager::IsBasicModified() const
 {
-    DBG_CHKTHIS( BasicManager, 0 );
-
     BasicLibInfo* pInf = pLibs->First();
     while ( pInf )
     {

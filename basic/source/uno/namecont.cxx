@@ -364,11 +364,6 @@ bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScri
     return true;    // notify all other listeners too
 }
 
-
-
-// Implementation class SfxLibraryContainer
-DBG_NAME( SfxLibraryContainer )
-
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer( void )
     : SfxLibraryContainer_BASE( maMutex )
@@ -384,8 +379,6 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     , mbOwnBasMgr( false )
     , meInitMode(DEFAULT)
 {
-    DBG_CTOR( SfxLibraryContainer, NULL );
-
     mxContext = comphelper::getProcessComponentContext();
 
     mxSFI = ucb::SimpleFileAccess::create( mxContext );
@@ -399,7 +392,6 @@ SfxLibraryContainer::~SfxLibraryContainer()
     {
         BasicManager::LegacyDeleteBasicManager( mpBasMgr );
     }
-    DBG_DTOR( SfxLibraryContainer, NULL );
 }
 
 void SfxLibraryContainer::checkDisposed() const

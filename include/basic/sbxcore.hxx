@@ -52,8 +52,6 @@ class SbxBase;
 class SbxFactory;
 class SbxObject;
 
-DBG_NAMEEX_VISIBILITY(SbxBase, BASIC_DLLPUBLIC)
-
 class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
     virtual bool LoadData( SvStream&, sal_uInt16 );
@@ -111,43 +109,40 @@ public:
 SV_DECL_REF(SbxBase)
 
 inline void SbxBase::SetFlags( sal_uInt16 n )
-{ //DBG_CHKTHIS( SbxBase, 0 );
- nFlags = n; }
+{ nFlags = n; }
 
 inline sal_uInt16 SbxBase::GetFlags() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return nFlags; }
+{ return nFlags; }
 
 inline void SbxBase::SetFlag( sal_uInt16 n )
-{ //DBG_CHKTHIS( SbxBase, 0 );
- nFlags |= n; }
+{ nFlags |= n; }
 
 inline void SbxBase::ResetFlag( sal_uInt16 n )
-{ //DBG_CHKTHIS( SbxBase, 0 );
- nFlags &= ~n; }
+{ nFlags &= ~n; }
 
 inline bool SbxBase::IsSet( sal_uInt16 n ) const
-{ DBG_CHKTHIS( SbxBase, 0 ); return ( nFlags & n ) != 0; }
+{ return ( nFlags & n ) != 0; }
 
 inline bool SbxBase::IsReset( sal_uInt16 n ) const
-{ DBG_CHKTHIS( SbxBase, 0 ); return ( nFlags & n ) == 0; }
+{ return ( nFlags & n ) == 0; }
 
 inline bool SbxBase::CanRead() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_READ ); }
+{ return IsSet( SBX_READ ); }
 
 inline bool SbxBase::CanWrite() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_WRITE ); }
+{ return IsSet( SBX_WRITE ); }
 
 inline bool SbxBase::IsModified() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_MODIFIED ); }
+{ return IsSet( SBX_MODIFIED ); }
 
 inline bool SbxBase::IsConst() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_CONST ); }
+{ return IsSet( SBX_CONST ); }
 
 inline bool SbxBase::IsHidden() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return IsSet( SBX_HIDDEN ); }
+{ return IsSet( SBX_HIDDEN ); }
 
 inline bool SbxBase::IsVisible() const
-{ DBG_CHKTHIS( SbxBase, 0 ); return IsReset( SBX_INVISIBLE ); }
+{ return IsReset( SBX_INVISIBLE ); }
 
 #endif
 

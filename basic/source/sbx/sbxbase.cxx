@@ -47,62 +47,48 @@ SbxAppData::~SbxAppData()
     delete pBasicFormater;
 }
 
-
-//////////////////////////////// SbxBase
-
-DBG_NAME(SbxBase);
-
 SbxBase::SbxBase()
 {
-    DBG_CTOR( SbxBase, 0 );
     nFlags  = SBX_READWRITE;
 }
 
 SbxBase::SbxBase( const SbxBase& r )
     : SvRefBase( r )
 {
-    DBG_CTOR( SbxBase, 0 );
     nFlags  = r.nFlags;
 }
 
 SbxBase::~SbxBase()
 {
-    DBG_DTOR(SbxBase,0);
 }
 
 SbxBase& SbxBase::operator=( const SbxBase& r )
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     nFlags = r.nFlags;
     return *this;
 }
 
 SbxDataType SbxBase::GetType() const
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return SbxEMPTY;
 }
 
 SbxClassType SbxBase::GetClass() const
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return SbxCLASS_DONTCARE;
 }
 
 void SbxBase::Clear()
 {
-    DBG_CHKTHIS( SbxBase, 0 );
 }
 
 bool SbxBase::IsFixed() const
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return IsSet( SBX_FIXED );
 }
 
 void SbxBase::SetModified( bool b )
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     if( IsSet( SBX_NO_MODIFY ) )
         return;
     if( b )
@@ -270,7 +256,6 @@ void SbxBase::Skip( SvStream& rStrm )
 
 bool SbxBase::Store( SvStream& rStrm )
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     if( !( nFlags & SBX_DONTSTORE ) )
     {
         rStrm.WriteUInt32( (sal_uInt32) GetCreator() )
@@ -296,37 +281,31 @@ bool SbxBase::Store( SvStream& rStrm )
 
 bool SbxBase::LoadData( SvStream&, sal_uInt16 )
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return false;
 }
 
 bool SbxBase::StoreData( SvStream& ) const
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return false;
 }
 
 bool SbxBase::LoadPrivateData( SvStream&, sal_uInt16 )
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return true;
 }
 
 bool SbxBase::StorePrivateData( SvStream& ) const
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return true;
 }
 
 bool SbxBase::LoadCompleted()
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return true;
 }
 
 bool SbxBase::StoreCompleted()
 {
-    DBG_CHKTHIS( SbxBase, 0 );
     return true;
 }
 
