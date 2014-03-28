@@ -39,8 +39,6 @@ public:
         );
     virtual ~NetChartTypeTemplate();
 
-    APPHELPER_XSERVICEINFO_DECL()
-
 protected:
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL matchesTemplate(

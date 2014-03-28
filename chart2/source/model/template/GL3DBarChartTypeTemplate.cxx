@@ -17,12 +17,6 @@ using namespace com::sun::star;
 
 namespace chart {
 
-namespace {
-
-const OUString aServiceName("com.sun.star.chart2.GL3DBarChartTypeTemplate");
-
-}
-
 GL3DBarChartTypeTemplate::GL3DBarChartTypeTemplate(
     const uno::Reference<uno::XComponentContext>& xContext, const OUString& rServiceName ) :
     ChartTypeTemplate(xContext, rServiceName) {}
@@ -81,16 +75,6 @@ sal_Bool GL3DBarChartTypeTemplate::supportsCategories()
 {
     return false;
 }
-
-uno::Sequence<OUString> GL3DBarChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aServices(2);
-    aServices[0] = aServiceName;
-    aServices[1] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-APPHELPER_XSERVICEINFO_IMPL(GL3DBarChartTypeTemplate, aServiceName);
 
 }
 

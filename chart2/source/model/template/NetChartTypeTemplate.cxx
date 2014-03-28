@@ -34,11 +34,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-namespace
-{
-static const OUString lcl_aServiceName( "com.sun.star.chart2.NetChartTypeTemplate" );
-} // anonymous namespace
-
 namespace chart
 {
 
@@ -198,17 +193,6 @@ Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNe
     ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }
-
-Sequence< OUString > NetChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( NetChartTypeTemplate, lcl_aServiceName );
 
 } //  namespace chart
 

@@ -42,8 +42,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.chart2.LineChartTypeTemplate" );
-
 enum
 {
     PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE,
@@ -374,17 +372,6 @@ void SAL_CALL LineChartTypeTemplate::applyStyle(
         ASSERT_EXCEPTION( ex );
     }
 }
-
-Sequence< OUString > LineChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LineChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( LineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LineChartTypeTemplate, ChartTypeTemplate, OPropertySet )

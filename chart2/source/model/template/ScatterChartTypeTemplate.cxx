@@ -44,8 +44,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.chart2.ScatterChartTypeTemplate" );
-
 enum
 {
     PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE,
@@ -394,17 +392,6 @@ Reference< chart2::XDataInterpreter > SAL_CALL ScatterChartTypeTemplate::getData
 
     return m_xDataInterpreter;
 }
-
-Sequence< OUString > ScatterChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ScatterChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( ScatterChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScatterChartTypeTemplate, ChartTypeTemplate, OPropertySet )

@@ -45,8 +45,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.chart2.ColumnLineChartTypeTemplate" );
-
 enum
 {
     PROP_COL_LINE_NUMBER_OF_LINES
@@ -415,17 +413,6 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
 
     return m_xDataInterpreter;
 }
-
-uno::Sequence< OUString > ColumnLineChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ColumnLineChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( ColumnLineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ColumnLineChartTypeTemplate, ChartTypeTemplate, OPropertySet )

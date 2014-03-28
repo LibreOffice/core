@@ -908,25 +908,11 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
         comphelper::copyProperties( xSource, xDestination );
 }
 
-
-
-Sequence< OUString > ChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    aServices[ 1 ] = "com.sun.star.layout.LayoutElement";
-    aServices[ 2 ] = "com.sun.star.beans.PropertySet";
-    return aServices;
-}
-
 Reference< uno::XComponentContext > ChartTypeTemplate::GetComponentContext() const
 {
     return m_xContext;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ChartTypeTemplate,
-                             OUString("com.sun.star.comp.chart.ChartTypeTemplate") );
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,9 +39,6 @@ public:
         const OUString & rServiceName );
     virtual ~BubbleChartTypeTemplate();
 
-    /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
-
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations

@@ -43,8 +43,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.chart2.BubbleChartTypeTemplate" );
-
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & /*rOutProperties*/ )
 {
@@ -221,17 +219,6 @@ Reference< chart2::XDataInterpreter > SAL_CALL BubbleChartTypeTemplate::getDataI
 
     return m_xDataInterpreter;
 }
-
-Sequence< OUString > BubbleChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( BubbleChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( BubbleChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( BubbleChartTypeTemplate, ChartTypeTemplate, OPropertySet )

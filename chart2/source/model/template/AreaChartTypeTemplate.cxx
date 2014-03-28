@@ -40,8 +40,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.chart2.AreaChartTypeTemplate" );
-
 enum
 {
     PROP_AREA_TEMPLATE_DIMENSION
@@ -243,17 +241,6 @@ Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForN
     ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }
-
-uno::Sequence< OUString > AreaChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( AreaChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( AreaChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( AreaChartTypeTemplate, ChartTypeTemplate, OPropertySet )

@@ -49,8 +49,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.chart2.PieChartTypeTemplate" );
-
 enum
 {
     PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
@@ -615,17 +613,6 @@ void PieChartTypeTemplate::adaptDiagram( const uno::Reference< chart2::XDiagram 
     //different default for scene geometry:
     ThreeDHelper::setDefaultRotation( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ), true );
 }
-
-uno::Sequence< OUString > PieChartTypeTemplate::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aServices( 2 );
-    aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
-    return aServices;
-}
-
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PieChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )

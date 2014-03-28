@@ -43,9 +43,6 @@ public:
         sal_Int32 nNumberOfLines );
     virtual ~ColumnLineChartTypeTemplate();
 
-    /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
-
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations
