@@ -2827,7 +2827,6 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     bool bValChanged = false;
     bool bRefModified = false;
-    bool bRefSizeChanged = false;
 
     if (bHasRefs)
     {
@@ -2877,7 +2876,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     bool bNeedDirty = false;
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
     if ( bRefModified || bColRowNameCompile ||
-         (bValChanged && bHasRelName && (bHasRelName || bInDeleteUndo || bRefSizeChanged)) || bOnRefMove)
+         (bValChanged && bHasRelName ) || bOnRefMove)
         bNeedDirty = true;
 
     if (pUndoDoc && (bValChanged || bOnRefMove))
