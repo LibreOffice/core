@@ -489,9 +489,9 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             // have doc-shell modified only for formula input/change and not
             // cursor travelling and such things...
             SmDocShell *pDocShell = GetDoc();
-            if (pDocShell)
-                pDocShell->SetModified( GetEditEngine()->IsModified() );
-
+            EditEngine *pEditEngine = GetEditEngine();
+            if (pDocShell && pEditEngine)
+                pDocShell->SetModified(pEditEngine->IsModified());
             aModifyTimer.Start();
         }
 
