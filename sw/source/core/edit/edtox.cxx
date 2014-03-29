@@ -308,28 +308,12 @@ void SwEditShell::ApplyAutoMark()
         rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
         // SearchOptions to be used in loop below
-        bool bCaseSensitive = true;
-        bool bWordOnly      = false;
-        bool bSrchInSel     = false;
-        bool bLEV_Relaxed   = true;
         sal_Int32 nLEV_Other    = 2;    //  -> changedChars;
         sal_Int32 nLEV_Longer   = 3;    //! -> deletedChars;
         sal_Int32 nLEV_Shorter  = 1;    //! -> insertedChars;
         sal_Int32 nTransliterationFlags = 0;
 
-        sal_Int32 nSrchFlags = 0;
-        if (!bCaseSensitive)
-        {
-            nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-            nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-        }
-        if ( bWordOnly)
-            nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-        if ( bLEV_Relaxed)
-            nSrchFlags |= SearchFlags::LEV_RELAXED;
-        if ( bSrchInSel)
-            nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                            SearchFlags::REG_NOT_ENDOFLINE );
+        sal_Int32 nSrchFlags = SearchFlags::LEV_RELAXED;
 
         OUString sEmpty;
         SearchOptions aSearchOpt(
@@ -363,8 +347,8 @@ void SwEditShell::ApplyAutoMark()
                     OUString sWordOnly    = sLine.getToken(0, ';', nTokenPos);
 
                     //3.
-                    bCaseSensitive  = !sCase.isEmpty() && !comphelper::string::equals(sCase, cZero);
-                    bWordOnly       = !sWordOnly.isEmpty() && !comphelper::string::equals(sWordOnly, cZero);
+                    bool bCaseSensitive = !sCase.isEmpty() && !comphelper::string::equals(sCase, cZero);
+                    bool bWordOnly = !sWordOnly.isEmpty() && !comphelper::string::equals(sWordOnly, cZero);
 
                     if (!bCaseSensitive)
                     {
