@@ -84,7 +84,7 @@ namespace comphelper
     private:
         /** loads the bundle represented by the instance
 
-            The method is safe against multiple calls: If a previos call succeeded or failed, the
+            The method is safe against multiple calls: If a previous call succeeded or failed, the
             previous result will be returned, without any other processing.
 
             @precond
