@@ -11,7 +11,7 @@
 
 #include "node.hxx"
 
-/** Representation of caret position with an equantion */
+/** Representation of caret position with an equation */
 struct SmCaretPos{
     SmCaretPos(SmNode* selectedNode = NULL, int iIndex = 0) {
         pSelectedNode = selectedNode;
