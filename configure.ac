@@ -4657,6 +4657,20 @@ dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
 
 dnl ===================================================================
+dnl Check for posix_memalign availability
+dnl ===================================================================
+HAVE_POSIX_MEMALIGN=0
+AC_CHECK_LIB(c, posix_memalign, [HAVE_POSIX_MEMALIGN=1])
+AC_DEFINE_UNQUOTED(HAVE_POSIX_MEMALIGN, $HAVE_POSIX_MEMALIGN)
+
+dnl ===================================================================
+dnl Check for memalign availability
+dnl ===================================================================
+HAVE_MEMALIGN=0
+AC_CHECK_LIB(c, memalign, [HAVE_MEMALIGN=1])
+AC_DEFINE_UNQUOTED(HAVE_MEMALIGN, $HAVE_MEMALIGN)
+
+dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable crashdump feature])
