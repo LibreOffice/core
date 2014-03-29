@@ -106,7 +106,7 @@ public:
     BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
     Window*         pEventWin;      // Window of forwarded events
     ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
-    sal_Bool*           pDtorNotify;
+    bool            bInDtor;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
     Point           aLastMousePos;  // prevents pseudo-MouseMoves

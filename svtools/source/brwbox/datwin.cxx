@@ -192,7 +192,7 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,pHeaderBar( 0 )
     ,pEventWin( pParent )
     ,pCornerWin( 0 )
-    ,pDtorNotify( 0 )
+    ,bInDtor( false )
     ,bInPaint( false )
     ,bInCommand( false )
     ,bNoScrollBack( false )
@@ -220,8 +220,7 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
 
 BrowserDataWin::~BrowserDataWin()
 {
-    if( pDtorNotify )
-        *pDtorNotify = sal_True;
+    bInDtor = true;
 
     for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
         delete aInvalidRegion[ i ];
@@ -411,16 +410,13 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     if ( COMMAND_CONTEXTMENU == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
          nRow < pBox->GetRowCount() && !pBox->IsRowSelected(nRow) )
     {
-        sal_Bool bDeleted = sal_False;
-        pDtorNotify = &bDeleted;
         bInCommand = true;
         MouseButtonDown( aMouseEvt );
-        if( bDeleted )
+        if( bInDtor )
             return;
         MouseButtonUp( aMouseEvt );
-        if( bDeleted )
+        if( bInDtor )
             return;
-        pDtorNotify = 0;
         bInCommand = false;
     }
 
@@ -428,12 +424,9 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     CommandEvent aEvt( aEventPos, rEvt.GetCommand(),
                         rEvt.IsMouseEvent(), rEvt.GetData() );
     bInCommand = true;
-    sal_Bool bDeleted = sal_False;
-    pDtorNotify = &bDeleted;
     GetParent()->Command( aEvt );
-    if( bDeleted )
+    if( bInDtor )
         return;
-    pDtorNotify = 0;
     bInCommand = false;
 
     if ( COMMAND_STARTDRAG == rEvt.GetCommand() )
