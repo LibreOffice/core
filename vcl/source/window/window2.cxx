@@ -1865,6 +1865,12 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
             aFont.SetItalic(ITALIC_NORMAL);
         SetControlFont(aFont);
     }
+    else if (rKey == "underline" && rValue == "True")
+    {
+        Font aFont(GetControlFont());
+        aFont.SetUnderline(UNDERLINE_SINGLE);
+        SetControlFont(aFont);
+    }
     else
     {
         SAL_INFO("vcl.layout", "unhandled font attribute: " << rKey.getStr());
