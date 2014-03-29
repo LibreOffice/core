@@ -150,14 +150,14 @@ class StgTmpStrm : public SvMemoryStream
     using SvMemoryStream::GetData;
     virtual sal_uLong GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong SeekPos( sal_uLong nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual void FlushData() SAL_OVERRIDE;
 
 public:
     StgTmpStrm( sal_uLong=16 );
    ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
-    void SetSize( sal_uLong ) SAL_OVERRIDE;
+    virtual void SetSize( sal_uInt64 ) SAL_OVERRIDE;
     sal_uLong GetSize() const;
 };
 

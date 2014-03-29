@@ -43,10 +43,10 @@ public:
                 rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
-    virtual ErrCode ReadAt(sal_uInt64, void *, sal_uLong, sal_uInt64 *) const SAL_OVERRIDE;
+    virtual ErrCode ReadAt(sal_uInt64, void *, sal_uLong, sal_Size *) const SAL_OVERRIDE;
 
     virtual ErrCode WriteAt(sal_uInt64 nPos, const void * pBuffer, sal_uLong nCount,
-                            sal_uInt64 * pWritten) SAL_OVERRIDE;
+                            sal_Size * pWritten) SAL_OVERRIDE;
 
     virtual ErrCode Flush() const SAL_OVERRIDE;
 

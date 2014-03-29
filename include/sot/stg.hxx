@@ -78,7 +78,7 @@ public:
                         TYPEINFO_OVERRIDE();
     virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
-    virtual sal_uLong   Seek( sal_uLong nPos ) = 0;
+    virtual sal_uInt64  Seek( sal_uInt64 nPos ) = 0;
     virtual sal_uLong   Tell() = 0;
     virtual void        Flush() = 0;
     virtual bool        SetSize( sal_uLong nNewSize ) = 0;
@@ -160,7 +160,7 @@ public:
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
     virtual sal_uLong   Read( void * pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong   Seek( sal_uLong nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64  Seek( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual sal_uLong   Tell() SAL_OVERRIDE { return nPos; }
     virtual void        Flush() SAL_OVERRIDE;
     virtual bool        SetSize( sal_uLong nNewSize ) SAL_OVERRIDE;
@@ -255,7 +255,7 @@ public:
 
     virtual sal_uLong           Read( void * pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong           Write( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong           Seek( sal_uLong nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64          Seek( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual sal_uLong           Tell() SAL_OVERRIDE;
     virtual void                Flush() SAL_OVERRIDE;
     virtual bool                SetSize( sal_uLong nNewSize ) SAL_OVERRIDE;

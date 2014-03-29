@@ -39,7 +39,7 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
     com::sun::star::uno::Reference< com::sun::star::io::XSeekable >
         m_xSeekable;
     SvDataPipe_Impl * m_pPipe;
-    sal_uLong m_nSeekedFrom;
+    sal_uInt64 m_nSeekedFrom;
 
     SVL_DLLPRIVATE bool open();
 

@@ -1292,7 +1292,7 @@ sal_uLong UCBStorageStream::Write( const void* pData, sal_uLong nSize )
     return pImp->PutData( pData, nSize );
 }
 
-sal_uLong UCBStorageStream::Seek( sal_uLong nPos )
+sal_uInt64 UCBStorageStream::Seek( sal_uInt64 nPos )
 {
     //return pImp->m_pStream->Seek( nPos );
     return pImp->Seek( nPos );
