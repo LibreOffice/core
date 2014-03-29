@@ -190,8 +190,8 @@ protected: // Overridden methods
 
     virtual sal_uLong   GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong   PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong   SeekPos( sal_uLong nPos ) SAL_OVERRIDE;
-    virtual void    SetSize( sal_uLong nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64   SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
+    virtual void    SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
     virtual void    FlushData() SAL_OVERRIDE;
 
 private: // Data

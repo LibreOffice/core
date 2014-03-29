@@ -197,7 +197,7 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
     virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64  SeekPos(sal_uInt64 nPos) SAL_OVERRIDE;
     virtual void        FlushData() SAL_OVERRIDE;
 
 protected:

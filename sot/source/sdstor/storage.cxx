@@ -160,7 +160,7 @@ sal_uLong SotStorageStream::PutData( const void* pData, sal_uLong nSize )
     return nRet;
 }
 
-sal_uLong SotStorageStream::SeekPos( sal_uLong nPos )
+sal_uInt64 SotStorageStream::SeekPos(sal_uInt64 nPos)
 {
     sal_uLong nRet = 0;
 
@@ -186,9 +186,9 @@ void SotStorageStream::FlushData()
         SvStream::FlushData();
 }
 
-void SotStorageStream::SetSize( sal_uLong nNewSize )
+void SotStorageStream::SetSize(sal_uInt64 const nNewSize)
 {
-    sal_uLong   nPos = Tell();
+    sal_uInt64 const nPos = Tell();
     if( pOwnStm )
     {
         pOwnStm->SetSize( nNewSize );
@@ -211,7 +211,7 @@ sal_uInt32 SotStorageStream::GetSize() const
     return nSize;
 }
 
-sal_Size SotStorageStream::remainingSize()
+sal_uInt64 SotStorageStream::remainingSize()
 {
     if (pOwnStm)
         return pOwnStm->GetSize() - Tell();

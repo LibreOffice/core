@@ -1502,7 +1502,7 @@ ErrCode UcbLockBytes::Flush() const
 }
 
 
-ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
+ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 {
     SvLockBytesStat aStat;
     Stat( &aStat, (SvLockBytesStatFlag) 0 );

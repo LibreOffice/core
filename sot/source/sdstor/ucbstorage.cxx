@@ -407,8 +407,8 @@ public:
 
     virtual sal_uLong           GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong           PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong           SeekPos( sal_uLong nPos ) SAL_OVERRIDE;
-    virtual void                SetSize( sal_uLong nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64          SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
+    virtual void                SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
     virtual void                FlushData() SAL_OVERRIDE;
     virtual void                ResetError() SAL_OVERRIDE;
 
@@ -447,7 +447,7 @@ public:
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
     sal_uLong                   GetSize();
 
-    sal_uLong                   ReadSourceWriteTemporary( sal_uLong aLength ); // read aLength from source and copy to temporary,
+    sal_uInt64                   ReadSourceWriteTemporary( sal_uInt64 aLength ); // read aLength from source and copy to temporary,
                                                                            // no seeking is produced
     sal_uLong                   ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
 
@@ -827,12 +827,12 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
 
 }
 
-sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
+sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
 {
     // read aLength bite from the source stream and copy them to the current
     // position of the temporary stream
 
-    sal_uLong aResult = 0;
+    sal_uInt64 aResult = 0;
 
     if( m_bSourceRead )
     {
@@ -843,7 +843,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
 
             sal_uLong aReaded = 32000;
 
-            for( sal_uLong pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000 )
+            for (sal_uInt64 pInd = 0; pInd < aLength && aReaded == 32000 ; pInd += 32000)
             {
                 sal_uLong aToCopy = min( aLength - pInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
@@ -939,12 +939,12 @@ sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
 
 }
 
-sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
+sal_uInt64 UCBStorageStream_Impl::SeekPos(sal_uInt64 const nPos)
 {
     if( !Init() )
         return 0;
 
-    sal_uLong aResult;
+    sal_uInt64 aResult;
 
     if( nPos == STREAM_SEEK_TO_END )
     {
@@ -996,7 +996,7 @@ sal_uLong UCBStorageStream_Impl::SeekPos( sal_uLong nPos )
     return aResult;
 }
 
-void  UCBStorageStream_Impl::SetSize( sal_uLong nSize )
+void  UCBStorageStream_Impl::SetSize(sal_uInt64 const nSize)
 {
     if ( !(m_nMode & STREAM_WRITE) )
     {
@@ -1011,7 +1011,7 @@ void  UCBStorageStream_Impl::SetSize( sal_uLong nSize )
 
     if( m_bSourceRead )
     {
-        sal_uLong aPos = m_pStream->Tell();
+        sal_uInt64 const aPos = m_pStream->Tell();
         m_pStream->Seek( STREAM_SEEK_TO_END );
         if( m_pStream->Tell() < nSize )
             ReadSourceWriteTemporary( nSize - m_pStream->Tell() );

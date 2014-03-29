@@ -220,7 +220,7 @@ ErrCode SvLockBytes::Flush() const
 }
 
 // virtual
-ErrCode SvLockBytes::SetSize(sal_Size nSize)
+ErrCode SvLockBytes::SetSize(sal_uInt64 const nSize)
 {
     if (!m_pStream)
     {
@@ -242,7 +242,7 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
 
     if (pStat)
     {
-        sal_Size nPos = m_pStream->Tell();
+        sal_uInt64 const nPos = m_pStream->Tell();
         pStat->nSize = m_pStream->Seek(STREAM_SEEK_TO_END);
         m_pStream->Seek(nPos);
     }
@@ -319,8 +319,8 @@ sal_Size SvStream::GetData( void* pData, sal_Size nSize )
     {
         DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
         sal_Size nRet;
-        nError = xLockBytes->ReadAt( nActPos, pData, nSize, &nRet );
-        nActPos += nRet;
+        nError = xLockBytes->ReadAt(m_nActPos, pData, nSize, &nRet);
+        m_nActPos += nRet;
         return nRet;
     }
     else return 0;
@@ -332,25 +332,25 @@ sal_Size SvStream::PutData( const void* pData, sal_Size nSize )
     {
         DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
         sal_Size nRet;
-        nError = xLockBytes->WriteAt( nActPos, pData, nSize, &nRet );
-        nActPos += nRet;
+        nError = xLockBytes->WriteAt(m_nActPos, pData, nSize, &nRet);
+        m_nActPos += nRet;
         return nRet;
     }
     else return 0;
 }
 
-sal_Size SvStream::SeekPos( sal_Size nPos )
+sal_uInt64 SvStream::SeekPos(sal_uInt64 const nPos)
 {
     if( !GetError() && nPos == STREAM_SEEK_TO_END )
     {
         DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
         SvLockBytesStat aStat;
         xLockBytes->Stat( &aStat, SVSTATFLAG_DEFAULT );
-        nActPos = aStat.nSize;
+        m_nActPos = aStat.nSize;
     }
     else
-        nActPos = nPos;
-    return nActPos;
+        m_nActPos = nPos;
+    return m_nActPos;
 }
 
 void SvStream::FlushData()
@@ -362,7 +362,7 @@ void SvStream::FlushData()
     }
 }
 
-void SvStream::SetSize( sal_Size nSize )
+void SvStream::SetSize(sal_uInt64 const nSize)
 {
     DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
     nError = xLockBytes->SetSize( nSize );
@@ -370,7 +370,7 @@ void SvStream::SetSize( sal_Size nSize )
 
 void SvStream::ImpInit()
 {
-    nActPos             = 0;
+    m_nActPos           = 0;
     nCompressMode       = COMPRESSMODE_NONE;
     eStreamCharSet      = osl_getThreadTextEncoding();
     nCryptMask          = 0;
@@ -383,7 +383,7 @@ void SvStream::ImpInit()
 
     SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    nBufFilePos         = 0;
+    m_nBufFilePos       = 0;
     nBufActualPos       = 0;
     bIsDirty            = false;
     bIsConsistent       = true;
@@ -463,7 +463,7 @@ void SvStream::SetNumberFormatInt( sal_uInt16 nNewFormat )
 
 void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
 {
-    sal_Size nActualFilePos = Tell();
+    sal_uInt64 const nActualFilePos = Tell();
     bool bDontSeek = (pRWBuf == 0);
 
     if( bIsDirty && bIsConsistent && bIsWritable )  // due to Windows NT: Access denied
@@ -472,7 +472,7 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     if( nBufSize )
     {
         delete[] pRWBuf;
-        nBufFilePos += nBufActualPos;
+        m_nBufFilePos += nBufActualPos;
     }
 
     pRWBuf          = 0;
@@ -492,7 +492,7 @@ void SvStream::ClearBuffer()
 {
     nBufActualLen   = 0;
     nBufActualPos   = 0;
-    nBufFilePos     = 0;
+    m_nBufFilePos   = 0;
     pBufPos         = pRWBuf;
     bIsDirty        = false;
     bIsConsistent   = true;
@@ -519,7 +519,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
     sal_Char    buf[256+1];
     bool        bEnd        = false;
-    sal_Size       nOldFilePos = Tell();
+    sal_uInt64  nOldFilePos = Tell();
     sal_Char    c           = 0;
     sal_Size       nTotalLen   = 0;
 
@@ -593,7 +593,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
 {
     sal_Unicode buf[256+1];
     bool        bEnd        = false;
-    sal_Size       nOldFilePos = Tell();
+    sal_uInt64  nOldFilePos = Tell();
     sal_Unicode c           = 0;
     sal_Size       nTotalLen   = 0;
 
@@ -690,7 +690,7 @@ OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
 
     sal_Char buf[ 256 + 1 ];
     bool bEnd = false;
-    sal_Size nFilePos = rStream.Tell();
+    sal_uInt64 nFilePos = rStream.Tell();
 
     while( !bEnd && !rStream.GetError() )
     {
@@ -857,18 +857,18 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     return nError == SVSTREAM_OK;
 }
 
-sal_Size SvStream::SeekRel( sal_sSize nPos )
+sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
 {
-    sal_Size nActualPos = Tell();
+    sal_uInt64 nActualPos = Tell();
 
     if ( nPos >= 0 )
     {
-        if ( SAL_MAX_SIZE - nActualPos > (sal_Size)nPos )
+        if (SAL_MAX_UINT64 - nActualPos > static_cast<sal_uInt64>(nPos))
             nActualPos += nPos;
     }
     else
     {
-        sal_Size nAbsPos = (sal_Size)-nPos;
+        sal_uInt64 const nAbsPos = static_cast<sal_uInt64>(-nPos);
         if ( nActualPos >= nAbsPos )
             nActualPos -= nAbsPos;
     }
@@ -1262,7 +1262,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
         nCount = GetData( (char*)pData,nCount);
         if( nCryptMask )
             EncryptBuffer(pData, nCount);
-        nBufFilePos += nCount;
+        m_nBufFilePos += nCount;
     }
     else
     {
@@ -1281,7 +1281,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
         {
             if( bIsDirty ) // Does stream require a flush?
             {
-                SeekPos( nBufFilePos );
+                SeekPos(m_nBufFilePos);
                 if( nCryptMask )
                     CryptAndWriteBuffer(pRWBuf, nBufActualLen);
                 else
@@ -1297,22 +1297,22 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
 
                 bIoRead = false;
 
-                SeekPos( nBufFilePos + nBufActualPos );
+                SeekPos(m_nBufFilePos + nBufActualPos);
                 nBufActualLen = 0;
                 pBufPos       = pRWBuf;
                 nCount = GetData( (char*)pData, nCount );
                 if( nCryptMask )
                     EncryptBuffer(pData, nCount);
-                nBufFilePos += nCount;
-                nBufFilePos += nBufActualPos;
+                m_nBufFilePos += nCount;
+                m_nBufFilePos += nBufActualPos;
                 nBufActualPos = 0;
             }
             else
             {
                 // => Yes. Fill buffer first, then copy to target area
 
-                nBufFilePos += nBufActualPos;
-                SeekPos( nBufFilePos );
+                m_nBufFilePos += nBufActualPos;
+                SeekPos(m_nBufFilePos);
 
                 // TODO: Typecast before GetData, sal_uInt16 nCountTmp
                 sal_Size nCountTmp = GetData( pRWBuf, nBufSize );
@@ -1356,7 +1356,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
             nCount = CryptAndWriteBuffer( pData, nCount );
         else
             nCount = PutData( (char*)pData, nCount );
-        nBufFilePos += nCount;
+        m_nBufFilePos += nCount;
         return nCount;
     }
 
@@ -1378,7 +1378,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
         // Does stream require flushing?
         if( bIsDirty )
         {
-            SeekPos( nBufFilePos );
+            SeekPos(m_nBufFilePos);
             if( nCryptMask )
                 CryptAndWriteBuffer( pRWBuf, (sal_Size)nBufActualLen );
             else
@@ -1390,16 +1390,16 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
         if( nCount > nBufSize )
         {
             bIoWrite = false;
-            nBufFilePos += nBufActualPos;
+            m_nBufFilePos += nBufActualPos;
             nBufActualLen = 0;
             nBufActualPos = 0;
             pBufPos       = pRWBuf;
-            SeekPos( nBufFilePos );
+            SeekPos(m_nBufFilePos);
             if( nCryptMask )
                 nCount = CryptAndWriteBuffer( pData, nCount );
             else
                 nCount = PutData( (char*)pData, nCount );
-            nBufFilePos += nCount;
+            m_nBufFilePos += nCount;
         }
         else
         {
@@ -1407,7 +1407,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
             memcpy( pRWBuf, pData, (size_t)nCount );
 
             // Mind the order!
-            nBufFilePos += nBufActualPos;
+            m_nBufFilePos += nBufActualPos;
             nBufActualPos = (sal_uInt16)nCount;
             pBufPos = pRWBuf + nCount;
             nBufActualLen = (sal_uInt16)nCount;
@@ -1418,21 +1418,21 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
     return nCount;
 }
 
-sal_Size SvStream::Seek( sal_Size nFilePos )
+sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
 {
     bIoRead = bIoWrite = false;
     bIsEof = false;
     if( !pRWBuf )
     {
-        nBufFilePos = SeekPos( nFilePos );
-        DBG_ASSERT(Tell()==nBufFilePos,"Out Of Sync!");
-        return nBufFilePos;
+        m_nBufFilePos = SeekPos( nFilePos );
+        DBG_ASSERT(Tell() == m_nBufFilePos,"Out Of Sync!");
+        return m_nBufFilePos;
     }
 
     // Is seek position within buffer?
-    if( nFilePos >= nBufFilePos && nFilePos <= (nBufFilePos + nBufActualLen))
+    if (nFilePos >= m_nBufFilePos && nFilePos <= (m_nBufFilePos + nBufActualLen))
     {
-        nBufActualPos = (sal_uInt16)(nFilePos - nBufFilePos);
+        nBufActualPos = (sal_uInt16)(nFilePos - m_nBufFilePos);
         pBufPos = pRWBuf + nBufActualPos;
         // Update nBufFree to avoid crash upon PutBack
         nBufFree = nBufActualLen - nBufActualPos;
@@ -1441,7 +1441,7 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
     {
         if( bIsDirty && bIsConsistent)
         {
-            SeekPos( nBufFilePos );
+            SeekPos(m_nBufFilePos);
             if( nCryptMask )
                 CryptAndWriteBuffer( pRWBuf, nBufActualLen );
             else
@@ -1451,25 +1451,25 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
         nBufActualLen = 0;
         nBufActualPos = 0;
         pBufPos       = pRWBuf;
-        nBufFilePos = SeekPos( nFilePos );
+        m_nBufFilePos = SeekPos( nFilePos );
     }
 #ifdef OV_DEBUG
     {
-        sal_Size nDebugTemp = nBufFilePos + nBufActualPos;
+        sal_uInt64 nDebugTemp = m_nBufFilePos + nBufActualPos;
         DBG_ASSERT(Tell()==nDebugTemp,"Sync?");
     }
 #endif
-    return nBufFilePos + nBufActualPos;
+    return m_nBufFilePos + nBufActualPos;
 }
 
 //STREAM_SEEK_TO_END in the some of the Seek backends is special cased to be
 //efficient, in others e.g. SotStorageStream it's really horribly slow, and in
 //those this should be overridden
-sal_Size SvStream::remainingSize()
+sal_uInt64 SvStream::remainingSize()
 {
-    sal_Size nCurr = Tell();
-    sal_Size nEnd = Seek(STREAM_SEEK_TO_END);
-    sal_Size nMaxAvailable = nEnd-nCurr;
+    sal_uInt64 const nCurr = Tell();
+    sal_uInt64 const nEnd = Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nMaxAvailable = nEnd-nCurr;
     Seek(nCurr);
     return nMaxAvailable;
 }
@@ -1478,7 +1478,7 @@ void SvStream::Flush()
 {
     if( bIsDirty && bIsConsistent )
     {
-        SeekPos( nBufFilePos );
+        SeekPos(m_nBufFilePos);
         if( nCryptMask )
             CryptAndWriteBuffer( pRWBuf, (sal_Size)nBufActualLen );
         else
@@ -1494,14 +1494,14 @@ void SvStream::RefreshBuffer()
 {
     if( bIsDirty && bIsConsistent )
     {
-        SeekPos( nBufFilePos );
+        SeekPos(m_nBufFilePos);
         if( nCryptMask )
             CryptAndWriteBuffer( pRWBuf, (sal_Size)nBufActualLen );
         else
             PutData( pRWBuf, nBufActualLen );
         bIsDirty = false;
     }
-    SeekPos( nBufFilePos );
+    SeekPos(m_nBufFilePos);
     nBufActualLen = (sal_uInt16)GetData( pRWBuf, nBufSize );
     if( nBufActualLen && nError == ERRCODE_IO_PENDING )
         nError = ERRCODE_NONE;
@@ -1621,7 +1621,7 @@ void SvStream::SetCryptMaskKey(const OString& rCryptMaskKey)
 void SvStream::SyncSvStream( sal_Size nNewStreamPos )
 {
     ClearBuffer();
-    SvStream::nBufFilePos = nNewStreamPos;
+    SvStream::m_nBufFilePos = nNewStreamPos;
 }
 
 void SvStream::SyncSysStream()
@@ -1630,10 +1630,10 @@ void SvStream::SyncSysStream()
     SeekPos( Tell() );
 }
 
-bool SvStream::SetStreamSize( sal_Size nSize )
+bool SvStream::SetStreamSize(sal_uInt64 const nSize)
 {
 #ifdef DBG_UTIL
-    sal_Size nFPos = Tell();
+    sal_uInt64 nFPos = Tell();
 #endif
     sal_uInt16 nBuf = nBufSize;
     SetBufferSize( 0 );
@@ -1740,8 +1740,8 @@ const void* SvMemoryStream::GetBuffer()
 sal_uIntPtr SvMemoryStream::GetSize()
 {
     Flush();
-    sal_uIntPtr nTemp = Tell();
-    sal_uIntPtr nLength = Seek( STREAM_SEEK_TO_END );
+    sal_uInt64 const nTemp = Tell();
+    sal_uInt64 const nLength = Seek( STREAM_SEEK_TO_END );
     Seek( nTemp );
     return nLength;
 }
@@ -1842,7 +1842,7 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
     return nCount;
 }
 
-sal_Size SvMemoryStream::SeekPos( sal_Size nNewPos )
+sal_uInt64 SvMemoryStream::SeekPos(sal_uInt64 const nNewPos)
 {
     // nEndOfData: First position in stream not allowed to read from
     // nSize: Size of allocated buffer
@@ -1975,7 +1975,7 @@ void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize, sal_Size nResizeOffset)
     return pRetVal;
 }
 
-void SvMemoryStream::SetSize( sal_Size nNewSize )
+void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
 {
     long nDiff = (long)nNewSize - (long)nSize;
     ReAllocateMemory( nDiff );

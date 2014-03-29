@@ -56,7 +56,7 @@ friend class SotStorage;
 protected:
     virtual sal_uLong       GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong       PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
-    virtual sal_uLong       SeekPos( sal_uLong nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64      SeekPos(sal_uInt64 nPos) SAL_OVERRIDE;
     virtual void        FlushData() SAL_OVERRIDE;
                         ~SotStorageStream();
 public:
@@ -77,13 +77,13 @@ public:
 
     virtual void        ResetError() SAL_OVERRIDE;
 
-    virtual void        SetSize( sal_uLong nNewSize ) SAL_OVERRIDE;
+    virtual void        SetSize( sal_uInt64 nNewSize ) SAL_OVERRIDE;
     sal_uInt32              GetSize() const;
     bool                CopyTo( SotStorageStream * pDestStm );
     virtual bool        Commit();
     virtual bool        Revert();
     bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
-    virtual sal_Size remainingSize() SAL_OVERRIDE;
+    virtual sal_uInt64 remainingSize() SAL_OVERRIDE;
 };
 
 #ifndef SOT_DECL_SOTSTORAGESTREAM_DEFINED

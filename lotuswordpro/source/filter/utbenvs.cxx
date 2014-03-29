@@ -97,7 +97,7 @@ sal_uLong   LtcUtBenValueStream::PutData( const void* /*pData*/, sal_uLong nSize
 *   @param  position in value stream
 *   @return current position in value stream
 */
- sal_uLong  LtcUtBenValueStream::SeekPos( sal_uLong nPos )
+sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 {
     if (nPos <= m_ulValueLength)
         cCurrentPosition = nPos;
@@ -111,7 +111,7 @@ sal_uLong   LtcUtBenValueStream::PutData( const void* /*pData*/, sal_uLong nSize
 *   @param  size of buffer
 *   @return
 */
- void   LtcUtBenValueStream::SetSize( sal_uLong /*nSize*/ )
+ void   LtcUtBenValueStream::SetSize( sal_uInt64 /*nSize*/ )
 {
     //pLtcBenContainer pContainer = cpValue->GetContainer();
     //pContainer->GetStream()->SetStreamSize(nSize);

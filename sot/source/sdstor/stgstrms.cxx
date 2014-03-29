@@ -1187,7 +1187,7 @@ sal_uLong StgTmpStrm::GetSize() const
     return n;
 }
 
-void StgTmpStrm::SetSize( sal_uLong n )
+void StgTmpStrm::SetSize(sal_uInt64 n)
 {
     if( pStrm )
         pStrm->SetStreamSize( n );
@@ -1241,7 +1241,7 @@ void StgTmpStrm::SetSize( sal_uLong n )
         {
             if( n > nEndOfData )
             {
-                sal_uLong nCur = Tell();
+                sal_uInt64 nCur = Tell();
                 Seek( nEndOfData - 1 );
                 WriteUChar( (sal_uInt8) 0 );
                 Seek( nCur );
@@ -1284,7 +1284,7 @@ sal_uLong StgTmpStrm::PutData( const void* pData, sal_uLong n )
     return nNew;
 }
 
-sal_uLong StgTmpStrm::SeekPos( sal_uLong n )
+sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
 {
     if( n == STREAM_SEEK_TO_END )
         n = GetSize();

@@ -70,7 +70,7 @@ typedef sal_uInt16 StreamMode;
 #define STREAM_STD_READWRITE            (STREAM_READWRITE | STREAM_SHARE_DENYALL)
 
 #define STREAM_SEEK_TO_BEGIN            0L
-#define STREAM_SEEK_TO_END              ULONG_MAX
+#define STREAM_SEEK_TO_END              SAL_MAX_UINT64
 
 #define NUMBERFORMAT_INT_BIGENDIAN      (sal_uInt16)0x0000
 #define NUMBERFORMAT_INT_LITTLEENDIAN   (sal_uInt16)0xFFFF
@@ -136,7 +136,7 @@ public:
 
     virtual ErrCode Flush() const;
 
-    virtual ErrCode SetSize(sal_Size nSize);
+    virtual ErrCode SetSize(sal_uInt64 nSize);
 
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
 };
@@ -204,7 +204,7 @@ private:
     // LockBytes Interface
     void*           pImp;           // unused
     SvLockBytesRef  xLockBytes;  // Default implementation
-    sal_Size        nActPos;
+    sal_uInt64      m_nActPos;
 
     // Puffer-Verwaltung
     sal_uInt8*      pRWBuf;         // Points to read/write buffer
@@ -244,15 +244,15 @@ private:
     SvStream&       operator=( const SvStream& rStream ); // not implemented
 
 protected:
-    sal_Size        nBufFilePos;///< File position of pBuf[0]
+    sal_uInt64      m_nBufFilePos; ///< File position of pBuf[0]
     sal_uInt16      eStreamMode;
     bool            bIsWritable;
 
     virtual sal_Size GetData( void* pData, sal_Size nSize );
     virtual sal_Size PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size SeekPos( sal_Size nPos );
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos );
     virtual void    FlushData();
-    virtual void    SetSize( sal_Size nSize );
+    virtual void    SetSize(sal_uInt64 nSize);
 
     void            ClearError();
     void            ClearBuffer();
@@ -339,15 +339,15 @@ public:
 
     sal_Size        Read( void* pData, sal_Size nSize );
     sal_Size        Write( const void* pData, sal_Size nSize );
-    sal_Size        Seek( sal_Size nPos );
-    sal_Size        SeekRel( sal_sSize nPos );
-    sal_Size        Tell() const { return nBufFilePos+nBufActualPos;  }
+    sal_uInt64      Seek( sal_uInt64 nPos );
+    sal_uInt64      SeekRel( sal_Int64 nPos );
+    sal_uInt64      Tell() const { return m_nBufFilePos + nBufActualPos;  }
     // length between current (Tell()) pos and end of stream
-    virtual sal_Size remainingSize();
+    virtual sal_uInt64 remainingSize();
     void            Flush();
     bool            IsEof() const { return bIsEof; }
     // next Tell() <= nSize
-    bool            SetStreamSize( sal_Size nSize );
+    bool            SetStreamSize( sal_uInt64 nSize );
 
     /** Read a line of bytes.
 
@@ -662,8 +662,8 @@ private:
 protected:
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
-    virtual sal_Size SeekPos( sal_Size nPos ) SAL_OVERRIDE;
-    virtual void    SetSize( sal_Size nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
+    virtual void    SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
     virtual void    FlushData() SAL_OVERRIDE;
 
 public:
@@ -703,8 +703,8 @@ protected:
 
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
-    virtual sal_Size SeekPos( sal_Size nPos ) SAL_OVERRIDE;
-    virtual void    SetSize( sal_Size nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
+    virtual void    SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
     virtual void    FlushData() SAL_OVERRIDE;
 
     /// AllocateMemory must update pBuf accordingly
@@ -747,7 +747,7 @@ public:
     bool            IsObjectMemoryOwner() { return bOwnsData; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
     sal_Size        GetResizeOffset() const { return nResize; }
-    virtual sal_Size remainingSize() SAL_OVERRIDE { return GetBufSize() - Tell(); }
+    virtual sal_uInt64 remainingSize() SAL_OVERRIDE { return GetBufSize() - Tell(); }
 };
 
 class TOOLS_DLLPUBLIC SvScriptStream: public SvStream

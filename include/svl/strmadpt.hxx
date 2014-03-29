@@ -50,7 +50,7 @@ public:
 
     virtual ErrCode Flush() const SAL_OVERRIDE;
 
-    virtual ErrCode SetSize(sal_uLong) SAL_OVERRIDE;
+    virtual ErrCode SetSize(sal_uInt64) SAL_OVERRIDE;
 
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const SAL_OVERRIDE;
 

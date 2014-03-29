@@ -216,10 +216,10 @@ sal_uIntPtr SvPersistStream::PutData( const void* pData, sal_uIntPtr nSize )
     return nRet;
 }
 
-sal_uIntPtr SvPersistStream::SeekPos( sal_uIntPtr nPos )
+sal_uInt64 SvPersistStream::SeekPos(sal_uInt64 const nPos)
 {
     DBG_ASSERT( pStm, "stream not set" );
-    sal_uIntPtr nRet = pStm->Seek( nPos );
+    sal_uInt64 nRet = pStm->Seek( nPos );
     SetError( pStm->GetError() );
     return nRet;
 }

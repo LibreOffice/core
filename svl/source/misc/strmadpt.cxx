@@ -170,7 +170,7 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
 }
 
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uLong)
+ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uInt64)
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
@@ -547,7 +547,7 @@ void SvInputStream::FlushData()
 {}
 
 // virtual
-sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
+sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
 {
     if (open())
     {
@@ -614,7 +614,7 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
 }
 
 // virtual
-void SvInputStream::SetSize(sal_uLong)
+void SvInputStream::SetSize(sal_uInt64)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
@@ -712,7 +712,7 @@ sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
 }
 
 // virtual
-sal_uLong SvOutputStream::SeekPos(sal_uLong)
+sal_uInt64 SvOutputStream::SeekPos(sal_uInt64)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -736,7 +736,7 @@ void SvOutputStream::FlushData()
 }
 
 // virtual
-void SvOutputStream::SetSize(sal_uLong)
+void SvOutputStream::SetSize(sal_uInt64)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }

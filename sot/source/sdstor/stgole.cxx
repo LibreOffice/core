@@ -68,7 +68,7 @@ sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
         return 0;
 }
 
-sal_uLong StgInternalStream::SeekPos( sal_uLong nPos )
+sal_uInt64 StgInternalStream::SeekPos(sal_uInt64 const nPos)
 {
     return pStrm ? pStrm->Seek( nPos ) : 0;
 }

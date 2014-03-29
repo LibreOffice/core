@@ -165,7 +165,7 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
     return nCount;
 }
 
-sal_Size SvFileStream::SeekPos( sal_Size nPos )
+sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 {
     DWORD nNewPos = 0;
     if( IsOpen() )
@@ -184,7 +184,7 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
     }
     else
         SetError( SVSTREAM_GENERALERROR );
-    return (sal_Size)nNewPos;
+    return static_cast<sal_uInt64>(nNewPos);
 }
 
 void SvFileStream::FlushData()
@@ -410,7 +410,7 @@ void SvFileStream::ResetError()
     SvStream::ClearError();
 }
 
-void SvFileStream::SetSize( sal_Size nSize )
+void SvFileStream::SetSize(sal_uInt64 const nSize)
 {
 
     if( IsOpen() )
