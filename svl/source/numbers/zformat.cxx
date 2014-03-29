@@ -199,7 +199,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     eLang &= 0x03FF;    // 10 bit primary language
     if ( bDate )
     {
-        if ( nDBNum == 4 && eLang == LANGUAGE_KOREAN )
+        if ( nDBNum == 4 && eLang == (LANGUAGE_KOREAN & 0x03FF) )
         {
             nNatNum = 9;
         }
