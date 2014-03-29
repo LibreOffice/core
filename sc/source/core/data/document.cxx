@@ -2820,21 +2820,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         pClipDoc->GetClipParam().mbCutMode = false;
 }
 
-static SCROW lcl_getLastNonFilteredRow(
-    const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags, SCROW nBegRow, SCROW nEndRow,
-    SCROW nRowCount)
-{
-    SCROW nFilteredRow = rFlags.GetFirstForCondition(
-        nBegRow, nEndRow, CR_FILTERED, CR_FILTERED);
-
-    SCROW nRow = nFilteredRow - 1;
-    if (nRow - nBegRow + 1 > nRowCount)
-        // make sure the row range stays within the data size.
-        nRow = nBegRow + nRowCount - 1;
-
-    return nRow;
-}
-
 void ScDocument::CopyMultiRangeFromClip(
     const ScAddress& rDestPos, const ScMarkData& rMark, sal_uInt16 nInsFlag, ScDocument* pClipDoc,
     bool bResetCut, bool bAsLink, bool /*bIncludeFiltered*/, bool bSkipAttrForEmpty)
@@ -2846,82 +2831,61 @@ void ScDocument::CopyMultiRangeFromClip(
         // There is nothing in the clip doc to copy.
         return;
 
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // avoid multiple recalculations
+    // Right now, we don't allow pasting into filtered rows, so we don't even handle it here.
 
+    sc::AutoCalcSwitch aACSwitch(*this, false); // turn of auto calc temporarily.
     NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
+
+    ScRange aDestRange;
+    rMark.GetMarkArea(aDestRange);
+
+    bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
 
     SCCOL nCol1 = rDestPos.Col();
     SCROW nRow1 = rDestPos.Row();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
 
+    if (!bSkipAttrForEmpty)
+    {
+        // Do the deletion first.
+        sal_uInt16 nDelFlag = IDF_CONTENTS;
+        SCCOL nColSize = rClipParam.getPasteColSize();
+        SCROW nRowSize = rClipParam.getPasteRowSize();
+
+        DeleteArea(nCol1, nRow1, nCol1+nColSize-1, nRow1+nRowSize-1, rMark, nDelFlag);
+    }
+
     sc::CopyFromClipContext aCxt(*this, NULL, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
     aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
 
-    ScRange aDestRange;
-    rMark.GetMarkArea(aDestRange);
-    SCROW nLastMarkedRow = aDestRange.aEnd.Row();
-
-    bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
-
-    SCROW nBegRow = nRow1;
-    sal_uInt16 nDelFlag = IDF_CONTENTS;
-    const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags = GetRowFlagsArray(aCxt.getTabStart());
-
-    for ( size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i )
+    for (size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i)
     {
-        ScRange* p = rClipParam.maRanges[ i ];
-        // The begin row must not be filtered.
+        ScRange* p = rClipParam.maRanges[i];
 
         SCROW nRowCount = p->aEnd.Row() - p->aStart.Row() + 1;
-
         SCsCOL nDx = static_cast<SCsCOL>(nCol1 - p->aStart.Col());
-        SCsROW nDy = static_cast<SCsROW>(nBegRow - p->aStart.Row());
+        SCsROW nDy = static_cast<SCsROW>(nRow1 - p->aStart.Row());
         SCCOL nCol2 = nCol1 + p->aEnd.Col() - p->aStart.Col();
+        SCROW nEndRow = nRow1 + nRowCount - 1;
 
-        SCROW nEndRow = lcl_getLastNonFilteredRow(rFlags, nBegRow, nLastMarkedRow, nRowCount);
+        CopyBlockFromClip(aCxt, nCol1, nRow1, nCol2, nEndRow, rMark, nDx, nDy);
 
-        if (!bSkipAttrForEmpty)
-            DeleteArea(nCol1, nBegRow, nCol2, nEndRow, rMark, nDelFlag);
-
-        CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy);
-        nRowCount -= nEndRow - nBegRow + 1;
-
-        while (nRowCount > 0)
+        switch (rClipParam.meDirection)
         {
-            // Get the first non-filtered row.
-            SCROW nNonFilteredRow = rFlags.GetFirstForCondition(nEndRow+1, nLastMarkedRow, CR_FILTERED, 0);
-            if (nNonFilteredRow > nLastMarkedRow)
-                return;
-
-            SCROW nRowsSkipped = nNonFilteredRow - nEndRow - 1;
-            nDy += nRowsSkipped;
-
-            nBegRow = nNonFilteredRow;
-            nEndRow = lcl_getLastNonFilteredRow(rFlags, nBegRow, nLastMarkedRow, nRowCount);
-
-            if (!bSkipAttrForEmpty)
-                DeleteArea(nCol1, nBegRow, nCol2, nEndRow, rMark, nDelFlag);
-
-            CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy);
-            nRowCount -= nEndRow - nBegRow + 1;
+            case ScClipParam::Row:
+                // Begin row for the next range being pasted.
+                nRow1 += nRowCount;
+            break;
+            case ScClipParam::Column:
+                nCol1 += p->aEnd.Col() - p->aStart.Col() + 1;
+            break;
+            default:
+                ;
         }
-
-        if (rClipParam.meDirection == ScClipParam::Row)
-            // Begin row for the next range being pasted.
-            nBegRow = rFlags.GetFirstForCondition(nEndRow+1, nLastMarkedRow, CR_FILTERED, 0);
-        else
-            nBegRow = nRow1;
-
-        if (rClipParam.meDirection == ScClipParam::Column)
-            nCol1 += p->aEnd.Col() - p->aStart.Col() + 1;
     }
 
     bInsertingFromOtherDoc = false;
-
-    ScRangeList aRanges;
-    aRanges.Append(aDestRange);
 
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
@@ -2932,7 +2896,6 @@ void ScDocument::CopyMultiRangeFromClip(
 
     if (bResetCut)
         pClipDoc->GetClipParam().mbCutMode = false;
-    SetAutoCalc( bOldAutoCalc );
 }
 
 void ScDocument::SetClipArea( const ScRange& rArea, bool bCut )
