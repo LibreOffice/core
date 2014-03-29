@@ -431,11 +431,6 @@ SvStream::~SvStream()
         delete[] pRWBuf;
 }
 
-sal_uInt16 SvStream::IsA() const
-{
-    return (sal_uInt16)ID_STREAM;
-}
-
 void SvStream::ClearError()
 {
     bIsEof = false;
@@ -1724,11 +1719,6 @@ SvMemoryStream::~SvMemoryStream()
         else
             Flush();
     }
-}
-
-sal_uInt16 SvMemoryStream::IsA() const
-{
-    return (sal_uInt16)ID_MEMORYSTREAM;
 }
 
 const void* SvMemoryStream::GetBuffer()

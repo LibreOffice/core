@@ -50,8 +50,6 @@ public:
                        rTheStream);
 
     virtual ~SvOutputStream();
-
-    virtual sal_uInt16 IsA() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVL_OUTSTRM_HXX

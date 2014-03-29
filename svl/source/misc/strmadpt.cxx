@@ -647,12 +647,6 @@ SvInputStream::~SvInputStream()
 }
 
 // virtual
-sal_uInt16 SvInputStream::IsA() const
-{
-    return 0;
-}
-
-// virtual
 void SvInputStream::AddMark(sal_uLong nPos)
 {
     if (open() && m_pPipe)
@@ -761,12 +755,6 @@ SvOutputStream::~SvOutputStream()
         {
         }
     }
-}
-
-// virtual
-sal_uInt16 SvOutputStream::IsA() const
-{
-    return 0;
 }
 
 

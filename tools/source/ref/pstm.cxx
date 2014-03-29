@@ -182,17 +182,6 @@ void SvPersistStream::SetStream( SvStream * pStream )
     }
 }
 
-/** Returns the identifier of this stream class.
-
-    @return ID_PERSISTSTREAM
-
-    @see SvStream::IsA
-*/
-sal_uInt16 SvPersistStream::IsA() const
-{
-    return ID_PERSISTSTREAM;
-}
-
 void SvPersistStream::ResetError()
 {
     SvStream::ResetError();

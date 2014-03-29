@@ -215,7 +215,6 @@ public:
 
     void                SetStream( SvStream * pStream );
     SvStream *          GetStream() const { return pStm; }
-    virtual sal_uInt16  IsA() const SAL_OVERRIDE;
 
     SvPersistBase *     GetObject( sal_uIntPtr nIdx ) const;
     sal_uIntPtr         GetIndex( SvPersistBase * ) const;

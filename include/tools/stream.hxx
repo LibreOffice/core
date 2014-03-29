@@ -79,13 +79,6 @@ typedef sal_uInt16 StreamMode;
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
 
-#define ID_STREAM                       1
-#define ID_FILESTREAM                   2
-#define ID_MEMORYSTREAM                 3
-#define ID_SHAREDMEMORYSTREAM           4
-#define ID_STORAGESTREAM                5
-#define ID_PERSISTSTREAM                6
-
 class SvStream;
 
 typedef SvStream& (*SvStrPtr)( SvStream& );
@@ -455,7 +448,6 @@ public:
 
     bool            IsWritable() const { return bIsWritable; }
     StreamMode      GetStreamMode() const { return eStreamMode; }
-    virtual sal_uInt16 IsA() const;
 
     long            GetVersion() { return nVersion; }
     void            SetVersion( long n ) { nVersion = n; }
@@ -678,7 +670,6 @@ public:
     void            Close();
     bool            IsOpen() const { return bIsOpen; }
     bool            IsLocked() const { return ( nLockCounter!=0 ); }
-    virtual sal_uInt16 IsA() const SAL_OVERRIDE;
 
     const OUString& GetFileName() const { return aFilename; }
 };
@@ -737,7 +728,6 @@ public:
     sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
     operator const  void*() { Flush(); return pBuf; }
-    virtual sal_uInt16  IsA() const SAL_OVERRIDE;
 
     void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
     void*           SetBuffer( void* pBuf, sal_Size nSize,

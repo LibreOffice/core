@@ -61,8 +61,6 @@ public:
 
     virtual ~SvInputStream();
 
-    virtual sal_uInt16 IsA() const SAL_OVERRIDE;
-
     virtual void AddMark(sal_uLong nPos);
 
     virtual void RemoveMark(sal_uLong nPos);

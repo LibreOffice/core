@@ -133,11 +133,6 @@ SvFileStream::~SvFileStream()
         delete pInstanceData;
 }
 
-sal_uInt16 SvFileStream::IsA() const
-{
-    return ID_FILESTREAM;
-}
-
 /// Does not check for EOF, makes isEof callable
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {

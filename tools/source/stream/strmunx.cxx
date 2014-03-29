@@ -306,11 +306,6 @@ SvFileStream::~SvFileStream()
         delete pInstanceData;
 }
 
-sal_uInt16 SvFileStream::IsA() const
-{
-    return ID_FILESTREAM;
-}
-
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
