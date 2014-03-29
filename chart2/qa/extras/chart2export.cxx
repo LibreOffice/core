@@ -54,6 +54,7 @@ public:
     void testPieChartRotation();
     void testEmbeddingsOleObjectGrabBag();
     void testGapWidthXLSX();
+    void testSmoothedLines();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testPieChartRotation);
     CPPUNIT_TEST(testEmbeddingsOleObjectGrabBag);
     CPPUNIT_TEST(testGapWidthXLSX);
+    CPPUNIT_TEST(testSmoothedLines);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -554,6 +556,7 @@ void Chart2ExportTest::testUpDownBars()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
 }
 
+<<<<<<< HEAD
 void Chart2ExportTest::testDoughnutChart()
 {
     load("/chart2/qa/extras/data/docx/", "doughnutChart.docx");
@@ -770,6 +773,14 @@ void Chart2ExportTest::testGapWidthXLSX()
 
     xChartDoc = getChartDocFromSheet( 1, mxComponent );
     checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
+}
+
+void Chart2ExportTest::testSmoothedLines()
+{
+    load("/chart2/qa/extras/data/ods/", "smoothedLines.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:smooth", "val", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
