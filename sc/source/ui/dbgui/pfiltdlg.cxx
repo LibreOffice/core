@@ -284,9 +284,9 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
     if ( pDoc && nList>0 && nList<=3 )
     {
         ComboBox*   pValList        = aValueEdArr[nList-1];
-        sal_uInt16      nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
-        sal_uInt16      nListPos        = 0;
-        OUString     aCurValue       = pValList->GetText();
+        sal_Int32   nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
+        sal_Int32   nListPos        = 0;
+        OUString    aCurValue       = pValList->GetText();
 
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
