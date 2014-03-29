@@ -163,7 +163,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
     if (!m_bConnected)
         throw NotConnectedException();
 
-    // ensure the sequence has enoungh space left
+    // ensure the sequence has enough space left
     if (m_nSize + _rData.getLength() > m_rSequence.getLength())
     {
         sal_Int32 nCurrentLength = m_rSequence.getLength();
