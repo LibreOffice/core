@@ -142,7 +142,7 @@ public:
     /** Insert a special node created from aString
      *
      * Used for handling insert request from the "catalog" dialog.
-     * The provided string should be formatet as the desired command: %phi
+     * The provided string should be formated as the desired command: %phi
      * Note: this method ONLY supports commands defined in Math.xcu
      *
      * For more complex expressions use InsertCommandText, this method doesn't
