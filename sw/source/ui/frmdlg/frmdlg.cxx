@@ -78,7 +78,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     , m_nBorderId(0)
 {
     sal_uInt16 nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
-    m_bHTMLMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
+    m_bHTMLMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     // example font for both example TabPages
 
