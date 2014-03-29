@@ -617,23 +617,12 @@ void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
 
 void Reader::ResetFrmFmts( SwDoc& rDoc )
 {
-    for (sal_uInt16 i=0; i<3; ++i)
+    sal_uInt16 const s_ids[3] = {
+        RES_POOLFRM_FRAME, RES_POOLFRM_GRAPHIC, RES_POOLFRM_OLE
+    };
+    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(s_ids); ++i)
     {
-        sal_uInt16 nPoolId;
-        switch (i)
-        {
-            case 0:
-                nPoolId = RES_POOLFRM_FRAME;
-                break;
-            case 1:
-                nPoolId = RES_POOLFRM_GRAPHIC;
-                break;
-            case 2:
-                nPoolId = RES_POOLFRM_OLE;
-                break;
-        }
-
-        SwFrmFmt *pFrmFmt = rDoc.GetFrmFmtFromPool( nPoolId );
+        SwFrmFmt *const pFrmFmt = rDoc.GetFrmFmtFromPool( s_ids[i] );
 
         pFrmFmt->ResetFmtAttr( RES_LR_SPACE );
         pFrmFmt->ResetFmtAttr( RES_UL_SPACE );
