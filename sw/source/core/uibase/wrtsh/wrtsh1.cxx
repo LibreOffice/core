@@ -451,7 +451,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     //2. If the cursor is at the end of an non empty paragraph a paragraph
     //   break should be insertet. StarMath objects are character bound and
     //   no break should be inserted.
-    //3. If an selektion is passed to a StarMath object, this object should
+    //3. If an selection is passed to a StarMath object, this object should
     //   not be activated. sal_False should be returned then.
     bool bStarMath = true;
     sal_Bool bActivate = sal_True;

@@ -271,7 +271,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin
     if( rMEvt.IsRight() && eHit != SDRTABLEHIT_NONE )
         return true; // right click will become context menu
 
-    // for cell selektion with the mouse remember our first hit
+    // for cell selection with the mouse remember our first hit
     if( mbLeftButtonDown )
     {
         RemoveSelection();
