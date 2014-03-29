@@ -465,10 +465,12 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_TblWidth_w:
-            dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_w( nIntValue );
+            if (StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() ))
+                pMap->SetCT_TblWidth_w( nIntValue );
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
-            dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_type( nIntValue );
+            if (StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() ))
+                pMap->SetCT_TblWidth_type( nIntValue );
         break;
         case NS_ooxml::LN_CT_LatentStyles_defQFormat:
             m_pImpl->AppendLatentStyleProperty("defQFormat", val);
