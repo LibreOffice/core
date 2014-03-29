@@ -417,66 +417,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
     }
 
-    if( bContinue && pSdrView && bQuickBalloon)
-    {
-        SdrViewEvent aVEvt;
-        SdrHitKind eHit = pSdrView->PickAnything(aPos, aVEvt);
-        const SvxURLField *pField;
-        SdrObject* pObj = NULL;
-
-        if ((pField = aVEvt.pURLField) != 0)
-        {
-            // hit an URL field
-            if (pField)
-            {
-                pObj = aVEvt.pObj;
-                sTxt = pField->GetURL();
-
-                bContinue = false;
-            }
-        }
-        if (bContinue && eHit == SDRHIT_TEXTEDIT)
-        {
-            // look for URL field in DrawText object that is opened for editing
-            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-            const SvxFieldItem* pFieldItem;
-
-            if (pSdrView->AreObjectsMarked())
-            {
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-
-                if (rMarkList.GetMarkCount() == 1)
-                    pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            }
-
-            if (pObj && pObj->ISA(SdrTextObj) && pOLV &&
-                    (pFieldItem = pOLV->GetFieldUnderMousePointer()) != 0)
-            {
-                pField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
-
-                if (pField )
-                {
-                    sTxt = ((const SvxURLField*) pField)->GetURL();
-                    bContinue = false;
-                }
-            }
-        }
-        if (!sTxt.isEmpty() && pObj)
-        {
-            sTxt = URIHelper::removePassword( sTxt, INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_UNAMBIGUOUS);
-
-            Rectangle aLogicPix = LogicToPixel(pObj->GetLogicRect());
-            Rectangle aScreenRect(OutputToScreenPixel(aLogicPix.TopLeft()),
-                                OutputToScreenPixel(aLogicPix.BottomRight()));
-
-            if (bBalloon)
-                Help::ShowBalloon(this, rEvt.GetMousePosPixel(), aScreenRect, sTxt);
-            else
-                Help::ShowQuickHelp(this, aScreenRect, sTxt);
-        }
-    }
-
     if( bContinue )
         Window::RequestHelp( rEvt );
 }
