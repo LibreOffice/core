@@ -816,7 +816,7 @@ IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
     // We want to have the focus in the edit window once Math has been opened
     // to allow for immediate typing.
     // Problem: There is no proper way to do this
-    // Thus: this timer based soultion has been implemented (see GrabFocus below)
+    // Thus: this timer based solution has been implemented (see GrabFocus below)
 
     // Follow-up problem (#i114910): grabing the focus may bust the help system since
     // it relies on getting the current frame which conflicts with grabbing the focus.
