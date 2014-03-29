@@ -256,13 +256,8 @@ bool SdrMarkView::MarkPoints(const Rectangle* pRect, bool bUnmark)
 bool SdrMarkView::MarkNextPoint(const Point& /*rPnt*/, bool /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
-    bool bChgd=false;
     SortMarkedObjects();
-
-    if (bChgd) {
-        MarkListHasChanged();
-    }
-    return bChgd;
+    return false;
 }
 
 const Rectangle& SdrMarkView::GetMarkedPointsRect() const
