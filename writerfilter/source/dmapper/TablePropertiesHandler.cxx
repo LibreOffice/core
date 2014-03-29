@@ -98,7 +98,7 @@ namespace dmapper {
 
                     DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
                     // In case any of the cells has the btLr cell direction, then an explicit minimal size will just hide the whole row, don't do that.
-                    if (pMeasureHandler->GetRowHeightSizeType() != text::SizeType::MIN || !pManager->HasBtlrCell())
+                    if (pMeasureHandler->GetRowHeightSizeType() != text::SizeType::MIN || !pManager || !pManager->HasBtlrCell())
                     {
                         // In case a cell already wanted fixed size, we should not overwrite it here.
                         if (!pManager || !pManager->IsRowSizeTypeInserted())
