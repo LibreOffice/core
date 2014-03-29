@@ -1672,14 +1672,15 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
             }
         }
 
-        SwBorderAttrAccess* pAttrAccess = 0L;
-        if ( !_pAttrs || pFrm != &m_rThis )
+        SwBorderAttrAccess* pAttrAccess = NULL;
+        if (pFrm && (!_pAttrs || pFrm != &m_rThis))
         {
             pAttrAccess = new SwBorderAttrAccess( SwFrm::GetCache(), pFrm );
             _pAttrs = pAttrAccess->Get();
         }
 
-        nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+        if (_pAttrs)
+            nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
 
         delete pAttrAccess;
     }
