@@ -119,7 +119,7 @@ public:
             void                SetDatePatternsConfigString( const OUString& rStr );
 
     // determine whether the decimal separator defined in the keyboard layout is used
-    // or the one approriate to the locale
+    // or the one appropriate to the locale
             bool                IsDecimalSeparatorAsLocale() const;
             void                SetDecimalSeparatorAsLocale( bool bSet);
 

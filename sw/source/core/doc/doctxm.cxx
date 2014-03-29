@@ -773,7 +773,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         pDoc->ChgFmt(*GetFmt(), *pAttr);
 
     // determine default page description, which will be used by the content nodes,
-    // if no approriate one is found.
+    // if no appropriate one is found.
     const SwPageDesc* pDefaultPageDesc;
     {
         pDefaultPageDesc =

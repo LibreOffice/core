@@ -76,7 +76,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
                 while (m_arrChildIndizies.size() > 0)
                 {   // If the list isn't empty and there's nothing above
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> xChild(xSearchLoop, ::com::sun::star::uno::UNO_QUERY);
-                    OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no approriate interface !");
+                    OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no appropriate interface !");
 
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xParent( xChild->getParent());
                     xContainerAccess = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xParent, ::com::sun::star::uno::UNO_QUERY);
