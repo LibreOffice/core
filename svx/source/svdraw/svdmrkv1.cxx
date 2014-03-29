@@ -578,13 +578,8 @@ SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) cons
 bool SdrMarkView::MarkNextGluePoint(const Point& /*rPnt*/, bool /*bPrev*/)
 {
     ForceUndirtyMrkPnt();
-    bool bChgd=false;
     SortMarkedObjects();
-
-    if (bChgd) {
-        MarkListHasChanged();
-    }
-    return bChgd;
+    return false;
 }
 
 const Rectangle& SdrMarkView::GetMarkedGluePointsRect() const
