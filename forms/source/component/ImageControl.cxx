@@ -627,7 +627,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
         Reference< XImageProducer > xProducer = m_xImageProducer;
         {
             // release our mutex once (it's acquired in the calling method!), as starting the image production may
-            // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
+            // result in the locking of the solar mutex (unfortunately the default implementation of our aggregate,
             // VCLXImageControl, does this locking)
             MutexRelease aRelease(m_aMutex);
             xProducer->startProduction();

@@ -973,7 +973,7 @@ protected:
                             getCurrentFormComponentValue() const;
 
     /** We can't write (new) common properties in this base class, as the file format doesn't allow this
-        (unfortunally). So derived classes may use the following two methods. They secure the written
+        (unfortunately). So derived classes may use the following two methods. They secure the written
         data with marks, so any new common properties in newer versions will be skipped by older ones.
     */
     void    writeCommonProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);

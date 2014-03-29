@@ -489,7 +489,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     // as our property vector is sorted by handles, not by name, we have to sort aOwnProps
     ::std::sort(aOwnProps.getArray(), aOwnProps.getArray() + aOwnProps.getLength(), PropertyCompareByName());
 
-    // unfortunally the STL merge function does not allow the output range to overlap one of the input ranges,
+    // unfortunately the STL merge function does not allow the output range to overlap one of the input ranges,
     // so we need an extra sequence
     Sequence< Property > aOutput;
     aOutput.realloc(_rProps.getLength() + aOwnProps.getLength());
