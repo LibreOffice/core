@@ -1375,8 +1375,8 @@ sal_Int32 SwFrmPage::FillPosLB(const FrmMap* _pMap,
                             const sal_Int16 _nRel,
                             ListBox& _rLB )
 {
-    OUString sSelEntry, sOldEntry;
-    sOldEntry = _rLB.GetSelectEntry();
+    OUString sSelEntry;
+    const OUString sOldEntry = _rLB.GetSelectEntry();
 
     _rLB.Clear();
 
@@ -1443,7 +1443,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
     {
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
-            OUString sOldEntry(_rLB.GetSelectEntry());
+            const OUString sOldEntry(_rLB.GetSelectEntry());
             const size_t nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
@@ -1464,7 +1464,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalFrame,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
-                            OUString sEntry = aFramePosString.GetString(sStrId1);
+                            const OUString sEntry = aFramePosString.GetString(sStrId1);
                             sal_Int32 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (_pMap[nMapPos].nAlign == _nAlign)
@@ -1529,7 +1529,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalFrame,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
-                            OUString sEntry = aFramePosString.GetString(eStrId1);
+                            const OUString sEntry = aFramePosString.GetString(eStrId1);
                             sal_Int32 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == _nRel)
@@ -1661,8 +1661,8 @@ sal_Int32 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
     {
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
-            size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
-            OUString sSelEntry(rAlignLB.GetSelectEntry());
+            const size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
+            const OUString sSelEntry(rAlignLB.GetSelectEntry());
 
             for (size_t i = 0; i < nMapCount; i++)
             {
@@ -2791,10 +2791,10 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         pFmtURL = new SwFmtURL();
 
     {
-        OUString sText = pURLED->GetText();
+        const OUString sText = pURLED->GetText();
 
         if( pFmtURL->GetURL() != sText ||
-            OUString(pFmtURL->GetName()) != pNameED->GetText() ||
+            pFmtURL->GetName() != pNameED->GetText() ||
             pServerCB->IsChecked() != pFmtURL->IsServerMap() )
         {
             pFmtURL->SetURL( sText, pServerCB->IsChecked() );
@@ -2809,7 +2809,7 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         bModified = sal_True;
     }
 
-    if(OUString(pFmtURL->GetTargetFrameName()) != pFrameCB->GetText())
+    if(pFmtURL->GetTargetFrameName() != pFrameCB->GetText())
     {
         pFmtURL->SetTargetFrameName(pFrameCB->GetText());
         bModified = sal_True;
@@ -2831,7 +2831,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
 
     try
     {
-        OUString sTemp(pURLED->GetText());
+        const OUString sTemp(pURLED->GetText());
         if(!sTemp.isEmpty())
             xFP->setDisplayDirectory(sTemp);
     }
@@ -3194,7 +3194,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
                         aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
         lcl_InsertVectors(rChangeLB,
                 aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
-        OUString sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
+        const OUString sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
         if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
             rChangeLB.SelectEntry(sToSelect);
         else
