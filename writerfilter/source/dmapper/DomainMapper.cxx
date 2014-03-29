@@ -1261,7 +1261,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             {
 
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                pStyleSheetPropertyMap->SetOutlineLevel( nLvl );
+                if (pStyleSheetPropertyMap)
+                    pStyleSheetPropertyMap->SetOutlineLevel( nLvl );
             }
             else
             {
