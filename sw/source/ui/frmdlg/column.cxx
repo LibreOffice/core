@@ -1000,7 +1000,6 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
         return 0;
     if(m_pAutoWidthBox->IsChecked())
     {
-        OSL_ENSURE(nCols, "Abstand kann nicht ohne Spalten eingestellt werden");
         const long nMaxGap = static_cast< long >
             ((pColMgr->GetActualSize() - nCols * MINLAY)/(nCols - 1));
         if(nActValue > nMaxGap)
