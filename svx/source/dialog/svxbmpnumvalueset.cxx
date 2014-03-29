@@ -391,6 +391,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 SvxNumValueSet::SvxNumValueSet(Window* pParent, WinBits nWinBits)
     : ValueSet(pParent, nWinBits)
+    , nPageType(0)
+    , bHTMLMode(false)
+    , pVDev(NULL)
 {
 }
 
