@@ -363,7 +363,7 @@ void PasteClipboardData(HWND hwndParent)
     if ( SUCCEEDED( hr ) )
     {
         HRESULT hr = CoMarshalInterThreadInterfaceInStream(
-            __uuidof(IDataObject), //The IID of inteface to be marshaled
+            __uuidof(IDataObject), //The IID of interface to be marshaled
             pIDataObj,       //The interface pointer
             &g_pStm          //IStream pointer
             );

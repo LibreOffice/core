@@ -858,7 +858,7 @@ SvxEditViewForwarder* SmEditSource::GetEditViewForwarder( bool /*bCreate*/ )
 
 void SmEditSource::UpdateData()
 {
-    // would possibly only by needed if the XText inteface is implemented
+    // would possibly only by needed if the XText interface is implemented
     // and its text needs to be updated.
 }
 

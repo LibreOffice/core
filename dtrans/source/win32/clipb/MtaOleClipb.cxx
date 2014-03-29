@@ -174,7 +174,7 @@ HRESULT MarshalIDataObjectInStream( IDataObject* pIDataObject, LPSTREAM* ppStrea
 
     *ppStream = NULL;
     return CoMarshalInterThreadInterfaceInStream(
-        __uuidof(IDataObject),  //The IID of inteface to be marshaled
+        __uuidof(IDataObject),  //The IID of interface to be marshaled
         pIDataObject,           //The interface pointer
         ppStream                //IStream pointer
         );

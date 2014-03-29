@@ -172,7 +172,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
         If the reflected type is not an array, then a null-reference is returned.
 
         @return
-                inteface to modify array instances (or null-reference)
+                interface to modify array instances (or null-reference)
     */
     XIdlArray getArray();
 

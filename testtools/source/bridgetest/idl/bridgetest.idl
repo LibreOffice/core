@@ -131,7 +131,7 @@ struct ThreeByteStruct
     byte                       c;
 };
 /**
- * complex types adding string, inteface, any
+ * complex types adding string, interface, any
  */
 struct TestElement : TestSimple
 {

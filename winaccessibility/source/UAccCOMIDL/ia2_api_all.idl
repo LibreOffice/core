@@ -3686,7 +3686,7 @@ interface IAccessibleHypertext : IAccessibleText
 /** @brief This interface exposes information about hypertext in a document.
 
  The %IAccessibleHypertext2 interface extends the functinality of the
- %IAccessibleHypertext inteface.
+ %IAccessibleHypertext interface.
 */
 [object, uuid(CF64D89F-8287-4B44-8501-A827453A6077)]
 interface IAccessibleHypertext2 : IAccessibleHypertext
@@ -4326,7 +4326,7 @@ interface IAccessibleTable : IUnknown
  Please also refer to the IAccessibleTableCell interface.
 
  If you want to support older applications you should also support the
-  IAccessibleTable inteface.
+  IAccessibleTable interface.
 */
 [object, uuid(6167f295-06f0-4cdd-a1fa-02e25153d869)]
 interface IAccessibleTable2 : IUnknown
