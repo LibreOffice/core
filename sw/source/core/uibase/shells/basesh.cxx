@@ -1828,8 +1828,6 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 break;
             case FN_FRAME_WRAP_CONTOUR:
                 aWrap.SetContour(!aWrap.IsContour());
-                if (nSurround == SURROUND_THROUGHT)
-                    nSurround = SURROUND_PARALLEL;
                 break;
             case FN_FRAME_WRAPTHRU_TRANSP:
                 if (aWrap.IsContour())
