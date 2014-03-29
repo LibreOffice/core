@@ -4652,6 +4652,11 @@ AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 
 dnl ===================================================================
+dnl Check for availability of posix_memalign and memalign
+dnl ===================================================================
+AC_CHECK_FUNCS([posix_memalign memalign])
+
+dnl ===================================================================
 dnl Check for syslog header
 dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
