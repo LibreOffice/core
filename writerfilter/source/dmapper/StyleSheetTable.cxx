@@ -675,7 +675,8 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
         break;
         case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
-                dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TrPrBase_jc(nIntValue);
+            if (StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() ))
+                pMap->SetCT_TrPrBase_jc(nIntValue);
         break;
         case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
         {
