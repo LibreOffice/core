@@ -280,12 +280,8 @@ void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
 
 void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)
 {
-    sal_uInt64 const nStrmPos = rInStrm.Tell();
-    rInStrm.Seek( STREAM_SEEK_TO_END );
-    sal_uInt64 const nStrmSize = rInStrm.Tell();
-    rInStrm.Seek( nStrmPos );
-
-    sal_uInt64 nBytesLeft = ::std::min( nBytes, nStrmSize - nStrmPos );
+    sal_uInt64 const nRemaining(rInStrm.remainingSize());
+    sal_uInt64 nBytesLeft = ::std::min(nBytes, nRemaining);
     if( nBytesLeft > 0 )
     {
         const sal_Size nMaxBuffer = 4096;
