@@ -753,7 +753,7 @@
                   <object class="GtkLabel" id="flOptions">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">Settings</property>
+                    <property name="label" translatable="yes">Settings</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
