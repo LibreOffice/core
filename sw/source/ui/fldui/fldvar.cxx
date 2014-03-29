@@ -398,8 +398,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 m_pNameED->SetText( sName );
 
                 // User- or SetField ?
-                sal_uInt16 nInpType = 0;
-                nInpType = static_cast< sal_uInt16 >(GetFldMgr().GetFldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
+                const sal_uInt16 nInpType = static_cast< sal_uInt16 >
+                    (GetFldMgr().GetFldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
 
                 if (nInpType)   // SETEXPFLD
                 {
@@ -571,7 +571,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 void SwFldVarPage::UpdateSubType()
 {
     OUString sOldSel;
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     SetSelectionSel(m_pSelectionLB->GetSelectEntryPos());
     if(GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
@@ -769,12 +769,12 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             m_pNumFormatLB->SelectEntry(sOldSel);
     }
 
-    sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
+    const sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
 
     for (sal_uInt16 i = 0; i < nSize; i++)
     {
         sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
-        sal_uInt16 nFldId = GetFldMgr().GetFormatId( nTypeId, i );
+        const sal_uInt16 nFldId = GetFldMgr().GetFormatId( nTypeId, i );
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(nFldId) );
         if (IsFldEdit() && nFldId == GetCurField()->GetFormat())
             m_pFormatLB->SelectEntryPos( nPos );
@@ -806,7 +806,7 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 {
     OUString sValue(m_pValueED->GetText());
     sal_Bool bHasValue = !sValue.isEmpty();
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
     bool bInsert = false, bApply = false, bDelete = false;
 
     OUString sName( m_pNameED->GetText() );
@@ -929,9 +929,9 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 
 IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 {
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-    sal_uInt16 nCurId = pBox->GetCurItemId();
+    const sal_uInt16 nCurId = pBox->GetCurItemId();
 
     if (nCurId == m_nDeleteId)
     {
@@ -1095,12 +1095,12 @@ IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
 
 bool SwFldVarPage::FillItemSet(SfxItemSet& )
 {
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
 
-    sal_Int32 nSubPos = m_pSelectionLB->GetSelectEntryPos();
+    const sal_Int32 nSubPos = m_pSelectionLB->GetSelectEntryPos();
     sal_uInt16 nSubType = (nSubPos == LISTBOX_ENTRY_NOTFOUND) ? 0 :
         (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nSubPos);
 
