@@ -33,7 +33,7 @@ class SmToolBoxWindow : public SfxFloatingWindow
 
 protected:
     ToolBox     aToolBoxCat;
-    FixedLine   aToolBoxCat_Delim;  // to visualy separate the catalog part
+    FixedLine   aToolBoxCat_Delim;  // to visually separate the catalog part
     ToolBox    *pToolBoxCmd;
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
