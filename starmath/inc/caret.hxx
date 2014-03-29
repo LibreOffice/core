@@ -28,7 +28,7 @@ struct SmCaretPos{
      * Notice how there's special cases for SmTextNode.
      */
     //TODO: Special cases for SmBlankNode is needed
-    //TODO: Consider forgetting about the todo above... As it's really unpleasent.
+    //TODO: Consider forgetting about the todo above... As it's really unpleasant.
     int Index;
     /** True, if this is a valid caret position */
     bool IsValid() const { return pSelectedNode != NULL; }
