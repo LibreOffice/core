@@ -1822,7 +1822,8 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         exportSeriesValues( xValuesSeq, nYValueType );
                     }
 
-                    if( eChartType == chart::TYPEID_SCATTER )
+                    if( eChartType == chart::TYPEID_SCATTER
+                            || eChartType == chart::TYPEID_LINE )
                         exportSmooth();
 
                     pFS->endElement( FSNS( XML_c, XML_ser ) );
