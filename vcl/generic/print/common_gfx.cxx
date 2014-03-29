@@ -219,7 +219,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         rightside.push_back( Point( aLastRect.Right()+1, aLastRect.Bottom()+1 ) );
 
         // cool, we can concatenate rectangles
-        int nDX = -65536, nDY = 65536;
+        const int nDX = -65536, nDY = 65536;
         int nNewDX = 0, nNewDY = 0;
 
         Point aLastPoint = leftside.front();
@@ -234,9 +234,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
             {
                 nNewDX = aPoint.X() - aLastPoint.X();
                 nNewDY = aPoint.Y() - aLastPoint.Y();
-                if( nNewDX == 0 && nDX == 0 )
-                    continue;
-                if( nDX != 0 && nNewDX != 0 &&
+                if( nNewDX != 0 &&
                     (double)nNewDY/(double)nNewDX == (double)nDY/(double)nDX )
                     continue;
             }
@@ -245,8 +243,6 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         }
 
         aLastPoint = rightside.back();
-        nDX = -65536;
-        nDY = 65536;
         PSBinLineTo (aLastPoint, rOldPoint, rColumn);
         rightside.pop_back();
         while( rightside.begin() != rightside.end() )
@@ -257,9 +253,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
             {
                 nNewDX = aPoint.X() - aLastPoint.X();
                 nNewDY = aPoint.Y() - aLastPoint.Y();
-                if( nNewDX == 0 && nDX == 0 )
-                    continue;
-                if( nDX != 0 && nNewDX != 0 &&
+                if( nNewDX != 0 &&
                     (double)nNewDY/(double)nNewDX == (double)nDY/(double)nDX )
                     continue;
             }
