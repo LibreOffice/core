@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_1ddd4315",
+        "filename": "sal/osl/unx/memory.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-03-29T16:51:08Z",
+      "side": 1,
+      "message": "do not delete other platform specific code...\nthe suboptimal emulation below should not be inflicted to platform that have a valid equivalent.\nin that vein I\u0027d rather not have the HAVE_POSIX_MEMALIGN (*)\nbut have a ifdef  \u003c 1060 thing...\nyou can even use, for all practical purpose, valloc.\niow \n#elif \u003cmacosx 10.6 or below\n   return valloc(size)\n#else\n\npage aligned should be safe enough for now.. especially considering the only use case is in sc/inc/formulagroup and there it wants a 256 bytes alignment.. so a page aligned memory will do.\n\n(*) again my rational is, although I\u0027m fine helping you maintain a 10.5 port, It\u0027d rather that hack needed for it be easy to identify as such, so that we can eventually scrub them out in the future.\nintroducing HAVE_POSIX_MEMALIGN fail that test as it will be quite hard to remember later on that the only reason that was introduce was the 10.5 backport..",
+      "revId": "b9446b7d8dc75cf0df57b172b2561f5bcbb5d1c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
