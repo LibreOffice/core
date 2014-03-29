@@ -176,7 +176,7 @@ private:
 
     void            InitScrollBar( ScrollBar& rScrollBar, long nMaxVal );
     DECL_LINK(      ScrollHdl, ScrollBar* );
-    DECL_LINK(      EndScrollHdl, ScrollBar* );
+    DECL_LINK(      EndScrollHdl, void* );
 
     DECL_LINK(      SplitHdl, Splitter* );
     void            DoHSplit(long nSplitPos);

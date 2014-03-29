@@ -979,7 +979,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     return bDone;
 }
 
-IMPL_LINK( ScTabView, EndScrollHdl, ScrollBar*, pScroll )
+IMPL_LINK_NOARG(ScTabView, EndScrollHdl)
 {
     if ( bDragging )
     {
@@ -991,8 +991,6 @@ IMPL_LINK( ScTabView, EndScrollHdl, ScrollBar*, pScroll )
 
 IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 {
-    sal_Bool bOnlineScroll = sal_True;      //! Optionen
-
     bool bHoriz = ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight );
     long nViewPos;
     if ( bHoriz )
@@ -1071,71 +1069,68 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
         }
     }
 
-    if ( bOnlineScroll || eType != SCROLL_DRAG )
+    long nDelta = pScroll->GetDelta();
+    switch ( eType )
     {
-        long nDelta = pScroll->GetDelta();
-        switch ( eType )
-        {
-            case SCROLL_LINEUP:
-                nDelta = -1;
-                break;
-            case SCROLL_LINEDOWN:
-                nDelta = 1;
-                break;
-            case SCROLL_PAGEUP:
-                if ( pScroll == &aHScrollLeft ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_LEFT );
-                if ( pScroll == &aHScrollRight ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_RIGHT );
-                if ( pScroll == &aVScrollTop ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_TOP );
-                if ( pScroll == &aVScrollBottom ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_BOTTOM );
-                if (nDelta==0) nDelta=-1;
-                break;
-            case SCROLL_PAGEDOWN:
-                if ( pScroll == &aHScrollLeft ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
-                if ( pScroll == &aHScrollRight ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
-                if ( pScroll == &aVScrollTop ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_TOP );
-                if ( pScroll == &aVScrollBottom ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
-                if (nDelta==0) nDelta=1;
-                break;
-            case SCROLL_DRAG:
-                {
-                    //  nur in die richtige Richtung scrollen, nicht um ausgeblendete
-                    //  Bereiche herumzittern
-
-                    long nScrollMin = 0;        // RangeMin simulieren
-                    if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
-                        nScrollMin = aViewData.GetFixPosX();
-                    if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
-                        nScrollMin = aViewData.GetFixPosY();
-
-                    long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
-                    nDelta = nScrollPos - nViewPos;
-                    if ( nScrollPos > nPrevDragPos )
-                    {
-                        if (nDelta<0) nDelta=0;
-                    }
-                    else if ( nScrollPos < nPrevDragPos )
-                    {
-                        if (nDelta>0) nDelta=0;
-                    }
-                    else
-                        nDelta = 0;
-                    nPrevDragPos = nScrollPos;
-                }
-                break;
-            default:
+        case SCROLL_LINEUP:
+            nDelta = -1;
+            break;
+        case SCROLL_LINEDOWN:
+            nDelta = 1;
+            break;
+        case SCROLL_PAGEUP:
+            if ( pScroll == &aHScrollLeft ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_LEFT );
+            if ( pScroll == &aHScrollRight ) nDelta = -(long) aViewData.PrevCellsX( SC_SPLIT_RIGHT );
+            if ( pScroll == &aVScrollTop ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_TOP );
+            if ( pScroll == &aVScrollBottom ) nDelta = -(long) aViewData.PrevCellsY( SC_SPLIT_BOTTOM );
+            if (nDelta==0) nDelta=-1;
+            break;
+        case SCROLL_PAGEDOWN:
+            if ( pScroll == &aHScrollLeft ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
+            if ( pScroll == &aHScrollRight ) nDelta = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
+            if ( pScroll == &aVScrollTop ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_TOP );
+            if ( pScroll == &aVScrollBottom ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
+            if (nDelta==0) nDelta=1;
+            break;
+        case SCROLL_DRAG:
             {
-                // added to avoid warnings
-            }
-        }
+                //  nur in die richtige Richtung scrollen, nicht um ausgeblendete
+                //  Bereiche herumzittern
 
-        if (nDelta)
+                long nScrollMin = 0;        // RangeMin simulieren
+                if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
+                    nScrollMin = aViewData.GetFixPosX();
+                if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
+                    nScrollMin = aViewData.GetFixPosY();
+
+                long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
+                nDelta = nScrollPos - nViewPos;
+                if ( nScrollPos > nPrevDragPos )
+                {
+                    if (nDelta<0) nDelta=0;
+                }
+                else if ( nScrollPos < nPrevDragPos )
+                {
+                    if (nDelta>0) nDelta=0;
+                }
+                else
+                    nDelta = 0;
+                nPrevDragPos = nScrollPos;
+            }
+            break;
+        default:
         {
-            sal_Bool bUpdate = ( eType != SCROLL_DRAG );    // bei Drag die Ranges nicht aendern
-            if ( bHoriz )
-                ScrollX( nDelta, (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT, bUpdate );
-            else
-                ScrollY( nDelta, (pScroll == &aVScrollTop) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM, bUpdate );
+            // added to avoid warnings
         }
+    }
+
+    if (nDelta)
+    {
+        sal_Bool bUpdate = ( eType != SCROLL_DRAG );    // bei Drag die Ranges nicht aendern
+        if ( bHoriz )
+            ScrollX( nDelta, (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT, bUpdate );
+        else
+            ScrollY( nDelta, (pScroll == &aVScrollTop) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM, bUpdate );
     }
 
     return 0;
