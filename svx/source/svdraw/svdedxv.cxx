@@ -618,7 +618,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
         pTextEditOutliner->SetEndPasteOrDropHdl(LINK(this,SdrObjEditView, EndPasteOrDropHdl));
 
         // It is just necessary to make the visualized page known. Set it.
-        pTextEditOutliner->setVisualizedPage(pPV ? pPV->GetPage() : 0);
+        pTextEditOutliner->setVisualizedPage(pPV->GetPage());
 
         pTextEditOutliner->SetTextObjNoInit( dynamic_cast< SdrTextObj* >( mxTextEditObj.get() ) );
 
