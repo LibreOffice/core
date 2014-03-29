@@ -140,7 +140,7 @@ bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataF
                         }
                         else
                         {
-                            //TODO/LATER: how to handle objects without persistance?!
+                            //TODO/LATER: how to handle objects without persistence?!
                         }
                     }
                     catch ( uno::Exception& )

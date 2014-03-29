@@ -438,7 +438,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XEmbedPersist > xEmb( xObj, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xEmb, uno::UNO_QUERY );
-    // if the object has a persistance and the object is not a link than it must have persistence entry in the storage
+    // if the object has a persistence and the object is not a link than it must have persistence entry in the storage
     OSL_ENSURE( !( xEmb.is() && ( !xLink.is() || !xLink->isLink() ) ) || xAccess->hasByName(rName),
                     "Added element not in storage!" );
 #endif
@@ -721,7 +721,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
 
-    // objects without persistance are not really stored by the method
+    // objects without persistence are not really stored by the method
     if ( xObj.is() && StoreEmbeddedObject( xObj, rName, true ) )
     {
         xResult = Get_Impl( rName, xObj);
@@ -830,7 +830,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
         }
     }
 
-    SAL_WARN_IF( !xResult.is(), "comphelper.container", "Can not copy embedded object that has no persistance!\n" );
+    SAL_WARN_IF( !xResult.is(), "comphelper.container", "Can not copy embedded object that has no persistence!\n" );
 
     if ( xResult.is() )
     {
@@ -999,7 +999,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     uno::Reference < embed::XLinkageSupport > xLink( xPersist, uno::UNO_QUERY );
     sal_Bool bIsNotEmbedded = !xPersist.is() || ( xLink.is() && xLink->isLink() );
 
-    // if the object has a persistance and the object is not a link than it must have persistence entry in the storage
+    // if the object has a persistence and the object is not a link than it must have persistence entry in the storage
     OSL_ENSURE( bIsNotEmbedded || xAccess->hasByName(aName), "Removing element not present in storage!" );
 #endif
 
@@ -1113,7 +1113,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
         try
         {
 #if OSL_DEBUG_LEVEL > 1
-            // if the object has a persistance and the object is not a link than it must have persistence entry in storage
+            // if the object has a persistence and the object is not a link than it must have persistence entry in storage
             OSL_ENSURE( bIsNotEmbedded || pImpl->mxStorage->hasByName( aName ), "The object has no persistence entry in the storage!" );
 #endif
             if ( xPersist.is() && pImpl->mxStorage->hasByName( aName ) )

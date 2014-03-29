@@ -560,7 +560,7 @@ public class EmbedContApp extends Applet
                 {
                     if ( m_xStorage != null && m_xEmbedObj != null )
                     {
-                        // if has persistance store there
+                        // if has persistence store there
                         // if not it is and error, SaveAs had to be used
 
                         if ( m_bOwnFile )
@@ -1042,7 +1042,7 @@ public class EmbedContApp extends Applet
 
         public void actionPerformed( ActionEvent e )
         {
-            // if has persistance store there
+            // if has persistence store there
             // if not open SaveAs dialog and store
             if ( m_xStorage != null && m_xEmbedObj != null )
             {

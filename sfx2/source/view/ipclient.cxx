@@ -224,7 +224,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         // and the user didn't request saving the changes
         return;
 
-    // the common persistance is supported by objects and links
+    // the common persistence is supported by objects and links
     uno::Reference< embed::XCommonEmbedPersist > xPersist( m_xObject, uno::UNO_QUERY );
     if ( !xPersist.is() )
         throw uno::RuntimeException();

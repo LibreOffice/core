@@ -1239,9 +1239,9 @@ bool SfxObjectShell::SaveTo_Impl
                 // The active storage must be switched. The simple saving is not enough.
                 // The problem is that the target medium contains target MediaDescriptor.
 
-                    // In future the switch of the persistance could be done on stream level:
+                    // In future the switch of the persistence could be done on stream level:
                     // a new wrapper service will be implemented that allows to exchange
-                    // persistance on the fly. So the real persistance will be set
+                    // persistence on the fly. So the real persistence will be set
                     // to that stream only after successful commit of the storage.
                     // TODO/LATER:
                     // create wrapper stream based on the URL

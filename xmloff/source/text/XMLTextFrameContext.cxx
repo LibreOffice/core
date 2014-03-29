@@ -509,7 +509,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
                 }
                 else
                 {
-                    // it should be an own OOo link that has no storage persistance
+                    // it should be an own OOo link that has no storage persistence
                     xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOOoLink( GetImport(),
                                                         sURL,

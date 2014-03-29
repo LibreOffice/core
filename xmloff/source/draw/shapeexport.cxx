@@ -2751,7 +2751,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                 if ( bInternal )
                 {
-                    // OOo internal links have no storage persistance, URL is stored in the XML file
+                    // OOo internal links have no storage persistence, URL is stored in the XML file
                     // the result LinkURL is empty in case the object is not a link
                     xPropSet->getPropertyValue("LinkURL") >>= sURL;
                 }

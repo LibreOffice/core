@@ -231,7 +231,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
 
-    // no persistance for linked objects, so the descriptors are provided in constructor
+    // no persistence for linked objects, so the descriptors are provided in constructor
     OCommonEmbeddedObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps,

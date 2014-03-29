@@ -873,7 +873,7 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
                         if ( xPers.is() )
                             xPers->storeOwn();
                         else {
-                            OSL_FAIL("Modified object without persistance in cache!");
+                            OSL_FAIL("Modified object without persistence in cache!");
                         }
                     }
 

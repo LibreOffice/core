@@ -379,7 +379,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // if has persistance store there
+            // if has persistence store there
             // if not open SaveAs dialog and store
             if ( m_xStorage != null && m_xEmbedObj != null )
             {
