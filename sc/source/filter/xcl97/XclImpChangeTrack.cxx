@@ -54,7 +54,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     if( xInStrm.Is() )
     {
         xInStrm->Seek( STREAM_SEEK_TO_END );
-        sal_uLong nStreamLen = xInStrm->Tell();
+        sal_uInt64 const nStreamLen = xInStrm->Tell();
         if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
         {
             xInStrm->Seek( STREAM_SEEK_TO_BEGIN );

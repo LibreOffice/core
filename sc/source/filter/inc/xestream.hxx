@@ -145,9 +145,9 @@ public:
     // *** SvStream access ***
 
     /** Sets position of system stream (only allowed outside of records). */
-    sal_Size            SetSvStreamPos( sal_Size nPos );
+    sal_uInt64          SetSvStreamPos(sal_uInt64 nPos);
     /** Returns the absolute position of the system stream. */
-    inline sal_Size     GetSvStreamPos() const { return mrStrm.Tell(); }
+    inline sal_uInt64   GetSvStreamPos() const { return mrStrm.Tell(); }
 
     void                SetEncrypter( XclExpEncrypterRef xEncrypter );
 
@@ -236,7 +236,7 @@ private:
     sal_uInt8           mpnSalt[16];
     sal_uInt8           mpnSaltDigest[16];
 
-    sal_Size            mnOldPos;      /// Last known stream position
+    sal_uInt64          mnOldPos;      /// Last known stream position
     bool                mbValid;
 };
 

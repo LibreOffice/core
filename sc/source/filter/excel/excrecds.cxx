@@ -355,8 +355,8 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 //------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
-    nStrPos( STREAM_SEEK_TO_END ),
-    nOwnPos( STREAM_SEEK_TO_END ),
+    m_nStrPos( STREAM_SEEK_TO_END ),
+    m_nOwnPos( STREAM_SEEK_TO_END ),
     nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTabNum ) ? 0x0000 : 0x0001 ),
     nTab( nTabNum )
 {
@@ -364,8 +364,8 @@ ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
 
 
 ExcBundlesheetBase::ExcBundlesheetBase() :
-    nStrPos( STREAM_SEEK_TO_END ),
-    nOwnPos( STREAM_SEEK_TO_END ),
+    m_nStrPos( STREAM_SEEK_TO_END ),
+    m_nOwnPos( STREAM_SEEK_TO_END ),
     nGrbit( 0x0000 ),
     nTab( SCTAB_GLOBAL )
 {
@@ -374,9 +374,9 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
 
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
-    rStrm.SetSvStreamPos( nOwnPos );
+    rStrm.SetSvStreamPos( m_nOwnPos );
     rStrm.DisableEncryption();
-    rStrm << static_cast<sal_uInt32>(nStrPos);
+    rStrm << static_cast<sal_uInt32>(m_nStrPos);
     rStrm.EnableEncryption();
 }
 
@@ -400,7 +400,7 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
 
 void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
-    nOwnPos = rStrm.GetSvStreamPos();
+    m_nOwnPos = rStrm.GetSvStreamPos();
     rStrm   << (sal_uInt32) 0x00000000              // dummy (stream position of the sheet)
             << nGrbit;
     rStrm.WriteByteString(aName);             // 8 bit length, max 255 chars

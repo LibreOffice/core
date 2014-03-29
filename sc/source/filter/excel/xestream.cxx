@@ -376,7 +376,7 @@ void XclExpStream::DisableEncryption()
     EnableEncryption(false);
 }
 
-sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
+sal_Size XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
 {
     OSL_ENSURE( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
     return mbInRec ? 0 : mrStrm.Seek( nPos );
@@ -599,7 +599,7 @@ sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos ) const
 
 void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBytes )
 {
-    sal_Size nStrmPos = rStrm.Tell();
+    sal_uInt64 nStrmPos = rStrm.Tell();
     sal_uInt16 nBlockOffset = GetOffsetInBlock(nStrmPos);
     sal_uInt32 nBlockPos = GetBlockPos(nStrmPos);
 

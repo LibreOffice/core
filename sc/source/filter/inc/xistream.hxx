@@ -86,7 +86,7 @@ private:
 
 private:
     ErrCode             mnError;        /// Decrypter error code.
-    sal_Size            mnOldPos;       /// Last known stream position.
+    sal_uInt64          mnOldPos;       /// Last known stream position.
     sal_uInt16          mnRecSize;      /// Current record size.
 };
 

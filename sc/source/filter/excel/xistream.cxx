@@ -79,7 +79,7 @@ void XclImpDecrypter::Update( SvStream& rStrm, sal_uInt16 nRecSize )
 {
     if( IsValid() )
     {
-        sal_Size nNewPos = rStrm.Tell();
+        sal_uInt64 const nNewPos = rStrm.Tell();
         if( (mnOldPos != nNewPos) || (mnRecSize != nRecSize) )
         {
             OnUpdate( mnOldPos, nNewPos, nRecSize );

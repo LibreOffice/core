@@ -260,8 +260,8 @@ private:
 class ExcBundlesheetBase : public ExcRecord
 {
 protected:
-    sal_Size                nStrPos;
-    sal_Size                nOwnPos;    // Position NACH # und Len
+    sal_uInt64              m_nStrPos;
+    sal_uInt64              m_nOwnPos;    // Position after # and Len
     sal_uInt16                  nGrbit;
     SCTAB                   nTab;
 
@@ -270,7 +270,7 @@ protected:
 public:
                             ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
 
-    inline void             SetStreamPos( sal_Size nNewStrPos ) { nStrPos = nNewStrPos; }
+    inline void             SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual sal_uInt16          GetNum() const SAL_OVERRIDE;

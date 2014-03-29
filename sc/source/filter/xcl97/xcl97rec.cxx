@@ -1098,7 +1098,7 @@ XclExpString ExcBundlesheet8::GetName() const
 
 void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
-    nOwnPos = rStrm.GetSvStreamPos();
+    m_nOwnPos = rStrm.GetSvStreamPos();
     // write dummy position, real position comes later
     rStrm.DisableEncryption();
     rStrm << sal_uInt32(0);
