@@ -3021,12 +3021,10 @@ void ChartExport::exportSmooth()
     sal_Int32 nSplineType = 0;
     if( GetProperty( xPropSet, "SplineType" ) )
         mAny >>= nSplineType;
-    if( nSplineType != 0 )
-    {
-        pFS->singleElement( FSNS( XML_c, XML_smooth ),
-            XML_val, "1",
+    const char* pVal = nSplineType != 0 ? "1" : "0";
+    pFS->singleElement( FSNS( XML_c, XML_smooth ),
+            XML_val, pVal,
             FSEND );
-    }
 }
 
 void ChartExport::exportFirstSliceAng( )
