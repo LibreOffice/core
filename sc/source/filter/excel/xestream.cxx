@@ -278,15 +278,14 @@ void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
         *this << nZero;
 }
 
-sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
+void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)
 {
-    sal_Size nStrmPos = rInStrm.Tell();
+    sal_uInt64 const nStrmPos = rInStrm.Tell();
     rInStrm.Seek( STREAM_SEEK_TO_END );
-    sal_Size nStrmSize = rInStrm.Tell();
+    sal_uInt64 const nStrmSize = rInStrm.Tell();
     rInStrm.Seek( nStrmPos );
 
-    sal_Size nBytesLeft = ::std::min( nBytes, nStrmSize - nStrmPos );
-    sal_Size nRet = 0;
+    sal_uInt64 nBytesLeft = ::std::min( nBytes, nStrmSize - nStrmPos );
     if( nBytesLeft > 0 )
     {
         const sal_Size nMaxBuffer = 4096;
@@ -299,12 +298,10 @@ sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
             rInStrm.Read( pBuffer, nWriteLen );
             sal_Size nWriteRet = Write( pBuffer, nWriteLen );
             bValid = (nWriteLen == nWriteRet);
-            nRet += nWriteRet;
             nBytesLeft -= nWriteRet;
         }
         delete[] pBuffer;
     }
-    return nRet;
 }
 
 void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags )

@@ -122,7 +122,7 @@ public:
 
     /** Copies nBytes bytes from current position of the stream rInStrm.
         @descr  Omitting the second parameter means: read to end of stream. */
-    sal_Size            CopyFromStream( SvStream& rInStrm, sal_Size nBytes = STREAM_SEEK_TO_END );
+    void                CopyFromStream( SvStream& rInStrm, sal_uInt64 nBytes = STREAM_SEEK_TO_END );
 
     // *** unicode string export is realized with helper class XclExpString ***
     // (slice length setting has no effect here -> disabled automatically)
