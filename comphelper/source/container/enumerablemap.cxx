@@ -333,7 +333,7 @@ namespace comphelper
         }
 
     private:
-        // sicne we share our mutex with the main map, we need to keep it alive as long as we live
+        // since we share our mutex with the main map, we need to keep it alive as long as we live
         Reference< XInterface >     m_xKeepMapAlive;
         ::std::auto_ptr< MapData >  m_pMapDataCopy;
         MapEnumerator               m_aEnumerator;
