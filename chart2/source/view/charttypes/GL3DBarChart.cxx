@@ -13,6 +13,8 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 
+#include <stdio.h>
+
 using namespace com::sun::star;
 
 namespace chart {
