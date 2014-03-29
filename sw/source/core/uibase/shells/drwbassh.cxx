@@ -120,7 +120,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     sal_Bool bAlignPossible = pSh->IsAlignPossible();
 
     sal_Bool bTopParam = sal_True, bBottomParam = sal_True;
-    bool bNotify = false;
     bool bDone = false;
     SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
 
@@ -400,7 +399,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     pSh->LeaveSelFrmMode();
                     // #105852# FME
                 }
-                bNotify = true;
             }
             break;
 
@@ -602,9 +600,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             pSh->SetModified();
         else if (bChanged)
             pSdrView->GetModel()->SetChanged(true);
-        // 40220: After Delete from DrawObjecs over the API GPF through self-destruction
-        if(bNotify)
-            GetView().AttrChangedNotify(pSh); // Shell switch if applicable...
     }
 }
 
