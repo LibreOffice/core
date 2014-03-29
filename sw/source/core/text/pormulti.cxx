@@ -1970,7 +1970,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         else
         {
-            // For Solaris, this optimisation can causes trouble:
+            // For Solaris, this optimization can causes trouble:
             // Setting this to the portion width ( = rMulti.Width() )
             // can make GetTextBreak inside SwTxtGuess::Guess return to small
             // values. Therefore we add some extra twips.

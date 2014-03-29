@@ -1051,7 +1051,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                     // that should considerably increase performance for
                     // large bitmaps and small clippings.
 
-                    // Note that this optimisation is a workaround for a
+                    // Note that this optimization is a workaround for a
                     // Writer peculiarity, namely, to decompose background
                     // graphics into myriads of disjunct, tiny
                     // rectangles. That otherwise kills us here, since for

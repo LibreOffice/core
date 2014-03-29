@@ -661,7 +661,7 @@ void SlideShowView::init()
 
     getTransformation();
 
-    // #i48939# only switch on kind of hacky scroll optimisation, when
+    // #i48939# only switch on kind of hacky scroll optimization, when
     // running fullscreen. this minimizes the probability that other
     // windows partially cover the show.
     if( mbFullScreen )

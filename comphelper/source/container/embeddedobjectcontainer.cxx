@@ -517,7 +517,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed:
                 xPersist->storeToEntry( pImpl->mxStorage, rName, aSeq, aSeq );
             else
             {
-                //TODO/LATER: possible optimisation, don't store immediately
+                //TODO/LATER: possible optimization, don't store immediately
                 //xPersist->setPersistentEntry( pImpl->mxStorage, rName, embed::EntryInitModes::ENTRY_NO_INIT, aSeq, aSeq );
                 xPersist->storeAsEntry( pImpl->mxStorage, rName, aSeq, aSeq );
                 xPersist->saveCompleted( sal_True );

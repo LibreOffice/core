@@ -578,7 +578,7 @@ namespace vclcanvas
 
 
                 // this distinction really looks like a
-                // micro-optimisation, but in fact greatly speeds up
+                // micro-optimization, but in fact greatly speeds up
                 // especially complex gradients. That's because when using
                 // clipping, we can output polygons instead of
                 // poly-polygons, and don't have to output the gradient
@@ -963,7 +963,7 @@ namespace vclcanvas
 
 
                         // this distinction really looks like a
-                        // micro-optimisation, but in fact greatly speeds up
+                        // micro-optimization, but in fact greatly speeds up
                         // especially complex fills. That's because when using
                         // clipping, we can output polygons instead of
                         // poly-polygons, and don't have to output the gradient

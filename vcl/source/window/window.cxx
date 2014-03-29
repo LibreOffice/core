@@ -1467,7 +1467,7 @@ void Window::ImplLoadRes( const ResId& rResId )
 
     sal_uLong nRSStyle = aHeader.nRSStyle;
 
-    // looks bad due to optimisation
+    // looks bad due to optimization
     if ( nRSStyle & RSWND_CLIENTSIZE )
     {
         if ( bPos )
@@ -7127,7 +7127,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 
             // When ClipRegion was not initialised, assume
             // the window has not been sent, therefore do not
-            // trigger any Invalidates. This is an optimisation
+            // trigger any Invalidates. This is an optimization
             // for HTML documents with many controls. If this
             // check gives problems, a flag should be introduced
             // which tracks whether the window has already been

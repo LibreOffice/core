@@ -220,7 +220,7 @@ private:
 
         // trigger "clipCode1 & aMinFlag/bMinFlag" cases in
         // clippedlinerenderer.hxx (note1: needs forcing end point to
-        // be clipped as well, otherwise optimisation kicks in. note2:
+        // be clipped as well, otherwise optimization kicks in. note2:
         // needs forcing end point to clip on two edges, not only on
         // one, otherwise swap kicks in)
         const basegfx::B2IPoint aPt5(1,1);

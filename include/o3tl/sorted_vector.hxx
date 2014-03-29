@@ -141,7 +141,7 @@ public:
 
     void insert(sorted_vector<Value,Compare,Find> const& rOther)
     {
-       // optimisation for the rather common case that we are overwriting this with the contents
+       // optimization for the rather common case that we are overwriting this with the contents
        // of another sorted vector
        if ( empty() )
        {
