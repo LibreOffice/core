@@ -451,7 +451,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
         return sal_False;
     }
 
-    const SwLayoutFrm *pEnd = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pEnd = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper();
     OSL_ENSURE( pEnd, "without frame nothing works" );
 
     bool bTblIsValid, bValidChartSel;
