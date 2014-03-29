@@ -1785,7 +1785,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         if( pContext.get() )
         {
             ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
-            pParaContext->SetFrameMode();
+            if (pParaContext)
+                pParaContext->SetFrameMode();
         }
         else
         {
