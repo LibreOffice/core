@@ -481,57 +481,54 @@ void StringResourceImpl::newLocale( const Locale& locale )
     }
 
     // TODO?: Check if locale is valid? How?
-    bool bValid = true;
-    if( bValid )
+    //if (!bValid)
+    //{
+    //    OUString errorMsg("StringResourceImpl: Invalid locale");
+    //    throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+    //}
+
+    LocaleItem* pLocaleItem = new LocaleItem( locale );
+    m_aLocaleItemVector.push_back( pLocaleItem );
+    pLocaleItem->m_bModified = true;
+
+    // Copy strings from default locale
+    LocaleItem* pCopyFromItem = m_pDefaultLocaleItem;
+    if( pCopyFromItem == NULL )
+        pCopyFromItem = m_pCurrentLocaleItem;
+    if( pCopyFromItem != NULL && loadLocale( pCopyFromItem ) )
     {
-        LocaleItem* pLocaleItem = new LocaleItem( locale );
-        m_aLocaleItemVector.push_back( pLocaleItem );
-        pLocaleItem->m_bModified = true;
-
-        // Copy strings from default locale
-        LocaleItem* pCopyFromItem = m_pDefaultLocaleItem;
-        if( pCopyFromItem == NULL )
-            pCopyFromItem = m_pCurrentLocaleItem;
-        if( pCopyFromItem != NULL && loadLocale( pCopyFromItem ) )
+        const IdToStringMap& rSourceMap = pCopyFromItem->m_aIdToStringMap;
+        IdToStringMap& rTargetMap = pLocaleItem->m_aIdToStringMap;
+        IdToStringMap::const_iterator it;
+        for( it = rSourceMap.begin(); it != rSourceMap.end(); ++it )
         {
-            const IdToStringMap& rSourceMap = pCopyFromItem->m_aIdToStringMap;
-            IdToStringMap& rTargetMap = pLocaleItem->m_aIdToStringMap;
-            IdToStringMap::const_iterator it;
-            for( it = rSourceMap.begin(); it != rSourceMap.end(); ++it )
-            {
-                OUString aId  = (*it).first;
-                OUString aStr = (*it).second;
-                rTargetMap[ aId ] = aStr;
-            }
-
-            const IdToIndexMap& rSourceIndexMap = pCopyFromItem->m_aIdToIndexMap;
-            IdToIndexMap& rTargetIndexMap = pLocaleItem->m_aIdToIndexMap;
-            IdToIndexMap::const_iterator it_index;
-            for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); ++it_index )
-            {
-                OUString aId  = (*it_index).first;
-                sal_Int32 nIndex = (*it_index).second;
-                rTargetIndexMap[ aId ] = nIndex;
-            }
-            pLocaleItem->m_nNextIndex = pCopyFromItem->m_nNextIndex;
+            OUString aId  = (*it).first;
+            OUString aStr = (*it).second;
+            rTargetMap[ aId ] = aStr;
         }
 
-        if( m_pCurrentLocaleItem == NULL )
-            m_pCurrentLocaleItem = pLocaleItem;
-
-        if( m_pDefaultLocaleItem == NULL )
+        const IdToIndexMap& rSourceIndexMap = pCopyFromItem->m_aIdToIndexMap;
+        IdToIndexMap& rTargetIndexMap = pLocaleItem->m_aIdToIndexMap;
+        IdToIndexMap::const_iterator it_index;
+        for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); ++it_index )
         {
-            m_pDefaultLocaleItem = pLocaleItem;
-            m_bDefaultModified = true;
+            OUString aId  = (*it_index).first;
+            sal_Int32 nIndex = (*it_index).second;
+            rTargetIndexMap[ aId ] = nIndex;
         }
+        pLocaleItem->m_nNextIndex = pCopyFromItem->m_nNextIndex;
+    }
 
-        implModified();
-    }
-    else
+    if( m_pCurrentLocaleItem == NULL )
+        m_pCurrentLocaleItem = pLocaleItem;
+
+    if( m_pDefaultLocaleItem == NULL )
     {
-        OUString errorMsg("StringResourceImpl: Invalid locale");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+        m_pDefaultLocaleItem = pLocaleItem;
+        m_bDefaultModified = true;
     }
+
+    implModified();
 }
 
 void StringResourceImpl::removeLocale( const Locale& locale )
