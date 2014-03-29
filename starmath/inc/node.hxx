@@ -863,7 +863,7 @@ public:
 
 
 
-/** Binary horizontial node
+/** Binary horizontal node
  *
  * This node is used for binary operators. In a formula such as "A + B".
  *

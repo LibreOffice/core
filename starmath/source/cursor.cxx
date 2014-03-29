@@ -49,7 +49,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
                         && direction == MoveUp) continue;
                 //Compare if it to what we have, if we have anything yet
                 if(NewPos){
-                    //Compute distance to current line squared, multiplied with a horizontial factor
+                    //Compute distance to current line squared, multiplied with a horizontal factor
                     long dp_sq = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
                                  curr_line.SquaredDistanceY(from_line);
                     //Discard current line if best line is closer
