@@ -2130,11 +2130,11 @@ void SvxConfigPage::MoveEntry( bool bMoveUp )
 bool SvxConfigPage::MoveEntryData(
     SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry )
 {
-    //modified by shizhoubo for issue53677
-    if ( NULL == pSourceEntry || NULL == pTargetEntry )
-     {
-         return false;
-     }
+    //#i53677#
+    if (NULL == pSourceEntry || NULL == pTargetEntry)
+    {
+        return false;
+    }
 
     // Grab the entries list for the currently selected menu
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
@@ -2142,39 +2142,26 @@ bool SvxConfigPage::MoveEntryData(
     SvxConfigEntry* pSourceData =
         (SvxConfigEntry*) pSourceEntry->GetUserData();
 
-    if ( pTargetEntry == NULL )
+    SvxConfigEntry* pTargetData =
+        (SvxConfigEntry*) pTargetEntry->GetUserData();
+
+    if ( pSourceData != NULL && pTargetData != NULL )
     {
+        // remove the source entry from our list
         RemoveEntry( pEntries, pSourceData );
-        pEntries->insert(
-            pEntries->begin(), pSourceData );
+
+        SvxEntries::iterator iter = pEntries->begin();
+        SvxEntries::const_iterator end = pEntries->end();
+
+        // advance the iterator to the position of the target entry
+        while (*iter != pTargetData && ++iter != end) ;
+
+        // insert the source entry at the position after the target
+        pEntries->insert( ++iter, pSourceData );
 
         GetSaveInData()->SetModified( true );
 
         return true;
-    }
-    else
-    {
-        SvxConfigEntry* pTargetData =
-            (SvxConfigEntry*) pTargetEntry->GetUserData();
-
-        if ( pSourceData != NULL && pTargetData != NULL )
-        {
-            // remove the source entry from our list
-            RemoveEntry( pEntries, pSourceData );
-
-            SvxEntries::iterator iter = pEntries->begin();
-            SvxEntries::const_iterator end = pEntries->end();
-
-            // advance the iterator to the position of the target entry
-            while (*iter != pTargetData && ++iter != end) ;
-
-            // insert the source entry at the position after the target
-            pEntries->insert( ++iter, pSourceData );
-
-            GetSaveInData()->SetModified( true );
-
-            return true;
-        }
     }
 
     return false;
