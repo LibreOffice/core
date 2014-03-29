@@ -39,6 +39,7 @@ using namespace http_dav_ucp;
 ContentProvider::ContentProvider(
                 const uno::Reference< uno::XComponentContext >& rContext )
 : ::ucbhelper::ContentProviderImplHelper( rContext ),
+  m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
 }
@@ -195,7 +196,7 @@ ContentProvider::queryContent(
     try
     {
         xContent = new ::http_dav_ucp::Content(
-                        m_xContext, this, xCanonicId, new DAVSessionFactory() );
+                        m_xContext, this, xCanonicId, m_xDAVSessionFactory );
         registerNewContent( xContent );
     }
     catch ( ucb::ContentCreationException const & )

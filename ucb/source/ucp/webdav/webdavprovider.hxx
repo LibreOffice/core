@@ -68,6 +68,7 @@ namespace http_dav_ucp {
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
+    rtl::Reference< DAVSessionFactory > m_xDAVSessionFactory;
     PropertyMap * m_pProps;
 
 public:
