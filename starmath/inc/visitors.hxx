@@ -305,7 +305,7 @@ private:
 /** A visitor for building a SmCaretPosGraph
  *
  * Visit invariant:
- * Each pNode, except SmExpressionNode, SmBinHorNode and a few others, constitues an entry
+ * Each pNode, except SmExpressionNode, SmBinHorNode and a few others, constitutes an entry
  * in a line. Consider the line entry "H", this entry creates one carat position, here
  * denoted by | in "H|".
  *
@@ -482,7 +482,7 @@ public:
     void Visit( SmRectangleNode* pNode ) SAL_OVERRIDE;
     void Visit( SmVerticalBraceNode* pNode ) SAL_OVERRIDE;
 private:
-    /** Extract text from a pNode that constitues a line */
+    /** Extract text from a pNode that constitutes a line */
     void LineToText( SmNode* pNode ) {
         Separate( );
         if( pNode )

@@ -394,11 +394,11 @@ private:
 
 /** Minimalistic recursive decent SmNodeList parser
  *
- * This parser is used to take a list of nodes that constitues a line
+ * This parser is used to take a list of nodes that constitutes a line
  * and parse them to a tree of SmBinHorNode, SmUnHorNode and SmExpression.
  *
  * Please note, this will not handle all kinds of nodes, only nodes that
- * constitues and entry in a line.
+ * constitutes and entry in a line.
  *
  * Below is an EBNF representation of the grammar used for this parser:
  * \code
