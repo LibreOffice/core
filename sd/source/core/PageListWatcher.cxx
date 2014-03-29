@@ -109,7 +109,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
             else
             {
                 SAL_WARN( "sd.core",
-                          "ImpPageListWatcher::GetSdPage(PK_NOTES): page number " << nPgNum << " >= " << maPageVectorStandard.size() );
+                          "ImpPageListWatcher::GetSdPage(PK_NOTES): page number " << nPgNum << " >= " << maPageVectorNotes.size() );
             }
             break;
         }
