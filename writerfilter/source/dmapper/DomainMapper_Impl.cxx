@@ -390,7 +390,7 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
         if (!m_aTextAppendStack.empty())
         {
             uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-            if (xTextAppend.is())
+            if (xTextAppend.is() && pSectionContext_)
                 pSectionContext_->SetStart( xTextAppend->getEnd() );
         }
     }
