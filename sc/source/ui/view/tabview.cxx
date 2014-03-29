@@ -981,33 +981,9 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
 IMPL_LINK( ScTabView, EndScrollHdl, ScrollBar*, pScroll )
 {
-    sal_Bool bOnlineScroll = sal_True;      //! Optionen
-
     if ( bDragging )
     {
-        if ( bOnlineScroll )                // nur Ranges aktualisieren
-            UpdateScrollBars();
-        else
-        {
-            long nScrollMin = 0;        // RangeMin simulieren
-            if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
-                nScrollMin = aViewData.GetFixPosX();
-            if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
-                nScrollMin = aViewData.GetFixPosY();
-
-            if ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight )
-            {
-                ScHSplitPos eWhich = (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
-                long nDelta = GetScrollBarPos( *pScroll ) + nScrollMin - aViewData.GetPosX(eWhich);
-                if (nDelta) ScrollX( nDelta, eWhich );
-            }
-            else                            // VScroll...
-            {
-                ScVSplitPos eWhich = (pScroll == &aVScrollTop) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
-                long nDelta = GetScrollBarPos( *pScroll ) + nScrollMin - aViewData.GetPosY(eWhich);
-                if (nDelta) ScrollY( nDelta, eWhich );
-            }
-        }
+        UpdateScrollBars();
         bDragging = false;
     }
     return 0;
