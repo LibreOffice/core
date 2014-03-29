@@ -988,7 +988,7 @@ public class FunctionHelper
      *
      * @param   aParent parent window of this dialog
      * @param   bOpen   If it is set to true =>
-     *                  dialog is opend in "file open" mode -
+     *                  dialog is opened in "file open" mode -
      *                  otherwise in "file save" mode.
      */
     public static String askUserForFileURL(Component aParent,boolean bOpen)

@@ -2598,7 +2598,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
         {
             css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
             Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
-            //#i70261#: dialogs opend from an OLE object will cause a deactivate on the frame of the OLE object
+            //#i70261#: dialogs opened from an OLE object will cause a deactivate on the frame of the OLE object
             // on Solaris/Linux at that time pFocusWindow is still NULL because the focus handling is different; right after
             // the deactivation the focus will be set into the dialog!
             // currently I see no case where a sub frame could get a deactivate with pFocusWindow being NULL permanently

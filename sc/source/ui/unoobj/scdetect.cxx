@@ -557,7 +557,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opened twice
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
@@ -566,7 +566,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     if ( nIndexOfContent == -1 && xContent.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opened twice
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
