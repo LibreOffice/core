@@ -198,7 +198,7 @@ namespace sdr
                 const double fMinZ(-aCameraRange.getMaxZ());
                 const double fMaxZ(-aCameraRange.getMinZ());
 
-                // construct temorary matrix from world to device. Use unit values here to measure expansion
+                // construct temporary matrix from world to device. Use unit values here to measure expansion
                 basegfx::B3DHomMatrix aWorldToDevice(aWorldToCamera);
                 const drawinglayer::attribute::SdrSceneAttribute& rSdrSceneAttribute = getSdrSceneAttribute();
 

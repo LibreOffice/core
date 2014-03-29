@@ -451,7 +451,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     if ( xChild.is() && xChild->getParent() != pImpl->m_xModel.get() )
         xChild->setParent( pImpl->m_xModel.get() );
 
-    // look for object in temorary container
+    // look for object in temporary container
     if ( pImpl->mpTempObjectContainer )
     {
         aIt = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.begin();
