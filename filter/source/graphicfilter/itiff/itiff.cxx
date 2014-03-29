@@ -1110,7 +1110,7 @@ bool TIFFReader::HasAlphaChannel() const
 sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {
     sal_uInt16  i, nNumTags, nTagType;
-    sal_uLong   nMaxPos;
+    sal_uInt64  nMaxPos;
     sal_uLong   nPos;
     sal_uInt32 nFirstIfd, nDataLen;
 

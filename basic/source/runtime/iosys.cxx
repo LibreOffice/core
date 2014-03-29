@@ -359,14 +359,14 @@ OslStream::~OslStream()
 
 sal_Size OslStream::GetData(void* pData, sal_Size nSize)
 {
-    sal_Size nBytesRead = nSize;
+    sal_uInt64 nBytesRead = nSize;
     maFile.read( pData, nBytesRead, nBytesRead );
     return nBytesRead;
 }
 
 sal_Size OslStream::PutData(const void* pData, sal_Size nSize)
 {
-    sal_Size nBytesWritten;
+    sal_uInt64 nBytesWritten;
     maFile.write( pData, nSize, nBytesWritten );
     return nBytesWritten;
 }
