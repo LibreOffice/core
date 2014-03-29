@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_7d871f10",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-03-29T11:59:26Z",
+      "side": 1,
+      "message": "Tabs... please use spaces.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_bd78b72c",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-03-29T11:59:26Z",
+      "side": 1,
+      "message": "Tabs",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_fd722f48",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-03-29T11:59:26Z",
+      "side": 1,
+      "message": "Tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
