@@ -357,7 +357,6 @@ class CustomAnimationTriggerEntryItem : public SvLBoxString
 public:
                     CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
-    virtual sal_uInt16  IsA();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
     SvLBoxItem*     Create() const SAL_OVERRIDE;
     void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
@@ -380,14 +379,6 @@ CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntr
 CustomAnimationTriggerEntryItem::~CustomAnimationTriggerEntryItem()
 {
 }
-
-
-
-sal_uInt16 CustomAnimationTriggerEntryItem::IsA()
-{
-    return (sal_uInt16)-1;
-}
-
 
 
 void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
