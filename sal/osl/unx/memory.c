@@ -16,25 +16,36 @@
 
 void* osl_aligned_alloc( sal_Size align, sal_Size size )
 {
-#ifdef __ANDROID__
-    return memalign(align, size);
-#else
     if (size == 0)
     {
         return NULL;
     }
     else
     {
+#ifdef HAVE_POSIX_MEMALIGN
         void* ptr;
         int err = posix_memalign(&ptr, align, size);
         return err ? NULL : ptr;
-    }
+#else
+        void* ptr = malloc(size + (align - 1) + sizeof(void*));
+        if (!ptr) return NULL;
+
+        char* aptr = ((char*)ptr) + sizeof(void*);
+        aptr += (align - ((size_t)aptr & (align - 1)) & (align - 1));
+
+        ((void**)aptr)[-1] = ptr;
+        return aptr;
 #endif
+    }
 }
 
 void osl_aligned_free( void* p )
 {
+#ifdef HAVE_POSIX_MEMALIGN
     free(p);
+#else
+    free(((void**)p)[-1]);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
