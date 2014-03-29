@@ -1556,7 +1556,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 if(pCustomShape->HasText() && !pCustomShape->IsTextPath())
                 {
                     // #i37011# also create a text object and add at rPos + 1
-                    SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(
+                    SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
                         pCustomShape->GetObjInventor(), OBJ_TEXT, 0L, pCustomShape->GetModel());
 
                     // Copy text content
