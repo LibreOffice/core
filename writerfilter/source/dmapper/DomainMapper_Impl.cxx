@@ -746,6 +746,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pFrameProperties[15].Name = rPropNameSupplier.GetName(PROP_BACK_COLOR_TRANSPARENCY);
 
                 const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
+                if (!pStyleProperties)
+                    return;
                 sal_Int32 nWidth =
                     rAppendContext.pLastParagraphProperties->Getw() > 0 ?
                         rAppendContext.pLastParagraphProperties->Getw() :
