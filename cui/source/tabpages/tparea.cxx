@@ -1965,21 +1965,6 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     m_pCbxHatchBckgrd->Enable();
     m_pLbHatchBckgrdColor->Enable();
 
-    // set table text
-    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
-    INetURLObject   aURL( pHatchingList->GetPath() );
-
-    aURL.Append( pHatchingList->GetName() );
-    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-    if( aURL.getBase().getLength() > 18 )
-    {
-        aString += aURL.getBase().copy( 0, 15 );
-        aString += "...";
-    }
-    else
-        aString += aURL.getBase();
-
     ModifyHatchingHdl_Impl( this );
     ModifyHatchBckgrdColorHdl_Impl( this );
     ToggleHatchBckgrdColorHdl_Impl( this );
