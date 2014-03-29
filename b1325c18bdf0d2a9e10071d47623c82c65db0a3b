@@ -19,6 +19,74 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_1da1c3a9",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Please use spaces instead of tabs. Normally our git hook should prevent to commit tabs so you might need to execute ./g -z to set them up.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_3da687c2",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_5dab3b89",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Can you move this calculation out of the loop? We don\u0027t need to calculate it for every of the 256 loop iterations.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_7db0fff4",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Why did you remove the boost::scoped_array? I assume you did not use git and copied the file from an older tree to a newer checkout. That will always produce problems. Please try to work with git to prevent such errors.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_bd78b72c",
         "filename": "vcl/source/gdi/bitmap3.cxx",
         "patchSetId": 1
@@ -36,6 +104,23 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_9d94d345",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_fd722f48",
         "filename": "vcl/source/gdi/bitmap3.cxx",
         "patchSetId": 1
@@ -47,6 +132,278 @@
       "writtenOn": "2014-03-29T11:59:26Z",
       "side": 1,
       "message": "Tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_bd919754",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_dd9e4b63",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Accidental revert of old commit.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1d88e321",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_5d825b01",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Trailing whitespaces.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_9d7bf328",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_dd756b33",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1d8f0325",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Trailing whitespaces.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_3d94c736",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2549,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Accidental revert of older commit.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_5d997b6d",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2643,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Accidental revert of older commit.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_9da21399",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Accidental revert of older commit.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_bd9fd74f",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2691,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "tabs.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_ddac8b8f",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_fda94f7c",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1db623dd",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2737,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "accidental revert of older commit.",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_3dbbe7c5",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2887,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "accidental revert of older commit",
+      "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_5db09bdd",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2947,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-29T12:05:31Z",
+      "side": 1,
+      "message": "Accidental revert of older commit.",
       "revId": "b1325c18bdf0d2a9e10071d47623c82c65db0a3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
