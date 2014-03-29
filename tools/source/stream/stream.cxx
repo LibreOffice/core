@@ -265,7 +265,8 @@ ErrCode SvAsyncLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, sal_Size
         return SvOpenLockBytes::ReadAt(nPos, pBuffer, nCount, pRead);
     else
     {
-        sal_Size nTheCount = std::min(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
+        sal_Size nTheCount =
+            std::min<sal_Size>(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
         ErrCode nError = SvOpenLockBytes::ReadAt(nPos, pBuffer, nTheCount,
                                                  pRead);
         return !nCount || nTheCount == nCount || nError ? nError :
@@ -281,7 +282,8 @@ ErrCode SvAsyncLockBytes::WriteAt(sal_uInt64 const nPos, const void * pBuffer,
         return SvOpenLockBytes::WriteAt(nPos, pBuffer, nCount, pWritten);
     else
     {
-        sal_Size nTheCount = std::min(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
+        sal_Size nTheCount =
+            std::min<sal_Size>(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
         ErrCode nError = SvOpenLockBytes::WriteAt(nPos, pBuffer, nTheCount,
                                                   pWritten);
         return !nCount || nTheCount == nCount || nError ? nError :
