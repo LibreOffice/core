@@ -55,17 +55,21 @@ using namespace rtl;
 using namespace sd;
 
 DiscoveryService::DiscoveryService()
-    : zService( 0 )
+    : mSocket(-1)
+    , zService(0)
 {
 }
 
 DiscoveryService::~DiscoveryService()
 {
-  #ifdef WNT
-    closesocket( mSocket );
-  #else
-    close( mSocket );
-  #endif
+    if (mSocket != -1)
+    {
+#ifdef WNT
+        closesocket( mSocket );
+#else
+        close( mSocket );
+#endif
+    }
 
      if (zService)
          zService->clear();
