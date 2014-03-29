@@ -12,7 +12,7 @@
 #include "node.hxx"
 #include "caret.hxx"
 
-/** Factor to multiple the squared horizontical distance with
+/** Factor to multiple the squared horizontal distance with
  * Used for Up and Down movement.
  */
 #define HORIZONTICAL_DISTANCE_FACTOR        10

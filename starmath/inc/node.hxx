@@ -771,7 +771,7 @@ public:
 
 
 
-/** Unary horizontical node
+/** Unary horizontal node
  *
  * The same as SmBinHorNode except this is for unary operators.
  */
@@ -897,7 +897,7 @@ public:
 
 
 
-/** Binary horizontical node
+/** Binary horizontal node
  *
  * This node is used for creating the OVER command, consider the formula:
  * "numerator OVER denominator", which looks like
