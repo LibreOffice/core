@@ -54,7 +54,7 @@ class SmCursor;
  *
  * The printer can belong to the document or the OLE-Container. If the document
  * is an OLE-Document the printer generally belongs to the container too.
- * But the container mayby works with a different MapUnit than the server.
+ * But the container maybe works with a different MapUnit than the server.
  * Referring to the MapMode the printer will be accordingly adjusted in the
  * constructor and restored in the destructor. This brings that this class
  * is always allowed to exists only a short time (e.g. while painting).
