@@ -411,7 +411,6 @@ void SwSection::SetEditInReadonly(bool const bFlag)
 
 void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    bool bRemake = false;
     bool bUpdateFtn = false;
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
@@ -517,12 +516,6 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     default:
         CheckRegistration( pOld, pNew );
         break;
-    }
-
-    if( bRemake )
-    {
-        GetFmt()->DelFrms();
-        GetFmt()->MakeFrms();
     }
 
     if( bUpdateFtn )
