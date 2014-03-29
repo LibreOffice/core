@@ -704,7 +704,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                                 if( pContext.get() )
                                 {
                                     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pContext.get() );
-                                    pParaContext->SetFrameMode(false);
+                                    if (pParaContext)
+                                        pParaContext->SetFrameMode(false);
                                 }
                                 nIntValue = text::VertOrientation::NONE;
                                 break;
