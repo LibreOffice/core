@@ -91,10 +91,12 @@ class SvxLineTabPage : public SvxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 private:
-    VclBox*             m_pBoxStyle;
+    VclBox*             m_pBoxColor;
     LineLB*             m_pLbLineStyle;
     ColorLB*            m_pLbColor;
+    VclBox*             m_pBoxWidth;
     MetricField*        m_pMtrLineWidth;
+    VclBox*             m_pBoxTransparency;
     MetricField*        m_pMtrTransparent;
 
     VclFrame*           m_pFlLineEnds;

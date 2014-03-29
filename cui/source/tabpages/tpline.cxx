@@ -110,9 +110,11 @@ SvxLineTabPage::SvxLineTabPage
    nPageType           ( 0 )
 {
     get(m_pLbLineStyle,"LB_LINE_STYLE");
+    get(m_pBoxColor,"boxCOLOR");
     get(m_pLbColor,"LB_COLOR");
-    get(m_pBoxStyle,"boxSTYLE_ATTR");
+    get(m_pBoxWidth,"boxWIDTH");
     get(m_pMtrLineWidth,"MTR_FLD_LINE_WIDTH");
+    get(m_pBoxTransparency,"boxTRANSPARENCY");
     get(m_pMtrTransparent,"MTR_LINE_TRANSPARENT");
 
     get(m_pFlLineEnds,"FL_LINE_ENDS");
@@ -1545,13 +1547,11 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
     // Make transparency accessible accordingly
     if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
     {
-//         aFtTransparent.Disable();
-        m_pMtrTransparent->Disable();
+        m_pBoxTransparency->Disable();
     }
     else
     {
-//         aFtTransparent.Enable();
-        m_pMtrTransparent->Enable();
+        m_pBoxTransparency->Enable();
     }
 
     const bool bHasLineStyle = m_pLbLineStyle->GetSelectEntryPos() !=0;
@@ -1611,9 +1611,9 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
     if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
     {
         if(!bSymbols)
-            m_pLbColor->Disable();
+            m_pBoxColor->Disable();
 
-        m_pBoxStyle->Disable();
+        m_pBoxWidth->Disable();
 
         if( m_pFlLineEnds->IsEnabled() )
         {
@@ -1627,7 +1627,8 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
     }
     else
     {
-        m_pBoxStyle->Enable();
+        m_pBoxColor->Enable();
+        m_pBoxWidth->Enable();
 
         if( m_pFlLineEnds->IsEnabled() )
         {
