@@ -80,7 +80,7 @@ GlueEscDirLB::~GlueEscDirLB()
  */
 void GlueEscDirLB::Select()
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectEntryPos();
     SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
 
     if ( m_xFrame.is() )
