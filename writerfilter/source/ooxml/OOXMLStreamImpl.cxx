@@ -445,9 +445,10 @@ OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (OOXMLStream::Pointer_t pStream,  OOXMLStream::StreamType_t nStreamType)
 {
-    return OOXMLStream::Pointer_t
-        (new OOXMLStreamImpl(*dynamic_cast<OOXMLStreamImpl *>(pStream.get()),
-                             nStreamType));
+    OOXMLStream::Pointer_t pRet;
+    if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
+        pRet.reset(new OOXMLStreamImpl(*pImpl, nStreamType));
+    return pRet;
 }
 
 OOXMLStream::Pointer_t
