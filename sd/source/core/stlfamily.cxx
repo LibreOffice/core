@@ -83,10 +83,6 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
-                if (!pSdStyle)
-                {
-                    continue;
-                }
                 if (pSdStyle->GetName().startsWith(aLayoutName))
                 {
                     maStyleSheets[ pSdStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pSdStyle );
