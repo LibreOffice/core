@@ -791,7 +791,7 @@ namespace fileaccess {
         {
             aAny <<=
                 InteractiveBadTransferURLException(
-                    OUString( "bad tranfer url"),
+                    OUString( "bad transfer url"),
                     xComProc);
             cancelCommandExecution( aAny,xEnv );
         }

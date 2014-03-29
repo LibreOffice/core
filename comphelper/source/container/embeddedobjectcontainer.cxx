@@ -766,7 +766,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     // this must be an object based on properties, otherwise we can not copy it currently
                     uno::Reference< beans::XPropertySet > xOrigProps( xObj->getComponent(), uno::UNO_QUERY_THROW );
 
-                    // use object class ID to create a new one and tranfer all the properties
+                    // use object class ID to create a new one and transfer all the properties
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
