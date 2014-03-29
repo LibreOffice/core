@@ -72,6 +72,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -732,7 +733,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
     sal_Bool bCalcCharPositions = sal_True;
-    sal_Int32* pBuf = new sal_Int32[ pNode->Len() ];
+    boost::scoped_array<sal_Int32> pBuf(new sal_Int32[ pNode->Len() ]);
 
     sal_Bool bSameLineAgain = sal_False;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1056,7 +1057,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                 {
-                    pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, pPortion->GetLen(), pBuf );
+                    pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, pPortion->GetLen(), pBuf.get() );
 
                     // #i9050# Do Kerning also behind portions...
                     if ( ( aTmpFont.GetFixKerning() > 0 ) && ( ( nTmpPos + pPortion->GetLen() ) < pNode->Len() ) )
@@ -1071,7 +1072,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     // => Always simply quick inserts.
                     size_t nPos = nTmpPos - pLine->GetStart();
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                    rArray.insert(rArray.begin()+nPos, pBuf, pBuf+nLen);
+                    rArray.insert(rArray.begin()+nPos, pBuf.get(), pBuf.get()+nLen);
                 }
 
                 // And now check for Compression:
@@ -1560,7 +1561,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     if ( bLineBreak )
         CreateAndInsertEmptyLine( pParaPortion, nStartPosY );
 
-    delete[] pBuf;
+    pBuf.reset();
 
     sal_Bool bHeightChanged = FinishCreateLines( pParaPortion );
 
@@ -3029,7 +3030,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
                                 const sal_Int32* pDXArray = 0;
-                                sal_Int32* pTmpDXArray = 0;
+                                boost::scoped_array<sal_Int32> pTmpDXArray;
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
                                 {
@@ -3173,11 +3174,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                     }
 
-                                    pTmpDXArray = new sal_Int32[ aText.getLength() ];
-                                    pDXArray = pTmpDXArray;
+                                    pTmpDXArray.reset(new sal_Int32[ aText.getLength() ]);
+                                    pDXArray = pTmpDXArray.get();
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
                                     if ( aStatus.DoRestoreFont() )
                                         GetRefDevice()->SetFont( _aOldFont );
 
@@ -3203,11 +3204,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     nTextLen = aText.getLength();
 
                                     // crash when accessing 0 pointer in pDXArray
-                                    pTmpDXArray = new sal_Int32[ aText.getLength() ];
-                                    pDXArray = pTmpDXArray;
+                                    pTmpDXArray.reset(new sal_Int32[ aText.getLength() ]);
+                                    pDXArray = pTmpDXArray.get();
                                     Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );
                                     if ( aStatus.DoRestoreFont() )
                                         GetRefDevice()->SetFont( _aOldFont );
                                 }
@@ -3473,8 +3474,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                 pOutDev->Pop();
 
-                                //The C++ language guarantees that delete p will do nothing if p is equal to NULL.
-                                delete[] pTmpDXArray;
+                                pTmpDXArray.reset();
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                 {

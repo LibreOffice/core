@@ -54,6 +54,7 @@
 // calculate if it's RTL or not
 #include <unicode/ubidi.h>
 #include <cassert>
+#include <boost/scoped_array.hpp>
 using ::std::advance;
 
 
@@ -1007,8 +1008,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 if(bStrippingPortions)
                 {
                     const Font aSvxFont(pOutDev->GetFont());
-                    sal_Int32* pBuf = new sal_Int32[ pPara->GetText().getLength() ];
-                    pOutDev->GetTextArray( pPara->GetText(), pBuf );
+                    boost::scoped_array<sal_Int32> pBuf(new sal_Int32[ pPara->GetText().getLength() ]);
+                    pOutDev->GetTextArray( pPara->GetText(), pBuf.get() );
 
                     if(bSymbol)
                     {
@@ -1017,10 +1018,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                         aTextPos.Y() -= aMetric.GetDescent();
                     }
 
-                    DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf,
+                    DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf.get(),
                         aSvxFont, nPara, -1, bRightToLeftPara, 0, 0, false, false, true, 0, Color(), Color());
-
-                    delete[] pBuf;
                 }
                 else
                 {

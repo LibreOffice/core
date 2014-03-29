@@ -35,6 +35,7 @@
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/numdef.hxx>
+#include <boost/scoped_array.hpp>
 
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
@@ -176,7 +177,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     sal_uInt16 nIdx = 0;
 
     const int nProps = 15;
-    beans::PropertyValue* pArray = new beans::PropertyValue[nProps];
+    boost::scoped_array<beans::PropertyValue> pArray(new beans::PropertyValue[nProps]);
 
     Any aVal;
     {
@@ -261,9 +262,8 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     pArray[nIdx++] = beans::PropertyValue(OUString(UNO_NAME_NRULE_BULLET_RELSIZE), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     DBG_ASSERT( nIdx <= nProps, "FixMe: overflow in Array!!! [CL]" );
-    Sequence< beans::PropertyValue> aSeq(pArray, nIdx);
+    Sequence< beans::PropertyValue> aSeq(pArray.get(), nIdx);
 
-    delete [] pArray;
     return aSeq;
 }
 

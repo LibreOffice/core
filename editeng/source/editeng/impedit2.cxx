@@ -62,7 +62,7 @@
 #include <sot/formats.hxx>
 
 #include <unicode/ubidi.h>
-
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <algorithm>
@@ -546,7 +546,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             const EditLine* pLine = pParaPortion->GetLines()[nLine];
             if ( pLine )
             {
-                Rectangle* aRects = new Rectangle[ mpIMEInfos->nLen ];
+                boost::scoped_array<Rectangle> aRects(new Rectangle[ mpIMEInfos->nLen ]);
                 for (sal_Int32 i = 0; i < mpIMEInfos->nLen; ++i)
                 {
                     sal_Int32 nInputPos = mpIMEInfos->aPos.GetIndex() + i;
@@ -555,8 +555,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                     Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
                     aRects[ i ] = pView->GetImpEditView()->GetWindowPos( aR2 );
                 }
-                pView->GetWindow()->SetCompositionCharRect( aRects, mpIMEInfos->nLen );
-                delete[] aRects;
+                pView->GetWindow()->SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
             }
         }
     }
