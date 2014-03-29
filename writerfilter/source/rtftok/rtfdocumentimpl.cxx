@@ -4633,7 +4633,8 @@ int RTFDocumentImpl::popState()
                 // to RTLD_GLOBAL, so most probably a gcc bug.
                 oox::FormulaImportBase* pImport = dynamic_cast<oox::FormulaImportBase*>(dynamic_cast<SfxBaseModel*>(xComponent.get()));
                 assert( pImport != NULL );
-                pImport->readFormulaOoxml(m_aMathBuffer);
+                if (pImport)
+                    pImport->readFormulaOoxml(m_aMathBuffer);
                 RTFValue::Pointer_t pValue(new RTFValue(xObject));
                 RTFSprms aMathAttributes;
                 aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
