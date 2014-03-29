@@ -993,11 +993,11 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
 {
+    if (nCols < 2)
+        return 0;
     PercentField *pFld = m_aPercentFieldsMap[pMetricFld];
     assert(pFld);
     long nActValue = static_cast< long >(pFld->DenormalizePercent(pFld->GetValue(FUNIT_TWIP)));
-    if(nCols < 2)
-        return 0;
     if(m_pAutoWidthBox->IsChecked())
     {
         const long nMaxGap = static_cast< long >
