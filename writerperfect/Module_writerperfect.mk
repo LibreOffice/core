@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_targets,writerperfect,\
 $(eval $(call gb_Module_add_check_targets,writerperfect,\
 	CppunitTest_writerperfect_impress \
 	CppunitTest_writerperfect_stream \
+	CppunitTest_writerperfect_writer \
 ))
 
 # vim: set noet sw=4 ts=4:
