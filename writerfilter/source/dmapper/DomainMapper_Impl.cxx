@@ -4362,7 +4362,9 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(aStyle);
         if (!pEntry)
             return xRet;
-        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
+        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
+        if (!pStyleSheetProperties)
+            return xRet;
         sal_Int32 nListId = pStyleSheetProperties->GetListId();
         if (nListId < 0)
             return xRet;
