@@ -131,8 +131,8 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
     m_pCategoryBox->InsertEntry( m_sNone );
-    sal_uInt16 i, nCount = pMgr->GetFldTypeCount();
-    for (i = 0; i < nCount; i++)
+    sal_uInt16 nCount = pMgr->GetFldTypeCount();
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
         SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
@@ -195,7 +195,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     nCount = pMgr->GetFldTypeCount();
     SwFieldType* pFldType;
-    for ( i = nCount; i; )
+    for ( sal_uInt16 i = nCount; i; )
     {
         pFldType = pMgr->GetFldType(USHRT_MAX, --i);
         if( pFldType->GetName().equals(m_pCategoryBox->GetText()) )
@@ -206,10 +206,10 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     }
 
     nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
-    for ( i = 0; i < nCount; ++i )
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
-        sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
+        const sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
         m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>( nFmtId ) );
         if( nFmtId == nSelFmt )
             m_pFormatBox->SelectEntryPos( i );
@@ -342,7 +342,7 @@ void SwCaptionDialog::DrawSample()
     bool bNone = sFldTypeName == m_sNone;
     if( !bNone )
     {
-        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData(
+        const sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData(
                                         m_pFormatBox->GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
@@ -499,7 +499,7 @@ bool CategoryBox::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pEvent = rNEvt.GetKeyEvent();
         const KeyCode&  rKeyCode = pEvent->GetKeyCode();
-        sal_uInt16 nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
+        const sal_uInt16 nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
 
         if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
                 && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
