@@ -350,7 +350,7 @@ void SwCaptionDialog::DrawSample()
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
-                aStr += sFldTypeName;
+                aStr = sFldTypeName;
                 if ( !aStr.isEmpty() )
                     aStr += " ";
             }
@@ -368,7 +368,7 @@ void SwCaptionDialog::DrawSample()
                 OUString sNumber( rSh.GetOutlineNumRule()->
                                 MakeNumString(aNumVector, sal_False ));
                 if( !sNumber.isEmpty() )
-                    (aStr += sNumber) += pFldType->GetDelimiter();
+                    aStr += sNumber + pFldType->GetDelimiter();
             }
 
             switch( nNumFmt )
@@ -384,8 +384,7 @@ void SwCaptionDialog::DrawSample()
             //#i61007# order of captions
             if( bOrderNumberingFirst )
             {
-                aStr += m_pNumberingSeparatorED->GetText();
-                aStr += sFldTypeName;
+                aStr += m_pNumberingSeparatorED->GetText() + sFldTypeName;
             }
 
         }
@@ -418,7 +417,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
 
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    OUString sNone(SW_RESSTR(SW_STR_NONE));
+    const OUString sNone(SW_RESSTR(SW_STR_NONE));
 
     m_pLbLevel->InsertEntry(sNone);
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -479,10 +478,9 @@ void SwSequenceOptionDialog::Apply()
 
 OUString  SwSequenceOptionDialog::GetCharacterStyle() const
 {
-    OUString sRet;
     if(m_pLbCharStyle->GetSelectEntryPos())
-        sRet = m_pLbCharStyle->GetSelectEntry();
-    return sRet;
+        return m_pLbCharStyle->GetSelectEntry();
+    return OUString();
 }
 
 void    SwSequenceOptionDialog::SetCharacterStyle(const OUString& rStyle)
