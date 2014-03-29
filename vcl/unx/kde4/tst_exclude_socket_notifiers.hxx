@@ -95,7 +95,7 @@ class SocketTestThread : public QThread
     Q_OBJECT
 public:
     SocketTestThread():QThread(0),testResult(false){};
-    void run()
+    virtual void run() SAL_OVERRIDE
     {
         SocketEventsTester *tester = new SocketEventsTester();
         if (tester->init())
