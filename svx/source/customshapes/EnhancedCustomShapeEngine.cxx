@@ -194,7 +194,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
         if ( bHasText )
         {
             // #i37011# also create a text object and add at rPos + 1
-            SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(
+            SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
                 pCustoObj->GetObjInventor(), OBJ_TEXT, 0L, pCustoObj->GetModel());
 
             // Copy text content
