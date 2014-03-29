@@ -582,8 +582,9 @@ ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( marker ):
                     return this;
                 case C_TOKEN( smooth ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
+                    // TODO: fix for MSO 2007 behavior
+                    // MSO 2007 writes false by default and not true
+                    mrModel.mbSmooth = rAttribs.getBool( XML_val, true );
                     return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
@@ -657,8 +658,9 @@ ContextHandlerRef RadarSeriesContext::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( marker ):
                     return this;
                 case C_TOKEN( smooth ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
+                    // TODO: fix for MSO 2007 behavior
+                    // MSO 2007 writes false by default and not true
+                    mrModel.mbSmooth = rAttribs.getBool( XML_val, true );
                     return 0;
                 case C_TOKEN( val ):
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::VALUES ) );
@@ -695,8 +697,9 @@ ContextHandlerRef ScatterSeriesContext::onCreateContext( sal_Int32 nElement, con
                 case C_TOKEN( marker ):
                     return this;
                 case C_TOKEN( smooth ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
+                    // TODO: fix for MSO 2007 behavior
+                    // MSO 2007 writes false by default and not true
+                    mrModel.mbSmooth = rAttribs.getBool( XML_val, true );
                     return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
