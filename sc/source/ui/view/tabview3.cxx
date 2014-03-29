@@ -2020,12 +2020,8 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW )
                 aEnd.Y() = pGridWin[i]->GetOutputSizePixel().Height();
 
-            bool bShowChanges = true;           //! ...
-            if (bShowChanges)
-            {
-                aStart.X() -= nLayoutSign;      // include change marks
-                aStart.Y() -= 1;
-            }
+            aStart.X() -= nLayoutSign;      // include change marks
+            aStart.Y() -= 1;
 
             bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
             if (bMarkClipped)
@@ -2038,8 +2034,6 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 {
                     long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
                     aStart.X() -= nMarkPixel * nLayoutSign;
-                    if (!bShowChanges)
-                        aStart.X() -= nLayoutSign;      // cell grid
                 }
             }
 
