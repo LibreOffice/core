@@ -78,7 +78,7 @@ struct FrmMap
 {
     SvxSwFramePosString::StringId eStrId;
     SvxSwFramePosString::StringId eMirrorStrId;
-    sal_uInt16 nAlign;
+    sal_Int16  nAlign;
     sal_uLong  nLBRelations;
 };
 
@@ -87,7 +87,7 @@ struct RelationMap
     SvxSwFramePosString::StringId eStrId;
     SvxSwFramePosString::StringId eMirrorStrId;
     sal_uLong  nLBRelation;
-    sal_uInt16 nRelation;
+    sal_Int16  nRelation;
 };
 
 struct StringIdPair_Impl
@@ -558,7 +558,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
 
 // helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
-static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
+static sal_uLong lcl_GetLBRelationsForRelations( const sal_Int16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
@@ -1066,11 +1066,8 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
                                                 rOldSet.Get(RES_HORI_ORIENT) );
 
         sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
-        short nAlign = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
-        short nRel = GetRelation(pHMap, *m_pHoriRelationLB);
-
-        const sal_Int16 eHOri = nAlign;
-        const sal_Int16 eRel  = nRel;
+        const sal_Int16 eHOri = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
+        const sal_Int16 eRel = GetRelation(pHMap, *m_pHoriRelationLB);
 
         aHoriOrient.SetHoriOrient( eHOri );
         aHoriOrient.SetRelationOrient( eRel );
@@ -1105,11 +1102,8 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
                                                 rOldSet.Get(RES_VERT_ORIENT) );
 
         sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
-        short nAlign = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
-        short nRel = GetRelation(pVMap, *m_pVertRelationLB);
-
-        const sal_Int16     eVOri = nAlign;
-        const sal_Int16     eRel  = nRel;
+        const sal_Int16 eVOri = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
+        const sal_Int16 eRel = GetRelation(pVMap, *m_pVertRelationLB);
 
         aVertOrient.SetVertOrient    ( eVOri);
         aVertOrient.SetRelationOrient( eRel );
@@ -1245,10 +1239,10 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
     Description:    initialise horizonal and vertical Pos
  --------------------------------------------------------------------*/
 void SwFrmPage::InitPos(RndStdIds eId,
-                                sal_uInt16 nH,
-                                sal_uInt16 nHRel,
-                                sal_uInt16 nV,
-                                sal_uInt16 nVRel,
+                                sal_Int16 nH,
+                                sal_Int16 nHRel,
+                                sal_Int16 nV,
+                                sal_Int16 nVRel,
                                 long   nX,
                                 long   nY)
 {
@@ -1322,7 +1316,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
 
     // select current Pos
     // horizontal
-    if ( nH == USHRT_MAX )
+    if ( nH < 0 )
     {
         nH    = nOldH;
         nHRel = nOldHRel;
@@ -1331,7 +1325,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     FillRelLB(pHMap, nMapPos, nH, nHRel, *m_pHoriRelationLB, *m_pHoriRelationFT);
 
     // vertical
-    if ( nV == USHRT_MAX )
+    if ( nV < 0 )
     {
         nV    = nOldV;
         nVRel = nOldVRel;
@@ -1379,8 +1373,8 @@ void SwFrmPage::InitPos(RndStdIds eId,
 }
 
 sal_Int32 SwFrmPage::FillPosLB(const FrmMap* _pMap,
-                            const sal_uInt16 _nAlign,
-                            const sal_uInt16 _nRel,
+                            const sal_Int16 _nAlign,
+                            const sal_Int16 _nRel,
                             ListBox& _rLB )
 {
     OUString sSelEntry, sOldEntry;
@@ -1436,8 +1430,8 @@ sal_Int32 SwFrmPage::FillPosLB(const FrmMap* _pMap,
 
 sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                             const sal_uInt16 _nLBSelPos,
-                            const sal_uInt16 _nAlign,
-                            sal_uInt16 _nRel,
+                            const sal_Int16 _nAlign,
+                            const sal_Int16 _nRel,
                             ListBox& _rLB,
                             FixedText& _rFT )
 {
@@ -1551,22 +1545,39 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
             else
             {
                 // Probably anchor switch. So look for similar relation
+                sal_Int16 nSimRel = -1;
                 switch (_nRel)
                 {
-                    case text::RelOrientation::FRAME:           _nRel = text::RelOrientation::PAGE_FRAME;   break;
-                    case text::RelOrientation::PRINT_AREA:      _nRel = text::RelOrientation::PAGE_PRINT_AREA; break;
-                    case text::RelOrientation::PAGE_LEFT:       _nRel = text::RelOrientation::FRAME_LEFT;   break;
-                    case text::RelOrientation::PAGE_RIGHT:      _nRel = text::RelOrientation::FRAME_RIGHT;  break;
-                    case text::RelOrientation::FRAME_LEFT:      _nRel = text::RelOrientation::PAGE_LEFT;    break;
-                    case text::RelOrientation::FRAME_RIGHT:     _nRel = text::RelOrientation::PAGE_RIGHT;   break;
-                    case text::RelOrientation::PAGE_FRAME:      _nRel = text::RelOrientation::FRAME;          break;
-                    case text::RelOrientation::PAGE_PRINT_AREA: _nRel = text::RelOrientation::PRINT_AREA;        break;
+                    case text::RelOrientation::FRAME:
+                        nSimRel = text::RelOrientation::PAGE_FRAME;
+                        break;
+                    case text::RelOrientation::PRINT_AREA:
+                        nSimRel = text::RelOrientation::PAGE_PRINT_AREA;
+                        break;
+                    case text::RelOrientation::PAGE_LEFT:
+                        nSimRel = text::RelOrientation::FRAME_LEFT;
+                        break;
+                    case text::RelOrientation::PAGE_RIGHT:
+                        nSimRel = text::RelOrientation::FRAME_RIGHT;
+                        break;
+                    case text::RelOrientation::FRAME_LEFT:
+                        nSimRel = text::RelOrientation::PAGE_LEFT;
+                        break;
+                    case text::RelOrientation::FRAME_RIGHT:
+                        nSimRel = text::RelOrientation::PAGE_RIGHT;
+                        break;
+                    case text::RelOrientation::PAGE_FRAME:
+                        nSimRel = text::RelOrientation::FRAME;
+                        break;
+                    case text::RelOrientation::PAGE_PRINT_AREA:
+                        nSimRel = text::RelOrientation::PRINT_AREA;
+                        break;
 
                     default:
                         if (_rLB.GetEntryCount())
                         {
                             RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(_rLB.GetEntryCount() - 1);
-                            _nRel = pEntry->nRelation;
+                            nSimRel = pEntry->nRelation;
                         }
                         break;
                 }
@@ -1574,7 +1585,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 for (sal_Int32 i = 0; i < _rLB.GetEntryCount(); i++)
                 {
                     RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
-                    if (pEntry->nRelation == _nRel)
+                    if (pEntry->nRelation == nSimRel)
                     {
                         _rLB.SelectEntryPos(i);
                         break;
@@ -1597,21 +1608,20 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
     return nLBRelations;
 }
 
-short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
+sal_Int16 SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 {
-    short nRel = 0;
-    sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
+    const sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         RelationMap *pEntry = (RelationMap *)rRelationLB.GetEntryData(nPos);
-        nRel = pEntry->nRelation;
+        return pEntry->nRelation;
     }
 
-    return nRel;
+    return 0;
 }
 
-short SwFrmPage::GetAlignment(FrmMap *pMap, sal_Int32 nMapPos,
+sal_Int16 SwFrmPage::GetAlignment(FrmMap *pMap, sal_Int32 nMapPos,
         ListBox &/*rAlignLB*/, ListBox &rRelationLB)
 {
     if (!pMap || nMapPos < 0)
@@ -1740,7 +1750,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
 IMPL_LINK_NOARG(SwFrmPage, MirrorHdl)
 {
     RndStdIds eId = GetAnchor();
-    InitPos( eId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
+    InitPos( eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
 
     return 0;
 }
@@ -1796,11 +1806,8 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     {
         // alignment horizonal
         sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
-        short nAlign = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
-        short nRel = GetRelation(pHMap, *m_pHoriRelationLB);
-
-        aVal.nHoriOrient = nAlign;
-        aVal.nHRelOrient = nRel;
+        aVal.nHoriOrient = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
+        aVal.nHRelOrient = GetRelation(pHMap, *m_pHoriRelationLB);
     }
     else
         aVal.nHoriOrient = text::HoriOrientation::NONE;
@@ -1809,11 +1816,8 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     {
         // alignment vertical
         sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
-        short nAlign = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
-        short nRel = GetRelation(pVMap, *m_pVertRelationLB);
-
-        aVal.nVertOrient = nAlign;
-        aVal.nVRelOrient = nRel;
+        aVal.nVertOrient = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
+        aVal.nVRelOrient = GetRelation(pVMap, *m_pVertRelationLB);
     }
     else
         aVal.nVertOrient = text::VertOrientation::NONE;
@@ -1916,7 +1920,7 @@ IMPL_LINK_NOARG(SwFrmPage, AnchorTypeHdl)
 
     RndStdIds eId = GetAnchor();
 
-    InitPos( eId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
+    InitPos( eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
     RangeModifyHdl(0);
 
     if(bHtmlMode)
@@ -1939,7 +1943,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     FrmMap *pMap = bHori ? pHMap : pVMap;
 
     sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pMap, *pLB));
-    short nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
+    const sal_Int16 nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
 
     if (bHori)
     {
@@ -1956,7 +1960,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 
     RangeModifyHdl( 0 );
 
-    sal_uInt16 nRel = 0;
+    sal_Int16 nRel = 0;
     if (pLB->GetSelectEntryCount())
     {
 
@@ -2051,7 +2055,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     {
         if(bHori)
         {
-            sal_uInt16 nRel = GetRelation(pHMap, *m_pHoriRelationLB);
+            const sal_Int16 nRel = GetRelation(pHMap, *m_pHoriRelationLB);
             if(text::RelOrientation::PRINT_AREA == nRel && 0 == m_pVerticalDLB->GetSelectEntryPos())
             {
                 m_pVerticalDLB->SelectEntryPos(1);
@@ -2120,22 +2124,16 @@ void SwFrmPage::UpdateExample()
     if ( pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
-        short nAlign = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
-        short nRel = GetRelation(pHMap, *m_pHoriRelationLB);
-
-        m_pExampleWN->SetHAlign(nAlign);
-        m_pExampleWN->SetHoriRel(nRel);
+        m_pExampleWN->SetHAlign(GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB));
+        m_pExampleWN->SetHoriRel(GetRelation(pHMap, *m_pHoriRelationLB));
     }
 
     nPos = m_pVerticalDLB->GetSelectEntryPos();
     if ( pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
-        short nAlign = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
-        short nRel = GetRelation(pVMap, *m_pVertRelationLB);
-
-        m_pExampleWN->SetVAlign(nAlign);
-        m_pExampleWN->SetVertRel(nRel);
+        m_pExampleWN->SetVAlign(GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB));
+        m_pExampleWN->SetVertRel(GetRelation(pVMap, *m_pVertRelationLB));
     }
 
     // size
@@ -2273,7 +2271,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
     RndStdIds eAnchorId = (RndStdIds)GetAnchor();
 
     if ( bNew && !bFormat )
-        InitPos(eAnchorId, USHRT_MAX, 0, USHRT_MAX, USHRT_MAX, LONG_MAX, LONG_MAX);
+        InitPos(eAnchorId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
     else
     {
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);

@@ -118,10 +118,10 @@ class SwFrmPage: public SfxTabPage
     const SwPosition* mpToCharCntntPos;
 
     // old alignment
-    short        nOldH;
-    short    nOldHRel;
-    short        nOldV;
-    short    nOldVRel;
+    sal_Int16 nOldH;
+    sal_Int16 nOldHRel;
+    sal_Int16 nOldV;
+    sal_Int16 nOldVRel;
 
     FrmMap* pVMap;
     FrmMap* pHMap;
@@ -137,8 +137,8 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK(AnchorTypeHdl, void *);
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
-    void            InitPos(RndStdIds eId, sal_uInt16 nH, sal_uInt16 nHRel,
-                            sal_uInt16 nV,  sal_uInt16 nVRel,
+    void            InitPos(RndStdIds eId, sal_Int16 nH, sal_Int16 nHRel,
+                            sal_Int16 nV, sal_Int16 nVRel,
                             long   nX,  long   nY);
 
     DECL_LINK(RealSizeHdl, void *);
@@ -156,20 +156,20 @@ class SwFrmPage: public SfxTabPage
     // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in the alignment.
     sal_Int32       FillPosLB( const FrmMap* _pMap,
-                               const sal_uInt16 _nAlign,
-                               const sal_uInt16 _nRel,
+                               const sal_Int16 _nAlign,
+                               const sal_Int16 _nRel,
                                ListBox& _rLB );
     // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in their string entries.
     sal_uLong       FillRelLB( const FrmMap* _pMap,
                                const sal_uInt16 _nLBSelPos,
-                               const sal_uInt16 _nAlign,
-                               sal_uInt16 _nRel,
+                               const sal_Int16 _nAlign,
+                               const sal_Int16 _nRel,
                                ListBox& _rLB,
                                FixedText& _rFT );
     sal_Int32       GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
-    short           GetAlignment(FrmMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
-    short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
+    sal_Int16       GetAlignment(FrmMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    sal_Int16       GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();
 
     void setOptimalFrmWidth();
