@@ -2570,6 +2570,8 @@ void OOXMLFastContextHandlerMath::process()
 // to RTLD_GLOBAL, so most probably a gcc bug.
     oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( dynamic_cast< SfxBaseModel* >(component.get()));
     assert( import != NULL );
+    if (!import)
+        return;
     import->readFormulaOoxml( buffer );
     if (isForwardEvents())
     {
