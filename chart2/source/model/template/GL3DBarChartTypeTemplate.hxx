@@ -41,7 +41,7 @@ public:
     virtual sal_Bool SAL_CALL matchesTemplate(
         const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
         sal_Bool bAdaptProperties )
-        throw (css::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes )
@@ -52,14 +52,14 @@ public:
 
     // OPropertySet
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException);
+        throw (css::beans::UnknownPropertyException) SAL_OVERRIDE;
 
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }

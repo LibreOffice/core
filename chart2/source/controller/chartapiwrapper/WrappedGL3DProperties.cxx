@@ -57,7 +57,8 @@ public:
     virtual ~WrappedGL3DProperty() {}
 
     virtual uno::Any getPropertyValue( const uno::Reference<beans::XPropertySet>& /*xInnerPS*/ ) const
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+               uno::RuntimeException) SAL_OVERRIDE
     {
         uno::Reference<chart2::XChartType> xCT = getChartType();
         if (!xCT.is())
@@ -77,7 +78,7 @@ public:
         const uno::Any& rOutValue, const uno::Reference<beans::XPropertySet>& /*xInnerPS*/ ) const
             throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                    lang::IllegalArgumentException, lang::WrappedTargetException,
-                   uno::RuntimeException)
+                   uno::RuntimeException) SAL_OVERRIDE
     {
         uno::Reference<chart2::XChartType> xCT = getChartType();
         if (!xCT.is())
@@ -92,7 +93,7 @@ public:
     }
 
     virtual void setPropertyToDefault( const uno::Reference<beans::XPropertyState>& /*xInnerPropState*/ ) const
-        throw (beans::UnknownPropertyException, uno::RuntimeException)
+        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE
     {
         uno::Reference<chart2::XChartType> xCT = getChartType();
         if (!xCT.is())
@@ -107,13 +108,14 @@ public:
     }
 
     virtual uno::Any getPropertyDefault( const uno::Reference<beans::XPropertyState>& /*xInnerPS*/ ) const
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+               uno::RuntimeException) SAL_OVERRIDE
     {
         return maDefault;
     }
 
     virtual beans::PropertyState getPropertyState( const uno::Reference<beans::XPropertyState>& /*xInnerPS*/ ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+        throw (beans::UnknownPropertyException, uno::RuntimeException) SAL_OVERRIDE
     {
         return beans::PropertyState_DIRECT_VALUE;
     }
