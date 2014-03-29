@@ -1080,7 +1080,7 @@ void WW8AttributeOutput::CharFont( const SvxFontItem& rFont )
 
 void WW8AttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 {
-    //Can only export in 8+, in 7- export as normal varient and expect that
+    //Can only export in 8+, in 7- export as normal variant and expect that
     //upperlevel code has blocked exporting clobbering attributes
     sal_uInt16 nFontID = m_rWW8Export.GetId( rFont );
     if ( m_rWW8Export.bWrtWW8 )
@@ -1092,7 +1092,7 @@ void WW8AttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 
 void WW8AttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
-    //Can only export in 8+, in 7- export as normal varient and expect that
+    //Can only export in 8+, in 7- export as normal variant and expect that
     //upperlevel code has blocked exporting clobbering attributes
     sal_uInt16 nFontID = m_rWW8Export.GetId( rFont );
     if ( m_rWW8Export.bWrtWW8 )
@@ -1104,7 +1104,7 @@ void WW8AttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 
 void WW8AttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 {
-    //Can only export in 8+, in 7- export as normal varient and expect that
+    //Can only export in 8+, in 7- export as normal variant and expect that
     //upperlevel code has blocked exporting clobbering attributes
     if (m_rWW8Export.bWrtWW8)
     {
@@ -1118,7 +1118,7 @@ void WW8AttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 
 void WW8AttributeOutput::CharPostureCTL( const SvxPostureItem& rPosture )
 {
-    // Can only export in 8+, in 7- export as normal varient and expect that
+    // Can only export in 8+, in 7- export as normal variant and expect that
     // upperlevel code has blocked exporting clobbering attributes
     if (m_rWW8Export.bWrtWW8)
     {

@@ -481,7 +481,7 @@ void MSWordStyles::SetStyleDefaults( const SwFmt& rFmt, bool bPap )
         {
             //If we are a character property then see if it is one of the
             //western/asian ones that must be collapsed together for export to
-            //word. If so default to the western varient.
+            //word. If so default to the western variant.
             if ( bPap || m_rExport.CollapseScriptsforWordOk(
                 i18n::ScriptType::LATIN, n) )
             {

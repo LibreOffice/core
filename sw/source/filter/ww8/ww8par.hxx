@@ -959,8 +959,8 @@ struct ApoTestResults
 
 struct ANLDRuleMap
 {
-    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, varient 1
-    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, varient 2
+    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, variant 1
+    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, variant 2
     SwNumRule* GetNumRule(sal_uInt8 nNumType);
     void SetNumRule(SwNumRule*, sal_uInt8 nNumType);
     ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}

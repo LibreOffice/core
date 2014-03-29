@@ -484,7 +484,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
         /*
          It is possible to have a number of date stamps for the created time
          of the change, (possibly a word bug) so we must use the "get a full
-         list" varient of HasCharSprm and take the last one as the true one.
+         list" variant of HasCharSprm and take the last one as the true one.
         */
         std::vector<const sal_uInt8 *> aResult;
         bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);

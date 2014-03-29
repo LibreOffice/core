@@ -3279,7 +3279,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 
 void SwWW8ImplReader::Read_TxtColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    //Has newer colour varient, ignore this old varient
+    //Has newer colour variant, ignore this old variant
     if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::LN_CCv))
         return;
 
@@ -3762,7 +3762,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* , short nLen )
 
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    //Has newer colour varient, ignore this old varient
+    //Has newer colour variant, ignore this old variant
     if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA71))
         return;
 

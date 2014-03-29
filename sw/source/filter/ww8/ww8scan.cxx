@@ -7297,7 +7297,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                     nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
-                    OSL_ENSURE(!this, "Unknown sprm varient");
+                    OSL_ENSURE(!this, "Unknown sprm variant");
                     break;
             }
             break;
