@@ -285,12 +285,13 @@ void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)
     if( nBytesLeft > 0 )
     {
         const sal_Size nMaxBuffer = 4096;
-        sal_uInt8* pBuffer = new sal_uInt8[ ::std::min( nBytesLeft, nMaxBuffer ) ];
+        sal_uInt8 *const pBuffer =
+            new sal_uInt8[ ::std::min<sal_Size>(nBytesLeft, nMaxBuffer) ];
         bool bValid = true;
 
         while( bValid && (nBytesLeft > 0) )
         {
-            sal_Size nWriteLen = ::std::min( nBytesLeft, nMaxBuffer );
+            sal_Size nWriteLen = ::std::min<sal_Size>(nBytesLeft, nMaxBuffer);
             rInStrm.Read( pBuffer, nWriteLen );
             sal_Size nWriteRet = Write( pBuffer, nWriteLen );
             bValid = (nWriteLen == nWriteRet);
@@ -369,7 +370,7 @@ void XclExpStream::DisableEncryption()
     EnableEncryption(false);
 }
 
-sal_Size XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
+sal_uInt64 XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
 {
     OSL_ENSURE( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
     return mbInRec ? 0 : mrStrm.Seek( nPos );
