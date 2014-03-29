@@ -50,7 +50,7 @@ namespace comphelper
         Reference< XProxyFactory > xFactory = ProxyFactory::create( m_xContext );
 
         // then the proxy itself
-        { // i36686 OJ: achieve the desctruction of the tempoary -> otherwise it leads to _rRefCount -= 2
+        { // i36686 OJ: achieve the desctruction of the temporary -> otherwise it leads to _rRefCount -= 2
             m_xProxyAggregate = xFactory->createProxy( _rxComponent );
         }
         if ( m_xProxyAggregate.is() )
