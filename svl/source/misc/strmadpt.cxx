@@ -328,8 +328,7 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
         {
             nError = m_xLockBytes->ReadAt(m_nPosition,
                                           rData.getArray(),
-                                          nMaxBytesToRead < 0 ?
-                                              0 : nMaxBytesToRead,
+                                          nMaxBytesToRead,
                                           &nCount);
             if (nError != ERRCODE_NONE && nError != ERRCODE_IO_PENDING)
                 throw io::IOException();
