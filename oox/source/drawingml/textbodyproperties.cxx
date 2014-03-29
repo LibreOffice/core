@@ -31,8 +31,9 @@ namespace drawingml {
 
 
 
-TextBodyProperties::TextBodyProperties():
-    meVA( TextVerticalAdjust_TOP )
+TextBodyProperties::TextBodyProperties()
+    : mbAnchorCtr(false)
+    , meVA( TextVerticalAdjust_TOP )
 {
 }
 
