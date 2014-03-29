@@ -5059,8 +5059,8 @@ class SvNullStream : public SvStream
 protected:
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE { memset( pData, 0, nSize ); return nSize; }
     virtual sal_Size PutData( const void*, sal_Size nSize ) SAL_OVERRIDE { return nSize; }
-    virtual sal_Size SeekPos( sal_Size nPos ) SAL_OVERRIDE { return nPos; }
-    virtual void SetSize( sal_Size ) SAL_OVERRIDE {}
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE { return nPos; }
+    virtual void SetSize( sal_uInt64 ) SAL_OVERRIDE {}
     virtual void FlushData() SAL_OVERRIDE {}
 
 public:

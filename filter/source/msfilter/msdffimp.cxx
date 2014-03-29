@@ -6443,7 +6443,7 @@ sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDat
 {
     if( nDatLen )
     {
-        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_Size>(nDatLen));
+        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_uInt64>(nDatLen));
         rpBuff = new char[rBuffLen];
         rBuffLen = rStData.Read(rpBuff, rBuffLen);
     }
@@ -6455,7 +6455,7 @@ sal_Bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLe
 {
     if( nDatLen )
     {
-        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_Size>(nDatLen));
+        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_uInt64>(nDatLen));
         rpBuff = new char[rBuffLen];
         rBuffLen = rStData.Read(rpBuff, rBuffLen);
     }

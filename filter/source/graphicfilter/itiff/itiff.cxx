@@ -1156,7 +1156,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 pTIFF->ReadUInt16( nTagType ).ReadUInt16( nDataType ).ReadUInt32( nDataLen ).ReadUInt32( nOffset );
 
                 if( DataTypeSize() * nDataLen > 4 )
-                    nMaxPos = std::max( nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos );
+                    nMaxPos = std::max( (sal_uInt64) nOrigPos + nOffset + DataTypeSize() * nDataLen, nMaxPos );
             }
             pTIFF->ReadUInt32( nOffset );
             if ( pTIFF->IsEof() )
