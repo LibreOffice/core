@@ -1077,7 +1077,7 @@ void SmRootNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     pRootSym->Arrange(rDev, rFormat);
 
     Point  aPos = pRootSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
-    //! overrride calculated vertical position
+    //! override calculated vertical position
     aPos.Y()  = pRootSym->GetTop() + pBody->GetBottom() - pRootSym->GetBottom();
     aPos.Y() -= nVerOffset;
     pRootSym->MoveTo(aPos);

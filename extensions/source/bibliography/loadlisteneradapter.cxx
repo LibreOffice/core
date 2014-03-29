@@ -46,7 +46,7 @@ namespace bib
 
     void OComponentListener::_disposing( const EventObject& /*_rSource*/ ) throw( RuntimeException)
     {
-        // nothing to do here, overrride if you're interested in
+        // nothing to do here, override if you're interested in
     }
 
 
