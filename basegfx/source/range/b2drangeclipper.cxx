@@ -84,7 +84,7 @@ namespace basegfx
                 Rectangle this edge is part of
 
                 @param fInvariantCoord
-                The invariant ccordinate value of this edge
+                The invariant coordinate value of this edge
 
                 @param eEdgeType
                 Is fInvariantCoord the lower or the higher value, for

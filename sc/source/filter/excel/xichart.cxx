@@ -3695,7 +3695,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
 {
     Reference< XCoordinateSystem > xCoordSystem;
 
-    /*  Try to get existing ccordinate system. For now, all series from primary
+    /*  Try to get existing coordinate system. For now, all series from primary
         and secondary axes sets are inserted into one coordinate system. Later,
         this should be changed to use one coordinate system for each axes set. */
     Reference< XCoordinateSystemContainer > xCoordSystemCont( xDiagram, UNO_QUERY );
