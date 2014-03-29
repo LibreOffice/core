@@ -440,7 +440,7 @@ static void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< OUString >& rNext, const ::std::vector< OUString >& rRemain)
 {
     ::std::vector< OUString >::const_iterator aIt;
-    sal_uInt16 nEntry = 0;
+    sal_Int32 nEntry = 0;
     for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
         nEntry = rBox.InsertEntry(*aIt);
     for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
@@ -522,8 +522,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
-        sal_uInt16 nIndex;
-        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
+        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
         {
             if(aHoriIds[nIndex].eHori == eStringId)
             {
@@ -531,8 +530,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
                 return eStringId;
             }
         }
-        nIndex = 0;
-        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
+        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
         {
             // --> OD 2009-08-31 #mongolianlayout#
             if ( !bVerticalL2R )
@@ -562,8 +560,8 @@ static sal_uLong lcl_GetLBRelationsForRelations( const sal_Int16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
-    sal_uInt16 nRelMapSize = SAL_N_ELEMENTS(aRelationMap);
-    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
+    const size_t nRelMapSize = SAL_N_ELEMENTS(aRelationMap);
+    for ( size_t nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
     {
         if ( aRelationMap[nRelMapPos].nRelation == _nRel )
         {
@@ -1065,7 +1063,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         SwFmtHoriOrient aHoriOrient( (const SwFmtHoriOrient&)
                                                 rOldSet.Get(RES_HORI_ORIENT) );
 
-        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
+        const sal_Int32 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
         const sal_Int16 eHOri = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
         const sal_Int16 eRel = GetRelation(pHMap, *m_pHoriRelationLB);
 
@@ -1101,7 +1099,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         SwFmtVertOrient aVertOrient( (const SwFmtVertOrient&)
                                                 rOldSet.Get(RES_VERT_ORIENT) );
 
-        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
+        const sal_Int32 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
         const sal_Int16 eVOri = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
         const sal_Int16 eRel = GetRelation(pVMap, *m_pVertRelationLB);
 
@@ -1446,7 +1444,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
             OUString sOldEntry(_rLB.GetSelectEntry());
-            sal_uInt16 nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
+            const size_t nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
             for (size_t nMapPos = 0; nMapPos < nMapCount; nMapPos++)
@@ -1454,7 +1452,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 if (_pMap[nMapPos].eStrId == eStrId)
                 {
                     nLBRelations = _pMap[nMapPos].nLBRelations;
-                    for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
+                    for (size_t nRelPos = 0; nRelPos < nRelCount; ++nRelPos)
                     {
                         if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
                         {
@@ -1498,8 +1496,6 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
         }
         else
         {
-            sal_uInt16 nRelCount = SAL_N_ELEMENTS(aRelationMap);
-
             // special handling for map <aVCharMap>,
             // because its ambigous in its <eStrId>/<eMirrorStrId>.
             if ( _pMap == aVCharMap )
@@ -1515,11 +1511,13 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 nLBRelations = _pMap[_nLBSelPos].nLBRelations;
             }
 
+            const size_t nRelCount = SAL_N_ELEMENTS(aRelationMap);
+
             for (sal_uLong nBit = 1; nBit < 0x80000000; nBit <<= 1)
             {
                 if (nLBRelations & nBit)
                 {
-                    for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
+                    for (size_t nRelPos = 0; nRelPos < nRelCount; ++nRelPos)
                     {
                         if (aRelationMap[nRelPos].nLBRelation == nBit)
                         {
@@ -1796,7 +1794,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
     SvxSwFrameValidation        aVal;
 
-    aVal.nAnchorType = static_cast< sal_uInt16 >(GetAnchor());
+    aVal.nAnchorType = static_cast< sal_Int16 >(GetAnchor());
     aVal.bAutoHeight = m_pAutoHeightCB->IsChecked();
     aVal.bAutoWidth = m_pAutoWidthCB->IsChecked();
     aVal.bMirror = m_pMirrorPagesCB->IsChecked();
@@ -1805,7 +1803,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     if ( pHMap )
     {
         // alignment horizonal
-        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
+        const sal_Int32 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
         aVal.nHoriOrient = GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
         aVal.nHRelOrient = GetRelation(pHMap, *m_pHoriRelationLB);
     }
@@ -1815,7 +1813,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     if ( pVMap )
     {
         // alignment vertical
-        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
+        const sal_Int32 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
         aVal.nVertOrient = GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
         aVal.nVRelOrient = GetRelation(pVMap, *m_pVertRelationLB);
     }
@@ -1851,7 +1849,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
         const SwFmtCol& rCol = (const SwFmtCol&)GetTabDialog()->GetExampleSet()->Get(RES_COL);
         if ( rCol.GetColumns().size() > 1 )
         {
-            for ( sal_uInt16 i = 0; i < rCol.GetColumns().size(); ++i )
+            for ( size_t i = 0; i < rCol.GetColumns().size(); ++i )
             {
                 aVal.nMinWidth += rCol.GetColumns()[i].GetLeft() +
                                   rCol.GetColumns()[i].GetRight() +
@@ -1942,7 +1940,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     FixedText *pRelFT = bHori ? m_pHoriRelationFT : m_pVertRelationFT;
     FrmMap *pMap = bHori ? pHMap : pVMap;
 
-    sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pMap, *pLB));
+    const sal_Int32 nMapPos = GetMapPos(pMap, *pLB);
     const sal_Int16 nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
 
     if (bHori)
@@ -2123,7 +2121,7 @@ void SwFrmPage::UpdateExample()
     sal_Int32 nPos = m_pHorizontalDLB->GetSelectEntryPos();
     if ( pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pHMap, *m_pHorizontalDLB));
+        const sal_Int32 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
         m_pExampleWN->SetHAlign(GetAlignment(pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB));
         m_pExampleWN->SetHoriRel(GetRelation(pHMap, *m_pHoriRelationLB));
     }
@@ -2131,7 +2129,7 @@ void SwFrmPage::UpdateExample()
     nPos = m_pVerticalDLB->GetSelectEntryPos();
     if ( pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nMapPos = static_cast<sal_uInt16>(GetMapPos(pVMap, *m_pVerticalDLB));
+        const sal_Int32 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
         m_pExampleWN->SetVAlign(GetAlignment(pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB));
         m_pExampleWN->SetVertRel(GetRelation(pVMap, *m_pVertRelationLB));
     }
@@ -2141,7 +2139,7 @@ void SwFrmPage::UpdateExample()
     long nYPos = static_cast< long >(m_pAtVertPosED->Denormalize(m_pAtVertPosED->GetValue(FUNIT_TWIP)));
     m_pExampleWN->SetRelPos(Point(nXPos, nYPos));
 
-    m_pExampleWN->SetAnchor( static_cast< sal_uInt16 >(GetAnchor()) );
+    m_pExampleWN->SetAnchor( static_cast< sal_Int16 >(GetAnchor()) );
     m_pExampleWN->Invalidate();
 }
 
@@ -2409,7 +2407,7 @@ SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet &rSet )
 void SwGrfExtPage::Reset(const SfxItemSet &rSet)
 {
     const SfxPoolItem* pItem;
-    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
@@ -2452,9 +2450,8 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
             ;
         }
 
-        sal_uInt16 nPos = ((const SwMirrorGrf* )pItem)->IsGrfToggle() ? 1 : 0;
-        nPos += (eMirror == RES_MIRROR_GRAPH_VERT || eMirror == RES_MIRROR_GRAPH_BOTH)
-                 ? 2 : 0;
+        const int nPos = (((const SwMirrorGrf* )pItem)->IsGrfToggle() ? 1 : 0)
+            + ((eMirror == RES_MIRROR_GRAPH_VERT || eMirror == RES_MIRROR_GRAPH_BOTH) ? 2 : 0);
 
         bEnableMirrorRB = nPos != 0;
 
@@ -3062,7 +3059,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     if ( rSet.GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_AVAILABLE )
     {
         SdrTextVertAdjust nAdjust = ((const SdrTextVertAdjustItem&)rSet.Get(RES_TEXT_VERT_ADJUST)).GetValue();
-        sal_uInt16 nPos = 0;
+        sal_Int32 nPos = 0;
         switch(nAdjust)
         {
             case SDRTEXTVERTADJUST_TOP:      nPos = 0;   break;
