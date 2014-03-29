@@ -3147,17 +3147,14 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 {
     if (DragStat().CheckMinMoved(rPnt))
     {
-        Point aPnt(rPnt);
         bool bNeuMoveOnly=getSdrDragView().IsMoveOnlyDragging();
         bAtCenter=false;
         SdrCrookMode eNeuMode=getSdrDragView().GetCrookMode();
         bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
         bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
         bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SDRCROOK_ROTATE;
-        long nSA=0;
 
-        if (nSA==0)
-            aPnt=GetSnapPos(aPnt);
+        Point aPnt(GetSnapPos(rPnt));
 
         Point aNeuCenter(aMarkCenter.X(),aStart.Y());
 
@@ -3250,23 +3247,6 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
             if (bResize)
             {
-                if (nSA!=0)
-                { // angle snapping
-                    long nWink0=nPntWink;
-                    nPntWink+=nSA/2;
-                    nPntWink/=nSA;
-                    nPntWink*=nSA;
-                    BigInt a2(nNeuRad);
-                    a2*=BigInt(nWink);
-                    a2/=BigInt(nWink0);
-                    nNeuRad=long(a2);
-
-                    if (bVertical)
-                        aNeuCenter.X()=aStart.X()+nNeuRad;
-                    else
-                        aNeuCenter.Y()=aStart.Y()+nNeuRad;
-                }
-
                 long nMul=(long)(nUmfang*NormAngle360(nPntWink)/36000);
 
                 if (bAtCenter)
@@ -3281,23 +3261,6 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
                 if (nWink==0)
                     bValid=false;
-
-                if (bValid && nSA!=0)
-                { // angle snapping
-                    long nWink0=nWink;
-                    nWink+=nSA/2;
-                    nWink/=nSA;
-                    nWink*=nSA;
-                    BigInt a2(nNeuRad);
-                    a2*=BigInt(nWink);
-                    a2/=BigInt(nWink0);
-                    nNeuRad=long(a2);
-
-                    if (bVertical)
-                        aNeuCenter.X()=aStart.X()+nNeuRad;
-                    else
-                        aNeuCenter.Y()=aStart.Y()+nNeuRad;
-                }
             }
         }
 
