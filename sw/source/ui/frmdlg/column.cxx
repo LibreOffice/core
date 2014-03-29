@@ -1016,12 +1016,12 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
     }
     else
     {
-        const sal_uInt16 nOffset = (pFld == &aDistEd2) ? 1 : 0;
-        long nDiff = nActValue - nColDist[nFirstVis + nOffset];
+        const sal_uInt16 nVis = nFirstVis + (pFld == &aDistEd2) ? 1 : 0;
+        long nDiff = nActValue - nColDist[nVis];
         if(nDiff)
         {
-            long nLeft = nColWidth[nFirstVis + nOffset];
-            long nRight = nColWidth[nFirstVis + nOffset + 1];
+            long nLeft = nColWidth[nVis];
+            long nRight = nColWidth[nVis + 1];
             if(nLeft + nRight + 2 * MINLAY < nDiff)
                 nDiff = nLeft + nRight - 2 * MINLAY;
             if(nDiff < nRight - MINLAY)
@@ -1044,13 +1044,13 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
                 }
                 nDiff = nTemp;
             }
-            nColWidth[nFirstVis + nOffset] = nLeft;
-            nColWidth[nFirstVis + nOffset + 1] = nRight;
-            nColDist[nFirstVis + nOffset] += nDiff;
+            nColWidth[nVis] = nLeft;
+            nColWidth[nVis + 1] = nRight;
+            nColDist[nVis] += nDiff;
 
-            pColMgr->SetColWidth( nFirstVis + nOffset, sal_uInt16(nLeft) );
-            pColMgr->SetColWidth( nFirstVis + nOffset + 1, sal_uInt16(nRight) );
-            pColMgr->SetGutterWidth( sal_uInt16(nColDist[nFirstVis + nOffset]), nFirstVis + nOffset );
+            pColMgr->SetColWidth( nVis, sal_uInt16(nLeft) );
+            pColMgr->SetColWidth( nVis + 1, sal_uInt16(nRight) );
+            pColMgr->SetGutterWidth( sal_uInt16(nColDist[nVis]), nVis );
         }
 
     }
