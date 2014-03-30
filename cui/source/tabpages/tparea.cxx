@@ -1825,21 +1825,6 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 
-    // set table text
-    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
-    INetURLObject   aURL( pColorList->GetPath() );
-
-    aURL.Append( pColorList->GetName() );
-    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-    if( aURL.getBase().getLength() > 18 )
-    {
-        aString += aURL.getBase().copy( 0, 15 );
-        aString += "...";
-    }
-    else
-        aString += aURL.getBase();
-
     ModifyColorHdl_Impl( this );
 }
 
