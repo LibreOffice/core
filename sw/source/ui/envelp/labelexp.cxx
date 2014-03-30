@@ -52,7 +52,7 @@ void SwVisitingCardPage::InitFrameControl()
     uno::Sequence<OUString> aNames = m_xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();
 
-    for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
+    for(sal_Int32 i = 0; i < aNames.getLength(); ++i)
     {
         uno::Any aGroup = m_xAutoText->getByName(pGroups[i]);
         uno::Reference< text::XAutoTextGroup >  xGroup;
@@ -66,7 +66,7 @@ void SwVisitingCardPage::InitFrameControl()
                 uno::Any aTitle = xPrSet->getPropertyValue( UNO_NAME_TITLE );
                 OUString uTitle;
                 aTitle >>= uTitle;
-                sal_uInt16 nEntry = m_pAutoTextGroupLB->InsertEntry(uTitle);
+                const sal_Int32 nEntry = m_pAutoTextGroupLB->InsertEntry(uTitle);
                 m_pAutoTextGroupLB->SetEntryData(nEntry, new OUString(pGroups[i]));
             }
         }
