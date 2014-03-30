@@ -157,8 +157,10 @@ void SwLabPreview::Paint(const Rectangle &)
     // Labels
     SetClipRegion(Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     SetFillColor( COL_LIGHTGRAYBLUE );
-    for (sal_uInt16 nRow = 0; nRow < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
-        for (sal_uInt16 nCol = 0; nCol < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
+    const sal_Int32 nRows = std::min<sal_Int32>(2, aItem.nRows);
+    const sal_Int32 nCols = std::min<sal_Int32>(2, aItem.nCols);
+    for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
+        for (sal_Int32 nCol = 0; nCol < nCols; ++nCol)
             DrawRect(Rectangle(
               Point(lX0 + ROUND(f * (aItem.lLeft  + nCol * aItem.lHDist)),
                     lY0 + ROUND(f * (aItem.lUpper + nRow * aItem.lVDist))),
@@ -495,8 +497,8 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
         rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
         rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
         rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-        rItem.nCols   = rRec.nCols   = (sal_uInt16) m_pColsField->GetValue();
-        rItem.nRows   = rRec.nRows   = (sal_uInt16) m_pRowsField->GetValue();
+        rItem.nCols   = rRec.nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
+        rItem.nRows   = rRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
         rItem.lPWidth  = rRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
         rItem.lPHeight = rRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     }
@@ -552,8 +554,8 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     aRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
     aRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
     aRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-    aRec.nCols   = (sal_uInt16) m_pColsField->GetValue();
-    aRec.nRows   = (sal_uInt16) m_pRowsField->GetValue();
+    aRec.nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
+    aRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
     aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.bCont = aItem.bCont;
@@ -594,7 +596,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
 
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     const std::vector<OUString>& rMan = rCfg.GetManufacturers();
-    for (sal_uInt16 i = 0; i < rMan.size(); i++)
+    for (size_t i = 0; i < rMan.size(); ++i)
     {
         m_pMakeCB->InsertEntry(rMan[i]);
     }
@@ -621,9 +623,8 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             replaceAll("%1", sMake).replaceAll("%2", sType));
         aQuery.set_secondary_text(aQuery.get_secondary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
-        sal_uInt16 eRet = aQuery.Execute();
 
-        if (RET_YES != eRet)
+        if (RET_YES != aQuery.Execute())
             return 0;
     }
     rLabRec.aType = sType;
