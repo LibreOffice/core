@@ -283,7 +283,7 @@ namespace sdr
 
                                     SdrModel* pModel = rObj.GetModel();
                                     SfxStyleSheetBasePool* pStylePool = (pModel != NULL) ? pModel->GetStyleSheetPool() : 0L;
-                                    SfxStyleSheet* pNewStyle = (SfxStyleSheet*)pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily());
+                                    SfxStyleSheet* pNewStyle = pStylePool ? (SfxStyleSheet*)pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily()) : NULL;
                                     DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
 
                                     if(pNewStyle)
