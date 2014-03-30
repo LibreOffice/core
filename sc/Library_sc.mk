@@ -397,6 +397,11 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dbgui/imoptdlg \
     $(if $(filter TRUE,$(MPL_SUBSET)),, \
         sc/source/ui/dbgui/pvlaydlg) \
+    sc/source/ui/dbgui/PivotLayoutDialog \
+    sc/source/ui/dbgui/PivotLayoutTreeListBase \
+    sc/source/ui/dbgui/PivotLayoutTreeListData \
+    sc/source/ui/dbgui/PivotLayoutTreeListLabel \
+    sc/source/ui/dbgui/PivotLayoutTreeList \
     sc/source/ui/dbgui/sfiltdlg \
     sc/source/ui/dialogs/searchresults \
     sc/source/ui/docshell/arealink \
