@@ -1769,7 +1769,6 @@ void* SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
 
     ResetError();
 
-    DBG_ASSERT( nEndOfData<STREAM_SEEK_TO_END,"Invalid EOF");
     return pResult;
 }
 

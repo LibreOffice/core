@@ -430,7 +430,6 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bCo
     mrStrm.Seek( STREAM_SEEK_TO_END );
     mnStreamSize = mrStrm.Tell();
     mrStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    OSL_ENSURE( mnStreamSize < STREAM_SEEK_TO_END, "XclImpStream::XclImpStream - stream error" );
 }
 
 XclImpStream::~XclImpStream()
