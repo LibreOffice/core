@@ -61,6 +61,8 @@
 #include "condformatdlg.hxx"
 #include "xmlsourcedlg.hxx"
 
+#include "PivotLayoutDialog.hxx"
+
 //------------------------------------------------------------------
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
@@ -321,20 +323,16 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_PIVOTTABLE:
         {
-#if ! MPL_HAVE_SUBSET
             //  all settings must be in pDialogDPObject
 
             if( pDialogDPObject )
             {
                 // Check for an existing datapilot output.
                 ScViewData* pViewData = GetViewData();
-                ScDPObject* pObj = pDoc->GetDPAtCursor(
-                    pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-
-                GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-                pResult = new ScPivotLayoutDlg( pB, pCW, pParent, *pDialogDPObject, pObj == NULL);
+                pViewData->SetRefTabNo( pViewData->GetTabNo() );
+                ScDPObject* pObj = pDoc->GetDPAtCursor(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+                pResult = new ScPivotLayoutDialog(pB, pCW, pParent, pViewData, pDialogDPObject, pObj == NULL);
             }
-#endif
         }
         break;
 
