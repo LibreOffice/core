@@ -59,7 +59,7 @@ class SwFldRefPage : public SwFldPage
     // in order to restore selection after update of selection listbox
     const SwTxtNode* mpSavedSelectedTxtNode;
     // fallback, if previously selected text node doesn't exist anymore
-    sal_Int32  mnSavedSelectedPos;
+    size_t mnSavedSelectedPos;
 
     DECL_LINK(TypeHdl, void *);
     DECL_LINK(SubTypeHdl, void * = 0);

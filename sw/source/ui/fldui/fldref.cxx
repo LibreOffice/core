@@ -124,16 +124,16 @@ void SwFldRefPage::SaveSelectedTxtNode()
 
             if ( nTypeId == REFFLDFLAG_HEADING )
             {
-                mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
-                if ( static_cast<size_t>(mnSavedSelectedPos) < maOutlineNodes.size() )
+                mnSavedSelectedPos = static_cast<size_t>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
+                if ( mnSavedSelectedPos < maOutlineNodes.size() )
                 {
                     mpSavedSelectedTxtNode = maOutlineNodes[mnSavedSelectedPos];
                 }
             }
             else if ( nTypeId == REFFLDFLAG_NUMITEM )
             {
-                mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
-                if ( static_cast<size_t>(mnSavedSelectedPos) < maNumItems.size() )
+                mnSavedSelectedPos = static_cast<size_t>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
+                if ( mnSavedSelectedPos < maNumItems.size() )
                 {
                     mpSavedSelectedTxtNode = maNumItems[mnSavedSelectedPos]->GetTxtNode();
                 }
@@ -187,7 +187,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     if(!pSh)
         pSh = ::GetActiveWrtShell();
 
-    sal_uInt16 nFldTypeCnt = pSh->GetFldTypeCount(RES_SETEXPFLD);
+    const sal_uInt16 nFldTypeCnt = pSh->GetFldTypeCount(RES_SETEXPFLD);
 
     for (sal_uInt16 n = 0; n < nFldTypeCnt; ++n)
     {
@@ -233,7 +233,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
                                 equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
             OUString sVal = sUserData.getToken(1, ';');
-            sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
+            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
@@ -372,7 +372,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
             default:
                 if( REFFLDFLAG & nTypeId )
                 {
-                    sal_uInt16 nOldId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld);
+                    const sal_uInt16 nOldId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld);
                     if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
                         // then the old one stays
                         nFldDlgFmtSel = m_pFormatLB->GetSelectEntryPos();
@@ -496,7 +496,7 @@ void SwFldRefPage::UpdateSubType()
         {
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr );
+            const sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr );
 
             for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
@@ -509,7 +509,7 @@ void SwFldRefPage::UpdateSubType()
         {
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr, true );
+            const sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr, true );
 
             for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
@@ -527,8 +527,7 @@ void SwFldRefPage::UpdateSubType()
             pIDoc->getOutlineNodes( maOutlineNodes );
             bool bCertainTxtNodeSelected( false );
             SvTreeListEntry* pEntry = 0;
-            sal_uInt16 nOutlIdx = 0;
-            for ( nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
+            for ( size_t nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
             {
                 pEntry = m_pSelectionToolTipLB->InsertEntry(
                                 pIDoc->getOutlineText( nOutlIdx, true, true, false ) );
@@ -541,8 +540,7 @@ void SwFldRefPage::UpdateSubType()
                     sOldSel = "";
                     bCertainTxtNodeSelected = true;
                 }
-                else if ( !bCertainTxtNodeSelected &&
-                          mnSavedSelectedPos == nOutlIdx )
+                else if ( !bCertainTxtNodeSelected && mnSavedSelectedPos == nOutlIdx )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
                     sOldSel = "";
@@ -557,8 +555,7 @@ void SwFldRefPage::UpdateSubType()
             pIDoc->getNumItems( maNumItems );
             bool bCertainTxtNodeSelected( false );
             SvTreeListEntry* pEntry = 0;
-            sal_uInt16 nNumItemIdx = 0;
-            for ( nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
+            for ( size_t nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
             {
                 pEntry = m_pSelectionToolTipLB->InsertEntry(
                             pIDoc->getListItemText( *maNumItems[nNumItemIdx], true, true ) );
@@ -571,8 +568,7 @@ void SwFldRefPage::UpdateSubType()
                     sOldSel = "";
                     bCertainTxtNodeSelected = true;
                 }
-                else if ( !bCertainTxtNodeSelected &&
-                          mnSavedSelectedPos == nNumItemIdx )
+                else if ( !bCertainTxtNodeSelected && mnSavedSelectedPos == nNumItemIdx )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
                     sOldSel = "";
@@ -593,7 +589,7 @@ void SwFldRefPage::UpdateSubType()
                 if(IsFldEdit())
                     sOldSel = "";
 
-                sal_uInt16 nCnt = pType->GetSeqFldList( aArr );
+                const sal_uInt16 nCnt = pType->GetSeqFldList( aArr );
                 for( sal_uInt16 n = 0; n < nCnt; ++n )
                 {
                     m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
@@ -730,7 +726,7 @@ sal_Int32 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         if (!IsFldEdit())
             m_pFormatLB->SelectEntry(sOldSel);
         else
-            m_pFormatLB->SelectEntry(SW_RESSTR(FMT_REF_BEGIN + (sal_uInt16)GetCurField()->GetFormat()));
+            m_pFormatLB->SelectEntry(SW_RESSTR(FMT_REF_BEGIN + GetCurField()->GetFormat()));
 
         if (!m_pFormatLB->GetSelectEntryCount())
         {
@@ -773,14 +769,9 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     sal_uInt16 nSubType = 0;
-    sal_uLong nFormat;
-
-    nFormat = m_pFormatLB->GetSelectEntryPos();
-
-    if(nFormat == LISTBOX_ENTRY_NOTFOUND)
-        nFormat = 0;
-    else
-        nFormat = (sal_uLong)m_pFormatLB->GetEntryData((sal_uInt16)nFormat);
+    const sal_Int32 nEntryPos = m_pFormatLB->GetSelectEntryPos();
+    const sal_uLong nFormat = (nEntryPos == LISTBOX_ENTRY_NOTFOUND)
+        ? 0 : (sal_uLong)m_pFormatLB->GetEntryData(nEntryPos);
 
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
@@ -869,7 +860,8 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
-                const sal_uInt16 nOutlIdx( static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData())) );
+                const size_t nOutlIdx( static_cast<size_t>
+                    (reinterpret_cast<sal_uLong>(pEntry->GetUserData())) );
                 pSh->getIDocumentOutlineNodesAccess()->getOutlineNodes( maOutlineNodes );
                 if ( nOutlIdx < maOutlineNodes.size() )
                 {
@@ -889,7 +881,8 @@ bool SwFldRefPage::FillItemSet(SfxItemSet& )
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
-                const sal_uInt16 nNumItemIdx( static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData())) );
+                const size_t nNumItemIdx( static_cast<size_t>
+                    (reinterpret_cast<sal_uLong>(pEntry->GetUserData())) );
                 pSh->getIDocumentListItemsAccess()->getNumItems( maNumItems );
                 if ( nNumItemIdx < maNumItems.size() )
                 {
