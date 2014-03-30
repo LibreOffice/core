@@ -39,11 +39,11 @@ public:
         const OUString aTmp = rRegion + ":" + rGlosName;
         m_pGlosBox->InsertEntry(aTmp);
     }
-    sal_uInt16 GetSelectedIdx() const
+    sal_Int32 GetSelectedIdx() const
     {
         return m_pGlosBox->GetSelectEntryPos();
     }
-    void SelectEntryPos(sal_uInt16 nIdx)
+    void SelectEntryPos(sal_Int32 nIdx)
     {
         m_pGlosBox->SelectEntryPos(nIdx);
     }

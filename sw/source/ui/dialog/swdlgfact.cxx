@@ -298,12 +298,12 @@ void AbstractSwSelGlossaryDlg_Impl::InsertGlos(const OUString &rRegion, const OU
     pDlg->InsertGlos( rRegion, rGlosName );
 }
 
-sal_uInt16 AbstractSwSelGlossaryDlg_Impl::GetSelectedIdx() const
+sal_Int32 AbstractSwSelGlossaryDlg_Impl::GetSelectedIdx() const
 {
     return pDlg->GetSelectedIdx();
 }
 
-void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_uInt16 nIdx)
+void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
 {
     pDlg->SelectEntryPos( nIdx );
 }

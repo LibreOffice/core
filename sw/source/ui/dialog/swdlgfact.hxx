@@ -184,8 +184,8 @@ class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl,SwSelGlossaryDlg)
     virtual void InsertGlos(const OUString &rRegion, const OUString &rGlosName) SAL_OVERRIDE;    // inline
-    virtual sal_uInt16 GetSelectedIdx() const SAL_OVERRIDE;  // inline
-    virtual void SelectEntryPos(sal_uInt16 nIdx) SAL_OVERRIDE;   // inline
+    virtual sal_Int32 GetSelectedIdx() const SAL_OVERRIDE;  // inline
+    virtual void SelectEntryPos(sal_Int32 nIdx) SAL_OVERRIDE;   // inline
 };
 
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg

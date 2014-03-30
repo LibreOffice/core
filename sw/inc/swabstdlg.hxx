@@ -255,8 +255,8 @@ class AbstractSwSelGlossaryDlg : public VclAbstractDialog
 {
 public:
     virtual void InsertGlos(const OUString &rRegion, const OUString &rGlosName) = 0;    // inline
-    virtual sal_uInt16 GetSelectedIdx() const = 0;  // inline
-    virtual void SelectEntryPos(sal_uInt16 nIdx) = 0;   // inline
+    virtual sal_Int32 GetSelectedIdx() const = 0;  // inline
+    virtual void SelectEntryPos(sal_Int32 nIdx) = 0;   // inline
 };
 
 class AbstractSwAutoFormatDlg : public VclAbstractDialog
