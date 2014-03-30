@@ -1518,8 +1518,8 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
     nIndex++;
 
-    if ( nIndex < NUM_VIEW_SETTINGS )
-        rSequence.realloc ( nIndex );
+    assert(nIndex == NUM_VIEW_SETTINGS);
+    (void)nIndex;
 }
 #undef NUM_VIEW_SETTINGS
 
