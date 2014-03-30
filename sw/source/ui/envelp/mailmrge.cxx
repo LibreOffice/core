@@ -192,8 +192,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     pImpl           (new SwMailMergeDlg_Impl),
 
     rSh             (rShell),
-    rDBName         (rSourceName),
-    rTableName      (rTblName),
     nMergeType      (DBMGR_MERGE_MAILING),
     m_aDialogSize( GetSizePixel() )
 {
@@ -288,9 +286,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 Sequence<PropertyValue> aProperties(3);
                 PropertyValue* pProperties = aProperties.getArray();
                 pProperties[0].Name = "DataSourceName";
-                pProperties[0].Value <<= rDBName;
+                pProperties[0].Value <<= rSourceName;
                 pProperties[1].Name = "Command";
-                pProperties[1].Value <<= rTableName;
+                pProperties[1].Value <<= rTblName;
                 pProperties[2].Name = "CommandType";
                 pProperties[2].Value <<= nCommandType;
                 xD->dispatch(aURL, aProperties);
@@ -356,9 +354,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
     if(_xConnection.is())
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTableName);
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTblName);
     else
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, rSourceName, rTblName);
     for(sal_Int32 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); ++nEntry)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 

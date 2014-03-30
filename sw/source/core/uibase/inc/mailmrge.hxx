@@ -105,8 +105,6 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     SwWrtShell&     rSh;
     SwModuleOptions* pModOpt;
-    OUString        rDBName;
-    OUString        rTableName;
 
     sal_uInt16          nMergeType;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
