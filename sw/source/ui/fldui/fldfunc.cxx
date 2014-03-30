@@ -124,8 +124,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
         if (nTypeId == TYP_MACROFLD)
         {
-            OUString sName(GetCurField()->GetPar1());
-            GetFldMgr().SetMacroPath(sName);
+            GetFldMgr().SetMacroPath(GetCurField()->GetPar1());
         }
     }
 
@@ -270,9 +269,9 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         if(bDropDown)
             ListEnableHdl(0);
 
-        if( m_pNameFT->GetText() != OUString(m_sOldNameFT) )
+        if (m_pNameFT->GetText() != m_sOldNameFT)
             m_pNameFT->SetText(m_sOldNameFT);
-        if (m_pValueFT->GetText() != OUString(m_sOldValueFT))
+        if (m_pValueFT->GetText() != m_sOldValueFT)
             m_pValueFT->SetText(m_sOldValueFT);
 
         switch (nTypeId)
@@ -399,7 +398,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
     if(pControl == m_pListAddPB ||
             (pControl == m_pListItemED && m_pListAddPB->IsEnabled()))
     {
-        OUString sEntry(m_pListItemED->GetText());
+        const OUString sEntry(m_pListItemED->GetText());
         m_pListItemsLB->InsertEntry(sEntry);
         m_pListItemsLB->SelectEntry(sEntry);
     }
@@ -415,7 +414,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
         {
             if(nSelPos)
             {
-                OUString sEntry = m_pListItemsLB->GetSelectEntry();
+                const OUString sEntry = m_pListItemsLB->GetSelectEntry();
                 m_pListItemsLB->RemoveEntry(nSelPos);
                 nSelPos--;
                 m_pListItemsLB->InsertEntry(sEntry, nSelPos);
@@ -426,7 +425,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
         {
             if(nSelPos < m_pListItemsLB->GetEntryCount() - 1)
             {
-                OUString sEntry = m_pListItemsLB->GetSelectEntry();
+                const OUString sEntry = m_pListItemsLB->GetSelectEntry();
                 m_pListItemsLB->RemoveEntry(nSelPos);
                 nSelPos++;
                 m_pListItemsLB->InsertEntry(sEntry, nSelPos);
@@ -467,7 +466,7 @@ void SwFldFuncPage::UpdateSubType()
 
     std::vector<OUString> aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
-    size_t nCount = aLst.size();
+    const size_t nCount = aLst.size();
 
     for(size_t i = 0; i < nCount; ++i)
     {
@@ -507,9 +506,7 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     Window* pDefModalDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pBtn );
 
-    OUString sMacro(TurnMacroString(m_pNameED->GetText()));
-    sMacro = sMacro.replaceAll(".", ";");
-
+    const OUString sMacro(TurnMacroString(m_pNameED->GetText()).replaceAll(".", ";"));
     if (GetFldMgr().ChooseMacro(sMacro))
         UpdateSubType();
 
@@ -620,21 +617,17 @@ sal_uInt16 SwFldFuncPage::GetGroup()
 
 void    SwFldFuncPage::FillUserData()
 {
-    OUString sData(USER_DATA_VERSION);
-    sData += ";";
     const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
         ? USHRT_MAX
         : sal::static_int_cast< sal_uInt16 >
             (reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nEntryPos )));
-    sData += OUString::number( nTypeSel );
-    SetUserData(sData);
+    SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
 IMPL_LINK_NOARG(SwFldFuncPage, ModifyHdl)
 {
-    OUString aName(m_pNameED->GetText());
-    const sal_Int32 nLen = aName.getLength();
+    const sal_Int32 nLen = m_pNameED->GetText().getLength();
 
     sal_Bool bEnable = sal_True;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
