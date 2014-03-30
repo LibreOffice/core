@@ -15,10 +15,14 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/theDesktop.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include "WpftImportTestBase.hxx"
 
@@ -30,6 +34,7 @@ namespace io = com::sun::star::io;
 namespace lang = com::sun::star::lang;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
+namespace util = com::sun::star::util;
 
 namespace writerperfect
 {
@@ -70,12 +75,14 @@ void WpftImportTestBase::tearDown()
 bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
+    // create an empty frame
     const uno::Reference<lang::XComponent> xDoc(
             m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0, uno::Sequence<beans::PropertyValue>()),
             uno::UNO_QUERY_THROW);
 
     bool result = false;
 
+    // try to import the document (and load it into the prepared frame)
     try
     {
         const uno::Reference<document::XImporter> xImporter(m_xFilter, uno::UNO_QUERY_THROW);
@@ -105,7 +112,39 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
         // ignore
     }
 
-    xDoc->dispose();
+    // close the opened document
+    uno::Reference<util::XCloseable> xCloseable(xDoc, uno::UNO_QUERY);
+
+    if (!xCloseable.is())
+    {
+        uno::Reference<frame::XController> xController(xDoc, uno::UNO_QUERY);
+
+        if (!xController.is())
+        {
+            const uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
+            if (xModel.is())
+                xController = xModel->getCurrentController();
+        }
+
+        if (xController.is())
+        {
+            const uno::Reference<frame::XFrame> xFrame = xController->getFrame();
+            if (xFrame.is())
+                xCloseable.set(xFrame, uno::UNO_QUERY);
+        }
+    }
+
+    try
+    {
+        if (xCloseable.is())
+            xCloseable->close(true);
+        else
+            xDoc->dispose();
+    }
+    catch (const uno::Exception &)
+    {
+        // ignore
+    }
 
     return result;
 }
