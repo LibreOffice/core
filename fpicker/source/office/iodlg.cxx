@@ -2500,7 +2500,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
         if ( INET_PROT_NOT_VALID != eProt && INET_PROT_FILE != eProt )
             nQuestionMarkPos = -1;
 
-        sal_Int32 nWildCardPos = std::min( nWildCardPos, nQuestionMarkPos );
+        nWildCardPos = std::min( nWildCardPos, nQuestionMarkPos );
     }
 
     rFilter = aEmpty;
