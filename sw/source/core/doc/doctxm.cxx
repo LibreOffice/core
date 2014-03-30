@@ -466,6 +466,8 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
     case  TOX_BIBLIOGRAPHY:      prBase = &mpDefTOXBases->pBiblioBase; break;
     case  TOX_CITATION: /** TODO */break;
     }
+    if (!prBase)
+        return NULL;
     if(!(*prBase) && bCreate)
     {
         SwForm aForm(eTyp);
