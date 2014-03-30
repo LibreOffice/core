@@ -34,9 +34,9 @@ public:
     void Show( bool bShow );
     void Enable( bool bEnable );
 
-    sal_uInt16 GetSelectEntryCount() const;
-    sal_uInt16 GetSelectEntryPos() const;
-    void SelectEntryPos( sal_uInt16 nPos );
+    sal_Int32 GetSelectEntryCount() const;
+    sal_Int32 GetSelectEntryPos() const;
+    void SelectEntryPos(sal_Int32 nPos);
 
     void SetSelectHdl( const Link& rLink );
 

@@ -44,17 +44,17 @@ void BarGeometryResources::Enable( bool bEnable )
     m_pLB_Geometry->Enable( bEnable );
 }
 
-sal_uInt16 BarGeometryResources::GetSelectEntryCount() const
+sal_Int32 BarGeometryResources::GetSelectEntryCount() const
 {
     return m_pLB_Geometry->GetSelectEntryCount();
 }
 
-sal_uInt16 BarGeometryResources::GetSelectEntryPos() const
+sal_Int32 BarGeometryResources::GetSelectEntryPos() const
 {
     return m_pLB_Geometry->GetSelectEntryPos();
 }
 
-void BarGeometryResources::SelectEntryPos( sal_uInt16 nPos )
+void BarGeometryResources::SelectEntryPos(sal_Int32 nPos)
 {
     if( nPos < m_pLB_Geometry->GetEntryCount() )
         m_pLB_Geometry->SelectEntryPos( nPos );
