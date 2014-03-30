@@ -114,8 +114,8 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
     rItem.bPage = m_pPageButton->IsChecked();
-    rItem.nCol  = (sal_uInt16) m_pColField->GetValue();
-    rItem.nRow  = (sal_uInt16) m_pRowField->GetValue();
+    rItem.nCol = static_cast<sal_Int32>(m_pColField->GetValue());
+    rItem.nRow = static_cast<sal_Int32>(m_pRowField->GetValue());
     rItem.bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
 }
 
