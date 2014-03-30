@@ -374,6 +374,8 @@ sal_Size OslStream::PutData(const void* pData, sal_Size nSize)
 sal_uInt64 OslStream::SeekPos( sal_uInt64 nPos )
 {
     ::osl::FileBase::RC rc = ::osl::FileBase::E_None;
+    // check if a truncated STREAM_SEEK_TO_END was passed
+    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
     if( nPos == STREAM_SEEK_TO_END )
     {
         rc = maFile.setPos( osl_Pos_End, 0 );

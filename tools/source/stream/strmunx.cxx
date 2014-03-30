@@ -358,6 +358,8 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 
 sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 {
+    // check if a truncated STREAM_SEEK_TO_END was passed
+    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
     if ( IsOpen() )
     {
         oslFileError rc;

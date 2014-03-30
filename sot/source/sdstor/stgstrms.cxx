@@ -1283,6 +1283,8 @@ sal_uLong StgTmpStrm::PutData( const void* pData, sal_uLong n )
 
 sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
 {
+    // check if a truncated STREAM_SEEK_TO_END was passed
+    assert(n != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
     if( n == STREAM_SEEK_TO_END )
         n = GetSize();
     if( n && n > THRESHOLD && !pStrm )
