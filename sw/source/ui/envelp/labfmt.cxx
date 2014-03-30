@@ -92,14 +92,14 @@ void SwLabPreview::Paint(const Rectangle &)
 {
     const Size aSz(GetOutputSizePixel());
 
-    long lOutWPix   = aSz.Width ();
-    long lOutHPix   = aSz.Height();
+    const long lOutWPix   = aSz.Width ();
+    const long lOutHPix   = aSz.Height();
 
     // Scale factor
-    float fxpix = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
+    const float fxpix = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
 
-    long lOutWPix23 = (long)((float)lOutWPix * fxpix);
-    long lOutHPix23 = (long)((float)lOutHPix * fxpix);
+    const long lOutWPix23 = (long)((float)lOutWPix * fxpix);
+    const long lOutHPix23 = (long)((float)lOutHPix * fxpix);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
@@ -119,34 +119,28 @@ void SwLabPreview::Paint(const Rectangle &)
     SetFont(aPaintFont);
 
     // size of region to be displayed
-    long lDispW = aItem.lLeft  + aItem.lHDist;
-    long lDispH = aItem.lUpper + aItem.lVDist;
-    if (aItem.nCols == 1)
-        lDispW += aItem.lLeft ;
-    else
-        lDispW += ROUND(aItem.lHDist / 10.0);
-    if (aItem.nRows == 1)
-        lDispH += aItem.lUpper;
-    else
-        lDispH += ROUND(aItem.lVDist / 10.0);
+    const long lDispW = aItem.lLeft + aItem.lHDist
+        + ((aItem.nCols == 1) ? aItem.lLeft : ROUND(aItem.lHDist/10.0));
+    const long lDispH = aItem.lUpper + aItem.lVDist
+        + ((aItem.nRows == 1) ? aItem.lUpper : ROUND(aItem.lVDist/10.0));
 
     // Scale factor
-    float fx = (float) lOutWPix23 / std::max(1L, lDispW),
-          fy = (float) lOutHPix23 / std::max(1L, lDispH),
-          f  = fx < fy ? fx : fy;
+    const float fx = (float) lOutWPix23 / std::max(1L, lDispW);
+    const float fy = (float) lOutHPix23 / std::max(1L, lDispH);
+    const float f  = fx < fy ? fx : fy;
 
     // zero point
-    long lOutlineW = ROUND(f * lDispW);
-    long lOutlineH = ROUND(f * lDispH);
+    const long lOutlineW = ROUND(f * lDispW);
+    const long lOutlineH = ROUND(f * lDispH);
 
-    long lX0 = (lOutWPix - lOutlineW) / 2;
-    long lY0 = (lOutHPix - lOutlineH) / 2;
-    long lX1 = lX0 + ROUND(f *  aItem.lLeft );
-    long lY1 = lY0 + ROUND(f *  aItem.lUpper);
-    long lX2 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lWidth ));
-    long lY2 = lY0 + ROUND(f * (aItem.lUpper + aItem.lHeight));
-    long lX3 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lHDist ));
-    long lY3 = lY0 + ROUND(f * (aItem.lUpper + aItem.lVDist ));
+    const long lX0 = (lOutWPix - lOutlineW) / 2;
+    const long lY0 = (lOutHPix - lOutlineH) / 2;
+    const long lX1 = lX0 + ROUND(f *  aItem.lLeft );
+    const long lY1 = lY0 + ROUND(f *  aItem.lUpper);
+    const long lX2 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lWidth ));
+    const long lY2 = lY0 + ROUND(f * (aItem.lUpper + aItem.lHeight));
+    const long lX3 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lHDist ));
+    const long lY3 = lY0 + ROUND(f * (aItem.lUpper + aItem.lVDist ));
 
     // draw outline (area)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
