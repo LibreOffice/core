@@ -2280,7 +2280,37 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     else
         nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
 
-    SAL_WARN_IF( nRes, "vcl.filter", "GrafikFehler [" << nRes << "] - [" << rPath << "]" );
+    OUString aReturnString;
+
+    switch (nRes)
+    {
+        case GRFILTER_OPENERROR:
+            aReturnString="open error";
+            break;
+        case GRFILTER_IOERROR:
+            aReturnString="IO error";
+            break;
+        case GRFILTER_FORMATERROR:
+            aReturnString="format error";
+            break;
+        case GRFILTER_VERSIONERROR:
+            aReturnString="version error";
+            break;
+        case GRFILTER_FILTERERROR:
+            aReturnString="filter error";
+            break;
+        case GRFILTER_ABORT:
+            aReturnString="import aborted";
+            break;
+        case GRFILTER_TOOBIG:
+            aReturnString="graphic is too big";
+            break;
+        default:
+            // nothing more to do
+            break;
+    }
+
+    SAL_WARN_IF( nRes, "vcl.filter", "Problem importing graphic " << rPath << ". Reason: " << aReturnString );
 
     return nRes;
 }
