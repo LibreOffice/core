@@ -1288,7 +1288,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
-    sal_uInt16 nCurrPos = m_pCurrencyLB->GetSelectEntryPos();
+    sal_Int32 nCurrPos = m_pCurrencyLB->GetSelectEntryPos();
     const NfCurrencyEntry* pCurr = (const NfCurrencyEntry*)
         m_pCurrencyLB->GetEntryData( nCurrPos );
     OUString sNewCurr;
