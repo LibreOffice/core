@@ -73,7 +73,7 @@ public:
     SwNumNamesDlg(Window *pParent);
     void SetUserNames(const OUString *pList[]);
     OUString GetName() const { return m_pFormEdit->GetText(); }
-    sal_uInt16 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
+    sal_Int32 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
 
 // remember selected entry
