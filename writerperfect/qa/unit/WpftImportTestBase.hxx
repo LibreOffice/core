@@ -20,7 +20,7 @@
 #include <unotest/filters-test.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace beans { class PropertyValue; }
+    namespace beans { struct PropertyValue; }
     namespace container { class XNameAccess; }
     namespace document { class XFilter; }
     namespace frame { class XDesktop2; }
