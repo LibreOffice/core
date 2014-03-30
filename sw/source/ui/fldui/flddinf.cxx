@@ -99,7 +99,6 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     pSelEntry = 0;
 
     // display SubTypes in TypeLB
-    sal_uInt16 nTypeId = TYP_DOCINFOFLD;
     SvTreeListEntry* pEntry = 0;
 
     SvTreeListEntry* pInfo = 0;
@@ -132,7 +131,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     }
 
     std::vector<OUString> aLst;
-    GetFldMgr().GetSubTypes(nTypeId, aLst);
+    GetFldMgr().GetSubTypes(TYP_DOCINFOFLD, aLst);
     for(size_t i = 0; i < aLst.size(); ++i)
     {
         if (!IsFldEdit() || nSubType == i)
@@ -419,7 +418,6 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
     if (!pSelEntry || (sal_uInt16)(sal_uLong)pSelEntry->GetUserData() == USHRT_MAX)
         return false;
 
-    sal_uInt16 nTypeId = TYP_DOCINFOFLD;
     sal_uInt16 nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
 
     sal_uLong nFormat = 0;
@@ -444,7 +442,7 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
         nOldFormat != nFormat || m_pFixedCB->GetState() != m_pFixedCB->GetSavedValue()
         || (DI_CUSTOM == nSubType && !aName.equals( m_sOldCustomFieldName )))
     {
-        InsertFld(nTypeId, nSubType, aName, aEmptyOUStr, nFormat,
+        InsertFld(TYP_DOCINFOFLD, nSubType, aName, aEmptyOUStr, nFormat,
                 ' ', m_pFormatLB->IsAutomaticLanguage());
     }
 
