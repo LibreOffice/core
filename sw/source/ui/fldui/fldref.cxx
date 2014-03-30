@@ -957,11 +957,11 @@ sal_uInt16 SwFldRefPage::GetGroup()
 
 void    SwFldRefPage::FillUserData()
 {
-    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
-    if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
-        nTypeSel = USHRT_MAX;
-    else
-        nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nTypeSel )));
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
+        ? USHRT_MAX
+        : sal::static_int_cast< sal_uInt16 >
+            (reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nEntryPos )));
     SetUserData( USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
