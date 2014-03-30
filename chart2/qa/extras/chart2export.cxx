@@ -556,7 +556,6 @@ void Chart2ExportTest::testUpDownBars()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
 }
 
-<<<<<<< HEAD
 void Chart2ExportTest::testDoughnutChart()
 {
     load("/chart2/qa/extras/data/docx/", "doughnutChart.docx");
