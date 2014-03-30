@@ -2282,6 +2282,7 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
 
     OUString aReturnString;
 
+#ifdef DBG_UTIL
     switch (nRes)
     {
         case GRFILTER_OPENERROR:
@@ -2311,6 +2312,7 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     }
 
     SAL_WARN_IF( nRes, "vcl.filter", "Problem importing graphic " << rPath << ". Reason: " << aReturnString );
+#endif
 
     return nRes;
 }
