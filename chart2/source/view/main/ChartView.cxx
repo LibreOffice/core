@@ -48,6 +48,7 @@
 #include "DateHelper.hxx"
 #include "defines.hxx"
 #include <unonames.hxx>
+#include "3DBarChart.hxx"
 
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
@@ -2398,6 +2399,40 @@ void ChartView::impl_refreshAddIn()
     }
 }
 
+/**
+ * Is it a real 3D chart with a true 3D scene or a 3D chart in a 2D scene.
+ */
+bool ChartView::isReal3DChart()
+{
+    uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
+    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
+    if( !xCooSysContainer.is())
+        return false;
+
+    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    {
+        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
+        //
+        //iterate through all chart types in the current coordinate system
+        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
+        OSL_ASSERT( xChartTypeContainer.is());
+        if( !xChartTypeContainer.is() )
+            continue;
+
+        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        {
+            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+            OUString aChartType = xChartType->getChartType();
+            if( aChartType == "com.sun.star.chart2.GL3DBarChartType" )
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void ChartView::createShapes()
 {
     osl::ResettableMutexGuard aTimedGuard(maTimeMutex);
@@ -2442,6 +2477,12 @@ void ChartView::createShapes()
     }
     pShapeFactory->setPageSize(mxRootShape, aPageSize);
     pShapeFactory->clearPage(mxRootShape);
+
+    if(isReal3DChart())
+    {
+        createShapes3D();
+        return;
+    }
 
     {
         SolarMutexGuard aSolarGuard;
@@ -3065,6 +3106,53 @@ IMPL_LINK_NOARG(ChartView, UpdateTimeBased)
     update();
 
     return 0;
+}
+
+void ChartView::createShapes3D()
+{
+    uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
+    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
+    if( !xCooSysContainer.is())
+        return;
+
+    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    sal_Int32 nGlobalSeriesIndex = 0;//for automatic symbols
+    std::vector<VDataSeries*> aDataSeries;
+    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    {
+        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
+
+        //iterate through all chart types in the current coordinate system
+        uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
+        OSL_ASSERT( xChartTypeContainer.is());
+        if( !xChartTypeContainer.is() )
+            continue;
+        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        {
+            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+
+            uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
+            OSL_ASSERT( xDataSeriesContainer.is());
+            if( !xDataSeriesContainer.is() )
+                continue;
+
+            uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+            {
+                uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
+                if(!xDataSeries.is())
+                    continue;
+
+                VDataSeries* pSeries = new VDataSeries( xDataSeries );
+                aDataSeries.push_back(pSeries);
+            }
+        }
+    }
+
+    Bar3DChart aBarChart(aDataSeries);
+    aBarChart.create3DShapes();
+    aBarChart.render();
 }
 
 } //namespace chart

@@ -28,6 +28,7 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/p
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 	mdds_headers \
+	glm_headers \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
@@ -81,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/axes/VPolarCoordinateSystem \
     chart2/source/view/axes/VPolarGrid \
     chart2/source/view/axes/VPolarRadiusAxis \
+    chart2/source/view/charttypes/3DBarChart \
     chart2/source/view/charttypes/AreaChart \
     chart2/source/view/charttypes/BarChart \
     chart2/source/view/charttypes/BarPositionHelper \
@@ -93,6 +95,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/charttypes/Splines \
     chart2/source/view/charttypes/VSeriesPlotter \
     chart2/source/view/diagram/VDiagram \
+    chart2/source/view/main/3DChartObjects \
     chart2/source/view/main/ChartItemPool \
     chart2/source/view/main/ChartView \
     chart2/source/view/main/Clipping \
