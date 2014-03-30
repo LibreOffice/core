@@ -449,7 +449,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
         return 0;
     }
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(m_nSeekedFrom != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(m_nSeekedFrom != SAL_MAX_UINT32);
     sal_uInt32 nRead = 0;
     if (m_xSeekable.is())
     {
@@ -551,7 +551,7 @@ void SvInputStream::FlushData()
 sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nPos != SAL_MAX_UINT32);
     if (open())
     {
         if (nPos == STREAM_SEEK_TO_END)

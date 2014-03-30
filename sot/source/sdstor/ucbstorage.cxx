@@ -942,7 +942,7 @@ sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
 sal_uInt64 UCBStorageStream_Impl::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nPos != SAL_MAX_UINT32);
 
     if( !Init() )
         return 0;

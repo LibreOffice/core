@@ -375,7 +375,7 @@ sal_uInt64 OslStream::SeekPos( sal_uInt64 nPos )
 {
     ::osl::FileBase::RC rc = ::osl::FileBase::E_None;
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nPos != SAL_MAX_UINT32);
     if( nPos == STREAM_SEEK_TO_END )
     {
         rc = maFile.setPos( osl_Pos_End, 0 );

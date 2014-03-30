@@ -309,7 +309,7 @@ ErrCode SvAsyncLockBytes::FillAppend(const void * pBuffer, sal_Size nCount,
 sal_uInt64 SvAsyncLockBytes::Seek(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nPos != SAL_MAX_UINT32);
     if (nPos != STREAM_SEEK_TO_END)
         m_nSize = nPos;
     return m_nSize;
@@ -346,7 +346,7 @@ sal_Size SvStream::PutData( const void* pData, sal_Size nSize )
 sal_uInt64 SvStream::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nPos != SAL_MAX_UINT32);
     if( !GetError() && nPos == STREAM_SEEK_TO_END )
     {
         DBG_ASSERT( xLockBytes.Is(), "pure virtual function" );
@@ -1843,7 +1843,7 @@ sal_uInt64 SvMemoryStream::SeekPos(sal_uInt64 const nNewPos)
     // nSize: Size of allocated buffer
 
     // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nNewPos != (sal_uInt64)(sal_uInt32)STREAM_SEEK_TO_END);
+    assert(nNewPos != SAL_MAX_UINT32);
     if( nNewPos < nEndOfData )
         nPos = nNewPos;
     else if( nNewPos == STREAM_SEEK_TO_END )
