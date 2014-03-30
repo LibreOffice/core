@@ -205,7 +205,7 @@ void ScMoveTableDlg::CheckNewTabName()
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
-    sal_uInt16 nPos = pLbDoc->GetSelectEntryPos();
+    sal_Int32 nPos = pLbDoc->GetSelectEntryPos();
     return static_cast<ScDocument*>(pLbDoc->GetEntryData(nPos));
 }
 
