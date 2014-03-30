@@ -320,7 +320,7 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & ItemGet(const SwFmt &rFmt,
-            sal_uInt16 eType) throw(std::bad_cast)
+            sal_uInt16 eType) throw(std::bad_cast, css::uno::RuntimeException)
         {
             return item_cast<T>(rFmt.GetFmtAttr(eType));
         }
