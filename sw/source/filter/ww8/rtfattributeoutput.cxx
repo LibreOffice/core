@@ -3679,7 +3679,8 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENod
     oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xClosable.get()));
     assert( pBase != NULL );
     OStringBuffer aBuf;
-    pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
+    if (pBase)
+        pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
     m_aRunText->append(aBuf.makeStringAndClear());
     // Replacement graphic.
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATHPICT " ");
