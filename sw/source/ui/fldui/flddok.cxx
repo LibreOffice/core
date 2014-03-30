@@ -153,10 +153,10 @@ void SwFldDokPage::Reset(const SfxItemSet& )
 
     if( !IsRefresh() )
     {
-        OUString sUserData = GetUserData();
+        const OUString sUserData = GetUserData();
         if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            OUString sVal = sUserData.getToken(1, ';');
+            const OUString sVal = sUserData.getToken(1, ';');
             const sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
             if(nVal != USHRT_MAX)
             {
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                         case TYP_AUTHORFLD:
                         {
-                            OUString sFmt(GetFldMgr().GetFormatStr(nTypeId, i));
+                            const OUString sFmt(GetFldMgr().GetFormatStr(nTypeId, i));
                             nPos = m_pSelectionLB->InsertEntry(sFmt);
                             m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
                             m_pSelectionLB->SelectEntry(GetFldMgr().GetFormatStr(nTypeId, GetCurField()->GetFormat()));
@@ -524,8 +524,8 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
         // Prev/Next - PageNumFields special treatment:
         sal_uInt16 nTmp = (sal_uInt16)(sal_uLong)m_pFormatLB->GetEntryData(
                                         m_pFormatLB->GetSelectEntryPos() );
-        OUString sOldTxt( m_pValueFT->GetText() );
-        OUString sNewTxt( SW_RES( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
+        const OUString sOldTxt( m_pValueFT->GetText() );
+        const OUString sNewTxt( SW_RES( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
                                                          : STR_OFFSET ));
 
         if( sOldTxt != sNewTxt )
@@ -643,15 +643,11 @@ sal_uInt16 SwFldDokPage::GetGroup()
 
 void    SwFldDokPage::FillUserData()
 {
-    OUString sData(USER_DATA_VERSION);
-    sData += ";";
-    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
-    if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
-        nTypeSel = USHRT_MAX;
-    else
-        nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nTypeSel )));
-    sData += OUString::number( nTypeSel );
-    SetUserData(sData);
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
+        ? USHRT_MAX : sal::static_int_cast< sal_uInt16 >
+            (reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nEntryPos )));
+    SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
