@@ -2490,6 +2490,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
     OUString aEmpty;
     OUString aReversePath = comphelper::string::reverseString(rPath);
     sal_Int32 nQuestionMarkPos = rPath.indexOf( '?' );
+    sal_Int32 nWildCardPos = rPath.indexOf( FILEDIALOG_DEF_WILDCARD );
 
     if ( nQuestionMarkPos != -1 )
     {
@@ -2498,8 +2499,10 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
 
         if ( INET_PROT_NOT_VALID != eProt && INET_PROT_FILE != eProt )
             nQuestionMarkPos = -1;
+
+        sal_Int32 nWildCardPos = std::min( nWildCardPos, nQuestionMarkPos );
     }
-    sal_Int32 nWildCardPos = std::min( rPath.indexOf( FILEDIALOG_DEF_WILDCARD ), nQuestionMarkPos );
+
     rFilter = aEmpty;
 
     if ( nWildCardPos != -1 )
