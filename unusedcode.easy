@@ -28,7 +28,9 @@ OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(Region const&, MapMode const&) const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
+ScBitMaskCompressedArray<int, unsigned char>::GetFirstForCondition(int, int, unsigned char const&, unsigned char const&) const
 ScDocument::CreateFormatTable() const
+ScDocument::GetRowFlagsArray(short) const
 ScExtIButton::GetSelected() const
 ScFormulaCellGroup::scheduleCompilation()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
