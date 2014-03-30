@@ -416,7 +416,8 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
         {
             if ( !( nMode & STREAM_WRITE ) || !SetSize( nNew ) )
             {
-                OSL_ENSURE( nMode & STREAM_WRITE, "Trying to resize readonly stream by seeking, could be a wrong offset!" );
+                SAL_WARN_IF(!(nMode & STREAM_WRITE), "sot",
+                    "Trying to resize readonly stream by seeking, could be a wrong offset: " << nNew);
                 return nPos;
             }
             else

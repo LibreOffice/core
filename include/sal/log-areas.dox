@@ -266,6 +266,10 @@ certain functionality.
 @li @c slideshow.eventqueue
 @li @c slideshow.opengl
 
+@section sot
+
+@li @c sot - COM structured storage
+
 @section svl
 
 @li @c svl
