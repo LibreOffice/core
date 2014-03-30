@@ -1241,10 +1241,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
         {
             if( n > nEndOfData )
             {
-                sal_uInt64 nCur = Tell();
-                Seek( nEndOfData - 1 );
-                WriteUChar( (sal_uInt8) 0 );
-                Seek( nCur );
+                SvMemoryStream::SetSize(n);
             }
             else
                 nEndOfData = n;
