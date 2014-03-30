@@ -555,7 +555,7 @@ void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, bool bSelected 
     pDlg->Insert( rString, bSelected);
 }
 
-sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
+sal_Int32 AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
 {
     return pDlg->GetSelectEntryCount();
 }
@@ -567,12 +567,12 @@ void    AbstractScShowTabDlg_Impl::SetDescription(
     pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
 
-sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_uInt16 nPos) const
+sal_Int32 AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_Int32 nPos) const
 {
     return pDlg->GetSelectEntryPos( nPos);
 }
 
-OUString AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
+OUString AbstractScShowTabDlg_Impl::GetSelectEntry(sal_Int32 nPos) const
 {
     return pDlg->GetSelectEntry(nPos);
 }

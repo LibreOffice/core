@@ -46,9 +46,9 @@ public:
     /** Inserts a string into the ListBox. */
     void    Insert( const OUString& rString, bool bSelected );
 
-    sal_uInt16  GetSelectEntryCount() const;
-    OUString    GetSelectEntry(sal_uInt16 nPos) const;
-    sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const;
+    sal_Int32 GetSelectEntryCount() const;
+    OUString    GetSelectEntry(sal_Int32 nPos) const;
+    sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const;
 };
 
 

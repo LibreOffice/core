@@ -338,10 +338,10 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
 {
     DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
     virtual void    Insert( const OUString& rString, bool bSelected ) SAL_OVERRIDE;
-    virtual sal_uInt16  GetSelectEntryCount() const SAL_OVERRIDE;
+    virtual sal_Int32 GetSelectEntryCount() const SAL_OVERRIDE;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId ) SAL_OVERRIDE;
-    virtual OUString  GetSelectEntry(sal_uInt16 nPos) const SAL_OVERRIDE;
-    virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const SAL_OVERRIDE;
+    virtual OUString  GetSelectEntry(sal_Int32 nPos) const SAL_OVERRIDE;
+    virtual sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const SAL_OVERRIDE;
 };
 
 class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg

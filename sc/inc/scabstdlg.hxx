@@ -286,10 +286,10 @@ class AbstractScShowTabDlg : public VclAbstractDialog
 {
 public:
     virtual void    Insert( const OUString& rString, bool bSelected ) = 0;
-    virtual sal_uInt16  GetSelectEntryCount() const = 0;
+    virtual sal_Int32 GetSelectEntryCount() const = 0;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
-    virtual OUString  GetSelectEntry(sal_uInt16 nPos) const = 0;
-    virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const = 0;
+    virtual OUString  GetSelectEntry(sal_Int32 nPos) const = 0;
+    virtual sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const = 0;
 };
 
 class AbstractScSortWarningDlg : public VclAbstractDialog

@@ -64,24 +64,20 @@ void ScShowTabDlg::Insert( const OUString& rString, bool bSelected )
         m_pLb->SelectEntryPos( m_pLb->GetEntryCount() - 1 );
 }
 
-
-
-sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
+sal_Int32 ScShowTabDlg::GetSelectEntryCount() const
 {
     return m_pLb->GetSelectEntryCount();
 }
 
-OUString ScShowTabDlg::GetSelectEntry(sal_uInt16 nPos) const
+OUString ScShowTabDlg::GetSelectEntry(sal_Int32 nPos) const
 {
     return m_pLb->GetSelectEntry(nPos);
 }
 
-sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
+sal_Int32 ScShowTabDlg::GetSelectEntryPos(sal_Int32 nPos) const
 {
     return m_pLb->GetSelectEntryPos(nPos);
 }
-
-
 
 IMPL_LINK_NOARG_INLINE_START(ScShowTabDlg, DblClkHdl)
 {
