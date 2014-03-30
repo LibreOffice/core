@@ -14,7 +14,7 @@ $(eval $(call gb_StaticLibrary_set_include,writerperfect_importtestbase,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_StatiLibrary_use_externals,writerperfect_importtestbase,\
+$(eval $(call gb_StaticLibrary_use_externals,writerperfect_importtestbase,\
 	boost_headers \
     cppunit \
 ))
