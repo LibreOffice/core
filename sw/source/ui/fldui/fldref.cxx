@@ -746,13 +746,13 @@ sal_Int32 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
 {
     OUString aName(m_pNameED->GetText());
-    const sal_uInt16 nLen = aName.getLength();
+    const bool bEmptyName = aName.isEmpty();
 
     sal_Bool bEnable = sal_True;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     if ((nTypeId == TYP_SETREFFLD && !GetFldMgr().CanInsertRefMark(aName)) ||
-        (nLen == 0 && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
+        (bEmptyName && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
                        nTypeId == REFFLDFLAG_BOOKMARK)))
         bEnable = sal_False;
 
