@@ -39,7 +39,7 @@ using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROUND(x) ((sal_uInt16) ((x) + .5))
+#define ROUND(x) static_cast<long>((x) + .5)
 
 SwLabPreview::SwLabPreview(Window* pParent)
     : Window(pParent, 0)
@@ -119,16 +119,16 @@ void SwLabPreview::Paint(const Rectangle &)
     SetFont(aPaintFont);
 
     // size of region to be displayed
-    long lDispW = ROUND(aItem.lLeft  + aItem.lHDist);
-    long lDispH = ROUND(aItem.lUpper + aItem.lVDist);
+    long lDispW = aItem.lLeft  + aItem.lHDist;
+    long lDispH = aItem.lUpper + aItem.lVDist;
     if (aItem.nCols == 1)
-        lDispW += ROUND(aItem.lLeft );
+        lDispW += aItem.lLeft ;
     else
-        lDispW += ROUND(aItem.lHDist / 10);
+        lDispW += ROUND(aItem.lHDist / 10.0);
     if (aItem.nRows == 1)
-        lDispH += ROUND(aItem.lUpper);
+        lDispH += aItem.lUpper;
     else
-        lDispH += ROUND(aItem.lVDist / 10);
+        lDispH += ROUND(aItem.lVDist / 10.0);
 
     // Scale factor
     float fx = (float) lOutWPix23 / std::max(1L, lDispW),
@@ -141,12 +141,12 @@ void SwLabPreview::Paint(const Rectangle &)
 
     long lX0 = (lOutWPix - lOutlineW) / 2;
     long lY0 = (lOutHPix - lOutlineH) / 2;
-    long lX1 = ROUND(lX0 + f *  aItem.lLeft );
-    long lY1 = ROUND(lY0 + f *  aItem.lUpper);
-    long lX2 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lWidth ));
-    long lY2 = ROUND(lY0 + f * (aItem.lUpper + aItem.lHeight));
-    long lX3 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lHDist ));
-    long lY3 = ROUND(lY0 + f * (aItem.lUpper + aItem.lVDist ));
+    long lX1 = lX0 + ROUND(f *  aItem.lLeft );
+    long lY1 = lY0 + ROUND(f *  aItem.lUpper);
+    long lX2 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lWidth ));
+    long lY2 = lY0 + ROUND(f * (aItem.lUpper + aItem.lHeight));
+    long lX3 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lHDist ));
+    long lY3 = lY0 + ROUND(f * (aItem.lUpper + aItem.lVDist ));
 
     // draw outline (area)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
@@ -166,8 +166,8 @@ void SwLabPreview::Paint(const Rectangle &)
     for (sal_uInt16 nRow = 0; nRow < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
         for (sal_uInt16 nCol = 0; nCol < std::min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
             DrawRect(Rectangle(
-              Point(ROUND(lX0 + f * (aItem.lLeft  + nCol * aItem.lHDist)),
-                    ROUND(lY0 + f * (aItem.lUpper + nRow * aItem.lVDist))),
+              Point(lX0 + ROUND(f * (aItem.lLeft  + nCol * aItem.lHDist)),
+                    lY0 + ROUND(f * (aItem.lUpper + nRow * aItem.lVDist))),
               Size (ROUND(f * aItem.lWidth ),
                     ROUND(f * aItem.lHeight))));
     SetClipRegion();
@@ -185,7 +185,7 @@ void SwLabPreview::Paint(const Rectangle &)
     if (aItem.lUpper)
     {
         DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
-        DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
+        DrawText(Point(lX0 - 10 - lUpperWidth, lY0 + ROUND(f*aItem.lUpper/2.0 - lXHeight/2.0)), aUpperStr);
     }
 
     // annotation: width and height
@@ -213,7 +213,7 @@ void SwLabPreview::Paint(const Rectangle &)
     if (aItem.nRows > 1)
     {
         DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
-        DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
+        DrawText(Point(lX0 - 10 - lVDistWidth, lY1 + ROUND(f*aItem.lVDist/2.0 - lXHeight/2.0)), aVDistStr);
     }
 
     // annotation: columns
