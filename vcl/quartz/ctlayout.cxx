@@ -261,6 +261,9 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
 
     if (flags & DRAWTEXT_F_OUTLINE)
     {
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        return false;
+#else
         CFMutableDictionaryRef styledict = CFDictionaryCreateMutableCopy(
                 CFAllocatorGetDefault(),
                 CFDictionaryGetCount(mpTextStyle->GetStyleDict()),
@@ -281,6 +284,7 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
         drawCTLine(rAquaGraphics, pCTLine, mpTextStyle);
         CFRelease(pCTLine);
         return true;
+#endif
     }
     else
     {
