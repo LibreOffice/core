@@ -353,7 +353,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
 sal_uLong NumFormatListBox::GetFormat() const
 {
-    sal_uInt16 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectEntryPos();
 
     return (sal_uLong)GetEntryData(nPos);
 }
