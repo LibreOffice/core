@@ -253,6 +253,7 @@ CGPoint CTLayout::GetTextDrawPosition(void) const
  */
 bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
 {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1060
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
 
     // short circuit if there is nothing to do
@@ -286,6 +287,9 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
     {
         return SalLayout::DrawTextSpecial(rGraphics, flags);
     }
+#else
+    return false;
+#endif
 }
 
 void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, const CoreTextStyle* const pStyle) const
