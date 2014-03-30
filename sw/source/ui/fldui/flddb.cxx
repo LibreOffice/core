@@ -82,30 +82,28 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     Init(); // Allgemeine initialisierung
 
     m_pTypeLB->SetUpdateMode(false);
-    sal_Int32 nOldPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_Int32 nOldPos = m_pTypeLB->GetSelectEntryPos();
     m_sOldDBName = m_pDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
 
     m_pTypeLB->Clear();
-
-    sal_Int32 nPos;
-    sal_uInt16 nTypeId, i;
 
     if (!IsFldEdit())
     {
         // initialise TypeListBox
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
-        for(i = rRg.nStart; i < rRg.nEnd; ++i)
+        for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            nTypeId = GetFldMgr().GetTypeId(i);
-            nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
+            const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
+            const sal_Int32 nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else
     {
-        nTypeId = GetCurField()->GetTypeId();
-        nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
+        const sal_uInt16 nTypeId = GetCurField()->GetTypeId();
+        const sal_Int32 nPos = m_pTypeLB->InsertEntry(
+            GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 
@@ -115,11 +113,11 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
     m_pFormatLB->Clear();
 
-    sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, false, IsFldDlgHtmlMode());
-    for( i = 0; i < nSize; ++i )
+    const sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, false, IsFldDlgHtmlMode());
+    for( sal_uInt16 i = 0; i < nSize; ++i )
     {
-        sal_Int32 nEntryPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
-        sal_uInt16 nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
+        const sal_Int32 nEntryPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
+        const sal_uInt16 nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
         m_pFormatLB->SetEntryData( nEntryPos, reinterpret_cast<void*>(nFmtId) );
         if( SVX_NUM_ARABIC == nFmtId )
             m_pFormatLB->SelectEntryPos( nEntryPos );
@@ -153,10 +151,10 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
             OUString sVal = sUserData.getToken(1, ';');
-            sal_uInt16 nVal = (sal_uInt16)sVal.toInt32();
+            const sal_uInt16 nVal = (sal_uInt16)sVal.toInt32();
             if(nVal != USHRT_MAX)
             {
-                for(i = 0; i < m_pTypeLB->GetEntryCount(); i++)
+                for (sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); ++i)
                     if(nVal == (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(i))
                     {
                         m_pTypeLB->SelectEntryPos(i);
@@ -199,7 +197,7 @@ bool SwFldDBPage::FillItemSet(SfxItemSet& )
 
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
         sal_uLong nFormat = 0;
         sal_uInt16 nSubType = 0;
 
@@ -225,7 +223,7 @@ bool SwFldDBPage::FillItemSet(SfxItemSet& )
             break;
 
         case TYP_DBSETNUMBERFLD:
-            nFormat = (sal_uInt16)(sal_uLong)m_pFormatLB->GetEntryData(
+            nFormat = (sal_uLong)m_pFormatLB->GetEntryData(
                                 m_pFormatLB->GetSelectEntryPos() );
             break;
         }
@@ -280,7 +278,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         if(!pSh)
             pSh = ::GetActiveWrtShell();
         sal_Bool bCond = sal_False, bSetNo = sal_False, bFormat = sal_False, bDBFormat = sal_False;
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
         m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
 
@@ -346,7 +344,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 if( IsFldEdit() )
                 {
                     for( sal_Int32 nI = m_pFormatLB->GetEntryCount(); nI; )
-                        if( GetCurField()->GetFormat() == (sal_uInt16)(sal_uLong)
+                        if( GetCurField()->GetFormat() == (sal_uLong)
                             m_pFormatLB->GetEntryData( --nI ))
                         {
                             m_pFormatLB->SelectEntryPos( nI );
@@ -393,7 +391,7 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 void SwFldDBPage::CheckInsert()
 {
     bool bInsert = true;
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     SvTreeListEntry* pEntry = m_pDatabaseTLB->GetCurEntry();
 
@@ -425,7 +423,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     SvTreeListEntry* pEntry = pColEntry = pBox->GetCurEntry();
     if (pEntry)
     {
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
         pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
@@ -484,12 +482,9 @@ void    SwFldDBPage::FillUserData()
 {
     OUString sData(USER_DATA_VERSION);
     sData += ";";
-    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
-
-    if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
-        nTypeSel = USHRT_MAX;
-    else
-        nTypeSel = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData( nTypeSel );
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
+        ? USHRT_MAX : (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData( nEntryPos );
     sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
