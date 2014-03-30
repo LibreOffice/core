@@ -328,7 +328,7 @@ class FilterCache : public BaseLock
                         This method "load(xxx)" synchronize such load-on-demand requests.
 
                         Of course it would be possible to supress this special load thread
-                        in general and start it manualy inside this load() request.
+                        in general and start it manually inside this load() request.
                         The outside code decide then, if and when this cache will be filled
                         with all available information ...
 
