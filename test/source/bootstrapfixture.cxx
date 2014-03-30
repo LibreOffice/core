@@ -131,7 +131,7 @@ OString loadFile(const OUString& rURL)
     sal_uInt64 nBytesRead;
     aFile.read(aBytes.get(), nSize, nBytesRead);
     CPPUNIT_ASSERT_EQUAL(nSize, nBytesRead);
-    OString aContent(aBytes.get());
+    OString aContent(aBytes.get(), nBytesRead);
 
     return aContent;
 }
