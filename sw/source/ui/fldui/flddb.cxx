@@ -150,8 +150,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         OUString sUserData = GetUserData();
         if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            OUString sVal = sUserData.getToken(1, ';');
-            const sal_uInt16 nVal = (sal_uInt16)sVal.toInt32();
+            const sal_uInt16 nVal = (sal_uInt16)sUserData.getToken(1, ';').toInt32();
             if(nVal != USHRT_MAX)
             {
                 for (sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); ++i)
@@ -369,7 +368,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         {
             m_pValueED->SetText(aEmptyOUStr);
             if (bCond)
-                m_pConditionED->SetText(OUString("TRUE"));
+                m_pConditionED->SetText("TRUE");
             else
                 m_pConditionED->SetText(aEmptyOUStr);
         }
@@ -480,13 +479,10 @@ IMPL_LINK_NOARG(SwFldDBPage, ModifyHdl)
 
 void    SwFldDBPage::FillUserData()
 {
-    OUString sData(USER_DATA_VERSION);
-    sData += ";";
     const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
         ? USHRT_MAX : (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData( nEntryPos );
-    sData += OUString::number( nTypeSel );
-    SetUserData(sData);
+    SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
 void SwFldDBPage::ActivateMailMergeAddress()
