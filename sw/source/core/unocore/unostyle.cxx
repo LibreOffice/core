@@ -1951,21 +1951,21 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwPageDesc* pPageDesc = SwPageDesc::GetByName(*pDoc, sDescName);
                     if(pPageDesc)
                     {
-                            pNewDesc->RegisterToPageDesc( *pPageDesc );
-                            bPut = sal_True;
+                        pNewDesc->RegisterToPageDesc( *pPageDesc );
+                        bPut = sal_True;
                     }
                     else
                     {
                         throw lang::IllegalArgumentException();
                     }
-                    if(!bPut)
-                    {
-                        rStyleSet.ClearItem(RES_BREAK);
-                        rStyleSet.Put(SwFmtPageDesc());
-                    }
-                    else
-                        rStyleSet.Put(*pNewDesc);
                 }
+                if(!bPut)
+                {
+                    rStyleSet.ClearItem(RES_BREAK);
+                    rStyleSet.Put(SwFmtPageDesc());
+                }
+                else
+                    rStyleSet.Put(*pNewDesc);
 
                 delete pNewDesc;
                 bDone = true;
