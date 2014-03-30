@@ -22,7 +22,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
-
+#include <vector>
 
 namespace writerfilter {
 namespace dmapper

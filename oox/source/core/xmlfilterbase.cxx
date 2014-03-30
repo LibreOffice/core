@@ -20,6 +20,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 
 #include <cstdio>
+#include <set>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>

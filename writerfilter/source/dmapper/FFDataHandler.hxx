@@ -20,6 +20,7 @@
 #define INCLUDED_FFDataHandler_HXX
 #include <resourcemodel/LoggedResources.hxx>
 #include <rtl/ustring.hxx>
+#include <vector>
 namespace writerfilter {
 namespace dmapper {
 class FFDataHandler : public LoggedProperties
