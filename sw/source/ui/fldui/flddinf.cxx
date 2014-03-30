@@ -123,11 +123,10 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     }
 
     sal_Int32 nSelEntryData = LISTBOX_ENTRY_NOTFOUND;
-    OUString sUserData = GetUserData();
+    const OUString sUserData = GetUserData();
     if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
     {
-        OUString sVal = sUserData.getToken(1, ';');
-        nSelEntryData = sVal.toInt32();
+        nSelEntryData = sUserData.getToken(1, ';').toInt32();
     }
 
     std::vector<OUString> aLst;
@@ -150,9 +149,9 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
                         for (sal_Int32 n=0; n < rProperties.getLength(); n++)
                         {
-                            OUString sEntry = rProperties[n].Name;
+                            const OUString sEntry = rProperties[n].Name;
                             pEntry = m_pTypeTLB->InsertEntry(sEntry, pInfo);
-                            if(m_sOldCustomFieldName.equals( sEntry ))
+                            if (m_sOldCustomFieldName == sEntry)
                             {
                                 pSelEntry = pEntry;
                                 m_pTypeTLB->Expand( pInfo );
@@ -245,7 +244,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
                 if( nSubType == DI_CUSTOM )
                 {
                     //find out which type the custom field has - for a start set to DATE format
-                    OUString sName = m_pTypeTLB->GetEntryText(pSelEntry);
+                    const OUString sName = m_pTypeTLB->GetEntryText(pSelEntry);
                     try
                     {
                         uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
@@ -440,7 +439,7 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
 
     if (!IsFldEdit() || nOldSel != m_pSelectionLB->GetSelectEntryPos() ||
         nOldFormat != nFormat || m_pFixedCB->GetState() != m_pFixedCB->GetSavedValue()
-        || (DI_CUSTOM == nSubType && !aName.equals( m_sOldCustomFieldName )))
+        || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
     {
         InsertFld(TYP_DOCINFOFLD, nSubType, aName, aEmptyOUStr, nFormat,
                 ' ', m_pFormatLB->IsAutomaticLanguage());
@@ -462,12 +461,9 @@ sal_uInt16 SwFldDokInfPage::GetGroup()
 
 void    SwFldDokInfPage::FillUserData()
 {
-    OUString sData(USER_DATA_VERSION);
-    sData += ";";
     SvTreeListEntry* pEntry = m_pTypeTLB->FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;
-    sData += OUString::number( nTypeSel );
-    SetUserData(sData);
+    SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
