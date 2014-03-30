@@ -94,9 +94,7 @@ void SwChangeDBDlg::FillDBPopup()
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
 
     const SwDBData& rDBData = pSh->GetDBData();
-    OUString sDBName(rDBData.sDataSource);
-    OUString sTableName(rDBData.sCommand);
-    m_pAvailDBTLB->Select(sDBName, sTableName, aEmptyOUStr);
+    m_pAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, aEmptyOUStr);
 
     std::vector<OUString> aAllDBNames;
 
@@ -118,9 +116,7 @@ void SwChangeDBDlg::FillDBPopup()
 
     for(size_t k = 0; k < nCount; k++)
     {
-        sDBName = aDBNameList[k];
-        sDBName = sDBName.getToken(0, ';');
-        pLast = Insert(sDBName);
+        pLast = Insert(aDBNameList[k].getToken(0, ';'));
         if (!pFirst)
             pFirst = pLast;
     }
@@ -135,8 +131,8 @@ void SwChangeDBDlg::FillDBPopup()
 
 SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
 {
-    OUString sDBName(rDBName.getToken(0, DB_DELIM));
-    OUString sTableName(rDBName.getToken(1, DB_DELIM));
+    const OUString sDBName(rDBName.getToken(0, DB_DELIM));
+    const OUString sTableName(rDBName.getToken(1, DB_DELIM));
     sal_IntPtr nCommandType = rDBName.getToken(2, DB_DELIM).toInt32();
     SvTreeListEntry* pParent;
     SvTreeListEntry* pChild;
@@ -252,20 +248,20 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
-    OUString sTmp(rDBData.sDataSource);
-    sTmp += ".";
-    sTmp += rDBData.sCommand;
-
-    OUString sName(sTmp.replaceAll("~", "~~"));
-    if (sName == ".") //empty
-        sName = SW_RESSTR(SW_STR_NONE);
-
-    m_pDocDBNameFT->SetText(sName);
+    if (rDBData.sDataSource.isEmpty() && rDBData.sCommand.isEmpty())
+    {
+        m_pDocDBNameFT->SetText(SW_RESSTR(SW_STR_NONE));
+    }
+    else
+    {
+        const OUString sName(rDBData.sDataSource + "." + rDBData.sCommand);
+        m_pDocDBNameFT->SetText(sName.replaceAll("~", "~~"));
+    }
 }
 
 IMPL_LINK_NOARG(SwChangeDBDlg, AddDBHdl)
 {
-    OUString sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
+    const OUString sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
     if (!sNewDB.isEmpty())
         m_pAvailDBTLB->AddDataSource(sNewDB);
     return 0;
