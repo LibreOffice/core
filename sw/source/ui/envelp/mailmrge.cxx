@@ -421,7 +421,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             aProps >>= aFilterProperties;
             OUString sUIName2;
             const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
-            for(int nProp = 0; nProp < aFilterProperties.getLength(); nProp++)
+            for(sal_Int32 nProp = 0; nProp < aFilterProperties.getLength(); ++nProp)
             {
                 if(pFilterProperties[nProp].Name == "UIName")
                 {
