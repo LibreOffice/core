@@ -22,6 +22,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace writerfilter {
