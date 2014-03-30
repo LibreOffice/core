@@ -242,7 +242,7 @@ class ImageList(ListDataListener):
 
     def refreshCounterText(self):
         self.lblCounter.Model.Label = self.counterRenderer.render(
-            self.Counter (self.pageStart + 1, self.pageEnd,
+            self.Counter (self.pageStart + 1, self.pageEnd(),
                           self.listModel.getSize()))
 
     def pageEnd(self):
