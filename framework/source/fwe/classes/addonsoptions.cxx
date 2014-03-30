@@ -842,7 +842,6 @@ bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBa
 
 bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
 {
-    bool                     bInsertSeparator        = false;
     sal_uInt32               nToolBarItemCount       = rAddonOfficeToolBarSeq.getLength();
     OUString                 aAddonToolBarItemSetNode( rToolBarItemSetNodeName + m_aPathDelimiter );
     Sequence< OUString >     aAddonToolBarItemSetNodeSeq = GetNodeNames( rToolBarItemSetNodeName );
@@ -865,12 +864,6 @@ bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNode
         // Read the ToolBarItem
         if ( ReadToolBarItem( aToolBarItemNode, aToolBarItem ) )
         {
-            if ( bInsertSeparator )
-            {
-                bInsertSeparator = false;
-                InsertToolBarSeparator( rAddonOfficeToolBarSeq );
-            }
-
             // Successfully read a toolbar item, append to our list
             sal_uInt32 nAddonCount = rAddonOfficeToolBarSeq.getLength();
             rAddonOfficeToolBarSeq.realloc( nAddonCount+1 );
