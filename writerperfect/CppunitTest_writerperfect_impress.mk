@@ -40,7 +40,7 @@ $(eval $(call gb_CppunitTest_use_rdb,writerperfect_impress,services))
 $(eval $(call gb_CppunitTest_use_configuration,writerperfect_impress))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_impress,\
-	writerperfect/qa/unit/wpftimpress \
+	writerperfect/qa/unit/WpftImpressFilterTest \
 ))
 
 # vim: set noet sw=4 ts=4:
