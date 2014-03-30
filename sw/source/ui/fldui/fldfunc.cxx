@@ -583,22 +583,20 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
     if (!rMacro.isEmpty())
     {
         // reverse content of aName
-        OUString sTmp;
-        OUStringBuffer sBuf;
+        OUString sMacro;
         sal_Int32 nPos = 0;
 
         for (int i = 0; i < 4 && nPos != -1; i++)
         {
-            if (i == 3)
-                sTmp = rMacro.copy(nPos);
-            else
-                sTmp = rMacro.getToken(0, '.', nPos);
+            OUString sTmp = (i == 3)
+                ? rMacro.copy(nPos)
+                : rMacro.getToken(0, '.', nPos);
 
-            if( !sBuf.isEmpty() )
-                sTmp += ".";
-            sBuf.insert(0, sTmp);
+            sMacro = !sMacro.isEmpty()
+                ? sTmp + "." + sMacro
+                : sTmp;
         }
-        return sBuf.makeStringAndClear();
+        return sMacro;
     }
 
     return rMacro;
