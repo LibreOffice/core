@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_bdd7d7be",
+        "filename": "vcl/quartz/ctlayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-03-30T20:01:00Z",
+      "side": 1,
+      "message": "without that, you will not get the outline...\njust like you won\u0027t get the fake bold effect in some other part of this file",
+      "revId": "12cd918c2ab39c6187dbc3424f9083d57448dd21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
