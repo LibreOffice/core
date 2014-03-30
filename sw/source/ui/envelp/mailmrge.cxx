@@ -359,7 +359,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTableName);
     else
         pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
-    for(sal_uInt16 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
+    for(sal_Int32 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); ++nEntry)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
     aAddressFldLB.SelectEntry(OUString("EMAIL"));
@@ -410,7 +410,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         sCommand += ":default_first";
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         const OUString sName("Name");
-        sal_uInt16 nODT = USHRT_MAX;
+        sal_Int32 nODT = -1;
         while(xList->hasMoreElements())
         {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
@@ -431,7 +431,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             }
             if( !sUIName2.isEmpty() )
             {
-                sal_uInt16 nFilter = aFilterLB.InsertEntry( sUIName2 );
+                const sal_Int32 nFilter = aFilterLB.InsertEntry( sUIName2 );
                 if( sFilter.equalsAscii("writer8") )
                     nODT = nFilter;
                 aFilterLB.SetEntryData( nFilter, new OUString( sFilter ) );
@@ -454,7 +454,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
     else
         delete pBeamerWin;
 
-    for( sal_uInt16 nFilter = 0; nFilter < aFilterLB.GetEntryCount(); ++nFilter )
+    for( sal_Int32 nFilter = 0; nFilter < aFilterLB.GetEntryCount(); ++nFilter )
     {
         OUString* pData = reinterpret_cast< OUString* >( aFilterLB.GetEntryData(nFilter) );
         delete pData;
