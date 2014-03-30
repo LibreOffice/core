@@ -29,6 +29,10 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_writer,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_writer,\
+	writerperfect_importtestbase \
+))
+
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_writer))
 
 $(eval $(call gb_CppunitTest_use_rdb,writerperfect_writer,services))
