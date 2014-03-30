@@ -30,7 +30,7 @@
     typeid( ex ).name() << ", Message: " << \
     ex.Message )
 
-#define ENABLE_GL3D_BARCHART 0
+#define ENABLE_GL3D_BARCHART 1
 
 #endif
 

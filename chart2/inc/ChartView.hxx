@@ -200,6 +200,8 @@ private: //methods
     ChartView();
 
     void createShapes();
+    void createShapes3D();
+    bool isReal3DChart();
     void getMetaFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
