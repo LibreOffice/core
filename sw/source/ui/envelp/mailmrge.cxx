@@ -288,9 +288,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 Sequence<PropertyValue> aProperties(3);
                 PropertyValue* pProperties = aProperties.getArray();
                 pProperties[0].Name = "DataSourceName";
-                pProperties[0].Value <<= OUString(rSourceName);
+                pProperties[0].Value <<= rDBName;
                 pProperties[1].Name = "Command";
-                pProperties[1].Value <<= OUString(rTableName);
+                pProperties[1].Value <<= rTableName;
                 pProperties[2].Name = "CommandType";
                 pProperties[2].Value <<= nCommandType;
                 xD->dispatch(aURL, aProperties);
@@ -362,7 +362,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     for(sal_Int32 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); ++nEntry)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
-    aAddressFldLB.SelectEntry(OUString("EMAIL"));
+    aAddressFldLB.SelectEntry("EMAIL");
 
     OUString sPath(pModOpt->GetMailingPath());
     if(sPath.isEmpty())
@@ -378,7 +378,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     if (!bColumn )
     {
-        aColumnLB.SelectEntry(OUString("NAME"));
+        aColumnLB.SelectEntry("NAME");
     }
     else
         aColumnLB.SelectEntry(pModOpt->GetNameFromColumn());
@@ -403,18 +403,18 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         uno::Reference< container::XNameContainer> xFilterFactory(
                 xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
         uno::Reference< container::XContainerQuery > xQuery(xFilterFactory, UNO_QUERY_THROW);
-        OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags=");
-        sCommand += OUString::number(SFX_FILTER_EXPORT);
-        sCommand += ":eflags=";
-        sCommand += OUString::number(SFX_FILTER_NOTINFILEDLG);
-        sCommand += ":default_first";
+        const OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags="
+            + OUString::number(SFX_FILTER_EXPORT)
+            + ":eflags="
+            + OUString::number(SFX_FILTER_NOTINFILEDLG)
+            + ":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         const OUString sName("Name");
         sal_Int32 nODT = -1;
         while(xList->hasMoreElements())
         {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
-            OUString sFilter = aFilter.getUnpackedValueOrDefault(sName, OUString());
+            const OUString sFilter = aFilter.getUnpackedValueOrDefault(sName, OUString());
 
             uno::Any aProps = xFilterFactory->getByName(sFilter);
             uno::Sequence< beans::PropertyValue > aFilterProperties;
@@ -423,7 +423,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
             for(int nProp = 0; nProp < aFilterProperties.getLength(); nProp++)
             {
-                if(pFilterProperties[nProp].Name.equalsAscii("UIName"))
+                if(pFilterProperties[nProp].Name == "UIName")
                 {
                     pFilterProperties[nProp].Value >>= sUIName2;
                     break;
@@ -666,7 +666,7 @@ bool SwMailMergeDlg::ExecQryShell()
                 aAbs, aPathED.GetText(), URIHelper::GetMaybeFileHdl()));
         pModOpt->SetMailingPath(sPath);
 
-        const OUString sDelim = OUString(INET_PATH_TOKEN);
+        const OUString sDelim(INET_PATH_TOKEN);
         if (!sPath.endsWith(sDelim))
             sPath += sDelim;
 
