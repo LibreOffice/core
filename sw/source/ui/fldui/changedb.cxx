@@ -141,8 +141,8 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
     SvTreeListEntry* pParent;
     SvTreeListEntry* pChild;
 
-    sal_uInt16 nParent = 0;
-    sal_uInt16 nChild = 0;
+    sal_uLong nParent = 0;
+    sal_uLong nChild = 0;
 
     Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
     Image aDBImg = aImageList.GetImage(IMG_DB);
