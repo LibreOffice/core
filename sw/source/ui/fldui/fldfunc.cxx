@@ -102,7 +102,6 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     m_pTypeLB->Clear();
 
     sal_Int32 nPos;
-    sal_uInt16 nTypeId;
 
     if (!IsFldEdit())
     {
@@ -110,16 +109,16 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         // fill Typ-Listbox
-        for(short i = rRg.nStart; i < rRg.nEnd; ++i)
+        for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            nTypeId = GetFldMgr().GetTypeId(i);
+            const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
             nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else
     {
-        nTypeId = GetCurField()->GetTypeId();
+        const sal_uInt16 nTypeId = GetCurField()->GetTypeId();
         nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 
@@ -155,7 +154,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
         if(sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
             OUString sVal = sUserData.getToken(1, ';');
-            sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
+            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
@@ -197,7 +196,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 
     if (nOld != GetTypeSel())
     {
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
         // fill Selection-Listbox
         UpdateSubType();
@@ -205,7 +204,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         // fill Format-Listbox
         m_pFormatLB->Clear();
 
-        sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
+        const sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
 
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
@@ -216,7 +215,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         if (nSize)
         {
             if (IsFldEdit() && nTypeId == TYP_JUMPEDITFLD)
-                m_pFormatLB->SelectEntry(SW_RESSTR(FMT_MARK_BEGIN + (sal_uInt16)GetCurField()->GetFormat()));
+                m_pFormatLB->SelectEntry(SW_RESSTR(FMT_MARK_BEGIN + GetCurField()->GetFormat()));
 
             if (!m_pFormatLB->GetSelectEntryCount())
                 m_pFormatLB->SelectEntryPos(0);
@@ -378,7 +377,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 
 IMPL_LINK_NOARG(SwFldFuncPage, SelectHdl)
 {
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     if( TYP_MACROFLD == nTypeId )
         m_pNameED->SetText( m_pSelectionLB->GetSelectEntry() );
@@ -460,7 +459,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
  --------------------------------------------------------------------*/
 void SwFldFuncPage::UpdateSubType()
 {
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     // fill Selction-Listbox
     m_pSelectionLB->SetUpdateMode(false);
@@ -521,16 +520,13 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 
 bool SwFldFuncPage::FillItemSet(SfxItemSet& )
 {
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     sal_uInt16 nSubType = 0;
 
-    sal_uLong nFormat = m_pFormatLB->GetSelectEntryPos();
-
-    if(nFormat == LISTBOX_ENTRY_NOTFOUND)
-        nFormat = 0;
-    else
-        nFormat = (sal_uLong)m_pFormatLB->GetEntryData(nFormat);
+    const sal_Int32 nEntryPos = m_pFormatLB->GetSelectEntryPos();
+    const sal_uLong nFormat = (nEntryPos == LISTBOX_ENTRY_NOTFOUND)
+        ? 0 : (sal_uLong)m_pFormatLB->GetEntryData(nEntryPos);
 
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
@@ -594,7 +590,7 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
         OUStringBuffer sBuf;
         sal_Int32 nPos = 0;
 
-        for (sal_uInt16 i = 0; i < 4 && nPos != -1; i++)
+        for (int i = 0; i < 4 && nPos != -1; i++)
         {
             if (i == 3)
                 sTmp = rMacro.copy(nPos);
@@ -626,11 +622,11 @@ void    SwFldFuncPage::FillUserData()
 {
     OUString sData(USER_DATA_VERSION);
     sData += ";";
-    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
-    if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
-        nTypeSel = USHRT_MAX;
-    else
-        nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nTypeSel )));
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
+        ? USHRT_MAX
+        : sal::static_int_cast< sal_uInt16 >
+            (reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nEntryPos )));
     sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
@@ -638,7 +634,7 @@ void    SwFldFuncPage::FillUserData()
 IMPL_LINK_NOARG(SwFldFuncPage, ModifyHdl)
 {
     OUString aName(m_pNameED->GetText());
-    const sal_uInt16 nLen = aName.getLength();
+    const sal_Int32 nLen = aName.getLength();
 
     sal_Bool bEnable = sal_True;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
