@@ -3729,7 +3729,8 @@ void DocxAttributeOutput::WritePostponedMath()
 // to RTLD_GLOBAL, so most probably a gcc bug.
     oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
     assert( formulaexport != NULL );
-    formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
+    if (formulaexport)
+        formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
     m_postponedMath = NULL;
 }
 
