@@ -2067,8 +2067,8 @@ uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
         else
             xTarget->add(xShape);
 
-        xShape->setSize( rSize );
         xShape->setPosition( rPosition );
+        xShape->setSize( rSize );
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
         PropertyMapper::setMultiProperties( rPropNames, rPropValues, xPropSet );
     }
