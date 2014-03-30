@@ -278,9 +278,13 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
                 CFDictionaryGetCount(mpTextStyle->GetStyleDict()),
                 mpTextStyle->GetStyleDict());
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+        /* just don't do 'kCTStrokeWidthAttributeName' */
+#else
         int nStroke = 2;
         CFNumberRef rStroke = CFNumberCreate(NULL, kCFNumberSInt32Type, &nStroke);
         CFDictionarySetValue(styledict, kCTStrokeWidthAttributeName, rStroke);
+#endif
 
         CFAttributedStringRef pAttrStr = CFAttributedStringCreate(
                 NULL,
