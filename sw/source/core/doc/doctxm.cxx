@@ -492,8 +492,9 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     case  TOX_BIBLIOGRAPHY:      prBase = &mpDefTOXBases->pBiblioBase; break;
     case  TOX_CITATION: /** TODO */break;
     }
-    if(*prBase)
-        delete (*prBase);
+    if (!prBase)
+        return;
+    delete (*prBase);
     (*prBase) = new SwTOXBase(rBase);
 }
 
