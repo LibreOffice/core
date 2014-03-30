@@ -90,7 +90,7 @@ public:
 
     void update();
 
-    sal_uInt16 getOrientation() { return m_pOrientBox->GetSelectEntryPos(); }
+    sal_Int32 getOrientation() const { return m_pOrientBox->GetSelectEntryPos(); }
 };
 
 class RTSDevicePage : public TabPage
