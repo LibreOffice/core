@@ -1002,7 +1002,7 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
     }
     else
     {
-        const sal_uInt16 nVis = nFirstVis + (pFld == &aDistEd2) ? 1 : 0;
+        const sal_uInt16 nVis = nFirstVis + ((pFld == &aDistEd2) ? 1 : 0);
         long nDiff = nActValue - nColDist[nVis];
         if(nDiff)
         {
