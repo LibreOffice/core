@@ -43,7 +43,7 @@
 #define REFFLDFLAG_HEADING  0x7100
 #define REFFLDFLAG_NUMITEM  0x7200
 
-sal_uInt16  nFldDlgFmtSel       = 0;
+static sal_uInt16 nFldDlgFmtSel = 0;
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -353,7 +353,8 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         // fill selection-ListBox
         UpdateSubType();
 
-        sal_Bool bName = sal_False;     nFldDlgFmtSel = 0;
+        sal_Bool bName = sal_False;
+        nFldDlgFmtSel = 0;
 
         if ( ( !IsFldEdit() || m_pSelectionLB->GetEntryCount() ) &&
              nOld != LISTBOX_ENTRY_NOTFOUND )
