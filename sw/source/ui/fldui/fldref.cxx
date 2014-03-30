@@ -142,16 +142,6 @@ void SwFldRefPage::SaveSelectedTxtNode()
     }
 }
 
-const SwTxtNode* SwFldRefPage::GetSavedSelectedTxtNode() const
-{
-    return mpSavedSelectedTxtNode;
-}
-
-sal_Int32 SwFldRefPage::GetSavedSelectedPos() const
-{
-    return mnSavedSelectedPos;
-}
-
 void SwFldRefPage::Reset(const SfxItemSet& )
 {
     if (!IsFldEdit())
@@ -545,14 +535,14 @@ void SwFldRefPage::UpdateSubType()
                 pEntry->SetUserData( reinterpret_cast<void*>(nOutlIdx) );
                 if ( ( IsFldEdit() &&
                        pRefFld->GetReferencedTxtNode() == maOutlineNodes[nOutlIdx] ) ||
-                     GetSavedSelectedTxtNode() == maOutlineNodes[nOutlIdx] )
+                     mpSavedSelectedTxtNode == maOutlineNodes[nOutlIdx] )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
                     sOldSel = "";
                     bCertainTxtNodeSelected = true;
                 }
                 else if ( !bCertainTxtNodeSelected &&
-                          GetSavedSelectedPos() == nOutlIdx )
+                          mnSavedSelectedPos == nOutlIdx )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
                     sOldSel = "";
@@ -575,14 +565,14 @@ void SwFldRefPage::UpdateSubType()
                 pEntry->SetUserData( reinterpret_cast<void*>(nNumItemIdx) );
                 if ( ( IsFldEdit() &&
                        pRefFld->GetReferencedTxtNode() == maNumItems[nNumItemIdx]->GetTxtNode() ) ||
-                     GetSavedSelectedTxtNode() == maNumItems[nNumItemIdx]->GetTxtNode() )
+                     mpSavedSelectedTxtNode == maNumItems[nNumItemIdx]->GetTxtNode() )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
                     sOldSel = "";
                     bCertainTxtNodeSelected = true;
                 }
                 else if ( !bCertainTxtNodeSelected &&
-                          GetSavedSelectedPos() == nNumItemIdx )
+                          mnSavedSelectedPos == nNumItemIdx )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
                     sOldSel = "";

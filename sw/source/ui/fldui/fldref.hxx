@@ -70,8 +70,6 @@ class SwFldRefPage : public SwFldPage
 
     // #i83479#
     void SaveSelectedTxtNode();
-    const SwTxtNode* GetSavedSelectedTxtNode() const;
-    sal_Int32  GetSavedSelectedPos() const;
 
 protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
