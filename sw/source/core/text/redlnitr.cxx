@@ -97,6 +97,8 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
 
         do
         {
+            if ( nCnt >= pScriptInfo->CountScriptChg() )
+                break;
             nChg = pScriptInfo->GetScriptChg( nCnt );
             sal_uInt16 nScript = pScriptInfo->GetScriptType( nCnt++ );
             sal_uInt8 nTmp = 4;
