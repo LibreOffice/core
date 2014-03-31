@@ -1364,9 +1364,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( ensureCapacity )( IMPL_RTL_STRINGDATA** ppThi
     *ppThis = pTempStr;
     RTL_LOG_STRING_NEW( *ppThis );
 
-    /* must be done last, if pStr == *ppThis */
-    if ( pOrg )
-        IMPL_RTL_STRINGNAME( release )( pOrg );
+    IMPL_RTL_STRINGNAME( release )( pOrg );
 }
 
 /* ----------------------------------------------------------------------- */
