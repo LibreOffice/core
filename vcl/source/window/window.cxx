@@ -9840,4 +9840,12 @@ Selection Window::GetSurroundingTextSelection() const
   return Selection( 0, 0 );
 }
 
+bool Window::UsePolyPolygonForComplexGradient()
+{
+    if ( meRasterOp != ROP_OVERPAINT )
+        return true;
+
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

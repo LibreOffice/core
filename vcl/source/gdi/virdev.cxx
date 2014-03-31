@@ -543,6 +543,11 @@ sal_uInt16 VirtualDevice::GetAlphaBitCount() const
     return 0;
 }
 
+bool VirtualDevice::UsePolyPolygonForComplexGradient()
+{
+    return true;
+}
+
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
     meRefDevMode = (sal_uInt8)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
