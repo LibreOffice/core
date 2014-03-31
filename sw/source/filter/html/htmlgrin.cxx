@@ -859,6 +859,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONLOAD:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC );
                 bSetEvent = sal_True;
@@ -866,6 +867,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONUNLOAD:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONUNLOAD:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC );
                 bSetEvent = sal_True;
@@ -873,6 +875,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONFOCUS:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONFOCUS:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC );
                 bSetEvent = sal_True;
@@ -880,6 +883,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONBLUR:
                 eScriptType2 = STARBASIC;
+                //fallthrough
             case HTML_O_ONBLUR:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC );
                 bSetEvent = sal_True;
