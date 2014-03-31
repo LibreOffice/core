@@ -61,14 +61,22 @@ class FWE_DLLPUBLIC MenuConfiguration
     public:
         struct Attributes
         {
-            Attributes() {}
-            Attributes( const OUString& aFrame, const OUString& aImageIdStr ) :
-                aTargetFrame( aFrame ), aImageId( aImageIdStr ) {}
+            Attributes()
+                : nStyle(0)
+            {
+            }
+
+            Attributes( const OUString& aFrame, const OUString& aImageIdStr )
+                : aTargetFrame(aFrame)
+                , aImageId(aImageIdStr)
+                , nStyle(0)
+            {
+            }
 
             OUString aTargetFrame;
             OUString aImageId;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
-                        sal_Int16 nStyle;
+            sal_Int16 nStyle;
         };
 
         MenuConfiguration(
