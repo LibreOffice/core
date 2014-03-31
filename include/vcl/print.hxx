@@ -274,6 +274,7 @@ public:
 
 protected:
     long                        ImplGetGradientStepCount( long nMinRect ) SAL_OVERRIDE;
+    virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
     void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) SAL_OVERRIDE { };
 
 public:
