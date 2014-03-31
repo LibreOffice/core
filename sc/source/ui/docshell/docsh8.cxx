@@ -517,8 +517,8 @@ void lcl_GetColumnTypes(
         OUString aFieldName;
         OUString aString;
 
-        // Feldname[,Type[,Width[,Prec]]]
-        // Typ etc.: L; D; C[,W]; N[,W[,P]]
+        // Fieldname[,Type[,Width[,Prec]]]
+        // Type etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
             aString = pDoc->GetString(nCol, nFirstRow, nTab);
@@ -533,29 +533,30 @@ void lcl_GetColumnTypes(
                     case 'L' :
                         nDbType = sdbc::DataType::BIT;
                         nFieldLen = 1;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
                         break;
                     case 'D' :
                         nDbType = sdbc::DataType::DATE;
                         nFieldLen = 8;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
                         break;
                     case 'M' :
                         nDbType = sdbc::DataType::LONGVARCHAR;
                         nFieldLen = 10;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
-                        bHasMemo = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
+                        bHasMemo = true;
                         break;
                     case 'C' :
                         nDbType = sdbc::DataType::VARCHAR;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
                         break;
                     case 'N' :
                         nDbType = sdbc::DataType::DECIMAL;
+                        bTypeDefined = true;
                         break;
                 }
                 if ( bTypeDefined && !nFieldLen && nToken > 2 )
@@ -567,7 +568,9 @@ void lcl_GetColumnTypes(
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
                             nPrecision = aTmp.toInt32();
-                            bPrecDefined = sal_True;
+                            if (nPrecision && nFieldLen < nPrecision+1)
+                                nFieldLen = nPrecision + 1;     // include decimal separator
+                            bPrecDefined = true;
                         }
                     }
                 }
@@ -575,11 +578,12 @@ void lcl_GetColumnTypes(
             else
                 aFieldName = aString;
 
-            // Feldnamen pruefen und ggbf. gueltigen Feldnamen erzeugen.
-            // Erstes Zeichen muss Buchstabe sein,
-            // weitere nur alphanumerisch und Unterstrich erlaubt,
-            // "_DBASELOCK" ist reserviert (obsolet weil erstes Zeichen kein Buchstabe),
-            // keine doppelten Namen.
+            // Check field name and generate valid field name if necessary.
+            // First character has to be alphabetical, subsequent characters
+            // have to be alphanumerical or underscore.
+            // "_DBASELOCK" is reserved (obsolete because first character is
+            // not alphabetical).
+            // No duplicated names.
             if ( !IsAsciiAlpha( aFieldName[0] ) )
                 aFieldName = "N" + aFieldName;
             OUString aTmpStr;
@@ -596,7 +600,7 @@ void lcl_GetColumnTypes(
                 aFieldName = aFieldName.copy(0,  10);
 
             if (!aFieldNames.insert(aFieldName).second)
-            {   // doppelter Feldname, numerisch erweitern
+            {   // Duplicated field name, append numeric suffix.
                 sal_uInt16 nSub = 1;
                 OUString aFixPart( aFieldName );
                 do
@@ -616,7 +620,7 @@ void lcl_GetColumnTypes(
         }
 
         if ( !bTypeDefined )
-        {   // Feldtyp
+        {   // Field type.
             ScRefCellValue aCell;
             aCell.assign(*pDoc, ScAddress(nCol, nFirstDataRow, nTab));
             if (aCell.isEmpty() || aCell.hasString())
@@ -646,61 +650,99 @@ void lcl_GetColumnTypes(
         }
         bool bSdbLenAdjusted = false;
         bool bSdbLenBad = false;
-        // Feldlaenge
+        // Field length.
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
-        {   // maximale Feldbreite bestimmen
+        {   // Determine maximum field width.
             nFieldLen = pDoc->GetMaxStringLen( nTab, nCol, nFirstDataRow,
                 nLastRow, eCharSet );
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
         }
         else if ( nDbType == sdbc::DataType::DECIMAL )
-        {   // maximale Feldbreite und Nachkommastellen bestimmen
-            xub_StrLen nLen;
+        {   // Determine maximum field width and precision.
+            sal_Int32 nLen;
             sal_uInt16 nPrec;
             nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
                 nFirstDataRow, nLastRow );
-            // dBaseIII Limit Nachkommastellen: 15
+            // dBaseIII precision limit: 15
             if ( nPrecision > 15 )
                 nPrecision = 15;
             if ( nPrec > 15 )
                 nPrec = 15;
             if ( bPrecDefined && nPrecision != nPrec )
-            {   // Laenge auf vorgegebene Nachkommastellen anpassen
-                if ( nPrecision )
-                    nLen = sal::static_int_cast<xub_StrLen>( nLen + ( nPrecision - nPrec ) );
+            {
+                if (nPrecision < nPrec)
+                {
+                    // This is a hairy case. User defined nPrecision but a
+                    // number format has more precision. Modifying a dBase
+                    // field may as well render the resulting file useless for
+                    // an application that relies on its defined structure,
+                    // especially if we are resaving an already existing file.
+                    // So who's right, the user who (or the loaded file that)
+                    // defined the field, or the user who applied the format?
+                    // Commit f59e350d1733125055f1144f8b3b1b0a46f6d1ca gave the
+                    // format a higher priority, which is debatable.
+                    SAL_WARN( "sc", "lcl_GetColumnTypes: conflicting dBase field precision for "
+                            << aFieldName << " (" << nPrecision << "<" << nPrec << ")");
+
+                    // Adjust length to larger predefined integer part. There
+                    // may be a reason that the field was prepared for larger
+                    // numbers.
+                    if (nFieldLen - nPrecision > nLen - nPrec)
+                        nLen = nFieldLen - (nPrecision ? nPrecision+1 : 0) + 1 + nPrec;
+                    // And override precision.
+                    nPrecision = nPrec;
+                }
                 else
-                    nLen -= nPrec+1;            // auch den . mit raus
+                {
+                    // Adjust length to predefined precision.
+                    if ( nPrecision )
+                        nLen = nLen + ( nPrecision - nPrec );
+                    else
+                        nLen -= nPrec+1;    // also remove the decimal separator
+                }
             }
-            if ( nLen > nFieldLen && !bTypeDefined )
-                nFieldLen = nLen;
+            if (nFieldLen < nLen)
+            {
+                if (!bTypeDefined)
+                    nFieldLen = nLen;
+                else
+                {
+                    // Again a hairy case and conflict. Furthermore, the
+                    // larger overall length may be a result of only a higher
+                    // precision obtained from formats.
+                    SAL_WARN( "sc", "lcl_GetColumnTypes: conflicting dBase field length for "
+                            << aFieldName << " (" << nFieldLen << "<" << nLen << ")");
+                    nFieldLen = nLen;
+                }
+            }
             if ( !bPrecDefined )
                 nPrecision = nPrec;
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
             else if ( nFieldLen > 19 )
-                nFieldLen = 19;     // dBaseIII Limit Feldlaenge numerisch: 19
+                nFieldLen = 19;     // dBaseIII numeric field length limit: 19
             if ( nPrecision && nFieldLen < nPrecision + 2 )
-                nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
+                nFieldLen = nPrecision + 2;     // 0. must fit into
             // 538 MUST: Sdb internal representation adds 2 to the field length!
             // To give the user what he wants we must substract it here.
              //! CAVEAT! There is no way to define a numeric field with a length
              //! of 1 and no decimals!
             if ( nFieldLen == 1 && nPrecision == 0 )
-                bSdbLenBad = sal_True;
+                bSdbLenBad = true;
             nFieldLen = SvDbaseConverter::ConvertPrecisionToOdbc( nFieldLen, nPrecision );
-            bSdbLenAdjusted = sal_True;
+            bSdbLenAdjusted = true;
         }
         if ( nFieldLen > 254 )
         {
             if ( nDbType == sdbc::DataType::VARCHAR )
-            {   // zu lang fuer normales Textfeld => Memofeld
+            {   // Too long for a normal text field => memo field.
                 nDbType = sdbc::DataType::LONGVARCHAR;
                 nFieldLen = 10;
-                bHasMemo = sal_True;
+                bHasMemo = true;
             }
             else
-                nFieldLen = 254;                    // dumm gelaufen..
+                nFieldLen = 254;                    // bad luck..
         }
 
         pColNames[nField] = aFieldName;
