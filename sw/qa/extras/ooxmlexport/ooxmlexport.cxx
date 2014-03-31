@@ -645,15 +645,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(mxComponent, "RecordChanges")));
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 {
     // 'Document Background' wasn't exported.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
 {

@@ -296,7 +296,9 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             {
                 pItem = aI->second;
                 sal_uInt16 nWhich = pItem->Which();
-                if ( nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE)
+                // Handle fill attributes just like frame attributes for now.
+                if ( (nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE ) ||
+                     (nWhich >= XATTR_FILL_FIRST && nWhich < XATTR_FILL_LAST))
                     AttrOutput().OutputItem( *pItem );
             }
         }
@@ -811,7 +813,9 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 const SwFrmFmt &rFrmFmt = mpParentFrame->GetFrmFmt();
 
                 SfxItemSet aSet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
-                    RES_FRMATR_END-1);
+                    RES_FRMATR_END-1,
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                    0);
                 aSet.Set(rFrmFmt.GetAttrSet());
 
                 // Fly als Zeichen werden bei uns zu Absatz-gebundenen
@@ -5365,15 +5369,12 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_BACKGROUND:
             FormatBackground( static_cast< const SvxBrushItem& >( rHt ) );
             break;
-#if 0
-        // FIXME port to FillAttributes
-        case RES_FILL_STYLE:
+        case XATTR_FILLSTYLE:
             FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
             break;
-        case RES_FILL_GRADIENT:
+        case XATTR_FILLGRADIENT:
             FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
             break;
-#endif
         case RES_BOX:
             FormatBox( static_cast< const SvxBoxItem& >( rHt ) );
             break;

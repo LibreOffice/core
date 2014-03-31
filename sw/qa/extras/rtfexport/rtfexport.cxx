@@ -476,8 +476,6 @@ DECLARE_RTFEXPORT_TEST(testTextFrameBorders, "textframe-borders.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -498,7 +496,6 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
-#endif
 
 DECLARE_RTFEXPORT_TEST(testRecordChanges, "record-changes.rtf")
 {
