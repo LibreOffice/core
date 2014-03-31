@@ -1118,9 +1118,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     SfxShell *pShell=0;
     const SfxSlot *pSlot=0;
 
-    // if slot was uncached, we should have created a cache in this method!
-    DBG_ASSERT( pCache, "This code needs a cache!");
-    const SfxSlotServer* pServer = pCache ? pCache->GetSlotServer( rDispatcher, pImp->xProv ) : 0;
+    const SfxSlotServer* pServer = pCache->GetSlotServer( rDispatcher, pImp->xProv );
     if ( !pServer )
     {
         return NULL;
