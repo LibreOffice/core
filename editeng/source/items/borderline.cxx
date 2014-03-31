@@ -661,7 +661,7 @@ OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     };
     OUString aStr = "(" + ::GetColorString( aColor ) + OUString(cpDelim);
 
-    if ( m_nStyle < sizeof(aStyleIds)/sizeof(*aStyleIds) )
+    if ( m_nStyle < int(SAL_N_ELEMENTS(aStyleIds)) )
     {
         sal_uInt16 nResId = aStyleIds[m_nStyle];
         aStr += EE_RESSTR(nResId);
