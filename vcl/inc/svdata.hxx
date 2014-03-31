@@ -190,7 +190,6 @@ struct ImplSVWinData
     Window*                 mpActiveApplicationFrame; // the last active application frame, can be used as DefModalDialogParent if no focuswin set
     Window*                 mpCaptureWin;       // window, that has the mouse capture
     Window*                 mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
-    DbgWindow*              mpDbgWin;           // debug window
     FloatingWindow*         mpFirstFloat;       // First FloatingWindow in PopupMode
     Dialog*                 mpLastExecuteDlg;   // First Dialog that is in Execute
     Window*                 mpExtTextInputWin;  // Window, which is in ExtTextInput

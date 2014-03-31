@@ -22,7 +22,6 @@
 #include <osl/file.hxx>
 #include <osl/signal.h>
 
-#include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/resmgr.hxx"
 
@@ -252,9 +251,6 @@ bool InitVCL()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // register with tools
-    InitTools();
-
     // remember Main-Thread-Id
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
@@ -292,8 +288,7 @@ bool InitVCL()
     // Set exception handler
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
-    // initialise debug data
-    DBGGUI_INIT();
+    DBGGUI_INIT_SOLARMUTEXCHECK();
 
     return true;
 }
@@ -383,9 +378,6 @@ void DeInitVCL()
 
     osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = NULL;
-
-    // Debug Daten zuruecksetzen
-    DBGGUI_DEINIT();
 
     // free global data
     delete pSVData->maGDIData.mpGrfConverter;
@@ -557,8 +549,6 @@ void DeInitVCL()
 
     // Deinit Sal
     DestroySalInstance( pSVData->mpDefInst );
-
-    DeInitTools();
 
     if( pOwnSvApp )
     {

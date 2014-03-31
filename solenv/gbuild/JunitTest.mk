@@ -30,16 +30,13 @@ $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_targe
 
 ifneq (,$(strip $(OOO_JUNIT_JAR)))
 
-# DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
-# DISABLE_SAL_DBGBOX is the same, for osl/diagnose.h on Windows only
 .PHONY : $(call gb_JunitTest_get_target,%)
 $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-        (DBGSV_ERROR_OUT=shell DISABLE_SAL_DBGBOX=t \
-		    $(gb_JunitTest_JAVACOMMAND) \
+        ($(gb_JunitTest_JAVACOMMAND) \
             -classpath "$(T_CP)" \
             $(DEFS) \
             org.junit.runner.JUnitCore \

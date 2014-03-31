@@ -20,7 +20,6 @@
 #include <math.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/tools.h>
 #include <tools/bigint.hxx>
 
 

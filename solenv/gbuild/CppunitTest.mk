@@ -37,7 +37,6 @@ endif
 # defined by platform
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
-# DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
 gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunittester)
 gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunittester)
 
@@ -78,8 +77,6 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
-		$(if $(DBGSV_ERROR_OUT),DBGSV_ERROR_OUT=$(DBGSV_ERROR_OUT)) \
-		DISABLE_SAL_DBGBOX=t \
 		$(if $(SAL_DIAGNOSE_ABORT),SAL_DIAGNOSE_ABORT=$(SAL_DIAGNOSE_ABORT)) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,$(call gb_CppunitTest_get_linktarget,$*)) \
@@ -121,7 +118,6 @@ $(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
-$(call gb_CppunitTest_get_target,$(1)) : DBGSV_ERROR_OUT := shell
 $(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT :=
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
@@ -130,7 +126,6 @@ $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
 endef
 
 define gb_CppunitTest_abort_on_assertion
-$(call gb_CppunitTest_get_target,$(1)) : DBGSV_ERROR_OUT := abort
 $(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT := TRUE
 
 endef

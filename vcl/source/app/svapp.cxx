@@ -29,7 +29,6 @@
 #include "rtl/instance.hxx"
 #include "rtl/process.h"
 
-#include "tools/tools.h"
 #include "tools/debug.hxx"
 #include "tools/time.hxx"
 

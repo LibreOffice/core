@@ -115,7 +115,6 @@
 #include "tools/resmgr.hxx"
 #include "tools/stream.hxx"
 #include "tools/time.hxx"
-#include "tools/tools.h"
 #include "tools/urlobj.hxx"
 #include "tools/vcompat.hxx"
 #include "uno/current_context.hxx"
@@ -371,7 +370,6 @@
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/time.hxx>
-#include <tools/tools.h>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/zcodec.hxx>

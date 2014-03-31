@@ -56,7 +56,6 @@
 
 #include "com/sun/star/i18n/XCharacterClassification.hpp"
 
-#include <map>
 #include <algorithm>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -100,61 +99,11 @@ static const sal_Char* pDbgHelpText[] =
 "sufficient for other systems or other system settings. With very narrow "
 "fonts the dialogs are made wider because they otherwise appear too narrow.\n",
 "\n",
-"Warnings\n",
-"DBG_WARNING() can be used to output warnings. DBG_WARNING1() to "
-"DBG_WARNING3() can be used to produce formatted output (printf format string). "
-"In case you want to have conditional warnings DBG_ASSERTWARNING() can be "
-"used. The warning will be produced if the condition was not met. The first "
-"parameter is the condition and the second parameter is the message to be "
-"produced. Warnings are enabled if the corresponding option is selected in the "
-"dropdown box. When none are selected the condition with DBG_ASSERTWARNING() "
-"is not evaluated.\n",
-"\n",
-"Errors\n",
-"DBG_ERROR() can be used to produce error messages. DBG_ERRORFILE() also "
-"produces the file and the line number where the macro is located. "
-"DBG_ERROR1() bis DBG_ERROR5() can be used to produce formatted output "
-"(print format string). "
-"In case you want to have conditional warnings DBG_ASSERT() can be "
-"used. The warning will be produced if the condition was not met. The first "
-"parameter is the condition and the second parameter is the message to be "
-"produced. Warnings are enabled if the corresponding option is selected in the "
-"dropdown box. When none are selected the condition with DBG_ASSERT() "
-"is not evaluated.\n",
-"\n",
 "\n",
 "Output\n",
 "------------------------------------------\n",
 "\n",
-"Overwrite - CheckBox\n",
-"With every new program start the log file is overwritten if output has been "
-"generated.\n",
-"\n",
-"Include ObjectTest filters\n",
-"Only classes which contain one of the indicated filters are evaluated with "
-"the object test. Filters are separated by ';' and are case sensitive. "
-"Wildcards are not supported. If no text is indicated the filters are not "
-"active.\n",
-"\n",
-"Exclude ObjectTest filters\n",
-"Only classes which do not contain one of the indicated filters are evaluated "
-"with the object test. Filters are separated by ';' and are case sensitive. "
-"Wildcards are not supported. If no text is indicated the filters are not "
-"active.\n",
-"\n",
-"Include filters\n",
-"Only those texts which include the indicated filters are output. "
-"Filters are separated by ';' and are case sensitive. "
-"Wildcards are not supported. The filter is used for all output (except for "
-"errors). If no text is indicated the filters are not active.\n",
-"\n",
-"Exclude filters\n",
-"Only those texts which do not include the indicated filters are output. "
-"Filters are separated by ';' and are case sensitive. "
-"Wildcards are not supported. The filter is used for all output (except for "
-"errors). If no text is indicated the filters are not active.\n",
-"\n",
-"Furthermore you can indicate where the data will be output:\n",
+"You can indicate where the data will be output:\n",
 "\n",
 "None\n",
 "Output is surpressed.\n",
@@ -201,27 +150,22 @@ static const sal_Char* pDbgHelpText[] =
 "Settings\n",
 "------------------------------------------\n",
 "\n",
-"Where by default the INI and LOG file is read and written the following "
+"Where by default the INI file is read and written the following "
 "can be set:\n",
 "\n",
-"WIN/WNT (WIN.INI, Group SV, Default: dbgsv.ini and dbgsv.log):\n",
+"WIN/WNT (WIN.INI, Group SV, Default: dbgsv.ini):\n",
 "INI: dbgsv\n",
-"LOG: dbgsvlog\n",
 "\n",
-"OS2 (OS2.INI, Application SV, Default: dbgsv.ini and dbgsv.log):\n",
+"OS2 (OS2.INI, Application SV, Default: dbgsv.ini):\n",
 "INI: DBGSV\n",
-"LOG: DBGSVLOG\n",
 "\n",
-"UNIX (Environment variable, Default: .dbgsv.init and dbgsv.log):\n",
+"UNIX (Environment variable, Default: .dbgsv.init):\n",
 "INI: DBGSV_INIT\n",
-"LOG: DBGSV_LOG\n",
 "\n",
-"MAC (Default: dbgsv.ini and dbgsv.log):\n",
+"MAC (Default: dbgsv.ini):\n",
 "INI: not possible\n",
-"LOG: only debug dialog settings\n",
 "\n",
-"The path and file name must always be specified. The name of the log "
-"file that was entered in the debug dialog has always priority.\n",
+"The path and file name must always be specified.\n",
 "\n",
 "\n",
 "Example\n",
@@ -260,56 +204,6 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 NULL
 };
-
-namespace
-{
-    typedef ::std::map< OUString, DbgChannelId > UserDefinedChannels;
-    UserDefinedChannels& ImplDbgGetUserDefinedChannels()
-    {
-        static UserDefinedChannels s_aChannels;
-        return s_aChannels;
-    }
-
-    void ImplAppendUserDefinedChannels( ListBox& rList )
-    {
-        const UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();
-        for ( UserDefinedChannels::const_iterator channel = rChannels.begin();
-              channel != rChannels.end();
-              ++channel
-            )
-        {
-            sal_uInt16 nEntryPos = rList.InsertEntry( channel->first );
-            rList.SetEntryData( nEntryPos, reinterpret_cast< void* >( channel->second ) );
-        }
-    }
-
-    void ImplSelectChannel( ListBox& rList, sal_uLong nChannelToSelect, sal_uInt16 nPositionOffset )
-    {
-        if ( nChannelToSelect < DBG_OUT_USER_CHANNEL_0 )
-            rList.SelectEntryPos( (sal_uInt16)( nChannelToSelect - nPositionOffset ) );
-        else
-        {
-            for ( sal_uInt16 pos = 0; pos < rList.GetEntryCount(); ++pos )
-            {
-                DbgChannelId nChannelId = static_cast< DbgChannelId >( reinterpret_cast<sal_IntPtr>(rList.GetEntryData( pos )) );
-                if ( nChannelId == nChannelToSelect )
-                {
-                    rList.SelectEntryPos( pos );
-                    return;
-                }
-            }
-        }
-    }
-
-    DbgChannelId ImplGetChannelId( const ListBox& rList, sal_uInt16 nPositionOffset )
-    {
-        sal_uInt16 nSelectedChannelPos = rList.GetSelectEntryPos();
-        DbgChannelId nSelectedChannel = static_cast< DbgChannelId >( reinterpret_cast<sal_IntPtr>(rList.GetEntryData( nSelectedChannelPos )) );
-        if ( nSelectedChannel == 0)
-            return (DbgChannelId)( nSelectedChannelPos + nPositionOffset );
-        return nSelectedChannel;
-    }
-}
 
 #define DBGWIN_MAXLINES     100
 
@@ -354,24 +248,9 @@ private:
     CheckBox        maBoldAppFont;
     GroupBox        maBox3;
 
-    Edit            maDebugName;
-    CheckBox        maOverwrite;
-    FixedText       maInclClassText;
-    Edit            maInclClassFilter;
-    FixedText       maExclClassText;
-    Edit            maExclClassFilter;
-    FixedText       maInclText;
-    Edit            maInclFilter;
-    FixedText       maExclText;
-    Edit            maExclFilter;
-    FixedText       maErrorText;
-    ListBox         maErrorBox;
-    GroupBox        maBox4;
-
     OKButton        maOKButton;
     CancelButton    maCancelButton;
     HelpButton      maHelpButton;
-    sal_uInt16          mnErrorOff;
 
 public:
                     DbgDialog();
@@ -379,8 +258,6 @@ public:
                     DECL_LINK( ClickHdl, Button* );
     void            RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
-
-static sal_Char aDbgOutBuf[DBG_BUF_MAXLEN];
 
 DbgWindow::DbgWindow() :
     WorkWindow( NULL, WB_STDWORK ),
@@ -416,7 +293,6 @@ bool DbgWindow::Close()
     DbgSaveData( *pData );
 
     delete this;
-    ImplGetSVData()->maWinData.mpDbgWin = NULL;
     return true;
 }
 
@@ -526,19 +402,6 @@ DbgDialog::DbgDialog() :
     maDialog( this ),
     maBoldAppFont( this ),
     maBox3( this ),
-    maDebugName( this ),
-    maOverwrite( this ),
-    maInclClassText( this ),
-    maInclClassFilter( this ),
-    maExclClassText( this ),
-    maExclClassFilter( this ),
-    maInclText( this ),
-    maInclFilter( this ),
-    maExclText( this ),
-    maExclFilter( this ),
-    maErrorText( this ),
-    maErrorBox( this, WB_DROPDOWN ),
-    maBox4( this ),
     maOKButton( this, WB_DEFBUTTON ),
     maCancelButton( this ),
     maHelpButton( this )
@@ -583,119 +446,6 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    maDebugName.Show();
-    maDebugName.SetText(OStringToOUString(pData->aDebugName, RTL_TEXTENCODING_UTF8));
-    maDebugName.SetMaxTextLen( sizeof( pData->aDebugName ) );
-    maDebugName.SetPosSizePixel( LogicToPixel( Point( 10, 130 ), aAppMap ),
-                                 LogicToPixel( Size( 185, 14 ), aAppMap ) );
-    }
-
-    {
-    maOverwrite.Show();
-    maOverwrite.SetText("Overwrite ~File");
-    if ( pData->bOverwrite )
-        maOverwrite.Check( true );
-    maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
-                                 aButtonSize );
-    }
-
-    {
-    maInclClassText.Show();
-    maInclClassText.SetText("~Include-ObjectTest-Filter");
-    maInclClassText.SetPosSizePixel( LogicToPixel( Point( 10, 150 ), aAppMap ),
-                                     LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    maInclClassFilter.Show();
-    maInclClassFilter.SetText(OStringToOUString(pData->aInclClassFilter, RTL_TEXTENCODING_UTF8));
-    maInclClassFilter.SetMaxTextLen( sizeof( pData->aInclClassFilter ) );
-    maInclClassFilter.SetPosSizePixel( LogicToPixel( Point( 10, 160 ), aAppMap ),
-                                       LogicToPixel( Size( 95, 14 ), aAppMap ) );
-    }
-
-    {
-    maExclClassText.Show();
-    maExclClassText.SetText("~Exclude-ObjectTest-Filter");
-    maExclClassText.SetPosSizePixel( LogicToPixel( Point( 115, 150 ), aAppMap ),
-                                     LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    maExclClassFilter.Show();
-    maExclClassFilter.SetText(OStringToOUString(pData->aExclClassFilter, RTL_TEXTENCODING_UTF8));
-    maExclClassFilter.SetMaxTextLen( sizeof( pData->aExclClassFilter ) );
-    maExclClassFilter.SetPosSizePixel( LogicToPixel( Point( 115, 160 ), aAppMap ),
-                                       LogicToPixel( Size( 95, 14 ), aAppMap ) );
-    }
-
-    {
-    maInclText.Show();
-    maInclText.SetText("~Include-Filter");
-    maInclText.SetPosSizePixel( LogicToPixel( Point( 10, 180 ), aAppMap ),
-                                LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    maInclFilter.Show();
-    maInclFilter.SetText(OStringToOUString(pData->aInclFilter, RTL_TEXTENCODING_UTF8));
-    maInclFilter.SetMaxTextLen( sizeof( pData->aInclFilter ) );
-    maInclFilter.SetPosSizePixel( LogicToPixel( Point( 10, 190 ), aAppMap ),
-                                  LogicToPixel( Size( 95, 14 ), aAppMap ) );
-    }
-
-    {
-    maExclText.Show();
-    maExclText.SetText("~Exclude-Filter");
-    maExclText.SetPosSizePixel( LogicToPixel( Point( 115, 180 ), aAppMap ),
-                                LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    maExclFilter.Show();
-    maExclFilter.SetText(OStringToOUString(pData->aExclFilter, RTL_TEXTENCODING_UTF8));
-    maExclFilter.SetMaxTextLen( sizeof( pData->aExclFilter ) );
-    maExclFilter.SetPosSizePixel( LogicToPixel( Point( 115, 190 ), aAppMap ),
-                                  LogicToPixel( Size( 95, 14 ), aAppMap ) );
-    }
-
-    {
-    maErrorText.Show();
-    maErrorText.SetText("~Error");
-    maErrorText.SetPosSizePixel( LogicToPixel( Point( 220, 210 ), aAppMap ),
-                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    if ( DbgIsAllErrorOut() )
-    {
-        maErrorBox.InsertEntry( OUString("None") );
-        maErrorBox.InsertEntry( OUString("File") );
-        maErrorBox.InsertEntry( OUString("Window") );
-        maErrorBox.InsertEntry( OUString("Shell") );
-        mnErrorOff = 0;
-    }
-    else
-        mnErrorOff = 4;
-    maErrorBox.InsertEntry( OUString("MessageBox") );
-    maErrorBox.InsertEntry( OUString("TestTool") );
-    maErrorBox.InsertEntry( OUString("Debugger") );
-    maErrorBox.InsertEntry( OUString("Abort") );
-    ImplAppendUserDefinedChannels( maErrorBox );
-    ImplSelectChannel( maErrorBox, pData->nErrorOut, mnErrorOff );
-    maErrorBox.Show();
-    maErrorBox.SetPosSizePixel( LogicToPixel( Point( 220, 220 ), aAppMap ),
-                                LogicToPixel( Size( 95, 80 ), aAppMap ) );
-    }
-
-    {
-    maBox4.Show();
-    maBox4.SetText("Output");
-    maBox4.SetPosSizePixel( LogicToPixel( Point( 5, 120 ), aAppMap ),
-                            LogicToPixel( Size( 330, 135 ), aAppMap ) );
-    }
-
-    {
     maOKButton.Show();
     maOKButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
     maOKButton.SetPosSizePixel( LogicToPixel( Point( 10, 260 ), aAppMap ),
@@ -727,21 +477,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         memcpy( &aData, DbgGetData(), sizeof( DbgData ) );
         aData.nTestFlags = 0;
 
-        aData.nErrorOut   = ImplGetChannelId( maErrorBox, mnErrorOff );
-
-        strncpy( aData.aDebugName, OUStringToOString(maDebugName.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aDebugName ) );
-        strncpy( aData.aInclClassFilter, OUStringToOString(maInclClassFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aInclClassFilter ) );
-        strncpy( aData.aExclClassFilter, OUStringToOString(maExclClassFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aExclClassFilter ) );
-        strncpy( aData.aInclFilter, OUStringToOString(maInclFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aInclFilter ) );
-        strncpy( aData.aExclFilter, OUStringToOString(maExclFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aExclFilter ) );
-        aData.aDebugName[sizeof( aData.aDebugName )-1] = '\0';
-        aData.aInclClassFilter[sizeof( aData.aInclClassFilter )-1] = '\0';
-        aData.aExclClassFilter[sizeof( aData.aExclClassFilter )-1] = '\0';
-        aData.aInclFilter[sizeof( aData.aInclFilter )-1] = '\0';
-        aData.aExclFilter[sizeof( aData.aExclFilter )-1] = '\0';
-
-        aData.bOverwrite = maOverwrite.IsChecked() ? true : false;
-
         if ( maRes.IsChecked() )
             aData.nTestFlags |= DBG_TEST_RESOURCE;
 
@@ -754,17 +489,10 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         // Daten speichern
         DbgSaveData( aData );
 
-        // Umschalten der Laufzeitwerte
-        DBG_INSTOUTERROR( aData.nErrorOut );
-
         DbgData* pData = DbgGetData();
         #define IMMEDIATE_FLAGS (DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)
         pData->nTestFlags &= ~IMMEDIATE_FLAGS;
         pData->nTestFlags |= aData.nTestFlags & IMMEDIATE_FLAGS;
-        strncpy( pData->aInclClassFilter, aData.aInclClassFilter, sizeof( pData->aInclClassFilter ) );
-        strncpy( pData->aExclClassFilter, aData.aExclClassFilter, sizeof( pData->aExclClassFilter ) );
-        strncpy( pData->aInclFilter, aData.aInclFilter, sizeof( pData->aInclFilter ) );
-        strncpy( pData->aExclFilter, aData.aExclFilter, sizeof( pData->aExclFilter ) );
         if ( maBoldAppFont.GetSavedValue() != TriState(maBoldAppFont.IsChecked()) )
         {
             AllSettings aSettings = Application::GetSettings();
@@ -1220,210 +948,14 @@ void DbgDialogTest( Window* pWindow )
     }
 }
 
-#ifndef WNT
-#define USE_VCL_MSGBOX
-#define COPY_BUTTON_ID 25
-
-class DbgMessageBox : public ErrorBox
-{
-    OUString m_aMessage;
-    public:
-    DbgMessageBox( const OUString& rMessage ) :
-       ErrorBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO, rMessage ),
-       m_aMessage( rMessage )
-    {
-        SetText("Debug Output");
-        AddButton(OUString("Copy"), COPY_BUTTON_ID, 0);
-    }
-
-    virtual void Click() SAL_OVERRIDE
-    {
-        if( GetCurButtonId() == COPY_BUTTON_ID )
-            vcl::unohelper::TextDataObject::CopyStringTo( m_aMessage, GetClipboard() );
-        else
-            ErrorBox::Click();
-    }
-};
-
-#endif
-
-class SolarMessageBoxExecutor : public ::vcl::SolarThreadExecutor
-{
-private:
-    OUString  m_sDebugMessage;
-
-public:
-    SolarMessageBoxExecutor( const OUString& _rDebugMessage )
-        :m_sDebugMessage( _rDebugMessage )
-    {
-    }
-
-protected:
-    virtual long doIt() SAL_OVERRIDE;
-};
-
-long SolarMessageBoxExecutor::doIt()
-{
-    long nResult = RET_NO;
-
-    // Stop tracking and release mouse, to assure boxes do not hang
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpTrackWin )
-        pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
-    if ( pSVData->maWinData.mpCaptureWin )
-        pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-
-#if ! defined USE_VCL_MSGBOX
-#ifdef WNT
-    bool bOldCallTimer = pSVData->mbNoCallTimer;
-    pSVData->mbNoCallTimer = true;
-    nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.getStr(), L"Debug Output",
-                                     MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
-    pSVData->mbNoCallTimer = bOldCallTimer;
-    switch ( nResult )
-    {
-        case IDYES:
-            nResult = RET_YES;
-            break;
-        case IDNO:
-            nResult = RET_NO;
-            break;
-        case IDCANCEL:
-            nResult = RET_CANCEL;
-            break;
-    }
-#endif // WNT
-#else
-    sal_uInt16 nOldMode = Application::GetSystemWindowMode();
-    Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    DbgMessageBox aBox( m_sDebugMessage );
-    Application::SetSystemWindowMode( nOldMode );
-    nResult = aBox.Execute();
-#endif
-
-    return nResult;
-}
-
-void DbgPrintMsgBox( const char* pLine )
-{
-    // are modal message boxes prohibited at the moment?
-    if ( Application::IsDialogCancelEnabled() )
-    {
-#if defined( WNT )
-        // TODO: Shouldn't this be a IsDebuggerPresent()?
-        if ( GetSystemMetrics( SM_DEBUG ) )
-        {
-            strcpy( aDbgOutBuf, pLine );
-            strcat( aDbgOutBuf, "\r\n" );
-            OutputDebugString( aDbgOutBuf );
-            return;
-        }
-#endif
-
-#ifdef UNX
-        fprintf( stderr, "%s\n", pLine );
-        return;
-#else
-        DbgPrintFile( pLine );
-        return;
-#endif
-    }
-
-    strcpy( aDbgOutBuf, pLine );
-#if defined UNX && HAVE_FEATURE_DESKTOP
-    strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
-#elif defined _WIN32
-    strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=try to invoke debugger)" );
-#else
-    strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=crash)" );
-#endif
-
-    SolarMessageBoxExecutor aMessageBox( OUString( aDbgOutBuf, strlen(aDbgOutBuf), RTL_TEXTENCODING_UTF8 ) );
-    TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
-    long nResult = aMessageBox.execute( aTimeout );
-
-    if ( aMessageBox.didTimeout() )
-        DbgPrintShell( pLine );
-    else if ( nResult == RET_YES )
-        GetpApp()->Abort( OUString("Debug-Utilities-Error") );
-    else if ( nResult == RET_CANCEL )
-        DbgCoreDump();
-}
-
-class SolarWindowPrinter : public ::vcl::SolarThreadExecutor
-{
-private:
-    OUString  m_sDebugMessage;
-
-public:
-    SolarWindowPrinter( const OUString& _rDebugMessage )
-        :m_sDebugMessage( _rDebugMessage )
-    {
-    }
-
-protected:
-    virtual long doIt() SAL_OVERRIDE;
-};
-
-long SolarWindowPrinter::doIt()
-{
-    DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
-    if ( !pDbgWindow )
-    {
-        pDbgWindow = new DbgWindow;
-        ImplGetSVData()->maWinData.mpDbgWin = pDbgWindow;
-    }
-    pDbgWindow->InsertLine( m_sDebugMessage );
-
-    return 0L;
-}
-
-void DbgPrintWindow( const char* pLine )
-{
-    static bool bIn = false;
-
-    // keine rekursiven Traces
-    if ( bIn )
-        return;
-    bIn = true;
-
-    SolarWindowPrinter aPrinter( OUString( pLine, strlen(pLine), RTL_TEXTENCODING_UTF8 ) );
-    TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
-    aPrinter.execute( aTimeout );
-
-    if ( aPrinter.didTimeout() )
-        DbgPrintShell( pLine );
-
-    bIn = false;
-}
-
-void DbgAbort( char const * i_message )
-{
-    OUString const message( i_message, strlen( i_message ), osl_getThreadTextEncoding() );
-    Application::Abort( message );
-}
-
 void ImplDbgTestSolarMutex()
 {
     assert(ImplGetSVData()->mpDefInst->CheckYieldMutex());
 }
 
-void DbgGUIInit()
+void DbgGUIInitSolarMutexCheck()
 {
-    DbgSetPrintMsgBox( DbgPrintMsgBox );
-    DbgSetPrintWindow( DbgPrintWindow );
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
-    DbgSetAbort( DbgAbort );
-}
-
-void DbgGUIDeInit()
-{
-    DbgSetPrintMsgBox( NULL );
-    DbgSetPrintWindow( NULL );
-    DbgSetAbort( NULL );
-
-    DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
-    delete pDbgWindow;
 }
 
 void DbgGUIDeInitSolarMutexCheck()

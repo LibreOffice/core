@@ -40,113 +40,25 @@
 
 #ifdef DBG_UTIL
 
-typedef void (*DbgPrintLine)( const sal_Char* pLine );
-typedef const sal_Char* (*DbgUsr)(const void* pThis );
 typedef void (*DbgTestSolarMutexProc)();
-
-#define DBG_BUF_MAXLEN              16384
 
 #define DBG_TEST_RESOURCE           (0x02000000)
 #define DBG_TEST_DIALOG             (0x04000000)
 #define DBG_TEST_BOLDAPPFONT        (0x08000000)
 
-#define DBG_OUT_NULL                0
-#define DBG_OUT_FILE                1
-#define DBG_OUT_WINDOW              2
-#define DBG_OUT_SHELL               3
-#define DBG_OUT_MSGBOX              4
-#define DBG_OUT_TESTTOOL            5
-#define DBG_OUT_DEBUGGER            6
-#define DBG_OUT_ABORT               7
-
-#define DBG_OUT_COUNT               8
-
-// user (runtime) defined output channels
-#define DBG_OUT_USER_CHANNEL_0    100
-
 struct DbgData
 {
     sal_uIntPtr       nTestFlags;
-    bool              bOverwrite;
-    sal_uIntPtr       nErrorOut;
-    sal_Char    aDebugName[260];
-    sal_Char    aInclFilter[512];
-    sal_Char    aExclFilter[512];
-    sal_Char    aInclClassFilter[512];
-    sal_Char    aExclClassFilter[512];
     sal_Char    aDbgWinState[50];           // DbgGUIData for VCL
 };
 
-struct DbgDataType
-{
-    void*       pData;
-    sal_Char const *   pName;
-};
-
 // Dbg prototypes
-#define DBG_FUNC_DEBUGSTART         1
-#define DBG_FUNC_DEBUGEND           2
-#define DBG_FUNC_GETDATA            4
-#define DBG_FUNC_SAVEDATA           5
-#define DBG_FUNC_SETPRINTMSGBOX     6
-#define DBG_FUNC_SETPRINTWINDOW     7
-#define DBG_FUNC_COREDUMP           12
-#define DBG_FUNC_ALLERROROUT        13
-#define DBG_FUNC_SETTESTSOLARMUTEX  14
-#define DBG_FUNC_TESTSOLARMUTEX     15
-#define DBG_FUNC_PRINTFILE          16
-#define DBG_FUNC_SET_ABORT          20
+#define DBG_FUNC_GETDATA            0
+#define DBG_FUNC_SAVEDATA           1
+#define DBG_FUNC_SETTESTSOLARMUTEX  2
+#define DBG_FUNC_TESTSOLARMUTEX     3
 
 TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
-
-inline void DbgDebugStart()
-{
-    DbgFunc( DBG_FUNC_DEBUGSTART );
-}
-
-inline void DbgDebugEnd()
-{
-    DbgFunc( DBG_FUNC_DEBUGEND );
-}
-
-inline void DbgSetPrintMsgBox( DbgPrintLine pProc )
-{
-    DbgFunc( DBG_FUNC_SETPRINTMSGBOX, (void*)(long)pProc );
-}
-
-inline void DbgSetPrintWindow( DbgPrintLine pProc )
-{
-    DbgFunc( DBG_FUNC_SETPRINTWINDOW, (void*)(long)pProc );
-}
-
-inline void DbgSetAbort( DbgPrintLine pProc )
-{
-    DbgFunc( DBG_FUNC_SET_ABORT, (void*)(long)pProc );
-}
-
-typedef sal_uInt16 DbgChannelId;
-
-/** registers a user-defined channel for emitting the diagnostic messages
-
-    Note that such a user-defined channel cannot be revoked during the lifetime
-    of the process. Thus, it's the caller's responsibility to ensure that the
-    procedure to which ->pProc points remains valid.
-
-    @param pProc
-        the function for emitting the diagnostic messages
-    @return
-        a unique number for this channel, which can be used for ->DbgData::nErrorOut
-    @see DBG_OUT_USER_CHANNEL_0
-
-    (In theory, this function could replace the other hard-coded channels. Well, at least
-    the ones for MsgBox, Window, Shell, TestTool. Perhaps in the next life ...)
-*/
-TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
-
-inline bool DbgIsAllErrorOut()
-{
-    return (DbgFunc( DBG_FUNC_ALLERROROUT ) != 0);
-}
 
 inline DbgData* DbgGetData()
 {
@@ -156,15 +68,6 @@ inline DbgData* DbgGetData()
 inline void DbgSaveData( const DbgData& rData )
 {
     DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
-}
-
-inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test whether to collect OSL_ASSERTions as well
-{
-    DbgData* pData = DbgGetData();
-    if ( pData )
-        return pData->nErrorOut;
-    else
-        return DBG_OUT_NULL;
 }
 
 inline sal_uIntPtr DbgIsResource()
@@ -194,31 +97,10 @@ inline sal_uIntPtr DbgIsBoldAppFont()
         return sal_False;
 }
 
-inline void DbgCoreDump()
-{
-    DbgFunc( DBG_FUNC_COREDUMP );
-}
-
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 {
     DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, (void*)(long)pProc );
 }
-
-inline void DbgTestSolarMutex()
-{
-    DbgFunc( DBG_FUNC_TESTSOLARMUTEX );
-}
-
-inline void DbgPrintFile( const sal_Char* pLine )
-{
-    DbgFunc( DBG_FUNC_PRINTFILE, (void*)(sal_Char*)pLine );
-}
-
-TOOLS_DLLPUBLIC void DbgPrintShell(char const * message);
-TOOLS_DLLPUBLIC void DbgOutTypef( const sal_Char* pFStr, ... );
-
-#define DBG_DEBUGSTART()                    DbgDebugStart()
-#define DBG_DEBUGEND()                      DbgDebugEnd()
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
     SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", aWarning)
@@ -235,26 +117,11 @@ TOOLS_DLLPUBLIC void DbgOutTypef( const sal_Char* pFStr, ... );
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \
 {                                           \
-    DbgTestSolarMutex();                    \
-} while(false)
-
-#define DBG_INSTOUTERROR( nOut )            \
-do                                          \
-{                                           \
-    DbgGetData()->nErrorOut = nOut;         \
+    DbgFunc(DBG_FUNC_TESTSOLARMUTEX);       \
 } while(false)
 
 #else
 // NO DBG_UITL
-
-struct DbgData;
-struct DbgDataType;
-
-typedef void (*DbgPrintLine)( const sal_Char* pLine );
-typedef const sal_Char* (*DbgUsr)(const void* pThis );
-
-#define DBG_DEBUGSTART() ((void)0)
-#define DBG_DEBUGEND() ((void)0)
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
@@ -262,8 +129,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_ERRORFILE( aError ) ((void)0)
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
-
-#define DBG_INSTOUTERROR( nOut ) ((void)0)
 
 #endif
 

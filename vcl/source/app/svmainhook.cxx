@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/tools.h>
-
 #ifndef MACOSX
 // MacOSX implementation of ImplSVMainHook is in osx/salinst.cxx
 
