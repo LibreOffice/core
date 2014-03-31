@@ -18,8 +18,6 @@
  */
 
 #include "pagefrm.hxx"
-#include "viewsh.hxx"
-#include "doc.hxx"
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <fmtfsize.hxx>
@@ -30,9 +28,6 @@
 #include "sectfrm.hxx"
 #include "flyfrm.hxx"
 #include "frmtool.hxx"
-#include "dflyobj.hxx"
-#include "frmfmt.hxx"
-#include "ndindex.hxx"
 #include "hfspacingitem.hxx"
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
