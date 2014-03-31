@@ -80,6 +80,30 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
             m_xDesktop->loadComponentFromURL(m_aFactoryURL, "_blank", 0, uno::Sequence<beans::PropertyValue>()),
             uno::UNO_QUERY_THROW);
 
+    // Find the model and frame. We need them later.
+    uno::Reference<frame::XFrame> xFrame(xDoc, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
+    uno::Reference<frame::XController> xController(xDoc, uno::UNO_QUERY);
+
+    if (xFrame.is())
+    {
+        xController = xFrame->getController();
+        xModel = xController->getModel();
+    }
+    else if (xModel.is())
+    {
+        xController = xModel->getCurrentController();
+        xFrame = xController->getFrame();
+    }
+    else if (xController.is())
+    {
+        xFrame = xController->getFrame();
+        xModel = xController->getModel();
+    }
+
+    if (!xFrame.is() || !xModel.is())
+        throw uno::RuntimeException();
+
     bool result = false;
 
     // try to import the document (and load it into the prepared frame)
@@ -105,7 +129,9 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
 
         impl_detectFilterName(aDescriptor, aTypeName);
 
+        xModel->lockControllers();
         result = m_xFilter->filter(aDescriptor);
+        xModel->unlockControllers();
     }
     catch (const uno::Exception &)
     {
@@ -113,29 +139,9 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
     }
 
     // close the opened document
-    uno::Reference<util::XCloseable> xCloseable(xDoc, uno::UNO_QUERY);
-
-    if (!xCloseable.is())
-    {
-        uno::Reference<frame::XController> xController(xDoc, uno::UNO_QUERY);
-
-        if (!xController.is())
-        {
-            const uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
-            if (xModel.is())
-                xController = xModel->getCurrentController();
-        }
-
-        if (xController.is())
-        {
-            const uno::Reference<frame::XFrame> xFrame = xController->getFrame();
-            if (xFrame.is())
-                xCloseable.set(xFrame, uno::UNO_QUERY);
-        }
-    }
-
     try
     {
+        uno::Reference<util::XCloseable> xCloseable(xFrame, uno::UNO_QUERY);
         if (xCloseable.is())
             xCloseable->close(true);
         else
