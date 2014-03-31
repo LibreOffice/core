@@ -38,20 +38,38 @@
 static const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 
 ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize, sal_uIntPtr nMemUsage )
-    : mnCRC(0)
+    : mbInit(0)
+    , mbStatus(false)
+    , mbFinish(false)
+    , mnMemUsage(nMemUsage)
+    , mpIStm(NULL)
+    , mpInBuf(NULL)
+    , mnInBufSize(nInBufSize)
+    , mnInToRead(0)
+    , mpOStm(NULL)
+    , mpOutBuf(NULL)
+    , mnOutBufSize(nOutBufSize)
+    , mnCRC(0)
+    , mnCompressMethod(0)
 {
-    mnMemUsage = nMemUsage;
-    mnInBufSize = nInBufSize;
-    mnOutBufSize = nOutBufSize;
     mpsC_Stream = new z_stream;
 }
 
-ZCodec::ZCodec( void )
-    : mnCRC(0)
+ZCodec::ZCodec()
+    : mbInit(0)
+    , mbStatus(false)
+    , mbFinish(false)
+    , mnMemUsage(MAX_MEM_USAGE)
+    , mpIStm(NULL)
+    , mpInBuf(NULL)
+    , mnInBufSize(DEFAULT_IN_BUFSIZE)
+    , mnInToRead(0)
+    , mpOStm(NULL)
+    , mpOutBuf(NULL)
+    , mnOutBufSize(DEFAULT_OUT_BUFSIZE)
+    , mnCRC(0)
+    , mnCompressMethod(0)
 {
-    mnMemUsage = MAX_MEM_USAGE;
-    mnInBufSize = DEFAULT_IN_BUFSIZE;
-    mnOutBufSize = DEFAULT_OUT_BUFSIZE;
     mpsC_Stream = new z_stream;
 }
 
