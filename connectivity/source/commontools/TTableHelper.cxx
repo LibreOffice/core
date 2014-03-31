@@ -141,7 +141,7 @@ namespace connectivity
 
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
-                           sal_Bool _bCase)
+                           bool _bCase)
     :OTable_TYPEDEF(_pTables,_bCase)
     ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
@@ -149,7 +149,7 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
 
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                             const Reference< XConnection >& _xConnection,
-                            sal_Bool _bCase,
+                            bool _bCase,
                             const OUString& _Name,
                             const OUString& _Type,
                             const OUString& _Description ,

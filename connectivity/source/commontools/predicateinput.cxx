@@ -365,14 +365,14 @@ namespace dbtools
                                                                 0,
                                                                 0,
                                                                 nType,
-                                                                sal_False,
-                                                                sal_False,
+                                                                false,
+                                                                false,
                                                                 xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
                                                                 OUString(),
                                                                 OUString(),
                                                                 OUString());
         Reference<XPropertySet> xColumn = pColumn;
-        pColumn->setFunction(sal_True);
+        pColumn->setFunction(true);
         pColumn->setRealName(sField);
 
         OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );

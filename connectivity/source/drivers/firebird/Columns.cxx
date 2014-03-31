@@ -26,7 +26,7 @@ Columns::Columns(Table& rTable,
                  Mutex& rMutex,
                  const TStringVector& rVector):
     OColumnsHelper(rTable,
-                   sal_True, // TODO: is this case sensitivity?
+                   true, // TODO: is this case sensitivity?
                    rMutex,
                    rVector)
 {

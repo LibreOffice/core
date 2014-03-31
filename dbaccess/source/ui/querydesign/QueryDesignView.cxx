@@ -3059,14 +3059,14 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
                                                                 0,
                                                                 0,
                                                                 nType,
-                                                                sal_False,
-                                                                sal_False,
+                                                                false,
+                                                                false,
                                                                 xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
                                                                 OUString(),
                                                                 OUString(),
                                                                 OUString());
         _rxColumn = pColumn;
-        pColumn->setFunction(sal_True);
+        pColumn->setFunction(true);
         pColumn->setRealName(pEntry->GetField());
     }
     else

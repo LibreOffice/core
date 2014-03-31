@@ -919,9 +919,9 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             {
                 //TODO:Create a new class for create statement to handle field length
                 OParseColumn* pColumn = new OParseColumn(aColumnName,aTypeName,OUString(),OUString(),
-                    ColumnValue::NULLABLE_UNKNOWN,0,0,nType,sal_False,sal_False,isCaseSensitive(),
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,nType,false,false,isCaseSensitive(),
                     OUString(),OUString(),OUString());
-                pColumn->setFunction(sal_False);
+                pColumn->setFunction(false);
                 pColumn->setRealName(aColumnName);
 
                 Reference< XPropertySet> xCol = pColumn;
@@ -1463,14 +1463,14 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                                     0,
                                                     0,
                                                     nType,
-                                                    sal_False,
-                                                    sal_False,
+                                                    false,
+                                                    false,
                                                     isCaseSensitive(),
                                                     OUString(),
                                                     OUString(),
                                                     OUString());
-        pColumn->setFunction(sal_True);
-        pColumn->setAggregateFunction(sal_True);
+        pColumn->setFunction(true);
+        pColumn->setAggregateFunction(true);
         pColumn->setRealName(sFunctionName);
         m_aParameters->get().push_back(pColumn);
     }
@@ -1530,8 +1530,8 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                                     0,
                                                     0,
                                                     nType,
-                                                    sal_False,
-                                                    sal_False,
+                                                    false,
+                                                    false,
                                                     isCaseSensitive(),
                                                     OUString(),
                                                     OUString(),
@@ -1757,8 +1757,8 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                     0,
                     0,
                     _nType,
-                    sal_False,
-                    sal_False,
+                    false,
+                    false,
                     isCaseSensitive(),
                     OUString(),
                     OUString(),
@@ -1776,9 +1776,9 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
             OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive(),
+                ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,false,false,isCaseSensitive(),
                 OUString(),OUString(),OUString());
-            pColumn->setFunction(sal_True);
+            pColumn->setFunction(true);
             pColumn->setAggregateFunction(bAggFkt);
             pColumn->setRealName(rColumnName);
 
@@ -1798,9 +1798,9 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                 OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
                 OParseColumn* pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
-                    ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive(),
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,false,false,isCaseSensitive(),
                     OUString(),OUString(),OUString());
-                pColumn->setFunction(sal_True);
+                pColumn->setFunction(true);
                 pColumn->setAggregateFunction(bAggFkt);
                 pColumn->setRealName(rColumnName);
                 SAL_WARN("connectivity.parse", "Trying to construct a column with Function==true and a TableName; this makes no sense.");
@@ -1838,9 +1838,9 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
             OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,OUString(),OUString(),OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,isCaseSensitive(),
+                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,false,false,isCaseSensitive(),
                 OUString(),OUString(),OUString());
-            pColumn->setFunction(sal_True);
+            pColumn->setFunction(true);
             pColumn->setAggregateFunction(bAggFkt);
 
             Reference< XPropertySet> xCol = pColumn;

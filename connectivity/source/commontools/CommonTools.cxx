@@ -54,7 +54,7 @@ namespace connectivity
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
 
-    sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape)
+    bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape)
     {
         int    pos=0;
         int    flag=0;
@@ -65,14 +65,14 @@ namespace connectivity
             {
                 case CHAR_PLACE:
                     if ( *pStr == 0 )
-                        return sal_False;
+                        return false;
                     break;
                 default:
                     if (*pWild && (*pWild == cEscape) && ((*(pWild+1)== CHAR_PLACE) || (*(pWild+1) == CHAR_WILD)) )
                         pWild++;
                     if ( rtl_ascii_toUpperCase(*pWild) != rtl_ascii_toUpperCase(*pStr) )
                         if ( !pos )
-                            return sal_False;
+                            return false;
                         else
                             pWild += pos;
                     else
@@ -82,7 +82,7 @@ namespace connectivity
                     while ( *pWild == CHAR_WILD )
                         pWild++;
                     if ( *pWild == 0 )
-                        return sal_True;
+                        return true;
                     flag = 1;
                     pos  = 0;
                     if ( *pStr == 0 )
@@ -155,9 +155,9 @@ namespace connectivity
         return aRet;
     }
 
-    sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
+    bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
     {
-        sal_Bool bRet = sal_False;
+        bool bRet = false;
         if ( _pJVM.is() )
         {
             jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);

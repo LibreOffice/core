@@ -127,10 +127,10 @@ namespace connectivity
     public:
         OTableHelper(   sdbcx::OCollection* _pTables,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                        sal_Bool _bCase);
+                        bool _bCase);
         OTableHelper(   sdbcx::OCollection* _pTables,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                        sal_Bool _bCase,
+                        bool _bCase,
                         const OUString& _Name,
                         const OUString& _Type,
                         const OUString& _Description = OUString(),

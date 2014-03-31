@@ -44,10 +44,10 @@ namespace connectivity
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) SAL_OVERRIDE;
     public:
         OColumnsHelper( ::cppu::OWeakObject& _rParent
-                        ,sal_Bool _bCase
+                        ,bool _bCase
                         ,::osl::Mutex& _rMutex
                         ,const TStringVector &_rVector
-                        ,sal_Bool _bUseHardRef = sal_True
+                        ,bool _bUseHardRef = true
                     );
         virtual ~OColumnsHelper();
 

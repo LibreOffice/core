@@ -59,10 +59,10 @@ namespace connectivity
 }
 
 OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
-                                ,sal_Bool _bCase
+                                ,bool _bCase
                                 ,::osl::Mutex& _rMutex
                                 ,const TStringVector &_rVector
-                                ,sal_Bool _bUseHardRef
+                                ,bool _bUseHardRef
             ) : OCollection(_rParent,_bCase,_rMutex,_rVector,sal_False,_bUseHardRef)
     ,m_pImpl(NULL)
     ,m_pTable(NULL)

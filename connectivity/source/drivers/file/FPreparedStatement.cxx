@@ -503,8 +503,8 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
                                                     ,nPrecision
                                                     ,nScale
                                                     ,eType
-                                                    ,sal_False
-                                                    ,sal_False
+                                                    ,false
+                                                    ,false
                                                     ,m_aSQLIterator.isCaseSensitive()
                                                     ,OUString()
                                                     ,OUString()

@@ -51,8 +51,8 @@ namespace jvmaccess { class VirtualMachine; }
 
 namespace connectivity
 {
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
-    inline sal_Bool match(const OUString &rWild, const OUString &rStr, const sal_Unicode cEscape)
+    OOO_DLLPUBLIC_DBTOOLS bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
+    inline bool match(const OUString &rWild, const OUString &rStr, const sal_Unicode cEscape)
     {
         return match(rWild.getStr(), rStr.getStr(), cEscape);
     }
@@ -150,7 +150,7 @@ namespace connectivity
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
-    OOO_DLLPUBLIC_DBTOOLS void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
+    OOO_DLLPUBLIC_DBTOOLS void checkDisposed(bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
 
 #if HAVE_FEATURE_JAVA
     /** creates a java virtual machine
@@ -167,7 +167,7 @@ namespace connectivity
         @param  _sClassName
             The class name to look for.
     */
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName );
+    OOO_DLLPUBLIC_DBTOOLS bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName );
 #endif
 }
 

@@ -39,7 +39,7 @@ Table::Table(Tables* pTables,
              const uno::Reference< XConnection >& rConnection):
     OTableHelper(pTables,
                  rConnection,
-                 sal_True),
+                 true),
     m_rMutex(rMutex),
     m_nPrivileges(0)
 {
@@ -54,7 +54,7 @@ Table::Table(Tables* pTables,
              const OUString& rDescription):
     OTableHelper(pTables,
                  rConnection,
-                 sal_True,
+                 true,
                  rName,
                  rType,
                  rDescription,

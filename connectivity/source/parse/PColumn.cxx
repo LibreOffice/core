@@ -35,7 +35,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 
-OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     _bCase)
+OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn, bool _bCase)
     : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
@@ -52,10 +52,10 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)))
                                 ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME)))
                                 )
-    , m_bFunction(sal_False)
-    , m_bDbasePrecisionChanged(sal_False)
-    , m_bAggregateFunction(sal_False)
-    , m_bIsSearchable( sal_True )
+    , m_bFunction(false)
+    , m_bDbasePrecisionChanged(false)
+    , m_bAggregateFunction(false)
+    , m_bIsSearchable( true )
 {
     construct();
 }
@@ -69,9 +69,9 @@ OParseColumn::OParseColumn( const OUString& _Name,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
                     sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase,
+                    bool            _IsAutoIncrement,
+                    bool            _IsCurrency,
+                    bool            _bCase,
                     const OUString& _CatalogName,
                     const OUString& _SchemaName,
                     const OUString& _TableName
@@ -90,10 +90,10 @@ OParseColumn::OParseColumn( const OUString& _Name,
                                   _CatalogName,
                                   _SchemaName,
                                   _TableName)
-    , m_bFunction(sal_False)
-    , m_bDbasePrecisionChanged(sal_False)
-    , m_bAggregateFunction(sal_False)
-    , m_bIsSearchable( sal_True )
+    , m_bFunction(false)
+    , m_bDbasePrecisionChanged(false)
+    , m_bAggregateFunction(false)
+    , m_bIsSearchable( true )
 {
     construct();
 }
@@ -191,7 +191,7 @@ void OParseColumn::construct()
 
 
 OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const OUString& i_rOriginatingTableName,
-                            sal_Bool    _bCase, sal_Bool _bAscending )
+                            bool _bCase, bool _bAscending )
     : connectivity::sdbcx::OColumn(
         getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
         getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))),
@@ -215,7 +215,7 @@ OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const OUStr
 }
 
 
-OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, sal_Bool _bCase, sal_Bool _bAscending )
+OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, bool _bCase, bool _bAscending )
     : connectivity::sdbcx::OColumn(
         getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
         getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))),

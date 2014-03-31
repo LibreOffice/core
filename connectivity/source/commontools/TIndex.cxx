@@ -43,9 +43,9 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex
 OIndexHelper::OIndexHelper( OTableHelper* _pTable,
                 const OUString& _Name,
                 const OUString& _Catalog,
-                sal_Bool _isUnique,
-                sal_Bool _isPrimaryKeyIndex,
-                sal_Bool _isClustered
+                bool _isUnique,
+                bool _isPrimaryKeyIndex,
+                bool _isClustered
                 ) : connectivity::sdbcx::OIndex(_Name,
                                   _Catalog,
                                   _isUnique,

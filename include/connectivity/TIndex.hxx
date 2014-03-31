@@ -37,9 +37,9 @@ namespace connectivity
         OIndexHelper(   OTableHelper* _pTable,
                 const OUString& _Name,
                 const OUString& _Catalog,
-                sal_Bool _isUnique,
-                sal_Bool _isPrimaryKeyIndex,
-                sal_Bool _isClustered
+                bool _isUnique,
+                bool _isPrimaryKeyIndex,
+                bool _isClustered
             );
         inline OTableHelper* getTable() const { return m_pTable; }
     };

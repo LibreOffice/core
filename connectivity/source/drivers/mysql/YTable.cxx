@@ -75,7 +75,7 @@ namespace connectivity
 
 OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection)
-    :OTableHelper(_pTables,_xConnection,sal_True)
+    :OTableHelper(_pTables,_xConnection,true)
 {
     // we create a new table here, so we should have all the rights or ;-)
     m_nPrivileges = Privilege::DROP         |
@@ -100,7 +100,7 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                     sal_Int32 _nPrivileges
                 ) : OTableHelper(   _pTables,
                                     _xConnection,
-                                    sal_True,
+                                    true,
                                     _Name,
                                     _Type,
                                     _Description,
