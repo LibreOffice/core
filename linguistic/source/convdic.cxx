@@ -189,7 +189,7 @@ ConvDic::ConvDic(
 
     if( !rMainURL.isEmpty() )
     {
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
         bIsReadonly = IsReadOnly( rMainURL, &bExists );
 
         if( !bExists )  // new empty dictionary

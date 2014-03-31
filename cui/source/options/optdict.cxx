@@ -621,7 +621,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 
                 nAddRes = linguistic::AddEntryToDic( xDic,
                             aNewWord, bIsNegEntry,
-                            aRplcText, LanguageTag( xDic->getLocale() ).getLanguageType(), sal_False );
+                            aRplcText, LanguageTag( xDic->getLocale() ).getLanguageType(), false );
              }
         }
         if (DIC_ERR_NONE != nAddRes)

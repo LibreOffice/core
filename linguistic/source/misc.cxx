@@ -203,10 +203,10 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
     return nDist;
 }
 
-sal_Bool IsUseDicList( const PropertyValues &rProperties,
+bool IsUseDicList( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
 
     sal_Int32 nLen = rProperties.getLength();
     const PropertyValue *pVal = rProperties.getConstArray();
@@ -230,10 +230,10 @@ sal_Bool IsUseDicList( const PropertyValues &rProperties,
     return bRes;
 }
 
-sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
+bool IsIgnoreControlChars( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
 
     sal_Int32 nLen = rProperties.getLength();
     const PropertyValue *pVal = rProperties.getConstArray();
@@ -257,9 +257,9 @@ sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
     return bRes;
 }
 
-static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
+static bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (xEntry.is())
     {
         // there has to be (at least one) '=' or '[' denoting a hyphenation position
@@ -275,7 +275,7 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
 uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XSearchableDictionaryList > &xDicList,
         const OUString &rWord, sal_Int16 nLanguage,
-        sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
+        bool bSearchPosDics, bool bSearchSpellEntry )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -320,12 +320,12 @@ uno::Reference< XDictionaryEntry > SearchDicList(
     return xEntry;
 }
 
-sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicList )
+bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicList )
 {
     if (!xDicList.is())
-        return sal_True;
+        return true;
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
     const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
@@ -343,7 +343,7 @@ sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xD
         }
         catch(uno::Exception &)
         {
-            bRet = sal_False;
+            bRet = false;
         }
     }
 
@@ -352,9 +352,9 @@ sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xD
 
 sal_uInt8 AddEntryToDic(
         uno::Reference< XDictionary >  &rxDic,
-        const OUString &rWord, sal_Bool bIsNeg,
+        const OUString &rWord, bool bIsNeg,
         const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
-        sal_Bool bStripDot )
+        bool bStripDot )
 {
     if (!rxDic.is())
         return DIC_ERR_NOT_EXISTS;
@@ -370,7 +370,7 @@ sal_uInt8 AddEntryToDic(
             aTmp = aTmp.copy( 0, nLen - 1 );
         }
     }
-    sal_Bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
+    bool bAddOk = rxDic->add( aTmp, bIsNeg, rRplcTxt );
 
     sal_uInt8 nRes = DIC_ERR_NONE;
     if (!bAddOk)
@@ -406,10 +406,10 @@ uno::Sequence< sal_Int16 >
     return aLangs;
 }
 
-sal_Bool    IsReadOnly( const OUString &rURL, sal_Bool *pbExist )
+bool    IsReadOnly( const OUString &rURL, bool *pbExist )
 {
-    sal_Bool bRes = sal_False;
-    sal_Bool bExists = sal_False;
+    bool bRes = false;
+    bool bExists = false;
 
     if (!rURL.isEmpty())
     {
@@ -427,7 +427,7 @@ sal_Bool    IsReadOnly( const OUString &rURL, sal_Bool *pbExist )
         }
         catch (Exception &)
         {
-            bRes = sal_True;
+            bRes = true;
         }
     }
 
@@ -436,10 +436,10 @@ sal_Bool    IsReadOnly( const OUString &rURL, sal_Bool *pbExist )
     return bRes;
 }
 
-static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &rRplc,
+static bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &rRplc,
         uno::Reference< XHyphenatedWord > &rxHyphWord )
 {
-    sal_Bool bRes = rxHyphWord->isAlternativeSpelling();
+    bool bRes = rxHyphWord->isAlternativeSpelling();
     if (bRes)
     {
         OUString aWord( rxHyphWord->getWord() ),
@@ -495,7 +495,7 @@ static sal_Int16 GetOrigWordPos( const OUString &rOrigWord, sal_Int16 nPos )
     while (nPos >= 0  &&  i++ < nLen)
     {
         sal_Unicode cChar = rOrigWord[i];
-        sal_Bool bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+        bool bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
         if (!bSkip)
             --nPos;
     }
@@ -512,7 +512,7 @@ sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos )
         for (sal_Int32 i = 0;  i < nPos;  ++i)
         {
             sal_Unicode cChar = rTxt[i];
-            sal_Bool bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+            bool bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
             if (!bSkip)
                 ++nRes;
         }
@@ -530,7 +530,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         sal_Int16    nChgPos = 0,
                  nChgLen = 0;
         OUString aRplc;
-        sal_Bool bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
+        bool bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
 #if OSL_DEBUG_LEVEL > 1
         OUString aWord( rxHyphWord->getWord() );
 #endif
@@ -597,7 +597,7 @@ osl::Mutex & lcl_GetCharClassMutex()
     return aMutex;
 }
 
-sal_Bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage )
+bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -682,7 +682,7 @@ static const sal_uInt32 the_aDigitZeroes [] =
     0x0001D7CE  //1D7FF   ; Decimal # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 };
 
-sal_Bool HasDigits( const OUString &rText )
+bool HasDigits( const OUString &rText )
 {
     static const int nNumDigitZeroes = sizeof(the_aDigitZeroes) / sizeof(the_aDigitZeroes[0]);
     const sal_Int32 nLen = rText.getLength();
@@ -697,25 +697,25 @@ sal_Bool HasDigits( const OUString &rText )
             if (nDigitZero > nCodePoint)
                 break;
             if (/*nDigitZero <= nCodePoint &&*/ nCodePoint <= nDigitZero + 9)
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool IsNumeric( const OUString &rText )
+bool IsNumeric( const OUString &rText )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if (!rText.isEmpty())
     {
         sal_Int32 nLen = rText.getLength();
-        bRes = sal_True;
+        bRes = true;
         for(sal_Int32 i = 0; i < nLen; ++i)
         {
             sal_Unicode cChar = rText[ i ];
             if ( !((sal_Unicode)'0' <= cChar  &&  cChar <= (sal_Unicode)'9') )
             {
-                bRes = sal_False;
+                bRes = false;
                 break;
             }
         }

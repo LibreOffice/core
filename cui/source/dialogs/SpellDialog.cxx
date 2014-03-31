@@ -586,7 +586,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
     SvxPrepareAutoCorrect( aOldWord, aString );
     Reference<XDictionary> aXDictionary( SvxGetChangeAllList(), UNO_QUERY );
     sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
-            aOldWord , sal_True,
+            aOldWord, true,
             aString, eLang );
 
     if(nAdded == DIC_ERR_NONE)
@@ -635,7 +635,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
     {
         OUString sErrorText(m_pSentenceED->GetErrorText());
         sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
-            sErrorText, sal_False,
+            sErrorText, false,
             OUString(), LANGUAGE_NONE );
         if(nAdded == DIC_ERR_NONE)
         {
@@ -917,7 +917,7 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
     if (xDic.is())
     {
-        nAddRes = linguistic::AddEntryToDic( xDic, aNewWord, sal_False, OUString(), LANGUAGE_NONE );
+        nAddRes = linguistic::AddEntryToDic( xDic, aNewWord, false, OUString(), LANGUAGE_NONE );
         // save modified user-dictionary if it is persistent
         uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
         if (xSavDic.is())

@@ -114,8 +114,8 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount 
 
 void PropertyChgHelper::SetDefaultValues()
 {
-    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = sal_True;
-    bResIsUseDictionaryList         = bIsUseDictionaryList          = sal_True;
+    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = true;
+    bResIsUseDictionaryList         = bIsUseDictionaryList          = true;
 }
 
 
@@ -127,7 +127,7 @@ void PropertyChgHelper::GetCurrentValues()
         const OUString *pPropName = GetPropNames().getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Bool *pbVal     = NULL,
+            bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
             if ( pPropName[i] == UPN_IS_IGNORE_CONTROL_CHARACTERS )
@@ -164,7 +164,7 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Bool  *pbResVal = NULL;
+            bool  *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -181,18 +181,18 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
 }
 
 
-sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
 
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
         sal_Int16 nLngSvcFlags = (nEvtFlags & AE_HYPHENATOR) ?
                     LinguServiceEventFlags::HYPHENATE_AGAIN : 0;
-        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
+        bool bSCWA = false, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = false; // SPELL_WRONG_WORDS_AGAIN ?
 
-        sal_Bool  *pbVal = NULL;
+        bool  *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -204,12 +204,12 @@ sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt
             case UPH_IS_USE_DICTIONARY_LIST       :
             {
                 pbVal = &bIsUseDictionaryList;
-                bSCWA = bSWWA = sal_True;
+                bSCWA = bSWWA = true;
                 break;
             }
             default:
             {
-                bRes = sal_False;
+                bRes = false;
             }
         }
         if (pbVal)
@@ -218,7 +218,7 @@ sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt
         bRes = 0 != pbVal;  // sth changed?
         if (bRes)
         {
-            sal_Bool bSpellEvts = (nEvtFlags & AE_SPELLCHECKER) ? sal_True : sal_False;
+            bool bSpellEvts = (nEvtFlags & AE_SPELLCHECKER);
             if (bSCWA && bSpellEvts)
                 nLngSvcFlags |= LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
             if (bSWWA && bSpellEvts)
@@ -390,9 +390,9 @@ void PropertyHelper_Spell::SetDefaultValues()
 {
     PropertyChgHelper::SetDefaultValues();
 
-    bResIsSpellUpperCase        = bIsSpellUpperCase         = sal_False;
-    bResIsSpellWithDigits       = bIsSpellWithDigits        = sal_False;
-    bResIsSpellCapitalization   = bIsSpellCapitalization    = sal_True;
+    bResIsSpellUpperCase        = bIsSpellUpperCase         = false;
+    bResIsSpellWithDigits       = bIsSpellWithDigits        = false;
+    bResIsSpellCapitalization   = bIsSpellCapitalization    = true;
 }
 
 
@@ -406,7 +406,7 @@ void PropertyHelper_Spell::GetCurrentValues()
         const OUString *pPropName = GetPropNames().getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Bool *pbVal     = NULL,
+            bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
             if ( pPropName[i] == UPN_IS_SPELL_UPPER_CASE )
@@ -435,36 +435,36 @@ void PropertyHelper_Spell::GetCurrentValues()
 }
 
 
-sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
-    sal_Bool bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
+    bool bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
 
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
+        bool bSCWA = false, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = false; // SPELL_WRONG_WORDS_AGAIN ?
 
-        sal_Bool *pbVal = NULL;
+        bool *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSCWA = ! *pbVal;    // sal_False->sal_True change?
                 bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSCWA = ! *pbVal;    // sal_False->sal_True change?
                 bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             case UPH_IS_SPELL_CAPITALIZATION      :
             {
                 pbVal = &bIsSpellCapitalization;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSCWA = ! *pbVal;    // sal_False->sal_True change?
                 bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
@@ -526,7 +526,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
             }
             else
             {
-                sal_Bool *pbResVal = NULL;
+                bool *pbResVal = NULL;
                 switch (pVal[i].Handle)
                 {
                     case UPH_IS_SPELL_UPPER_CASE     : pbResVal = &bResIsSpellUpperCase; break;
@@ -621,9 +621,9 @@ void PropertyHelper_Hyphen::GetCurrentValues()
 }
 
 
-sal_Bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
-    sal_Bool bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
+    bool bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
 
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
@@ -817,22 +817,22 @@ void PropertyHelper_Spelling::SetTmpPropVals( const com::sun::star::beans::Prope
     pInst->SetTmpPropVals( rPropVals );
 }
 
-sal_Bool PropertyHelper_Spelling::IsSpellUpperCase() const
+bool PropertyHelper_Spelling::IsSpellUpperCase() const
 {
     return pInst->IsSpellUpperCase();
 }
 
-sal_Bool PropertyHelper_Spelling::IsSpellWithDigits() const
+bool PropertyHelper_Spelling::IsSpellWithDigits() const
 {
     return pInst->IsSpellWithDigits();
 }
 
-sal_Bool PropertyHelper_Spelling::IsSpellCapitalization() const
+bool PropertyHelper_Spelling::IsSpellCapitalization() const
 {
     return pInst->IsSpellCapitalization();
 }
 
-sal_Bool PropertyHelper_Spelling::addLinguServiceEventListener(
+bool PropertyHelper_Spelling::addLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException)
@@ -840,7 +840,7 @@ sal_Bool PropertyHelper_Spelling::addLinguServiceEventListener(
     return pInst->addLinguServiceEventListener( rxListener );
 }
 
-sal_Bool PropertyHelper_Spelling::removeLinguServiceEventListener(
+bool PropertyHelper_Spelling::removeLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException)

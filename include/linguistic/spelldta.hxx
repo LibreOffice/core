@@ -42,7 +42,7 @@ namespace linguistic
         MergeProposalSeqs(
                 ::com::sun::star::uno::Sequence< OUString > &rAlt1,
                 ::com::sun::star::uno::Sequence< OUString > &rAlt2,
-                sal_Bool bAllowDuplicates );
+                bool bAllowDuplicates );
 
 void    SeqRemoveNegEntries(
                 ::com::sun::star::uno::Sequence< OUString > &rSeq,
@@ -50,7 +50,7 @@ void    SeqRemoveNegEntries(
                     ::com::sun::star::linguistic2::XSearchableDictionaryList > &rxDicList,
                 sal_Int16 nLanguage );
 
-sal_Bool    SeqHasEntry(
+bool    SeqHasEntry(
                 const ::com::sun::star::uno::Sequence< OUString > &rSeq,
                 const OUString &rTxt);
 

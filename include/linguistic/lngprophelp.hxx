@@ -68,12 +68,12 @@ class PropertyChgHelper :
     int     nEvtFlags;  // flags for event types allowed to be launched
 
     // default values
-    sal_Bool    bIsIgnoreControlCharacters;
-    sal_Bool    bIsUseDictionaryList;
+    bool    bIsIgnoreControlCharacters;
+    bool    bIsUseDictionaryList;
 
     // return values, will be set to default value or current temporary value
-    sal_Bool    bResIsIgnoreControlCharacters;
-    sal_Bool    bResIsUseDictionaryList;
+    bool    bResIsIgnoreControlCharacters;
+    bool    bResIsUseDictionaryList;
 
 
     // disallow use of copy-constructor and assignment-operator
@@ -92,7 +92,7 @@ protected:
 
     void    AddPropNames( const char *pNewNames[], sal_Int32 nCount );
 
-    virtual sal_Bool    propertyChange_Impl(
+    virtual bool    propertyChange_Impl(
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
 
 public:
@@ -143,8 +143,8 @@ public:
         ::com::sun::star::uno::XInterface > &
             GetEvtObj() const       { return xMyEvtObj; }
 
-    sal_Bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
-    sal_Bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
+    bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
+    bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
 };
 
 
@@ -195,15 +195,15 @@ class LNG_DLLPUBLIC PropertyHelper_Spell :
     public PropertyChgHelper
 {
     // default values
-    sal_Bool    bIsSpellUpperCase;
-    sal_Bool    bIsSpellWithDigits;
-    sal_Bool    bIsSpellCapitalization;
+    bool        bIsSpellUpperCase;
+    bool        bIsSpellWithDigits;
+    bool        bIsSpellCapitalization;
 
     // return values, will be set to default value or current temporary value
     sal_Int16   nResMaxNumberOfSuggestions; // special value that is not part of the property set and thus needs to be handled differently
-    sal_Bool    bResIsSpellUpperCase;
-    sal_Bool    bResIsSpellWithDigits;
-    sal_Bool    bResIsSpellCapitalization;
+    bool        bResIsSpellUpperCase;
+    bool        bResIsSpellWithDigits;
+    bool        bResIsSpellCapitalization;
 
 
     // disallow use of copy-constructor and assignment-operator
@@ -214,7 +214,7 @@ protected:
     // PropertyChgHelper
     virtual void    SetDefaultValues() SAL_OVERRIDE;
     virtual void    GetCurrentValues() SAL_OVERRIDE;
-    virtual sal_Bool    propertyChange_Impl(
+    virtual bool    propertyChange_Impl(
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) SAL_OVERRIDE;
 
 public:
@@ -235,9 +235,9 @@ public:
     virtual sal_Int16   GetDefaultNumberOfSuggestions() const;
 
     sal_Int16   GetMaxNumberOfSuggestions() const   { return nResMaxNumberOfSuggestions; }
-    sal_Bool    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
-    sal_Bool    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
-    sal_Bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
+    bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
+    bool        IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
+    bool        IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
 
@@ -260,15 +260,15 @@ public:
 
     void    AddAsPropListener();
     void    RemoveAsPropListener();
-    void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
-    sal_Bool    IsSpellUpperCase() const;
-    sal_Bool    IsSpellWithDigits() const;
-    sal_Bool    IsSpellCapitalization() const;
-    sal_Bool addLinguServiceEventListener(
+    void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
+    bool    IsSpellUpperCase() const;
+    bool    IsSpellWithDigits() const;
+    bool    IsSpellCapitalization() const;
+    bool addLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool removeLinguServiceEventListener(
+    bool removeLinguServiceEventListener(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(::com::sun::star::uno::RuntimeException);
@@ -296,7 +296,7 @@ protected:
     // PropertyChgHelper
     virtual void    SetDefaultValues() SAL_OVERRIDE;
     virtual void    GetCurrentValues() SAL_OVERRIDE;
-    virtual sal_Bool    propertyChange_Impl(
+    virtual bool    propertyChange_Impl(
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) SAL_OVERRIDE;
 
 public:

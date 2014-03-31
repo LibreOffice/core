@@ -40,9 +40,9 @@ namespace linguistic
 {
 
 
-sal_Bool FileExists( const OUString &rMainURL )
+bool FileExists( const OUString &rMainURL )
 {
-    sal_Bool bExists = sal_False;
+    bool bExists = false;
     if (!rMainURL.isEmpty())
     {
         try

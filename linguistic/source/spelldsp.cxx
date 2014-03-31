@@ -262,13 +262,13 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
     {
         Reference< XSearchableDictionaryList > xDList( GetDictionaryList() );
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
-                rWord, nLanguage, sal_False, sal_True ) );
+                rWord, nLanguage, false, true ) );
         if (xNegEntry.is())
             xRes = xNegEntry;
         else
         {
             Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
-                    rWord, nLanguage, sal_True, sal_True ) );
+                    rWord, nLanguage, true, true ) );
             if (xPosEntry.is())
                 xRes = xPosEntry;
         }
@@ -660,7 +660,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
                     // replacement text must not be in negative dictionary itself
                     if (!aAddRplcTxt.isEmpty() &&
-                        !SearchDicList( xDList, aAddRplcTxt, nLanguage, sal_False, sal_True ).is())
+                        !SearchDicList( xDList, aAddRplcTxt, nLanguage, false, true ).is())
                     {
                         aProposalList.Prepend( aAddRplcTxt );
                     }

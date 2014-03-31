@@ -36,10 +36,10 @@ class HyphenatedWord :
 {
     OUString     aWord;
     OUString     aHyphenatedWord;
-    sal_Int16               nHyphPos;
-    sal_Int16               nHyphenationPos;
-    sal_Int16               nLanguage;
-    sal_Bool                bIsAltSpelling;
+    sal_Int16    nHyphPos;
+    sal_Int16    nHyphenationPos;
+    sal_Int16    nLanguage;
+    bool         bIsAltSpelling;
 
     // disallow copy-constructor and assignment-operator for now
     HyphenatedWord(const HyphenatedWord &);

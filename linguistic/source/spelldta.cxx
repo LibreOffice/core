@@ -44,17 +44,17 @@ namespace linguistic
 
 #define MAX_PROPOSALS   40
 
-sal_Bool SeqHasEntry(
+bool SeqHasEntry(
         const Sequence< OUString > &rSeq,
         const OUString &rTxt)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     sal_Int32 nLen = rSeq.getLength();
     const OUString *pEntry = rSeq.getConstArray();
     for (sal_Int32 i = 0;  i < nLen  &&  !bRes;  ++i)
     {
         if (rTxt == pEntry[i])
-            bRes = sal_True;
+            bRes = true;
     }
     return bRes;
 }
@@ -117,7 +117,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList,
-                    pEntries[i], nLanguage, sal_False, sal_True ) );
+                    pEntries[i], nLanguage, false, true ) );
         if (xNegEntry.is())
         {
             pEntries[i] = aEmpty;
@@ -128,7 +128,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
     {
         Sequence< OUString > aNew;
         // merge sequence without duplicates and empty strings in new empty sequence
-        aNew = MergeProposalSeqs( aNew, rSeq, sal_False );
+        aNew = MergeProposalSeqs( aNew, rSeq, false );
         rSeq = aNew;
     }
 }
@@ -137,7 +137,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
 Sequence< OUString > MergeProposalSeqs(
             Sequence< OUString > &rAlt1,
             Sequence< OUString > &rAlt2,
-            sal_Bool bAllowDuplicates )
+            bool bAllowDuplicates )
 {
     Sequence< OUString > aMerged;
 

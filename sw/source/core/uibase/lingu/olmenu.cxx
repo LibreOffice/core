@@ -754,7 +754,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             }
         } else {
             linguistic::AddEntryToDic( xDictionary,
-                    m_xSpellAlt->getWord(), sal_False, OUString(), LANGUAGE_NONE );
+                    m_xSpellAlt->getWord(), false, OUString(), LANGUAGE_NONE );
         }
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == MN_ADD_TO_DIC_SINGLE)
@@ -777,7 +777,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
             if (xDic.is())
             {
-                sal_Int16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, sal_False, OUString(), LANGUAGE_NONE );
+                sal_Int16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, false, OUString(), LANGUAGE_NONE );
                 // save modified user-dictionary if it is persistent
                 uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
                 if (xSavDic.is())
