@@ -395,11 +395,15 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
         int         mnUpperPart;
         int         mnLowerPart;
 
-        inline SpinbuttonValue()
-        : ImplControlValue( CTRL_SPINBUTTONS, BUTTONVALUE_DONTKNOW, 0 )
+        SpinbuttonValue()
+            : ImplControlValue( CTRL_SPINBUTTONS, BUTTONVALUE_DONTKNOW, 0 )
+            , mnUpperState(0)
+            , mnLowerState(0)
+            , mnUpperPart(0)
+            , mnLowerPart(0)
         {
-            mnUpperState = mnLowerState = 0;
-        };
+        }
+
         virtual ~SpinbuttonValue();
         virtual SpinbuttonValue* clone() const SAL_OVERRIDE;
 };
