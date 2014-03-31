@@ -1,177 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkGrid" id="PrinterDevicePage">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
-    <property name="border_width">6</property>
-    <property name="row_spacing">6</property>
-    <property name="column_spacing">12</property>
-    <property name="column_homogeneous">True</property>
-    <child>
-      <object class="GtkLabel" id="label7">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">_Option</property>
-        <property name="use_underline">True</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label8">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">Current _value</property>
-        <property name="use_underline">True</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label9">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">Printer _Language type</property>
-        <property name="use_underline">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label10">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">_Color</property>
-        <property name="use_underline">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label11">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">Color _depth</property>
-        <property name="use_underline">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBoxText" id="colorspace">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="entry_text_column">0</property>
-        <property name="id_column">1</property>
-        <items>
-          <item translatable="yes">From driver</item>
-          <item translatable="yes">Color</item>
-          <item translatable="yes">Grayscale</item>
-        </items>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBoxText" id="colordepth">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="entry_text_column">0</property>
-        <property name="id_column">1</property>
-        <items>
-          <item translatable="yes">8 Bit</item>
-          <item translatable="yes">24 Bit</item>
-        </items>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">4</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBox" id="level">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="model">liststore1</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkTreeView" id="options:border">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="treeview-selection1"/>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkTreeView" id="values:border">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="treeview-selection2"/>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-  </object>
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -205,5 +35,181 @@
         <col id="1">10</col>
       </row>
     </data>
+  </object>
+  <object class="GtkGrid" id="PrinterDevicePage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
+    <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkLabel" id="label7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">_Option</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">options:border</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label8">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Current _value</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">values:border</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label9">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Printer _Language type</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">level</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label10">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">_Color</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">colorspace</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label11">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Color _depth</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">colordepth</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="colorspace">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <items>
+          <item translatable="yes">From driver</item>
+          <item translatable="yes">Color</item>
+          <item translatable="yes">Grayscale</item>
+        </items>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="colordepth">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <items>
+          <item translatable="yes">8 Bit</item>
+          <item translatable="yes">24 Bit</item>
+        </items>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">4</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="level">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="model">liststore1</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTreeView" id="options:border">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="treeview-selection1"/>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkTreeView" id="values:border">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="treeview-selection2"/>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
   </object>
 </interface>
