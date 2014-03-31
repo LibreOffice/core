@@ -120,7 +120,7 @@ public:
 
     const SwFrm *GetCell( sal_Int32 nRow, sal_Int32 nColumn, sal_Bool bExact,
                           SwAccessibleTable *pThis ) const
-        throw(lang::IndexOutOfBoundsException );
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception);
     const SwFrm *GetCellAtPos( sal_Int32 nLeft, sal_Int32 nTop,
                                          sal_Bool bExact ) const;
     inline sal_Int32 GetRowCount() const;
@@ -421,7 +421,7 @@ void SwAccessibleTableData_Impl::GetSelection(
 const SwFrm *SwAccessibleTableData_Impl::GetCell(
         sal_Int32 nRow, sal_Int32 nColumn, sal_Bool,
         SwAccessibleTable *pThis ) const
-    throw(lang::IndexOutOfBoundsException )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     CheckRowAndCol( nRow, nColumn, pThis );
 
