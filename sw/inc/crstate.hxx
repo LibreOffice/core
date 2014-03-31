@@ -181,6 +181,7 @@ struct SwCrsrMoveState
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
+        p2Lines( NULL ),
         pSpecialPos( NULL ),
         eState( MV_SETONLYTEXT ),
         nCursorBidiLevel( 0 ),
