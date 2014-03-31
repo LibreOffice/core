@@ -355,7 +355,7 @@ namespace basegfx
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
                 sal_uInt32 nNewEdgeIndex;
-                double fNewCut;
+                double fNewCut(0.0);
                 const double fNewDistance(getSmallestDistancePointToPolygon(aCandidate, rTestPoint, nNewEdgeIndex, fNewCut));
 
                 if(DBL_MAX == fRetval || fNewDistance < fRetval)
