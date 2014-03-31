@@ -57,7 +57,6 @@ namespace pdfi
 
     m_xContext(xContext),
     fYPrevTextPosition(-10000.0),
-    fPrevTextHeight(0.0),
     fXPrevTextPosition(0.0),
     fPrevTextWidth(0.0),
     m_pElFactory( new ElementFactory() ),
@@ -254,10 +253,14 @@ void PDFIProcessor::processGlyphLine()
 
     for (size_t i = 0; i < m_GlyphsList.size(); i++)
     {
-        double spaceSize = 0.0;
+        bool prependSpace = false;
         if (i != 0)
-            spaceSize = m_GlyphsList[i].getRect().X1 - m_GlyphsList[i - 1].getRect().X2;
-        bool prependSpace = spaceSize > spaceDetectBoundary;
+        {
+            double spaceSize =
+                m_GlyphsList[i].getRect().X1 -
+                m_GlyphsList[i - 1].getRect().X2;
+            prependSpace = spaceSize > spaceDetectBoundary;
+        }
         drawCharGlyphs(m_GlyphsList[i].getGlyph(),
                        m_GlyphsList[i].getRect(),
                        m_GlyphsList[i].getGC(),
@@ -273,13 +276,14 @@ void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
                                    const geometry::RealRectangle2D& rRect,
                                    const geometry::Matrix2D&        rFontMatrix )
 {
-    double isFirstLine= fYPrevTextPosition+ fXPrevTextPosition+ fPrevTextHeight+ fPrevTextWidth ;
-    if(
-        (  ( ( fYPrevTextPosition!= rRect.Y1 ) ) ||
-           ( ( fXPrevTextPosition > rRect.X2 ) ) ||
-           ( ( fXPrevTextPosition+fPrevTextWidth*1.3)<rRect.X1 )
-        )  && ( isFirstLine> 0.0 )
-    )
+    ::basegfx::B2DPoint point1(rRect.X1, rRect.Y1);
+    ::basegfx::B2DPoint point2(rRect.X2, rRect.Y2);
+    point1 *= getCurrentContext().Transformation;
+    point2 *= getCurrentContext().Transformation;
+
+    if ((fYPrevTextPosition != point1.getY()) ||
+        (fXPrevTextPosition > point2.getX()) ||
+        ((fXPrevTextPosition + fPrevTextWidth * 1.3) < point1.getX()))
     {
         processGlyphLine();
     }
@@ -288,12 +292,11 @@ void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
 
     getGCId(getCurrentContext());
 
-    m_GlyphsList.push_back( aGlyph );
+    m_GlyphsList.push_back(aGlyph);
 
-    fYPrevTextPosition  = rRect.Y1;
-    fXPrevTextPosition  = rRect.X2;
-    fPrevTextHeight     = rRect.Y2-rRect.Y1;
-    fPrevTextWidth      = rRect.X2-rRect.X1;
+    fYPrevTextPosition  = point1.getY();
+    fXPrevTextPosition  = point2.getX();
+    fPrevTextWidth      = point2.getX() - point1.getX();
 }
 
 GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
