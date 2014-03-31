@@ -135,40 +135,6 @@ namespace osl
         BasePath.pData, RelPath.pData, &AbsolutePath.pData);
  }
 
- /*****************************************
-     systemPathGetFileOrLastDirectoryPart
-    Returns the file or the directory part
-    of the given path
-
-    @param pustrPath [in] a system path,
-           must not be NULL
-
-    @param ppustrFileOrDirPart [out] on
-           return receives the last part
-           of the given directory or the
-           file name
-           if pustrPath is the root path
-           '/' an empty string will be
-           returned
-           if pustrPath has a trailing
-           '/' the last part before the
-           '/' will be returned else
-           the part after the last '/'
-           will be returned
-
-    @returns nothing
-
-  ****************************************/
-
- inline void systemPathGetFileNameOrLastDirectoryPart(
-     const rtl::OUString& Path,
-    rtl::OUString&       FileNameOrLastDirPart)
- {
-    osl_systemPathGetFileNameOrLastDirectoryPart(
-        Path.pData, &FileNameOrLastDirPart.pData);
- }
-
-
  /********************************************
      systemPathIsHiddenFileOrDirectoryEntry
     Returns sal_True if the last part of
@@ -190,28 +156,6 @@ namespace osl
      const rtl::OUString& Path)
  {
     return osl_systemPathIsHiddenFileOrDirectoryEntry(Path.pData);
- }
-
-
- /************************************************
-     systemPathIsLocalOrParentDirectoryEntry
-    Returns sal_True if the last part of the given
-    system path is the local directory entry '.'
-    or the parent directory entry '..'
-
-    @param pustrPath [in] a system path,
-           must not be NULL
-
-    @returns sal_True if the last part of the
-             given system path is '.' or '..'
-             else sal_False
-
- ************************************************/
-
- inline bool systemPathIsLocalOrParentDirectoryEntry(
-     const rtl::OUString& Path)
- {
-    return osl_systemPathIsLocalOrParentDirectoryEntry(Path.pData);
  }
 
  /************************************************
