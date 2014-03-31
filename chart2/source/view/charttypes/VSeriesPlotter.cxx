@@ -145,7 +145,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
 {
-    OSL_POSTCOND(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
+    SAL_WARN_IF(!m_xChartTypeModel.is(),"chart2","no XChartType available in view, fallback to default values may be wrong");
 }
 
 VSeriesPlotter::~VSeriesPlotter()

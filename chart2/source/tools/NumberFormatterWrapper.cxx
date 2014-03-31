@@ -62,7 +62,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
     SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if( pSupplierObj )
         m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
-    OSL_POSTCOND(m_pNumberFormatter,"need a numberformatter");
+    SAL_WARN_IF(!m_pNumberFormatter,"chart2.tools","need a numberformatter");
 }
 
 NumberFormatterWrapper::~NumberFormatterWrapper()
