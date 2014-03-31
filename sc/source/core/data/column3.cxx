@@ -1906,15 +1906,19 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
     sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
     xub_StrLen nStringLen = 0;
-    nPrecision = pDocument->GetDocOptions().GetStdPrecision();
-    if ( nPrecision == SvNumberFormatter::UNLIMITED_PRECISION )
-        // In case of unlimited precision, use 2 instead.
-        nPrecision = 2;
+    nPrecision = 0;
 
     if ( !maItems.empty() )
     {
         OUString aString;
+        String aSep;
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
+        sal_uInt16 nMaxGeneralPrecision = pDocument->GetDocOptions().GetStdPrecision();
+        // Limit the decimals passed to doubleToUString().
+        // Also, the dBaseIII maximum precision is 15.
+        if (nMaxGeneralPrecision > 15)
+            nMaxGeneralPrecision = 15;
+        bool bHaveSigned = false;
         SCSIZE nIndex;
         SCROW nRow;
         Search( nRowStart, nIndex );
@@ -1926,16 +1930,33 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
             if ( eType == CELLTYPE_VALUE || (eType == CELLTYPE_FORMULA
                     && aCell.mpFormula->IsValue()) )
             {
-                sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
-                    nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                ScCellFormat::GetInputString(aCell, nFormat, aString, *pNumFmt, pDocument);
-                xub_StrLen nLen = aString.getLength();
-                if ( nLen )
+                do
                 {
-                    if ( nFormat )
+                    sal_uInt16 nCellPrecision = nMaxGeneralPrecision;
+                    if (eType == CELLTYPE_FORMULA)
                     {
+                        // Limit unformatted formula cell precision to precision
+                        // encountered so far, if any, otherwise we'd end up with 15 just
+                        // because of =1/3 ...  If no precision yet then arbitrarily limit
+                        // to a maximum of 4 unless a maximum general precision is set.
+                        if (nPrecision)
+                            nCellPrecision = nPrecision;
+                        else
+                            nCellPrecision = (nMaxGeneralPrecision >= 15) ? 4 : nMaxGeneralPrecision;
+                    }
+
+                    double fVal = aCell.getValue();
+                    if (!bHaveSigned && fVal < 0.0)
+                        bHaveSigned = true;
+
+                    sal_uInt16 nPrec;
+                    sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
+                                nRow, ATTR_VALUE_FORMAT ))->GetValue();
+                    if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
+                    {
+                        aSep = pNumFmt->GetFormatDecimalSep(nFormat);
+                        ScCellFormat::GetInputString(aCell, nFormat, aString, *pNumFmt, pDocument);
                         const SvNumberformat* pEntry = pNumFmt->GetEntry( nFormat );
-                        sal_uInt16 nPrec;
                         if (pEntry)
                         {
                             bool bThousand, bNegRed;
@@ -1944,14 +1965,54 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
                         }
                         else
                             nPrec = pNumFmt->GetFormatPrecision( nFormat );
-
-                        if ( nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > nPrecision )
-                            nPrecision = nPrec;
                     }
+                    else
+                    {
+                        if (nPrecision >= nMaxGeneralPrecision)
+                            break;      // early bail out for nothing changes here
+
+                        if (!fVal)
+                        {
+                            // 0 doesn't change precision, but set a maximum length if none yet.
+                            if (!nStringLen)
+                                nStringLen = 1;
+                            break;
+                        }
+
+                        // Simple number string with at most 15 decimals and trailing
+                        // decimal zeros eliminated.
+                        aSep = ".";
+                        aString = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_F, nCellPrecision, '.', true);
+                        nPrec = SvNumberFormatter::UNLIMITED_PRECISION;
+                    }
+
+                    sal_Int32 nLen = aString.getLength();
+                    if (nLen <= 0)
+                        // Ignore empty string.
+                        break;
+
+                    if (nPrec == SvNumberFormatter::UNLIMITED_PRECISION && nPrecision < nMaxGeneralPrecision)
+                    {
+                        if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
+                        {
+                            // For some reason we couldn't obtain a precision from the
+                            // format, retry with simple number string.
+                            aSep = ".";
+                            aString = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_F, nCellPrecision, '.', true);
+                            nLen = aString.getLength();
+                        }
+                        sal_Int32 nSep = aString.indexOf( aSep);
+                        if (nSep != -1)
+                            nPrec = aString.getLength() - nSep - 1;
+
+                    }
+
+                    if (nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > nPrecision)
+                        nPrecision = nPrec;
+
                     if ( nPrecision )
                     {   // less than nPrecision in string => widen it
                         // more => shorten it
-                        String aSep = pNumFmt->GetFormatDecimalSep( nFormat );
                         sal_Int32 nTmp = aString.indexOf( aSep );
                         if ( nTmp == -1 )
                             nLen += nPrecision + aSep.Len();
@@ -1964,9 +2025,18 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
                                 // nPrecision < nTmp : nLen - Diff
                         }
                     }
+
+                    // Enlarge for sign if necessary. Bear in mind that
+                    // GetMaxNumberStringLen() is for determining dBase decimal field width
+                    // and precision where the overall field width must include the sign.
+                    // Fitting -1 into "#.##" (width 4, 2 decimals) does not work.
+                    if (bHaveSigned && fVal >= 0.0)
+                        ++nLen;
+
                     if ( nStringLen < nLen )
                         nStringLen = nLen;
-                }
+
+                } while (0);
             }
             nIndex++;
         }
