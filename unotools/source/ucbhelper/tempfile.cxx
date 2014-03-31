@@ -184,8 +184,18 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
     // 36 ** 6 == 2176782336
     unsigned const nRadix = 36;
     unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
-    OUString aName = rName + "lu";
-
+    OUString aName;
+    OUString aEyeCatcher = "lu";
+#ifdef DBG_UTIL
+#ifdef UNX
+    const char* eye = getenv("LO_TESTNAME");
+    if(eye)
+    {
+        aEyeCatcher = OUString(eye, strlen(eye), RTL_TEXTENCODING_ASCII_US);
+    }
+#endif
+#endif
+    aName = rName + aEyeCatcher;
     rName = "";
     static unsigned long u = Time::GetSystemTicks() % nMax;
     for ( unsigned long nSeed = u; ++u != nSeed; )

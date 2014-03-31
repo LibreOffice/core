@@ -95,6 +95,39 @@ private:
     sal_uInt32 m_nStartTime;
 };
 
+#ifdef UNX
+#include <stdlib.h>
+// Setup an env variable so that temp file (or other) can
+// have a usefull value to identify the source
+class EyecatcherListener
+    : public CppUnit::TestListener
+    , private boost::noncopyable
+{
+public:
+    void startTest( CppUnit::Test* test) SAL_OVERRIDE
+    {
+        char* tn = new char [ test->getName().length() + 2 ];
+        strcpy(tn, test->getName().c_str());
+        int len = strlen(tn);
+        for(int i = 0; i < len; i++)
+        {
+            if(!isalnum(tn[i]))
+            {
+                tn[i] = '_';
+            }
+            tn[len] = '_';
+            tn[len + 1] = 0;
+        }
+        setenv("LO_TESTNAME", tn, true);
+        delete[] tn;
+    }
+
+    void endTest( CppUnit::Test* /* test */ ) SAL_OVERRIDE
+    {
+    }
+};
+#endif
+
 //Allow the whole uniting testing framework to be run inside a "Protector"
 //which knows about uno exceptions, so it can print the content of the
 //exception before falling over and dying
@@ -144,6 +177,10 @@ public:
         result.addListener(&timer);
 #endif
 
+#ifdef UNX
+        EyecatcherListener eye;
+        result.addListener(&eye);
+#endif
         for (size_t i = 0; i < protectors.size(); ++i)
             result.pushProtector(protectors[i]);
 
