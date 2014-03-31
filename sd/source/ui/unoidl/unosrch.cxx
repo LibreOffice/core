@@ -88,8 +88,9 @@ public:
   */
 
 SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) throw()
+    : mpShape(NULL)
+    , mpPage(pPage)
 {
-    mpPage = pPage;
 }
 
 SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
