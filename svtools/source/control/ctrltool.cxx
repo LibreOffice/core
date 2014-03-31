@@ -108,7 +108,8 @@ private:
     sal_uInt16              mnType;
 
     ImplFontListNameInfo(const OUString& rSearchName)
-        : maSearchName( rSearchName )
+        : maSearchName(rSearchName)
+        , mpFirst(NULL)
         , mnType(0)
     {
     }
