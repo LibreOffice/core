@@ -2423,6 +2423,8 @@ void ScFiltersTest::testPrintRangeODS()
     pRange = pDoc->GetRepeatRowRange(1);
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL(ScRange(0,2,0,0,4,0), *pRange);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testOutlineODS()
@@ -2476,6 +2478,8 @@ void ScFiltersTest::testOutlineODS()
         bool bVisible = pEntry->IsVisible();
         CPPUNIT_ASSERT_EQUAL(aRow[i].bVisible, bVisible);
     }
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testColumnStyleXLSX()
