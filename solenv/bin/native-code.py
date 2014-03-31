@@ -75,6 +75,7 @@ core_constructor_list = [
     "com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
     "com_sun_star_i18n_CharacterClassification_get_implementation",
     "com_sun_star_i18n_CharacterClassification_Unicode_get_implementation",
+    "com_sun_star_i18n_Collator_get_implementation",
     "com_sun_star_i18n_LocaleDataImpl_get_implementation",
     "com_sun_star_i18n_NumberFormatCodeMapper_get_implementation",
     "com_sun_star_i18n_Transliteration_get_implementation",
