@@ -1935,6 +1935,10 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
 
 CustomPropertiesControl::CustomPropertiesControl(Window* pParent)
     : VclVBox(pParent)
+    , m_pHeaderBar(NULL)
+    , m_pBody(NULL)
+    , m_pPropertiesWin(NULL)
+    , m_pVertScroll(NULL)
     , m_nThumbPos(0)
 {
 }
