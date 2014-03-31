@@ -67,7 +67,6 @@ namespace pdfi
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext >  m_xContext;
         double fYPrevTextPosition;
-        double fPrevTextHeight;
         double fXPrevTextPosition;
         double fPrevTextWidth;
         enum DocumentTextDirecion { LrTb, RlTb, TbLr };
