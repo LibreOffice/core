@@ -2983,7 +2983,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 }
 
                                 uno::Sequence< beans::NamedValue > aOldEncryptionData;
-                                GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
+                                (void)GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
 
                                 if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
                                     throw;
