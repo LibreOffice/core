@@ -150,6 +150,10 @@ public:
 };
 
 SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
+    : pOldTxt(NULL)
+    , nIdx(0)
+    , nLen(0)
+    , pInf(NULL)
 {
     bOn = pPor->GetExpTxt( *pNew, aTxt );
 
