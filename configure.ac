@@ -10639,8 +10639,8 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
         AC_MSG_RESULT([external])
         if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
             if test -z $COMMONS_CODEC_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-codec-1.9.jar,
-                    [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.9.jar ],
+                AC_CHECK_FILE(/usr/share/java/commons-codec-1.6.jar,
+                    [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.6.jar ],
                     [
                         AC_CHECK_FILE(/usr/share/java/commons-codec.jar,
                             [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
@@ -10685,8 +10685,8 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
         fi
         if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
             if test -z $COMMONS_LOGGING_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.3.jar,
-                   [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.3.jar ],
+                AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar,
+                   [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],
                    [
                         AC_CHECK_FILE(/usr/share/java/commons-logging.jar,
                             [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
