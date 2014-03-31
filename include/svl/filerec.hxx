@@ -239,8 +239,14 @@ protected:
     sal_uInt8           _nPreTag;   //  aus dem Header gelesenes Pre-Tag
 
                         // Drei-Phasen-Ctor f"ur Subklassen
-                        SfxMiniRecordReader() {}
-   void                 Construct_Impl( SvStream *pStream, sal_uInt8 nTag )
+    SfxMiniRecordReader()
+        : _pStream(NULL)
+        , _nEofRec(0)
+        , _bSkipped(false)
+        , _nPreTag(0)
+    {
+    }
+    void                 Construct_Impl( SvStream *pStream, sal_uInt8 nTag )
                         {
                             _pStream = pStream;
                             _bSkipped = false;
