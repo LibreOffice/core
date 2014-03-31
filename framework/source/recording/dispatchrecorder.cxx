@@ -100,7 +100,8 @@ Sequence< Any > make_seq_out_of_struct(
 
 
 DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        : m_xConverter( css::script::Converter::create(xContext) )
+    : m_nRecordingID(0)
+    , m_xConverter(css::script::Converter::create(xContext))
 {
 }
 
