@@ -39,6 +39,8 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
     for( int i = 0; i < pKey->countValues(); i++ )
     {
         pValue = pKey->getValue( i );
+        if (pValue->m_bCustomOption)
+            continue;
         aOptionText = pParser->translateOption( pKey->getKey(), pValue->m_aOption) ;
 
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
@@ -56,7 +58,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         }
     }
     pValue = m_aJobData.m_aContext.getValue( pKey );
-    if( pValue )
+    if (pValue && !pValue->m_bCustomOption)
     {
         if( ( nPos = rBox.GetEntryPos( (void*)pValue ) ) != LISTBOX_ENTRY_NOTFOUND )
             rBox.SelectEntryPos( nPos );
@@ -286,14 +288,18 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
  */
 
 RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
-    : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "vcl/ui/printerdevicepage.ui" )
-    , m_pParent( pParent )
+    : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "vcl/ui/printerdevicepage.ui")
+    , m_pParent(pParent)
+    , m_pCustomValue(NULL)
 {
     get(m_pPPDKeyBox, "options");
     get(m_pPPDValueBox, "values");
 
     m_pPPDKeyBox->SetDropDownLineCount(12);
     m_pPPDValueBox->SetDropDownLineCount(12);
+
+    get(m_pCustomEdit, "custom");
+    m_pCustomEdit->SetModifyHdl(LINK(this, RTSDevicePage, ModifyHdl));
 
     get(m_pLevelBox, "level");
     get(m_pSpaceBox, "colorspace");
@@ -423,7 +429,14 @@ sal_uLong RTSDevicePage::getPDFDevice()
     return -1;      //explicitly PS
 }
 
-
+IMPL_LINK( RTSDevicePage, ModifyHdl, Edit*, pEdit )
+{
+    if (m_pCustomValue)
+    {
+        m_pCustomValue->m_aCustomOption = m_pCustomEdit->GetText();
+    }
+    return 0;
+}
 
 IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
 {
@@ -436,7 +449,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
     {
         const PPDKey* pKey = (PPDKey*)m_pPPDKeyBox->GetEntryData( m_pPPDKeyBox->GetSelectEntryPos() );
         const PPDValue* pValue = (PPDValue*)m_pPPDValueBox->GetEntryData( m_pPPDValueBox->GetSelectEntryPos() );
-        if( pKey && pValue )
+        if (pKey && pValue)
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
             FillValueBox( pKey );
@@ -445,11 +458,10 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
-
-
 void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 {
     m_pPPDValueBox->Clear();
+    m_pCustomEdit->Hide();
 
     if( ! pKey )
         return;
@@ -461,13 +473,24 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
         if( m_pParent->m_aJobData.m_aContext.checkConstraints( pKey, pValue ) &&
             m_pParent->m_aJobData.m_pParser )
         {
-            OUString aEntry( m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption ) );
+            OUString aEntry;
+            if (pValue->m_bCustomOption)
+                aEntry = VclResId(SV_PRINT_CUSTOM_TXT);
+            else
+                aEntry = OUString(m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption));
             sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
             m_pPPDValueBox->SetEntryData( nPos, (void*)pValue );
         }
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
     m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
+    if (pValue->m_bCustomOption)
+    {
+        m_pCustomValue = pValue;
+        m_pParent->m_aJobData.m_aContext.setValue(pKey, pValue);
+        m_pCustomEdit->SetText(m_pCustomValue->m_aCustomOption);
+        m_pCustomEdit->Show();
+    }
 }
 
 int SetupPrinterDriver(::psp::PrinterInfo& rJobData)

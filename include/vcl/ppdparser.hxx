@@ -42,9 +42,14 @@ enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
 
 struct VCL_DLLPUBLIC PPDValue
 {
-    PPDValueType    m_eType;
-    OUString        m_aOption;
-    OUString        m_aValue;
+    PPDValueType     m_eType;
+    //CustomOption stuff for fdo#43049
+    //see http://www.cups.org/documentation.php/spec-ppd.html#OPTIONS
+    //for full specs, only the basics are implemented here
+    bool             m_bCustomOption;
+    mutable OUString m_aCustomOption;
+    OUString         m_aOption;
+    OUString         m_aValue;
 };
 
 
@@ -82,7 +87,7 @@ public:
     PPDKey( const OUString& rKey );
     ~PPDKey();
 
-    PPDValue*           insertValue( const OUString& rOption, PPDValueType eType );
+    PPDValue*           insertValue(const OUString& rOption, PPDValueType eType, bool bCustomOption = false);
     int                 countValues() const
     { return m_aValues.size(); }
     // neither getValue will return the query option

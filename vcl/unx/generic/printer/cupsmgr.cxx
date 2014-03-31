@@ -591,10 +591,16 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
         {
             const PPDKey* pKey = aKeys[i];
             const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
-            if(pValue && pValue->m_eType == eInvocation && !pValue->m_aOption.isEmpty() )
+            OUString sPayLoad;
+            if (pValue && pValue->m_eType == eInvocation)
+            {
+                sPayLoad = pValue->m_bCustomOption ? pValue->m_aCustomOption : pValue->m_aOption;
+            }
+
+            if (!sPayLoad.isEmpty())
             {
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
-                OString aValue = OUStringToOString( pValue->m_aOption, RTL_TEXTENCODING_ASCII_US );
+                OString aValue = OUStringToOString( sPayLoad, RTL_TEXTENCODING_ASCII_US );
                 rNumOptions = cupsAddOption( aKey.getStr(), aValue.getStr(), rNumOptions, (cups_option_t**)rOptions );
             }
         }

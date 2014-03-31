@@ -115,4 +115,9 @@ String SV_PRINT_INVALID_TXT
     Text [ en-US ] = "<ignore>";
 };
 
+String SV_PRINT_CUSTOM_TXT
+{
+    Text [ en-US ] = "Custom";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

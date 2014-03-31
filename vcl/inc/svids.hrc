@@ -214,6 +214,7 @@
 #define SV_PRINT_NOCOLLATE_IMG              10614
 #define SV_PRINT_QUERYFAXNUMBER_TXT         10615
 #define SV_PRINT_INVALID_TXT                10616
+#define SV_PRINT_CUSTOM_TXT                 10617
 
 #define SV_EDIT_WARNING_BOX                 10650
 

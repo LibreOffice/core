@@ -933,6 +933,18 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         }
         else if( aKey == "CustomPageSize" ) // currently not handled
             continue;
+        else if (aKey.startsWith("Custom", &aKey) )
+        {
+            //fdo#43049 very basic support for Custom entries, we ignore the
+            //validation params and types
+            PPDKey* pKey = NULL;
+            OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
+            keyit = m_aKeys.find( aUniKey );
+            if(keyit != m_aKeys.end())
+                pKey = keyit->second;
+            pKey->insertValue("Custom", eInvocation, true);
+            continue;
+        }
 
         // default values are parsed in pass 2
         if (aKey.startsWith("Default"))
@@ -1525,23 +1537,20 @@ void PPDKey::eraseValue( const OUString& rOption )
     m_aValues.erase( it );
 }
 
-
-
-PPDValue* PPDKey::insertValue( const OUString& rOption, PPDValueType eType )
+PPDValue* PPDKey::insertValue(const OUString& rOption, PPDValueType eType, bool bCustomOption)
 {
     if( m_aValues.find( rOption ) != m_aValues.end() )
         return NULL;
 
     PPDValue aValue;
     aValue.m_aOption = rOption;
+    aValue.m_bCustomOption = bCustomOption;
     aValue.m_eType = eType;
     m_aValues[ rOption ] = aValue;
     PPDValue* pValue = &m_aValues[rOption];
     m_aOrderedValues.push_back( pValue );
     return pValue;
 }
-
-
 
 /*
  * PPDContext

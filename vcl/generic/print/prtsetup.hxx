@@ -26,6 +26,7 @@
 #include "vcl/tabpage.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/button.hxx"
+#include "vcl/edit.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/lstbox.hxx"
 #include "vcl/field.hxx"
@@ -102,6 +103,8 @@ class RTSDevicePage : public TabPage
 
     ListBox*            m_pPPDKeyBox;
     ListBox*            m_pPPDValueBox;
+    const psp::PPDValue* m_pCustomValue;
+    Edit*               m_pCustomEdit;
 
     ListBox*            m_pLevelBox;
     ListBox*            m_pSpaceBox;
@@ -110,6 +113,7 @@ class RTSDevicePage : public TabPage
     void FillValueBox( const ::psp::PPDKey* );
 
     DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK( ModifyHdl, Edit* );
 public:
     RTSDevicePage( RTSDialog* );
     ~RTSDevicePage();
