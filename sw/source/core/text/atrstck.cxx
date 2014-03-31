@@ -383,7 +383,11 @@ sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
  *                      SwAttrHandler::SwAttrHandler()
  *************************************************************************/
 
-SwAttrHandler::SwAttrHandler() : mpShell( 0 ), pFnt( 0 ), bVertLayout( false )
+SwAttrHandler::SwAttrHandler()
+    : mpIDocumentSettingAccess(NULL)
+    , mpShell(NULL)
+    , pFnt(NULL)
+    , bVertLayout(false)
 {
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
