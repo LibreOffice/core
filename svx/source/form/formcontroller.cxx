@@ -1030,8 +1030,8 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
     if ( _Term < m_nCurrentFilterPosition )
         --m_nCurrentFilterPosition;
 
-    OSL_POSTCOND( ( m_nCurrentFilterPosition < 0 ) == ( m_aFilterRows.empty() ),
-        "FormController::removeDisjunctiveTerm: inconsistency!" );
+    SAL_WARN_IF( !( ( m_nCurrentFilterPosition < 0 ) != ( m_aFilterRows.empty() ) ),
+        "svx.form", "FormController::removeDisjunctiveTerm: inconsistency!" );
 
     // update the texts in the filter controls
     impl_setTextOnAllFilter_throw();

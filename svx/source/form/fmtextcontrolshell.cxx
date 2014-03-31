@@ -1006,7 +1006,7 @@ namespace svx
                     bDisable |= true;
                     break;
                 }
-                OSL_POSTCOND( !bNeedSelection || bNeedTextComponent, "FmTextControlShell::GetTextAttributeState: bNeedSelection should imply bNeedTextComponent!" );
+                SAL_WARN_IF( bNeedSelection && !bNeedTextComponent, "svx.form", "FmTextControlShell::GetTextAttributeState: bNeedSelection should imply bNeedTextComponent!" );
 
                 if ( !bDisable && bNeedWriteableControl )
                     bDisable |= !IsActiveControl( ) || m_bActiveControlIsReadOnly;

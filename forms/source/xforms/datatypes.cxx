@@ -111,7 +111,7 @@ namespace xforms
 
 #define SET_PROPERTY( propertyid, value, member ) \
     setFastPropertyValue( PROPERTY_ID_##propertyid, makeAny( value ) ); \
-    OSL_POSTCOND( member == value, "OXSDDataType::setFoo: inconsistency!" );
+    SAL_WARN_IF( member != value, "forms.misc", "OXSDDataType::setFoo: inconsistency!" );
 
 
     OUString SAL_CALL OXSDDataType::getName(  ) throw (RuntimeException, std::exception)
