@@ -1149,12 +1149,11 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::R
 
 SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pDoc)
     : m_pImpl(new Impl)
-    ,
-    m_pPropSet(pSet),
-    m_pDoc ( pDoc ),
-    eType(eSet),
-    bIsDescriptor(true),
-    m_pCopySource( 0 )
+    , m_pPropSet(pSet)
+    , m_pDoc(pDoc)
+    , eType(eSet)
+    , bIsDescriptor(true)
+    , m_pCopySource(0)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1195,6 +1194,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
         break;
 
         default:
+            pProps = NULL;
             ;
     }
 }
