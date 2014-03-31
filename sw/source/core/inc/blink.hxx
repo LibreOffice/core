@@ -36,10 +36,19 @@ class SwBlinkPortion
     sal_uInt16              nDir;
 
 public:
-    SwBlinkPortion( const SwLinePortion* pPortion, sal_uInt16 nDirection )
-            { pPor = pPortion; nDir = nDirection; }
-    SwBlinkPortion( const SwBlinkPortion* pBlink, const SwLinePortion* pPort )
-    {   pPor = pPort; pFrm = pBlink->pFrm; aPos = pBlink->aPos; nDir = pBlink->nDir; }
+    SwBlinkPortion(const SwLinePortion* pPortion, sal_uInt16 nDirection)
+        : pPor(pPortion)
+        , pFrm(NULL)
+        , nDir(nDirection)
+    {
+    }
+    SwBlinkPortion(const SwBlinkPortion* pBlink, const SwLinePortion* pPort)
+        : aPos(pBlink->aPos)
+        , pPor(pPort)
+        , pFrm(pBlink->pFrm)
+        , nDir(pBlink->nDir)
+    {
+    }
     void SetPos( const Point& aNew ){ aPos = aNew; }
     const Point& GetPos() const{ return aPos; }
     void SetRootFrm( const SwRootFrm* pNew ){ pFrm = pNew; }
@@ -71,7 +80,7 @@ public:
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
     void FrmDelete( const SwRootFrm* pRoot );
-    inline bool IsVisible() const { return bVisible ; }
+    bool IsVisible() const { return bVisible ; }
 };
 
 // Blink-Manager, global variable, see Blink.Cxx
