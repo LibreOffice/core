@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_EVENT_EVENTHANDLER_HXX
-#define INCLUDED_SVX_SDR_EVENT_EVENTHANDLER_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
+#define INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
 
 #include <sal/types.h>
 
 #include <vector>
 #include <vcl/timer.hxx>
-
-
-// predeclarations
 
 namespace sdr
 {
@@ -35,12 +32,9 @@ namespace sdr
         class BaseEvent;
         class EventHandler;
 
-        // typedefs for a list of BaseEvents
         typedef ::std::vector< BaseEvent* > BaseEventVector;
     } // end of namespace event
 } // end of namespace sdr
-
-
 
 namespace sdr
 {
@@ -49,13 +43,11 @@ namespace sdr
         class BaseEvent
         {
             // the EventHandler this event is registered at
-            EventHandler&                                   mrEventHandler;
+            EventHandler& mrEventHandler;
 
         public:
-            // basic constructor.
             BaseEvent(EventHandler& rEventHandler);
 
-            // destructor
             virtual ~BaseEvent();
 
             // the called method if the event is triggered
@@ -64,15 +56,13 @@ namespace sdr
     } // end of namespace event
 } // end of namespace sdr
 
-
-
 namespace sdr
 {
     namespace event
     {
         class EventHandler
         {
-            BaseEventVector                                 maVector;
+            BaseEventVector maVector;
 
             // to allow BaseEvents to use the add/remove functionality
             friend class BaseEvent;
@@ -86,22 +76,17 @@ namespace sdr
             BaseEvent* GetEvent();
 
         public:
-            // basic constructor.
             EventHandler();
 
-            // destructor
             virtual ~EventHandler();
 
             // Trigger and consume the events
             virtual void ExecuteEvents();
 
-            // for control
             bool IsEmpty() const;
         };
     } // end of namespace event
 } // end of namespace sdr
-
-
 
 namespace sdr
 {
@@ -110,10 +95,8 @@ namespace sdr
         class TimerEventHandler : public EventHandler, public Timer
         {
         public:
-            // basic constructor.
             TimerEventHandler(sal_uInt32 nTimeout = 1L);
 
-            // destructor
             virtual ~TimerEventHandler();
 
             // The timer when it is triggered; from class Timer
@@ -125,8 +108,6 @@ namespace sdr
     } // end of namespace event
 } // end of namespace sdr
 
-
-
-#endif // INCLUDED_SVX_SDR_EVENT_EVENTHANDLER_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_EVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
