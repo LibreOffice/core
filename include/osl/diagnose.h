@@ -95,8 +95,6 @@
 */
 #define OSL_LOG_PREFIX SAL_DETAIL_WHERE
 
-#define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
-
 #define OSL_TRACE(...) \
     SAL_DETAIL_INFO_IF_FORMAT(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
 
@@ -121,16 +119,6 @@
 #else
 #define _OSL_GLOBAL
 #endif  /* __cplusplus */
-
-#if OSL_DEBUG_LEVEL > 0
-
-#define _OSL_DEBUG_ONLY(f)  (f)
-
-#else
-
-#define _OSL_DEBUG_ONLY(f)          ((void)0)
-
-#endif /* OSL_DEBUG_LEVEL */
 
 /* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
 /* copied from boost/current_function.hpp to make it usable from C
