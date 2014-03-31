@@ -351,7 +351,6 @@ class AddonsOptions_Impl : public ConfigItem
         void                 SubstituteVariables( OUString& aURL );
 
         bool                 ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
-        void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
         OUString          GeneratePrefixURL();
 
         Sequence< OUString > GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const;
@@ -874,34 +873,7 @@ bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNode
     return ( (sal_uInt32)rAddonOfficeToolBarSeq.getLength() > nToolBarItemCount );
 }
 
-
 //  private method
-
-void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
-{
-    Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
-
-    aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Name = m_aPropNames[ INDEX_URL            ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Name = m_aPropNames[ INDEX_TITLE          ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Name = m_aPropNames[ INDEX_IMAGEIDENTIFIER];
-    aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Name = m_aPropNames[ INDEX_TARGET         ];
-    aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Name = m_aPropNames[ INDEX_CONTEXT        ];
-
-    aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= SEPARATOR_URL;
-    aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= m_aEmpty;
-    aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= m_aEmpty;
-    aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= m_aEmpty;
-    aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= m_aEmpty;
-
-    sal_uInt32 nToolBarItemCount = rAddonOfficeToolBarSeq.getLength();
-    rAddonOfficeToolBarSeq.realloc( nToolBarItemCount+1 );
-    rAddonOfficeToolBarSeq[nToolBarItemCount] = aToolBarItem;
-}
-
-
-
-//  private method
-
 void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
