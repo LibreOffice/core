@@ -142,7 +142,7 @@ namespace dbtools
         // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%09d
         static OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
         // return the any in an sql standard format
-        static OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
+        static OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, bool bQuote,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >&  _rxTypeConverter);
 
         /** converts a Unicode string into a 8-bit string, using the given encoding

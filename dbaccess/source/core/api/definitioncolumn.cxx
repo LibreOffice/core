@@ -237,7 +237,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
             return NULL;
 
         OUString sComposedTableName = ::dbtools::composeTableName(
-            _rxConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
+            _rxConnection->getMetaData(), sCatalog, sSchema, sTable, false, ::dbtools::eComplete );
 
         // retrieve the table in question
         Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );

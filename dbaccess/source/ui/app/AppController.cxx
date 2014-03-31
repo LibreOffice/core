@@ -2152,7 +2152,7 @@ void OApplicationController::renameEntry()
                                 OUString sCatalog = aDialog->getCatalog();
                                 OUString sSchema  = aDialog->getSchema();
 
-                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
+                                sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, false, ::dbtools::eInDataManipulation );
                             }
                             else
                                 sNewName = aDialog->getName();

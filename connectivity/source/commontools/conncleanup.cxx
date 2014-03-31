@@ -45,8 +45,8 @@ namespace dbtools
 
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )
-        ,m_bRSListening( sal_False )
-        ,m_bPropertyListening( sal_False )
+        ,m_bRSListening( false )
+        ,m_bPropertyListening( false )
     {
         Reference< XPropertySet > xProps(_rxRowSet, UNO_QUERY);
         OSL_ENSURE(xProps.is(), "OAutoConnectionDisposer::OAutoConnectionDisposer: invalid rowset (no XPropertySet)!");
@@ -72,7 +72,7 @@ namespace dbtools
         try
         {
             _rxRowSet->addPropertyChangeListener( getActiveConnectionPropertyName(), this );
-            m_bPropertyListening = sal_True;
+            m_bPropertyListening = true;
         }
         catch( const Exception& )
         {
@@ -92,7 +92,7 @@ namespace dbtools
             if ( _rxEventSource.is() )
             {
                 _rxEventSource->removePropertyChangeListener( getActiveConnectionPropertyName(), this );
-                m_bPropertyListening = sal_False;
+                m_bPropertyListening = false;
             }
         }
         catch( const Exception& )
@@ -114,7 +114,7 @@ namespace dbtools
         {
             OSL_FAIL( "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
         }
-        m_bRSListening = sal_True;
+        m_bRSListening = true;
     }
 
 
@@ -129,7 +129,7 @@ namespace dbtools
         {
             OSL_FAIL( "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
         }
-        m_bRSListening = sal_False;
+        m_bRSListening = false;
     }
 
 

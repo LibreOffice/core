@@ -149,7 +149,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
         dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
         OUString aComposedName;
 
-        aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,sal_True,::dbtools::eInIndexDefinitions);
+        aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable, true, ::dbtools::eInIndexDefinitions);
         if (!_rForName.isEmpty() )
         {
             aSql.append( ::dbtools::quoteName( aQuote, _rForName ) );
@@ -230,7 +230,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementNam
 
             OUString aComposedName = dbtools::composeTableName( m_pTable->getMetaData(), m_pTable, ::dbtools::eInIndexDefinitions, false, false, true );
             OUString sIndexName,sTemp;
-            sIndexName = dbtools::composeTableName( m_pTable->getMetaData(), sTemp, aSchema, aName, sal_True, ::dbtools::eInIndexDefinitions );
+            sIndexName = dbtools::composeTableName( m_pTable->getMetaData(), sTemp, aSchema, aName, true, ::dbtools::eInIndexDefinitions );
 
             aSql += sIndexName + " ON " + aComposedName;
 

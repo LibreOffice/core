@@ -243,7 +243,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     m_aCurrentColumns.resize(4);
 
     m_aLocale = m_aParseContext.getPreferredLocale();
-    m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext );
+    m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, true, m_aContext );
     Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
@@ -499,7 +499,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
                 {
                     OUString aCatlog,aSchema,aTable;
                     ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
+                    sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
                 }
                 else if (!sTableName.isEmpty())
                     sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -1337,7 +1337,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         }
         else
         {
-            aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
+            aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, false, ::dbtools::eInDataManipulation );
 
             // Is this the right case for the table name?
             // Else, look for it with different case, if applicable.
@@ -1370,7 +1370,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         }
         if(pBegin != pEnd)
         {
-            sReturn = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation ) + ".";
+            sReturn = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, true, ::dbtools::eInDataManipulation ) + ".";
         }
     }
     return sReturn;
@@ -1595,7 +1595,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         {
             OUString aCatlog,aSchema,aTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-            sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
+            sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, true, ::dbtools::eInDataManipulation );
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -1630,7 +1630,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::VARCHAR:
             case DataType::CHAR:
             case DataType::LONGVARCHAR:
-                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, true, m_xTypeConverter ) );
                 break;
             case DataType::CLOB:
                 {
@@ -1645,7 +1645,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     }
                     else
                     {
-                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, true, m_xTypeConverter ) );
                     }
                 }
                 break;
@@ -1681,11 +1681,11 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     m_xTypeConverter->convertToSimpleType(aValue, TypeClass_BOOLEAN) >>= bValue;
 
                     OUString sColumnExp = aSQL.makeStringAndClear();
-                    getBoleanComparisonPredicate( sColumnExp, bValue, m_nBoolCompareMode, aSQL );
+                    getBooleanComparisonPredicate( sColumnExp, bValue, m_nBoolCompareMode, aSQL );
                 }
                 break;
             default:
-                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, true, m_xTypeConverter ) );
                 break;
         }
     }

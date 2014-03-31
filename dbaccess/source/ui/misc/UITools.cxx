@@ -695,7 +695,7 @@ OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const
         {
             sSchema = _xMetaData->getUserName();
         }
-        sCompsedName = ::dbtools::composeTableName( _xMetaData, sCatalog, sSchema, _sName, sal_False, ::dbtools::eInDataManipulation );
+        sCompsedName = ::dbtools::composeTableName( _xMetaData, sCatalog, sSchema, _sName, false, ::dbtools::eInDataManipulation );
         sDefaultName = ::dbtools::createUniqueName(_xTables,sCompsedName);
     }
     catch(const SQLException&)
@@ -1495,7 +1495,7 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
 
     try
     {
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, sal_True, _rxContext));
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, true, _rxContext));
 
         if ( xSupplier.is() )
         {

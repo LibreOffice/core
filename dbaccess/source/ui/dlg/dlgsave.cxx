@@ -303,7 +303,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
                 getCatalog(),
                 getSchema(),
                 sNameToCheck,
-                sal_False,  // no quoting
+                false,  // no quoting
                 ::dbtools::eInDataManipulation
             );
         }

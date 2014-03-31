@@ -144,7 +144,7 @@ void OApplicationController::convertToView(const OUString& _sName)
             OUString sCatalog = aDlg.getCatalog();
             OUString sSchema  = aDlg.getSchema();
             OUString sNewName(
-                ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, sal_False, ::dbtools::eInTableDefinitions ) );
+                ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, false, ::dbtools::eInTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
                 throw SQLException(OUString(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,OUString( "S1000" ) ,0,Any());

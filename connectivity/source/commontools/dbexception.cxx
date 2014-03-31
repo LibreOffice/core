@@ -158,7 +158,7 @@ void SQLExceptionInfo::implDetermineType()
 }
 
 
-sal_Bool SQLExceptionInfo::isKindOf(TYPE _eType) const
+bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 {
     switch (_eType)
     {
@@ -171,7 +171,7 @@ sal_Bool SQLExceptionInfo::isKindOf(TYPE _eType) const
         case UNDEFINED:
             return (m_eType == UNDEFINED);
     }
-    return sal_False;
+    return false;
 }
 
 

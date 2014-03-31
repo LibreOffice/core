@@ -147,7 +147,7 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_CATALOGNAME))
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_SCHEMANAME))
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_NAME))
-                        ,sal_True
+                        ,true
                         ,::dbtools::eInDataManipulation);
     }
 }

@@ -394,7 +394,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
                     if ( pKeyProps.get() )
                         m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
 
-                    const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,sal_False,::dbtools::eInDataManipulation);
+                    const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::eInDataManipulation);
                     pKeyProps.reset(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule));
                     pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
                     _rNames.push_back(sFkName);
@@ -517,10 +517,10 @@ void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException
             ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
             OUString sComposedName;
-            sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
+            sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,true,::dbtools::eInDataManipulation);
             sSql += sComposedName
                  + " TO ";
-            sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
+            sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,true,::dbtools::eInDataManipulation);
             sSql += sComposedName;
 
             Reference< XStatement > xStmt = m_pImpl->m_xConnection->createStatement(  );
@@ -563,7 +563,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 OUString SAL_CALL OTableHelper::getName() throw(RuntimeException, std::exception)
 {
     OUString sComposedName;
-    sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_False,::dbtools::eInDataManipulation);
+    sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,false,::dbtools::eInDataManipulation);
     return sComposedName;
 }
 

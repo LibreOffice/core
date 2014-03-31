@@ -107,7 +107,7 @@ OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException
 {
     OUString sComposedName;
     if(m_xMetaData.is())
-        sComposedName = ::dbtools::composeTableName( m_xMetaData, m_CatalogName, m_SchemaName, m_Name, sal_False, ::dbtools::eInDataManipulation );
+        sComposedName = ::dbtools::composeTableName( m_xMetaData, m_CatalogName, m_SchemaName, m_Name, false, ::dbtools::eInDataManipulation );
     else
     {
         Any aValue;

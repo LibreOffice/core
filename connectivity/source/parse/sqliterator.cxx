@@ -300,7 +300,7 @@ namespace
                     sCatalog,
                     sSchema,
                     sName,
-                    sal_False,
+                    false,
                     ::dbtools::eInDataManipulation
                 );
             }
@@ -458,7 +458,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
                                 aCatalog.hasValue() ? ::comphelper::getString(aCatalog) : OUString(),
                                 aSchema,
                                 aTableName,
-                                sal_False,
+                                false,
                                 ::dbtools::eInDataManipulation);
 
     // if there is no alias for the table name assign the orignal name to it

@@ -790,7 +790,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(getORB()) );
         INetURLObject aURL( _sPath );
         OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-        OUString sDatabaseName = ::dbtools::createUniqueName(xDatabaseContext, sFilename,sal_False);
+        OUString sDatabaseName = ::dbtools::createUniqueName(xDatabaseContext, sFilename, false);
         xDatabaseContext->registerObject(sDatabaseName, xDatasource);
     }
 

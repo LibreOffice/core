@@ -104,7 +104,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                                      sal_Int32 _nScale,
-                                     sal_Bool _bIsCurrency,
+                                     bool _bIsCurrency,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
                                      const ::com::sun::star::lang::Locale& _rLocale);
 
@@ -340,9 +340,9 @@ namespace dbtools
             instead of spreading this knowledge through all callers.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
-                                        ,const OUString& _sProperty,
-                                        sal_Bool _bDefault = sal_False);
+    bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp,
+                                     const OUString& _sProperty,
+                                           bool _bDefault = false);
 
     /** retrieves a particular indirect data source setting
 
@@ -405,7 +405,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
-        sal_Bool _bAllowDefault = sal_False,
+        bool _bAllowDefault = false,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>()
     );
 
@@ -436,15 +436,15 @@ namespace dbtools
     /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
         @param      _rxCursorSet    the property set
     */
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+    OOO_DLLPUBLIC_DBTOOLS bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
     /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
         @param      _rxCursorSet    the property set
     */
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+    OOO_DLLPUBLIC_DBTOOLS bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
     /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
         @param      _rxCursorSet    the property set
     */
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+    OOO_DLLPUBLIC_DBTOOLS bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
 
 
     /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
@@ -453,7 +453,7 @@ namespace dbtools
                             const OUString& _rCatalog,
                             const OUString& _rSchema,
                             const OUString& _rName,
-                            sal_Bool _bQuote,
+                            bool _bQuote,
                             EComposeRule _eComposeRule);
 
     /** composes a table name for usage in a SELECT statement
@@ -512,14 +512,14 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxContainer,
                                      const OUString& _rBaseName,
-                                     sal_Bool _bStartWithNumber = sal_True);
+                                     bool _bStartWithNumber = true);
 
     /** creates a unique name which is not already used in the given name array
     */
     OOO_DLLPUBLIC_DBTOOLS OUString createUniqueName(
         const ::com::sun::star::uno::Sequence< OUString >& _rNames,
         const OUString& _rBaseName,
-        sal_Bool _bStartWithNumber = sal_True
+        bool _bStartWithNumber = true
     );
 
     /** create a name which is a valid SQL 92 identifier name
@@ -537,7 +537,7 @@ namespace dbtools
 
         @see convertName2SQLName
     */
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool isValidSQLName( const OUString& _rName, const OUString& _rSpecials );
+    OOO_DLLPUBLIC_DBTOOLS bool isValidSQLName( const OUString& _rName, const OUString& _rSpecials );
 
     OOO_DLLPUBLIC_DBTOOLS
     void showError( const SQLExceptionInfo& _rInfo,
@@ -714,10 +714,10 @@ namespace dbtools
             createSDBCXColumn(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                 const OUString& _rName,
-                                sal_Bool _bCase,
-                                sal_Bool _bQueryForInfo = sal_True,
-                                sal_Bool _bIsAutoIncrement = sal_False,
-                                sal_Bool _bIsCurrency = sal_False,
+                                bool _bCase,
+                                bool _bQueryForInfo = true,
+                                bool _bIsAutoIncrement = false,
+                                bool _bIsCurrency = false,
                                 sal_Int32 _nDataType = com::sun::star::sdbc::DataType::OTHER);
 
     /** tries to locate the corresponding DataDefinitionSupplier for the given url and connection
@@ -751,7 +751,7 @@ namespace dbtools
                                  const OUString& _sSchema,
                                  const OUString& _sTable);
 
-    typedef ::std::pair<sal_Bool,sal_Bool> TBoolPair;
+    typedef ::std::pair<bool,bool> TBoolPair;
     typedef ::std::pair< TBoolPair,sal_Int32 > ColumnInformation;
     typedef ::std::multimap< OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
     /** collects the information about auto increment, currency and data type for the given column name.
@@ -784,9 +784,9 @@ namespace dbtools
         @param _out_rSQLPredicate
             the buffer to which the comparison predicate will be appended
     */
-    OOO_DLLPUBLIC_DBTOOLS void getBoleanComparisonPredicate(
+    OOO_DLLPUBLIC_DBTOOLS void getBooleanComparisonPredicate(
             const OUString& _rExpression,
-            const sal_Bool  _bValue,
+            const bool  _bValue,
             const sal_Int32 _nBooleanComparisonMode,
             OUStringBuffer& _out_rSQLPredicate
         );

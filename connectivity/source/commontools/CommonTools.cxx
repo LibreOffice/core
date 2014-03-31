@@ -188,17 +188,17 @@ sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
 }
 
 
-sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
+bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
 {
     // Test for correct naming (in SQL sense)
     // This is important for table names for example
     const sal_Unicode* pStr = rName.getStr();
     if (*pStr > 127 || isdigit(*pStr))
-        return sal_False;
+        return false;
 
     for (; *pStr; ++pStr )
         if(!isCharOk(*pStr,_rSpecials))
-            return sal_False;
+            return false;
 
     if  (   !rName.isEmpty()
         &&  (   (rName.toChar() == '_')
@@ -207,13 +207,13 @@ sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
                 )
             )
         )
-        return sal_False;
+        return false;
     // the SQL-Standard requires the first character to be an alphabetic character, which
     // isn't easy to decide in UniCode ...
     // So we just prohibit the characters which already lead to problems ....
     // 11.04.00 - 74902 - FS
 
-    return sal_True;
+    return true;
 }
 
 // Creates a new name if necessary

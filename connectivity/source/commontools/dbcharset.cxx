@@ -70,9 +70,9 @@ namespace dbtools
     }
 
 
-    sal_Bool OCharsetMap::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
+    bool OCharsetMap::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
     {
-        sal_Bool bIsMimeEncoding = 0 != ( _rInfo.Flags & RTL_TEXTENCODING_INFO_MIME );
+        bool bIsMimeEncoding = 0 != ( _rInfo.Flags & RTL_TEXTENCODING_INFO_MIME );
         OSL_ENSURE( !bIsMimeEncoding || rtl_getMimeCharsetFromTextEncoding( _eEncoding ),
                 "OCharsetMap::OCharsetMap: inconsistence in rtl!" );
         OSL_UNUSED( _eEncoding );

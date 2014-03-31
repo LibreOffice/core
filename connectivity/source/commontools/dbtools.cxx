@@ -145,7 +145,7 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
 
 sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                                  sal_Int32 _nScale,
-                                 sal_Bool _bIsCurrency,
+                                 bool _bIsCurrency,
                                  const Reference< XNumberFormatTypes >& _xTypes,
                                  const Locale& _rLocale)
 {
@@ -808,7 +808,7 @@ namespace
 
 static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
                 const OUString& _rCatalog, const OUString& _rSchema, const OUString& _rName,
-                sal_Bool _bQuote, EComposeRule _eComposeRule )
+                bool _bQuote, EComposeRule _eComposeRule )
 {
     OSL_ENSURE(_rxMetaData.is(), "impl_doComposeTableName : invalid meta data !");
     if ( !_rxMetaData.is() )
@@ -861,7 +861,7 @@ OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta
 {
     OUString sCatalog, sSchema, sTable;
     qualifiedNameComponents(_rxMeta,_rName,sCatalog,sSchema,sTable,_eComposeRule);
-    return impl_doComposeTableName( _rxMeta, sCatalog, sSchema, sTable, sal_True, _eComposeRule );
+    return impl_doComposeTableName( _rxMeta, sCatalog, sSchema, sTable, true, _eComposeRule );
 }
 
 void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const OUString& _rQualifiedName, OUString& _rCatalog, OUString& _rSchema, OUString& _rName,EComposeRule _eComposeRule)
@@ -912,7 +912,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
 
 Reference< XNumberFormatsSupplier> getNumberFormats(
             const Reference< XConnection>& _rxConn,
-            sal_Bool _bAlloweDefault,
+            bool _bAlloweDefault,
             const Reference< XComponentContext>& _rxContext)
 {
     // ask the parent of the connection (should be an DatabaseAccess)
@@ -1197,17 +1197,17 @@ catch(const Exception&)
 }
 }
 
-sal_Bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
+bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::INSERT) != 0));
 }
 
-sal_Bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
+bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::UPDATE) != 0));
 }
 
-sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
+bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::DELETE) != 0));
 }
@@ -1302,7 +1302,7 @@ OUString composeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
                         const OUString& _rCatalog,
                         const OUString& _rSchema,
                         const OUString& _rName,
-                        sal_Bool _bQuote,
+                        bool _bQuote,
                         EComposeRule _eComposeRule)
 {
     return impl_doComposeTableName( _rxMetaData, _rCatalog, _rSchema, _rName, _bQuote, _eComposeRule );
@@ -1311,8 +1311,8 @@ OUString composeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
 OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection,
     const OUString& _rCatalog, const OUString& _rSchema, const OUString& _rName )
 {
-    sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, OUString( "UseCatalogInSelect" ), sal_True );
-    sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, OUString( "UseSchemaInSelect" ), sal_True );
+    bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, OUString( "UseCatalogInSelect" ), true );
+    bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, OUString( "UseSchemaInSelect" ), true );
 
     return impl_doComposeTableName(
         _rxConnection->getMetaData(),
@@ -1396,7 +1396,7 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     return nSearchFlag;
 }
 
-OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& _rBaseName, sal_Bool _bStartWithNumber )
+OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& _rBaseName, bool _bStartWithNumber )
 {
     ::std::set< OUString > aUsedNames;
     ::std::copy(
@@ -1418,7 +1418,7 @@ OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& 
     return sName;
 }
 
-OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const OUString& _rBaseName,sal_Bool _bStartWithNumber)
+OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const OUString& _rBaseName, bool _bStartWithNumber)
 {
     Sequence< OUString > aElementNames;
 
@@ -1933,7 +1933,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
     }
 }
 
-void getBoleanComparisonPredicate( const OUString& _rExpression, const sal_Bool _bValue, const sal_Int32 _nBooleanComparisonMode,
+void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bValue, const sal_Int32 _nBooleanComparisonMode,
     OUStringBuffer& _out_rSQLPredicate )
 {
     switch ( _nBooleanComparisonMode )

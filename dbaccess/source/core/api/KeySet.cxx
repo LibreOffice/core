@@ -197,7 +197,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
         xTableProp->getPropertyValue( PROPERTY_CATALOGNAME )>>= sCatalog;
         xTableProp->getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema;
         xTableProp->getPropertyValue( PROPERTY_NAME )       >>= sTable;
-        sUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
+        sUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, false, ::dbtools::eInDataManipulation );
     }
 
     ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sUpdateTableName,(*o_pKeyColumnNames),true);

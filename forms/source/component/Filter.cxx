@@ -124,7 +124,7 @@ namespace frm
         {
             // we can create one from the connection, if it's an SDB connection
 
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_xContext );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, true, m_xContext );
 
             if ( xFormatSupplier.is() )
             {
@@ -302,7 +302,7 @@ namespace frm
                     bool bSelected = ( rEvent.Selected == TRISTATE_TRUE );
 
                     OUString sExpressionMarker( "$expression$" );
-                    ::dbtools::getBoleanComparisonPredicate(
+                    ::dbtools::getBooleanComparisonPredicate(
                         sExpressionMarker,
                         bSelected,
                         nBooleanComparisonMode,

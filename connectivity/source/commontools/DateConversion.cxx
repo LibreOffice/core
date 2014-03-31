@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 
-OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
+OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool bQuote,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)
 {
     OUStringBuffer aRet;

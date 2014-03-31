@@ -684,7 +684,7 @@ void SbaXDataBrowserController::initFormatter()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::initFormatter" );
     // create a formatter working with the connections format supplier
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
 
     if(xSupplier.is())
     {
@@ -1877,7 +1877,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(true));
     xModelSet->setPropertyValue("CursorColor", makeAny(sal_Int32(COL_LIGHTRED)));
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;

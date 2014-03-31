@@ -39,13 +39,13 @@ namespace dbaui
         }
     }
 
-    sal_Bool OCharsetDisplay::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
+    bool OCharsetDisplay::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
     {
         if ( !OCharsetMap::approveEncoding( _eEncoding, _rInfo ) )
-            return sal_False;
+            return false;
 
         if ( RTL_TEXTENCODING_DONTKNOW == _eEncoding )
-            return sal_True;
+            return true;
 
         return !GetTextString(_eEncoding).isEmpty();
     }

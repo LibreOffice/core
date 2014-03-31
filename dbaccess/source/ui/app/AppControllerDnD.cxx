@@ -628,7 +628,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                         sDefaultName = sDefaultName.getToken( 0, ' ' );
 
                         Reference< XNameAccess > xQueries( getQueryDefintions(), UNO_QUERY_THROW );
-                        sTargetName = ::dbtools::createUniqueName( xQueries, sDefaultName, sal_False );
+                        sTargetName = ::dbtools::createUniqueName( xQueries, sDefaultName, false );
                     }
                 }
                 catch(const Exception&)

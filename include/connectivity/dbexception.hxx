@@ -127,9 +127,9 @@ public:
     const SQLExceptionInfo& operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent);
     const SQLExceptionInfo& operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException);
 
-    sal_Bool    isKindOf(TYPE _eType) const;
+    bool        isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !
-    sal_Bool    isValid() const { return m_eType != UNDEFINED; }
+    bool        isValid() const { return m_eType != UNDEFINED; }
     TYPE        getType() const { return m_eType; }
 
     operator const ::com::sun::star::sdbc::SQLException*    () const;
@@ -177,7 +177,7 @@ public:
 
     /** determines whether there are more elements in the exception chain
     */
-    sal_Bool                                    hasMoreElements() const { return ( m_pCurrent != NULL ); }
+    bool                                        hasMoreElements() const { return ( m_pCurrent != NULL ); }
 
     /** returns the type of the current element in the exception chain
     */

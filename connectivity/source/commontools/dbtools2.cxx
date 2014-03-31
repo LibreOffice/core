@@ -216,7 +216,7 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= sSchema;
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= sTable;
 
-    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
+    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
     if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
@@ -331,7 +331,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                                                         sSchema,
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
-                    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
+                    sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
 
 
                     if ( sComposedName.isEmpty() )
@@ -400,10 +400,10 @@ namespace
                                           const OUString& _aTable,
                                           const OUString& _rQueryName,
                                           const OUString& _rName,
-                                          sal_Bool _bCase,
-                                          sal_Bool _bQueryForInfo,
-                                          sal_Bool _bIsAutoIncrement,
-                                          sal_Bool _bIsCurrency,
+                                          bool _bCase,
+                                          bool _bQueryForInfo,
+                                          bool _bIsAutoIncrement,
+                                          bool _bIsCurrency,
                                           sal_Int32 _nDataType)
     {
         Reference<XPropertySet> xProp;
@@ -525,10 +525,10 @@ namespace
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
                                           const Reference<XConnection>& _xConnection,
                                           const OUString& _rName,
-                                          sal_Bool _bCase,
-                                          sal_Bool _bQueryForInfo,
-                                          sal_Bool _bIsAutoIncrement,
-                                          sal_Bool _bIsCurrency,
+                                          bool _bCase,
+                                          bool _bQueryForInfo,
+                                          bool _bIsAutoIncrement,
+                                          bool _bIsCurrency,
                                           sal_Int32 _nDataType)
 {
     Reference<XPropertySet> xProp;
@@ -629,9 +629,9 @@ bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const s
     return getDataSourceSetting( _rxDataSource, sAsciiSettingsName,_rSettingsValue );
 }
 
-sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const OUString& _sProperty,sal_Bool _bDefault)
+bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUString& _sProperty, bool _bDefault)
 {
-    sal_Bool bEnabled = _bDefault;
+    bool bEnabled = _bDefault;
     try
     {
         Reference< XPropertySet> xProp(findDataSource(_xProp),UNO_QUERY);

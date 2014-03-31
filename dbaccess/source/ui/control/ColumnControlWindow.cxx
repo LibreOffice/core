@@ -93,7 +93,7 @@ Reference< XNumberFormatter > OColumnControlWindow::GetFormatter() const
     if ( !m_xFormatter.is() )
         try
         {
-            Reference< XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(m_xConnection, sal_True, m_xContext));
+            Reference< XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(m_xConnection, true, m_xContext));
 
             if ( xSupplier.is() )
             {

@@ -579,7 +579,7 @@ OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) co
         }
         sTable = GetEntryText( _pEntry );
 
-        return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
+        return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, false, ::dbtools::eInDataManipulation );
     }
     catch( const Exception& )
     {

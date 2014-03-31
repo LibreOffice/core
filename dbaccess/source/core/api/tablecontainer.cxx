@@ -371,7 +371,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
                     xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
+                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInTableDefinitions );
 
                 OUString sType;
                 xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;

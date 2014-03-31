@@ -132,7 +132,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
             _io_tableInfo.sComposedName = OptionalString(
                 composeTableName( _metaData, *_io_tableInfo.sCatalog, *_io_tableInfo.sSchema, *_io_tableInfo.sName,
-                sal_False, ::dbtools::eInDataManipulation )
+                false, ::dbtools::eInDataManipulation )
             );
         }
     }

@@ -43,8 +43,8 @@ namespace dbtools
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     m_xOriginalConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > m_xRowSet; // needed to add as listener
-        sal_Bool    m_bRSListening          : 1; // true when we're listening on rowset
-        sal_Bool    m_bPropertyListening    : 1; // true when we're listening for property changes
+        bool    m_bRSListening          : 1; // true when we're listening on rowset
+        bool    m_bPropertyListening    : 1; // true when we're listening for property changes
 
     public:
         /** constructs an object
@@ -74,11 +74,11 @@ namespace dbtools
 
         void        startRowSetListening();
         void        stopRowSetListening();
-        sal_Bool    isRowSetListening() const { return m_bRSListening; }
+        bool        isRowSetListening() const { return m_bRSListening; }
 
         void        startPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps );
         void        stopPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxEventSource );
-        sal_Bool    isPropertyListening() const { return m_bPropertyListening; }
+        bool        isPropertyListening() const { return m_bPropertyListening; }
     };
 
 

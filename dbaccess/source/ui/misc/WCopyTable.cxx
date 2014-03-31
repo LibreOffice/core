@@ -543,7 +543,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
             if ( _xSourceConnection == m_xDestConnection )
             {
                 Reference< XTablesSupplier > xSup( m_xDestConnection, UNO_QUERY_THROW );
-                m_sName = ::dbtools::createUniqueName( xSup->getTables(), sInitialTableName, sal_False );
+                m_sName = ::dbtools::createUniqueName( xSup->getTables(), sInitialTableName, false );
             }
             else
                 m_sName = sInitialTableName;
@@ -582,7 +582,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
                                             sTable,
                                             ::dbtools::eInDataManipulation);
 
-        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,sal_False,::dbtools::eInTableDefinitions);
+        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,false,::dbtools::eInTableDefinitions);
     }
 
     OCopyTable* pPage1( new OCopyTable( this ) );
@@ -1564,7 +1564,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
     OUString sName = _sName;
     Sequence< OUString > aColumnNames( m_rSourceObject.getColumnNames() );
     if ( aColumnNames.getLength() )
-        sName = ::dbtools::createUniqueName( aColumnNames, sName, sal_False );
+        sName = ::dbtools::createUniqueName( aColumnNames, sName, false );
     else
     {
         if ( m_vSourceColumns.find(sName) != m_vSourceColumns.end())

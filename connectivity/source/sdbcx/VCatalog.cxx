@@ -198,7 +198,7 @@ OUString OCatalog::buildName(const Reference< XRow >& _xRow)
         sTable = OUString();
 
     OUString sComposedName(
-        ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation ) );
+        ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, false, ::dbtools::eInDataManipulation ) );
     return sComposedName;
 }
 

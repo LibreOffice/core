@@ -116,7 +116,7 @@ namespace dbtools
                 );
             }
 
-            Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats( m_xConnection, sal_True );
+            Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats( m_xConnection, true );
             if ( !xNumberFormats.is() )
                 ::comphelper::disposeComponent( m_xFormatter );
             else

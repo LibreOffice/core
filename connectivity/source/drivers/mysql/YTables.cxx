@@ -143,7 +143,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
             aSql += "TABLE ";
 
         OUString sComposedName(
-            ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );
+            ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::eInDataManipulation ) );
         aSql += sComposedName;
         Reference< XStatement > xStmt = xConnection->createStatement(  );
         if ( xStmt.is() )
