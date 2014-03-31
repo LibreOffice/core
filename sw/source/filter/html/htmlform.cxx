@@ -1337,6 +1337,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
 
         case HTML_O_SDONSUBMIT:
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONSUBMIT:
             nEvent = HTML_ET_ONSUBMITFORM;
             bSetEvent = sal_True;
@@ -1344,6 +1345,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
 
         case HTML_O_SDONRESET:
             eScriptType2 = STARBASIC;
+            //fallthrough
         case HTML_O_ONRESET:
             nEvent = HTML_ET_ONRESETFORM;
             bSetEvent = sal_True;
