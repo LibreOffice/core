@@ -846,7 +846,7 @@ void StgDirStrm::SetupEntry (
     const sal_Int32 nEntryCount,
     const sal_Int32 nDepth)
 {
-    if (nDepth >= nEntryCount)
+    if (nDepth > nEntryCount)
     {
         // Tree grew higher than there are different nodes.  Looks like
         // something is wrong with the file.  Return now to avoid
