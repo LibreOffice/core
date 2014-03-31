@@ -71,7 +71,7 @@ void SwLabDlg::_ReplaceGroup( const OUString &rMake )
 {
     // Remove old entries
     pRecs->erase(pRecs->begin() + 1, pRecs->end());
-    aLabelsCfg.FillLabels(OUString(rMake), *pRecs);
+    aLabelsCfg.FillLabels(rMake, *pRecs);
     aLstGroup = rMake;
 }
 
@@ -134,8 +134,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     // Read user label from writer.cfg
     SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
     SwLabRec* pRec = new SwLabRec;
-    const OUString aTmp( SW_RES( STR_CUSTOM ) );
-    pRec->aMake   = pRec->aType = aTmp;
+    pRec->aMake = pRec->aType = SW_RESSTR( STR_CUSTOM );
     pRec->SetFromItem( aItem );
 
     bool bDouble = false;
@@ -201,7 +200,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, sal_Bool bCont)
 {
     SwLabRec* pRec = NULL;
     bool bFound = false;
-    OUString sCustom(SW_RES(STR_CUSTOM));
+    const OUString sCustom(SW_RES(STR_CUSTOM));
 
     const size_t nCount = Recs().size();
     for (size_t i = 0; i < nCount; ++i)
@@ -326,8 +325,8 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
-    OUString aStr("<" + OUString(m_pDatabaseLB->GetSelectEntry()) + "." +
-                  OUString(m_pTableLB->GetSelectEntry()) + "." +
+    OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
+                  m_pTableLB->GetSelectEntry() + "." +
                   (m_pTableLB->GetEntryData(m_pTableLB->GetSelectEntryPos()) == 0 ? OUString("0") : OUString("1")) + "." +
                   m_pDBFieldLB->GetSelectEntry() + ">");
     m_pWritingEdit->ReplaceSelected(aStr);
