@@ -195,7 +195,6 @@ class TOOLS_DLLPUBLIC SvStream
 {
 private:
     // LockBytes Interface
-    void*           pImp;           // unused
     SvLockBytesRef  xLockBytes;  // Default implementation
     sal_uInt64      m_nActPos;
 
