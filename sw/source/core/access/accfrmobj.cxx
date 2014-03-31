@@ -72,6 +72,9 @@ SwAccessibleChild::SwAccessibleChild( Window* pWindow )
 SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
                                       const SdrObject* pDrawObj,
                                       Window* pWindow )
+    : mpFrm( 0 )
+    , mpDrawObj( 0 )
+    , mpWindow( 0 )
 {
     if ( pFrm )
     {
