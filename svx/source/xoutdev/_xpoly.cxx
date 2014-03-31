@@ -34,30 +34,30 @@
 #include <basegfx/numeric/ftools.hxx>
 
 
-ImpXPolygon::ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 _nResize )
+ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
+    : pPointAry(NULL)
+    , pFlagAry(NULL)
+    , pOldPointAry(NULL)
+    , bDeleteOldPoints(sal_False)
+    , nSize(0)
+    , nResize(_nResize)
+    , nPoints(0)
+    , nRefCount(1)
 {
-    pPointAry               = NULL;
-    pFlagAry                = NULL;
-    bDeleteOldPoints        = sal_False;
-    nSize                   = 0;
-    nResize                 = _nResize;
-    nPoints                 = 0;
-    nRefCount               = 1;
-
-    Resize( nInitSize );
+    Resize(nInitSize);
 }
 
 ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
+    : pPointAry(NULL)
+    , pFlagAry(NULL)
+    , pOldPointAry(NULL)
+    , bDeleteOldPoints(sal_False)
+    , nSize(0)
+    , nResize(rImpXPoly.nResize)
+    , nPoints(0)
+    , nRefCount(1)
 {
     ( (ImpXPolygon&) rImpXPoly ).CheckPointDelete();
-
-    pPointAry               = NULL;
-    pFlagAry                = NULL;
-    bDeleteOldPoints        = sal_False;
-    nSize                   = 0;
-    ImpXPolygon::nResize    = rImpXPoly.nResize;
-    nPoints                 = 0;
-    nRefCount               = 1;
 
     Resize( rImpXPoly.nSize );
 
