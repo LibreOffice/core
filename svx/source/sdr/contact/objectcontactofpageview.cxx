@@ -26,7 +26,6 @@
 #include <svx/svdview.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
-#include <svx/sdr/event/eventhandler.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -35,11 +34,9 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
 
-
+#include "eventhandler.hxx"
 
 using namespace com::sun::star;
-
-
 
 namespace sdr
 {

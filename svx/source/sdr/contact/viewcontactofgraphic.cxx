@@ -27,7 +27,6 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/sdr/event/eventhandler.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
 #include "svx/svdstr.hrc"
@@ -46,7 +45,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-
+#include "eventhandler.hxx"
 
 namespace sdr
 {

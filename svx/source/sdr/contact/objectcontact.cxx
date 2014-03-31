@@ -22,15 +22,12 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/event/eventhandler.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 
-
+#include "eventhandler.hxx"
 
 using namespace com::sun::star;
-
-
 
 namespace sdr
 {

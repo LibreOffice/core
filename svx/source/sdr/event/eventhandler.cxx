@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/event/eventhandler.hxx>
+#include "eventhandler.hxx"
 
 // for SOLARIS compiler include of algorithm part of _STL is necessary to
 // get access to basic algos like ::std::find
 #include <algorithm>
 #include <tools/debug.hxx>
-
-
 
 namespace sdr
 {
