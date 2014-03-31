@@ -37,6 +37,7 @@ Module gid_Module_Prg_Calc_Bin
     Styles = (HIDDEN_ROOT);
     Files = (auto_calc_ALL,
     gid_File_Share_Registry_Calc_Xcd,
+    gid_File_Lib_Cbc,gid_File_Lib_CbcSolver,gid_File_Lib_Cgl,gid_File_Lib_Clp,gid_File_Lib_OsiClp,gid_File_Lib_CoinMP,gid_File_Lib_CoinUtils,gid_File_Lib_Osi,
     gid_File_Lib_Lpsolve);
 End
 

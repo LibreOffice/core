@@ -72,6 +72,7 @@
     #define EXENAME(name)                     STRING(CONCAT2(name,.exe))
     #define PROFILENAME(name)                 STRING(CONCAT2(name,.ini))
     #define SPECIAL_NAME(name)                STRING(CONCAT2(name,.dll))
+    #define SPECIAL_NAME_VER(name,version)    SPECIAL_NAME(name)
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,.dll))
 #endif
 

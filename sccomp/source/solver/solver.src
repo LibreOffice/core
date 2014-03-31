@@ -24,6 +24,11 @@ String RID_SOLVER_COMPONENT
     Text [ en-US ] = "%PRODUCTNAME Linear Solver";
 };
 
+String RID_COINMP_SOLVER_COMPONENT
+{
+    Text [ en-US ] = "%PRODUCTNAME CoinMP Linear Solver";
+};
+
 String RID_PROPERTY_NONNEGATIVE
 {
     Text [ en-US ] = "Assume variables as non-negative";
