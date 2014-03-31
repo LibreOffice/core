@@ -21,7 +21,7 @@ private:
 
 public:
     ScPivotLayoutTreeListData(Window* pParent, WinBits nBits);
-    virtual ~ScPivotLayoutTreeListData() SAL_OVERRIDE;
+    virtual ~ScPivotLayoutTreeListData();
     virtual bool DoubleClickHdl() SAL_OVERRIDE;
 
     void FillDataField(ScPivotFieldVector& rDataFields);

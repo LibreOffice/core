@@ -18,7 +18,7 @@ class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase
 {
 public:
     ScPivotLayoutTreeList(Window* pParent, WinBits nBits);
-    virtual ~ScPivotLayoutTreeList() SAL_OVERRIDE;
+    virtual ~ScPivotLayoutTreeList();
     virtual bool DoubleClickHdl() SAL_OVERRIDE;
 
     void Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListType eType);

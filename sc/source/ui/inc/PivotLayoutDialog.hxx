@@ -111,7 +111,7 @@ private:
 public:
     ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, Window* pParent,
                              ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
-    virtual ~ScPivotLayoutDialog() SAL_OVERRIDE;
+    virtual ~ScPivotLayoutDialog();
 
     virtual void SetReference(const ScRange& rReferenceRange, ScDocument* pDocument) SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;
