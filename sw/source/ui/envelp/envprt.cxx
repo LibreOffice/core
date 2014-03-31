@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
 {
     if (m_pAlignBox->GetCurItemId())
     {
-        for (sal_uInt16 i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
+        for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
             m_pAlignBox->CheckItem(m_aIds[i], false);
         m_pAlignBox->CheckItem(m_pAlignBox->GetCurItemId(), true);
     }
@@ -145,8 +145,8 @@ int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 {
-    sal_uInt16 nOrient = 0;
-    for (sal_uInt16 i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
+    int nOrient = 0;
+    for (int i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
     {
         if (m_pAlignBox->IsItemChecked(m_aIds[i]))
         {
