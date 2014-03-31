@@ -467,7 +467,9 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& _sFunctio
                                     aExpressionGrammer,
                                     ::boost::spirit::space_p ) );
 
-    OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
+#if (OSL_DEBUG_LEVEL > 0)
+    ::std::cout.flush(); // needed to keep stdout and cout in sync
+#endif
 
     // input fully congested by the parser?
     if( !aParseInfo.full )
