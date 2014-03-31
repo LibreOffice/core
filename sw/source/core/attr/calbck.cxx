@@ -385,9 +385,10 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 // SwClientIter
 
 SwClientIter::SwClientIter( const SwModify& rModify )
-    : rRoot( rModify )
+    : rRoot(rModify)
+    , pNxtIter(NULL)
+    , aSrchId(0)
 {
-    pNxtIter = 0;
     if( pClientIters )
     {
         // append to list of ClientIters
