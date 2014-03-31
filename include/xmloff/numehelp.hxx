@@ -34,13 +34,23 @@ class SvXMLExport;
 struct XMLNumberFormat
 {
     OUString   sCurrency;
-    sal_Int32       nNumberFormat;
-    sal_Int16       nType;
-    bool            bIsStandard : 1;
-    XMLNumberFormat() : nNumberFormat(0), nType(0) {}
-    XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat,
-        sal_Int16 nTempType) : sCurrency(sTempCurrency), nNumberFormat(nTempFormat),
-            nType(nTempType) {}
+    sal_Int32  nNumberFormat;
+    sal_Int16  nType;
+    bool       bIsStandard : 1;
+    XMLNumberFormat()
+        : nNumberFormat(0)
+        , nType(0)
+        , bIsStandard(false)
+    {
+    }
+
+    XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat, sal_Int16 nTempType)
+        : sCurrency(sTempCurrency)
+        , nNumberFormat(nTempFormat)
+        , nType(nTempType)
+        , bIsStandard(false)
+    {
+    }
 };
 
 struct LessNumberFormat
