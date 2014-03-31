@@ -672,9 +672,8 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     }
 }
 
-
-
-uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const throw()
+uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
+    throw (uno::RuntimeException, std::exception)
 {
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;
@@ -724,8 +723,6 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const throw()
 
     return aAny;
 }
-
-
 
 uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
     throw (uno::RuntimeException, std::exception)

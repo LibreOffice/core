@@ -186,7 +186,8 @@ public:
     const SvxItemPropertySet& GetPropertySet() { return *mpPropSet; }
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
-    ::com::sun::star::uno::Any GetBitmap( bool bMetaFile = false ) const throw ();
+    ::com::sun::star::uno::Any GetBitmap( bool bMetaFile = false ) const
+        throw (css::uno::RuntimeException, std::exception);
 
     ::svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
