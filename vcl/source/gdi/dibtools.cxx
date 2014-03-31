@@ -775,17 +775,18 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
 bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
 {
-    sal_uInt32  nTmp32;
-    sal_uInt16  nTmp16 = 0;
-    bool    bRet = false;
+    bool bRet = false;
 
-    const sal_Int64 nStreamLength (rIStm.Seek(STREAM_SEEK_TO_END));
-    rIStm.Seek(STREAM_SEEK_TO_BEGIN);
+    const sal_Int64 nSavedStreamPos( rIStm.Tell() );
+    const sal_Int64 nStreamLength( rIStm.Seek( STREAM_SEEK_TO_END ) );
+    rIStm.Seek( nSavedStreamPos );
 
+    sal_uInt16 nTmp16 = 0;
     rIStm >> nTmp16;
 
     if ( ( 0x4D42 == nTmp16 ) || ( 0x4142 == nTmp16 ) )
     {
+        sal_uInt32 nTmp32;
         if ( 0x4142 == nTmp16 )
         {
             rIStm.SeekRel( 12L );
@@ -803,7 +804,7 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             bRet = ( rIStm.GetError() == 0UL );
         }
 
-        if (rOffset >= nStreamLength)
+        if ( rOffset >= nStreamLength )
         {
             // Offset claims that image starts past the end of the
             // stream.  Unlikely.
