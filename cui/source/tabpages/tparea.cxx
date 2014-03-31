@@ -2061,21 +2061,6 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 
     m_pBxBitmap->Show();
 
-    // set table text
-    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
-    INetURLObject   aURL( pBitmapList->GetPath() );
-
-    aURL.Append( pBitmapList->GetName() );
-    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-    if( aURL.getBase().getLength() > 18 )
-    {
-        aString += aURL.getBase().copy( 0, 15 );
-        aString += "...";
-    }
-    else
-        aString += aURL.getBase();
-
     ModifyBitmapHdl_Impl( this );
     ModifyTileHdl_Impl( m_pTsbOriginal );
 }
