@@ -177,7 +177,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SolverComponent::getPropertySet
 
 OUString SAL_CALL SolverComponent::getComponentDescription() throw (uno::RuntimeException, std::exception)
 {
-    return lcl_GetResourceString( RID_SOLVER_COMPONENT );
+    return lcl_GetResourceString( RID_COINMP_SOLVER_COMPONENT );
 }
 
 OUString SAL_CALL SolverComponent::getStatusDescription() throw (uno::RuntimeException, std::exception)
@@ -589,7 +589,7 @@ uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
 
 OUString SolverComponent_getImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.Calc.Solver" );
+    return OUString::createFromAscii( "com.sun.star.comp.Calc.CoinMPSolver" );
 }
 
 OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeException, std::exception)
@@ -615,7 +615,7 @@ uno::Reference<uno::XInterface> SolverComponent_createInstance( const uno::Refer
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL solver_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL coinmp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
         void*       pRet = 0;

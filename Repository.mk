@@ -150,14 +150,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	analysis \
 	calc \
+	$(if $(ENABLE_COINMP),coinmpsolver) \
 	date \
 	pricing \
 	sc \
 	scd \
 	scfilt \
 	scui \
-	$(if $(MPL_SUBSET),,$(if $(ENABLE_LPSOLVE),solver)) \
 	$(if $(ENABLE_OPENCL),scopencl) \
+	$(if $(ENABLE_LPSOLVE),solver) \
 	$(if $(DISABLE_SCRIPTING),,vbaobj) \
 	$(if $(ENABLE_TELEPATHY),tubes) \
 ))

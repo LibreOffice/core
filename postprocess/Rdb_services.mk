@@ -109,6 +109,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlscript/util/xmlscript \
 	xmlsecurity/util/xmlsecurity \
 	xmlsecurity/util/xsec_fw \
+	$(if $(ENABLE_COINMP), \
+		sccomp/source/solver/coinmpsolver \
+	) \
 	$(if $(ENABLE_LPSOLVE), \
 		sccomp/source/solver/solver \
 	) \

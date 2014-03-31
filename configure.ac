@@ -654,6 +654,7 @@ linux-android*)
     enable_lotuswordpro=no
     enable_mpl_subset=yes
     enable_opengl=no
+    enable_coinmp=no
     enable_lpsolve=no
     enable_report_builder=no
     with_theme="tango"
@@ -7323,6 +7324,7 @@ if test $_os = iOS; then
     enable_mpl_subset=yes
     enable_opengl=no
     enable_lotuswordpro=no
+    enable_coinmp=no
     enable_lpsolve=no
     enable_postgresql_sdbc=no
     enable_lotuswordpro=no
@@ -9408,8 +9410,17 @@ dnl ===================================================================
 dnl How should we build the linear programming solver ?
 dnl ===================================================================
 
-# Should we check for system CoinMP ? How to do that ?
-BUILD_TYPE="$BUILD_TYPE COINMP"
+ENABLE_COINMP=
+AC_MSG_CHECKING([whether to build with CoinMP])
+if test "$enable_coinmp" != "no"; then
+    ENABLE_COINMP=TRUE
+    AC_MSG_RESULT([yes])
+    # Should we check for system CoinMP ? How to do that ?
+    BUILD_TYPE="$BUILD_TYPE COINMP"
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_COINMP)
 
 ENABLE_LPSOLVE=
 AC_MSG_CHECKING([whether to build with lpsolve])
