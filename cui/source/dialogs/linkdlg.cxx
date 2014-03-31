@@ -500,7 +500,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             SourceName().SetText( aEmpty );
             TypeName().SetText( aEmpty );
         }
-        if( pLinkMgr->GetPersist() )
+        if( pLinkMgr && pLinkMgr->GetPersist() )
             pLinkMgr->GetPersist()->SetModified();
     }
     return 0;
