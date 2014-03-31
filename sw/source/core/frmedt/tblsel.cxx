@@ -1181,7 +1181,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
             aPosArr.Remove( nSttPos, n - nSttPos );
         }
-#elsif defined( DEL_EMPTY_BOXES_AT_START_AND_END )
+#elif defined( DEL_EMPTY_BOXES_AT_START_AND_END )
 
         nWidth = pFirstBox->GetFrmFmt()->GetFrmSize().GetWidth();
         sal_uInt16 n, nSttPos = 0, nSEndPos = 0, nESttPos = 0;

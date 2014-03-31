@@ -313,7 +313,7 @@ long
                         *op++ = UMINUS;
                     if (tp->type == STAR || tp->type == AND)
                     {
-                        error(ERROR, "Illegal operator * or & in #if/#elsif");
+                        error(ERROR, "Illegal operator * or & in #if/#elif");
                         return 0;
                     }
                     continue;
@@ -380,7 +380,7 @@ long
                 /* fall through */
 
             default:
-                error(ERROR, "Bad operator (%t) in #if/#elsif", tp);
+                error(ERROR, "Bad operator (%t) in #if/#elif", tp);
                 return 0;
         }
     }
@@ -390,14 +390,14 @@ long
         return 0;
     if (op != &ops[1] || vp != &vals[1])
     {
-        error(ERROR, "Botch in #if/#elsif");
+        error(ERROR, "Botch in #if/#elif");
         return 0;
     }
     if (vals[0].type == UND)
         error(ERROR, "Undefined expression value");
     return vals[0].val;
 syntax:
-    error(ERROR, "Syntax error in #if/#elsif");
+    error(ERROR, "Syntax error in #if/#elif");
     return 0;
 }
 
@@ -679,7 +679,7 @@ struct value
                     else
                     {
                         error(ERROR,
-                              "Bad number %t in #if/#elsif", tp);
+                              "Bad number %t in #if/#elif", tp);
                         break;
                     }
             }
@@ -761,7 +761,7 @@ struct value
             break;
 
         case STRING:
-            error(ERROR, "String in #if/#elsif");
+            error(ERROR, "String in #if/#elif");
             break;
     }
     return v;
