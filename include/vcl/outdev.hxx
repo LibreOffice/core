@@ -805,6 +805,7 @@ protected:
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     virtual long                ImplGetGradientStepCount( long nMinRect );
+    virtual bool                UsePolyPolygonForComplexGradient() = 0;
 
     /** Transform and draw a bitmap directly
 

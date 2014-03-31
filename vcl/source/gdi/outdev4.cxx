@@ -372,7 +372,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     // as we will get wrong results if we output multiple times on top of each other.
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
-    // Also virtual devices are excluded, as some drivers are too slow.
 
     boost::scoped_ptr<PolyPolygon> pPolyPoly;
     Rectangle       aRect;
@@ -393,7 +392,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    if( (meRasterOp != ROP_OVERPAINT) || (meOutDevType != OUTDEV_WINDOW) || bMtf )
+    if ( UsePolyPolygonForComplexGradient() || bMtf )
         pPolyPoly.reset(new PolyPolygon( 2 ));
 
     long nMinRect = std::min( aRect.GetWidth(), aRect.GetHeight() );
