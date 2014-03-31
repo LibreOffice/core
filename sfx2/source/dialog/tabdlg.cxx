@@ -1227,7 +1227,9 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         pDataObject = Find(pImpl->aData, nId);
     }
 
-    DBG_ASSERT( pDataObject, "Id not known" );
+    assert(pDataObject); //Id not known
+    if (!pDataObject)
+        return 0;
 
     // Create TabPage if possible:
     if ( !pTabPage )
