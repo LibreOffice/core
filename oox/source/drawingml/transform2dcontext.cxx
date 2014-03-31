@@ -50,7 +50,8 @@ Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference
     }
     else
     {
-        mrShape.getTextBody()->getTextProperties().moRotation = aAttributeList.getInteger( XML_rot );
+        if( aAttributeList.hasAttribute( XML_rot ) )
+            mrShape.getTextBody()->getTextProperties().moRotation = -aAttributeList.getInteger( XML_rot ).get();
     }
 }
 
