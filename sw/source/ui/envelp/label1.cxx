@@ -140,7 +140,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     bool bDouble = false;
 
-    for (sal_uInt16 nRecPos = 0; nRecPos < pRecs->size(); nRecPos++)
+    for (size_t nRecPos = 0; nRecPos < pRecs->size(); ++nRecPos)
     {
         if (pRec->aMake == (*pRecs)[nRecPos]->aMake &&
             pRec->aType == (*pRecs)[nRecPos]->aType)
@@ -155,9 +155,9 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     else
         delete pRec;
 
-    sal_uInt16 nLstGroup = 0;
+    size_t nLstGroup = 0;
     const std::vector<OUString>& rMan = aLabelsCfg.GetManufacturers();
-    for(sal_uInt16 nMan = 0; nMan < rMan.size(); nMan++)
+    for(size_t nMan = 0; nMan < rMan.size(); ++nMan)
     {
         aMakes.push_back(rMan[nMan]);
         if ( rMan[nMan] == aItem.aLstMake )
@@ -203,8 +203,8 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, sal_Bool bCont)
     bool bFound = false;
     OUString sCustom(SW_RES(STR_CUSTOM));
 
-    const sal_uInt16 nCount = Recs().size();
-    for (sal_uInt16 i = 0; i < nCount; i++)
+    const size_t nCount = Recs().size();
+    for (size_t i = 0; i < nCount; ++i)
     {
         pRec = Recs()[i];
         if (pRec->aType != sCustom &&
@@ -274,7 +274,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
 
     size_t nLstGroup = 0;
 
-    const sal_uInt16 nCount = (sal_uInt16)GetParentSwLabDlg()->Makes().size();
+    const size_t nCount = GetParentSwLabDlg()->Makes().size();
     for(size_t i = 0; i < nCount; ++i)
     {
         OUString& rStr = GetParentSwLabDlg()->Makes()[i];
@@ -357,12 +357,12 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     aItem.aLstMake = aMake;
 
     const sal_Bool   bCont    = m_pContButton->IsChecked();
-    const sal_uInt16 nCount   = GetParentSwLabDlg()->Recs().size();
-          sal_uInt16 nLstType = 0;
+    const size_t nCount   = GetParentSwLabDlg()->Recs().size();
+    size_t nLstType = 0;
 
     const OUString sCustom(SW_RES(STR_CUSTOM));
     //insert the entries into the sorted list box
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for ( size_t i = 0; i < nCount; ++i )
     {
         const OUString aType ( GetParentSwLabDlg()->Recs()[i]->aType );
         bool bInsert = false;
@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
                 nLstType = GetParentSwLabDlg()->TypeIds().size();
         }
     }
-    for(sal_uInt16 nEntry = 0; nEntry < m_pHiddenSortTypeBox->GetEntryCount(); nEntry++)
+    for(sal_Int32 nEntry = 0; nEntry < m_pHiddenSortTypeBox->GetEntryCount(); ++nEntry)
     {
         m_pTypeBox->InsertEntry(m_pHiddenSortTypeBox->GetEntry(nEntry));
     }
@@ -588,7 +588,7 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet)
 
 SwVisitingCardPage::~SwVisitingCardPage()
 {
-    for(sal_uInt16 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
+    for(sal_Int32 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); ++i)
         delete (OUString*)m_pAutoTextGroupLB->GetEntryData( i );
     m_xAutoText = 0;
 
@@ -665,7 +665,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     aLabItem = (const SwLabItem&) rSet.Get(FN_LABEL);
 
     bool bFound = false;
-    sal_uInt16 i;
+    sal_Int32 i;
     for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
         if( aLabItem.sGlossaryGroup == *(const OUString*)m_pAutoTextGroupLB->GetEntryData( i ))
         {
