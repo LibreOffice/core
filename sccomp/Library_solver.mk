@@ -35,19 +35,11 @@ $(eval $(call gb_Library_use_libraries,solver,\
 
 $(eval $(call gb_Library_use_externals,solver,\
 	boost_headers \
-	$(WITH_LPSOLVER) \
+	lpsolve \
 ))
 
-ifeq ($(WITH_LPSOLVER),lpsolve)
 $(eval $(call gb_Library_add_exception_objects,solver,\
 	sccomp/source/solver/solver-lpsolve \
 ))
-
-else ifeq ($(WITH_LPSOLVER),coinmp)
-$(eval $(call gb_Library_add_exception_objects,solver,\
-	sccomp/source/solver/solver \
-))
-
-endif
 
 # vim: set noet sw=4 ts=4:

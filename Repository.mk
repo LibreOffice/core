@@ -156,8 +156,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	scd \
 	scfilt \
 	scui \
+	$(if $(MPL_SUBSET),,$(if $(ENABLE_LPSOLVE),solver)) \
 	$(if $(ENABLE_OPENCL),scopencl) \
-	$(if $(WITH_LPSOLVER),solver) \
 	$(if $(DISABLE_SCRIPTING),,vbaobj) \
 	$(if $(ENABLE_TELEPATHY),tubes) \
 ))

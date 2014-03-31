@@ -1982,7 +1982,7 @@ endef
 endif # ANDROID
 endif # SYSTEM_LCMS2
 
-ifeq ($(WITH_LPSOLVER),lpsolve)
+ifneq ($(ENABLE_LPSOLVE),)
 
 ifneq ($(SYSTEM_LPSOLVE),)
 
@@ -2020,7 +2020,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 
 endif # SYSTEM_LPSOLVE
 
-else ifeq ($(WITH_LPSOLVER),coinmp)
+endif # ENABLE_LPSOLVE
+
+ifneq ($(ENABLE_COINMP),)
 
 define gb_LinkTarget__use_coinmp
 $(call gb_LinkTarget_use_package,$(1),coinmp)
@@ -2050,7 +2052,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	coinmp \
 ))
 
-endif # WITH_LPSOLVER
+endif # ENABLE_COINMP
 
 ifeq ($(ENABLE_GIO),TRUE)
 
