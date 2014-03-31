@@ -94,7 +94,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
                             sal_Bool &rAttrSetFetched )
-    throw (beans::UnknownPropertyException);
+    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception);
 
 /******************************************************************
  * SwXParagraph
@@ -853,7 +853,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
                             sal_Bool &rAttrSetFetched )
-throw (beans::UnknownPropertyException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
 
