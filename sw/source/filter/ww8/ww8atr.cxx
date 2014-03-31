@@ -112,6 +112,8 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/localedatawrapper.hxx>
+#include <unobrushitemhelper.hxx>
+#include <svx/xenum.hxx>
 #include <tgrditem.hxx>
 #include <flddropdown.hxx>
 #include <chpfld.hxx>
@@ -825,6 +827,24 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
 
                 if (SFX_ITEM_SET != aSet.GetItemState(RES_SURROUND))
                     aSet.Put(SwFmtSurround(SURROUND_NONE));
+
+                const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrmFmt.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
+                if (pXFillStyleItem)
+                {
+                    switch (pXFillStyleItem->GetValue())
+                    {
+                    case XFILL_NONE:
+                        break;
+                    case XFILL_SOLID:
+                    {
+                        // Construct an SvxBrushItem, as expected by the exporters.
+                        aSet.Put(getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet()));
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                }
 
                 bOutFlyFrmAttrs = true;
                 //script doesn't matter if not exporting chp
