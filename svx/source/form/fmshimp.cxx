@@ -1485,10 +1485,12 @@ void FmXFormShell::ExecuteSearch()
     m_aSearchForms.swap( aEmpty );
     ::std::vector< OUString > aContextNames;
     impl_collectFormSearchContexts_nothrow( m_pShell->GetCurPage()->GetForms(), OUString(), m_aSearchForms, aContextNames );
-    OSL_POSTCOND( m_aSearchForms.size() == aContextNames.size(),
-        "FmXFormShell::ExecuteSearch: nonsense!" );
+
     if ( m_aSearchForms.size() != aContextNames.size() )
+    {
+        SAL_WARN ( "svx.form", "FmXFormShell::ExecuteSearch: nonsense!" );
         return;
+    }
 
     // filter out the forms which do not contain valid controls at all
     {

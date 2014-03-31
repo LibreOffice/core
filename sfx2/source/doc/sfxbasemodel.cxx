@@ -4282,7 +4282,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
 
     // determine the ViewFrame belonging to the given XFrame
     SfxViewFrame* pViewFrame = FindOrCreateViewFrame_Impl( i_rFrame, aViewCreationGuard );
-    OSL_POSTCOND( pViewFrame, "SfxBaseModel::createViewController: no frame?" );
+    SAL_WARN_IF( !pViewFrame , "sfx.doc", "SfxBaseModel::createViewController: no frame?" );
 
     // delegate to SFX' view factory
     pViewFrame->GetBindings().ENTERREGISTRATIONS();

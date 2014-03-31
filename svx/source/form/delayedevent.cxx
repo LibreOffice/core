@@ -20,7 +20,6 @@
 
 #include "delayedevent.hxx"
 
-#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
 
@@ -35,7 +34,7 @@ namespace svxform
     void DelayedEvent::Call( void* _pArg )
     {
         CancelPendingCall();
-        OSL_POSTCOND( m_nEventId == 0, "DelayedEvent::Call: CancelPendingCall did not work!" );
+        SAL_WARN_IF( m_nEventId != 0, "svx.form", "DelayedEvent::Call: CancelPendingCall did not work!" );
 
         m_nEventId = Application::PostUserEvent( LINK( this, DelayedEvent, OnCall ), _pArg );
     }
