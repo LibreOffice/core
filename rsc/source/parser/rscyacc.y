@@ -360,6 +360,7 @@ resource_definitions
       RscExpType              aExpType;
       sal_Int32                       lValue;
 
+      aExpType.cUnused = false;
       aExpType.cType = RSCEXP_NOTHING;
       pExp = new RscExpression( aExpType, '+', $2 );
       if( !pExp->Evaluate( &lValue ) )
