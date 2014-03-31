@@ -329,7 +329,7 @@ bool PowerPointExport::importDocument() throw()
     return false;
 }
 
-bool PowerPointExport::exportDocument() throw()
+bool PowerPointExport::exportDocument() throw (std::exception)
 {
     DrawingML::ResetCounters();
     maShapeMap.clear ();

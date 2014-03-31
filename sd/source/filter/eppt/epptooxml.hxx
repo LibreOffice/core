@@ -71,7 +71,7 @@ public:
 
     // from FilterBase
     virtual bool importDocument() throw() SAL_OVERRIDE;
-    virtual bool exportDocument() throw() SAL_OVERRIDE;
+    virtual bool exportDocument() throw (std::exception) SAL_OVERRIDE;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
     virtual sal_Int32 getSchemeClr( sal_Int32 /* nColorSchemeToken */ ) const { return 0; }
