@@ -100,7 +100,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/iosys \
 	basic/source/runtime/props \
 	basic/source/runtime/runtime \
-	basic/source/runtime/sbdiagnose \
 	basic/source/runtime/stdobj \
 	basic/source/runtime/stdobj1 \
 ))

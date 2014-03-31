@@ -123,10 +123,6 @@ Sub ClearAllText
     call ClearStatus
 end Sub
 
-Sub AssertionHandler( sMessage as String )
-    LogTestResult( &quot;assertion caught: &quot; + sMessage, FALSE )
-End Sub
-
 Sub Main
     On Local Error Goto MainError
 
@@ -144,7 +140,6 @@ Sub Main
     LocalTestLog% = OpenLogDat( GetLogFileName( gCurrentDocTest ) )
 
     gCurrentTestCase = cTestClosureSetupDoc
-    CaptureAssertions( "AssertionHandler" )
 
     call SetGlobalDoc
 
@@ -184,7 +179,6 @@ Sub Main
 
     gOutputDoc.setModified( bWasModified )
 
-    CaptureAssertions( &quot;&quot; )
     Exit Sub
 
 MainError:

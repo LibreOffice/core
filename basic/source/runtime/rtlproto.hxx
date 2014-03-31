@@ -360,7 +360,6 @@ extern RTLFUNC(CDateToIso);
 extern RTLFUNC(CDateFromIso);
 extern RTLFUNC(CompatibilityMode);
 extern RTLFUNC(CDec);
-extern RTLFUNC(CaptureAssertions);
 
 extern RTLFUNC(Partition); // Fong
 
