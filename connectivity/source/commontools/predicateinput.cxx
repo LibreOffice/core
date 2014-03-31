@@ -76,7 +76,7 @@ namespace dbtools
     //= OPredicateInputController
 
 
-    sal_Bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
+    bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
     {
         _rDecSep = '.';
         _rThdSep = ',';
@@ -88,14 +88,14 @@ namespace dbtools
                 aLocaleData = m_xLocaleData->getLocaleItem( _rLocale );
                 _rDecSep = lcl_getSeparatorChar( aLocaleData.decimalSeparator, _rDecSep );
                 _rThdSep = lcl_getSeparatorChar( aLocaleData.decimalSeparator, _rThdSep );
-                return sal_True;
+                return true;
             }
         }
         catch( const Exception& )
         {
             OSL_FAIL( "OPredicateInputController::getSeparatorChars: caught an exception!" );
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -245,13 +245,13 @@ namespace dbtools
     }
 
 
-    sal_Bool OPredicateInputController::normalizePredicateString(
+    bool OPredicateInputController::normalizePredicateString(
         OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField, OUString* _pErrorMessage ) const
     {
         OSL_ENSURE( m_xConnection.is() && m_xFormatter.is() && _rxField.is(),
             "OPredicateInputController::normalizePredicateString: invalid state or params!" );
 
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         if ( m_xConnection.is() && m_xFormatter.is() && _rxField.is() )
         {
             // parse the string
@@ -275,7 +275,7 @@ namespace dbtools
                 _rPredicateValue = sTransformedText;
                 delete pParseNode;
 
-                bSuccess = sal_True;
+                bSuccess = true;
             }
         }
 
@@ -285,7 +285,7 @@ namespace dbtools
 
     OUString OPredicateInputController::getPredicateValue(
         const OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
-        sal_Bool _bForStatementUse, OUString* _pErrorMessage ) const
+        bool _bForStatementUse, OUString* _pErrorMessage ) const
     {
         OSL_ENSURE( _rxField.is(), "OPredicateInputController::getPredicateValue: invalid params!" );
         OUString sReturn;
@@ -331,7 +331,7 @@ namespace dbtools
     }
 
     OUString OPredicateInputController::getPredicateValue(
-        const OUString& _sField, const OUString& _rPredicateValue, sal_Bool _bForStatementUse, OUString* _pErrorMessage ) const
+        const OUString& _sField, const OUString& _rPredicateValue, bool _bForStatementUse, OUString* _pErrorMessage ) const
     {
         OUString sReturn = _rPredicateValue;
         OUString sError;
@@ -381,7 +381,7 @@ namespace dbtools
         return pParseNode ? implParseNode(pParseNode,_bForStatementUse) : sReturn;
     }
 
-    OUString OPredicateInputController::implParseNode(OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const
+    OUString OPredicateInputController::implParseNode(OSQLParseNode* pParseNode, bool _bForStatementUse) const
     {
         OUString sReturn;
         if ( pParseNode )

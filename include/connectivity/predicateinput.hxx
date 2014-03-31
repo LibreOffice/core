@@ -68,7 +68,7 @@ namespace dbtools
             If not <NULL/>, and a parsing error occurs, the error message will be copied to the string the argument
             points to.
         */
-        sal_Bool        normalizePredicateString(
+        bool        normalizePredicateString(
             OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
             OUString* _pErrorMessage = NULL
@@ -90,14 +90,14 @@ namespace dbtools
         OUString getPredicateValue(
             const OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField,
-            sal_Bool _bForStatementUse,
+            bool _bForStatementUse,
             OUString* _pErrorMessage = NULL
         ) const;
 
         OUString getPredicateValue(
             const OUString& _sField
             , const OUString& _rPredicateValue
-            , sal_Bool _bForStatementUse
+            , bool _bForStatementUse
             , OUString* _pErrorMessage = NULL) const;
 
     private:
@@ -107,13 +107,13 @@ namespace dbtools
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField
         ) const;
 
-        sal_Bool getSeparatorChars(
+        bool getSeparatorChars(
             const ::com::sun::star::lang::Locale& _rLocale,
             sal_Unicode& _rDecSep,
             sal_Unicode& _rThdSep
         ) const;
 
-        OUString implParseNode(::connectivity::OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const;
+        OUString implParseNode(::connectivity::OSQLParseNode* pParseNode, bool _bForStatementUse) const;
     };
 
 

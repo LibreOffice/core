@@ -72,7 +72,7 @@ namespace dbtools
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                             m_xComponentAggregate;
         ::std::vector< OUString >           m_aFilterComponents;
-        sal_Bool                            m_bApplyPublicFilter;
+        bool                                m_bApplyPublicFilter;
 
     public:
         /// ctor
@@ -87,8 +87,8 @@ namespace dbtools
         const OUString&  getFilterComponent( FilterComponent _eWhich ) const;
         void                    setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent );
 
-        inline sal_Bool isApplyPublicFilter( ) const { return m_bApplyPublicFilter; }
-               void     setApplyPublicFilter( sal_Bool _bApply );
+        inline bool     isApplyPublicFilter( ) const { return m_bApplyPublicFilter; }
+               void     setApplyPublicFilter( bool _bApply );
 
     private:
         /** retrieves a filter which is a conjunction of all single filter components

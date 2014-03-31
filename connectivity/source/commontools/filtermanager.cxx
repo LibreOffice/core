@@ -86,7 +86,7 @@ namespace dbtools
     }
 
 
-    void FilterManager::setApplyPublicFilter( sal_Bool _bApply )
+    void FilterManager::setApplyPublicFilter( bool _bApply )
     {
         if ( m_bApplyPublicFilter == _bApply )
             return;
