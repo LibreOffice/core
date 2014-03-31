@@ -2165,7 +2165,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
     DBG_ASSERT( pAtom && pAtom->getType() == DFF_msofbtAnimCommand && xCommand.is(), "invalid call to ppt::AnimationImporter::importCommandContainer()!");
     if( pAtom && xCommand.is() )
     {
-        sal_Int32 nBits = 0, nType = 0;
+        sal_Int32 nBits = 0;
         Any aValue;
 
         const Atom* pChildAtom = pAtom->findFirstChildAtom();
@@ -2230,47 +2230,33 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
 
             NamedValue aParamValue;
 
-            switch( nType )
+            if ( aParam == "onstopaudio" )
             {
-            case 0: // event
-            case 1: // call
-                if ( aParam == "onstopaudio" )
+                nCommand = EffectCommands::STOPAUDIO;
+            }
+            else if ( aParam == "play" )
+            {
+                nCommand = EffectCommands::PLAY;
+            }
+            else if( aParam.startsWith( "playFrom" ) )
+            {
+                const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
+                rtl_math_ConversionStatus eStatus;
+                double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
+                if( eStatus == rtl_math_ConversionStatus_Ok )
                 {
-                    nCommand = EffectCommands::STOPAUDIO;
+                    aParamValue.Name = "MediaTime";
+                    aParamValue.Value <<= fMediaTime;
                 }
-                else if ( aParam == "play" )
-                {
-                    nCommand = EffectCommands::PLAY;
-                }
-                else if( aParam.startsWith( "playFrom" ) )
-                {
-                    const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
-                    rtl_math_ConversionStatus eStatus;
-                    double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
-                    if( eStatus == rtl_math_ConversionStatus_Ok )
-                    {
-                        aParamValue.Name = "MediaTime";
-                        aParamValue.Value <<= fMediaTime;
-                    }
-                    nCommand = EffectCommands::PLAY;
-                }
-                else if ( aParam == "togglePause" )
-                {
-                    nCommand = EffectCommands::TOGGLEPAUSE;
-                }
-                else if ( aParam == "stop" )
-                {
-                    nCommand = EffectCommands::STOP;
-                }
-                break;
-            case 2: // verb
-                {
-                    aParamValue.Name = "Verb";
-                    aParamValue.Value <<= aParam.toInt32();
-
-                    nCommand = EffectCommands::VERB;
-                }
-                break;
+                nCommand = EffectCommands::PLAY;
+            }
+            else if ( aParam == "togglePause" )
+            {
+                nCommand = EffectCommands::TOGGLEPAUSE;
+            }
+            else if ( aParam == "stop" )
+            {
+                nCommand = EffectCommands::STOP;
             }
 
             xCommand->setCommand( nCommand );
