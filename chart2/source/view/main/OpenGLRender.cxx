@@ -327,14 +327,6 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-#if defined( WNT )
-    SwapBuffers(glWin.hDC);
-#elif defined( MACOSX )
-
-#elif defined( UNX )
-    glXSwapBuffers(glWin.dpy, glWin.win);
-#endif
-    glFlush();
     glEnable(GL_LIGHTING);
     GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
     GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
@@ -569,14 +561,6 @@ void OpenGLRender::renderToBitmap()
     mxRenderTarget->setPosition(awt::Point(0,0));
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-#if defined( WNT )
-    SwapBuffers(glWin.hDC);
-#elif defined( MACOSX )
-
-#elif defined( UNX )
-    glXSwapBuffers(glWin.dpy, glWin.win);
-#endif
-    glFlush();
 }
 
 int OpenGLRender::CreateTextureObj(int width, int height)
@@ -946,7 +930,6 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     return 0;
 }
 
-
 int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
     size_t listNum = m_RectangleShapePointList.size();
@@ -1056,7 +1039,6 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
     m_fZStep += Z_STEP;
     return 0;
 }
-
 
 int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)
@@ -1484,5 +1466,4 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
     return 0;
 }
 
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* iim:set shiftwidth=4 softtabstop=4 expandtab: */
