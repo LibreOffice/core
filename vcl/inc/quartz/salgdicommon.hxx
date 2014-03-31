@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_QUARTZ_SALGDICOMMON_HXX
 #define INCLUDED_VCL_INC_QUARTZ_SALGDICOMMON_HXX
 
+#include <iostream>
+
 #include <premac.h>
 #ifdef IOS
 #include <CoreGraphics/CoreGraphics.h>
@@ -62,6 +64,16 @@ inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha
     m_fRGBA[1] = fGreen;
     m_fRGBA[2] = fBlue;
     m_fRGBA[3] = fAlpha;
+}
+
+inline std::ostream &operator <<(std::ostream& s, const RGBAColor &aColor)
+{
+#ifndef SAL_LOG_INFO
+    (void) aColor;
+#else
+    s << "{" << aColor.GetRed() << "," << aColor.GetGreen() << "," << aColor.GetBlue() << "," << aColor.GetAlpha() << "}";
+#endif
+    return s;
 }
 
 // XOR emulation suckage.

@@ -39,10 +39,13 @@ OUString GetOUString( NSString* );
 CFStringRef CreateCFString( const OUString& );
 NSString* CreateNSString( const OUString& );
 
-std::ostream &operator <<(std::ostream& s, CGRect &rRect);
-std::ostream &operator <<(std::ostream& s, CGPoint &rPoint);
-std::ostream &operator <<(std::ostream& s, CGSize &rSize);
+std::ostream &operator <<(std::ostream& s, const CGRect &rRect);
+std::ostream &operator <<(std::ostream& s, const CGPoint &rPoint);
+std::ostream &operator <<(std::ostream& s, const CGSize &rSize);
 std::ostream &operator <<(std::ostream& s, CGColorRef pSize);
+std::ostream &operator <<(std::ostream& s, const CGAffineTransform &aXform);
+
+#define CG_TRACE( e ) SAL_INFO( "vcl.cg", e )
 
 #endif // INCLUDED_VCL_INC_QUARTZ_UTILS_H
 

@@ -354,6 +354,7 @@ certain functionality.
 @li @c vcl
 @li @c vcl.a11y
 @li @c vcl.app
+@li @c vcl.cg - CoreGraphics calls on OS X and iOS
 @li @c vcl.control
 @li @c vcl.coretext - CoreText-using code for Mac OS X and iOS
 @li @c vcl.emf - EMF/EMF+ processing

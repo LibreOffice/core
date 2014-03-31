@@ -158,6 +158,9 @@ protected:
     AquaSalFrame*                           mpFrame;
     CGLayerRef                              mxLayer;    // Quartz graphics layer
     CGContextRef                            mrContext;  // Quartz drawing context
+#if OSL_DEBUG_LEVEL > 0
+    int                                     mnContextStackDepth;
+#endif
     class XorEmulation*                     mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
     int                                     mnWidth;

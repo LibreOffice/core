@@ -67,7 +67,7 @@ NSString* CreateNSString( const OUString& rStr )
     return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
 }
 
-std::ostream &operator <<(std::ostream& s, CGRect &rRect)
+std::ostream &operator <<(std::ostream& s, const CGRect &rRect)
 {
 #ifndef SAL_LOG_INFO
     (void) rRect;
@@ -80,7 +80,7 @@ std::ostream &operator <<(std::ostream& s, CGRect &rRect)
     return s;
 }
 
-std::ostream &operator <<(std::ostream& s, CGPoint &rPoint)
+std::ostream &operator <<(std::ostream& s, const CGPoint &rPoint)
 {
 #ifndef SAL_LOG_INFO
     (void) rPoint;
@@ -90,7 +90,7 @@ std::ostream &operator <<(std::ostream& s, CGPoint &rPoint)
     return s;
 }
 
-std::ostream &operator <<(std::ostream& s, CGSize &rSize)
+std::ostream &operator <<(std::ostream& s, const CGSize &rSize)
 {
 #ifndef SAL_LOG_INFO
     (void) rSize;
@@ -112,6 +112,19 @@ std::ostream &operator <<(std::ostream& s, CGColorRef pColor)
     } else {
         s << "NULL";
     }
+#endif
+    return s;
+}
+
+std::ostream &operator <<(std::ostream& s, const CGAffineTransform &aXform)
+{
+#ifndef SAL_LOG_INFO
+    (void) aXform;
+#else
+    if (CGAffineTransformIsIdentity(aXform))
+        s << "IDENT";
+    else
+        s << "[" << aXform.a << "," << aXform.b << "," << aXform.c << "," << aXform.d << "," << aXform.tx << "," << aXform.ty << "]";
 #endif
     return s;
 }

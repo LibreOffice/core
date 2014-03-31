@@ -212,11 +212,7 @@ bool QuartzSalBitmap::CreateContext()
         // no conversion needed for truecolor
         maContextBuffer = maUserBuffer;
     }
-    else if( mnBits == 8
-#ifndef IOS
-            && maPalette.IsGreyPalette()
-#endif
-            )
+    else if( mnBits == 8 && maPalette.IsGreyPalette() )
     {
         // no conversion needed for grayscale
         maContextBuffer = maUserBuffer;

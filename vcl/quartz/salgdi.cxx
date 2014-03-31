@@ -39,6 +39,7 @@
 #include "vcl/svapp.hxx"
 
 #include "quartz/salgdi.h"
+#include "quartz/utils.h"
 
 #ifdef MACOSX
 #include "osx/salframe.h"
@@ -240,13 +241,14 @@ void CoreTextFontData::ReadMacCmapEncoding( void ) const
         return;
 }
 
-
-
 AquaSalGraphics::AquaSalGraphics()
 #ifdef MACOSX
     : mpFrame( NULL )
     , mxLayer( NULL )
     , mrContext( NULL )
+#if OSL_DEBUG_LEVEL > 0
+    , mnContextStackDepth( 0 )
+#endif
     , mpXorEmulation( NULL )
     , mnXorMode( 0 )
     , mnWidth( 0 )
@@ -268,6 +270,9 @@ AquaSalGraphics::AquaSalGraphics()
     : mxLayer( NULL )
     , mbForeignContext( false )
     , mrContext( NULL )
+#if OSL_DEBUG_LEVEL > 0
+    , mnContextStackDepth( 0 )
+#endif
     , mpXorEmulation( NULL )
     , mnXorMode( 0 )
     , mnWidth( 0 )
@@ -291,7 +296,12 @@ AquaSalGraphics::~AquaSalGraphics()
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::~AquaSalGraphics() this=" << this );
 
-    CGPathRelease( mxClipPath );
+    if( mxClipPath )
+    {
+        CG_TRACE( "CGPathRelease(" << mxClipPath << ")" );
+        CGPathRelease( mxClipPath );
+    }
+
     delete mpTextStyle;
 
     if( mpXorEmulation )
@@ -302,7 +312,10 @@ AquaSalGraphics::~AquaSalGraphics()
         return;
 #endif
     if( mxLayer )
+    {
+        CG_TRACE( "CGLayerRelease(" << mxLayer << ")" );
         CGLayerRelease( mxLayer );
+    }
     else if( mrContext
 #ifdef MACOSX
              && mbWindow
@@ -310,6 +323,7 @@ AquaSalGraphics::~AquaSalGraphics()
              )
     {
         // destroy backbuffer bitmap context that we created ourself
+        CG_TRACE( "CGContextRelease(" << mrContext << ")" );
         CGContextRelease( mrContext );
         mrContext = NULL;
     }
@@ -832,7 +846,6 @@ bool SvpSalGraphics::CheckContext()
 
     SAL_INFO( "vcl.ios", "CheckContext() this=" << this << ",  not foreign, return false");
     return false;
-
 }
 
 CGContextRef SvpSalGraphics::GetContext()
