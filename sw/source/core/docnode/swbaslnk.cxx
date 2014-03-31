@@ -396,7 +396,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
     {
         OUString aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
         uno::Any aValue;
-        GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
+        (void)GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
 
         if( bWaitForData && !GetObj() )
         {
