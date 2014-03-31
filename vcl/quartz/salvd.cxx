@@ -179,6 +179,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     if( mxLayer )
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
+        CG_TRACE( "CGlayerGetSize(" << mxLayer << ") = " << aSize );
         if( (nDX == aSize.width) && (nDY == aSize.height) )
         {
             // Yay, we do not have to do anything :)

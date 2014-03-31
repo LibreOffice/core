@@ -86,6 +86,7 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     if( nY < 0 )
         nHeight += nY, nY = 0;
     const CGSize aLayerSize = CGLayerGetSize( xLayer );
+    CG_TRACE( "CGLayerGetSize(" << xLayer << ") = " << aLayerSize );
     if( nWidth >= (int)aLayerSize.width - nX )
         nWidth = (int)aLayerSize.width - nX;
     if( nHeight >= (int)aLayerSize.height - nY )
@@ -255,8 +256,9 @@ bool QuartzSalBitmap::CreateContext()
 
     if( maContextBuffer.get() )
     {
-        mxGraphicContext = ::CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
+        mxGraphicContext = CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
             bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );
+        CG_TRACE( "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight << "x" << bitsPerComponent << ") = " << mxGraphicContext );
     }
 
     if( !mxGraphicContext )
@@ -868,6 +870,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHe
 
             CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskBuffer, nHeight * nDestBytesPerRow, &CFRTLFree) );
             xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, NULL, true, kCGRenderingIntentDefault);
+            CG_TRACE( "CGImageCreate(" << nWidth << "x" << nHeight << "x8) = " << xMask );
             CFRelease(xDataProvider);
         }
         else
@@ -906,6 +909,7 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
             OSL_TRACE("QuartzSalBitmap::%s(): kCGBitmapByteOrder32Host not found => inserting it.",__func__);
 
             CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
+            CG_TRACE( "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << xImage );
 
             // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
             CGContextRef mxGraphicContextNew = CGBitmapContextCreate( CGBitmapContextGetData(mxGraphicContext),
@@ -915,18 +919,27 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
                                                                       CGBitmapContextGetBytesPerRow(mxGraphicContext),
                                                                       CGBitmapContextGetColorSpace(mxGraphicContext),
                                                                       CGBitmapContextGetBitmapInfo(mxGraphicContext) | kCGBitmapByteOrder32Host);
+            CG_TRACE( "CGBitmapContextCreate(" << CGBitmapContextGetWidth(mxGraphicContext) << "x" << CGBitmapContextGetHeight(mxGraphicContext) << "x" << CGBitmapContextGetBitsPerComponent(mxGraphicContext) << ") = " << mxGraphicContextNew );
+
+            CG_TRACE( "CFRelease(" << mxGraphicContext << ")" );
             CFRelease(mxGraphicContext);
 
             // Needs to be flipped
+            CG_TRACE( "CGContextSaveGState(" << mxGraphicContextNew << ")" );
             CGContextSaveGState( mxGraphicContextNew );
+            CG_TRACE( "CGContextTranslateCTM(" << mxGraphicContextNew << ",0," << CGBitmapContextGetHeight(mxGraphicContextNew) << ")" );
             CGContextTranslateCTM (mxGraphicContextNew, 0, CGBitmapContextGetHeight(mxGraphicContextNew));
+            CG_TRACE( "CGContextScaleCTM(" << mxGraphicContextNew << ",1,-1)" );
             CGContextScaleCTM (mxGraphicContextNew, 1.0, -1.0);
 
+            CG_TRACE( "CGContextDrawImage(" << mxGraphicContextNew << "," << CGRectMake(0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)) << "," << xImage << ")" );
             CGContextDrawImage(mxGraphicContextNew, CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
 
             // Flip back
+            CG_TRACE( "CGContextRestoreGState(" << mxGraphicContextNew << ")" );
             CGContextRestoreGState( mxGraphicContextNew );
 
+            CG_TRACE( "CGImageRelease(" << xImage << ")" );
             CGImageRelease( xImage );
             mxGraphicContext = mxGraphicContextNew;
         }
