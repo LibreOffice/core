@@ -56,7 +56,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         return;
     }
     (void)bPixelSnap; // TODO
-    const CGAffineTransform* pTransform = NULL;
 
     const bool bHasCurves = rPolygon.areControlPointsUsed();
     for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
@@ -91,7 +90,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         if( !nPointIdx )
         {
             // first point => just move there
-            CGPathMoveToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
+            CGPathMoveToPoint( xPath, NULL, aPoint.getX(), aPoint.getY() );
             continue;
         }
 
@@ -104,7 +103,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 
         if( !bPendingCurve )    // line segment
         {
-            CGPathAddLineToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
+            CGPathAddLineToPoint( xPath, NULL, aPoint.getX(), aPoint.getY() );
         }
         else                        // cubic bezier segment
         {
@@ -115,7 +114,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
                 aCP1 += aHalfPointOfs;
                 aCP2 += aHalfPointOfs;
             }
-            CGPathAddCurveToPoint( xPath, pTransform, aCP1.getX(), aCP1.getY(),
+            CGPathAddCurveToPoint( xPath, NULL, aCP1.getX(), aCP1.getY(),
                                    aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
         }
     }
