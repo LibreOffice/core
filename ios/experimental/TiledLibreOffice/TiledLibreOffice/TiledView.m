@@ -6,6 +6,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <CoreText/CoreText.h>
+
 #include <touch/touch.h>
 
 #import "View.h"
@@ -131,22 +133,47 @@ static void updateTilesPerSecond(UILabel *label)
     // as needed at the current zoom levels. I keep thinking about
     // "pixels" incorrectly.
 
-    touch_lo_draw_tile(ctx,
-                       tileSize.width, tileSize.height,
-                       CGPointMake(bb.origin.x/self.scale, bb.origin.y/self.scale),
-                       CGSizeMake(bb.size.width/self.scale, bb.size.height/self.scale));
+    volatile static int number = 0;
+    int thisTile = number++;
+
+    if (!getenv("DRAW_ONLY_TILE") || thisTile == atoi(getenv("DRAW_ONLY_TILE")))
+        touch_lo_draw_tile(ctx,
+                           tileSize.width, tileSize.height,
+                           CGPointMake(bb.origin.x/self.scale, bb.origin.y/self.scale),
+                           CGSizeMake(bb.size.width/self.scale, bb.size.height/self.scale));
+    else {
+        CGContextSetRGBFillColor(ctx, 1, 1, 1, 1);
+        CGContextFillRect(ctx, CGRectMake(0, 0, bb.size.width, bb.size.height));
+    }
 
     [self didRenderTile];
 
     CGContextRestoreGState(ctx);
 
-    // I am a bit confused about what tiles exactly I am drawing, so
-    // make it perfectly obvious by drawing borders around the tiles
-    CGContextSaveGState(ctx);
-    CGContextSetStrokeColorWithColor(ctx, [[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5] CGColor]);
-    CGContextSetLineWidth(ctx, 1);
-    CGContextStrokeRect(ctx, bb);
-    CGContextRestoreGState(ctx);
+    if (getenv("DRAW_TILE_BORDERS")) {
+        // I am a bit confused about what tiles exactly I am drawing, so
+        // make it perfectly obvious by drawing borders around the tiles
+        CGContextSaveGState(ctx);
+        CGContextSetStrokeColorWithColor(ctx, [[UIColor colorWithRed:1 green:0 blue:0 alpha:0.5] CGColor]);
+        CGContextSetLineWidth(ctx, 1);
+        CGContextStrokeRect(ctx, bb);
+        CGContextRestoreGState(ctx);
+    }
+
+    if (getenv("DRAW_TILE_NUMBERS")) {
+        // Also draw the order number of the tile;)
+        CGContextSaveGState(ctx);
+        float scale = 1/[((View *) [self superview]) zoomScale];
+        NSString *s = [NSString stringWithFormat:@"%d", thisTile];
+        CFAttributedStringRef as = CFAttributedStringCreate(NULL, (__bridge CFStringRef)(s), NULL);
+        CTLineRef l = CTLineCreateWithAttributedString(as);
+        CGContextTranslateCTM(ctx, bb.origin.x, bb.origin.y);
+        CGContextScaleCTM(ctx, scale, scale);
+        CGContextSetTextPosition(ctx, 2, 12);
+        CGContextSetTextMatrix(ctx, CGAffineTransformScale(CGContextGetTextMatrix(ctx), 1, -1));
+        CTLineDraw(l, ctx);
+        CGContextRestoreGState(ctx);
+    }
 }
 
 @end
