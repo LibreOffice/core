@@ -44,7 +44,7 @@ class SwEnvPrtPage : public SfxTabPage
     FixedText*   m_pPrinterInfo;
     PushButton*  m_pPrtSetup;
 
-    sal_uInt16 m_aIds[6];
+    sal_uInt16 m_aIds[ENV_VER_RGHT-ENV_HOR_LEFT+1];
 
     Printer* pPrt;
 
