@@ -135,6 +135,7 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
         {
             pushAttributeToGrabBag(OOX_TOKEN(w14, rad),  "rad",  rAttribs);
         }
+        break;
         case OOX_TOKEN(w14, srgbClr):
         case OOX_TOKEN(w14, schemeClr):
         case OOX_TOKEN(w14, tint):
@@ -192,6 +193,7 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
         {
             pushAttributeToGrabBag(OOX_TOKEN(w14, val),  "val",  rAttribs);
         }
+        break;
         case OOX_TOKEN(w14, gs):
         {
             pushAttributeToGrabBag(OOX_TOKEN(w14, pos),  "pos", rAttribs);
