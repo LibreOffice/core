@@ -438,6 +438,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         pDoc = xDocSh->GetDocument();
         CPPUNIT_ASSERT(pDoc);
         impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+
+        xDocSh->DoClose();
     }
     {
         // This example doc contains cell anchored shape that is rotated, the
@@ -466,6 +468,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // apply hefty ( 1 mm ) tolerence here, as some opensuse tinderbox
         // failing
         impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor, 100 );
+
         xDocSh->DoClose();
     }
     {
@@ -491,6 +494,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         pDoc = xDocSh->GetDocument();
         CPPUNIT_ASSERT(pDoc);
         impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+
+        xDocSh->DoClose();
     }
 }
 
@@ -509,6 +514,8 @@ void ScFiltersTest::testEnhancedProtectionXLS()
     CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 2, 0)));  // union of two different editables
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 1, 0)));  // union of locked and editable
     CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 3, 0)));  // union of editable and password editable
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
