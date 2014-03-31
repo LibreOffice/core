@@ -20,8 +20,6 @@
 #include "layouter.hxx"
 #include "doc.hxx"
 #include "sectfrm.hxx"
-#include "ftnboss.hxx"
-#include "cntfrm.hxx"
 #include "pagefrm.hxx"
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
