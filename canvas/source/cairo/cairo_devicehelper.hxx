@@ -92,7 +92,6 @@ namespace cairocanvas
         void dumpScreenContent() const;
 
         OutputDevice* getOutputDevice() const { return mpRefDevice; }
-        const void* getSysData() { return mpSysData; }
         ::cairo::SurfaceSharedPtr getSurface();
         ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
         ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
@@ -121,7 +120,6 @@ namespace cairocanvas
         SurfaceProvider*          mpSurfaceProvider;
 
         OutputDevice*             mpRefDevice;
-        const void*               mpSysData;
         ::cairo::SurfaceSharedPtr mpSurface;
     };
 }
