@@ -1221,7 +1221,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                     const SvXMLStyleContext* pTempStyle =
                         ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                                 FindStyleChildContext( nFamily, rStyleName,
-                                                       sal_True );
+                                                       true );
                     pStyle = PTR_CAST( XMLTextStyleContext,pTempStyle);
                 }
 
@@ -1430,7 +1430,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     {
         const SvXMLStyleContext* pTempStyle =
             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
-                    FindStyleChildContext( nFamily, sStyleName, sal_True );
+                    FindStyleChildContext( nFamily, sStyleName, true );
         pStyle = PTR_CAST( XMLTextStyleContext,pTempStyle);
     }
     if( pStyle )
@@ -2117,7 +2117,7 @@ void XMLTextImportHelper::SetRuby(
             const SvXMLStyleContext* pTempStyle =
                 ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                 FindStyleChildContext( XML_STYLE_FAMILY_TEXT_RUBY,
-                                       rStyleName, sal_True );
+                                       rStyleName, true );
             pStyle = PTR_CAST(XMLPropStyleContext,pTempStyle);
 
             if (NULL != pStyle)
@@ -2351,7 +2351,7 @@ sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
     const SvXMLStyleContext* pStyle =
         ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                   FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE,
-                                              sStyleName, sal_True );
+                                              sStyleName, true );
 
     // get appropriate context
 
@@ -2387,7 +2387,7 @@ const SvxXMLListStyleContext *XMLTextImportHelper::FindAutoListStyle( const OUSt
         const SvXMLStyleContext* pTempStyle =
             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                     FindStyleChildContext( XML_STYLE_FAMILY_TEXT_LIST, rName,
-                                           sal_True );
+                                           true );
         pStyle = PTR_CAST( SvxXMLListStyleContext ,pTempStyle);
     }
 
@@ -2402,7 +2402,7 @@ XMLPropStyleContext *XMLTextImportHelper::FindAutoFrameStyle( const OUString& rN
         const SvXMLStyleContext* pTempStyle =
             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                     FindStyleChildContext( XML_STYLE_FAMILY_SD_GRAPHICS_ID, rName,
-                                           sal_True );
+                                           true );
         pStyle = PTR_CAST( XMLPropStyleContext ,pTempStyle);
     }
 
@@ -2419,7 +2419,7 @@ XMLPropStyleContext* XMLTextImportHelper::FindSectionStyle(
             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                            FindStyleChildContext(
                                XML_STYLE_FAMILY_TEXT_SECTION,
-                               rName, sal_True );
+                               rName, true );
         pStyle = PTR_CAST( XMLPropStyleContext,pTempStyle);
     }
 
@@ -2436,7 +2436,7 @@ XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
             ((SvXMLStylesContext *)&m_pImpl->m_xAutoStyles)->
                            FindStyleChildContext(
                                XML_STYLE_FAMILY_PAGE_MASTER,
-                               rName, sal_True );
+                               rName, true );
         pStyle = PTR_CAST( XMLPropStyleContext,pTempStyle);
     }
 

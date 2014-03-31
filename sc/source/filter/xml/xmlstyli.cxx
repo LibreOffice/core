@@ -627,14 +627,14 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     if (nNumberFormat < 0 && !sDataStyleName.isEmpty())
     {
         const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext*>(
-            pStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
+            pStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, true));
 
         if (!pStyle)
         {
             XMLTableStylesContext* pMyStyles = static_cast<XMLTableStylesContext*>(GetScImport().GetStyles());
             if (pMyStyles)
                 pStyle = static_cast<const SvXMLNumFormatContext*>(
-                    pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
+                    pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, true));
             else
             {
                 OSL_FAIL("not possible to get style");
@@ -979,7 +979,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
 
 void ScXMLMasterStylesContext::EndElement()
 {
-    FinishStyles(sal_True);
+    FinishStyles(true);
 }
 
 TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );

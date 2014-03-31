@@ -1996,7 +1996,7 @@ bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL 
 
 OUString SvXMLExport::EncodeStyleName(
         const OUString& rName,
-        sal_Bool *pEncoded ) const
+        bool *pEncoded ) const
 {
     return GetMM100UnitConverter().encodeStyleName( rName, pEncoded );
 }

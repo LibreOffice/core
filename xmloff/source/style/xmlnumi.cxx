@@ -425,7 +425,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     {
         eType = NumberingType::ARABIC;
         GetImport().GetMM100UnitConverter().convertNumFormat(
-                eType, sNumFormat, sNumLetterSync, sal_True );
+                eType, sNumFormat, sNumLetterSync, true );
         nCount = 15;
     }
 
@@ -1027,7 +1027,7 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
-        sal_Bool bOutl )
+        bool bOutl )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
 ,   sIsPhysical( "IsPhysical"  )
 ,   sNumberingRules( "NumberingRules"  )
@@ -1035,7 +1035,7 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 ,   sIsContinuousNumbering( "IsContinuousNumbering"  )
 ,   pLevelStyles( 0 )
 ,   nLevels( 0 )
-,   bConsecutive( sal_False )
+,   bConsecutive( false )
 ,   bOutline( bOutl )
 {
 }
@@ -1134,7 +1134,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
     }
 }
 
-void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
+void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
 {
     if( bOutline )
     {
@@ -1154,7 +1154,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
         const OUString& rName = GetDisplayName();
         if( rName.isEmpty() )
         {
-            SetValid( sal_False );
+            SetValid( false );
             return;
         }
 
@@ -1162,7 +1162,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
                 GetImport().GetTextImport()->GetNumberingStyles();
         if( !rNumStyles.is() )
         {
-            SetValid( sal_False );
+            SetValid( false );
             return;
         }
 
@@ -1221,7 +1221,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
         }
         else
         {
-            SetValid( sal_False );
+            SetValid( false );
         }
 
         SetNew( bNew );
@@ -1236,7 +1236,7 @@ void SvxXMLListStyleContext::CreateAndInsertAuto() const
     const OUString& rName = GetName();
     if( bOutline || xNumRules.is() || rName.isEmpty() )
     {
-        ((SvxXMLListStyleContext *)this)->SetValid( sal_False );
+        ((SvxXMLListStyleContext *)this)->SetValid( false );
         return;
     }
 
@@ -1270,7 +1270,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
 void SvxXMLListStyleContext::SetDefaultStyle(
         const Reference < XIndexReplace > & rNumRule,
         sal_Int16 nLevel,
-        sal_Bool bOrdered )
+        bool bOrdered )
 {
     Sequence<beans::PropertyValue> aPropSeq( bOrdered ? 1 : 4  );
     beans::PropertyValue *pProps = aPropSeq.getArray();

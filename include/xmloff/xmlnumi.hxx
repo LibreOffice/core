@@ -42,8 +42,8 @@ class SvxXMLListStyleContext : public SvXMLStyleContext
     SvxXMLListStyle_Impl        *pLevelStyles;
 
     sal_Int32                   nLevels;
-    sal_Bool                    bConsecutive : 1;
-    sal_Bool                    bOutline : 1;
+    bool                        bConsecutive : 1;
+    bool                        bOutline : 1;
 
 protected:
 
@@ -60,7 +60,7 @@ public:
             const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-            sal_Bool bOutl=sal_False );
+            bool bOutl = false );
 
     virtual ~SvxXMLListStyleContext();
 
@@ -78,8 +78,8 @@ public:
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
         { return xNumRules; }
-    sal_Bool IsOutline() const { return bOutline; }
-    sal_Bool IsConsecutive() const { return bConsecutive; }
+    bool IsOutline() const { return bOutline; }
+    bool IsConsecutive() const { return bConsecutive; }
     sal_Int32 GetLevels() const { return nLevels; }
 
     static ::com::sun::star::uno::Reference <
@@ -92,9 +92,9 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::container::XIndexReplace > & rNumRule,
         sal_Int16 nLevel,
-        sal_Bool bOrdered );
+        bool bOrdered );
 
-    virtual void CreateAndInsertLate( sal_Bool bOverwrite ) SAL_OVERRIDE;
+    virtual void CreateAndInsertLate( bool bOverwrite ) SAL_OVERRIDE;
 
     void CreateAndInsertAuto() const;
 };

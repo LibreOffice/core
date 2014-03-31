@@ -242,7 +242,7 @@ bool XMLGradientStyleExport::exportXML(
             else
             {
                 // Name
-                sal_Bool bEncoded = sal_False;
+                bool bEncoded = false;
                 OUString aStrName( rStrName );
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                       rExport.EncodeStyleName( aStrName,

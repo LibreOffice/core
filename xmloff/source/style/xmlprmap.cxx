@@ -125,12 +125,12 @@ void XMLPropertySetMapper::AddMapperEntry(
 }
 
 // Export a Property
-sal_Bool XMLPropertySetMapper::exportXML(
+bool XMLPropertySetMapper::exportXML(
         OUString& rStrExpValue,
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const XMLPropertyHandler* pHdl = GetPropertyHandler( rProperty.mnIndex );
 
@@ -143,12 +143,12 @@ sal_Bool XMLPropertySetMapper::exportXML(
 }
 
 // Import a Property
-sal_Bool XMLPropertySetMapper::importXML(
+bool XMLPropertySetMapper::importXML(
         const OUString& rStrImpValue,
         XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const XMLPropertyHandler* pHdl = GetPropertyHandler( rProperty.mnIndex );
 

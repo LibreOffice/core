@@ -1006,7 +1006,7 @@ void SwXMLImport::InsertStyles( sal_Bool bAuto )
     if( bAuto && GetAutoStyles() )
         GetAutoStyles()->CopyAutoStylesToDoc();
     if( !bAuto && GetStyles() )
-        GetStyles()->CopyStylesToDoc( !IsInsertMode(), sal_False );
+        GetStyles()->CopyStylesToDoc( !IsInsertMode(), false );
 }
 
 void SwXMLImport::FinishStyles()
@@ -1064,7 +1064,7 @@ bool SwXMLImport::FindAutomaticStyle(
         pStyle = PTR_CAST( SwXMLItemSetStyleContext_Impl,
               GetAutoStyles()->
                     FindStyleChildContext( nFamily, rName,
-                                           sal_True ) );
+                                           true ) );
         if( pStyle )
         {
             if( ppItemSet )

@@ -41,7 +41,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:hatch context
@@ -61,7 +61,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:fill-image context
@@ -87,7 +87,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:transparency context
@@ -107,7 +107,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:marker context
@@ -127,7 +127,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
 };
 
 // draw:marker context
@@ -147,7 +147,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX

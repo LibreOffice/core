@@ -69,7 +69,7 @@ void XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rVal
         if( rValue >>= sImageURL )
         {
             // Name
-            sal_Bool bEncoded = sal_False;
+            bool bEncoded = false;
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                   rExport.EncodeStyleName( rStrName,
                                                            &bEncoded ) );

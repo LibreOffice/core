@@ -3278,7 +3278,7 @@ namespace xmloff { namespace token {
     }
 
     // does rString represent eToken?
-    sal_Bool IsXMLToken(
+    bool IsXMLToken(
         const OUString& rString,
         enum XMLTokenEnum eToken )
     {

@@ -224,7 +224,7 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 
                 SdXMLNumberFormatImportContext* pSdNumStyle =
                     PTR_CAST( SdXMLNumberFormatImportContext,
-                        GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, sal_True ) );
+                        GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, true ) );
 
                 if( pSdNumStyle )
                     nStyle = pSdNumStyle->GetDrawKey();
@@ -1601,9 +1601,9 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
     }
 }
 
-sal_Bool SdXMLHeaderFooterDeclContext::IsTransient() const
+bool SdXMLHeaderFooterDeclContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 void SdXMLHeaderFooterDeclContext::EndElement()

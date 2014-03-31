@@ -109,7 +109,7 @@ bool XMLStyleExport::exportStyle(
         sName = *pPrefix;
     sName += rStyle->getName();
 
-    sal_Bool bEncoded = sal_False;
+    bool bEncoded = false;
     const OUString sEncodedStyleName(GetExport().EncodeStyleName( sName, &bEncoded ));
     GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sEncodedStyleName );
 

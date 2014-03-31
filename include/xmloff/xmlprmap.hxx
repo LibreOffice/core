@@ -105,7 +105,7 @@ public:
 
     /** Returns the type of an entry */
     sal_uInt32 GetEntryType( sal_Int32 nIndex,
-                                   sal_Bool bWithFlags = sal_True ) const
+                             bool bWithFlags = true ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         sal_uInt32 nType = aMapEntries[nIndex].nType;
@@ -165,10 +165,10 @@ public:
 
     /** import/export
         This methods calls the respective im/export-method of the respective PropertyHandler. */
-    virtual sal_Bool exportXML( OUString& rStrExpValue,
+    virtual bool exportXML( OUString& rStrExpValue,
                                 const XMLPropertyState& rProperty,
                                 const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool importXML( const OUString& rStrImpValue,
+    virtual bool importXML( const OUString& rStrImpValue,
                                 XMLPropertyState& rProperty,
                                 const SvXMLUnitConverter& rUnitConverter ) const;
 

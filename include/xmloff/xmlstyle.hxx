@@ -64,20 +64,20 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
     OUString     maDisplayName;
     OUString     maAutoName;
     OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
-    OUString     maFollow;   // Will be moved to XMLPropStyle soon!!!!
-    sal_Bool            mbHidden;
+    OUString     maFollow;    // Will be moved to XMLPropStyle soon!!!!
+    bool         mbHidden;
 
-    OUString     maHelpFile; // Will be removed very soon!!!!
+    OUString     maHelpFile;  // Will be removed very soon!!!!
 
-    sal_uInt32          mnHelpId;   // Will be removed very soon!!!!
-    sal_uInt16          mnFamily;
+    sal_uInt32   mnHelpId;    // Will be removed very soon!!!!
+    sal_uInt16   mnFamily;
 
-    sal_Bool            mbValid : 1;    // Set this to false in CreateAndInsert
-                                    // if the style shouldn't be processed
-                                    // by Finish() or si somehow invalid.
-    sal_Bool            mbNew : 1;  // Set this to false in CreateAnsInsert
-                                    // if the style is already existing.
-    sal_Bool            mbDefaultStyle : 1;
+    bool         mbValid : 1; // Set this to false in CreateAndInsert
+                              // if the style shouldn't be processed
+                              // by Finish() or si somehow invalid.
+    bool         mbNew : 1;   // Set this to false in CreateAnsInsert
+                              // if the style is already existing.
+    bool         mbDefaultStyle : 1;
 
 protected:
 
@@ -95,8 +95,9 @@ public:
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-    sal_uInt16 nFamily=0, sal_Bool bDefaultStyle = sal_False );
+              ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+              sal_uInt16 nFamily=0,
+              bool bDefaultStyle = false );
 
     virtual ~SvXMLStyleContext();
 
@@ -120,13 +121,13 @@ public:
 
     sal_uInt16 GetFamily() const { return mnFamily; }
 
-    sal_Bool IsValid() const { return mbValid; }
-    void SetValid( sal_Bool b ) { mbValid = b; }
+    bool IsValid() const { return mbValid; }
+    void SetValid( bool b ) { mbValid = b; }
 
-    sal_Bool IsNew() const { return mbNew; }
-    void SetNew( sal_Bool b ) { mbNew = b; }
+    bool IsNew() const { return mbNew; }
+    void SetNew( bool b ) { mbNew = b; }
 
-    sal_Bool IsHidden() const { return mbHidden; }
+    bool IsHidden() const { return mbHidden; }
 
     // This method is called for every default style
     virtual void SetDefaults();
@@ -137,13 +138,13 @@ public:
 
     // This method is called for every style. It must create it and insert
     // it into the document if this hasn't happened already in CreateAndInsert().
-    virtual void CreateAndInsertLate( sal_Bool bOverwrite );
+    virtual void CreateAndInsertLate( bool bOverwrite );
 
     // This method is called fpr every style after all styles have been
     // inserted into the document.
     virtual void Finish( bool bOverwrite );
 
-    sal_Bool IsDefaultStyle() const { return mbDefaultStyle; }
+    bool IsDefaultStyle() const { return mbDefaultStyle; }
 
     /** if this method returns true, its parent styles context
         should not add it to its container.<br>
@@ -153,7 +154,7 @@ public:
         and Finish() will not be called.
         The default return value is false
     */
-    virtual sal_Bool IsTransient() const;
+    virtual bool IsTransient() const;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
@@ -219,7 +220,7 @@ public:
         const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-        sal_Bool bAutomatic = sal_False );
+        bool bAutomatic = false );
 
     virtual ~SvXMLStylesContext();
 
@@ -238,7 +239,7 @@ public:
     const SvXMLStyleContext *FindStyleChildContext(
                                       sal_uInt16 nFamily,
                                       const OUString& rName,
-                                      sal_Bool bCreateIndex=sal_False ) const;
+                                      bool bCreateIndex = false ) const;
     virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;
@@ -251,13 +252,13 @@ public:
        virtual ::com::sun::star::uno::Reference < ::com::sun::star::style::XAutoStyleFamily >
         GetAutoStyles( sal_uInt16 nFamily ) const;
     void CopyAutoStylesToDoc();
-    void CopyStylesToDoc( sal_Bool bOverwrite, sal_Bool bFinish=sal_True );
-    void FinishStyles( sal_Bool bOverwrite );
+    void CopyStylesToDoc( bool bOverwrite, bool bFinish = true );
+    void FinishStyles( bool bOverwrite );
 
     // This method must be called to release the references to all styles
     // that are stored in the context.
     void Clear();
-    sal_Bool IsAutomaticStyle() const;
+    bool IsAutomaticStyle() const;
 };
 
 #endif // INCLUDED_XMLOFF_XMLSTYLE_HXX

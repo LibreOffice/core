@@ -107,7 +107,7 @@ bool XMLPageExport::exportStyle(
     else
     {
         OUString sName( rStyle->getName() );
-        sal_Bool bEncoded = sal_False;
+        bool bEncoded = false;
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                           GetExport().EncodeStyleName( sName, &bEncoded ) );
 

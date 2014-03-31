@@ -272,7 +272,7 @@ public:
         const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual sal_Bool IsTransient() const SAL_OVERRIDE;
+    virtual bool IsTransient() const SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 

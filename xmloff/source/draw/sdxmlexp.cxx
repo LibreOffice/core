@@ -2426,7 +2426,7 @@ void SdXMLExport::_ExportMasterStyles()
             Reference < container::XNamed > xNamed(xMasterPage, UNO_QUERY);
             if(xNamed.is())
             {
-                sal_Bool bEncoded = sal_False;
+                bool bEncoded = false;
                 sMasterPageName = xNamed->getName();
                 AddAttribute(XML_NAMESPACE_STYLE, XML_NAME,
                     EncodeStyleName( sMasterPageName, &bEncoded ));

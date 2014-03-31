@@ -145,13 +145,13 @@ SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp, sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >&,
-        sal_uInt16 nFam, sal_Bool bDefault ) :
+        sal_uInt16 nFam, bool bDefault ) :
     SvXMLImportContext( rImp, nPrfx, rLName ),
-    mbHidden( sal_False ),
+    mbHidden( false ),
     mnHelpId( UCHAR_MAX ),
     mnFamily( nFam ),
-    mbValid( sal_True ),
-    mbNew( sal_True ),
+    mbValid( true ),
+    mbNew( true ),
     mbDefaultStyle( bDefault )
 {
 }
@@ -189,7 +189,7 @@ void SvXMLStyleContext::CreateAndInsert( bool /*bOverwrite*/ )
 {
 }
 
-void SvXMLStyleContext::CreateAndInsertLate( sal_Bool /*bOverwrite*/ )
+void SvXMLStyleContext::CreateAndInsertLate( bool /*bOverwrite*/ )
 {
 }
 
@@ -197,9 +197,9 @@ void SvXMLStyleContext::Finish( bool /*bOverwrite*/ )
 {
 }
 
-sal_Bool SvXMLStyleContext::IsTransient() const
+bool SvXMLStyleContext::IsTransient() const
 {
-    return sal_False;
+    return false;
 }
 
 class SvXMLStyleIndex_Impl
@@ -282,8 +282,8 @@ public:
 
     const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
                                                     const OUString& rName,
-                                                    sal_Bool bCreateIndex ) const;
-    sal_Bool IsAutomaticStyle() const { return bAutomaticStyle; }
+                                                    bool bCreateIndex ) const;
+    bool IsAutomaticStyle() const { return bAutomaticStyle; }
 };
 
 SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
@@ -328,7 +328,7 @@ void SvXMLStylesContext_Impl::Clear()
 
 const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uInt16 nFamily,
                                                                          const OUString& rName,
-                                                                         sal_Bool bCreateIndex ) const
+                                                                         bool bCreateIndex ) const
 {
     const SvXMLStyleContext *pStyle = 0;
 
@@ -382,7 +382,7 @@ const SvXMLStyleContext *SvXMLStylesContext::GetStyle( sal_uInt32 i ) const
     return mpImpl->GetStyle( i );
 }
 
-sal_Bool SvXMLStylesContext::IsAutomaticStyle() const
+bool SvXMLStylesContext::IsAutomaticStyle() const
 {
     return mpImpl->IsAutomaticStyle();
 }
@@ -436,8 +436,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
             case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
             {
                 //there is not page family in ODF now, so I specify one for it
-                sal_Bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken
-                    ? sal_True: sal_False;
+                bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken;
                 pStyle = new PageStyleContext( GetImport(), p_nPrefix,
                                                     rLocalName, xAttrList, *this, bDefaultStyle );
             }
@@ -448,7 +447,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                 break;
             case XML_TOK_TEXT_OUTLINE:
                 pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList, sal_True );
+                                                    rLocalName, xAttrList, true );
                 break;
             case XML_TOK_TEXT_NOTE_CONFIG:
                 pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
@@ -785,7 +784,7 @@ OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 
 SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                         const OUString& rLName,
-                                        const uno::Reference< xml::sax::XAttributeList > &, sal_Bool bAuto ) :
+                                        const uno::Reference< xml::sax::XAttributeList > &, bool bAuto ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     msParaStyleServiceName( "com.sun.star.style.ParagraphStyle" ),
     msTextStyleServiceName( "com.sun.star.style.CharacterStyle" ),
@@ -852,8 +851,8 @@ void SvXMLStylesContext::CopyAutoStylesToDoc()
     }
 }
 
-void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
-                                          sal_Bool bFinish )
+void SvXMLStylesContext::CopyStylesToDoc( bool bOverwrite,
+                                          bool bFinish )
 {
     // pass 1: create text, paragraph and frame styles
     sal_uInt32 nCount = GetStyleCount();
@@ -887,7 +886,7 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
         FinishStyles( bOverwrite );
 }
 
-void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
+void SvXMLStylesContext::FinishStyles( bool bOverwrite )
 {
     sal_uInt32 nCount = GetStyleCount();
     for( sal_uInt32 i=0; i<nCount; i++ )
@@ -904,7 +903,7 @@ void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
 const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
                                   sal_uInt16 nFamily,
                                   const OUString& rName,
-                                  sal_Bool bCreateIndex ) const
+                                  bool bCreateIndex ) const
 {
     return mpImpl->FindStyleChildContext( nFamily, rName, bCreateIndex );
 }

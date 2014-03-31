@@ -323,7 +323,7 @@ void SdXMLGenericPageContext::EndElement()
                         if( pStyles )
                         {
                             const SdXMLNumberFormatImportContext* pSdNumStyle =
-                                dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, aDateTimeFormat, sal_True ) );
+                                dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, aDateTimeFormat, true ) );
 
                             if( pSdNumStyle )
                             {

@@ -56,7 +56,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
         return;
     OSL_ENSURE( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
-    sal_Bool bEncoded = sal_False;
+    bool bEncoded = false;
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(
                     rFmt.GetName(), &bEncoded ) );
     if( bEncoded )

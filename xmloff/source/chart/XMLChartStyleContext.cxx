@@ -79,7 +79,7 @@ void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString
     if( !rStyleName.isEmpty())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)rStylesContext.FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, rStyleName, sal_True );
+            XML_STYLE_FAMILY_DATA_STYLE, rStyleName, true );
         if( pStyle )
         {
             uno::Any aNumberFormat;

@@ -3247,7 +3247,7 @@ namespace xmloff { namespace token {
         enum XMLTokenEnum eToken );
 
     /// compare eToken to the string
-    XMLOFF_DLLPUBLIC sal_Bool IsXMLToken(
+    XMLOFF_DLLPUBLIC bool IsXMLToken(
         const OUString& rString,
         enum XMLTokenEnum eToken );
 } }

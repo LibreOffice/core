@@ -512,7 +512,7 @@ XMLTextListsHelper::MakeNumRule(
         // Because there is no list style sheet for this style, a default
         // format must be set for any level of this num rule.
         SvxXMLListStyleContext::SetDefaultStyle( xNumRules, io_rLevel,
-            sal_False );
+            false );
     }
 
     return xNumRules;

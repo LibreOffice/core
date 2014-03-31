@@ -110,9 +110,10 @@ RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
 
 void RptMLMasterStylesContext_Impl::EndElement()
 {
-    FinishStyles( sal_True );
+    FinishStyles( true );
     m_rImport.FinishStyles();
 }
+
     /// read a component (file + filter version)
 sal_Int32 ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
@@ -973,7 +974,7 @@ XMLShapeImportHelper* ORptFilter::CreateShapeImport()
 void ORptFilter::FinishStyles()
 {
     if( GetStyles() )
-        GetStyles()->FinishStyles( sal_True );
+        GetStyles()->FinishStyles( true );
 }
 
 OUString ORptFilter::convertFormula(const OUString& _sFormula)

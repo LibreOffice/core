@@ -507,7 +507,7 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
     CheckAttrList();
 
     // style:name="..."
-    sal_Bool bEncoded = sal_False;
+    bool bEncoded = false;
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                     EncodeStyleName( rCol.GetStyleName(), &bEncoded ) );
     if( bEncoded )

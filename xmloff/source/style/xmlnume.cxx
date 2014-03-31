@@ -662,7 +662,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     // style:name="..."
     if( !rName.isEmpty() )
     {
-        sal_Bool bEncoded = sal_False;
+        bool bEncoded = false;
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                           GetExport().EncodeStyleName( rName, &bEncoded ) );
         if( bEncoded )
@@ -773,7 +773,7 @@ void SvxXMLNumRuleExport::exportOutline()
                     GetExport().CheckAttrList();
                     if ( !sOutlineStyleName.isEmpty() )
                      {
-                        sal_Bool bEncoded = sal_False;
+                        bool bEncoded = false;
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                                         GetExport().EncodeStyleName( sOutlineStyleName,
                                                                      &bEncoded ) );

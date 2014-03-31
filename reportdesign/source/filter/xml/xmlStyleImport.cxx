@@ -102,13 +102,13 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
             if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
                 SvXMLNumFormatContext* pStyle = const_cast< SvXMLNumFormatContext*>(dynamic_cast<const SvXMLNumFormatContext*>(pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_False)));
+                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, false)));
                 if ( !pStyle )
                 {
                     OReportStylesContext* pMyStyles = PTR_CAST(OReportStylesContext,GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
                         pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
+                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true));
                     else {
                         OSL_FAIL("not possible to get style");
                     }
@@ -186,7 +186,7 @@ void OReportStylesContext::EndElement()
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else
-        GetImport().GetStyles()->CopyStylesToDoc(sal_True);
+        GetImport().GetStyles()->CopyStylesToDoc(true);
 }
 
 

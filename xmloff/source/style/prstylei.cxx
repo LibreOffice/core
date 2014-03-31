@@ -324,7 +324,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         }
         else
         {
-            SetValid( sal_False );
+            SetValid( false );
         }
     }
 }

@@ -178,7 +178,7 @@ void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
 /** convert string to enum using given enum map, if the enum is
     not found in the map, this method will return false
 */
-sal_Bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
+bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
                                       const OUString& rValue,
                                       const SvXMLEnumStringMapEntry *pMap )
 {
@@ -187,17 +187,17 @@ sal_Bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
         if( rValue.equalsAsciiL( pMap->pName, pMap->nNameLength ) )
         {
             rEnum = pMap->nValue;
-            return sal_True;
+            return true;
         }
         ++pMap;
     }
 
-    return sal_False;
+    return false;
 }
 
 /** convert string to enum using given token map, if the enum is
     not found in the map, this method will return false */
-sal_Bool SvXMLUnitConverter::convertEnum(
+bool SvXMLUnitConverter::convertEnum(
     sal_uInt16& rEnum,
     const OUString& rValue,
     const SvXMLEnumMapEntry *pMap )
@@ -207,18 +207,18 @@ sal_Bool SvXMLUnitConverter::convertEnum(
         if( IsXMLToken( rValue, pMap->eToken ) )
         {
             rEnum = pMap->nValue;
-            return sal_True;
+            return true;
         }
         ++pMap;
     }
-    return sal_False;
+    return false;
 }
 
 /** convert enum to string using given token map with an optional
     default token. If the enum is not found in the map,
     this method will either use the given default or return
     false if no default is set */
-sal_Bool SvXMLUnitConverter::convertEnum(
+bool SvXMLUnitConverter::convertEnum(
     OUStringBuffer& rBuffer,
     unsigned int nValue,
     const SvXMLEnumMapEntry *pMap,
@@ -263,15 +263,15 @@ static sal_Char aHexTab[] = "0123456789abcdef";
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
-    double fNumber, sal_Bool bWriteUnits) const
+    double fNumber, bool bWriteUnits) const
 {
     ::sax::Converter::convertDouble(rBuffer, fNumber,
         bWriteUnits, m_pImpl->m_eCoreMeasureUnit, m_pImpl->m_eXMLMeasureUnit);
 }
 
 /** convert string to double number (using ::rtl::math) */
-sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const OUString& rString, sal_Bool bLookForUnits) const
+bool SvXMLUnitConverter::convertDouble(double& rValue,
+    const OUString& rString, bool bLookForUnits) const
 {
     if(bLookForUnits)
     {
@@ -288,7 +288,7 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
 }
 
 /** get the Null Date of the XModel and set it to the UnitConverter */
-sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel)
+bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel)
 {
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatsSupplier> xNumberFormatsSupplier (xModel, com::sun::star::uno::UNO_QUERY);
     if (xNumberFormatsSupplier.is())
@@ -296,7 +296,7 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
         const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
         return xPropertySet.is() && (xPropertySet->getPropertyValue(OUString(XML_NULLDATE)) >>= m_pImpl->m_aNullDate);
     }
-    return sal_False;
+    return false;
 }
 
 /** convert double to ISO Date Time String */
@@ -317,7 +317,7 @@ bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
 void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         const double& fDateTime,
         const com::sun::star::util::Date& aTempNullDate,
-        sal_Bool bAddTimeIf0AM )
+        bool bAddTimeIf0AM )
 {
     double fValue = fDateTime;
     sal_Int32 nValue = static_cast <sal_Int32> (::rtl::math::approxFloor (fValue));
@@ -422,7 +422,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
 }
 
 /** convert ISO Date Time String to double */
-sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
+bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
                             const OUString& rString, const com::sun::star::util::Date& aTempNullDate)
 {
     com::sun::star::util::DateTime aDateTime;
@@ -453,10 +453,10 @@ SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode
 {
 }
 
-sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
+bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
 {
     if( -1 == mnNextTokenPos )
-        return sal_False;
+        return false;
 
     int nTokenEndPos = maTokenString.indexOf( mcSeparator, mnNextTokenPos );
     if( nTokenEndPos != -1 )
@@ -476,7 +476,7 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
         mnNextTokenPos = -1;
     }
 
-    return sal_True;
+    return true;
 }
 
 static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
@@ -511,11 +511,11 @@ static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUStri
 
 }
 /** convert string to ::basegfx::B3DVector */
-sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, const OUString& rValue )
+bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, const OUString& rValue )
 {
     OUString aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
-        return sal_False;
+        return false;
 
     rtl_math_ConversionStatus eStatus;
 
@@ -523,13 +523,13 @@ sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, co
             ',', &eStatus, NULL));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
-        return sal_False;
+        return false;
 
     rVector.setY(::rtl::math::stringToDouble(aContentY, '.',
             ',', &eStatus, NULL));
 
     if( eStatus != rtl_math_ConversionStatus_Ok )
-        return sal_False;
+        return false;
 
     rVector.setZ(::rtl::math::stringToDouble(aContentZ, '.',
             ',', &eStatus, NULL));
@@ -551,18 +551,18 @@ void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::base
 }
 
 /** convert string to Position3D */
-sal_Bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
+bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
     const OUString& rValue )
 {
     OUString aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
-        return sal_False;
+        return false;
 
-    if ( !convertDouble( rPosition.PositionX, aContentX, sal_True ) )
-        return sal_False;
-    if ( !convertDouble( rPosition.PositionY, aContentY, sal_True ) )
-        return sal_False;
-    return convertDouble( rPosition.PositionZ, aContentZ, sal_True );
+    if ( !convertDouble( rPosition.PositionX, aContentX, true ) )
+        return false;
+    if ( !convertDouble( rPosition.PositionY, aContentY, true ) )
+        return false;
+    return convertDouble( rPosition.PositionZ, aContentZ, true );
 }
 
 /** convert Position3D to string */
@@ -570,21 +570,21 @@ void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
                                            const drawing::Position3D& rPosition )
 {
     rBuffer.append( '(' );
-    convertDouble( rBuffer, rPosition.PositionX, sal_True );
+    convertDouble( rBuffer, rPosition.PositionX, true );
     rBuffer.append( ' ' );
-    convertDouble( rBuffer, rPosition.PositionY, sal_True );
+    convertDouble( rBuffer, rPosition.PositionY, true );
     rBuffer.append( ' ' );
-    convertDouble( rBuffer, rPosition.PositionZ, sal_True );
+    convertDouble( rBuffer, rPosition.PositionZ, true );
     rBuffer.append( ')' );
 }
 
-sal_Bool SvXMLUnitConverter::convertNumFormat(
+bool SvXMLUnitConverter::convertNumFormat(
         sal_Int16& rType,
         const OUString& rNumFmt,
         const OUString& rNumLetterSync,
-        sal_Bool bNumberNone ) const
+        bool bNumberNone ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     bool bExt = false;
 
     sal_Int32 nLen = rNumFmt.getLength();
@@ -593,7 +593,7 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
         if( bNumberNone )
             rType = NumberingType::NUMBER_NONE;
         else
-            bRet = sal_False;
+            bRet = false;
     }
     else if( 1 == nLen )
     {
@@ -746,10 +746,10 @@ void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet>&
 
 OUString SvXMLUnitConverter::encodeStyleName(
         const OUString& rName,
-        sal_Bool *pEncoded ) const
+        bool *pEncoded ) const
 {
     if( pEncoded )
-        *pEncoded = sal_False;
+        *pEncoded = false;
 
     sal_Int32 nLen = rName.getLength();
     OUStringBuffer aBuffer( nLen );
@@ -832,7 +832,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
                         aHexTab[ c & 0x0f ] ) );
             aBuffer.append( '_' );
             if( pEncoded )
-                *pEncoded = sal_True;
+                *pEncoded = true;
         }
     }
 
@@ -841,7 +841,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
     {
         aBuffer = rName;
         if( pEncoded )
-            *pEncoded = sal_False;
+            *pEncoded = false;
     }
 
 
@@ -849,11 +849,11 @@ OUString SvXMLUnitConverter::encodeStyleName(
 }
 
 /** convert string (hex) to number (sal_uInt32) */
-sal_Bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
+bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
                                        const OUString& rValue )
 {
     if( rValue.getLength() != 8 )
-        return sal_False;
+        return false;
 
     nVal = 0;
     for ( int i = 0; i < 8; i++ )
@@ -862,7 +862,7 @@ sal_Bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
             | sal::static_int_cast< sal_uInt32 >( lcl_gethex( rValue[i] ) );
     }
 
-    return sal_True;
+    return true;
 }
 
 /** convert number (sal_uInt32) to string (hex) */

@@ -72,9 +72,9 @@ void XMLGradientStyleContext::EndElement()
     {}
 }
 
-sal_Bool XMLGradientStyleContext::IsTransient() const
+bool XMLGradientStyleContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1( XMLHatchStyleContext, SvXMLStyleContext );
@@ -115,9 +115,9 @@ void XMLHatchStyleContext::EndElement()
     {}
 }
 
-sal_Bool XMLHatchStyleContext::IsTransient() const
+bool XMLHatchStyleContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1( XMLBitmapStyleContext, SvXMLStyleContext );
@@ -192,9 +192,9 @@ void XMLBitmapStyleContext::EndElement()
     {}
 }
 
-sal_Bool XMLBitmapStyleContext::IsTransient() const
+bool XMLBitmapStyleContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1( XMLTransGradientStyleContext, SvXMLStyleContext );
@@ -235,9 +235,9 @@ void XMLTransGradientStyleContext::EndElement()
     {}
 }
 
-sal_Bool XMLTransGradientStyleContext::IsTransient() const
+bool XMLTransGradientStyleContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1( XMLMarkerStyleContext, SvXMLStyleContext );
@@ -278,9 +278,9 @@ void XMLMarkerStyleContext::EndElement()
     {}
 }
 
-sal_Bool XMLMarkerStyleContext::IsTransient() const
+bool XMLMarkerStyleContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 TYPEINIT1( XMLDashStyleContext, SvXMLStyleContext );
@@ -321,9 +321,9 @@ void XMLDashStyleContext::EndElement()
     {}
 }
 
-sal_Bool XMLDashStyleContext::IsTransient() const
+bool XMLDashStyleContext::IsTransient() const
 {
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
