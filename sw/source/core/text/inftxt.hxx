@@ -779,7 +779,7 @@ public:
     SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor, bool bTxtLen,
                bool bExgLists, const sal_Char *pCh = NULL );
     ~SwTxtSlot();
-    inline bool IsOn() const { return bOn; }
+    bool IsOn() const { return bOn; }
 };
 
 /*************************************************************************

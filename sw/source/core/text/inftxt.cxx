@@ -1660,10 +1660,13 @@ SwTxtSlot::SwTxtSlot(
     bool bTxtLen,
     bool bExgLists,
     const sal_Char *pCh )
-    : pOldTxt( 0 ),
-      pOldSmartTagList( 0 ),
-      pOldGrammarCheckList( 0 ),
-      pTempList( 0 )
+    : pOldTxt(0)
+    , pOldSmartTagList(0)
+    , pOldGrammarCheckList(0)
+    , pTempList(0)
+    , nIdx(0)
+    , nLen(0)
+    , pInf(NULL)
 {
     if( pCh )
     {
