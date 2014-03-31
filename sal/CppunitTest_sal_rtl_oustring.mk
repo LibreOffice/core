@@ -23,4 +23,8 @@ $(eval $(call gb_CppunitTest_set_include,sal_rtl_oustring,\
 			    $$(INCLUDE) \
 				))
 
+# The test uses O(U)String capabilities that dlopen this lib:
+$(call gb_CppunitTest_get_target,sal_rtl_oustring) : \
+    $(call gb_Library_get_target,sal_textenc)
+
 # vim: set noet sw=4 ts=4:
