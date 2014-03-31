@@ -61,9 +61,9 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
             mrTextBodyProp.moInsets[i] = GetCoordinate( sValue );
     }
 
-    bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
+    mrTextBodyProp.mbAnchorCtr = aAttribs.getBool( XML_anchorCtr, false );
     if( xAttributes->hasAttribute( XML_anchorCtr ) ) {
-        if( bAnchorCenter )
+        if( mrTextBodyProp.mbAnchorCtr )
             mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
                 TextHorizontalAdjust_CENTER;
     }
