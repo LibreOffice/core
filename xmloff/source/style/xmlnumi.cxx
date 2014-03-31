@@ -544,8 +544,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             OUString sStr( sImageURL );
             if( !sImageURL.isEmpty() )
             {
-                sStr = GetImport().ResolveGraphicObjectURL( sImageURL,
-                                                                 sal_False );
+                sStr = GetImport().ResolveGraphicObjectURL( sImageURL, false );
             }
             else if( xBase64Stream.is() )
             {

@@ -60,7 +60,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::star::container::XIndexReplace > & xNumRule,
-                                             sal_Bool bOutline )
+                                             bool bOutline )
 {
     sal_Int32 nCount = xNumRule ->getCount();
     for( sal_Int32 i=0; i<nCount; i++ )
@@ -76,7 +76,7 @@ void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::s
 
 void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                                     const uno::Sequence<beans::PropertyValue>& rProps,
-                                    sal_Bool bOutline )
+                                    bool bOutline )
 {
     sal_Int16 eType = NumberingType::CHAR_SPECIAL;
 
@@ -649,7 +649,7 @@ SvxXMLNumRuleExport::~SvxXMLNumRuleExport()
 }
 
 void SvxXMLNumRuleExport::exportNumberingRule(
-        const OUString& rName, sal_Bool bIsHidden,
+        const OUString& rName, bool bIsHidden,
         const Reference< XIndexReplace >& rNumRule )
 {
     Reference< XPropertySet > xPropSet( rNumRule, UNO_QUERY );
@@ -696,7 +696,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     }
 }
 
-sal_Bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
+bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -709,7 +709,7 @@ sal_Bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
         if( !*(sal_Bool *)aAny.getValue() )
-            return sal_False;
+            return false;
     }
 
     aAny = xPropSet->getPropertyValue( sNumberingRules );
@@ -727,7 +727,7 @@ sal_Bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 
     exportNumberingRule( sName, bHidden, xNumRule );
 
-    return sal_True;
+    return true;
 }
 
 void SvxXMLNumRuleExport::exportOutline()
@@ -762,7 +762,7 @@ void SvxXMLNumRuleExport::exportOutline()
                    nODFVersion == SvtSaveOptions::ODFVER_011 ) &&
                  GetExport().writeOutlineStyleAsNormalListStyle() )
             {
-                exportNumberingRule( sOutlineStyleName, sal_False, xNumRule );
+                exportNumberingRule( sOutlineStyleName, false, xNumRule );
             }
             else
             {
@@ -785,15 +785,15 @@ void SvxXMLNumRuleExport::exportOutline()
                 }
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                           XML_OUTLINE_STYLE, true, true );
-                exportLevelStyles( xNumRule, sal_True );
+                exportLevelStyles( xNumRule, true );
             }
         }
     }
 }
 
-void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
-                                         XMLTextListAutoStylePool *pPool,
-                                         sal_Bool bExportChapterNumbering )
+void SvxXMLNumRuleExport::exportStyles( bool bUsed,
+                                        XMLTextListAutoStylePool *pPool,
+                                        bool bExportChapterNumbering )
 {
     if( bExportChapterNumbering )
         exportOutline();

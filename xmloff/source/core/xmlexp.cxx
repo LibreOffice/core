@@ -1882,13 +1882,13 @@ void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, bool /*bTimeFormat
 void SvXMLExport::exportDataStyles()
 {
     if(mpNumExport)
-        mpNumExport->Export(sal_False);
+        mpNumExport->Export(false);
 }
 
 void SvXMLExport::exportAutoDataStyles()
 {
     if(mpNumExport)
-        mpNumExport->Export(sal_True);
+        mpNumExport->Export(true);
 
     if (mxFormExport.is())
         mxFormExport->exportAutoControlNumberStyles();

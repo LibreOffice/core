@@ -108,7 +108,7 @@ public:
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
                 SvXMLDateElementAttributes eYear, SvXMLDateElementAttributes eHours,
                 SvXMLDateElementAttributes eMins, SvXMLDateElementAttributes eSecs,
-                sal_Bool bSystem );
+                bool bSystem );
 };
 
 struct MyCondition
@@ -129,20 +129,20 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 //  OUString       sMapName;
     OUString       sCalendar;
     OUString       sFormatString;
-    LanguageType        nFormatLang;
+    LanguageType   nFormatLang;
     com::sun::star::lang::Locale    aLocale;
-    sal_Bool            bAutoOrder;
-    sal_Bool            bFromSystem;
-    sal_Bool            bTruncate;
-    sal_Bool            bAutoDec;       // set in AddNumber
-    sal_Bool            bAutoInt;       // set in AddNumber
-    sal_Bool            bHasExtraText;
+    bool            bAutoOrder;
+    bool            bFromSystem;
+    bool            bTruncate;
+    bool            bAutoDec;       // set in AddNumber
+    bool            bAutoInt;       // set in AddNumber
+    bool            bHasExtraText;
     OUStringBuffer aFormatCode;
     OUStringBuffer aConditions;
-    sal_Bool            bHasLongDoW;
-    sal_Bool            bHasEra;
-    sal_Bool            bHasDateTime;
-    sal_Bool            bRemoveAfterUse;
+    bool            bHasLongDoW;
+    bool            bHasEra;
+    bool            bHasDateTime;
+    bool            bRemoveAfterUse;
 
     //  contained date elements, used to recognize default date formats
     SvXMLDateElementAttributes  eDateDOW;
@@ -152,7 +152,7 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     SvXMLDateElementAttributes  eDateHours;
     SvXMLDateElementAttributes  eDateMins;
     SvXMLDateElementAttributes  eDateSecs;
-    sal_Bool                    bDateNoDefault;
+    bool                        bDateNoDefault;
 
     SAL_DLLPRIVATE sal_Int32 PrivateGetKey();
 
@@ -184,11 +184,11 @@ public:
     sal_Int32 CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier );
     sal_uInt16 GetType() const                      { return nType; }   // SvXMLStylesTokens
 
-    sal_Bool IsFromSystem() const                   { return bFromSystem; }
-    sal_Bool HasLongDoW() const                     { return bHasLongDoW; }
-    void SetHasLongDoW(sal_Bool bSet)               { bHasLongDoW = bSet; }
-    sal_Bool HasEra() const                         { return bHasEra; }
-    void SetHasEra(sal_Bool bSet)                   { bHasEra = bSet; }
+    bool IsFromSystem() const                   { return bFromSystem; }
+    bool HasLongDoW() const                     { return bHasLongDoW; }
+    void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
+    bool HasEra() const                         { return bHasEra; }
+    void SetHasEra(bool bSet)                   { bHasEra = bSet; }
 
     void UpdateCalendar( const OUString& rNewCalendar );
 
@@ -200,13 +200,13 @@ public:
     void AddCurrency( const OUString& rContent, LanguageType nLang );
 
     void AddNfKeyword( sal_uInt16 nIndex );
-    sal_Bool ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew );
+    bool ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew );
     void AddCondition( const sal_Int32 nIndex );
     void AddCondition( const OUString& rCondition, const OUString& rApplyName );
     void AddColor( sal_uInt32 const nColor );
 
     /// determine whether number format uses the system language
-    sal_Bool IsSystemLanguage();
+    bool IsSystemLanguage();
 };
 
 #endif

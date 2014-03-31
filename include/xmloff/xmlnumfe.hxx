@@ -52,8 +52,8 @@ private:
     LocaleDataWrapper*          pLocaleData;
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
-    SAL_DLLPRIVATE void AddStyleAttr_Impl( sal_Bool bLong );
-    SAL_DLLPRIVATE void AddTextualAttr_Impl( sal_Bool bText );
+    SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
+    SAL_DLLPRIVATE void AddTextualAttr_Impl( bool bText );
     SAL_DLLPRIVATE void AddLanguageAttr_Impl( sal_Int32 nLang );
 
     SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );
@@ -61,36 +61,36 @@ private:
 
     SAL_DLLPRIVATE void WriteColorElement_Impl( const Color& rColor );
     SAL_DLLPRIVATE void WriteNumberElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
-                                        const OUString& rDashStr, sal_Bool bVarDecimals,
-                                        sal_Bool bGrouping, sal_Int32 nTrailingThousands,
+                                        const OUString& rDashStr, bool bVarDecimals,
+                                        bool bGrouping, sal_Int32 nTrailingThousands,
                                         const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries );
     SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
-                                        sal_Bool bGrouping, sal_Int32 nExp );
-    SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, sal_Bool bGrouping,
+                                        bool bGrouping, sal_Int32 nExp );
+    SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, bool bGrouping,
                                         sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator );
     SAL_DLLPRIVATE void WriteCurrencyElement_Impl( const OUString& rString,
                                         const OUString& rExt );
     SAL_DLLPRIVATE void WriteBooleanElement_Impl();
     SAL_DLLPRIVATE void WriteTextContentElement_Impl();
-    SAL_DLLPRIVATE void WriteDayElement_Impl( const OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteMonthElement_Impl( const OUString& rCalendar, sal_Bool bLong, sal_Bool bText );
-    SAL_DLLPRIVATE void WriteYearElement_Impl( const OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteEraElement_Impl( const OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteDayOfWeekElement_Impl( const OUString& rCalendar, sal_Bool bLong );
+    SAL_DLLPRIVATE void WriteDayElement_Impl( const OUString& rCalendar, bool bLong );
+    SAL_DLLPRIVATE void WriteMonthElement_Impl( const OUString& rCalendar, bool bLong, bool bText );
+    SAL_DLLPRIVATE void WriteYearElement_Impl( const OUString& rCalendar, bool bLong );
+    SAL_DLLPRIVATE void WriteEraElement_Impl( const OUString& rCalendar, bool bLong );
+    SAL_DLLPRIVATE void WriteDayOfWeekElement_Impl( const OUString& rCalendar, bool bLong );
     SAL_DLLPRIVATE void WriteWeekElement_Impl( const OUString& rCalendar );
-    SAL_DLLPRIVATE void WriteQuarterElement_Impl( const OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteHoursElement_Impl( sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteMinutesElement_Impl( sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDecimals );
+    SAL_DLLPRIVATE void WriteQuarterElement_Impl( const OUString& rCalendar, bool bLong );
+    SAL_DLLPRIVATE void WriteHoursElement_Impl( bool bLong );
+    SAL_DLLPRIVATE void WriteMinutesElement_Impl( bool bLong );
+    SAL_DLLPRIVATE void WriteSecondsElement_Impl( bool bLong, sal_uInt16 nDecimals );
     SAL_DLLPRIVATE void WriteAMPMElement_Impl();
     SAL_DLLPRIVATE void WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
                                     sal_Int32 nKey, sal_Int32 nPart );
 
     SAL_DLLPRIVATE void  WriteRepeatedElement_Impl( sal_Unicode ch );
-    SAL_DLLPRIVATE sal_Bool WriteTextWithCurrency_Impl( const OUString& rString,
+    SAL_DLLPRIVATE bool WriteTextWithCurrency_Impl( const OUString& rString,
                             const ::com::sun::star::lang::Locale& rLocale );
     SAL_DLLPRIVATE void ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
-                                sal_uInt16 nPart, sal_Bool bDefPart );
+                                sal_uInt16 nPart, bool bDefPart );
 
     SAL_DLLPRIVATE void ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey );
 
@@ -106,7 +106,7 @@ public:
     virtual ~SvXMLNumFmtExport();
 
     // core API
-    void Export( sal_Bool bIsAutoStyle);
+    void Export( bool bIsAutoStyle);
 
     // mark number format as used
     void SetUsed( sal_uInt32 nKey );

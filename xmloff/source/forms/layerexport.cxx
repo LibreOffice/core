@@ -252,7 +252,7 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportAutoControlNumberStyles()
     {
         if ( m_pControlNumberStyles )
-            m_pControlNumberStyles->Export( sal_True );
+            m_pControlNumberStyles->Export( true );
     }
 
     void OFormLayerXMLExport_Impl::exportAutoStyles()

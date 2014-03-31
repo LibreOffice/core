@@ -783,7 +783,7 @@ void SdXMLShapeContext::SetThumbnail()
             // load the thumbnail graphic and export it to a wmf stream so we can set
             // it at the api
 
-            const OUString aInternalURL( GetImport().ResolveGraphicObjectURL( maThumbnailURL, sal_False ) );
+            const OUString aInternalURL( GetImport().ResolveGraphicObjectURL( maThumbnailURL, false ) );
             xPropSet->setPropertyValue( sProperty, uno::makeAny( aInternalURL ) );
         }
     }

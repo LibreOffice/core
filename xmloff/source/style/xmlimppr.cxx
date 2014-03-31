@@ -407,12 +407,12 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
 
 }
 
-sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
+bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
             const Reference< XPropertySet > rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const
 {
-    sal_Bool bSet = sal_False;
+    bool bSet = false;
 
     Reference< XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
     if (xTolPropSet.is())
@@ -446,7 +446,7 @@ sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
     return bSet;
 }
 
-sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
+bool SvXMLImportPropertyMapper::_FillPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XPropertySet> & rPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
@@ -458,7 +458,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
     OSL_ENSURE( rPropSetInfo.is(), "need an XPropertySetInfo" );
 
     // preliminaries
-    sal_Bool bSet = sal_False;
+    bool bSet = false;
     sal_Int32 nCount = rProperties.size();
 
     // iterate over property states that we want to set
@@ -482,7 +482,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
             try
             {
                 rPropSet->setPropertyValue( rPropName, rProp.maValue );
-                bSet = sal_True;
+                bSet = true;
             }
             catch ( const IllegalArgumentException& e )
             {
@@ -647,7 +647,7 @@ void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
     }
 }
 
-sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
+bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XMultiPropertySet> & rMultiPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
@@ -657,7 +657,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
     OSL_ENSURE( rPropSetInfo.is(), "Need property set info." );
 
-    sal_Bool bSuccessful = sal_False;
+    bool bSuccessful = false;
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
@@ -669,7 +669,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     try
     {
         rMultiPropSet->setPropertyValues( aNames, aValues );
-        bSuccessful = sal_True;
+        bSuccessful = true;
     }
     catch ( ... )
     {
@@ -679,7 +679,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     return bSuccessful;
 }
 
-sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
+bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
     const vector<XMLPropertyState> & rProperties,
     const Reference<XTolerantMultiPropertySet> & rTolMultiPropSet,
     const UniReference<XMLPropertySetMapper> & rPropMapper,
@@ -688,7 +688,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
 {
     OSL_ENSURE( rTolMultiPropSet.is(), "Need tolerant multi property set. ");
 
-    sal_Bool bSuccessful = sal_False;
+    bool bSuccessful = false;
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
@@ -701,7 +701,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
     {
         Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
         if (aResults.getLength() == 0)
-            bSuccessful = sal_True;
+            bSuccessful = true;
         else
         {
             sal_Int32 nCount(aResults.getLength());

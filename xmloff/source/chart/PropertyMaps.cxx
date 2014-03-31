@@ -628,7 +628,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
 
             // deprecated from 6.0 beta on
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
-                rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
+                rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, false );
                 break;
 
             case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:

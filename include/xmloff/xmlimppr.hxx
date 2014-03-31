@@ -110,7 +110,7 @@ public:
                     ::com::sun::star::beans::XPropertySet > rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const;
 
-    sal_Bool FillPropertySet(
+    bool FillPropertySet(
             const ::std::vector< XMLPropertyState >& aProperties,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet > rPropSet,
@@ -128,7 +128,7 @@ public:
 
     /** implementation helper for FillPropertySet: fill an XPropertySet.
      * Exceptions will be asserted. */
-    static sal_Bool _FillPropertySet(
+    static bool _FillPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
@@ -143,7 +143,7 @@ public:
 
     /** implementation helper for FillPropertySet: fill an XMultiPropertySet.
      * If unsuccessul, set return value. */
-    static sal_Bool _FillMultiPropertySet(
+    static bool _FillMultiPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XMultiPropertySet> & rMultiPropSet,
@@ -157,7 +157,7 @@ public:
 
     /** implementation helper for FillPropertySet: fill an XTolerantMultiPropertySet.
      * If unsuccessul, set return value. */
-    static sal_Bool _FillTolerantMultiPropertySet(
+    static bool _FillTolerantMultiPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XTolerantMultiPropertySet> & rTolPropSet,

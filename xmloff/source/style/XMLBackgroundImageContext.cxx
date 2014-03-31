@@ -376,7 +376,7 @@ void XMLBackgroundImageContext::EndElement()
 {
     if( !sURL.isEmpty() )
     {
-        sURL = GetImport().ResolveGraphicObjectURL( sURL, sal_False );
+        sURL = GetImport().ResolveGraphicObjectURL( sURL, false );
     }
     else if( xBase64Stream.is() )
     {

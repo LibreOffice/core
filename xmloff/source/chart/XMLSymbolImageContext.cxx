@@ -121,7 +121,7 @@ void XMLSymbolImageContext::EndElement()
 
     if( !msURL.isEmpty() )
     {
-        sResolvedURL = GetImport().ResolveGraphicObjectURL( msURL, sal_False );
+        sResolvedURL = GetImport().ResolveGraphicObjectURL( msURL, false );
     }
     else if( mxBase64Stream.is() )
     {

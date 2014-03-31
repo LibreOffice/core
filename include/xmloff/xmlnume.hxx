@@ -54,13 +54,13 @@ class SvxXMLNumRuleExport
     void exportLevelStyles(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > & xNumRule,
-            sal_Bool bOutline=sal_False );
+            bool bOutline=false );
 
     void exportLevelStyle(
             sal_Int32 nLevel,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue>& rProps,
-            sal_Bool bOutline=sal_False );
+            bool bOutline=false );
 
 protected:
 
@@ -68,7 +68,7 @@ protected:
     // element.
     virtual void AddListStyleAttributes();
 
-    sal_Bool exportStyle( const ::com::sun::star::uno::Reference<
+    bool exportStyle( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::style::XStyle >& rStyle );
     void exportOutline();
 
@@ -79,11 +79,11 @@ public:
     SvxXMLNumRuleExport( SvXMLExport& rExport );
     virtual ~SvxXMLNumRuleExport();
 
-    void exportStyles( sal_Bool bUsed,
+    void exportStyles( bool bUsed,
                        XMLTextListAutoStylePool *pPool,
-                       sal_Bool bExportChapterNumbering = sal_True );
+                       bool bExportChapterNumbering = true );
     void exportNumberingRule(
-            const OUString& rName, sal_Bool bIsHidden,
+            const OUString& rName, bool bIsHidden,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > & xNumRule );
 };

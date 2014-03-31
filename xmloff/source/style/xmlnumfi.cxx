@@ -52,10 +52,10 @@ using namespace ::xmloff::token;
 struct SvXMLNumFmtEntry
 {
     OUString   aName;
-    sal_uInt32      nKey;
-    sal_Bool        bRemoveAfterUse;
+    sal_uInt32  nKey;
+    bool        bRemoveAfterUse;
 
-    SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, sal_Bool bR ) :
+    SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, bool bR ) :
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
@@ -70,8 +70,8 @@ struct SvXMLEmbeddedElement
         nFormatPos(nFP), aText(rT) {}
 
     //  comparison operators for PTRARR sorting - sorted by position
-    sal_Bool operator ==( const SvXMLEmbeddedElement& r ) const { return nFormatPos == r.nFormatPos; }
-    sal_Bool operator < ( const SvXMLEmbeddedElement& r ) const { return nFormatPos <  r.nFormatPos; }
+    bool operator ==( const SvXMLEmbeddedElement& r ) const { return nFormatPos == r.nFormatPos; }
+    bool operator < ( const SvXMLEmbeddedElement& r ) const { return nFormatPos <  r.nFormatPos; }
 };
 
 typedef boost::ptr_set<SvXMLEmbeddedElement> SvXMLEmbeddedElementArr;
@@ -101,7 +101,7 @@ public:
     const SvXMLTokenMap&    GetStyleElemAttrTokenMap();
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
     sal_uInt32              GetKeyForName( const OUString& rName );
-    void                    AddKey( sal_uInt32 nKey, const OUString& rName, sal_Bool bRemoveAfterUse );
+    void                    AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemoveAfterUse );
     void                    SetUsed( sal_uInt32 nKey );
     void                    RemoveVolatileFormats();
 };
@@ -114,16 +114,16 @@ struct SvXMLNumberInfo
     sal_Int32   nNumerDigits;
     sal_Int32   nDenomDigits;
     sal_Int32   nFracDenominator;
-    sal_Bool    bGrouping;
-    sal_Bool    bDecReplace;
-    sal_Bool    bVarDecimals;
+    bool        bGrouping;
+    bool        bDecReplace;
+    bool        bVarDecimals;
     double      fDisplayFactor;
     SvXMLEmbeddedElementArr aEmbeddedElements;
 
     SvXMLNumberInfo()
     {
         nDecimals = nInteger = nExpDigits = nNumerDigits = nDenomDigits = nFracDenominator = -1;
-        bGrouping = bDecReplace = bVarDecimals = sal_False;
+        bGrouping = bDecReplace = bVarDecimals = false;
         fDisplayFactor = 1.0;
     }
 };
@@ -132,12 +132,12 @@ class SvXMLNumFmtElementContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
     sal_uInt16              nType;
-    OUStringBuffer     aContent;
+    OUStringBuffer          aContent;
     SvXMLNumberInfo         aNumInfo;
     LanguageType            nElementLang;
-    sal_Bool                bLong;
-    sal_Bool                bTextual;
-    OUString           sCalendar;
+    bool                    bLong;
+    bool                    bTextual;
+    OUString                sCalendar;
 
 public:
                 SvXMLNumFmtElementContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -205,7 +205,7 @@ class SvXMLNumFmtPropContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
 	sal_Int32				m_nColor;
-    sal_Bool                bColSet;
+    bool                    bColSet;
 
 public:
                 SvXMLNumFmtPropContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -338,27 +338,27 @@ struct SvXMLDefaultDateFormat
     SvXMLDateElementAttributes  eHours;
     SvXMLDateElementAttributes  eMins;
     SvXMLDateElementAttributes  eSecs;
-    sal_Bool                    bSystem;
+    bool                        bSystem;
 };
 
 static const SvXMLDefaultDateFormat aDefaultDateFormats[] =
 {
     // format                           day-of-week     day             month               year            hours           minutes         seconds         format-source
 
-    { NF_DATE_SYSTEM_SHORT,             XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_True },
-    { NF_DATE_SYSTEM_LONG,              XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_True },
-    { NF_DATE_SYS_MMYY,                 XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_LONG,       XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_DDMMM,                XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_TEXTSHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_DDMMYYYY,             XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_LONG,       XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_DDMMYY,               XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_LONG,       XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_DMMMYY,               XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_DMMMYYYY,             XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_DMMMMYYYY,            XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_NNDMMMYY,             XML_DEA_SHORT,  XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_NNDMMMMYYYY,          XML_DEA_SHORT,  XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATE_SYS_NNNNDMMMMYYYY,        XML_DEA_LONG,   XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   sal_False },
-    { NF_DATETIME_SYSTEM_SHORT_HHMM,    XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_NONE,   sal_True },
-    { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    sal_False }
+    { NF_DATE_SYSTEM_SHORT,             XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   true },
+    { NF_DATE_SYSTEM_LONG,              XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   true },
+    { NF_DATE_SYS_MMYY,                 XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_LONG,       XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_DDMMM,                XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_TEXTSHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_DDMMYYYY,             XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_LONG,       XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_DDMMYY,               XML_DEA_NONE,   XML_DEA_LONG,   XML_DEA_LONG,       XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_DMMMYY,               XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_DMMMYYYY,             XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_DMMMMYYYY,            XML_DEA_NONE,   XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_NNDMMMYY,             XML_DEA_SHORT,  XML_DEA_SHORT,  XML_DEA_TEXTSHORT,  XML_DEA_SHORT,  XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_NNDMMMMYYYY,          XML_DEA_SHORT,  XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATE_SYS_NNNNDMMMMYYYY,        XML_DEA_LONG,   XML_DEA_SHORT,  XML_DEA_TEXTLONG,   XML_DEA_LONG,   XML_DEA_NONE,   XML_DEA_NONE,   XML_DEA_NONE,   false },
+    { NF_DATETIME_SYSTEM_SHORT_HHMM,    XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_NONE,   true },
+    { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    false }
 };
 
 
@@ -400,7 +400,7 @@ sal_uInt32 SvXMLNumImpData::GetKeyForName( const OUString& rName )
     return NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
-void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, sal_Bool bRemoveAfterUse )
+void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemoveAfterUse )
 {
     if ( bRemoveAfterUse )
     {
@@ -413,7 +413,7 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, sal_Bool b
             SvXMLNumFmtEntry* pObj = &aNameEntries[i];
             if ( pObj->nKey == nKey && !pObj->bRemoveAfterUse )
             {
-                bRemoveAfterUse = sal_False;        // clear flag for new entry
+                bRemoveAfterUse = false;        // clear flag for new entry
                 break;
             }
         }
@@ -436,7 +436,7 @@ void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )
         SvXMLNumFmtEntry* pObj = &aNameEntries[i];
         if ( pObj->nKey == nKey )
         {
-            pObj->bRemoveAfterUse = sal_False;      // used -> don't remove
+            pObj->bRemoveAfterUse = false;      // used -> don't remove
 
             //  continue searching - there may be several entries for the same key
             //  (with different names), the format must not be deleted if any one of
@@ -658,7 +658,7 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rParent( rParentContext ),
-    bColSet( sal_False )
+    bColSet( false )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -747,7 +747,7 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
     rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear() );
 }
 
-static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
+static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
     sal_uInt16 nFormatType = rParent.GetType();
 
@@ -766,7 +766,7 @@ static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& r
         //  because the same character can be a date separator that should not be quoted
         //  in date formats.
 
-        return sal_False;   // force quotes
+        return false;   // force quotes
     }
 
     //  see ImpSvNumberformatScan::Next_Symbol
@@ -777,25 +777,25 @@ static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& r
          cChar == ',' ||
          cChar == ':' ||
          cChar == '\'' )
-        return sal_True;    // for all format types
+        return true;    // for all format types
 
     //  percent sign must be used without quotes for percentage styles only
     if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && cChar == '%' )
-        return sal_True;
+        return true;
 
     //  don't put quotes around single parentheses (often used for negative numbers)
     if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
            nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
            nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
          ( cChar == '(' || cChar == ')' ) )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
 {
-    sal_Bool bQuote = sal_True;
+    bool bQuote = true;
     sal_Int32 nLength = rContent.getLength();
 
     if ( ( nLength == 1 &&
@@ -806,7 +806,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
     {
         //  don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats)
-        bQuote = sal_False;
+        bQuote = false;
     }
     else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
     {
@@ -843,7 +843,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
                     rContent.insert( 0, '"' );
                 }
             }
-            bQuote = sal_False;
+            bQuote = false;
         }
         // else: normal quoting (below)
     }
@@ -909,8 +909,8 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     rParent( rParentContext ),
     nType( nNewType ),
     nElementLang( LANGUAGE_SYSTEM ),
-    bLong( sal_False ),
-    bTextual( sal_False )
+    bLong( false ),
+    bTextual( false )
 {
     LanguageTagODF aLanguageTagODF;
     sal_Int32 nAttrVal;
@@ -949,9 +949,9 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
             case XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT:
                 if ( !sValue.isEmpty() )
-                    aNumInfo.bDecReplace = sal_True;    // only a default string is supported
+                    aNumInfo.bDecReplace = true;    // only a default string is supported
                 else
-                    aNumInfo.bVarDecimals = sal_True;   // empty replacement string: variable decimals
+                    aNumInfo.bVarDecimals = true;   // empty replacement string: variable decimals
                 break;
             case XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
@@ -983,7 +983,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
             case XML_TOK_ELEM_ATTR_STYLE:
                 if ( SvXMLUnitConverter::convertEnum( nAttrEnum, sValue, aStyleValueMap ) )
-                    bLong = (sal_Bool) nAttrEnum;
+                    bLong = (bool) nAttrEnum;
                 break;
             case XML_TOK_ELEM_ATTR_TEXTUAL:
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
@@ -1053,7 +1053,7 @@ void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const 
 
 void SvXMLNumFmtElementContext::EndElement()
 {
-    sal_Bool bEffLong = bLong;
+    bool bEffLong = bLong;
     switch (nType)
     {
         case XML_TOK_STYLE_TEXT:
@@ -1068,7 +1068,7 @@ void SvXMLNumFmtElementContext::EndElement()
                     aContent = OUStringBuffer();
                 }
 
-                rParent.SetHasLongDoW( sal_False );     // only once
+                rParent.SetHasLongDoW( false );     // only once
             }
             if ( !aContent.isEmpty() )
             {
@@ -1237,7 +1237,7 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
                 SvXMLDateElementAttributes eYear, SvXMLDateElementAttributes eHours,
                 SvXMLDateElementAttributes eMins, SvXMLDateElementAttributes eSecs,
-                sal_Bool bSystem )
+                bool bSystem )
 {
     static const sal_uInt16 nCount = sizeof(aDefaultDateFormats) / sizeof(SvXMLDefaultDateFormat);
     for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
@@ -1275,16 +1275,16 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     nType( nNewType ),
     nKey(-1),
     nFormatLang( LANGUAGE_SYSTEM ),
-    bAutoOrder( sal_False ),
-    bFromSystem( sal_False ),
-    bTruncate( sal_True ),
-    bAutoDec( sal_False ),
-    bAutoInt( sal_False ),
-    bHasExtraText( sal_False ),
-    bHasLongDoW( sal_False ),
-    bHasEra( sal_False ),
-    bHasDateTime( sal_False ),
-    bRemoveAfterUse( sal_False ),
+    bAutoOrder( false ),
+    bFromSystem( false ),
+    bTruncate( true ),
+    bAutoDec( false ),
+    bAutoInt( false ),
+    bHasExtraText( false ),
+    bHasLongDoW( false ),
+    bHasEra( false ),
+    bHasDateTime( false ),
+    bRemoveAfterUse( false ),
     eDateDOW( XML_DEA_NONE ),
     eDateDay( XML_DEA_NONE ),
     eDateMonth( XML_DEA_NONE ),
@@ -1292,7 +1292,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateHours( XML_DEA_NONE ),
     eDateMins( XML_DEA_NONE ),
     eDateSecs( XML_DEA_NONE ),
-    bDateNoDefault( sal_False )
+    bDateNoDefault( false )
 {
     LanguageTagODF aLanguageTagODF;
     OUString sNatNumAttrScript, sNatNumAttrRfcLanguageTag;
@@ -1335,7 +1335,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 break;
             case XML_TOK_STYLE_ATTR_FORMAT_SOURCE:
                 if ( SvXMLUnitConverter::convertEnum( nAttrEnum, sValue, aFormatSourceMap ) )
-                    bFromSystem = (sal_Bool) nAttrEnum;
+                    bFromSystem = (bool) nAttrEnum;
                 break;
             case XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW:
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
@@ -1414,16 +1414,16 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     nType( 0 ),
     nKey(nTempKey),
     nFormatLang( LANGUAGE_SYSTEM ),
-    bAutoOrder( sal_False ),
-    bFromSystem( sal_False ),
-    bTruncate( sal_True ),
-    bAutoDec( sal_False ),
-    bAutoInt( sal_False ),
-    bHasExtraText( sal_False ),
-    bHasLongDoW( sal_False ),
-    bHasEra( sal_False ),
-    bHasDateTime( sal_False ),
-    bRemoveAfterUse( sal_False ),
+    bAutoOrder( false ),
+    bFromSystem( false ),
+    bTruncate( true ),
+    bAutoDec( false ),
+    bAutoInt( false ),
+    bHasExtraText( false ),
+    bHasLongDoW( false ),
+    bHasEra( false ),
+    bHasDateTime( false ),
+    bRemoveAfterUse( false ),
     eDateDOW( XML_DEA_NONE ),
     eDateDay( XML_DEA_NONE ),
     eDateMonth( XML_DEA_NONE ),
@@ -1431,7 +1431,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateHours( XML_DEA_NONE ),
     eDateMins( XML_DEA_NONE ),
     eDateSecs( XML_DEA_NONE ),
-    bDateNoDefault( sal_False )
+    bDateNoDefault( false )
 {
     SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
 }
@@ -1499,7 +1499,7 @@ sal_Int32 SvXMLNumFormatContext::GetKey()
         if (bRemoveAfterUse)
         {
             //  format is used -> don't remove
-            bRemoveAfterUse = sal_False;
+            bRemoveAfterUse = false;
             if (pData)
                 pData->SetUsed(nKey);
 
@@ -1512,7 +1512,7 @@ sal_Int32 SvXMLNumFormatContext::GetKey()
     else
     {
         // reset bRemoveAfterUse before CreateAndInsert, so AddKey is called without bRemoveAfterUse set
-        bRemoveAfterUse = sal_False;
+        bRemoveAfterUse = false;
         CreateAndInsert(true);
         return nKey;
     }
@@ -1569,7 +1569,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
+            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, false);
         if (pStyle)
         {
             if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag
@@ -1639,14 +1639,14 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         {
             sal_Int32  nErrPos = 0;
             short       l_nType = 0;
-            sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, nFormatLang );
+            bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, l_nType, nIndex, nFormatLang );
             if ( !bOk && nErrPos == 0 && aFormatStr != sFormat )
             {
                 //  if the string was modified by PutEntry, look for an existing format
                 //  with the modified string
                 nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
                 if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND )
-                    bOk = sal_True;
+                    bOk = true;
             }
             if (!bOk)
                 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -1720,13 +1720,13 @@ const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
 void SvXMLNumFormatContext::AddToCode( sal_Unicode c )
 {
     aFormatCode.append( c );
-    bHasExtraText = sal_True;
+    bHasExtraText = true;
 }
 
 void SvXMLNumFormatContext::AddToCode( const OUString& rString )
 {
     aFormatCode.append( rString );
-    bHasExtraText = sal_True;
+    bHasExtraText = true;
 }
 
 void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
@@ -1774,10 +1774,10 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( rInfo.bDecReplace || rInfo.bVarDecimals )
         nGenPrec = 0;               // generate format without decimals...
 
-    sal_Bool bGrouping = rInfo.bGrouping;
+    bool bGrouping = rInfo.bGrouping;
     sal_uInt16 nEmbeddedCount = rInfo.aEmbeddedElements.size();
     if ( nEmbeddedCount )
-        bGrouping = sal_False;      // grouping and embedded characters can't be used together
+        bGrouping = false;      // grouping and embedded characters can't be used together
 
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
     OUStringBuffer aNumStr = pFormatter->GenerateFormat( nStdIndex, nFormatLang,
@@ -1869,7 +1869,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
 void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType nLang )
 {
-    sal_Bool bAutomatic = sal_False;
+    bool bAutomatic = false;
     OUString aSymbol = rContent;
     if ( aSymbol.isEmpty())
     {
@@ -1881,13 +1881,13 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
             pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
             aSymbol = sCurString;
 
-            bAutomatic = sal_True;
+            bAutomatic = true;
         }
     }
     else if ( nLang == LANGUAGE_SYSTEM && aSymbol.equalsAscii("CCC") )
     {
         //  "CCC" is used for automatic long symbol
-        bAutomatic = sal_True;
+        bAutomatic = true;
     }
 
     if ( bAutomatic )
@@ -1941,12 +1941,12 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         return;
 
     if ( nIndex == NF_KEY_G || nIndex == NF_KEY_GG || nIndex == NF_KEY_GGG )
-        bHasEra = sal_True;
+        bHasEra = true;
 
     if ( nIndex == NF_KEY_NNNN )
     {
         nIndex = NF_KEY_NNN;
-        bHasLongDoW = sal_True;         // to remove string constant with separator
+        bHasLongDoW = true;         // to remove string constant with separator
     }
 
     OUString sKeyword = pFormatter->GetKeyword( nFormatLang, nIndex );
@@ -1964,7 +1964,7 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         {
             aFormatCode.append( sKeyword );
         }
-        bHasDateTime = sal_True;
+        bHasDateTime = true;
     }
     else
     {
@@ -1993,33 +1993,33 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         case NF_KEY_AP:
         case NF_KEY_AMPM:   break;          // AM/PM may or may not be in date/time formats -> ignore by itself
         default:
-            bDateNoDefault = sal_True;      // any other element -> no default format
+            bDateNoDefault = true;      // any other element -> no default format
     }
 }
 
-static sal_Bool lcl_IsAtEnd( OUStringBuffer& rBuffer, const OUString& rToken )
+static bool lcl_IsAtEnd( OUStringBuffer& rBuffer, const OUString& rToken )
 {
     sal_Int32 nBufLen = rBuffer.getLength();
     sal_Int32 nTokLen = rToken.getLength();
 
     if ( nTokLen > nBufLen )
-        return sal_False;
+        return false;
 
     sal_Int32 nStartPos = nBufLen - nTokLen;
     for ( sal_Int32 nTokPos = 0; nTokPos < nTokLen; nTokPos++ )
         if ( rToken[ nTokPos ] != rBuffer[nStartPos + nTokPos] )
-            return sal_False;
+            return false;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew )
+bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew )
 {
     //  replaces one keyword with another if it is found at the end of the code
 
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     if (!pFormatter)
-        return sal_False;
+        return false;
 
     OUString sOldStr = pFormatter->GetKeyword( nFormatLang, nOld );
     if ( lcl_IsAtEnd( aFormatCode, sOldStr ) )
@@ -2031,9 +2031,9 @@ sal_Bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nN
         OUString sNewStr = pFormatter->GetKeyword( nFormatLang, nNew );
         aFormatCode.append( sNewStr );
 
-        return sal_True;    // changed
+        return true;    // changed
     }
-    return sal_False;       // not found
+    return false;       // not found
 }
 
 void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
@@ -2052,18 +2052,18 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         //! test for default conditions
 
         OUString sRealCond = rCondition.copy( nValLen, rCondition.getLength() - nValLen );
-        sal_Bool bDefaultCond = sal_False;
+        bool bDefaultCond = false;
 
         //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
         //! allow blanks in conditions
         if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond.equalsAscii( ">=0" ) )
-            bDefaultCond = sal_True;
+            bDefaultCond = true;
 
         if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )
         {
             //  The third condition in a number format with a text part can only be
             //  "all other numbers", the condition string must be empty.
-            bDefaultCond = sal_True;
+            bDefaultCond = true;
         }
 
         if (!bDefaultCond)
@@ -2133,7 +2133,7 @@ void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
     }
 }
 
-sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
+bool SvXMLNumFormatContext::IsSystemLanguage()
 {
     return nFormatLang == LANGUAGE_SYSTEM;
 }

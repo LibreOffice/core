@@ -288,8 +288,8 @@ public:
     // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
     // for the OpenOffice.org file format. (#i28749#)
-    sal_Bool mbShapePositionInHoriL2R;
-    sal_Bool mbTextDocInOOoFileFormat;
+    bool mbShapePositionInHoriL2R;
+    bool mbTextDocInOOoFileFormat;
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
     OUString implementationName;
@@ -308,8 +308,8 @@ public:
         , mbOwnEmbeddedResolver( false )
         , mbIsOOoXML(false)
         // Convert drawing object positions from OOo file format to OASIS (#i28749#)
-        , mbShapePositionInHoriL2R( sal_False )
-        , mbTextDocInOOoFileFormat( sal_False )
+        , mbShapePositionInHoriL2R( false )
+        , mbTextDocInOOoFileFormat( false )
         , mxComponentContext( rxContext )
         , implementationName(theImplementationName)
         , mpRDFaHelper() // lazy
@@ -425,7 +425,7 @@ SvXMLImport::SvXMLImport(
     mpStyleMap(0),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(0),
-    mbIsFormsSupported( sal_True ),
+    mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
     mbIsGraphicLoadOnDemandSupported( true )
 {
@@ -1176,28 +1176,28 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return mxDashHelper;
 }
 
-sal_Bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
+bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
 {
 
     // if, and only if, only parts are imported, then we're in a package
     const sal_uInt32 nTest = IMPORT_META|IMPORT_STYLES|IMPORT_CONTENT|IMPORT_SETTINGS;
     if( (mnImportFlags & nTest) == nTest )
-        return sal_False;
+        return false;
 
     // Some quick tests: Some may rely on the package structure!
     sal_Int32 nLen = rURL.getLength();
     if( (nLen > 0 && '/' == rURL[0]) )
         // RFC2396 net_path or abs_path
-        return sal_False;
+        return false;
     else if( nLen > 1 && '.' == rURL[0] )
     {
         if( '.' == rURL[1] )
             // ../: We are never going up one level, so we know
             // it's not an external URI
-            return sal_False;
+            return false;
         else if( '/' == rURL[1] )
             // we are remaining on a level, so it's an package URI
-            return sal_True;
+            return true;
     }
 
     // Now check for a RFC2396 schema
@@ -1208,10 +1208,10 @@ sal_Bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
         {
         case '/':
             // a relative path segement
-            return sal_True;
+            return true;
         case ':':
             // a schema
-            return sal_False;
+            return false;
         default:
             break;
             // we don't care about any other characters
@@ -1219,11 +1219,11 @@ sal_Bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
         ++nPos;
     }
 
-    return sal_True;
+    return true;
 }
 
 OUString SvXMLImport::ResolveGraphicObjectURL( const OUString& rURL,
-                                                      sal_Bool bLoadOnDemand )
+                                                      bool bLoadOnDemand )
 {
     OUString sRet;
 
@@ -1582,10 +1582,10 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
         return rValue;
 }
 
-sal_Bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
+bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
 {
     // the check returns sal_False only if the storage version could be retrieved
-    sal_Bool bResult = sal_True;
+    bool bResult = true;
 
     if ( !aODFVersion.isEmpty() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
     {
@@ -1798,12 +1798,12 @@ OUString SvXMLImport::GetStreamName() const
 }
 
 // Convert drawing object positions from OOo file format to OASIS (#i28749#)
-sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
+bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return mpImpl->mbShapePositionInHoriL2R;
 }
 
-sal_Bool SvXMLImport::IsTextDocInOOoFileFormat() const
+bool SvXMLImport::IsTextDocInOOoFileFormat() const
 {
     return mpImpl->mbTextDocInOOoFileFormat;
 }

@@ -149,7 +149,7 @@ bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList
                 break;
             case XML_TOK_IMAGE_URL:
                 {
-                    aStrURL = rImport.ResolveGraphicObjectURL( rStrValue, sal_False );
+                    aStrURL = rImport.ResolveGraphicObjectURL( rStrValue, false );
                     bHasHRef = true;
                 }
                 break;

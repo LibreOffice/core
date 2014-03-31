@@ -146,7 +146,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
 protected:
 
     ::com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > mxStatusIndicator;
-    sal_Bool                    mbIsFormsSupported;
+    bool                        mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
     bool                        mbIsGraphicLoadOnDemandSupported;
 
@@ -159,7 +159,7 @@ protected:
     virtual XMLTextImportHelper* CreateTextImport();
     inline void ClearTextImport() { mxTextImport = 0; }
     virtual XMLShapeImportHelper* CreateShapeImport();
-    inline sal_Bool HasShapeImport() const { return mxShapeImport.is(); }
+    inline bool HasShapeImport() const { return mxShapeImport.is(); }
     inline void ClearShapeImport() { mxShapeImport = 0; }
 
     virtual SchXMLImportHelper* CreateChartImport();
@@ -170,7 +170,7 @@ protected:
     void SetAutoStyles( SvXMLStylesContext *pAutoStyles );
     void SetMasterStyles( SvXMLStylesContext *pMasterStyles );
 
-    sal_Bool IsODFVersionConsistent( const OUString& aODFVersion );
+    bool IsODFVersionConsistent( const OUString& aODFVersion );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
     inline void SetEmbeddedResolver( com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
@@ -257,7 +257,7 @@ public:
 
     // get import helper for text
     inline UniReference< XMLTextImportHelper > GetTextImport();
-    sal_Bool HasTextImport() const { return mxTextImport.is(); }
+    bool HasTextImport() const { return mxTextImport.is(); }
     inline SvXMLNumFmtHelper* GetDataStylesImport();
 
     // get import helper for shapes
@@ -297,13 +297,13 @@ public:
 
     // Convert a local packe URL into either a graphic manager or a
     // internal package URL. The later one happens only if bLoadURL is true
-    OUString ResolveGraphicObjectURL( const OUString& rURL, sal_Bool bLoadOnDemand );
+    OUString ResolveGraphicObjectURL( const OUString& rURL, bool bLoadOnDemand );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
           GetStreamForGraphicObjectURLFromBase64();
     OUString ResolveGraphicObjectURLFromBase64(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOut );
 
-    sal_Bool IsPackageURL( const OUString& rURL ) const;
+    bool IsPackageURL( const OUString& rURL ) const;
     OUString ResolveEmbeddedObjectURL( const OUString& rURL,
                                        const OUString& rClassId );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
@@ -337,7 +337,7 @@ public:
     const SvXMLStylesContext *GetAutoStyles() const;
 
     sal_uInt16  getImportFlags() const { return mnImportFlags; }
-    sal_Bool    IsFormsSupported() const { return mbIsFormsSupported; }
+    bool    IsFormsSupported() const { return mbIsFormsSupported; }
     OUString GetAbsoluteReference(const OUString& rValue) const;
 
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
@@ -384,9 +384,9 @@ public:
     GetComponentContext() const;
 
     // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)
-    sal_Bool IsShapePositionInHoriL2R() const;
+    bool IsShapePositionInHoriL2R() const;
 
-    sal_Bool IsTextDocInOOoFileFormat() const;
+    bool IsTextDocInOOoFileFormat() const;
 
     OUString GetBaseURL() const;
     OUString GetDocumentBase() const;

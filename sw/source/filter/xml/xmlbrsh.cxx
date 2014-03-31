@@ -87,7 +87,7 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
         {
         case XML_TOK_BGIMG_HREF:
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, GetImport().ResolveGraphicObjectURL( rValue,sal_False),
+                *pItem, GetImport().ResolveGraphicObjectURL( rValue, false),
                 MID_GRAPHIC_LINK, rUnitConv );
             break;
         case XML_TOK_BGIMG_TYPE:

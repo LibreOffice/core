@@ -266,7 +266,7 @@ void XMLTextListAutoStylePool::exportXML() const
     for( i=0; i < nCount; i++ )
     {
         XMLTextListAutoStylePoolEntry_Impl *pEntry = aExpEntries[i];
-        aNumRuleExp.exportNumberingRule( pEntry->GetName(), sal_False,
+        aNumRuleExp.exportNumberingRule( pEntry->GetName(), false,
                                          pEntry->GetNumRules() );
     }
     delete [] aExpEntries;

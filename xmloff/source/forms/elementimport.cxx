@@ -1301,7 +1301,7 @@ namespace xmloff
             // we don't want say form url targets to be resolved
             // using ResolveGraphicObjectURL
             if ( _rLocalName.equalsAscii( s_pImageDataAttributeName ) )
-                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, sal_False );
+                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, false );
             else
                 sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
             return OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
