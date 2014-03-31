@@ -34,6 +34,7 @@ struct TextBodyProperties
 {
     PropertyMap                                     maPropertyMap;
     OptValue< sal_Int32 >                           moRotation;
+    bool                                            mbAnchorCtr;
     OptValue< sal_Int32 >                           moVert;
     boost::optional< sal_Int32 >                    moInsets[4];
     boost::optional< sal_Int32 >                    moTextOffX;
