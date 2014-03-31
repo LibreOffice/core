@@ -2683,25 +2683,42 @@ class MaxNumStringLenHandler
     SvNumberFormatter* mpFormatter;
     sal_Int32 mnMaxLen;
     sal_uInt16 mnPrecision;
+    sal_uInt16 mnMaxGeneralPrecision;
+    bool mbHaveSigned;
 
     void processCell(size_t nRow, ScRefCellValue& rCell)
     {
-        if (rCell.meType == CELLTYPE_FORMULA && !rCell.mpFormula->IsValue())
-            return;
+        sal_uInt16 nCellPrecision = mnMaxGeneralPrecision;
+        if (rCell.meType == CELLTYPE_FORMULA)
+        {
+            if (!rCell.mpFormula->IsValue())
+                return;
+
+            // Limit unformatted formula cell precision to precision
+            // encountered so far, if any, otherwise we'd end up with 15 just
+            // because of =1/3 ...  If no precision yet then arbitrarily limit
+            // to a maximum of 4 unless a maximum general precision is set.
+            if (mnPrecision)
+                nCellPrecision = mnPrecision;
+            else
+                nCellPrecision = (mnMaxGeneralPrecision >= 15) ? 4 : mnMaxGeneralPrecision;
+        }
+
+        double fVal = rCell.getValue();
+        if (!mbHaveSigned && fVal < 0.0)
+            mbHaveSigned = true;
 
         OUString aString;
+        OUString aSep;
+        sal_Int32 nLen;
+        sal_uInt16 nPrec;
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(
-            mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
-        ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter, &mrColumn.GetDoc());
-        sal_Int32 nLen = aString.getLength();
-        if (nLen <= 0)
-            // Ignore empty string.
-            return;
-
-        if (nFormat)
+                mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
+        if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
         {
+            aSep = mpFormatter->GetFormatDecimalSep(nFormat);
+            ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter, &mrColumn.GetDoc());
             const SvNumberformat* pEntry = mpFormatter->GetEntry(nFormat);
-            sal_uInt16 nPrec;
             if (pEntry)
             {
                 bool bThousand, bNegRed;
@@ -2710,15 +2727,54 @@ class MaxNumStringLenHandler
             }
             else
                 nPrec = mpFormatter->GetFormatPrecision(nFormat);
-
-            if (nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > mnPrecision)
-                mnPrecision = nPrec;
         }
+        else
+        {
+            if (mnPrecision >= mnMaxGeneralPrecision)
+                return;     // early bail out for nothing changes here
+
+            if (!fVal)
+            {
+                // 0 doesn't change precision, but set a maximum length if none yet.
+                if (!mnMaxLen)
+                    mnMaxLen = 1;
+                return;
+            }
+
+            // Simple number string with at most 15 decimals and trailing
+            // decimal zeros eliminated.
+            aSep = ".";
+            aString = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_F, nCellPrecision, '.', true);
+            nPrec = SvNumberFormatter::UNLIMITED_PRECISION;
+        }
+
+        nLen = aString.getLength();
+        if (nLen <= 0)
+            // Ignore empty string.
+            return;
+
+        if (nPrec == SvNumberFormatter::UNLIMITED_PRECISION && mnPrecision < mnMaxGeneralPrecision)
+        {
+            if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
+            {
+                // For some reason we couldn't obtain a precision from the
+                // format, retry with simple number string.
+                aSep = ".";
+                aString = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_F, nCellPrecision, '.', true);
+                nLen = aString.getLength();
+            }
+            sal_Int32 nSep = aString.indexOf( aSep);
+            if (nSep != -1)
+                nPrec = aString.getLength() - nSep - 1;
+
+        }
+
+        if (nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > mnPrecision)
+            mnPrecision = nPrec;
 
         if (mnPrecision)
         {   // less than mnPrecision in string => widen it
             // more => shorten it
-            OUString aSep = mpFormatter->GetFormatDecimalSep(nFormat);
             sal_Int32 nTmp = aString.indexOf(aSep);
             if ( nTmp == -1 )
                 nLen += mnPrecision + aSep.getLength();
@@ -2732,15 +2788,27 @@ class MaxNumStringLenHandler
             }
         }
 
+        // Enlarge for sign if necessary. Bear in mind that
+        // GetMaxNumberStringLen() is for determining dBase decimal field width
+        // and precision where the overall field width must include the sign.
+        // Fitting -1 into "#.##" (width 4, 2 decimals) does not work.
+        if (mbHaveSigned && fVal >= 0.0)
+            ++nLen;
+
         if (mnMaxLen < nLen)
             mnMaxLen = nLen;
     }
 
 public:
-    MaxNumStringLenHandler(const ScColumn& rColumn, sal_uInt16 nPrecision) :
+    MaxNumStringLenHandler(const ScColumn& rColumn, sal_uInt16 nMaxGeneralPrecision) :
         mrColumn(rColumn), mpFormatter(rColumn.GetDoc().GetFormatTable()),
-        mnMaxLen(0), mnPrecision(nPrecision)
+        mnMaxLen(0), mnPrecision(0), mnMaxGeneralPrecision(nMaxGeneralPrecision),
+        mbHaveSigned(false)
     {
+        // Limit the decimals passed to doubleToUString().
+        // Also, the dBaseIII maximum precision is 15.
+        if (mnMaxGeneralPrecision > 15)
+            mnMaxGeneralPrecision = 15;
     }
 
     void operator() (size_t nRow, double fVal)
@@ -2765,12 +2833,8 @@ public:
 sal_Int32 ScColumn::GetMaxNumberStringLen(
     sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
-    nPrecision = pDocument->GetDocOptions().GetStdPrecision();
-    if ( nPrecision == SvNumberFormatter::UNLIMITED_PRECISION )
-        // In case of unlimited precision, use 2 instead.
-        nPrecision = 2;
-
-    MaxNumStringLenHandler aFunc(*this, nPrecision);
+    sal_uInt16 nMaxGeneralPrecision = pDocument->GetDocOptions().GetStdPrecision();
+    MaxNumStringLenHandler aFunc(*this, nMaxGeneralPrecision);
     sc::ParseFormulaNumeric(maCells.begin(), maCells, nRowStart, nRowEnd, aFunc);
     nPrecision = aFunc.getPrecision();
     return aFunc.getMaxLen();

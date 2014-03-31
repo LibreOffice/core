@@ -551,6 +551,7 @@ void lcl_GetColumnTypes(
                         break;
                     case 'N' :
                         nDbType = sdbc::DataType::DECIMAL;
+                        bTypeDefined = true;
                         break;
                 }
                 if ( bTypeDefined && !nFieldLen && nToken > 2 )
@@ -562,6 +563,8 @@ void lcl_GetColumnTypes(
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
                             nPrecision = aTmp.toInt32();
+                            if (nPrecision && nFieldLen < nPrecision+1)
+                                nFieldLen = nPrecision + 1;     // include decimal separator
                             bPrecDefined = true;
                         }
                     }
@@ -662,14 +665,52 @@ void lcl_GetColumnTypes(
             if ( nPrec > 15 )
                 nPrec = 15;
             if ( bPrecDefined && nPrecision != nPrec )
-            {   // Adjust length to predefined precision.
-                if ( nPrecision )
-                    nLen = nLen + ( nPrecision - nPrec );
+            {
+                if (nPrecision < nPrec)
+                {
+                    // This is a hairy case. User defined nPrecision but a
+                    // number format has more precision. Modifying a dBase
+                    // field may as well render the resulting file useless for
+                    // an application that relies on its defined structure,
+                    // especially if we are resaving an already existing file.
+                    // So who's right, the user who (or the loaded file that)
+                    // defined the field, or the user who applied the format?
+                    // Commit f59e350d1733125055f1144f8b3b1b0a46f6d1ca gave the
+                    // format a higher priority, which is debatable.
+                    SAL_WARN( "sc", "lcl_GetColumnTypes: conflicting dBase field precision for "
+                            << aFieldName << " (" << nPrecision << "<" << nPrec << ")");
+
+                    // Adjust length to larger predefined integer part. There
+                    // may be a reason that the field was prepared for larger
+                    // numbers.
+                    if (nFieldLen - nPrecision > nLen - nPrec)
+                        nLen = nFieldLen - (nPrecision ? nPrecision+1 : 0) + 1 + nPrec;
+                    // And override precision.
+                    nPrecision = nPrec;
+                }
                 else
-                    nLen -= nPrec+1;            // also remove the decimal separator
+                {
+                    // Adjust length to predefined precision.
+                    if ( nPrecision )
+                        nLen = nLen + ( nPrecision - nPrec );
+                    else
+                        nLen -= nPrec+1;    // also remove the decimal separator
+                }
             }
-            if ( nLen > nFieldLen && !bTypeDefined )
-                nFieldLen = nLen;
+            if (nFieldLen < nLen)
+            {
+                if (!bTypeDefined)
+                    nFieldLen = nLen;
+                else
+                {
+                    // Again a hairy case and conflict. Furthermore, the
+                    // larger overall length may be a result of only a higher
+                    // precision obtained from formats.
+                    SAL_WARN( "sc", "lcl_GetColumnTypes: conflicting dBase field length for "
+                            << aFieldName << " (" << nFieldLen << "<" << nLen << ")");
+                    nFieldLen = nLen;
+                }
+            }
             if ( !bPrecDefined )
                 nPrecision = nPrec;
             if ( nFieldLen == 0 )
