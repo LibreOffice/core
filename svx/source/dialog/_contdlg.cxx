@@ -209,6 +209,7 @@ void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
 SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
                                         Window* _pParent, const ResId& rResId ) :
         SvxContourDlg       ( _pBindings, pCW, _pParent, rResId ),
+        pUpdateEditingObject( NULL ),
         pCheckObj           ( NULL ),
         aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
         aTbx1               ( this, ResId( TBX1, *rResId.GetResMgr() ) ),
@@ -217,6 +218,7 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         nGrfChanged         ( 0UL ),
         bExecState          ( sal_False ),
+        bUpdateGraphicLinked( sal_False ),
         bGraphicLinked      ( sal_False ),
         maImageList         ( SVX_RES( CD_IMAPDLG ) )
 {
