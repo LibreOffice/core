@@ -579,8 +579,9 @@ protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const;
     virtual OUString getDefaultAccessibleName() const;
 
-    virtual void               CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags) SAL_OVERRIDE;
-    virtual void               ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
+    virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags) SAL_OVERRIDE;
+    virtual void                ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
+    virtual bool                UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
 
 public:
     bool HasMirroredGraphics() const SAL_OVERRIDE;

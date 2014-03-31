@@ -1863,4 +1863,9 @@ void Printer::updatePrinters()
     }
 }
 
+bool Printer::UsePolyPolygonForComplexGradient()
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
