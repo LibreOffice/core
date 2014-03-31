@@ -1376,9 +1376,9 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     Point aNullPt;
                     SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFmt)->GetFrm( &aNullPt );
-                    pAnchor = pFlyFrm->GetAnchorFrm();
+                    pAnchor = pFlyFrm ? pFlyFrm->GetAnchorFrm() : NULL;
 
-                    if( pAnchor->FindFooterOrHeader() )
+                    if (!pAnchor || pAnchor->FindFooterOrHeader())
                     {
                         // if there is a textframe in the header/footer:
                         // do not replace but insert
