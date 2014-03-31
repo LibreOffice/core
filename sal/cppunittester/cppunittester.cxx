@@ -115,9 +115,9 @@ public:
             {
                 tn[i] = '_';
             }
-            tn[len] = '_';
-            tn[len + 1] = 0;
         }
+        tn[len] = '_';
+        tn[len + 1] = 0;
         setenv("LO_TESTNAME", tn, true);
         delete[] tn;
     }
