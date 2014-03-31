@@ -111,6 +111,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
 Index::Index(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext)
     : table_count(0)
     , key_count(0)
+    , mkey_count(0)
 {
     collator = new CollatorImpl(rxContext);
 }
