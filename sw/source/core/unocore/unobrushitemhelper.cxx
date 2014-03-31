@@ -38,6 +38,8 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xflhtit.hxx>
 
+namespace sw {
+
 //UUUU
 void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet)
 {
@@ -303,5 +305,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_Bool
 
     return aRetval;
 }
+
+} // namespace sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

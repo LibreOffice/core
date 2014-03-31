@@ -396,7 +396,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, sal_Bool bInParents ) c
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, bInParents);
+        aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bInParents);
 
         return aSvxBrushItem;
     }
@@ -421,7 +421,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent, con
             // to and return as state that it is set
             static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
-            aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, bSrchInParent);
+            aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bSrchInParent);
             *ppItem = &aSvxBrushItem;
 
             return SFX_ITEM_SET;
@@ -459,7 +459,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
         // fill a local ItemSet with the attributes corresponding as good as possible
         // to the new fill properties [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and set these
         // as ItemSet
-        setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+        sw::setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
 
         if(IsModifyLocked())
         {
@@ -553,7 +553,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
             // corresponding as good as possible to the new fill properties and set the whole ItemSet
             const SvxBrushItem& rSource(static_cast< const SvxBrushItem& >(*pSource));
-            setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+            sw::setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
 
             if(IsModifyLocked())
             {
@@ -782,7 +782,7 @@ const SvxBrushItem& SwFmt::GetBackground(sal_Bool bInP) const
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, bInP);
+        aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bInP);
 
         return aSvxBrushItem;
     }

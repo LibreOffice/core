@@ -838,7 +838,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                     case XFILL_SOLID:
                     {
                         // Construct an SvxBrushItem, as expected by the exporters.
-                        aSet.Put(getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet()));
+                        aSet.Put(sw::getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet()));
                         break;
                     }
                     default:

@@ -327,7 +327,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
         }
 
-        setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
+        sw::setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
     }
 
     if(bXFillStyleItemUsed)
@@ -1725,14 +1725,14 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if(RES_BACKGROUND == pEntry->nWID)
             {
                 const SwAttrSet& rSet = pFmt->GetAttrSet();
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
+                const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rSet));
                 SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
                 aChangedBrushItem.PutValue(aValue, nMemberId);
 
                 if(!(aChangedBrushItem == aOriginalBrushItem))
                 {
-                    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
+                    sw::setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
                     pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
                 }
 
@@ -2158,7 +2158,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(RES_BACKGROUND == pEntry->nWID)
             {
                 //UUUU
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
+                const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rSet));
 
                 if(!aOriginalBrushItem.QueryValue(aAny, nMemberId))
                 {
@@ -2311,7 +2311,7 @@ bool SwXFrame::needToMapFillItemsToSvxBrushItemTypes() const
     }
 
     //UUUU here different FillStyles can be excluded for export; it will depend on the
-    // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
+    // quality these fallbacks can reach. That again is done in sw::getSvxBrushItemFromSourceSet,
     // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
     // For now, take them all - except XFILL_NONE
 

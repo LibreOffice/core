@@ -1749,14 +1749,14 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 //UUUU
                 SfxItemSet& rStyleSet = rBase.GetItemSet();
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet));
+                const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rStyleSet));
                 SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
                 aChangedBrushItem.PutValue(aValue, nMemberId);
 
                 if(!(aChangedBrushItem == aOriginalBrushItem))
                 {
-                    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
+                    sw::setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
                 }
 
                 bDone = true;
@@ -2506,7 +2506,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 {
                     //UUUU
                     const SfxItemSet& rSet = rBase.GetItemSet();
-                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
+                    const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rSet));
 
                     if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
                     {
