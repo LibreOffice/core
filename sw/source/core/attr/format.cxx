@@ -111,7 +111,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
               aNew( *aSet.GetPool(), aSet.GetRanges() );
     aSet.Intersect_BC( rFmt.aSet, &aOld, &aNew );
-    aSet.Put_BC( rFmt.aSet, &aOld, &aNew );
+    (void)aSet.Put_BC( rFmt.aSet, &aOld, &aNew );
 
     // a few special treatments for attributes
     aSet.SetModifyAtAttr( this );
