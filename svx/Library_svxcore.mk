@@ -75,6 +75,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     utl \
     vcl \
     xo \
+    $(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)),vclopengl) \
 	$(gb_UWINAPI) \
 ))
 
@@ -82,6 +83,8 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
 	icuuc \
 	icu_headers \
+	mesa_headers \
+	glew \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
