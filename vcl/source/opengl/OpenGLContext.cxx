@@ -336,7 +336,7 @@ bool OpenGLContext::init( Window* pParent )
                                  GL_TRUE);
     if( m_aGLWin.ctx == NULL )
     {
-        OSL_TRACE("unable to create GLX context");
+        SAL_INFO("vcl.opengl", "unable to create GLX context");
         return false;
     }
 #endif
@@ -384,7 +384,7 @@ bool OpenGLContext::init( Window* pParent )
 #elif defined( UNX )
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
-        OSL_TRACE("unable to select current GLX context");
+        SAL_INFO("vcl.opengl", "unable to select current GLX context");
         return false;
     }
 
@@ -392,10 +392,10 @@ bool OpenGLContext::init( Window* pParent )
     double nGLXVersion = 0;
     if( glXQueryVersion( m_aGLWin.dpy, &glxMajor, &glxMinor ) )
       nGLXVersion = glxMajor + 0.1*glxMinor;
-    OSL_TRACE("available GLX version: %f", nGLXVersion);
+    SAL_INFO("vcl.opengl", "available GLX version: %f", nGLXVersion);
 
     m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
-    OSL_TRACE("available GL  extensions: %s", m_aGLWin.GLExtensions);
+    SAL_INFO("vcl.opengl", "available GL  extensions: %s", m_aGLWin.GLExtensions);
 
     if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
     {
@@ -417,9 +417,9 @@ bool OpenGLContext::init( Window* pParent )
         XSync(m_aGLWin.dpy, false);
 
         if( errorTriggered )
-            OSL_TRACE("error when trying to set swap interval, NVIDIA or Mesa bug?");
+            SAL_INFO("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
         else
-            OSL_TRACE("set swap interval to 1 (enable vsync)");
+            SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
 
         // restore the error handler
         XSetErrorHandler( oldHandler );
@@ -513,7 +513,7 @@ bool OpenGLContext::initWindow()
 
     m_aGLWin.win = sysData->aWindow;
 
-    OSL_TRACE("parent window: %d", m_aGLWin.win);
+    SAL_INFO("vcl.opengl", "parent window: %d", m_aGLWin.win);
 
     XWindowAttributes xattr;
     XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xattr );
@@ -576,7 +576,7 @@ bool OpenGLContext::initWindow()
     {
         SystemWindowData winData;
         winData.nSize = sizeof(winData);
-        OSL_TRACE("using VisualID %08X", vi->visualid);
+        SAL_INFO("vcl.opengl", "using VisualID %08X", vi->visualid);
         winData.pVisual = (void*)(vi->visual);
         m_pChildWindow.reset(new SystemChildWindow(m_pWindow.get(), 0, &winData, false));
         pChildSysData = m_pChildWindow->GetSystemData();
@@ -595,7 +595,7 @@ bool OpenGLContext::initWindow()
     m_aGLWin.win = pChildSysData->aWindow;
     m_aGLWin.vi = vi;
     m_aGLWin.GLXExtensions = glXQueryExtensionsString( m_aGLWin.dpy, m_aGLWin.screen );
-    OSL_TRACE("available GLX extensions: %s", m_aGLWin.GLXExtensions);
+    SAL_INFO("vcl.opengl", "available GLX extensions: %s", m_aGLWin.GLXExtensions);
 
     return true;
 }
