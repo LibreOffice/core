@@ -22,7 +22,7 @@
 using namespace css::uno;
 using namespace css::sheet;
 
-ScItemValue::ScItemValue(OUString aName, SCCOL nColumn, sal_uInt16 nFunctionMask) :
+ScItemValue::ScItemValue(OUString const & aName, SCCOL nColumn, sal_uInt16 nFunctionMask) :
     maName(aName),
     maFunctionData(nColumn, nFunctionMask),
     mpOriginalItemValue(this)
@@ -40,22 +40,7 @@ ScItemValue::~ScItemValue()
 namespace
 {
 
-OUString lclGetNameForNamedRange(ScRange aRange, ScDocument* pDocument)
-{
-    OUString aName;
-
-    ScRangeName* pRangeName = pDocument->GetRangeName();
-    if (pRangeName == NULL)
-        return aName;
-
-    const ScRangeData* pData = pRangeName->findByRange(aRange);
-    if (pData == NULL)
-        return aName;
-
-    return pData->GetName();
-}
-
-ScRange lclGetRangeForNamedRange(OUString aName, ScDocument* pDocument)
+ScRange lclGetRangeForNamedRange(OUString const & aName, ScDocument* pDocument)
 {
     ScRange aInvalidRange(ScAddress::INITIALIZE_INVALID);
     ScRangeName* pRangeName = pDocument->GetRangeName();

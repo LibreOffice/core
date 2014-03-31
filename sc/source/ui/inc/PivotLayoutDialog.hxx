@@ -33,7 +33,7 @@ public:
     ScPivotFuncData maFunctionData;
     ScItemValue* mpOriginalItemValue;
 
-    ScItemValue(OUString aName, SCCOL nColumn, sal_uInt16 nFunctionMask);
+    ScItemValue(OUString const & aName, SCCOL nColumn, sal_uInt16 nFunctionMask);
     ScItemValue(ScItemValue* pInputItemValue);
 
     virtual ~ScItemValue();

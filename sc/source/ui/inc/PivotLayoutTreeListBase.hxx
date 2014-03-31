@@ -33,8 +33,6 @@ public:
         COLUMN_LIST,
         DATA_LIST
     };
-private:
-    bool mbIsInternalDrag;
 
 protected:
     SvPivotTreeListType meType;

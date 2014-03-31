@@ -156,7 +156,7 @@ void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(SvTreeListEntry* pSou
         OUString rText = GetEntryText(pSource);
         GetModel()->Remove(pSource);
         sal_uLong nPosition = (pTarget == NULL) ? TREELIST_APPEND : GetModel()->GetAbsPos(pTarget) + 1;
-        InsertEntry(rText, NULL, sal_False, nPosition, pItemValue);
+        InsertEntry(rText, NULL, false, nPosition, pItemValue);
     }
     else
     {
@@ -184,7 +184,7 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, sal_
                             pDataItemValue->maName,
                             rFunctionData.mnDupCount);
 
-    InsertEntry(sDataName, NULL, sal_False, nPosition, pDataItemValue);
+    InsertEntry(sDataName, NULL, false, nPosition, pDataItemValue);
 }
 
 void ScPivotLayoutTreeListData::KeyInput(const KeyEvent& rKeyEvent)
