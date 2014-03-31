@@ -1266,7 +1266,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
     const sal_uInt32 nPolyCount(aPolyPolygon.count());
 
-    if(nPolyCount)
+    if (nPolyCount && pAttrObj)
     {
         SdrObjKind eKind = OBJ_PATHFILL;
 
