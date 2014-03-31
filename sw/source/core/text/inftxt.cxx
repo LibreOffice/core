@@ -1741,9 +1741,11 @@ SwTxtSlot::~SwTxtSlot()
     }
 }
 
-SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNew,
-        SwAttrIter* pItr )
-        : pFnt( pNew ? ((SwTxtSizeInfo&)rInf).GetFont() : 0 )
+SwFontSave::SwFontSave(const SwTxtSizeInfo &rInf, SwFont *pNew,
+        SwAttrIter* pItr)
+    : pInf(NULL)
+    , pFnt(pNew ? ((SwTxtSizeInfo&)rInf).GetFont() : NULL)
+    , pIter(NULL)
 {
     if( pFnt )
     {
@@ -1772,8 +1774,6 @@ SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNew,
             pIter = pItr;
             pIter->SetFnt( pNew );
         }
-        else
-            pIter = NULL;
     }
 }
 
