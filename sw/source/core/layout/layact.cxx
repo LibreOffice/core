@@ -22,24 +22,12 @@
 #include <time.h>
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
-#include "cntfrm.hxx"
-#include "doc.hxx"
-#include "IDocumentDrawModelAccess.hxx"
-#include "IDocumentSettingAccess.hxx"
-#include "IDocumentLayoutAccess.hxx"
-#include "IDocumentStatistics.hxx"
-#include "IDocumentTimerAccess.hxx"
 #include "viewimp.hxx"
 #include "crsrsh.hxx"
 #include "dflyobj.hxx"
-#include "flyfrm.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
-#include "ndtxt.hxx"
-#include "frmfmt.hxx"
-#include "swregion.hxx"
 #include "viewopt.hxx"
-#include "pam.hxx"
 #include "dbg_lay.hxx"
 #include "layouter.hxx"
 #include "docstat.hxx"
@@ -48,36 +36,27 @@
 #include <sfx2/event.hxx>
 
 #include <ftnidx.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/opaqitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
 #define _LAYACT_CXX
 #include "layact.hxx"
 #include <swwait.hxx>
 #include <fmtsrnd.hxx>
-#include <fmtanchr.hxx>
-#include <tools/shl.hxx>
 #include <docsh.hxx>
 
-#include "swmodule.hxx"
-#include "fmtline.hxx"
 #include "tabfrm.hxx"
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
 #include "mdiexp.hxx"
-#include "fmtornt.hxx"
 #include "sectfrm.hxx"
-#include "lineinfo.hxx"
 #include <acmplwrd.hxx>
 // #i28701#
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
-#include <PostItMgr.hxx>
 #include <vector>
 
 // SwLayAction static stuff
