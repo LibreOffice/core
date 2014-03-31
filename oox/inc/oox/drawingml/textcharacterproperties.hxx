@@ -24,6 +24,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/textfont.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 
 namespace oox { class PropertySet; }
 
@@ -53,6 +54,7 @@ struct TextCharacterProperties
     OptValue< bool >    moItalic;
     OptValue< bool >    moUnderlineLineFollowText;
     OptValue< bool >    moUnderlineFillFollowText;
+    GradientFillProperties      maGradientProps; /// Properties for gradient text colors
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const TextCharacterProperties& rSourceProps );

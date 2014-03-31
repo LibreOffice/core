@@ -161,6 +161,10 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.maHyperlinkPropertyMap ) );
         break;
+
+        case A_TOKEN( gradFill ):
+            xRet.set( new GradientFillContext( *this, xAttributes, mrTextCharacterProperties.maGradientProps ) );
+        break;
     }
     if( !xRet.is() )
         xRet.set( this );
