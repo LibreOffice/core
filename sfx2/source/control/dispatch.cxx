@@ -2101,9 +2101,8 @@ bool SfxDispatcher::_FillState
                 if ( !IsInvalidItem(pItem) && !pItem->ISA(SfxVoidItem) )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
-                    SAL_WARN_IF(
-                        !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()),
-                        "sfx.control",
+                    if (!pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()))
+                        SAL_INFO("sfx.control",
                         "item-type unequal to IDL (=> no BASIC) with SID: "
                             << nSlotId << " in " << pIF->GetClassName());
                 }
