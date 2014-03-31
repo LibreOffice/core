@@ -3006,8 +3006,7 @@ void SwContentTree::ShowActualView()
     GetParentWindow()->UpdateListBox();
 }
 
-// Here are the buttons for moving outlines are en-/disabled.
-
+// Here the buttons for moving outlines are en-/disabled.
 bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
 {
     if(!pEntry)
@@ -3018,10 +3017,20 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
     {
         pParentEntry = GetParent(pParentEntry);
     }
-    if(!bIsLastReadOnly && (!IsVisible() ||
-        ( (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE && pParentEntry) ||
-            (lcl_IsContent(pEntry) && ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE)) ))
-        bEnable = sal_True;
+    if (!bIsLastReadOnly)
+    {
+        if (!IsVisible())
+            bEnable = sal_True;
+        else if (pParentEntry)
+        {
+            if ((bIsRoot && nRootType == CONTENT_TYPE_OUTLINE) ||
+                (lcl_IsContent(pEntry) &&
+                    ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE))
+            {
+                bEnable = sal_True;
+            }
+        }
+    }
     SwNavigationPI* pNavi = GetParentWindow();
     pNavi->aContentToolBox.EnableItem(FN_ITEM_UP ,  bEnable);
     pNavi->aContentToolBox.EnableItem(FN_ITEM_DOWN, bEnable);
