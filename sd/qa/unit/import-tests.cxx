@@ -179,6 +179,7 @@ void SdFiltersTest::testSmoketest()
     }
 
     CPPUNIT_ASSERT_MESSAGE( "changed", !pDoc->IsChanged() );
+
     xDocShRef->DoClose();
 }
 
@@ -218,6 +219,8 @@ void SdFiltersTest::testN759180()
             }
         }
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN821567()
@@ -245,6 +248,8 @@ void SdFiltersTest::testN821567()
         aAny >>= bgImage;
     }
     CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported properly", !bgImage.isEmpty());
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN862510_1()
@@ -270,6 +275,8 @@ void SdFiltersTest::testN862510_1()
             CPPUNIT_ASSERT_MESSAGE( "Baseline attribute not handled properly", !( pFontEscapement && pFontEscapement->GetProp() != 100 ) );
         }
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN862510_2()
@@ -289,6 +296,8 @@ void SdFiltersTest::testN862510_2()
         CPPUNIT_ASSERT( pObj );
         CPPUNIT_ASSERT_MESSAGE( "Wrong Text Rotation!", pObj->GetExtraTextRotation( true ) == 90 );
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN862510_3()
@@ -308,6 +317,8 @@ void SdFiltersTest::testN862510_3()
         CPPUNIT_ASSERT( pObj );
         CPPUNIT_ASSERT_MESSAGE( "Left Spacing is wrong! check attribute anchorCtr", pObj->GetTextLeftDistance() < 30);
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN862510_4()
@@ -333,6 +344,8 @@ void SdFiltersTest::testN862510_4()
             CPPUNIT_ASSERT_MESSAGE( "gradfill for text color not handled!", !( pC && pC->GetValue().GetColor() == 0 ) );
         }
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN828390()
@@ -371,6 +384,8 @@ void SdFiltersTest::testN828390()
         }
     }
     CPPUNIT_ASSERT_MESSAGE("Subscript not exported properly", bPassed);
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN828390_2()
@@ -391,6 +406,8 @@ void SdFiltersTest::testN828390_2()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT(aEdit.GetText(0) == OUString("Linux  "));
     CPPUNIT_ASSERT(aEdit.GetText(1) == OUString("Standard Platform"));
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN828390_3()
@@ -425,6 +442,8 @@ void SdFiltersTest::testN828390_3()
         }
     }
     CPPUNIT_ASSERT_MESSAGE("CharEscapment not imported properly", bPassed);
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN828390_4()
@@ -465,6 +484,8 @@ void SdFiltersTest::testN828390_4()
         }
     }
     CPPUNIT_ASSERT(bPassed);
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN828390_5()
@@ -489,6 +510,8 @@ void SdFiltersTest::testN828390_5()
         CPPUNIT_ASSERT( pNumFmt );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's relative size is wrong!", pNumFmt->GetNumRule()->GetLevel(1).GetBulletRelSize(), sal_uInt16(75) ); // != 25
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN778859()
@@ -508,6 +531,8 @@ void SdFiltersTest::testN778859()
         CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testFdo68594()
@@ -527,6 +552,8 @@ void SdFiltersTest::testFdo68594()
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != NULL);
     // Color should be black
     CPPUNIT_ASSERT_MESSAGE( "Placeholder color mismatch", pC->GetValue().GetColor() == 0);
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testFdo72998()
@@ -551,6 +578,8 @@ void SdFiltersTest::testFdo72998()
         CPPUNIT_ASSERT_MESSAGE( "Width should be zero - for forcing scale to 1", !aViewBox.Width );
         CPPUNIT_ASSERT_MESSAGE( "Height should be zero - for forcing scale to 1", !aViewBox.Height );
     }
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testFdo64512()
@@ -593,6 +622,8 @@ void SdFiltersTest::testFdo64512()
         xNode->getTarget(), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "inner node not referencing svg shape",
                             xTargetShape != xSvgShape );
+
+    xDocShRef->DoClose();
 }
 
 // Unit test for importing charts
@@ -638,6 +669,8 @@ void SdFiltersTest::testFdo71075()
     uno::Sequence< double > aValues( xNumSeq->getNumericalData());
     for(sal_Int32 i=0;i<xValueSeq->getData().getLength();i++)
         CPPUNIT_ASSERT_MESSAGE( "Invalid Series count", aValues.getConstArray()[i] == values[i]);
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testStrictOOXML()
@@ -652,6 +685,8 @@ void SdFiltersTest::testStrictOOXML()
     uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testFdo71961()
@@ -685,6 +720,8 @@ void SdFiltersTest::testFdo71961()
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
