@@ -52,7 +52,13 @@ struct VCL_DLLPUBLIC AnimationBitmap
     Disposal    eDisposal;
     bool    bUserInput;
 
-                AnimationBitmap() {}
+                AnimationBitmap()
+                    : nWait(0)
+                    , eDisposal(DISPOSE_NOT)
+                    , bUserInput(false)
+                {
+                }
+
                 AnimationBitmap(
                     const BitmapEx& rBmpEx,
                     const Point& rPosPix,
