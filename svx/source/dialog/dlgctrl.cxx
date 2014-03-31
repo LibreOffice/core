@@ -1122,8 +1122,10 @@ void SvxPixelCtl::Reset()
 // Constructor: BitmapCtl for SvxPixelCtl
 
 SvxBitmapCtl::SvxBitmapCtl( Window* /*pParent*/, const Size& rSize )
+    : aSize(rSize)
+    , nLines(0)
+    , pBmpArray(NULL)
 {
-    aSize = rSize;
 }
 
 SvxBitmapCtl::~SvxBitmapCtl()
