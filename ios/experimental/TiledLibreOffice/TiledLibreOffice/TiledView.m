@@ -110,13 +110,9 @@ static void updateTilesPerSecond(UILabel *label)
 
     CGRect bb = CGContextGetClipBoundingBox(ctx);
 
-    // double zoomScale = [(View *) [self superview] zoomScale];
-    // CATiledLayer *catl = (CATiledLayer*) [self layer];
-
     CGContextSaveGState(ctx);
 
     CGContextTranslateCTM(ctx, bb.origin.x, bb.origin.y);
-    // CGContextScaleCTM(ctx, 1/zoomScale, 1/zoomScale);
 
     // CGSize tileSize = [catl tileSize];
     CGSize tileSize = bb.size;
