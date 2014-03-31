@@ -202,14 +202,12 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 #define SCA_VALID_TAB2      0x4000
 #define SCA_VALID           0x8000
 
-#define SCA_ABS               SCA_VALID \
-                            | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
+#define SCA_ABS    SCA_VALID | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
 
-#define SCR_ABS               SCA_ABS \
-                            | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
+#define SCR_ABS    SCA_ABS | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 
-#define SCA_ABS_3D          SCA_ABS | SCA_TAB_3D
-#define SCR_ABS_3D          SCR_ABS | SCA_TAB_3D
+#define SCA_ABS_3D SCA_ABS | SCA_TAB_3D
+#define SCR_ABS_3D SCR_ABS | SCA_TAB_3D
 
 //  ScAddress
 class ScAddress
@@ -224,19 +222,21 @@ public:
     enum Uninitialized      { UNINITIALIZED };
     enum InitializeInvalid  { INITIALIZE_INVALID };
 
-    struct Details {
+    struct Details
+    {
         formula::FormulaGrammar::AddressConvention  eConv;
         SCROW       nRow;
         SCCOL       nCol;
-        inline Details( formula::FormulaGrammar::AddressConvention eConvP, SCROW nRowP, SCCOL nColP )
-            : eConv( eConvP ), nRow( nRowP ), nCol( nColP )
-            {}
-        inline Details( formula::FormulaGrammar::AddressConvention eConvP, ScAddress const & rAddr )
-            : eConv( eConvP ), nRow( rAddr.Row() ), nCol( rAddr.Col() )
-            {}
-        inline Details( formula::FormulaGrammar::AddressConvention eConvP)
-            : eConv( eConvP ), nRow( 0 ), nCol( 0 )
-            {}
+
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP, SCROW nRowP, SCCOL nColP ) :
+            eConv(eConvP), nRow(nRowP), nCol(nColP)
+        {}
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP, ScAddress const & rAddr ) :
+            eConv(eConvP), nRow(rAddr.Row()),  nCol(rAddr.Col())
+        {}
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP) :
+            eConv(eConvP), nRow(0), nCol(0)
+        {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
     };
@@ -244,86 +244,138 @@ public:
 
     struct ExternalInfo
     {
-        OUString maTabName;
+        OUString    maTabName;
         sal_uInt16  mnFileId;
         bool        mbExternal;
 
-        inline ExternalInfo() : mnFileId(0), mbExternal(false) {}
+        inline ExternalInfo() :
+            mnFileId(0), mbExternal(false)
+        {}
     };
 
-    inline ScAddress() : nRow(0), nCol(0), nTab(0) {}
-    inline ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
-        : nRow(nRowP), nCol(nColP), nTab(nTabP)
-        {}
+    inline ScAddress() :
+        nRow(0), nCol(0), nTab(0)
+    {}
+    inline ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
+        nRow(nRowP), nCol(nColP), nTab(nTabP)
+    {}
     /** Yes, it is what it seems to be: Uninitialized. May be used for
         performance reasons if it is initialized by other means. */
-    inline ScAddress( Uninitialized ) {}
-    inline ScAddress( InitializeInvalid )
-        : nRow(-1), nCol(-1), nTab(-1) {}
-    inline ScAddress( const ScAddress& r )
-        : nRow(r.nRow), nCol(r.nCol), nTab(r.nTab)
-        {}
-    inline ScAddress& operator=( const ScAddress& r );
+    inline ScAddress( Uninitialized )
+    {}
+    inline ScAddress( InitializeInvalid ) :
+        nRow(-1), nCol(-1), nTab(-1)
+    {}
+    inline ScAddress( const ScAddress& rAddress ) :
+        nRow(rAddress.nRow), nCol(rAddress.nCol), nTab(rAddress.nTab)
+    {}
+    inline ScAddress& operator=( const ScAddress& rAddress );
 
     inline void Set( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    inline SCROW Row() const { return nRow; }
-    inline SCCOL Col() const { return nCol; }
-    inline SCTAB Tab() const { return nTab; }
-    inline void SetRow( SCROW nRowP ) { nRow = nRowP; }
-    inline void SetCol( SCCOL nColP ) { nCol = nColP; }
-    inline void SetTab( SCTAB nTabP ) { nTab = nTabP; }
-    inline void SetInvalid() { nRow = -1; nCol = -1; nTab = -1; }
-    inline bool IsValid() const { return (nRow >= 0) && (nCol >= 0) && (nTab >= 0); }
-    inline void PutInOrder( ScAddress& r );
-    inline void IncRow( SCsROW n=1 ) { nRow = sal::static_int_cast<SCROW>(nRow + n); }
-    inline void IncCol( SCsCOL n=1 ) { nCol = sal::static_int_cast<SCCOL>(nCol + n); }
-    inline void IncTab( SCsTAB n=1 ) { nTab = sal::static_int_cast<SCTAB>(nTab + n); }
+
+    inline SCROW Row() const
+    {
+        return nRow;
+    }
+
+    inline SCCOL Col() const
+    {
+        return nCol;
+    }
+    inline SCTAB Tab() const
+    {
+        return nTab;
+    }
+    inline void SetRow( SCROW nRowP )
+    {
+        nRow = nRowP;
+    }
+    inline void SetCol( SCCOL nColP )
+    {
+        nCol = nColP;
+    }
+    inline void SetTab( SCTAB nTabP )
+    {
+        nTab = nTabP;
+    }
+    inline void SetInvalid()
+    {
+        nRow = -1;
+        nCol = -1;
+        nTab = -1;
+    }
+    inline bool IsValid() const
+    {
+        return (nRow >= 0) && (nCol >= 0) && (nTab >= 0);
+    }
+
+    inline void PutInOrder( ScAddress& rAddress );
+
+    inline void IncRow( SCsROW nDelta = 1 )
+    {
+        nRow = sal::static_int_cast<SCROW>(nRow + nDelta);
+    }
+    inline void IncCol( SCsCOL nDelta = 1 )
+    {
+        nCol = sal::static_int_cast<SCCOL>(nCol + nDelta);
+    }
+    inline void IncTab( SCsTAB nDelta = 1 )
+    {
+        nTab = sal::static_int_cast<SCTAB>(nTab + nDelta);
+    }
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
-    { nColP = nCol; nRowP = nRow; nTabP = nTab; }
+    {
+        nColP = nCol;
+        nRowP = nRow;
+        nTabP = nTab;
+    }
 
-    SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = NULL,
-                  const Details& rDetails = detailsOOOa1,
-                  ExternalInfo* pExtInfo = NULL,
-                  const ::com::sun::star::uno::Sequence<
-                    com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+    SC_DLLPUBLIC sal_uInt16 Parse(
+                    const OUString&, ScDocument* = NULL,
+                    const Details& rDetails = detailsOOOa1,
+                    ExternalInfo* pExtInfo = NULL,
+                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
-    SC_DLLPUBLIC OUString Format( sal_uInt16 = 0, const ScDocument* = NULL,
-                 const Details& rDetails = detailsOOOa1) const;
+    SC_DLLPUBLIC OUString Format( sal_uInt16 nFlags = 0,
+                                  const ScDocument* pDocument = NULL,
+                                  const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
-    SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
-    inline bool operator==( const ScAddress& r ) const;
-    inline bool operator!=( const ScAddress& r ) const;
-    inline bool operator<( const ScAddress& r ) const;
-    inline bool operator<=( const ScAddress& r ) const;
-    inline bool operator>( const ScAddress& r ) const;
-    inline bool operator>=( const ScAddress& r ) const;
+    SC_DLLPUBLIC bool Move( SCsCOL nDeltaX, SCsROW nDeltaY, SCsTAB nDeltaZ,
+                            ScDocument* pDocument = NULL );
+
+    inline bool operator==( const ScAddress& rAddress ) const;
+    inline bool operator!=( const ScAddress& rAddress ) const;
+    inline bool operator<( const ScAddress& rAddress ) const;
+    inline bool operator<=( const ScAddress& rAddress ) const;
+    inline bool operator>( const ScAddress& rAddress ) const;
+    inline bool operator>=( const ScAddress& rAddress ) const;
 
     inline size_t hash() const;
 
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
     OUString GetColRowString( bool bAbsolute = false,
-                            const Details& rDetails = detailsOOOa1) const;
+                              const Details& rDetails = detailsOOOa1) const;
 };
 
-inline void ScAddress::PutInOrder( ScAddress& r )
+inline void ScAddress::PutInOrder( ScAddress& rAddress )
 {
-    if ( r.Col() < Col() )
+    if ( rAddress.Col() < Col() )
     {
-        SCCOL nTmp = r.Col();
-        r.SetCol( Col() );
+        SCCOL nTmp = rAddress.Col();
+        rAddress.SetCol( Col() );
         SetCol( nTmp );
     }
-    if ( r.Row() < Row() )
+    if ( rAddress.Row() < Row() )
     {
-        SCROW nTmp = r.Row();
-        r.SetRow( Row() );
+        SCROW nTmp = rAddress.Row();
+        rAddress.SetRow( Row() );
         SetRow( nTmp );
     }
-    if ( r.Tab() < Tab() )
+    if ( rAddress.Tab() < Tab() )
     {
-        SCTAB nTmp = r.Tab();
-        r.SetTab( Tab() );
+        SCTAB nTmp = rAddress.Tab();
+        rAddress.SetTab( Tab() );
         SetTab( nTmp );
     }
 }
@@ -335,52 +387,52 @@ inline void ScAddress::Set( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
     nTab = nTabP;
 }
 
-inline ScAddress& ScAddress::operator=( const ScAddress& r )
+inline ScAddress& ScAddress::operator=( const ScAddress& rAddress )
 {
-    nCol = r.nCol;
-    nRow = r.nRow;
-    nTab = r.nTab;
+    nCol = rAddress.nCol;
+    nRow = rAddress.nRow;
+    nTab = rAddress.nTab;
     return *this;
 }
 
-inline bool ScAddress::operator==( const ScAddress& r ) const
+inline bool ScAddress::operator==( const ScAddress& rAddress ) const
 {
-    return nRow == r.nRow && nCol == r.nCol && nTab == r.nTab;
+    return nRow == rAddress.nRow && nCol == rAddress.nCol && nTab == rAddress.nTab;
 }
 
-inline bool ScAddress::operator!=( const ScAddress& r ) const
+inline bool ScAddress::operator!=( const ScAddress& rAddress ) const
 {
-    return !operator==( r );
+    return !operator==( rAddress );
 }
 
 /** Same behavior as the old sal_uInt32 nAddress < r.nAddress with encoded
     tab|col|row bit fields. */
-inline bool ScAddress::operator<( const ScAddress& r ) const
+inline bool ScAddress::operator<( const ScAddress& rAddress ) const
 {
-    if (nTab == r.nTab)
+    if (nTab == rAddress.nTab)
     {
-        if (nCol == r.nCol)
-            return nRow < r.nRow;
+        if (nCol == rAddress.nCol)
+            return nRow < rAddress.nRow;
         else
-            return nCol < r.nCol;
+            return nCol < rAddress.nCol;
     }
     else
-        return nTab < r.nTab;
+        return nTab < rAddress.nTab;
 }
 
-inline bool ScAddress::operator<=( const ScAddress& r ) const
+inline bool ScAddress::operator<=( const ScAddress& rAddress ) const
 {
-    return operator<( r ) || operator==( r );
+    return operator<( rAddress ) || operator==( rAddress );
 }
 
-inline bool ScAddress::operator>( const ScAddress& r ) const
+inline bool ScAddress::operator>( const ScAddress& rAddress ) const
 {
-    return !operator<=( r );
+    return !operator<=( rAddress );
 }
 
-inline bool ScAddress::operator>=( const ScAddress& r ) const
+inline bool ScAddress::operator>=( const ScAddress& rAddress ) const
 {
-    return !operator<( r );
+    return !operator<( rAddress );
 }
 
 inline size_t ScAddress::hash() const
@@ -397,9 +449,9 @@ inline size_t ScAddress::hash() const
 
 struct ScAddressHashFunctor
 {
-    size_t operator()( const ScAddress & rAdr ) const
+    size_t operator()( const ScAddress & rAddress ) const
     {
-        return rAdr.hash();
+        return rAddress.hash();
     }
 };
 
@@ -411,52 +463,80 @@ struct ScAddressEqualFunctor
     }
 };
 
-inline bool ValidAddress( const ScAddress& rAddr )
+inline bool ValidAddress( const ScAddress& rAddress )
 {
-    return ValidCol(rAddr.Col()) && ValidRow(rAddr.Row()) && ValidTab(rAddr.Tab());
+    return ValidCol(rAddress.Col()) && ValidRow(rAddress.Row()) && ValidTab(rAddress.Tab());
 }
 
 //  ScRange
 class ScRange
 {
 public:
-    ScAddress aStart, aEnd;
-    inline ScRange() : aStart(), aEnd() {}
-    inline ScRange( ScAddress::Uninitialized e )
-        : aStart( e ), aEnd( e ) {}
-    inline ScRange( ScAddress::InitializeInvalid e )
-        : aStart( e ), aEnd( e ) {}
-    inline ScRange( const ScAddress& s, const ScAddress& e )
-        : aStart( s ), aEnd( e ) { aStart.PutInOrder( aEnd ); }
-    inline ScRange( const ScRange& r ) : aStart( r.aStart ), aEnd( r.aEnd ) {}
-    inline ScRange( const ScAddress& r ) : aStart( r ), aEnd( r ) {}
-    inline ScRange( SCCOL nCol, SCROW nRow, SCTAB nTab )
-        : aStart( nCol, nRow, nTab ), aEnd( aStart ) {}
-    inline ScRange( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-             SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
-        : aStart( nCol1, nRow1, nTab1 ), aEnd( nCol2, nRow2, nTab2 ) {}
+    ScAddress aStart;
+    ScAddress aEnd;
 
-    inline ScRange& operator=( const ScRange& r )
-    { aStart = r.aStart; aEnd = r.aEnd; return *this; }
+    inline ScRange() :
+        aStart(), aEnd()
+    {}
+
+    inline ScRange( ScAddress::Uninitialized eUninitialized ) :
+        aStart( eUninitialized ), aEnd( eUninitialized )
+    {}
+    inline ScRange( ScAddress::InitializeInvalid eInvalid ) :
+        aStart( eInvalid ), aEnd( eInvalid )
+    {}
+    inline ScRange( const ScAddress& aInputStart, const ScAddress& aInputEnd ) :
+        aStart( aInputStart ), aEnd( aInputEnd )
+    {
+        aStart.PutInOrder( aEnd );
+    }
+    inline ScRange( const ScRange& rRange ) :
+        aStart( rRange.aStart ), aEnd( rRange.aEnd )
+    {}
+    inline ScRange( const ScAddress& rRange ) :
+        aStart( rRange ), aEnd( rRange )
+    {}
+    inline ScRange( SCCOL nCol, SCROW nRow, SCTAB nTab ) :
+        aStart( nCol, nRow, nTab ), aEnd( aStart )
+    {}
+    inline ScRange( SCCOL nCol1, SCROW nRow1, SCTAB nTab1, SCCOL nCol2, SCROW nRow2, SCTAB nTab2 ) :
+        aStart( nCol1, nRow1, nTab1 ), aEnd( nCol2, nRow2, nTab2 )
+    {}
+
+    inline ScRange& operator=( const ScRange& rRange )
+    {
+        aStart = rRange.aStart;
+        aEnd = rRange.aEnd;
+        return *this;
+    }
     inline ScRange& operator=( const ScAddress& rPos )
-    { aStart = aEnd = rPos; return *this; }
-    inline void SetInvalid() { aStart.SetInvalid(); aEnd.SetInvalid(); }
-    inline bool IsValid() const { return aStart.IsValid() && aEnd.IsValid(); }
+    {
+        aStart = aEnd = rPos;
+        return *this;
+    }
+    inline void SetInvalid()
+    {
+        aStart.SetInvalid();
+        aEnd.SetInvalid();
+    }
+    inline bool IsValid() const
+    {
+        return aStart.IsValid() && aEnd.IsValid();
+    }
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
     SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = NULL,
-                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
-                  ScAddress::ExternalInfo* pExtInfo = NULL,
-                  const ::com::sun::star::uno::Sequence<
-                    com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+                                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                                   ScAddress::ExternalInfo* pExtInfo = NULL,
+                                   const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
     SC_DLLPUBLIC sal_uInt16 ParseAny( const OUString&, ScDocument* = NULL,
-                     const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+                                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = NULL,
-                     const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC sal_uInt16 ParseRows( const OUString&, ScDocument* = NULL,
-                     const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
+                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
         separator '!', including detection of external documents and sheet
@@ -478,29 +558,29 @@ public:
             Or NULL if a 3D sheet header could be parsed but
             bOnlyAcceptSingle==true was given.
      */
-    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDoc,
-            OUString& rExternDocName, OUString& rStartTabName, OUString& rEndTabName, sal_uInt16& nFlags,
-            bool bOnlyAcceptSingle,
-            const ::com::sun::star::uno::Sequence<
-                com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDocument,
+                                        OUString& rExternDocName, OUString& rStartTabName,
+                                        OUString& rEndTabName, sal_uInt16& nFlags,
+                                        bool bOnlyAcceptSingle,
+                                        const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
-    SC_DLLPUBLIC OUString Format(sal_uInt16 = 0, const ScDocument* = NULL,
-                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
+    SC_DLLPUBLIC OUString Format(sal_uInt16 nFlags= 0, const ScDocument* pDocument = NULL,
+                                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
-        SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
+                         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
     // The document for the maximum defined sheet number
-    SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
+    SC_DLLPUBLIC bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ, ScDocument* pDocument = NULL );
     SC_DLLPUBLIC void Justify();
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
-    SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    // do two ranges intersect?
+    SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
     void PutInOrder();
-    inline bool operator==( const ScRange& r ) const;
-    inline bool operator!=( const ScRange& r ) const;
-    inline bool operator<( const ScRange& r ) const;
-    inline bool operator<=( const ScRange& r ) const;
-    inline bool operator>( const ScRange& r ) const;
-    inline bool operator>=( const ScRange& r ) const;
+    inline bool operator==( const ScRange& rRange ) const;
+    inline bool operator!=( const ScRange& rRange ) const;
+    inline bool operator<( const ScRange& rRange ) const;
+    inline bool operator<=( const ScRange& rRange ) const;
+    inline bool operator>( const ScRange& rRange ) const;
+    inline bool operator>=( const ScRange& rRange ) const;
 
     /// Hash 2D area ignoring table number.
     inline size_t hashArea() const;
@@ -509,20 +589,20 @@ public:
 };
 
 inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
-        SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const
+                              SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const
 {
     aStart.GetVars( nCol1, nRow1, nTab1 );
     aEnd.GetVars( nCol2, nRow2, nTab2 );
 }
 
-inline bool ScRange::operator==( const ScRange& r ) const
+inline bool ScRange::operator==( const ScRange& rRange ) const
 {
-    return ( (aStart == r.aStart) && (aEnd == r.aEnd) );
+    return ( (aStart == rRange.aStart) && (aEnd == rRange.aEnd) );
 }
 
-inline bool ScRange::operator!=( const ScRange& r ) const
+inline bool ScRange::operator!=( const ScRange& rRange ) const
 {
-    return !operator==( r );
+    return !operator==( rRange );
 }
 
 /// Sort on upper left corner, if equal then use lower right too.
@@ -531,35 +611,35 @@ inline bool ScRange::operator<( const ScRange& r ) const
     return aStart < r.aStart || (aStart == r.aStart && aEnd < r.aEnd) ;
 }
 
-inline bool ScRange::operator<=( const ScRange& r ) const
+inline bool ScRange::operator<=( const ScRange& rRange ) const
 {
-    return operator<( r ) || operator==( r );
+    return operator<( rRange ) || operator==( rRange );
 }
 
-inline bool ScRange::operator>( const ScRange& r ) const
+inline bool ScRange::operator>( const ScRange& rRange ) const
 {
-    return !operator<=( r );
+    return !operator<=( rRange );
 }
 
-inline bool ScRange::operator>=( const ScRange& r ) const
+inline bool ScRange::operator>=( const ScRange& rRange ) const
 {
-    return !operator<( r );
+    return !operator<( rRange );
 }
 
-inline bool ScRange::In( const ScAddress& rAddr ) const
+inline bool ScRange::In( const ScAddress& rAddress ) const
 {
     return
-        aStart.Col() <= rAddr.Col() && rAddr.Col() <= aEnd.Col() &&
-        aStart.Row() <= rAddr.Row() && rAddr.Row() <= aEnd.Row() &&
-        aStart.Tab() <= rAddr.Tab() && rAddr.Tab() <= aEnd.Tab();
+        aStart.Col() <= rAddress.Col() && rAddress.Col() <= aEnd.Col() &&
+        aStart.Row() <= rAddress.Row() && rAddress.Row() <= aEnd.Row() &&
+        aStart.Tab() <= rAddress.Tab() && rAddress.Tab() <= aEnd.Tab();
 }
 
-inline bool ScRange::In( const ScRange& r ) const
+inline bool ScRange::In( const ScRange& rRange ) const
 {
     return
-        aStart.Col() <= r.aStart.Col() && r.aEnd.Col() <= aEnd.Col() &&
-        aStart.Row() <= r.aStart.Row() && r.aEnd.Row() <= aEnd.Row() &&
-        aStart.Tab() <= r.aStart.Tab() && r.aEnd.Tab() <= aEnd.Tab();
+        aStart.Col() <= rRange.aStart.Col() && rRange.aEnd.Col() <= aEnd.Col() &&
+        aStart.Row() <= rRange.aStart.Row() && rRange.aEnd.Row() <= aEnd.Row() &&
+        aStart.Tab() <= rRange.aStart.Tab() && rRange.aEnd.Tab() <= aEnd.Tab();
 }
 
 inline size_t ScRange::hashArea() const
@@ -574,8 +654,8 @@ inline size_t ScRange::hashArea() const
     return
         (static_cast<size_t>(aStart.Row()) << 26) ^ // start row <= 2^6
         (static_cast<size_t>(aStart.Col()) << 21) ^ // start column <= 2^5
-        (static_cast<size_t>(aEnd.Col()) << 15) ^   // end column <= 2^6
-        static_cast<size_t>(aEnd.Row());            // end row <= 2^15
+        (static_cast<size_t>(aEnd.Col())   << 15) ^ // end column <= 2^6
+         static_cast<size_t>(aEnd.Row());           // end row <= 2^15
 }
 
 inline size_t ScRange::hashStartColumn() const
@@ -586,7 +666,7 @@ inline size_t ScRange::hashStartColumn() const
     return
         (static_cast<size_t>(aStart.Col()) << 24) ^ // start column <= 2^8
         (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
-        static_cast<size_t>(aEnd.Row());
+         static_cast<size_t>(aEnd.Row());
 }
 
 struct ScRangeHashAreaFunctor
@@ -617,87 +697,136 @@ private:
     ScRange aRange[2];
 
 public:
-    ScRangePair() {}
+    ScRangePair()
+    {}
     ScRangePair( const ScRangePair& r )
-        { aRange[0] = r.aRange[0]; aRange[1] = r.aRange[1]; }
-    ScRangePair( const ScRange& r1, const ScRange& r2 )
-        {  aRange[0] = r1; aRange[1] = r2; }
+    {
+        aRange[0] = r.aRange[0];
+        aRange[1] = r.aRange[1];
+    }
+    ScRangePair( const ScRange& rRange1, const ScRange& rRange2 )
+    {
+        aRange[0] = rRange1;
+        aRange[1] = rRange2;
+    }
 
-    inline ScRangePair& operator= ( const ScRangePair& r );
-    const ScRange&      GetRange( sal_uInt16 n ) const { return aRange[n]; }
-    ScRange&            GetRange( sal_uInt16 n ) { return aRange[n]; }
+    inline ScRangePair& operator= ( const ScRangePair& rRange );
+    const ScRange& GetRange( sal_uInt16 n ) const
+    {
+        return aRange[n];
+    }
+    ScRange& GetRange( sal_uInt16 n )
+    {
+        return aRange[n];
+    }
     inline bool operator==( const ScRangePair& ) const;
     inline bool operator!=( const ScRangePair& ) const;
 };
 
-inline ScRangePair& ScRangePair::operator= ( const ScRangePair& r )
+inline ScRangePair& ScRangePair::operator= ( const ScRangePair& rRange )
 {
-    aRange[0] = r.aRange[0];
-    aRange[1] = r.aRange[1];
+    aRange[0] = rRange.aRange[0];
+    aRange[1] = rRange.aRange[1];
     return *this;
 }
 
-inline bool ScRangePair::operator==( const ScRangePair& r ) const
+inline bool ScRangePair::operator==( const ScRangePair& rRange ) const
 {
-    return ( (aRange[0] == r.aRange[0]) && (aRange[1] == r.aRange[1]) );
+    return (aRange[0] == rRange.aRange[0]) &&
+           (aRange[1] == rRange.aRange[1]);
 }
 
-inline bool ScRangePair::operator!=( const ScRangePair& r ) const
+inline bool ScRangePair::operator!=( const ScRangePair& rRange ) const
 {
-    return !operator==( r );
+    return !operator==( rRange );
 }
 
 //  ScRefAddress
 class ScRefAddress
 {
-            ScAddress           aAdr;
-            bool                bRelCol;
-            bool                bRelRow;
-            bool                bRelTab;
+private:
+    ScAddress           aAdr;
+    bool                bRelCol;
+    bool                bRelRow;
+    bool                bRelTab;
 public:
-    inline ScRefAddress() : bRelCol(false), bRelRow(false), bRelTab(false)
-        {}
+    inline ScRefAddress() :
+        bRelCol(false), bRelRow(false), bRelTab(false)
+    {}
     inline ScRefAddress( SCCOL nCol, SCROW nRow, SCTAB nTab,
-            bool bRelColP, bool bRelRowP, bool bRelTabP ) :
+                         bool bRelColP, bool bRelRowP, bool bRelTabP ) :
         aAdr(nCol, nRow, nTab),
         bRelCol(bRelColP), bRelRow(bRelRowP), bRelTab(bRelTabP)
-        {}
+    {}
     inline ScRefAddress( const ScAddress& rAdr,
-            bool bRelColP, bool bRelRowP, bool bRelTabP ) :
+                         bool bRelColP, bool bRelRowP, bool bRelTabP ) :
         aAdr(rAdr),
         bRelCol(bRelColP), bRelRow(bRelRowP), bRelTab(bRelTabP)
-        {}
+    {}
     inline ScRefAddress( const ScRefAddress& rRef ) :
-            aAdr(rRef.aAdr), bRelCol(rRef.bRelCol), bRelRow(rRef.bRelRow),
-            bRelTab(rRef.bRelTab)
-            {}
+        aAdr(rRef.aAdr), bRelCol(rRef.bRelCol), bRelRow(rRef.bRelRow),
+        bRelTab(rRef.bRelTab)
+    {}
 
-    inline  ScRefAddress&   operator=( const ScRefAddress& );
+    inline ScRefAddress& operator=( const ScRefAddress& );
 
-    inline  bool    IsRelCol() const { return bRelCol; }
-    inline  bool    IsRelRow() const { return bRelRow; }
-    inline  bool    IsRelTab() const { return bRelTab; }
+    inline bool IsRelCol() const
+    {
+        return bRelCol;
+    }
+    inline bool IsRelRow() const
+    {
+        return bRelRow;
+    }
+    inline bool IsRelTab() const
+    {
+        return bRelTab;
+    }
 
-    inline  void    SetRelCol(bool bNewRelCol) { bRelCol = bNewRelCol; }
-    inline  void    SetRelRow(bool bNewRelRow) { bRelRow = bNewRelRow; }
-    inline  void    SetRelTab(bool bNewRelTab) { bRelTab = bNewRelTab; }
+    inline void SetRelCol(bool bNewRelCol)
+    {
+        bRelCol = bNewRelCol;
+    }
+    inline void SetRelRow(bool bNewRelRow)
+    {
+        bRelRow = bNewRelRow;
+    }
+    inline void SetRelTab(bool bNewRelTab)
+    {
+        bRelTab = bNewRelTab;
+    }
 
-    inline  void    Set( const ScAddress& rAdr,
-                        bool bNewRelCol, bool bNewRelRow, bool bNewRelTab );
-    inline  void    Set( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                        bool bNewRelCol, bool bNewRelRow, bool bNewRelTab );
+    inline void Set( const ScAddress& rAdr,
+                     bool bNewRelCol, bool bNewRelRow, bool bNewRelTab );
+    inline void Set( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
+                     bool bNewRelCol, bool bNewRelRow, bool bNewRelTab );
 
-    inline  const ScAddress&    GetAddress() const { return aAdr; }
-    inline  SCCOL   Col() const { return aAdr.Col(); }
-    inline  SCROW   Row() const { return aAdr.Row(); }
-    inline  SCTAB   Tab() const { return aAdr.Tab(); }
+    inline const ScAddress& GetAddress() const
+    {
+        return aAdr;
+    }
 
-    inline  bool    operator == ( const ScRefAddress& r ) const;
-    inline  bool    operator != ( const ScRefAddress& r ) const
-                    { return !(operator==(r)); }
+    inline SCCOL Col() const
+    {
+        return aAdr.Col();
+    }
+    inline SCROW Row() const
+    {
+        return aAdr.Row();
+    }
+    inline SCTAB Tab() const
+    {
+        return aAdr.Tab();
+    }
 
-            OUString  GetRefString( ScDocument* pDoc, SCTAB nActTab,
-                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
+    inline bool operator == ( const ScRefAddress& r ) const;
+    inline bool operator != ( const ScRefAddress& r ) const
+    {
+        return !(operator==(r));
+    }
+
+    OUString  GetRefString( ScDocument* pDocument, SCTAB nActTab,
+                            const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 };
 
 inline ScRefAddress& ScRefAddress::operator=( const ScRefAddress& rRef )
@@ -710,7 +839,7 @@ inline ScRefAddress& ScRefAddress::operator=( const ScRefAddress& rRef )
 }
 
 inline void ScRefAddress::Set( const ScAddress& rAdr,
-        bool bNewRelCol, bool bNewRelRow, bool bNewRelTab )
+                               bool bNewRelCol, bool bNewRelRow, bool bNewRelTab )
 {
     aAdr = rAdr;
     bRelCol = bNewRelCol;
@@ -719,7 +848,7 @@ inline void ScRefAddress::Set( const ScAddress& rAdr,
 }
 
 inline void ScRefAddress::Set( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-        bool bNewRelCol, bool bNewRelRow, bool bNewRelTab )
+                               bool bNewRelCol, bool bNewRelRow, bool bNewRelTab )
 {
     aAdr.Set( nNewCol, nNewRow, nNewTab);
     bRelCol = bNewRelCol;
@@ -727,10 +856,12 @@ inline void ScRefAddress::Set( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
     bRelTab = bNewRelTab;
 }
 
-inline bool ScRefAddress::operator==( const ScRefAddress& r ) const
+inline bool ScRefAddress::operator==( const ScRefAddress& rRefAddress ) const
 {
-    return aAdr == r.aAdr && bRelCol == r.bRelCol && bRelRow == r.bRelRow &&
-        bRelTab == r.bRelTab;
+    return aAdr == rRefAddress.aAdr &&
+           bRelCol == rRefAddress.bRelCol &&
+           bRelRow == rRefAddress.bRelRow &&
+           bRelTab == rRefAddress.bRelTab;
 }
 
 // Global functions
@@ -751,16 +882,16 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
     }
 }
 
-bool ConvertSingleRef( ScDocument* pDoc, const OUString& rRefString,
-        SCTAB nDefTab, ScRefAddress& rRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
-        ScAddress::ExternalInfo* pExtInfo = NULL );
+bool ConvertSingleRef( ScDocument* pDocument, const OUString& rRefString,
+                       SCTAB nDefTab, ScRefAddress& rRefAddress,
+                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                       ScAddress::ExternalInfo* pExtInfo = NULL );
 
-bool ConvertDoubleRef(ScDocument* pDoc, const OUString& rRefString,
-        SCTAB nDefTab, ScRefAddress& rStartRefAddress,
-        ScRefAddress& rEndRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
-        ScAddress::ExternalInfo* pExtInfo = NULL );
+bool ConvertDoubleRef( ScDocument* pDocument, const OUString& rRefString,
+                       SCTAB nDefTab, ScRefAddress& rStartRefAddress,
+                       ScRefAddress& rEndRefAddress,
+                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+                       ScAddress::ExternalInfo* pExtInfo = NULL );
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);

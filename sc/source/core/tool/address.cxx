@@ -34,7 +34,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 
-using namespace ::com::sun::star;
+using namespace css;
 
 const ScAddress::Details ScAddress::detailsOOOa1( formula::FormulaGrammar::CONV_OOO, 0, 0 );
 
@@ -43,8 +43,7 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
     eConv( pDoc->GetAddressConvention() ),
     nRow( rAddr.Row() ),
     nCol( rAddr.Col() )
-{
-}
+{}
 
 namespace {
 
@@ -130,9 +129,7 @@ const sal_Unicode* parseQuotedName( const sal_Unicode* p, OUString& rName )
 
 }
 
-static long int
-sal_Unicode_strtol ( const sal_Unicode*  p,
-                     const sal_Unicode** pEnd )
+static long int sal_Unicode_strtol ( const sal_Unicode*  p, const sal_Unicode** pEnd )
 {
     long int accum = 0, prev = 0;
     bool is_neg = false;
@@ -180,13 +177,13 @@ static const sal_Unicode* lcl_eatWhiteSpace( const sal_Unicode* p )
              result in the identical file ID. Else <TRUE/>.
  */
 static bool lcl_ScRange_External_TabSpan(
-        ScRange & rRange,
-        sal_uInt16 & rFlags,
-        ScAddress::ExternalInfo* pExtInfo,
-        const OUString & rExternDocName,
-        const OUString & rStartTabName,
-        const OUString & rEndTabName,
-        ScDocument* pDoc )
+                            ScRange & rRange,
+                            sal_uInt16 & rFlags,
+                            ScAddress::ExternalInfo* pExtInfo,
+                            const OUString & rExternDocName,
+                            const OUString & rStartTabName,
+                            const OUString & rEndTabName,
+                            ScDocument* pDoc )
 {
     if (rExternDocName.isEmpty())
         return !pExtInfo || !pExtInfo->mbExternal;
@@ -258,11 +255,10 @@ static bool lcl_ScRange_External_TabSpan(
         Starting _within_ a quoted name, but still may be 3D; quoted name stops
         at pMsoxlQuoteStop
  */
-static const sal_Unicode *
-lcl_XL_ParseSheetRef( const sal_Unicode* start,
-                      OUString& rExternTabName,
-                      bool allow_3d,
-                      const sal_Unicode* pMsoxlQuoteStop )
+static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
+                                                 OUString& rExternTabName,
+                                                 bool bAllow3D,
+                                                 const sal_Unicode* pMsoxlQuoteStop )
 {
     OUString aTabName;
     const sal_Unicode *p = start;
@@ -296,8 +292,8 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
             return NULL;
         if (p == pMsoxlQuoteStop)
             ++p;    // position on ! of ...'!...
-        if( *p != '!' && ( !allow_3d || *p != ':' ) )
-            return (!allow_3d && *p == ':') ? p : start;
+        if( *p != '!' && ( !bAllow3D || *p != ':' ) )
+            return (!bAllow3D && *p == ':') ? p : start;
     }
     else if( *p == '\'')
     {
@@ -360,8 +356,8 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 break;
         }
 
-        if( *p != '!' && ( !allow_3d || *p != ':' ) )
-            return (!allow_3d && *p == ':') ? p : start;
+        if( *p != '!' && ( !bAllow3D || *p != ':' ) )
+            return (!bAllow3D && *p == ':') ? p : start;
 
         aTabName += OUString( start, sal::static_int_cast<sal_Int32>( p - start ) );
     }
@@ -383,7 +379,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
     name is not numeric.
  */
 static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExternDocName,
-        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+                                   const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     // 1-based, sequence starts with an empty element.
     if (pExternalLinks && pExternalLinks->hasElements())
@@ -427,14 +423,14 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
 }
 
 const sal_Unicode* ScRange::Parse_XL_Header(
-        const sal_Unicode* p,
-        const ScDocument* pDoc,
-        OUString& rExternDocName,
-        OUString& rStartTabName,
-        OUString& rEndTabName,
-        sal_uInt16& nFlags,
-        bool bOnlyAcceptSingle,
-        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+                                const sal_Unicode* p,
+                                const ScDocument* pDoc,
+                                OUString& rExternDocName,
+                                OUString& rStartTabName,
+                                OUString& rEndTabName,
+                                sal_uInt16& nFlags,
+                                bool bOnlyAcceptSingle,
+                                const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     const sal_Unicode* startTabs, *start = p;
     sal_uInt16 nSaveFlags = nFlags;
@@ -607,10 +603,9 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     return p;
 }
 
-static const sal_Unicode*
-lcl_r1c1_get_col( const sal_Unicode* p,
-                  const ScAddress::Details& rDetails,
-                  ScAddress* pAddr, sal_uInt16* nFlags )
+static const sal_Unicode* lcl_r1c1_get_col( const sal_Unicode* p,
+                                            const ScAddress::Details& rDetails,
+                                            ScAddress* pAddr, sal_uInt16* nFlags )
 {
     const sal_Unicode *pEnd;
     long int n;
@@ -652,10 +647,11 @@ lcl_r1c1_get_col( const sal_Unicode* p,
 
     return pEnd;
 }
-static inline const sal_Unicode*
-lcl_r1c1_get_row( const sal_Unicode* p,
-                  const ScAddress::Details& rDetails,
-                  ScAddress* pAddr, sal_uInt16* nFlags )
+
+static inline const sal_Unicode* lcl_r1c1_get_row(
+                                    const sal_Unicode* p,
+                                    const ScAddress::Details& rDetails,
+                                    ScAddress* pAddr, sal_uInt16* nFlags )
 {
     const sal_Unicode *pEnd;
     long int n;
@@ -698,13 +694,12 @@ lcl_r1c1_get_row( const sal_Unicode* p,
     return pEnd;
 }
 
-static sal_uInt16
-lcl_ScRange_Parse_XL_R1C1( ScRange& r,
-                           const sal_Unicode* p,
-                           ScDocument* pDoc,
-                           const ScAddress::Details& rDetails,
-                           bool bOnlyAcceptSingle,
-                           ScAddress::ExternalInfo* pExtInfo )
+static sal_uInt16 lcl_ScRange_Parse_XL_R1C1( ScRange& r,
+                                             const sal_Unicode* p,
+                                             ScDocument* pDoc,
+                                             const ScAddress::Details& rDetails,
+                                             bool bOnlyAcceptSingle,
+                                             ScAddress::ExternalInfo* pExtInfo )
 {
     const sal_Unicode* pTmp = NULL;
     OUString aExternDocName, aStartTabName, aEndTabName;
@@ -725,7 +720,7 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     if( *p == 'R' || *p == 'r' )
     {
         if( NULL == (p = lcl_r1c1_get_row( p, rDetails, &r.aStart, &nFlags )) )
-            goto failed;
+            return 0;
 
         if( *p != 'C' && *p != 'c' )    // full row R#
         {
@@ -761,7 +756,9 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             return bOnlyAcceptSingle ? 0 : nFlags;
         }
         else if( NULL == (p = lcl_r1c1_get_col( p, rDetails, &r.aStart, &nFlags )))
-            goto failed;
+        {
+            return 0;
+        }
 
         if( p[0] != ':' ||
             (p[1] != 'R' && p[1] != 'r') ||
@@ -798,7 +795,7 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     else if( *p == 'C' || *p == 'c' )   // full col C#
     {
         if( NULL == (p = lcl_r1c1_get_col( p, rDetails, &r.aStart, &nFlags )))
-            goto failed;
+            return 0;
 
         if( p[0] != ':' || (p[1] != 'C' && p[1] != 'c') ||
             NULL == (pTmp = lcl_r1c1_get_col( p+1, rDetails, &r.aEnd, &nFlags2 )))
@@ -829,12 +826,12 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         return bOnlyAcceptSingle ? 0 : nFlags;
     }
 
-failed :
     return 0;
 }
 
-static inline const sal_Unicode*
-lcl_a1_get_col( const sal_Unicode* p, ScAddress* pAddr, sal_uInt16* nFlags )
+static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
+                                                 ScAddress* pAddr,
+                                                 sal_uInt16* nFlags )
 {
     SCCOL nCol;
 
@@ -856,8 +853,9 @@ lcl_a1_get_col( const sal_Unicode* p, ScAddress* pAddr, sal_uInt16* nFlags )
     return p;
 }
 
-static inline const sal_Unicode*
-lcl_a1_get_row( const sal_Unicode* p, ScAddress* pAddr, sal_uInt16* nFlags )
+static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
+                                                 ScAddress* pAddr,
+                                                 sal_uInt16* nFlags )
 {
     const sal_Unicode *pEnd;
     long int n;
@@ -875,13 +873,12 @@ lcl_a1_get_row( const sal_Unicode* p, ScAddress* pAddr, sal_uInt16* nFlags )
     return pEnd;
 }
 
-static sal_uInt16
-lcl_ScRange_Parse_XL_A1( ScRange& r,
-                         const sal_Unicode* p,
-                         ScDocument* pDoc,
-                         bool bOnlyAcceptSingle,
-                         ScAddress::ExternalInfo* pExtInfo,
-                         const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
+                                           const sal_Unicode* p,
+                                           ScDocument* pDoc,
+                                           bool bOnlyAcceptSingle,
+                                           ScAddress::ExternalInfo* pExtInfo,
+                                           const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     const sal_Unicode* tmp1, *tmp2;
     OUString aExternDocName, aStartTabName, aEndTabName; // for external link table
@@ -1022,9 +1019,8 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
                     used in conjunction with pExtInfo to determine the tab span
                     of a 3D reference.
  */
-static sal_uInt16
-lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
-                         ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
+static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
+                                           ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
 {
     sal_uInt16  nRes = 0;
     OUString aDocName;       // der pure Dokumentenname
@@ -1266,38 +1262,37 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
     return nRes;
 }
 
-static sal_uInt16
-lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
-                      const ScAddress::Details& rDetails,
-                      ScAddress::ExternalInfo* pExtInfo = NULL,
-                      const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = NULL )
+static sal_uInt16 lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
+                                        const ScAddress::Details& rDetails,
+                                        ScAddress::ExternalInfo* pExtInfo = NULL,
+                                        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = NULL )
 {
     if( !*p )
         return 0;
 
     switch (rDetails.eConv)
     {
-    default :
-    case formula::FormulaGrammar::CONV_OOO:
+        case formula::FormulaGrammar::CONV_XL_A1:
+        case formula::FormulaGrammar::CONV_XL_OOX:
+        {
+            ScRange rRange = rAddr;
+            sal_uInt16 nFlags = lcl_ScRange_Parse_XL_A1(
+                                    rRange, p, pDoc, true, pExtInfo,
+                                    (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : NULL) );
+            rAddr = rRange.aStart;
+            return nFlags;
+        }
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+        {
+            ScRange rRange = rAddr;
+            sal_uInt16 nFlags = lcl_ScRange_Parse_XL_R1C1( rRange, p, pDoc, rDetails, true, pExtInfo );
+            rAddr = rRange.aStart;
+            return nFlags;
+        }
+        default :
+        case formula::FormulaGrammar::CONV_OOO:
         {
             return lcl_ScAddress_Parse_OOo( p, pDoc, rAddr, pExtInfo, NULL );
-        }
-
-    case formula::FormulaGrammar::CONV_XL_A1:
-    case formula::FormulaGrammar::CONV_XL_OOX:
-        {
-            ScRange r = rAddr;
-            sal_uInt16 nFlags = lcl_ScRange_Parse_XL_A1( r, p, pDoc, true, pExtInfo,
-                    (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : NULL) );
-            rAddr = r.aStart;
-            return nFlags;
-        }
-    case formula::FormulaGrammar::CONV_XL_R1C1:
-        {
-            ScRange r = rAddr;
-            sal_uInt16 nFlags = lcl_ScRange_Parse_XL_R1C1( r, p, pDoc, rDetails, true, pExtInfo );
-            rAddr = r.aStart;
-            return nFlags;
         }
     }
 }
@@ -1351,19 +1346,19 @@ bool ConvertDoubleRef( ScDocument* pDoc, const OUString& rRefString, SCTAB nDefT
 }
 
 sal_uInt16 ScAddress::Parse( const OUString& r, ScDocument* pDoc,
-                         const Details& rDetails,
-                         ExternalInfo* pExtInfo,
-                         const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+                             const Details& rDetails,
+                             ExternalInfo* pExtInfo,
+                             const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     return lcl_ScAddress_Parse( r.getStr(), pDoc, *this, rDetails, pExtInfo, pExternalLinks );
 }
 
-bool ScRange::Intersects( const ScRange& r ) const
+bool ScRange::Intersects( const ScRange& rRange ) const
 {
     return !(
-        std::min( aEnd.Col(), r.aEnd.Col() ) < std::max( aStart.Col(), r.aStart.Col() )
-     || std::min( aEnd.Row(), r.aEnd.Row() ) < std::max( aStart.Row(), r.aStart.Row() )
-     || std::min( aEnd.Tab(), r.aEnd.Tab() ) < std::max( aStart.Tab(), r.aStart.Tab() )
+        std::min( aEnd.Col(), rRange.aEnd.Col() ) < std::max( aStart.Col(), rRange.aStart.Col() )
+     || std::min( aEnd.Row(), rRange.aEnd.Row() ) < std::max( aStart.Row(), rRange.aStart.Row() )
+     || std::min( aEnd.Tab(), rRange.aEnd.Tab() ) < std::max( aStart.Tab(), rRange.aStart.Tab() )
         );
 }
 
@@ -1410,19 +1405,21 @@ void ScRange::ExtendTo( const ScRange& rRange )
     OSL_ENSURE( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
     if( IsValid() )
     {
-        aStart.SetCol( ::std::min( aStart.Col(), rRange.aStart.Col() ) );
-        aStart.SetRow( ::std::min( aStart.Row(), rRange.aStart.Row() ) );
-        aStart.SetTab( ::std::min( aStart.Tab(), rRange.aStart.Tab() ) );
-        aEnd.SetCol(   ::std::max( aEnd.Col(),   rRange.aEnd.Col() ) );
-        aEnd.SetRow(   ::std::max( aEnd.Row(),   rRange.aEnd.Row() ) );
-        aEnd.SetTab(   ::std::max( aEnd.Tab(),   rRange.aEnd.Tab() ) );
+        aStart.SetCol( std::min( aStart.Col(), rRange.aStart.Col() ) );
+        aStart.SetRow( std::min( aStart.Row(), rRange.aStart.Row() ) );
+        aStart.SetTab( std::min( aStart.Tab(), rRange.aStart.Tab() ) );
+        aEnd.SetCol(   std::max( aEnd.Col(),   rRange.aEnd.Col() ) );
+        aEnd.SetRow(   std::max( aEnd.Row(),   rRange.aEnd.Row() ) );
+        aEnd.SetTab(   std::max( aEnd.Tab(),   rRange.aEnd.Tab() ) );
     }
     else
         *this = rRange;
 }
 
-static sal_uInt16
-lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScAddress::ExternalInfo* pExtInfo = NULL )
+static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
+                                         const OUString& r,
+                                         ScDocument* pDoc,
+                                         ScAddress::ExternalInfo* pExtInfo = NULL )
 {
     sal_uInt16 nRes1 = 0, nRes2 = 0;
     sal_Int32 nPos = ScGlobal::FindUnquoted( r, ':');
@@ -1431,17 +1428,17 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScA
         OUStringBuffer aTmp(r);
         aTmp[nPos] = 0;
         const sal_Unicode* p = aTmp.getStr();
-        if( (nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, aRange.aStart, pExtInfo, NULL ) ) != 0 )
+        if( (nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, rRange.aStart, pExtInfo, NULL ) ) != 0 )
         {
-            aRange.aEnd = aRange.aStart;  // sheet must be initialized identical to first sheet
-            if ( (nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, aRange.aEnd, pExtInfo, &aRange ) ) != 0 )
+            rRange.aEnd = rRange.aStart;  // sheet must be initialized identical to first sheet
+            if ( (nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, rRange.aEnd, pExtInfo, &rRange ) ) != 0 )
             {
                 // PutInOrder / Justify
                 sal_uInt16 nMask, nBits1, nBits2;
                 SCCOL nTempCol;
-                if ( aRange.aEnd.Col() < (nTempCol = aRange.aStart.Col()) )
+                if ( rRange.aEnd.Col() < (nTempCol = rRange.aStart.Col()) )
                 {
-                    aRange.aStart.SetCol(aRange.aEnd.Col()); aRange.aEnd.SetCol(nTempCol);
+                    rRange.aStart.SetCol(rRange.aEnd.Col()); rRange.aEnd.SetCol(nTempCol);
                     nMask = (SCA_VALID_COL | SCA_COL_ABSOLUTE);
                     nBits1 = nRes1 & nMask;
                     nBits2 = nRes2 & nMask;
@@ -1449,9 +1446,9 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScA
                     nRes2 = (nRes2 & ~nMask) | nBits1;
                 }
                 SCROW nTempRow;
-                if ( aRange.aEnd.Row() < (nTempRow = aRange.aStart.Row()) )
+                if ( rRange.aEnd.Row() < (nTempRow = rRange.aStart.Row()) )
                 {
-                    aRange.aStart.SetRow(aRange.aEnd.Row()); aRange.aEnd.SetRow(nTempRow);
+                    rRange.aStart.SetRow(rRange.aEnd.Row()); rRange.aEnd.SetRow(nTempRow);
                     nMask = (SCA_VALID_ROW | SCA_ROW_ABSOLUTE);
                     nBits1 = nRes1 & nMask;
                     nBits2 = nRes2 & nMask;
@@ -1459,9 +1456,9 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScA
                     nRes2 = (nRes2 & ~nMask) | nBits1;
                 }
                 SCTAB nTempTab;
-                if ( aRange.aEnd.Tab() < (nTempTab = aRange.aStart.Tab()) )
+                if ( rRange.aEnd.Tab() < (nTempTab = rRange.aStart.Tab()) )
                 {
-                    aRange.aStart.SetTab(aRange.aEnd.Tab()); aRange.aEnd.SetTab(nTempTab);
+                    rRange.aStart.SetTab(rRange.aEnd.Tab()); rRange.aEnd.SetTab(nTempTab);
                     nMask = (SCA_VALID_TAB | SCA_TAB_ABSOLUTE | SCA_TAB_3D);
                     nBits1 = nRes1 & nMask;
                     nBits2 = nRes2 & nMask;
@@ -1483,42 +1480,47 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScA
     return nRes1;
 }
 
-sal_uInt16 ScRange::Parse( const OUString& r, ScDocument* pDoc,
-                       const ScAddress::Details& rDetails,
-                       ScAddress::ExternalInfo* pExtInfo,
-                       const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+sal_uInt16 ScRange::Parse( const OUString& rString, ScDocument* pDoc,
+                           const ScAddress::Details& rDetails,
+                           ScAddress::ExternalInfo* pExtInfo,
+                           const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
-    if (r.isEmpty())
+    if (rString.isEmpty())
         return 0;
 
     switch (rDetails.eConv)
     {
-    default :
-    case formula::FormulaGrammar::CONV_OOO:
-        return lcl_ScRange_Parse_OOo( *this, r, pDoc, pExtInfo );
+        case formula::FormulaGrammar::CONV_XL_A1:
+        case formula::FormulaGrammar::CONV_XL_OOX:
+        {
+            return lcl_ScRange_Parse_XL_A1( *this, rString.getStr(), pDoc, false, pExtInfo,
+                    (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : NULL) );
+        }
 
-    case formula::FormulaGrammar::CONV_XL_A1:
-    case formula::FormulaGrammar::CONV_XL_OOX:
-        return lcl_ScRange_Parse_XL_A1( *this, r.getStr(), pDoc, false, pExtInfo,
-                (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : NULL) );
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+        {
+            return lcl_ScRange_Parse_XL_R1C1( *this, rString.getStr(), pDoc, rDetails, false, pExtInfo );
+        }
 
-    case formula::FormulaGrammar::CONV_XL_R1C1:
-        return lcl_ScRange_Parse_XL_R1C1( *this, r.getStr(), pDoc, rDetails, false, pExtInfo );
+        default:
+        case formula::FormulaGrammar::CONV_OOO:
+        {
+            return lcl_ScRange_Parse_OOo( *this, rString, pDoc, pExtInfo );
+        }
     }
 }
 
 // Accept a full range, or an address
-sal_uInt16 ScRange::ParseAny( const OUString& r, ScDocument* pDoc,
-                          const ScAddress::Details& rDetails )
+sal_uInt16 ScRange::ParseAny( const OUString& rString, ScDocument* pDoc,
+                              const ScAddress::Details& rDetails )
 {
-    sal_uInt16 nRet = Parse( r, pDoc, rDetails );
-    const sal_uInt16 nValid = SCA_VALID | SCA_VALID_COL2 | SCA_VALID_ROW2 |
-        SCA_VALID_TAB2;
+    sal_uInt16 nRet = Parse( rString, pDoc, rDetails );
+    const sal_uInt16 nValid = SCA_VALID | SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
 
     if ( (nRet & nValid) != nValid )
     {
         ScAddress aAdr(aStart);//initialize with currentPos as fallback for table number
-        nRet = aAdr.Parse( r, pDoc, rDetails );
+        nRet = aAdr.Parse( rString, pDoc, rDetails );
         if ( nRet & SCA_VALID )
             aStart = aEnd = aAdr;
     }
@@ -1527,7 +1529,7 @@ sal_uInt16 ScRange::ParseAny( const OUString& r, ScDocument* pDoc,
 
 // Parse only full row references
 sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
-                           const ScAddress::Details& rDetails )
+                               const ScAddress::Details& rDetails )
 {
     if (rStr.isEmpty())
         return 0;
@@ -1586,7 +1588,7 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
 
 // Parse only full row references
 sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
-                           const ScAddress::Details& rDetails )
+                               const ScAddress::Details& rDetails )
 {
     if (rStr.isEmpty())
         return 0;
@@ -1643,59 +1645,55 @@ sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
     return (p != NULL && *p == '\0') ? nRes : 0;
 }
 
-static inline void
-lcl_a1_append_c ( OUString &r, int nCol, bool bIsAbs )
+static inline void lcl_a1_append_c ( OUString &rString, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
-        r += "$";
-    ScColToAlpha( r, sal::static_int_cast<SCCOL>(nCol) );
+        rString += "$";
+    ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
 }
 
-static inline void
-lcl_a1_append_r ( OUString &r, int nRow, bool bIsAbs )
+static inline void lcl_a1_append_r ( OUString &rString, int nRow, bool bIsAbs )
 {
     if ( bIsAbs )
-        r += "$";
-    r += OUString::number( nRow+1 );
+        rString += "$";
+    rString += OUString::number( nRow+1 );
 }
 
-static inline void
-lcl_r1c1_append_c ( OUString &r, int nCol, bool bIsAbs,
-                    const ScAddress::Details& rDetails )
+static inline void lcl_r1c1_append_c ( OUString &rString, int nCol, bool bIsAbs,
+                                       const ScAddress::Details& rDetails )
 {
-    r += "C";
+    rString += "C";
     if (bIsAbs)
     {
-        r += OUString::number( nCol + 1 );
+        rString += OUString::number( nCol + 1 );
     }
     else
     {
         nCol -= rDetails.nCol;
         if (nCol != 0) {
-            r += "[" + OUString::number( nCol ) + "]";
+            rString += "[" + OUString::number( nCol ) + "]";
         }
     }
 }
-static inline void
-lcl_r1c1_append_r ( OUString &r, int nRow, bool bIsAbs,
-                    const ScAddress::Details& rDetails )
+
+static inline void lcl_r1c1_append_r ( OUString &rString, int nRow, bool bIsAbs,
+                                       const ScAddress::Details& rDetails )
 {
-    r += "R";
+    rString += "R";
     if (bIsAbs)
     {
-        r += OUString::number( nRow + 1 );
+        rString += OUString::number( nRow + 1 );
     }
     else
     {
         nRow -= rDetails.nRow;
         if (nRow != 0) {
-            r += "[" + OUString::number( nRow ) + "]";
+            rString += "[" + OUString::number( nRow ) + "]";
         }
     }
 }
 
-static OUString
-getFileNameFromDoc( const ScDocument* pDoc )
+static OUString getFileNameFromDoc( const ScDocument* pDoc )
 {
     // TODO : er points at ScGlobal::GetAbsDocName()
     // as a better template.  Look into it
@@ -1721,7 +1719,7 @@ getFileNameFromDoc( const ScDocument* pDoc )
 }
 
 OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
-                        const Details& rDetails) const
+                           const Details& rDetails) const
 {
     OUString r;
     if( nFlags & SCA_VALID )
@@ -1805,11 +1803,10 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
     return r;
 }
 
-static void
-lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
-                  const ScAddress::Details& rDetails,
-                  sal_uInt16 nFlags,
-                  OUString& rTabName, OUString& rDocName )
+static void lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
+                              const ScAddress::Details& rDetails,
+                              sal_uInt16 nFlags,
+                              OUString& rTabName, OUString& rDocName )
 {
     pDoc->GetName(nTab, rTabName);
     rDocName = "";
@@ -1835,10 +1832,9 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
     ScCompiler::CheckTabQuotes( rTabName, rDetails.eConv);
 }
 
-static void
-lcl_ScRange_Format_XL_Header( OUString& r, const ScRange& rRange,
-                              sal_uInt16 nFlags, const ScDocument* pDoc,
-                              const ScAddress::Details& rDetails )
+static void lcl_ScRange_Format_XL_Header( OUString& rString, const ScRange& rRange,
+                                          sal_uInt16 nFlags, const ScDocument* pDoc,
+                                          const ScAddress::Details& rDetails )
 {
     if( nFlags & SCA_TAB_3D )
     {
@@ -1847,23 +1843,23 @@ lcl_ScRange_Format_XL_Header( OUString& r, const ScRange& rRange,
                           aTabName, aDocName );
         if( !aDocName.isEmpty() )
         {
-            r += "[" + aDocName + "]";
+            rString += "[" + aDocName + "]";
         }
-        r += aTabName;
+        rString += aTabName;
 
         if( nFlags & SCA_TAB2_3D )
         {
             lcl_Split_DocTab( pDoc, rRange.aEnd.Tab(), rDetails, nFlags,
                               aTabName, aDocName );
-            r += ":";
-            r += aTabName;
+            rString += ":";
+            rString += aTabName;
         }
-        r += "!";
+        rString += "!";
     }
 }
 
 OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
-                      const ScAddress::Details& rDetails ) const
+                          const ScAddress::Details& rDetails ) const
 {
     if( !( nFlags & SCA_VALID ) )
     {
