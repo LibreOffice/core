@@ -484,6 +484,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
         xSrcLayer = CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
         CG_TRACE( "CGLayerCreateWithContext(" << xCopyContext << "," << aSrcSize << ",NULL) = " << xSrcLayer );
         const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
+        CG_TRACE( "CGLayerGetContext(" << xSrcLayer << ") = " << xSrcContext );
         CGPoint aSrcPoint = CGPointMake(-nSrcX, -nSrcY);
         if( IsFlipped() )
         {

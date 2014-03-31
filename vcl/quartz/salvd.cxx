@@ -32,8 +32,7 @@
 #include "headless/svpvd.hxx"
 #endif
 #include "quartz/salgdi.h"
-
-
+#include "quartz/utils.h"
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
@@ -74,6 +73,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
         if (nDY == 0)
             nDY = 1;
         mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), NULL );
+        CG_TRACE( "CGLayerCreateWithContext(" << pData->rCGContext << "," << CGSizeMake( nDX, nDY) << ",NULL) = " << mxLayer );
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
     else
@@ -131,6 +131,7 @@ void AquaSalVirtualDevice::Destroy()
     {
         if( mpGraphics )
             mpGraphics->SetVirDevGraphics( NULL, NULL );
+        CG_TRACE( "CGLayerRelease(" << mxLayer << ")" );
         CGLayerRelease( mxLayer );
         mxLayer = NULL;
     }
@@ -139,6 +140,7 @@ void AquaSalVirtualDevice::Destroy()
     {
         void* pRawData = CGBitmapContextGetData( mxBitmapContext );
         rtl_freeMemory( pRawData );
+        CG_TRACE( "CGContextRelease(" << mxBitmapContext << ")" );
         CGContextRelease( mxBitmapContext );
         mxBitmapContext = NULL;
     }
@@ -198,6 +200,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+        CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x" << mnBitmapDepth << ") = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
     }
     else
@@ -254,6 +257,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+        CG_TRACE( "CGBitmapContextCreate(" << nDX << "x" << nDY << "x8) = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
 #endif
     }
@@ -262,11 +266,13 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
+    CG_TRACE( "CGLayerCreateWithContext(" << xCGContext << "," << aNewSize << ",NULL) = " << mxLayer );
 
     if( mxLayer && mpGraphics )
     {
         // get the matching Quartz context
         CGContextRef xDrawContext = CGLayerGetContext( mxLayer );
+        CG_TRACE( "CGLayerGetContext(" << mxLayer << ") = " << xDrawContext );
         mpGraphics->SetVirDevGraphics( mxLayer, xDrawContext, mnBitmapDepth );
     }
 
@@ -282,6 +288,7 @@ void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
         const CGSize aSize = CGLayerGetSize( mxLayer );
         rWidth = static_cast<long>(aSize.width);
         rHeight = static_cast<long>(aSize.height);
+        CG_TRACE( "CGLayerGetSize(" << mxLayer << ") = " << aSize << "(" << rWidth << "x" << rHeight << ")" );
     }
     else
     {

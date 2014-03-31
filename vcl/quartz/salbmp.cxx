@@ -29,6 +29,7 @@
 #include "vcl/salbtype.hxx"
 
 #include "quartz/salbmp.h"
+#include "quartz/utils.h"
 
 #ifdef MACOSX
 #include "osx/saldata.hxx"
@@ -103,7 +104,10 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     // copy layer content into the bitmap buffer
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
     if(mxGraphicContext) // remove warning
+    {
+        CG_TRACE( "CGContextDrawLayerAtPoint(" << mxGraphicContext << "," << aSrcPoint << "," << xLayer << ")" );
         CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
+    }
     return true;
 }
 
@@ -173,11 +177,16 @@ void QuartzSalBitmap::Destroy()
 
 void QuartzSalBitmap::DestroyContext()
 {
-    CGImageRelease( mxCachedImage );
-    mxCachedImage = NULL;
+    if( mxCachedImage )
+    {
+        CG_TRACE( "CGImageRelease(" << mxCachedImage << ")" );
+        CGImageRelease( mxCachedImage );
+        mxCachedImage = NULL;
+    }
 
     if( mxGraphicContext )
     {
+        CG_TRACE( "CGContextRelease(" << mxGraphicContext << ")" );
         CGContextRelease( mxGraphicContext );
         mxGraphicContext = NULL;
         maContextBuffer.reset();
@@ -739,6 +748,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
                 return NULL;
 
         mxCachedImage = CGBitmapContextCreateImage( mxGraphicContext );
+        CG_TRACE( "CGBitmapContextCreateImage(" << mxGraphicContext << ") = " << mxCachedImage );
     }
 
     CGImageRef xCroppedImage = NULL;
@@ -753,6 +763,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
         nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
         const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
+        CG_TRACE( "CGImageCreateWithImageInRect(" << mxCachedImage << "," << aCropRect << ") = " << xCroppedImage );
     }
 
     return xCroppedImage;
@@ -788,13 +799,18 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
         void* pMaskMem = rtl_allocateMemory( nMaskBytesPerRow * nHeight );
         CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
             nWidth, nHeight, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
+        CG_TRACE( "CGBitmapContextCreate(" << nWidth << "x" << nHeight << "x8) = " << xMaskContext );
+        CG_TRACE( "CGContextDrawImage(" << xMaskContext << "," << xImageRect << "," << xMask << ")" );
         CGContextDrawImage( xMaskContext, xImageRect, xMask );
+        CG_TRACE( "CFRelease(" << xMask << ")" );
         CFRelease( xMask );
         CGDataProviderRef xDataProvider( CGDataProviderCreateWithData( NULL,
         pMaskMem, nHeight * nMaskBytesPerRow, &CFRTLFree ) );
         static const CGFloat* pDecode = NULL;
         xMask = CGImageMaskCreate( nWidth, nHeight, 8, 8, nMaskBytesPerRow, xDataProvider, pDecode, false );
+        CG_TRACE( "CGImageMaskCreate(" << nWidth << "," << nHeight << ",8,8) = " << xMask );
         CFRelease( xDataProvider );
+        CG_TRACE( "CFRelease(" << xMaskContext << ")" );
         CFRelease( xMaskContext );
     }
 
@@ -803,7 +819,10 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 
     // combine image and alpha mask
     CGImageRef xMaskedImage = CGImageCreateWithMask( xImage, xMask );
+    CG_TRACE( "CGImageCreateWithMask(" << xImage << "," << xMask << ") = " << xMaskedImage );
+    CG_TRACE( "CFRelease(" << xMask << ")" );
     CFRelease( xMask );
+    CG_TRACE( "CFRelease(" << xImage << ")" );
     CFRelease( xImage );
     return xMaskedImage;
 }
