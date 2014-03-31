@@ -63,18 +63,18 @@ struct SC_DLLPUBLIC ScDPName
 
 struct ScDPLabelData
 {
-    OUString       maName;              ///< Original name of the dimension.
-    OUString       maLayoutName;        ///< Layout name (display name)
-    OUString       maSubtotalName;
-    SCCOL               mnCol;          ///< 0-based field index (not the source column index)
-    long                mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
-    sal_uInt16          mnFuncMask;     ///< Page/Column/Row subtotal function.
-    sal_Int32           mnUsedHier;     ///< Used hierarchy.
-    sal_Int32           mnFlags;        ///< Flags from the DataPilotSource dimension
-    sal_uInt8           mnDupCount;
-    bool                mbShowAll:1;    ///< true = Show all (also empty) results.
-    bool                mbIsValue:1;    ///< true = Sum or count in data field.
-    bool                mbDataLayout:1;
+    OUString   maName;         ///< Original name of the dimension.
+    OUString   maLayoutName;   ///< Layout name (display name)
+    OUString   maSubtotalName;
+    SCCOL      mnCol;          ///< 0-based field index (not the source column index)
+    long       mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
+    sal_uInt16 mnFuncMask;     ///< Page/Column/Row subtotal function.
+    sal_Int32  mnUsedHier;     ///< Used hierarchy.
+    sal_Int32  mnFlags;        ///< Flags from the DataPilotSource dimension
+    sal_uInt8  mnDupCount;
+    bool       mbShowAll:1;    ///< true = Show all (also empty) results.
+    bool       mbIsValue:1;    ///< true = Sum or count in data field.
+    bool       mbDataLayout:1;
 
     struct Member
     {
@@ -92,11 +92,11 @@ struct ScDPLabelData
          */
         OUString SC_DLLPUBLIC getDisplayName() const;
     };
-    ::std::vector<Member>                               maMembers;
-    ::com::sun::star::uno::Sequence< OUString >  maHiers;               ///< Hierarchies.
-    ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     ///< Sorting info.
-    ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   ///< Layout info.
-    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     ///< AutoShow info.
+    std::vector<Member>                    maMembers;
+    css::uno::Sequence<OUString>           maHiers;        ///< Hierarchies.
+    css::sheet::DataPilotFieldSortInfo     maSortInfo;     ///< Sorting info.
+    css::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   ///< Layout info.
+    css::sheet::DataPilotFieldAutoShowInfo maShowInfo;     ///< AutoShow info.
 
     ScDPLabelData();
 
@@ -111,11 +111,12 @@ typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVector;
 
 struct ScPivotField
 {
-    SCCOL               nCol;          ///< 0-based dimension index (not source column index)
-    long                mnOriginalDim; ///< >= 0 for duplicated field.
-    sal_uInt16          nFuncMask;
-    sal_uInt8           mnDupCount;
-    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+    SCCOL       nCol;          ///< 0-based dimension index (not source column index)
+    long        mnOriginalDim; ///< >= 0 for duplicated field.
+    sal_uInt16  nFuncMask;
+    sal_uInt8   mnDupCount;
+
+    css::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
     ScPivotField( const ScPivotField& r );
@@ -124,44 +125,46 @@ struct ScPivotField
     bool                operator==( const ScPivotField& r ) const;
 };
 
-typedef ::std::vector< ScPivotField > ScPivotFieldVector;
+typedef std::vector< ScPivotField > ScPivotFieldVector;
 
 struct ScPivotParam
 {
-    SCCOL           nCol;           ///< Cursor Position /
-    SCROW           nRow;           ///< or start of destination area
-    SCTAB           nTab;
+    SCCOL nCol;           ///< Cursor Position /
+    SCROW nRow;           ///< or start of destination area
+    SCTAB nTab;
+
     ScDPLabelDataVector maLabelArray;
-    ScPivotFieldVector maPageFields;
-    ScPivotFieldVector maColFields;
-    ScPivotFieldVector maRowFields;
-    ScPivotFieldVector maDataFields;
-    bool            bIgnoreEmptyRows;
-    bool            bDetectCategories;
-    bool            bMakeTotalCol;
-    bool            bMakeTotalRow;
+    ScPivotFieldVector  maPageFields;
+    ScPivotFieldVector  maColFields;
+    ScPivotFieldVector  maRowFields;
+    ScPivotFieldVector  maDataFields;
+
+    bool bIgnoreEmptyRows;
+    bool bDetectCategories;
+    bool bMakeTotalCol;
+    bool bMakeTotalRow;
 
     ScPivotParam();
     ScPivotParam( const ScPivotParam& r );
     ~ScPivotParam();
 
-    ScPivotParam&   operator=       ( const ScPivotParam& r );
-    bool            operator==      ( const ScPivotParam& r ) const;
+    ScPivotParam&   operator=  ( const ScPivotParam& r );
+    bool            operator== ( const ScPivotParam& r ) const;
     void SetLabelData(const ScDPLabelDataVector& r);
 };
 
 struct ScPivotFuncData
 {
-    SCCOL               mnCol;
-    long                mnOriginalDim;
-    sal_uInt16          mnFuncMask;
-    sal_uInt8           mnDupCount;
-    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+    SCCOL      mnCol;
+    long       mnOriginalDim;
+    sal_uInt16 mnFuncMask;
+    sal_uInt8  mnDupCount;
+
+    css::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
-    explicit ScPivotFuncData(
-        SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
-        const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
+    explicit ScPivotFuncData( SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
+                              const css::sheet::DataPilotFieldReference& rFieldRef );
 
     bool operator== (const ScPivotFuncData& r) const;
 
@@ -170,7 +173,7 @@ struct ScPivotFuncData
 #endif
 };
 
-typedef ::std::vector< ScPivotFuncData > ScPivotFuncDataVector;
+typedef std::vector<ScPivotFuncData> ScPivotFuncDataVector;
 typedef std::vector<ScDPName> ScDPNameVec;
 
 #endif

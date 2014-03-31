@@ -43,10 +43,11 @@ using std::cout;
 using std::endl;
 #endif
 
-using ::com::sun::star::sheet::DataPilotFieldReference;
-using ::std::vector;
+using css::sheet::DataPilotFieldReference;
+using std::vector;
 
-namespace {
+namespace
+{
 
 bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& right)
 {
@@ -56,20 +57,23 @@ bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& 
         && (left.ReferenceItemName == right.ReferenceItemName);
 }
 
-}
+} // namespace
 
-ScDPName::ScDPName() : mnDupCount(0) {}
+// ScDPName
+
+ScDPName::ScDPName() : mnDupCount(0)
+{}
 
 ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount) :
-    maName(rName), maLayoutName(rLayoutName), mnDupCount(nDupCount) {}
+    maName(rName), maLayoutName(rLayoutName), mnDupCount(nDupCount)
+{}
 
-
+// ScDPLabelData
 
 ScDPLabelData::Member::Member() :
     mbVisible(true),
     mbShowDetails(true)
-{
-}
+{}
 
 OUString ScDPLabelData::Member::getDisplayName() const
 {
@@ -89,8 +93,7 @@ ScDPLabelData::ScDPLabelData() :
     mbShowAll(false),
     mbIsValue(false),
     mbDataLayout(false)
-{
-}
+{}
 
 OUString ScDPLabelData::getDisplayName() const
 {
@@ -100,20 +103,22 @@ OUString ScDPLabelData::getDisplayName() const
     return maName;
 }
 
-ScPivotField::ScPivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
-    nCol( nNewCol ),
-    mnOriginalDim(-1),
-    nFuncMask( nNewFuncMask ),
-    mnDupCount(0)
-{
-}
+// ScPivotField
 
-ScPivotField::ScPivotField( const ScPivotField& r ) :
-    nCol(r.nCol),
-    mnOriginalDim(r.mnOriginalDim),
-    nFuncMask(r.nFuncMask),
-    mnDupCount(r.mnDupCount),
-    maFieldRef(r.maFieldRef) {}
+ScPivotField::ScPivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
+    nCol(nNewCol),
+    mnOriginalDim(-1),
+    nFuncMask(nNewFuncMask),
+    mnDupCount(0)
+{}
+
+ScPivotField::ScPivotField( const ScPivotField& rPivotField ) :
+    nCol(rPivotField.nCol),
+    mnOriginalDim(rPivotField.mnOriginalDim),
+    nFuncMask(rPivotField.nFuncMask),
+    mnDupCount(rPivotField.mnDupCount),
+    maFieldRef(rPivotField.maFieldRef)
+{}
 
 long ScPivotField::getOriginalDim() const
 {
@@ -128,12 +133,13 @@ bool ScPivotField::operator==( const ScPivotField& r ) const
         && equals(maFieldRef, r.maFieldRef);
 }
 
-ScPivotParam::ScPivotParam()
-    :   nCol(0), nRow(0), nTab(0),
-        bIgnoreEmptyRows(false), bDetectCategories(false),
-        bMakeTotalCol(true), bMakeTotalRow(true)
-{
-}
+// ScPivotParam
+
+ScPivotParam::ScPivotParam() :
+    nCol(0), nRow(0), nTab(0),
+    bIgnoreEmptyRows(false), bDetectCategories(false),
+    bMakeTotalCol(true), bMakeTotalRow(true)
+{}
 
 ScPivotParam::ScPivotParam( const ScPivotParam& r )
     :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
@@ -150,83 +156,84 @@ ScPivotParam::ScPivotParam( const ScPivotParam& r )
 }
 
 ScPivotParam::~ScPivotParam()
-{
-}
+{}
 
-void ScPivotParam::SetLabelData(const ScDPLabelDataVector& r)
+void ScPivotParam::SetLabelData(const ScDPLabelDataVector& rVector)
 {
     ScDPLabelDataVector aNewArray;
-    aNewArray.reserve(r.size());
-    for (ScDPLabelDataVector::const_iterator itr = r.begin(), itrEnd = r.end();
-         itr != itrEnd; ++itr)
-        aNewArray.push_back(new ScDPLabelData(*itr));
-
+    aNewArray.reserve(rVector.size());
+    ScDPLabelDataVector::const_iterator it;
+    for (it = rVector.begin(); it != rVector.end(); ++it)
+    {
+        aNewArray.push_back(new ScDPLabelData(*it));
+    }
     maLabelArray.swap(aNewArray);
 }
 
-ScPivotParam& ScPivotParam::operator=( const ScPivotParam& r )
+ScPivotParam& ScPivotParam::operator=( const ScPivotParam& rPivotParam )
 {
-    nCol              = r.nCol;
-    nRow              = r.nRow;
-    nTab              = r.nTab;
-    bIgnoreEmptyRows  = r.bIgnoreEmptyRows;
-    bDetectCategories = r.bDetectCategories;
-    bMakeTotalCol     = r.bMakeTotalCol;
-    bMakeTotalRow     = r.bMakeTotalRow;
+    nCol              = rPivotParam.nCol;
+    nRow              = rPivotParam.nRow;
+    nTab              = rPivotParam.nTab;
+    bIgnoreEmptyRows  = rPivotParam.bIgnoreEmptyRows;
+    bDetectCategories = rPivotParam.bDetectCategories;
+    bMakeTotalCol     = rPivotParam.bMakeTotalCol;
+    bMakeTotalRow     = rPivotParam.bMakeTotalRow;
 
-    maPageFields = r.maPageFields;
-    maColFields  = r.maColFields;
-    maRowFields  = r.maRowFields;
-    maDataFields = r.maDataFields;
-    SetLabelData(r.maLabelArray);
+    maPageFields = rPivotParam.maPageFields;
+    maColFields  = rPivotParam.maColFields;
+    maRowFields  = rPivotParam.maRowFields;
+    maDataFields = rPivotParam.maDataFields;
+
+    SetLabelData(rPivotParam.maLabelArray);
     return *this;
 }
 
-bool ScPivotParam::operator==( const ScPivotParam& r ) const
+bool ScPivotParam::operator==( const ScPivotParam& rPivotParam ) const
 {
-    bool bEqual = (nCol == r.nCol)
-                 && (nRow == r.nRow)
-                 && (nTab == r.nTab)
-                 && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
-                 && (bDetectCategories == r.bDetectCategories)
-                 && (bMakeTotalCol == r.bMakeTotalCol)
-                 && (bMakeTotalRow == r.bMakeTotalRow)
-                 && (maLabelArray.size() == r.maLabelArray.size())
-                 && maPageFields == r.maPageFields
-                 && maColFields == r.maColFields
-                 && maRowFields == r.maRowFields
-                 && maDataFields == r.maDataFields;
-
+    bool bEqual = (nCol == rPivotParam.nCol &&
+                  nRow == rPivotParam.nRow &&
+                  nTab == rPivotParam.nTab &&
+                  bIgnoreEmptyRows  == rPivotParam.bIgnoreEmptyRows &&
+                  bDetectCategories == rPivotParam.bDetectCategories &&
+                  bMakeTotalCol == rPivotParam.bMakeTotalCol &&
+                  bMakeTotalRow == rPivotParam.bMakeTotalRow &&
+                  maLabelArray.size() == rPivotParam.maLabelArray.size() &&
+                  maPageFields == rPivotParam.maPageFields &&
+                  maColFields == rPivotParam.maColFields &&
+                  maRowFields == rPivotParam.maRowFields &&
+                  maDataFields == rPivotParam.maDataFields);
     return bEqual;
 }
 
-
+// ScPivotFuncData
 
 ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
     mnOriginalDim(-1),
-    mnFuncMask( nFuncMask ),
+    mnFuncMask(nFuncMask),
     mnDupCount(0)
-{
-}
+{}
 
-ScPivotFuncData::ScPivotFuncData(
-    SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
-    const DataPilotFieldReference& rFieldRef) :
-    mnCol( nCol ),
+ScPivotFuncData::ScPivotFuncData(SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask,
+                                 sal_uInt8 nDupCount, const DataPilotFieldReference& rFieldRef) :
+    mnCol(nCol),
     mnOriginalDim(nOriginalDim),
-    mnFuncMask( nFuncMask ),
+    mnFuncMask(nFuncMask),
     mnDupCount(nDupCount),
-    maFieldRef( rFieldRef )
-{
-}
+    maFieldRef(rFieldRef)
+{}
 
-bool ScPivotFuncData::operator== (const ScPivotFuncData& r) const
+bool ScPivotFuncData::operator== (const ScPivotFuncData& rFuncData) const
 {
-    if (mnCol != r.mnCol || mnOriginalDim != r.mnOriginalDim || mnFuncMask != r.mnFuncMask || mnDupCount != r.mnDupCount)
+    if (mnCol != rFuncData.mnCol ||
+        mnOriginalDim != rFuncData.mnOriginalDim ||
+        mnFuncMask != rFuncData.mnFuncMask ||
+        mnDupCount != rFuncData.mnDupCount)
+    {
         return false;
-
-    return equals(maFieldRef, r.maFieldRef);
+    }
+    return equals(maFieldRef, rFuncData.maFieldRef);
 }
 
 #if DEBUG_PIVOT_TABLE
@@ -237,7 +244,5 @@ void ScPivotFuncData::Dump() const
         << ")" << endl;
 }
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
