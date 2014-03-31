@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <tools/stream.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>
 #include <docary.hxx>
@@ -29,29 +27,19 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
-#include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <tabfrm.hxx>
 #include <rowfrm.hxx>
-#include <colfrm.hxx>
-#include <bodyfrm.hxx>
-#include <ndindex.hxx>
 #include <sectfrm.hxx>
-#include <frmfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <pagedesc.hxx>
 #include <frmtool.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include "viewopt.hxx"
-#include "viewsh.hxx"
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-
-#include <pam.hxx>
-#include <docsh.hxx>
-#include <poolfmt.hxx>
 
 #include <set>
 
