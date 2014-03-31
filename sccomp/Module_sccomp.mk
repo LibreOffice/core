@@ -19,13 +19,10 @@
 
 $(eval $(call gb_Module_Module,sccomp))
 
-ifeq ($(ENABLE_LPSOLVE),TRUE)
-
 $(eval $(call gb_Module_add_targets,sccomp,\
-	AllLangResTarget_solver \
-	Library_solver \
+	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE), AllLangResTarget_solver) \
+	$(if $(ENABLE_COINMP), Library_coinmpsolver) \
+	$(if $(ENABLE_LPSOLVE), Library_solver) \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

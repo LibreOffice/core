@@ -18,8 +18,6 @@
 
 #include "macros.inc"
 
-STD_LIB_FILE( gid_File_Lib_Solver, solver)
-
 STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
 STD_LIB_FILE( gid_File_Lib_Pricing, pricing)
@@ -68,14 +66,55 @@ File gid_File_Exe_Scalc
 End
 #endif
 
-#if defined(ENABLE_LPSOLVE)
-
+#if defined(WITH_LPSOLVER)
 STD_RES_FILE( gid_File_Res_Solver, solver)
+#endif
 
-#if ! defined (SYSTEM_LPSOLVE)
+#if defined(LPSOLVE_LPSOLVER)
+STD_LIB_FILE( gid_File_Lib_Solver, solver)
+
 File gid_File_Lib_Lpsolve
     PACKED_LIB_FILE_BODY;
     Name = SPECIAL_NAME(lpsolve55);
+End
+#endif
+
+#if defined(COINMP_LPSOLVER)
+STD_LIB_FILE( gid_File_Lib_CoinMPSolver, coinmpsolver)
+
+File gid_File_Lib_CoinMP
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(CoinMP,1);
+End
+
+#if !defined WNT
+File gid_File_Lib_Cbc
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(Cbc,3);
+End
+File gid_File_Lib_CbcSolver
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(CbcSolver,3);
+End
+File gid_File_Lib_Cgl
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(Cgl,1);
+End
+File gid_File_Lib_Clp
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(Clp,1);
+End
+File gid_File_Lib_OsiClp
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(OsiClp,1);
+End
+File gid_File_Lib_CoinUtils
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(CoinUtils,3);
+End
+File gid_File_Lib_Osi
+    PACKED_LIB_FILE_BODY;
+    Name = SPECIAL_NAME_VER(Osi,1);
 End
 #endif
 

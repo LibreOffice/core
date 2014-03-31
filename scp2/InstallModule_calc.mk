@@ -9,10 +9,13 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/calc))
 
-$(eval $(call gb_InstallModule_define_if_set,scp2/calc,\
-	ENABLE_LPSOLVE \
-	SYSTEM_LPSOLVE \
+ifneq (,$(ENABLE_COINMP)$(ENABLE_LPSOLVE))
+$(eval $(call gb_InstallModule_add_defs,scp2/calc,\
+	-DWITH_LPSOLVER \
+	$(if $(filter TRUE,$(ENABLE_COINMP)),-DCOINMP_LPSOLVER) \
+	$(if $(filter TRUE-NO,$(ENABLE_LPSOLVE)-$(SYSTEM_LPSOLVE)),-DLPSOLVE_LPSOLVER) \
 ))
+endif
 
 $(eval $(call gb_InstallModule_add_templates,scp2/calc,\
     scp2/source/templates/module_langpack_calc \

@@ -408,7 +408,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     simplecm \
     sm \
     smd \
-    solver \
+	$(if $(ENABLE_COINMP),coinmpsolver) \
+	$(if $(ENABLE_LPSOLVE),solver) \
     spa \
     spell \
     sts \

@@ -1655,6 +1655,7 @@ endef
 endif # ANDROID
 endif # SYSTEM_LCMS2
 
+ifneq ($(ENABLE_LPSOLVE),)
 
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
@@ -1685,6 +1686,36 @@ $(call gb_LinkTarget_set_include,$(1),\
 endef
 
 endif # SYSTEM_LPSOLVE
+
+endif # ENABLE_LPSOLVE
+
+ifneq ($(ENABLE_COINMP),)
+
+define gb_LinkTarget__use_coinmp
+$(call gb_LinkTarget_use_package,$(1),coinmp)
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/MSVisualStudio/v9/release/CoinMP.lib \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Cbc/src/.libs -lCbc -lCbcSolver \
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Cgl/src/.libs -lCgl \
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Clp/src/.libs -lClp \
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Clp/src/OsiClp/.libs -lOsiClp \
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/src/.libs -lCoinMP \
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/CoinUtils/src/.libs -lCoinUtils \
+	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Osi/src/Osi/.libs -lOsi \
+)
+endif
+$(call gb_LinkTarget_set_include,$(1),\
+   -I$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/src \
+   $$(INCLUDE) \
+)
+
+endef
+
+endif # ENABLE_COINMP
 
 ifeq ($(ENABLE_GIO),TRUE)
 

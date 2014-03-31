@@ -31,7 +31,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_KDE \
 	ENABLE_KDE4 \
 	ENABLE_LIBLANGTAG \
-	ENABLE_LPSOLVE \
 	ENABLE_NPAPI_FROM_BROWSER \
 	ENABLE_NPAPI_INTO_BROWSER \
 	ENABLE_ONLINE_UPDATE \
@@ -58,7 +57,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_LIBLANGTAG \
 	SYSTEM_LIBXML \
 	SYSTEM_LIBXSLT \
-	SYSTEM_LPSOLVE \
 	SYSTEM_LUCENE \
 	SYSTEM_MYTHES \
 	SYSTEM_NEON \
