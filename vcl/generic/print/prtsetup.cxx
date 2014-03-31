@@ -429,7 +429,7 @@ sal_uLong RTSDevicePage::getPDFDevice()
     return -1;      //explicitly PS
 }
 
-IMPL_LINK( RTSDevicePage, ModifyHdl, Edit*, pEdit )
+IMPL_LINK( RTSDevicePage, ModifyHdl, Edit*, /* pEdit */ )
 {
     if (m_pCustomValue)
     {
