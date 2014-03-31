@@ -34,7 +34,7 @@ Users::Users(const uno::Reference< XDatabaseMetaData >& rMetaData,
              Mutex& rMutex,
              TStringVector& rNames) :
     OCollection(rParent,
-                sal_True,
+                true,
                 rMutex,
                 rNames),
     m_xMetaData(rMetaData)

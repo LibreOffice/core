@@ -78,14 +78,8 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
         public:
-            OKey(sal_Bool _bCase);
-            OKey(const OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase);
-            /*OKey( const OUString& _Name,
-                    const OUString& _ReferencedTable,
-                    sal_Int32       _Type,
-                    sal_Int32       _UpdateRule,
-                    sal_Int32       _DeleteRule,
-                    sal_Bool _bCase);*/
+            OKey(bool _bCase);
+            OKey(const OUString& _Name,const TKeyProperties& _rProps,bool _bCase);
 
             virtual ~OKey( );
 

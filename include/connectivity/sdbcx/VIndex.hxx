@@ -52,10 +52,10 @@ namespace connectivity
                                     public OIndex_BASE
         {
         protected:
-            OUString m_Catalog;
-            sal_Bool        m_IsUnique;
-            sal_Bool        m_IsPrimaryKeyIndex;
-            sal_Bool        m_IsClustered;
+            OUString        m_Catalog;
+            bool            m_IsUnique;
+            bool            m_IsPrimaryKeyIndex;
+            bool            m_IsClustered;
 
             OCollection*    m_pColumns;
 
@@ -65,13 +65,13 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const SAL_OVERRIDE;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         public:
-            OIndex(sal_Bool _bCase);
+            OIndex(bool _bCase);
             OIndex( const OUString& _Name,
                     const OUString& _Catalog,
-                    sal_Bool _isUnique,
-                    sal_Bool _isPrimaryKeyIndex,
-                    sal_Bool _isClustered,
-                    sal_Bool _bCase);
+                    bool _isUnique,
+                    bool _isPrimaryKeyIndex,
+                    bool _isClustered,
+                    bool _bCase);
 
             virtual ~OIndex( );
 

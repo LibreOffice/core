@@ -85,9 +85,9 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
         public:
             OTable( OCollection*    _pTables,
-                    sal_Bool _bCase);
+                    bool _bCase);
             OTable( OCollection*    _pTables,
-                    sal_Bool _bCase,
+                    bool _bCase,
                     const OUString& _Name,
                     const OUString& _Type,
                     const OUString& _Description = OUString(),

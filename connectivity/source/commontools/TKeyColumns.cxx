@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
                 ::osl::Mutex& _rMutex,
                 const ::std::vector< OUString> &_rVector)
-            : connectivity::sdbcx::OCollection(*_pKey,sal_True,_rMutex,_rVector)
+            : connectivity::sdbcx::OCollection(*_pKey,true,_rMutex,_rVector)
             ,m_pKey(_pKey)
 {
 }
@@ -109,9 +109,9 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
                                                   nSize,
                                                   nDec,
                                                   nDataType,
-                                                  sal_False,
-                                                  sal_False,
-                                                  sal_False,
+                                                  false,
+                                                  false,
+                                                  false,
                                                   isCaseSensitive(),
                                                   aCatalog,
                                                   aSchema,

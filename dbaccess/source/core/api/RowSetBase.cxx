@@ -60,7 +60,7 @@ protected:
     virtual void impl_refresh() throw(RuntimeException) SAL_OVERRIDE;
     virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) SAL_OVERRIDE;
 public:
-    OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< OUString>()){}
+    OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent, true, _rMutex, ::std::vector< OUString>()){}
 };
 
 void OEmptyCollection::impl_refresh() throw(RuntimeException)

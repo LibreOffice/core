@@ -54,18 +54,18 @@ namespace connectivity
 
         private:
             comphelper::UStringMixEqual m_aCase;
-            sal_Bool                    m_bNew;
+            bool                        m_bNew;
 
         public:
-            ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew = sal_False);
+            ODescriptor(::cppu::OBroadcastHelper& _rBHelper, bool _bCase, bool _bNew = false);
 
             virtual ~ODescriptor();
 
-            sal_Bool isNew()  const         { return m_bNew;    }
-            sal_Bool getNew() const         { return m_bNew;    }
-            virtual void     setNew(sal_Bool _bNew);
+            bool isNew()  const         { return m_bNew;    }
+            bool getNew() const         { return m_bNew;    }
+            virtual void     setNew(bool _bNew);
 
-            sal_Bool isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
+            bool isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
 
             virtual void construct();
 
@@ -74,7 +74,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
             // compare
-            inline sal_Bool operator == ( const OUString & _rRH )
+            inline bool operator == ( const OUString & _rRH )
             {
                 return m_aCase(m_Name,_rRH);
             }
@@ -85,7 +85,7 @@ namespace connectivity
 
             static ODescriptor* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSomeComp );
             // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
-            static sal_Bool isNew( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDescriptor );
+            static bool isNew( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDescriptor );
         };
     }
 

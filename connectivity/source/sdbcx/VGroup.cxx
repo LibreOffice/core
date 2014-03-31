@@ -38,13 +38,13 @@ using namespace ::com::sun::star::beans;
 
 IMPLEMENT_SERVICE_INFO(OGroup,"com.sun.star.sdbcx.VGroup","com.sun.star.sdbcx.Group");
 
-OGroup::OGroup(sal_Bool _bCase) :   OGroup_BASE(m_aMutex)
+OGroup::OGroup(bool _bCase) :   OGroup_BASE(m_aMutex)
                 ,   ODescriptor(OGroup_BASE::rBHelper,_bCase)
                 ,   m_pUsers(NULL)
 {
 }
 
-OGroup::OGroup(const OUString& _Name,sal_Bool _bCase) :  OGroup_BASE(m_aMutex)
+OGroup::OGroup(const OUString& _Name, bool _bCase) :  OGroup_BASE(m_aMutex)
                         ,ODescriptor(OGroup_BASE::rBHelper,_bCase)
                         ,m_pUsers(NULL)
 {

@@ -34,7 +34,7 @@ using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View");
 
-OView::OView(sal_Bool _bCase,
+OView::OView(bool _bCase,
             const OUString& _Name,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
             sal_Int32 _CheckOption,
@@ -52,8 +52,8 @@ OView::OView(sal_Bool _bCase,
     construct();
 }
 
-OView::OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData)
-    : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase,sal_True)
+OView::OView(bool _bCase, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData)
+    : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper, _bCase, true)
     ,m_xMetaData(_xMetaData)
 {
     construct();

@@ -52,7 +52,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
     const TStringVector &_rVector )
-    :sdbcx::OCollection( _rParent, sal_True, _rMutex, _rVector )
+    :sdbcx::OCollection( _rParent, true, _rMutex, _rVector )
     ,m_xConnection( _rxConnection )
     ,m_xMetaData( _rxConnection->getMetaData() )
     ,m_bInDrop( sal_False )
@@ -87,7 +87,7 @@ m_xMetaData.clear();
 Reference< XPropertySet > HViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
-    connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
+    connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(true, xConnection->getMetaData());
     return pNew;
 }
 

@@ -65,9 +65,9 @@ sal_Bool SAL_CALL OTable::supportsService( const OUString& _rServiceName ) throw
 }
 
 OTable::OTable(OCollection* _pTables,
-               sal_Bool _bCase)
+               bool _bCase)
                : OTableDescriptor_BASE(m_aMutex)
-                ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,sal_True)
+                ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,true)
                 ,m_pKeys(NULL)
                 ,m_pColumns(NULL)
                 ,m_pIndexes(NULL)
@@ -76,7 +76,7 @@ OTable::OTable(OCollection* _pTables,
 }
 
 OTable::OTable( OCollection*    _pTables,
-                sal_Bool _bCase,
+                bool            _bCase,
                 const OUString& _Name,       const OUString& _Type,
                 const OUString& _Description,const OUString& _SchemaName,
                 const OUString& _CatalogName) :  OTableDescriptor_BASE(m_aMutex)
@@ -229,7 +229,7 @@ Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(Runtim
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     OTable* pTable = new OTable(m_pTables,isCaseSensitive(),m_Name,m_Type,m_Description,m_SchemaName,m_CatalogName);
-    pTable->setNew(sal_True);
+    pTable->setNew(true);
     return pTable;
 }
 

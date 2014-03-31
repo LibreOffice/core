@@ -49,16 +49,16 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const OUString& _rName)
     if(!xCol.is())
         return sdbcx::ObjectType();
 
-    sdbcx::ObjectType xRet = new sdbcx::OIndexColumn(sal_True,_rName
+    sdbcx::ObjectType xRet = new sdbcx::OIndexColumn(true,_rName
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                                     ,OUString()
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
-                                                    ,sal_False
-                                                    ,sal_False
-                                                    ,sal_False
+                                                    ,false
+                                                    ,false
+                                                    ,false
                                                     ,pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME)))
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)))

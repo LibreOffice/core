@@ -45,7 +45,7 @@ using namespace ::com::sun::star::lang;
 OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
         ::osl::Mutex& _rMutex,
         const TStringVector& _rVector
-        ) : OKeys_BASE(*_pTable,sal_True,_rMutex,_rVector,sal_True)
+        ) : OKeys_BASE(*_pTable,true,_rMutex,_rVector,true)
     ,m_pTable(_pTable)
 {
 }

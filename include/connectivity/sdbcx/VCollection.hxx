@@ -83,7 +83,7 @@ namespace connectivity
             virtual ObjectType getObject(sal_Int32 _nIndex) = 0;
             virtual ObjectType getObject(const OUString& columnName) = 0;
             virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject) = 0;
-            virtual sal_Bool isCaseSensitive() const = 0;
+            virtual bool isCaseSensitive() const = 0;
         };
 
         //  OCollection
@@ -100,7 +100,7 @@ namespace connectivity
         protected:
             ::cppu::OWeakObject&                    m_rParent;          // parent of the collection
             ::osl::Mutex&                           m_rMutex;           // mutex of the parent
-            sal_Bool                                m_bUseIndexOnly;    // is only TRUE when only an indexaccess is needed
+            bool                                    m_bUseIndexOnly;    // is only TRUE when only an indexaccess is needed
 
             // the implementing class should refresh their elements
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) = 0;
@@ -146,11 +146,11 @@ namespace connectivity
             ObjectType cloneDescriptor( const ObjectType& _descriptor );
 
             OCollection(::cppu::OWeakObject& _rParent,
-                        sal_Bool _bCase,
+                        bool _bCase,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector,
-                        sal_Bool _bUseIndexOnly = sal_False,
-                        sal_Bool _bUseHardRef = sal_True);
+                        bool _bUseIndexOnly = false,
+                        bool _bUseHardRef = true);
 
             /** clear the name map
                 <p>Does <em>not</em> dispose the objects hold by the collection.</p>
@@ -181,7 +181,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             void reFill(const TStringVector &_rVector);
-            inline sal_Bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
+            inline bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
             void renameObject(const OUString& _sOldName, const OUString& _sNewName);
 
             // only the name is identical to ::cppu::OComponentHelper
@@ -226,7 +226,7 @@ namespace connectivity
         private:
             void notifyElementRemoved(const OUString& _sName);
             void disposeElements();
-            void dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop = sal_True);
+            void dropImpl(sal_Int32 _nIndex, bool _bReallyDrop = true);
         };
     }
 }

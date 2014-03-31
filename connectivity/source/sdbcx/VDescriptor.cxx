@@ -36,7 +36,7 @@ namespace connectivity
         // = ODescriptor
 
 
-        ODescriptor::ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew)
+        ODescriptor::ODescriptor(::cppu::OBroadcastHelper& _rBHelper, bool _bCase, bool _bNew)
             :ODescriptor_PBASE(_rBHelper)
             ,m_aCase(_bCase)
             ,m_bNew(_bNew)
@@ -95,10 +95,10 @@ namespace connectivity
         }
 
 
-        sal_Bool ODescriptor::isNew( const Reference< XInterface >& _rxDescriptor )
+        bool ODescriptor::isNew( const Reference< XInterface >& _rxDescriptor )
         {
             ODescriptor* pImplementation = getImplementation( _rxDescriptor );
-            return pImplementation != NULL ? pImplementation->isNew() : sal_False;
+            return pImplementation && pImplementation->isNew();
         }
 
 
@@ -125,7 +125,7 @@ namespace connectivity
         }
 
 
-        void ODescriptor::setNew(sal_Bool _bNew)
+        void ODescriptor::setNew(bool _bNew)
         {
             m_bNew = _bNew;
         }

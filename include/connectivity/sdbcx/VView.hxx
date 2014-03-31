@@ -65,8 +65,8 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
-            OView(  sal_Bool _bCase,
+            OView(bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
+            OView(  bool _bCase,
                     const OUString& _rName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
                     sal_Int32 _nCheckOption = 0,

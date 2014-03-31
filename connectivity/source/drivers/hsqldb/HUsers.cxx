@@ -42,7 +42,7 @@ OUsers::OUsers( ::cppu::OWeakObject& _rParent,
                 const TStringVector &_rVector,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                 connectivity::sdbcx::IRefreshableUsers* _pParent)
-    : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
+    : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
     ,m_xConnection(_xConnection)
     ,m_pParent(_pParent)
 {

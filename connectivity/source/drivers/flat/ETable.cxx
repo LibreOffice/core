@@ -185,9 +185,9 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                                                 m_aPrecisions[i],
                                                 m_aScales[i],
                                                 m_aTypes[i],
-                                                sal_False,
-                                                sal_False,
-                                                sal_False,
+                                                false,
+                                                false,
+                                                false,
                                                 bCase,
                                                 m_CatalogName, getSchema(), getName());
         Reference< XPropertySet> xCol = pColumn;

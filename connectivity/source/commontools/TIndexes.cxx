@@ -42,7 +42,7 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
              const ::std::vector< OUString> &_rVector
              )
-    : OCollection(*_pTable,sal_True,_rMutex,_rVector)
+    : OCollection(*_pTable,true,_rMutex,_rVector)
     ,m_pTable(_pTable)
 {
 }

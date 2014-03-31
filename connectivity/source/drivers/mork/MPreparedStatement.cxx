@@ -439,9 +439,9 @@ size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
                                                     ,nPrecision
                                                     ,nScale
                                                     ,eType
-                                                    ,sal_False
-                                                    ,sal_False
-                                                    ,sal_False
+                                                    ,false
+                                                    ,false
+                                                    ,false
                                                     ,m_pSQLIterator->isCaseSensitive()
                                                     ,OUString()
                                                     ,OUString()

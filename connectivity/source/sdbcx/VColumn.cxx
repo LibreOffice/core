@@ -56,16 +56,16 @@ sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) thro
     return cppu::supportsService(this, _rServiceName);
 }
 
-OColumn::OColumn(sal_Bool _bCase)
+OColumn::OColumn(bool _bCase)
     :OColumnDescriptor_BASE(m_aMutex)
-    ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase,sal_True)
+    ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase,true)
     ,m_IsNullable(ColumnValue::NULLABLE)
     ,m_Precision(0)
     ,m_Scale(0)
     ,m_Type(0)
-    ,m_IsAutoIncrement(sal_False)
-    ,m_IsRowVersion(sal_False)
-    ,m_IsCurrency(sal_False)
+    ,m_IsAutoIncrement(false)
+    ,m_IsRowVersion(false)
+    ,m_IsCurrency(false)
 {
     construct();
 }
@@ -78,10 +78,10 @@ OColumn::OColumn(   const OUString& _Name,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
                     sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsRowVersion,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase,
+                    bool            _IsAutoIncrement,
+                    bool            _IsRowVersion,
+                    bool            _IsCurrency,
+                    bool            _bCase,
                     const OUString& _CatalogName,
                     const OUString& _SchemaName,
                     const OUString& _TableName)
@@ -202,7 +202,7 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
                                         m_CatalogName,
                                         m_SchemaName,
                                         m_TableName);
-    pNewColumn->setNew(sal_True);
+    pNewColumn->setNew(true);
     return pNewColumn;
 }
 

@@ -63,7 +63,7 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
                                 ,::osl::Mutex& _rMutex
                                 ,const TStringVector &_rVector
                                 ,bool _bUseHardRef
-            ) : OCollection(_rParent,_bCase,_rMutex,_rVector,sal_False,_bUseHardRef)
+            ) : OCollection(_rParent,_bCase,_rMutex,_rVector,false,_bUseHardRef)
     ,m_pImpl(NULL)
     ,m_pTable(NULL)
 {
@@ -129,7 +129,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
                                                 pColDesc->nField9,
                                                 pColDesc->nField5,
                                                 bAutoIncrement,
-                                                sal_False,
+                                                false,
                                                 bIsCurrency,
                                                 isCaseSensitive(),
                                                 aCatalog,
@@ -165,7 +165,7 @@ void OColumnsHelper::impl_refresh() throw(RuntimeException)
 
 Reference< XPropertySet > OColumnsHelper::createDescriptor()
 {
-    return new OColumn(sal_True);
+    return new OColumn(true);
 }
 
 // XAppend

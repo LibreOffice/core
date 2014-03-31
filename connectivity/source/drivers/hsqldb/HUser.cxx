@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(sal_True)
+OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
                 ,m_xConnection(_xConnection)
 {
     construct();
@@ -44,7 +44,7 @@ OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star
 
 OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                 const OUString& _Name
-            ) : connectivity::sdbcx::OUser(_Name,sal_True)
+            ) : connectivity::sdbcx::OUser(_Name, true)
                 ,m_xConnection(_xConnection)
 {
     construct();

@@ -1636,7 +1636,7 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
 
     OSQLTable aReturnTable = new OTable(
         NULL,
-        sal_False,
+        false,
         rTableName,
         OUString("Table"),
         OUString("New Created Table"),

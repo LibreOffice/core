@@ -297,7 +297,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, 
         " CHANGE " + ::dbtools::quoteName(sQuote,_rColName) +
         " ";
 
-    OColumn* pColumn = new OColumn(sal_True);
+    OColumn* pColumn = new OColumn(true);
     Reference<XPropertySet> xProp = pColumn;
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));

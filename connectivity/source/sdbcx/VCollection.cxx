@@ -56,8 +56,8 @@ namespace
         ::std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
         ObjectMap                               m_aNameMap;         // hold the elements and a name
     public:
-        OHardRefMap(sal_Bool _bCase)
-            : m_aNameMap(_bCase ? true : false)
+        OHardRefMap(bool _bCase)
+            : m_aNameMap(_bCase)
         {
         }
         virtual ~OHardRefMap()
@@ -215,7 +215,7 @@ namespace
             m_aElements[_nIndex]->second = _xObject;
         }
 
-        sal_Bool isCaseSensitive() const SAL_OVERRIDE
+        bool isCaseSensitive() const SAL_OVERRIDE
         {
             return m_aNameMap.key_comp().isCaseSensitive();
         }
@@ -228,11 +228,11 @@ IObjectCollection::~IObjectCollection() {}
 IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
 
 OCollection::OCollection(::cppu::OWeakObject& _rParent
-                         , sal_Bool _bCase
+                         , bool _bCase
                          , ::osl::Mutex& _rMutex
                          , const TStringVector &_rVector
-                         , sal_Bool _bUseIndexOnly
-                         , sal_Bool _bUseHardRef)
+                         , bool _bUseIndexOnly
+                         , bool _bUseHardRef)
                      :m_aContainerListeners(_rMutex)
                      ,m_aRefreshListeners(_rMutex)
                      ,m_rParent(_rParent)
@@ -386,7 +386,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
 
     ODescriptor* pDescriptor = ODescriptor::getImplementation( xNewlyCreated );
     if ( pDescriptor )
-        pDescriptor->setNew( sal_False );
+        pDescriptor->setNew( false );
 
     sName = getNameForObject( xNewlyCreated );
     if ( !m_pElements->exists( sName ) ) // this may happen when the drived class included it itself
@@ -418,7 +418,7 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
     dropImpl(index);
 }
 
-void OCollection::dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop)
+void OCollection::dropImpl(sal_Int32 _nIndex, bool _bReallyDrop)
 {
     OUString elementName = m_pElements->getName(_nIndex);
 
@@ -548,7 +548,7 @@ ObjectType OCollection::getObject(sal_Int32 _nIndex)
         {
             try
             {
-                dropImpl(_nIndex,sal_False);
+                dropImpl(_nIndex,false);
             }
             catch(const Exception& )
             {

@@ -69,7 +69,7 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
                                             nPrec,
                                             xRow->getInt(9),
                                             nType,
-                                            sal_False,sal_False,sal_False,sal_True,
+                                            false,false,false,true,
                                             sCatalogName,
                                             sSchemaName,
                                             sTableName);

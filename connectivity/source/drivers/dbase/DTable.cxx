@@ -429,7 +429,7 @@ void ODbaseTable::fillColumns()
                                                     nPrecision,
                                                     aDBFColumn.db_dez,
                                                     eType,
-                                                    sal_False,
+                                                    false,
                                                     bIsRowVersion,
                                                     bIsCurrency,
                                                     bCase,

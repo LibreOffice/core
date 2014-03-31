@@ -32,7 +32,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex(sal_True)
+OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex(true)
                  , m_pTable(_pTable)
 {
     construct();
@@ -50,7 +50,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable,
                                   _Catalog,
                                   _isUnique,
                                   _isPrimaryKeyIndex,
-                                  _isClustered,sal_True)
+                                  _isClustered,true)
                 ,m_pTable(_pTable)
 {
     construct();

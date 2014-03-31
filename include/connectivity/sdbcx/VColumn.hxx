@@ -50,22 +50,22 @@ namespace connectivity
                                     public ODescriptor
         {
         protected:
-            OUString m_TypeName;
-            OUString m_Description;
-            OUString m_DefaultValue;
+            OUString        m_TypeName;
+            OUString        m_Description;
+            OUString        m_DefaultValue;
 
             sal_Int32       m_IsNullable;
             sal_Int32       m_Precision;
             sal_Int32       m_Scale;
             sal_Int32       m_Type;
 
-            sal_Bool        m_IsAutoIncrement;
-            sal_Bool        m_IsRowVersion;
-            sal_Bool        m_IsCurrency;
+            bool            m_IsAutoIncrement;
+            bool            m_IsRowVersion;
+            bool            m_IsCurrency;
 
-            OUString m_CatalogName;
-            OUString m_SchemaName;
-            OUString m_TableName;
+            OUString       m_CatalogName;
+            OUString       m_SchemaName;
+            OUString       m_TableName;
 
             using OColumnDescriptor_BASE::rBHelper;
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const SAL_OVERRIDE;
@@ -76,7 +76,7 @@ namespace connectivity
             virtual void    SAL_CALL acquire() throw() SAL_OVERRIDE;
             virtual void    SAL_CALL release() throw() SAL_OVERRIDE;
 
-            OColumn(    sal_Bool _bCase);
+            OColumn(    bool _bCase);
             OColumn(    const OUString& _Name,
                         const OUString& _TypeName,
                         const OUString& _DefaultValue,
@@ -85,10 +85,10 @@ namespace connectivity
                         sal_Int32       _Precision,
                         sal_Int32       _Scale,
                         sal_Int32       _Type,
-                        sal_Bool        _IsAutoIncrement,
-                        sal_Bool        _IsRowVersion,
-                        sal_Bool        _IsCurrency,
-                        sal_Bool        _bCase,
+                        bool            _IsAutoIncrement,
+                        bool            _IsRowVersion,
+                        bool            _IsCurrency,
+                        bool            _bCase,
                         const OUString& _CatalogName,
                         const OUString& _SchemaName,
                         const OUString& _TableName);

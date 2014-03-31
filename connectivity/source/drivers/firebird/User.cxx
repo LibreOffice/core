@@ -19,14 +19,14 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
 User::User(const uno::Reference< XConnection >& rConnection):
-    OUser(sal_True) // Case Sensitive
+    OUser(true) // Case Sensitive
 {
     (void) rConnection;
 }
 
 User::User(const uno::Reference< XConnection >& rConnection, const OUString& rName):
     OUser(rName,
-          sal_True) // Case Sensitive
+          true) // Case Sensitive
 {
     (void) rConnection;
 }

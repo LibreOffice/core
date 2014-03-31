@@ -59,14 +59,14 @@ sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName ) throw(:
     return cppu::supportsService(this, _rServiceName);
 }
 
-OKey::OKey(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
-            ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
+OKey::OKey(bool _bCase) :   ODescriptor_BASE(m_aMutex)
+            ,   ODescriptor(ODescriptor_BASE::rBHelper, _bCase, true)
             ,   m_aProps(new KeyProperties())
             ,   m_pColumns(NULL)
 {
 }
 
-OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase)
+OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps, bool _bCase)
 : ODescriptor_BASE(m_aMutex)
  ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
  ,m_aProps(_rProps)

@@ -50,7 +50,7 @@ sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) t
     return cppu::supportsService(this, _rServiceName);
 }
 
-OKeyColumn::OKeyColumn(sal_Bool _bCase) : OColumn(_bCase)
+OKeyColumn::OKeyColumn(bool _bCase) : OColumn(_bCase)
 {
     construct();
 }
@@ -59,17 +59,17 @@ OKeyColumn::OKeyColumn( const OUString&  _ReferencedColumn,
                         const OUString&  _Name,
                         const OUString&  _TypeName,
                         const OUString&  _DefaultValue,
-                        sal_Int32               _IsNullable,
-                        sal_Int32               _Precision,
-                        sal_Int32               _Scale,
-                        sal_Int32               _Type,
-                        sal_Bool                _IsAutoIncrement,
-                        sal_Bool                _IsRowVersion,
-                        sal_Bool                _IsCurrency,
-                        sal_Bool                _bCase,
-                        const OUString& _CatalogName,
-                        const OUString& _SchemaName,
-                        const OUString& _TableName
+                        sal_Int32        _IsNullable,
+                        sal_Int32        _Precision,
+                        sal_Int32        _Scale,
+                        sal_Int32        _Type,
+                        bool             _IsAutoIncrement,
+                        bool             _IsRowVersion,
+                        bool             _IsCurrency,
+                        bool             _bCase,
+                        const OUString&  _CatalogName,
+                        const OUString&  _SchemaName,
+                        const OUString&  _TableName
                         ) : OColumn(_Name,
                             _TypeName,
                             _DefaultValue,

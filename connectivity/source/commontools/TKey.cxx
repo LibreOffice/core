@@ -31,7 +31,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::OKey(sal_True)
+OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::OKey(true)
     ,m_pTable(_pTable)
 {
     construct();
@@ -40,7 +40,7 @@ OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::O
 OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
             ,const OUString& _Name
             ,const sdbcx::TKeyProperties& _rProps
-            ) : connectivity::sdbcx::OKey(_Name,_rProps,sal_True)
+            ) : connectivity::sdbcx::OKey(_Name,_rProps,true)
                 ,m_pTable(_pTable)
 {
     construct();

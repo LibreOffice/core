@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< OUString> &_rVector)
-            : connectivity::sdbcx::OCollection(*_pIndex,sal_True,_rMutex,_rVector)
+            : connectivity::sdbcx::OCollection(*_pIndex,true,_rMutex,_rVector)
             ,m_pIndex(_pIndex)
 {
 }
@@ -94,7 +94,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
                                                       nSize,
                                                       nDec,
                                                       nDataType,
-                                                      sal_False,sal_False,sal_False,sal_True,
+                                                      false,false,false,true,
                                                       aCatalog, aSchema, aTable);
                 xRet = pRet;
                 break;
@@ -107,7 +107,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
 
 Reference< XPropertySet > OIndexColumns::createDescriptor()
 {
-    return new OIndexColumn(sal_True);
+    return new OIndexColumn(true);
 }
 
 void OIndexColumns::impl_refresh() throw(RuntimeException)

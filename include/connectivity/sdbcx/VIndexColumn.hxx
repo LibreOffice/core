@@ -34,12 +34,12 @@ namespace connectivity
             public OColumn, public OIndexColumn_PROP
         {
         protected:
-            sal_Bool    m_IsAscending;
+            bool    m_IsAscending;
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const SAL_OVERRIDE;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
         public:
-            OIndexColumn(   sal_Bool _bCase);
-            OIndexColumn(   sal_Bool _IsAscending,
+            OIndexColumn(   bool _bCase);
+            OIndexColumn(   bool _IsAscending,
                             const OUString& _Name,
                             const OUString& _TypeName,
                             const OUString& _DefaultValue,
@@ -47,10 +47,10 @@ namespace connectivity
                             sal_Int32       _Precision,
                             sal_Int32       _Scale,
                             sal_Int32       _Type,
-                            sal_Bool        _IsAutoIncrement,
-                            sal_Bool        _IsRowVersion,
-                            sal_Bool        _IsCurrency,
-                            sal_Bool        _bCase,
+                            bool            _IsAutoIncrement,
+                            bool            _IsRowVersion,
+                            bool            _IsCurrency,
+                            bool            _bCase,
                             const OUString& _CatalogName,
                             const OUString& _SchemaName,
                             const OUString& _TableName);

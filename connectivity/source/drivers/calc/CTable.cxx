@@ -510,7 +510,7 @@ void OCalcTable::fillColumns()
 
         sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, OUString(),OUString(),
                                                 ColumnValue::NULLABLE, nPrecision, nDecimals,
-                                                eType, sal_False, sal_False, bCurrency,
+                                                eType, false, false, bCurrency,
                                                 bStoresMixedCaseQuotedIdentifiers,
                                                 m_CatalogName, getSchema(), getName());
         Reference< XPropertySet> xCol = pColumn;

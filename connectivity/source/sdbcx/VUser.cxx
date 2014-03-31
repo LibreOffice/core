@@ -39,13 +39,13 @@ using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(OUser,"com.sun.star.sdbcx.VUser","com.sun.star.sdbcx.User");
 
-OUser::OUser(sal_Bool _bCase)  : OUser_BASE(m_aMutex)
-                , ODescriptor(OUser_BASE::rBHelper,_bCase,sal_True)
+OUser::OUser(bool _bCase)  : OUser_BASE(m_aMutex)
+                , ODescriptor(OUser_BASE::rBHelper,_bCase,true)
                 , m_pGroups(NULL)
 {
 }
 
-OUser::OUser(const OUString& _Name,sal_Bool _bCase) :    OUser_BASE(m_aMutex)
+OUser::OUser(const OUString& _Name, bool _bCase) :    OUser_BASE(m_aMutex)
                         ,ODescriptor(OUser_BASE::rBHelper,_bCase)
                         ,m_pGroups(NULL)
 {

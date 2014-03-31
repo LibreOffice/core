@@ -57,7 +57,7 @@ using namespace com::sun::star::lang;
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
-    : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
+    : OIndex(true/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
     , m_pFileStream(NULL)
     , m_nCurNode(NODE_NOTFOUND)
     , m_nPageCount(0)
@@ -72,7 +72,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable)
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const OUString& _rName)
-    : OIndex(_rName,OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
+    : OIndex(_rName, OUString(), _rHeader.db_unique, false, false, true)
     , m_pFileStream(NULL)
     , m_aHeader(_rHeader)
     , m_nCurNode(NODE_NOTFOUND)
