@@ -666,7 +666,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 
     bool bFound = false;
     sal_Int32 i;
-    for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
+    for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
         if( aLabItem.sGlossaryGroup == *(const OUString*)m_pAutoTextGroupLB->GetEntryData( i ))
         {
             bFound = true;
@@ -677,7 +677,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     {
         // initially search for a group starting with "crd" which is the name of the
         // business card AutoTexts
-        for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
+        for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
             if (((const OUString*)m_pAutoTextGroupLB->GetEntryData(i))->startsWith("crd"))
             {
                 bFound = true;
