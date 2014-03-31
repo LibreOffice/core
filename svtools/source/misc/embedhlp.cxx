@@ -664,7 +664,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
     Bitmap aBmp( SvtResId( BMP_PLUGIN ) );
     long nHeight = rRect.GetHeight() - pOut->GetTextHeight();
     long nWidth = rRect.GetWidth();
-    if( nHeight > 0 && aBmp.GetSizePixel().Width() > 0 )
+    if(nHeight > 0 && nWidth > 0 && aBmp.GetSizePixel().Width() > 0)
     {
         aPt.Y() = nHeight;
         Point   aP = rRect.TopLeft();
