@@ -59,7 +59,6 @@ public class CheckChangeColor {
         // create a PropertySet to set the properties for the new Pagestyle
         XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPageStyleCollection.getByName("Standard") );
 
-        /* FIXME port to FillAttributes
         assertEquals(
             "BackColor", new Any(Type.LONG, 0xFFFFFFFF),
             Any.complete(xPropertySet.getPropertyValue("BackColor")));
@@ -77,7 +76,7 @@ public class CheckChangeColor {
             Any.complete(xPropertySet.getPropertyValue("BackColor")));
         assertEquals(
             "IsLandscape", new Any(Type.BOOLEAN, true),
-            Any.complete(xPropertySet.getPropertyValue("IsLandscape")));*/
+            Any.complete(xPropertySet.getPropertyValue("IsLandscape")));
     }
 
     @Before public void setUpDocument() throws com.sun.star.uno.Exception {

@@ -1745,19 +1745,22 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case RES_BACKGROUND:
         {
-            //UUUU
-            SfxItemSet& rStyleSet = rBase.GetItemSet();
-            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet));
-            SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
-
-            aChangedBrushItem.PutValue(aValue, nMemberId);
-
-            if(!(aChangedBrushItem == aOriginalBrushItem))
+            if (SFX_STYLE_FAMILY_FRAME == eFamily)
             {
-                setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
-            }
+                //UUUU
+                SfxItemSet& rStyleSet = rBase.GetItemSet();
+                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet));
+                SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
-            bDone = true;
+                aChangedBrushItem.PutValue(aValue, nMemberId);
+
+                if(!(aChangedBrushItem == aOriginalBrushItem))
+                {
+                    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
+                }
+
+                bDone = true;
+            }
             break;
         }
         case OWN_ATTR_FILLBMP_MODE:
@@ -2499,16 +2502,19 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case RES_BACKGROUND:
             {
-                //UUUU
-                const SfxItemSet& rSet = rBase.GetItemSet();
-                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
-
-                if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
+                if (SFX_STYLE_FAMILY_FRAME == eFamily)
                 {
-                    OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
-                }
+                    //UUUU
+                    const SfxItemSet& rSet = rBase.GetItemSet();
+                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
 
-                bDone = true;
+                    if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
+                    {
+                        OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
+                    }
+
+                    bDone = true;
+                }
                 break;
             }
             case OWN_ATTR_FILLBMP_MODE:
