@@ -2280,9 +2280,9 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     else
         nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
 
+#ifdef DBG_UTIL
     OUString aReturnString;
 
-#ifdef DBG_UTIL
     switch (nRes)
     {
         case GRFILTER_OPENERROR:
