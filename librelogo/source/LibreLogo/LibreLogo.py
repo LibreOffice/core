@@ -1703,11 +1703,16 @@ def __compil__(s):
     if len(subnames) > 0:
         globs = "global %s" % ", ".join(subnames)
         # search user functions (function calls with two or more arguments need explicite Python parentheses)
+        ends = __l12n__(_.lng)["END"] # support multiple names of "END"
+        firstend = ends.split("|")[0]
+        s = re.sub(r"(?<!:)\b(?:%s)\b" % ends, firstend, s)
+        __l12n__(_.lng)["END"] = firstend
         functions += [ re.findall("(?u)\w+",i[0])[0]  for i in re.findall(r"""(?iu)(?<=__def__ )([^\n]*)\n # beginning of a procedure
             (?:[^\n]*(?<!\b(%(END)s))\n)* # 0 or more lines (not END)
             [^\n]*\b(?:%(OUTPUT)s)\b[^\n]*\n # line with OUTPUT (functions = procedures with OUTPUT)
             (?:[^\n]*(?<!\b(?:%(END)s))\n)* # 0 or more lines (not END)
-            [ \t]*\b(?:%(END)s)\b""" % __l12n__(_.lng), s, re.X) ] # final END (XXX multiple names of "END" doesn't supported)
+            [ \t]*\b(?:%(END)s)\b""" % __l12n__(_.lng), s, re.X) ]
+        __l12n__(_.lng)["END"] = ends
         # add line breaks before procedure calls
         procedures = set(subnames) - set(functions)
         if len(procedures) > 0:
