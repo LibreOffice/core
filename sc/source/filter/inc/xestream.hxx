@@ -324,7 +324,7 @@ public:
                                         OUString* pRelationshipId = NULL );
 
     // ignore
-    virtual bool exportDocument() throw() SAL_OVERRIDE;
+    virtual bool exportDocument() throw (std::exception) SAL_OVERRIDE;
 
     // only needed for import; ignore
     virtual bool importDocument() throw() SAL_OVERRIDE;
