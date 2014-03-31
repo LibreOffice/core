@@ -4255,22 +4255,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
             {
                 // First test if we have room at all
                 if( bBigger )
-                {
                     bRet = true;
-// What's up with Top, Table in a Frame or Header/Footer with fixed width??
-                    if( !bRet )
-                    {
-                        // Then call itself recursively; only with another mode (proportional)
-                        TblChgMode eOld = eTblChgMode;
-                        eTblChgMode = TBLFIX_CHGPROP;
-
-                        bRet = SetRowHeight( rAktBox, eType, nAbsDiff,
-                                            nRelDiff, ppUndo );
-
-                        eTblChgMode = eOld;
-                        return bRet;
-                    }
-                }
                 else
                     bRet = (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
                                         nAbsDiff, true );
