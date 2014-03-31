@@ -597,7 +597,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 // online layout.
                 //MakeAll();
             }
-            else
+            else if (pNew)
             {
                 const SwFmtFrmSize &rSz = nWhich == RES_FMT_CHG ?
                         ((SwFmtChg*)pNew)->pChangedFmt->GetFrmSize() :
