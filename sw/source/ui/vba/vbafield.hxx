@@ -49,7 +49,8 @@ class SwVbaFields : public SwVbaFields_BASE
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
 private:
-    css::uno::Reference< css::text::XTextField > Create_Field_FileName( const OUString& _text ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::text::XTextField > Create_Field_FileName(const OUString& rText)
+        throw (css::uno::RuntimeException, css::script::BasicErrorException);
     css::uno::Reference< css::text::XTextField > Create_Field_DocProperty( const OUString& _text ) throw (css::uno::RuntimeException);
 
 public:
