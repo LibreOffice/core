@@ -80,17 +80,6 @@ public:
                 aServiceNames = *pServiceNames_;
         }
 
-    // old function, only for backward compatibility
-    OSingleFactoryHelper(
-        const Reference<XMultiServiceFactory > & rServiceManager,
-        const OUString & rImplementationName_ )
-        SAL_THROW(())
-        : xSMgr( rServiceManager )
-        , pCreateFunction( NULL )
-        , m_fptr( 0 )
-        , aImplementationName( rImplementationName_ )
-        {}
-
     virtual ~OSingleFactoryHelper();
 
     // XInterface
