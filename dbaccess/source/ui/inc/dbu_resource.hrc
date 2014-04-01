@@ -75,8 +75,6 @@
 
 
 // dialog ids
-
-#define DLG_SQLEXCEPTIONCHAIN           RID_DIALOG_START +  3
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14

@@ -19,7 +19,6 @@
 
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hrc"
-#include "sqlmessage.hrc"
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/fixed.hxx>
@@ -293,12 +292,8 @@ namespace
 
 class OExceptionChainDialog : public ModalDialog
 {
-    FixedLine       m_aFrame;
-    FixedText       m_aListLabel;
-    SvTreeListBox   m_aExceptionList;
-    FixedText       m_aDescLabel;
-    MultiLineEdit   m_aExceptionText;
-    OKButton        m_aOK;
+    SvTreeListBox*    m_pExceptionList;
+    VclMultiLineEdit* m_pExceptionText;
 
     OUString        m_sStatusLabel;
     OUString        m_sErrorCodeLabel;
@@ -307,36 +302,34 @@ class OExceptionChainDialog : public ModalDialog
 
 public:
     OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions );
-    ~OExceptionChainDialog();
 
 protected:
     DECL_LINK(OnExceptionSelected, void*);
 };
 
-OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
-    :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
-    ,m_aFrame           (this, ModuleRes(FL_DETAILS))
-    ,m_aListLabel       (this, ModuleRes(FT_ERRORLIST))
-    ,m_aExceptionList   (this, ModuleRes(CTL_ERRORLIST))
-    ,m_aDescLabel       (this, ModuleRes(FT_DESCRIPTION))
-    ,m_aExceptionText   (this, ModuleRes(ME_DESCRIPTION))
-    ,m_aOK              (this, ModuleRes(PB_OK))
-    ,m_aExceptions( _rExceptions )
+OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ExceptionDisplayChain& _rExceptions)
+    : ModalDialog(pParent, "SQLExceptionDialog", "dbaccess/ui/sqlexception.ui")
+    , m_aExceptions(_rExceptions)
 {
+    get(m_pExceptionList, "list");
+    Size aListSize(LogicToPixel(Size(85, 93), MAP_APPFONT));
+    m_pExceptionList->set_width_request(aListSize.Width());
+    m_pExceptionList->set_height_request(aListSize.Height());
+    get(m_pExceptionText, "description");
+    Size aTextSize(LogicToPixel(Size(125 , 93), MAP_APPFONT));
+    m_pExceptionText->set_width_request(aTextSize.Width());
+    m_pExceptionText->set_height_request(aTextSize.Height());
 
     m_sStatusLabel = ModuleRes( STR_EXCEPTION_STATUS );
     m_sErrorCodeLabel = ModuleRes( STR_EXCEPTION_ERRORCODE );
 
-    FreeResource();
+    m_pExceptionList->SetSelectionMode(SINGLE_SELECTION);
+    m_pExceptionList->SetDragDropMode(0);
+    m_pExceptionList->EnableInplaceEditing(false);
+    m_pExceptionList->SetStyle(m_pExceptionList->GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
-    m_aExceptionList.SetSelectionMode(SINGLE_SELECTION);
-    m_aExceptionList.SetDragDropMode(0);
-    m_aExceptionList.EnableInplaceEditing(false);
-    m_aExceptionList.SetStyle(m_aExceptionList.GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
-
-    m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
-    m_aExceptionList.SetNodeDefaultImages( );
-    m_aExceptionText.SetReadOnly(true);
+    m_pExceptionList->SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
+    m_pExceptionList->SetNodeDefaultImages( );
 
     bool bHave22018 = false;
     size_t elementPos = 0;
@@ -346,7 +339,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
             ++loop, ++elementPos
         )
     {
-        lcl_insertExceptionEntry( m_aExceptionList, elementPos, *loop );
+        lcl_insertExceptionEntry( *m_pExceptionList, elementPos, *loop );
         bHave22018 = loop->sSQLState.equalsAscii( "22018" );
     }
 
@@ -362,18 +355,14 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
         m_aExceptions.push_back( aInfo22018 );
 
-        lcl_insertExceptionEntry( m_aExceptionList, m_aExceptions.size() - 1, aInfo22018 );
+        lcl_insertExceptionEntry( *m_pExceptionList, m_aExceptions.size() - 1, aInfo22018 );
     }
-}
-
-OExceptionChainDialog::~OExceptionChainDialog()
-{
 }
 
 IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
 {
-    SvTreeListEntry* pSelected = m_aExceptionList.FirstSelected();
-    OSL_ENSURE(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
+    SvTreeListEntry* pSelected = m_pExceptionList->FirstSelected();
+    OSL_ENSURE(!pSelected || !m_pExceptionList->NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
 
     OUString sText;
 
@@ -404,7 +393,7 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
         sText += aExceptionInfo.sMessage;
     }
 
-    m_aExceptionText.SetText(sText);
+    m_pExceptionText->SetText(sText);
 
     return 0L;
 }

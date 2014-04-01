@@ -19,8 +19,6 @@
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
-#include "sqlmessage.hrc"
-
 
 Image BMP_EXCEPTION_ERROR
 {
@@ -40,69 +38,14 @@ Image BMP_EXCEPTION_INFO
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
-ModalDialog DLG_SQLEXCEPTIONCHAIN
+String STR_EXCEPTION_STATUS
 {
-    HelpID = "dbaccess:ModalDialog:DLG_SQLEXCEPTIONCHAIN";
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 150 ) ;
-    Text [ en-US ] = "%PRODUCTNAME Base" ;
+    Text [ en-US ] = "SQL Status";
+};
 
-    FixedLine FL_DETAILS
-    {
-        Pos = MAP_APPFONT ( 6, 3 ) ;
-        Size = MAP_APPFONT ( 228, 8 ) ;
-        Text [ en-US ] = "Details";
-    };
-    FixedText FT_ERRORLIST
-    {
-        Pos = MAP_APPFONT ( 12, 12 ) ;
-        Size = MAP_APPFONT ( 85, 10 ) ;
-        Text [ en-US ] = "Error ~list:";
-        Group = TRUE;
-    };
-    Control CTL_ERRORLIST
-    {
-        Pos = MAP_APPFONT ( 12, 25 ) ;
-        Size = MAP_APPFONT ( 85, 93 ) ;
-        Border = TRUE;
-        TabStop = TRUE;
-        HelpId = HID_SQLERROR_EXCHAIN_ERRORS;
-    };
-    FixedText FT_DESCRIPTION
-    {
-        Pos = MAP_APPFONT ( 103, 12 ) ;
-        Size = MAP_APPFONT ( 125, 10 ) ;
-        Text [ en-US ] = "~Description:";
-        Group = TRUE;
-    };
-    MultiLineEdit ME_DESCRIPTION
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 25 ) ;
-        Size = MAP_APPFONT ( 125 , 93 ) ;
-        TabStop = TRUE ;
-        VScroll = TRUE ;
-        HelpId = HID_SQLERROR_EXCHAIN_TEXT;
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 95 , 130 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-
-    String STR_EXCEPTION_STATUS
-    {
-        Text [ en-US ] = "SQL Status";
-    };
-    String STR_EXCEPTION_ERRORCODE
-    {
-        Text [ en-US ] = "Error code";
-    };
+String STR_EXCEPTION_ERRORCODE
+{
+    Text [ en-US ] = "Error code";
 };
 
 String STR_EXPLAN_STRINGCONVERSION_ERROR
