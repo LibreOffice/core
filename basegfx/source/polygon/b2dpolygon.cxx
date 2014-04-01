@@ -318,11 +318,6 @@ public:
         }
     }
 
-    sal_uInt32 count() const
-    {
-        return maVector.size();
-    }
-
     bool operator==(const ControlVectorArray2D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
@@ -874,12 +869,6 @@ public:
         return (mpControlVector && mpControlVector->isUsed());
     }
 
-    void resetControlVectors(sal_uInt32 nIndex)
-    {
-        setPrevControlVector(nIndex, basegfx::B2DVector::getEmptyVector());
-        setNextControlVector(nIndex, basegfx::B2DVector::getEmptyVector());
-    }
-
     void resetControlVectors()
     {
         mpBufferedData.reset();
@@ -1158,28 +1147,6 @@ public:
         {
             maPoints.transform(rMatrix);
         }
-    }
-
-    const basegfx::B2DPoint* begin() const
-    {
-        return maPoints.begin();
-    }
-
-    const basegfx::B2DPoint* end() const
-    {
-        return maPoints.end();
-    }
-
-    basegfx::B2DPoint* begin()
-    {
-       mpBufferedData.reset();
-       return maPoints.begin();
-    }
-
-    basegfx::B2DPoint* end()
-    {
-        mpBufferedData.reset();
-        return maPoints.end();
     }
 };
 
