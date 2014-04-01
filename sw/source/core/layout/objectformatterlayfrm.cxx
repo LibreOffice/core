@@ -20,7 +20,6 @@
 #include <objectformatterlayfrm.hxx>
 #include <anchoredobject.hxx>
 #include <sortedobjs.hxx>
-#include <layfrm.hxx>
 #include <pagefrm.hxx>
 
 // #124218#
