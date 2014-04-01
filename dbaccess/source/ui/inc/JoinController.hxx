@@ -87,7 +87,7 @@ namespace dbaui
         inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
         // OSingleDocumentController overridables
-        virtual void        reconnect( sal_Bool _bUI ) SAL_OVERRIDE;
+        virtual void        reconnect( bool _bUI ) SAL_OVERRIDE;
         virtual void        impl_onModifyChanged() SAL_OVERRIDE;
 
         // own overridables

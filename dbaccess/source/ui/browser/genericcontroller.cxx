@@ -115,7 +115,7 @@ FeatureState UserDefinedFeatures::getState( const URL& /*_rFeatureURL*/ )
     // TODO: we should ask the dispatcher. However, this is laborious, since you cannot ask a dispatcher
     // directly, but need to add a status listener.
     FeatureState aState;
-    aState.bEnabled = sal_True;
+    aState.bEnabled = true;
     return aState;
 }
 
@@ -170,10 +170,10 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_xContext(_rM)
     ,m_aCurrentFrame( *this )
-    ,m_bPreview(sal_False)
-    ,m_bReadOnly(sal_False)
-    ,m_bCurrentlyModified(sal_False)
-    ,m_bExternalTitle(sal_False)
+    ,m_bPreview(false)
+    ,m_bReadOnly(false)
+    ,m_bCurrentlyModified(false)
+    ,m_bExternalTitle(false)
 {
     osl_atomic_increment( &m_refCount );
     {
@@ -226,7 +226,7 @@ OGenericUnoController::~OGenericUnoController()
 
 }
 
-sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
+bool OGenericUnoController::Construct(Window* /*pParent*/)
 {
     OSL_ENSURE( getView(), "the view is NULL!" );
 
@@ -252,7 +252,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
         ShowServiceNotAvailableError(getView(), OUString("com.sun.star.sdb.DatabaseContext"), true);
     }
 
-    return sal_True;
+    return true;
 }
 
 IMPL_LINK_NOARG(OGenericUnoController, OnAsyncInvalidateAll)
@@ -287,7 +287,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         else if ( ( *pIter >>= aValue ) && aValue.Name.equalsAscii( "Preview" ) )
         {
             aValue.Value >>= m_bPreview;
-            m_bReadOnly = sal_True;
+            m_bReadOnly = true;
         }
     }
     try
@@ -362,7 +362,7 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
         if ( xModi.is() )
             m_bCurrentlyModified = xModi->isModified(); // can only be reset by save
         else
-            m_bCurrentlyModified = sal_True;
+            m_bCurrentlyModified = true;
     }
     InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_UNDO);
@@ -454,7 +454,7 @@ namespace
     }
 }
 
-void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
+void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature, const Reference< XStatusListener > & xListener, bool _bIgnoreCache)
 {
     sal_uInt16 nFeat = m_aSupportedFeatures[ _rFeature ].nFeatureId;
     FeatureState aFeatState( GetState( nFeat ) );
@@ -519,7 +519,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
 
 }
 
-sal_Bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
+bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
 {
     SupportedFeatures::iterator aFeaturePos = ::std::find_if(
         m_aSupportedFeatures.begin(),
@@ -530,7 +530,7 @@ sal_Bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
     return ( m_aSupportedFeatures.end() != aFeaturePos && !aFeaturePos->first.isEmpty());
 }
 
-void OGenericUnoController::InvalidateFeature(const OUString& _rURLPath, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+void OGenericUnoController::InvalidateFeature(const OUString& _rURLPath, const Reference< XStatusListener > & _xListener, bool _bForceBroadcast)
 {
     ImplInvalidateFeature( m_aSupportedFeatures[ _rURLPath ].nFeatureId, _xListener, _bForceBroadcast );
 }
@@ -591,7 +591,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
 #endif
 }
 
-void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
+void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, bool _bForceBroadcast )
 {
 #if OSL_DEBUG_LEVEL > 0
     if ( _nId != -1 )
@@ -621,14 +621,14 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
         m_aAsyncInvalidateAll.Call();
 }
 
-void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener, bool _bForceBroadcast)
 {
     ImplInvalidateFeature( _nId, _xListener, _bForceBroadcast );
 }
 
 void OGenericUnoController::InvalidateAll()
 {
-    ImplInvalidateFeature( ALL_FEATURES, NULL, sal_True );
+    ImplInvalidateFeature( ALL_FEATURES, NULL, true );
 }
 
 void OGenericUnoController::InvalidateAll_Impl()
@@ -639,7 +639,7 @@ void OGenericUnoController::InvalidateAll_Impl()
             aIter != m_aSupportedFeatures.end();
             ++aIter
         )
-        ImplBroadcastFeatureState( aIter->first, NULL, sal_True );
+        ImplBroadcastFeatureState( aIter->first, NULL, true );
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -740,7 +740,7 @@ void OGenericUnoController::addStatusListener(const Reference< XStatusListener >
     m_arrStatusListener.insert( m_arrStatusListener.end(), DispatchTarget( aParsedURL, aListener ) );
 
     // initially broadcast the state
-    ImplBroadcastFeatureState( aParsedURL.Complete, aListener, sal_True );
+    ImplBroadcastFeatureState( aParsedURL.Complete, aListener, true );
         // force the new state to be broadcast to the new listener
 }
 
@@ -895,7 +895,7 @@ FeatureState OGenericUnoController::GetState( sal_uInt16 _nId ) const
     {
         case ID_BROWSER_UNDO:
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             break;
         default:
             aReturn = m_pData->m_aUserDefinedFeatures.getState( getURLForId( _nId ) );
@@ -1325,7 +1325,7 @@ void SAL_CALL OGenericUnoController::setTitle(const OUString& sTitle)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
-    m_bExternalTitle = sal_True;
+    m_bExternalTitle = true;
     impl_getTitleHelper_throw()->setTitle (sTitle);
 }
 
@@ -1375,7 +1375,7 @@ void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequenc
         Execute(_nCommandId, aArgs);
 }
 
-sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
+bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
     return GetState( _nCommandId ).bEnabled;
 }
@@ -1412,9 +1412,9 @@ void OGenericUnoController::notifyHiContrastChanged()
 {
 }
 
-sal_Bool OGenericUnoController::isDataSourceReadOnly() const
+bool OGenericUnoController::isDataSourceReadOnly() const
 {
-    return sal_False;
+    return false;
 }
 
 Reference< XController > OGenericUnoController::getXController() throw( RuntimeException )
@@ -1427,18 +1427,18 @@ bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
     return m_pData->m_aUserInputInterception.handleNotifyEvent( _rEvent );
 }
 
-sal_Bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
+bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
 {
     FeatureState aState = GetState( _nCommandId );
 
-    return aState.bChecked && (sal_Bool)*aState.bChecked;
+    return aState.bChecked && *aState.bChecked;
 }
 
-sal_Bool OGenericUnoController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
+bool OGenericUnoController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
 {
     OSL_ENSURE( !_rCompleteCommandURL.isEmpty(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
 
-    sal_Bool bIsEnabled = sal_False;
+    bool bIsEnabled = false;
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
     if ( aIter != m_aSupportedFeatures.end() )
         bIsEnabled = isCommandEnabled( aIter->second.nFeatureId );

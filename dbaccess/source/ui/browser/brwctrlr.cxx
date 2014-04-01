@@ -721,24 +721,24 @@ void SbaXDataBrowserController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:FormSlots/insertRecord",    ID_BROWSER_INSERT_ROW,  CommandGroup::INSERT );
 }
 
-sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
+bool SbaXDataBrowserController::Construct(Window* pParent)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::Construct" );
     // create/initialize the form and the grid model
     m_xRowSet = CreateForm();
     if (!m_xRowSet.is())
-        return sal_False;
+        return false;
 
     m_xColumnsSupplier.set(m_xRowSet,UNO_QUERY);
     m_xLoadable.set(m_xRowSet,UNO_QUERY);
 
     Reference< XPropertySet > xFormProperties( m_xRowSet, UNO_QUERY );
     if ( !InitializeForm( xFormProperties ) )
-        return sal_False;
+        return false;
 
     m_xGridModel = CreateGridModel();
     if (!m_xGridModel.is())
-        return sal_False;
+        return false;
 
     // set the formatter if available
     initFormatter();
@@ -759,14 +759,14 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     // create the view
     setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
     if (!getBrowserView())
-        return sal_False;
+        return false;
 
     // late construction
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         getBrowserView()->Construct(getControlModel());
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     catch(SQLException&)
     {
@@ -779,7 +779,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (!bSuccess)
     {
         //  deleteView();
-        return sal_False;
+        return false;
     }
 
     // now that we have a view we can create the clipboard listener
@@ -1558,7 +1558,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_FILTERCRIT:
                 if ( m_bCannotSelectUnfiltered && m_xParser.is() )
                 {
-                    aReturn.bEnabled = sal_True;
+                    aReturn.bEnabled = true;
                     break;
                 }
                 // no break
@@ -1574,11 +1574,11 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 break;
 
             case ID_BROWSER_REFRESH:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 break;
 
             case ID_BROWSER_REDO:
-                aReturn.bEnabled = sal_False;   // simply forget it ;). no redo possible.
+                aReturn.bEnabled = false;   // simply forget it ;). no redo possible.
                 break;
 
             case ID_BROWSER_UNDORECORD:
@@ -1591,7 +1591,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                         aReturn.bEnabled = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ISMODIFIED));
                 }
                 else
-                    aReturn.bEnabled = sal_True;
+                    aReturn.bEnabled = true;
 
                 aReturn.sTitle = (ID_BROWSER_UNDORECORD == nId) ? m_sStateUndoRecord : m_sStateSaveRecord;
             }
@@ -1613,7 +1613,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 if (!isValidCursor() || !isLoaded())
                     break;  // no cursor -> no edit mode
 
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
 
                 sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
                 aReturn.bChecked = nGridMode > DbGridControl::OPT_READONLY;
@@ -1621,19 +1621,19 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             break;
             case ID_BROWSER_FILTERED:
             {
-                aReturn.bEnabled = sal_False;
+                aReturn.bEnabled = false;
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_FILTER));
                 OUString aHaving = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_HAVING_CLAUSE));
                 if ( !(aFilter.isEmpty() && aHaving.isEmpty()) )
                 {
                     xActiveSet->getPropertyValue( PROPERTY_APPLYFILTER ) >>= aReturn.bChecked;
-                    aReturn.bEnabled = sal_True;
+                    aReturn.bEnabled = true;
                 }
                 else
                 {
                     aReturn.bChecked = false;
-                    aReturn.bEnabled = sal_False;
+                    aReturn.bEnabled = false;
                 }
             }
             break;

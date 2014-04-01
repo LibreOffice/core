@@ -147,7 +147,7 @@ namespace dbaui
 
         DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,SbaXDataBrowserController);
         // late construction
-        virtual sal_Bool Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(Window* pParent) SAL_OVERRIDE;
         // XInterface
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

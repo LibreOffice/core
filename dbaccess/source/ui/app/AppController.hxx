@@ -508,11 +508,11 @@ namespace dbaui
         virtual void        executeChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual void        executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual void        executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
-        virtual sal_Bool    isCommandEnabled(sal_uInt16 _nCommandId) const SAL_OVERRIDE;
-        virtual sal_Bool    isCommandEnabled( const OUString& _rCompleteCommandURL ) const SAL_OVERRIDE;
+        virtual bool        isCommandEnabled(sal_uInt16 _nCommandId) const SAL_OVERRIDE;
+        virtual bool        isCommandEnabled( const OUString& _rCompleteCommandURL ) const SAL_OVERRIDE;
         virtual sal_uInt16  registerCommandURL( const OUString& _rCompleteCommandURL ) SAL_OVERRIDE;
         virtual void        notifyHiContrastChanged() SAL_OVERRIDE;
-        virtual sal_Bool    isDataSourceReadOnly() const SAL_OVERRIDE;
+        virtual bool        isDataSourceReadOnly() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                             getXController(void) throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
         virtual bool        interceptUserInput( const NotifyEvent& _rEvent ) SAL_OVERRIDE;
@@ -546,7 +546,7 @@ namespace dbaui
         virtual void        disconnect();
 
         // late construction
-        virtual sal_Bool    Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool        Construct(Window* pParent) SAL_OVERRIDE;
         virtual void        describeSupportedFeatures() SAL_OVERRIDE;
 
     protected:

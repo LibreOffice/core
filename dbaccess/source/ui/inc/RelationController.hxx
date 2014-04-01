@@ -55,7 +55,7 @@ namespace dbaui
 
         void mergeData(const TTableConnectionData& _aConnectionData);
 
-        virtual sal_Bool Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(Window* pParent) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -409,7 +409,7 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
     return m_xDataSourceConnection;
 }
 
-sal_Bool OApplicationController::isDataSourceReadOnly() const
+bool OApplicationController::isDataSourceReadOnly() const
 {
     Reference<XStorable> xStore(m_xModel,UNO_QUERY);
     return !xStore.is() || xStore->isReadonly();
@@ -417,7 +417,7 @@ sal_Bool OApplicationController::isDataSourceReadOnly() const
 
 sal_Bool OApplicationController::isConnectionReadOnly() const
 {
-    sal_Bool bIsConnectionReadOnly = sal_True;
+    sal_Bool bIsConnectionReadOnly = true;
     if ( m_xMetaData.is() )
     {
         try

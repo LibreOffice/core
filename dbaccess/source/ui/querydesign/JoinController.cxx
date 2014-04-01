@@ -183,7 +183,7 @@ void OJoinController::disposing()
     m_vTableData.clear();
 }
 
-void OJoinController::reconnect( sal_Bool _bUI )
+void OJoinController::reconnect( bool _bUI )
 {
     OJoinController_BASE::reconnect( _bUI );
     if ( isConnected() && m_pAddTableDialog )
@@ -215,7 +215,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
         // (disabled automatically)
-    aReturn.bEnabled = sal_True;
+    aReturn.bEnabled = true;
 
     switch (_nId)
     {

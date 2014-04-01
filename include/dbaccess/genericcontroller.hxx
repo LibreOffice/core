@@ -124,14 +124,14 @@ namespace dbaui
     */
     struct FeatureState
     {
-        sal_Bool                    bEnabled;
+        bool                        bEnabled;
 
         optional< bool >            bChecked;
         optional< bool >            bInvisible;
         ::com::sun::star::uno::Any  aValue;
         optional< OUString > sTitle;
 
-        FeatureState() : bEnabled(sal_False) { }
+        FeatureState() : bEnabled(false) { }
     };
 
 
@@ -166,7 +166,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >
                     xListener;
         sal_Int32   nId;
-        sal_Bool    bForceBroadcast;
+        bool        bForceBroadcast;
     };
 
 
@@ -249,11 +249,11 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >         m_xDatabaseContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
 
-        sal_Bool                m_bPreview;
-        sal_Bool                m_bReadOnly;
+        bool                    m_bPreview;
+        bool                    m_bReadOnly;
 
-        sal_Bool                m_bCurrentlyModified    : 1;
-        sal_Bool                m_bExternalTitle : 1;
+        bool                    m_bCurrentlyModified : 1;
+        bool                    m_bExternalTitle : 1;
 
 
 
@@ -332,7 +332,7 @@ namespace dbaui
             @param  _nId
                 The ID of the feature.
         */
-        sal_Bool isFeatureSupported( sal_Int32 _nId );
+        bool isFeatureSupported( sal_Int32 _nId );
 
         // gets the URL which the given id is assigned to
         ::com::sun::star::util::URL getURLForId(sal_Int32 _nId) const;
@@ -395,10 +395,10 @@ namespace dbaui
         void InvalidateAll_Impl();
         void InvalidateFeature_Impl();
 
-        void ImplInvalidateFeature( sal_Int32 _nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _xListener, sal_Bool _bForceBroadcast );
+        void ImplInvalidateFeature( sal_Int32 _nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _xListener, bool _bForceBroadcast );
 
-        sal_Bool ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState);
-        void ImplBroadcastFeatureState(const OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache);
+        bool ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState);
+        void ImplBroadcastFeatureState(const OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, bool _bIgnoreCache);
 
         // link methods
         DECL_LINK(OnAsyncInvalidateAll, void*);
@@ -414,17 +414,17 @@ namespace dbaui
 
         // if xListener is NULL the change will be forwarded to all listeners to the given ::com::sun::star::util::URL
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        virtual void InvalidateFeature(const OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, sal_Bool _bForceBroadcast = sal_False);
+        virtual void InvalidateFeature(const OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
         // if there is an ::com::sun::star::util::URL translation for the id ('handle') the preceding InvalidateFeature is used.
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        virtual void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, sal_Bool _bForceBroadcast = sal_False);
+        virtual void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
 
         /** InvalidateAll invalidates all features currently known
         */
         virtual void InvalidateAll();
         // late construction
-        virtual sal_Bool Construct(Window* pParent);
+        virtual bool Construct(Window* pParent);
 
         /** get the layout manager
             @param  _xFrame
@@ -439,16 +439,16 @@ namespace dbaui
         virtual void executeChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual void executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual void executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
-        virtual sal_Bool isCommandEnabled(sal_uInt16 _nCommandId) const SAL_OVERRIDE;
-        virtual sal_Bool isCommandEnabled(const OUString& _rCompleteCommandURL) const SAL_OVERRIDE;
+        virtual bool isCommandEnabled(sal_uInt16 _nCommandId) const SAL_OVERRIDE;
+        virtual bool isCommandEnabled(const OUString& _rCompleteCommandURL) const SAL_OVERRIDE;
         virtual sal_uInt16 registerCommandURL( const OUString& _rCompleteCommandURL ) SAL_OVERRIDE;
         virtual void notifyHiContrastChanged() SAL_OVERRIDE;
-        virtual sal_Bool isDataSourceReadOnly() const SAL_OVERRIDE;
+        virtual bool isDataSourceReadOnly() const SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > getXController() throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) SAL_OVERRIDE;
 
         // misc
-        virtual sal_Bool isCommandChecked(sal_uInt16 _nCommandId) const;
+        virtual bool isCommandChecked(sal_uInt16 _nCommandId) const;
 
         // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

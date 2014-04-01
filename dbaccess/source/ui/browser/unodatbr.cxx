@@ -324,10 +324,10 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     SbaXDataBrowserController::disposing();
 }
 
-sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
+bool SbaTableQueryBrowser::Construct(Window* pParent)
 {
     if ( !SbaXDataBrowserController::Construct( pParent ) )
-        return sal_False;
+        return false;
 
     try
     {
@@ -384,7 +384,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         InvalidateFeature(ID_BROWSER_EXPLORER);
     }
 
-    return sal_True;
+    return true;
 }
 
 namespace
@@ -1734,7 +1734,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 bHandled = sal_True;
                 break;
             case ID_BROWSER_REFRESH:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 bHandled = sal_True;
                 break;
         }
@@ -1804,7 +1804,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     OUString sObject(aName);
 
                     aReturn.sTitle = sTitle.replaceFirst(OUString('#'), sObject);
-                    aReturn.bEnabled = sal_True;
+                    aReturn.bEnabled = true;
                 }
                 break;
             case ID_BROWSER_TABLEATTR:

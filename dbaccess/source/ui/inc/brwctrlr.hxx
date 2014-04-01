@@ -149,7 +149,7 @@ namespace dbaui
 
         UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction
-        virtual sal_Bool Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(Window* pParent) SAL_OVERRIDE;
 
         // UNO
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

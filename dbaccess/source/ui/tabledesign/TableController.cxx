@@ -186,7 +186,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
     switch (_nId)
     {
         case ID_BROWSER_CLOSE:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             break;
         case ID_BROWSER_EDITDOC:
             aReturn.bChecked = isEditable();
@@ -278,7 +278,7 @@ void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
 sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 {
     if (!isConnected())
-        reconnect(sal_True); // ask the user for a new connection
+        reconnect(true); // ask the user for a new connection
     Reference<XTablesSupplier> xTablesSup(getConnection(),UNO_QUERY);
 
     if (!xTablesSup.is())
@@ -537,11 +537,11 @@ void OTableController::impl_initialize()
     }
 }
 
-sal_Bool OTableController::Construct(Window* pParent)
+bool OTableController::Construct(Window* pParent)
 {
     setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )

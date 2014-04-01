@@ -133,23 +133,23 @@ namespace dbaui
         SharedConnection                m_xConnection;
         ::dbtools::DatabaseMetaData     m_aSdbMetaData;
         // </properties>
-        OUString                 m_sDataSourceName;      // the data source we're working for
+        OUString                        m_sDataSourceName;  // the data source we're working for
         DataSourceHolder                m_aDataSource;
         Reference< XModel >             m_xDocument;
         Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         sal_Int32                       m_nDocStartNumber;
-        sal_Bool                        m_bSuspended;   // is true when the controller was already suspended
-        sal_Bool                        m_bEditable;    // is the control readonly or not
-        sal_Bool                        m_bModified;    // is the data modified
+        bool                            m_bSuspended;   // is true when the controller was already suspended
+        bool                            m_bEditable;    // is the control readonly or not
+        bool                            m_bModified;    // is the data modified
         bool                            m_bNotAttached;
 
         DBSubComponentController_Impl( ::osl::Mutex& i_rMutex )
             :m_aDocScriptSupport()
             ,m_aModifyListeners( i_rMutex )
             ,m_nDocStartNumber(0)
-            ,m_bSuspended( sal_False )
-            ,m_bEditable(sal_True)
-            ,m_bModified(sal_False)
+            ,m_bSuspended( false )
+            ,m_bEditable(true)
+            ,m_bModified(false)
             ,m_bNotAttached(true)
         {
         }
@@ -198,7 +198,7 @@ namespace dbaui
         bool bShowError = true;
         if ( !isConnected() )
         {
-            reconnect( sal_False );
+            reconnect( false );
             bShowError = false;
         }
         if ( !isConnected() )
@@ -296,7 +296,7 @@ namespace dbaui
         }
     }
 
-    void DBSubComponentController::reconnect( sal_Bool _bUI )
+    void DBSubComponentController::reconnect( bool _bUI )
     {
         OSL_ENSURE(!m_pImpl->m_bSuspended, "Cannot reconnect while suspended!");
 
@@ -305,7 +305,7 @@ namespace dbaui
         m_pImpl->m_xConnection.clear();
 
         // reconnect
-        sal_Bool bReConnect = sal_True;
+        bool bReConnect = true;
         if ( _bUI )
         {
             QueryBox aQuery( getView(), ModuleRes(QUERY_CONNECTION_LOST) );
@@ -335,7 +335,7 @@ namespace dbaui
     void DBSubComponentController::losingConnection()
     {
         // our connection was disposed so we need a new one
-        reconnect( sal_True );
+        reconnect( true );
         InvalidateAll();
     }
 
@@ -384,7 +384,7 @@ namespace dbaui
         m_pImpl->m_aCurrentError = ::dbtools::SQLExceptionInfo();
     }
 
-    sal_Bool DBSubComponentController::hasError() const
+    bool DBSubComponentController::hasError() const
     {
         return m_pImpl->m_aCurrentError.isValid();
     }
@@ -403,7 +403,7 @@ namespace dbaui
     {
         m_pImpl->m_bSuspended = bSuspend;
         if ( !bSuspend && !isConnected() )
-            reconnect(sal_True);
+            reconnect(true);
 
         return sal_True;
     }
@@ -464,17 +464,17 @@ namespace dbaui
         return m_pImpl->m_xConnection;
     }
 
-    sal_Bool DBSubComponentController::isReadOnly() const
+    bool DBSubComponentController::isReadOnly() const
     {
         return !m_pImpl->m_bEditable;
     }
 
-    sal_Bool DBSubComponentController::isEditable() const
+    bool DBSubComponentController::isEditable() const
     {
         return m_pImpl->m_bEditable;
     }
 
-    void DBSubComponentController::setEditable(sal_Bool _bEditable)
+    void DBSubComponentController::setEditable(bool _bEditable)
     {
         m_pImpl->m_bEditable = _bEditable;
     }
@@ -484,7 +484,7 @@ namespace dbaui
         return m_pImpl->m_aSdbMetaData;
     }
 
-    sal_Bool DBSubComponentController::isConnected() const
+    bool DBSubComponentController::isConnected() const
     {
         return m_pImpl->m_xConnection.is();
     }
@@ -509,7 +509,7 @@ namespace dbaui
         return m_pImpl->m_aDataSource.getDataSourceProps();
     }
 
-    sal_Bool DBSubComponentController::haveDataSource() const
+    bool DBSubComponentController::haveDataSource() const
     {
         return m_pImpl->m_aDataSource.is();
     }
@@ -583,7 +583,7 @@ namespace dbaui
     {
         ::osl::ClearableMutexGuard aGuard( getMutex() );
 
-        if ( m_pImpl->m_bModified == i_bModified )
+        if ( (m_pImpl->m_bModified ? 1 : 0) == i_bModified )
             return;
 
         m_pImpl->m_bModified = i_bModified;
@@ -594,7 +594,7 @@ namespace dbaui
         m_pImpl->m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
     }
 
-    sal_Bool DBSubComponentController::impl_isModified() const
+    bool DBSubComponentController::impl_isModified() const
     {
         return m_pImpl->m_bModified;
     }

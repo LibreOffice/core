@@ -398,7 +398,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
     // (disabled automatically)
-    aReturn.bEnabled = sal_False;
+    aReturn.bEnabled = false;
     // check this first
     if ( !getView() )
         return aReturn;
@@ -549,11 +549,11 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = getDesignView()->GetMode() == RPTUI_INSERT;
             break;
         case SID_TERMINATE_INPLACEACTIVATION:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             break;
         case SID_SELECT_ALL_EDITS:
         case SID_SELECT_ALL_LABELS:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             break;
         case SID_RPT_NEW_FUNCTION:
             aReturn.bEnabled = isEditable();
@@ -566,7 +566,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_SELECT:
         case SID_SELECT_REPORT:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             break;
         case SID_EXECUTE_REPORT:
             aReturn.bEnabled = isConnected() && m_xReportDefinition.is();
@@ -601,7 +601,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bChecked = m_bShowRuler;
             break;
         case SID_OBJECT_SELECT:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             aReturn.bChecked = getDesignView()->GetMode() == RPTUI_SELECT;
             break;
         case SID_INSERT_DIAGRAM:
@@ -770,15 +770,15 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bChecked = getDesignView() && getDesignView()->isAddFieldVisible();
             break;
         case SID_SHOW_PROPERTYBROWSER:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             aReturn.bChecked = m_bShowProperties;
             break;
         case SID_PROPERTYBROWSER_LAST_PAGE:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             aReturn.aValue <<= m_sLastActivePage;
             break;
         case SID_SPLIT_POSITION:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             aReturn.aValue <<= getSplitPos();
             break;
         case SID_SAVEDOC:
@@ -814,11 +814,11 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                     {
                     }
                 else
-                    aReturn.bEnabled = sal_False;
+                    aReturn.bEnabled = false;
             }
             break;
         case SID_SORTINGANDGROUPING:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             aReturn.bChecked = m_pGroupsFloater && m_pGroupsFloater->IsVisible();
             break;
         case SID_ATTR_CHAR_WEIGHT:
@@ -928,10 +928,10 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_xReportDefinition.is();
             break;
         case SID_PRINTPREVIEW:
-            aReturn.bEnabled = sal_False;
+            aReturn.bEnabled = false;
             break;
         case SID_ATTR_ZOOM:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             {
                 SvxZoomItem aZoom(m_eZoomType,m_nZoomValue);
                 aZoom.SetValueSet(SVX_ZOOM_ENABLE_50|SVX_ZOOM_ENABLE_75|SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_200);
@@ -939,7 +939,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             }
             break;
         case SID_ATTR_ZOOMSLIDER:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             {
                 SvxZoomSliderItem aZoomSlider(m_nZoomValue,20,400);
                 aZoomSlider.AddSnappingPoint(50);
@@ -1788,7 +1788,7 @@ void OReportController::doOpenHelpAgent()
     }
 }
 
-sal_Bool OReportController::Construct(Window* pParent)
+bool OReportController::Construct(Window* pParent)
 {
     ODesignView* pMyOwnView = new ODesignView( pParent, m_xContext, *this );
     StartListening( *pMyOwnView );
@@ -1802,7 +1802,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     m_pClipbordNotifier->AddRemoveListener( getView(), true );
 
     OReportController_BASE::Construct(pParent);
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )
@@ -4110,7 +4110,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
-                    _rState.bEnabled = sal_False;
+                    _rState.bEnabled = false;
                 }
             }
             if ( aIter == aSelection.end() )
@@ -4124,8 +4124,8 @@ void OReportController::impl_zoom_nothrow()
     Fraction aZoom(m_nZoomValue,100);
     setZoomFactor( aZoom,*getDesignView() );
     getDesignView()->zoom(aZoom);
-    InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(),sal_True);
-    InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(),sal_True);
+    InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(), true);
+    InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(), true);
 }
 
 sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const

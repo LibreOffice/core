@@ -428,17 +428,17 @@ void SAL_CALL OApplicationController::disposing()
     OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
 }
 
-sal_Bool OApplicationController::Construct(Window* _pParent)
+bool OApplicationController::Construct(Window* _pParent)
 {
     setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
     getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         getContainer()->Construct();
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     catch(const SQLException&)
     {
@@ -454,7 +454,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         ::std::auto_ptr< Window> aTemp( getView() );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         clearView();
-        return sal_False;
+        return false;
     }
 
     // now that we have a view we can create the clipboard listener
@@ -468,7 +468,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     OApplicationController_CBASE::Construct( _pParent );
     getView()->Show();
 
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) throw( RuntimeException, std::exception )
@@ -570,7 +570,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
-    aReturn.bEnabled = sal_False;
+    aReturn.bEnabled = false;
     // check this first
     if ( !getContainer() || m_bReadOnly )
         return aReturn;
@@ -580,7 +580,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
         switch (_nId)
         {
             case SID_OPENURL:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 if ( m_xModel.is() )
                     aReturn.sTitle = m_xModel->getURL();
                 break;
@@ -614,13 +614,13 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_OPENDOC:
             case SID_HELP_INDEX:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 break;
             case ID_BROWSER_SAVEDOC:
                 aReturn.bEnabled = !isDataSourceReadOnly() && m_xDocumentModify.is() && m_xDocumentModify->isModified();
                 break;
             case ID_BROWSER_SAVEASDOC:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 break;
             case ID_BROWSER_SORTUP:
                 aReturn.bEnabled = getContainer()->isFilled() && getContainer()->getElementCount();
@@ -656,19 +656,19 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_VIEW_TABLES:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 aReturn.bChecked = getContainer()->getElementType() == E_TABLE;
                 break;
             case SID_DB_APP_VIEW_QUERIES:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 aReturn.bChecked = getContainer()->getElementType() == E_QUERY;
                 break;
             case SID_DB_APP_VIEW_FORMS:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 aReturn.bChecked = getContainer()->getElementType() == E_FORM;
                 break;
             case SID_DB_APP_VIEW_REPORTS:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 aReturn.bChecked = getContainer()->getElementType() == E_REPORT;
                 break;
             case ID_NEW_QUERY_DESIGN:
@@ -692,7 +692,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly();
                 break;
             case ID_DIRECT_SQL:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 break;
             case ID_MIGRATE_SCRIPTS:
             {
@@ -772,7 +772,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_EDIT_SQL_VIEW:
                 if ( isDataSourceReadOnly() )
-                    aReturn.bEnabled = sal_False;
+                    aReturn.bEnabled = false;
                 else
                 {
                     switch ( getContainer()->getElementType() )
@@ -782,7 +782,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                                         &&  ( getContainer()->isALeafSelected() );
                         break;
                     case E_TABLE:
-                        aReturn.bEnabled = sal_False;
+                        aReturn.bEnabled = false;
                         // there's one exception: views which support altering their underlying
                         // command can be edited in SQL view, too
                         if  (   ( getContainer()->getSelectionCount() > 0 )
@@ -818,7 +818,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !m_aTypeCollection.isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                 break;
             case SID_DB_APP_DSRELDESIGN:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 break;
             case SID_DB_APP_TABLEFILTER:
                 aReturn.bEnabled = !isDataSourceReadOnly();
@@ -849,7 +849,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 aReturn.bChecked = getContainer()->getPreviewMode() == E_PREVIEWNONE;
                 break;
             case SID_DB_APP_VIEW_DOCINFO_PREVIEW:
@@ -860,14 +860,14 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_VIEW_DOC_PREVIEW:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENT;
                 break;
             case ID_BROWSER_UNDO:
-                aReturn.bEnabled = sal_False;
+                aReturn.bEnabled = false;
                 break;
             case SID_MAIL_SENDDOC:
-                aReturn.bEnabled = sal_True;
+                aReturn.bEnabled = true;
                 break;
             case SID_DB_APP_SENDREPORTASMAIL:
                 {
@@ -877,7 +877,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_SENDREPORTTOWRITER:
             case SID_DB_APP_DBADMIN:
-                aReturn.bEnabled = sal_False;
+                aReturn.bEnabled = false;
                 break;
             case SID_DB_APP_STATUS_TYPE:
                 aReturn.bEnabled = m_xDataSource.is();
@@ -1173,7 +1173,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     }
 
                     /*updateTitle();*/
-                    m_bCurrentlyModified = sal_False;
+                    m_bCurrentlyModified = false;
                     InvalidateFeature(ID_BROWSER_SAVEDOC);
                     if ( getContainer()->getElementType() == E_NONE )
                     {
@@ -2346,12 +2346,12 @@ void OApplicationController::executeChecked(sal_uInt16 _nCommandId, const Sequen
     OApplicationController_CBASE::executeChecked( _nCommandId, aArgs );
 }
 
-sal_Bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
+bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
     return OApplicationController_CBASE::isCommandEnabled( _nCommandId );
 }
 
-sal_Bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
+bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
 {
     return OApplicationController_CBASE::isCommandEnabled( _rCompleteCommandURL );
 }

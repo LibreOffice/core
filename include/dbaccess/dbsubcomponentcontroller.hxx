@@ -73,19 +73,19 @@ namespace dbaui
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const SAL_OVERRIDE;
 
-                sal_Bool impl_isModified() const;
+                bool     impl_isModified() const;
         virtual void     impl_onModifyChanged();
 
     public:
 
-        sal_Bool        isReadOnly()            const;
-        sal_Bool        isEditable()            const;
-        void            setEditable(sal_Bool _bEditable);
+        bool            isReadOnly()            const;
+        bool            isEditable()            const;
+        void            setEditable(bool _bEditable);
 
 
         // asking for connection-related stuff
 
-        sal_Bool    isConnected() const;
+        bool            isConnected() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                     getMetaData( ) const;
@@ -95,7 +95,7 @@ namespace dbaui
         OUString getDataSourceName() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&
                     getDataSource() const;
-        sal_Bool    haveDataSource() const;
+        bool        haveDataSource() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                     getDatabaseDocument() const;
@@ -119,7 +119,7 @@ namespace dbaui
         /** @return
                 <TRUE/> when an error was set otherwise <FALSE/>
         */
-        sal_Bool hasError() const;
+        bool hasError() const;
 
         /** returns the current error
         */
@@ -167,8 +167,8 @@ namespace dbaui
         virtual ~DBSubComponentController();
 
         virtual void        disconnect();
-        virtual void        reconnect( sal_Bool _bUI );
-                sal_Bool    ensureConnected( sal_Bool _bUI )    { if ( !isConnected() ) reconnect( _bUI ); return isConnected(); }
+        virtual void        reconnect( bool _bUI );
+                bool        ensureConnected( bool _bUI )    { if ( !isConnected() ) reconnect( _bUI ); return isConnected(); }
 
         /** called when our connection is beeing disposed
             <p>The default implementation does a reconnect</p>

@@ -73,7 +73,7 @@ namespace dbaui
             @return
                 <TRUE/> if the command is allowed, otherwise <FALSE/>.
         */
-        virtual sal_Bool isCommandEnabled(sal_uInt16 _nCommandId) const = 0;
+        virtual bool isCommandEnabled(sal_uInt16 _nCommandId) const = 0;
 
         /** checks if the given Command is enabled
             @param  _rCompleteCommandURL
@@ -82,7 +82,7 @@ namespace dbaui
             @return
                 <TRUE/> if the command is allowed, otherwise <FALSE/>.
         */
-        virtual sal_Bool isCommandEnabled( const OUString& _rCompleteCommandURL ) const = 0;
+        virtual bool isCommandEnabled( const OUString& _rCompleteCommandURL ) const = 0;
 
         /** registers a command URL, giving it a unique name
 
@@ -108,7 +108,7 @@ namespace dbaui
             @return
                 <TRUE/> if read only, otherwise <FALSE/>
         */
-        virtual sal_Bool isDataSourceReadOnly() const = 0;
+        virtual bool isDataSourceReadOnly() const = 0;
 
         /** provides access to the model of the controller
 

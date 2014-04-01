@@ -474,16 +474,16 @@ void OQueryController::clearFields()
 FeatureState OQueryController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
-    aReturn.bEnabled = sal_True;
+    aReturn.bEnabled = true;
         // (disabled automatically)
 
     switch (_nId)
     {
         case ID_BROWSER_EDITDOC:
             if ( editingCommand() )
-                aReturn.bEnabled = sal_False;
+                aReturn.bEnabled = false;
             else if ( editingView() && !m_xAlterView.is() )
-                aReturn.bEnabled = sal_False;
+                aReturn.bEnabled = false;
             else
                 aReturn = OJoinController::GetState( _nId );
             break;
@@ -538,10 +538,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bGraphicalDesign;
             break;
         case ID_BROWSER_QUERY_EXECUTE:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             break;
         case SID_DB_QUERY_PREVIEW:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = true;
             aReturn.bChecked = getContainer() && getContainer()->getPreviewFrame().is();
             break;
 #if OSL_DEBUG_LEVEL > 1
@@ -553,7 +553,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_ADDTABLE:
             if ( !m_bGraphicalDesign )
             {
-                aReturn.bEnabled = sal_False;
+                aReturn.bEnabled = false;
                 break;
             }
             // run through
@@ -960,7 +960,7 @@ void OQueryController::impl_initialize()
         bForceInitialDesign = true;
     }
 
-    if ( !ensureConnected( sal_False ) )
+    if ( !ensureConnected( false ) )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;
         if ( editingView() )
@@ -1112,7 +1112,7 @@ void OQueryController::setQueryComposer()
     }
 }
 
-sal_Bool OQueryController::Construct(Window* pParent)
+bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text view or the design view
 
@@ -1177,7 +1177,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     OJoinController::disposing(Source);
 }
 
-void OQueryController::reconnect(sal_Bool _bUI)
+void OQueryController::reconnect(bool _bUI)
 {
     deleteIterator();
     ::comphelper::disposeComponent(m_xComposer);
@@ -1245,7 +1245,7 @@ void OQueryController::execute_QueryPropDlg()
         m_bDistinct = aQueryPropDlg.getDistinct();
         m_nLimit = aQueryPropDlg.getLimit();
         InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
-        InvalidateFeature( SID_QUERY_LIMIT, 0, sal_True );
+        InvalidateFeature( SID_QUERY_LIMIT, 0, true );
     }
 }
 

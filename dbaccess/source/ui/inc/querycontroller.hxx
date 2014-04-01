@@ -126,7 +126,7 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
-        virtual void            reconnect( sal_Bool _bUI ) SAL_OVERRIDE;
+        virtual void            reconnect( bool _bUI ) SAL_OVERRIDE;
         virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
 
         OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
@@ -165,7 +165,7 @@ namespace dbaui
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
 
-        virtual sal_Bool Construct(Window* pParent) SAL_OVERRIDE;
+        virtual bool Construct(Window* pParent) SAL_OVERRIDE;
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

@@ -199,7 +199,7 @@ void ORelationController::impl_initialize()
     if( !getSdbMetaData().supportsRelations() )
     {// check if this database supports relations
 
-        setEditable(sal_False);
+        setEditable(false);
         m_bRelationsPossible    = sal_False;
         {
             OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
@@ -242,11 +242,11 @@ OUString ORelationController::getPrivateTitle( ) const
     return ::dbaui::getStrippedDatabaseName(getDataSource(),sName);
 }
 
-sal_Bool ORelationController::Construct(Window* pParent)
+bool ORelationController::Construct(Window* pParent)
 {
     setView( * new ORelationDesignView( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
-    return sal_True;
+    return true;
 }
 
 short ORelationController::saveModified()
