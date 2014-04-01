@@ -296,10 +296,11 @@ bool OutputDevice::DrawTransparentNatively ( const PolyPolygon& rPolyPoly,
             // CAUTION: Only non printing (pixel-renderer) VCL commands from OutputDevices
             // should be used when printing. Normally this is avoided by the printer being
             // non-AAed and thus e.g. on WIN GdiPlus calls are not used. It may be necessary
-            // to add (OUTDEV_PRINTER != meOutDevType) to the entering if statement, thus
-            // using the fallbacl some lines below (which is not very good, though). For
-            // now, WinSalGraphics::drawPolyPolygon will detect printer usage and correct
-            // the wrong mapping (see there for details)
+            // to figure out a way of moving this code to it's own function that is
+            // overriden by the Print class, which will mean we deliberately override the
+            // functionality and we use the fallback some lines below (which is not very good,
+            // though. For now, WinSalGraphics::drawPolyPolygon will detect printer usage and
+            // correct the wrong mapping (see there for details)
             bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
         }
 
