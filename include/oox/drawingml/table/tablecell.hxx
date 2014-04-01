@@ -52,10 +52,10 @@ public:
     void        setRowSpan( sal_Int32 nRowSpan ){ mnRowSpan = nRowSpan; };
     sal_Int32   getGridSpan() const { return mnGridSpan; };
     void        setGridSpan( sal_Int32 nGridSpan ){ mnGridSpan = nGridSpan; };
-    sal_Bool    gethMerge() const { return mbhMerge; };
-    void        sethMerge( sal_Bool bhMerge ){ mbhMerge = bhMerge; };
-    sal_Bool    getvMerge() const { return mbvMerge; };
-    void        setvMerge( sal_Bool bvMerge ){ mbvMerge = bvMerge; };
+    bool        gethMerge() const { return mbhMerge; };
+    void        sethMerge( bool bhMerge ){ mbhMerge = bhMerge; };
+    bool        getvMerge() const { return mbvMerge; };
+    void        setvMerge( bool bvMerge ){ mbvMerge = bvMerge; };
     sal_Int32   getLeftMargin() const { return mnMarL; };
     void        setLeftMargin( sal_Int32 nMargin ){ mnMarL = nMargin; };
     sal_Int32   getRightMargin() const { return mnMarR; };
@@ -68,8 +68,8 @@ public:
     void        setVertToken( sal_Int32 nToken ){ mnVertToken = nToken; };
     sal_Int32   getAnchorToken() const { return mnAnchorToken; };
     void        setAnchorToken( sal_Int32 nToken ){ mnAnchorToken = nToken; };
-    sal_Bool    getAnchorCtr() const { return mbAnchorCtr; };
-    void        setAnchorCtr( sal_Bool bAnchorCtr ){ mbAnchorCtr = bAnchorCtr; };
+    bool        getAnchorCtr() const { return mbAnchorCtr; };
+    void        setAnchorCtr( bool bAnchorCtr ){ mbAnchorCtr = bAnchorCtr; };
     sal_Int32   getHorzOverflowToken() const { return mnHorzOverflowToken; };
     void        setHorzOverflowToken( sal_Int32 nToken ){ mnHorzOverflowToken = nToken; };
 
@@ -95,8 +95,8 @@ private:
 
     sal_Int32 mnRowSpan;
     sal_Int32 mnGridSpan;
-    sal_Bool mbhMerge;
-    sal_Bool mbvMerge;
+    bool mbhMerge;
+    bool mbvMerge;
 
     sal_Int32 mnMarL;
     sal_Int32 mnMarR;
@@ -104,7 +104,7 @@ private:
     sal_Int32 mnMarB;
     sal_Int32 mnVertToken;
     sal_Int32 mnAnchorToken;
-    sal_Bool  mbAnchorCtr;
+    bool  mbAnchorCtr;
     sal_Int32 mnHorzOverflowToken;
 };
 

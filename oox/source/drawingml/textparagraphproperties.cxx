@@ -383,7 +383,7 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
 }
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
-    const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, sal_Bool bApplyBulletMap, float fCharacterSize,
+    const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, bool bApplyBulletMap, float fCharacterSize,
     bool bPushDefaultValues ) const
 {
     PropertySet aPropSet( xPropSet );

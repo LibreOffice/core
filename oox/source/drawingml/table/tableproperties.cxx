@@ -39,13 +39,13 @@ using namespace ::com::sun::star::table;
 namespace oox { namespace drawingml { namespace table {
 
 TableProperties::TableProperties()
-: mbRtl( sal_False )
-, mbFirstRow( sal_False )
-, mbFirstCol( sal_False )
-, mbLastRow( sal_False )
-, mbLastCol( sal_False )
-, mbBandRow( sal_False )
-, mbBandCol( sal_False )
+: mbRtl( false )
+, mbFirstRow( false )
+, mbFirstCol( false )
+, mbLastRow( false )
+, mbLastCol( false )
+, mbBandRow( false )
+, mbBandCol( false )
 {
 }
 TableProperties::~TableProperties()
@@ -224,7 +224,7 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , const sal_Int32& 
     return createdTblStyle;
 }
 
-const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, sal_Bool &isCreateTabStyle )
+const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, bool &isCreateTabStyle )
 {
     ::oox::core::XmlFilterBase& rBase( const_cast< ::oox::core::XmlFilterBase& >( rFilterBase ) );
 
@@ -267,7 +267,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
     CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
 
-    sal_Bool mbOwnTblStyle = sal_False;
+    bool mbOwnTblStyle = false;
     const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, mbOwnTblStyle ) );
     sal_Int32 nRow = 0;
     const std::vector< TableRow >::const_iterator aTableRowEnd( mvTableRows.end() );
@@ -293,7 +293,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
         }
     }
 
-    if(mbOwnTblStyle == sal_True)
+    if(mbOwnTblStyle)
     {
         TableStyle* pTableStyle = (TableStyle*)&rTableStyle;
         if(pTableStyle != NULL)
@@ -301,7 +301,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
             delete pTableStyle;
             pTableStyle = NULL;
         }
-        mbOwnTblStyle = sal_False;
+        mbOwnTblStyle = false;
     }
 }
 

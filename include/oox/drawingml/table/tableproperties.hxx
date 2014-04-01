@@ -42,35 +42,35 @@ public:
     std::vector< sal_Int32 >& getTableGrid() { return mvTableGrid; };
     std::vector< TableRow >& getTableRows() { return mvTableRows; };
 
-    OUString&                      getStyleId(){ return maStyleId; };
+    OUString&                          getStyleId(){ return maStyleId; };
     boost::shared_ptr< TableStyle >&    getTableStyle(){ return mpTableStyle; };
-    sal_Bool&                           isRtl(){ return mbRtl; };
-    sal_Bool&                           isFirstRow(){ return mbFirstRow; };
-    sal_Bool&                           isFirstCol(){ return mbFirstCol; };
-    sal_Bool&                           isLastRow(){ return mbLastRow; };
-    sal_Bool&                           isLastCol(){ return mbLastCol; };
-    sal_Bool&                           isBandRow(){ return mbBandRow; };
-    sal_Bool&                           isBandCol(){ return mbBandCol; };
+    bool&                               isRtl(){ return mbRtl; };
+    bool&                               isFirstRow(){ return mbFirstRow; };
+    bool&                               isFirstCol(){ return mbFirstCol; };
+    bool&                               isLastRow(){ return mbLastRow; };
+    bool&                               isLastCol(){ return mbLastCol; };
+    bool&                               isBandRow(){ return mbBandRow; };
+    bool&                               isBandCol(){ return mbBandCol; };
 
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet, ::oox::drawingml::TextListStylePtr pMasterTextListStyle );
 
 private:
 
-    const TableStyle&                   getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, sal_Bool &isCreateTabStyle);
+    const TableStyle&                   getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, bool &isCreateTabStyle);
 
-    OUString                       maStyleId;              // either StyleId is available
+    OUString                            maStyleId;              // either StyleId is available
     boost::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
     std::vector< sal_Int32 >            mvTableGrid;
     std::vector< TableRow >             mvTableRows;
 
-    sal_Bool                            mbRtl;
-    sal_Bool                            mbFirstRow;
-    sal_Bool                            mbFirstCol;
-    sal_Bool                            mbLastRow;
-    sal_Bool                            mbLastCol;
-    sal_Bool                            mbBandRow;
-    sal_Bool                            mbBandCol;
+    bool                                mbRtl;
+    bool                                mbFirstRow;
+    bool                                mbFirstCol;
+    bool                                mbLastRow;
+    bool                                mbLastCol;
+    bool                                mbBandRow;
+    bool                                mbBandCol;
 };
 
 } } }

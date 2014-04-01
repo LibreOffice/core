@@ -39,8 +39,8 @@ public:
     ~TableStylePart();
 
     ::oox::drawingml::Color&            getTextColor(){ return maTextColor; }
-    ::boost::optional< sal_Bool >&      getTextBoldStyle(){ return maTextBoldStyle; }
-    ::boost::optional< sal_Bool >&      getTextItalicStyle(){ return maTextItalicStyle; }
+    ::boost::optional< bool >&          getTextBoldStyle(){ return maTextBoldStyle; }
+    ::boost::optional< bool >&          getTextItalicStyle(){ return maTextItalicStyle; }
     ::oox::drawingml::TextFont&         getAsianFont(){ return maAsianFont; }
     ::oox::drawingml::TextFont&         getComplexFont(){ return maComplexFont; }
     ::oox::drawingml::TextFont&         getSymbolFont(){ return maSymbolFont; }
@@ -54,8 +54,8 @@ public:
 private:
 
     ::oox::drawingml::Color             maTextColor;
-    ::boost::optional< sal_Bool >       maTextBoldStyle;
-    ::boost::optional< sal_Bool >       maTextItalicStyle;
+    ::boost::optional< bool >           maTextBoldStyle;
+    ::boost::optional< bool >           maTextItalicStyle;
     ::oox::drawingml::TextFont          maAsianFont;
     ::oox::drawingml::TextFont          maComplexFont;
     ::oox::drawingml::TextFont          maSymbolFont;
