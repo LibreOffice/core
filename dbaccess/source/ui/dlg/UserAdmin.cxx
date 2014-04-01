@@ -38,6 +38,7 @@
 #include "dbadmin.hxx"
 #include "moduledbu.hxx"
 #include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/passwd.hxx>
 
 using namespace ::com::sun::star::container;
@@ -52,16 +53,11 @@ using namespace comphelper;
 
 class OPasswordDialog : public ModalDialog
 {
-    FixedLine       aFLUser;
-    FixedText       aFTOldPassword;
-    Edit            aEDOldPassword;
-    FixedText       aFTPassword;
-    Edit            aEDPassword;
-    FixedText       aFTPasswordRepeat;
-    Edit            aEDPasswordRepeat;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    VclFrame* m_pUser;
+    Edit*     m_pEDOldPassword;
+    Edit*     m_pEDPassword;
+    Edit*     m_pEDPasswordRepeat;
+    OKButton* m_pOKBtn;
 
     DECL_LINK( OKHdl_Impl, void * );
     DECL_LINK( ModifiedHdl, Edit * );
@@ -69,57 +65,47 @@ class OPasswordDialog : public ModalDialog
 public:
     OPasswordDialog( Window* pParent,const OUString& _sUserName);
 
-    OUString        GetOldPassword() const { return aEDOldPassword.GetText(); }
-    OUString        GetNewPassword() const { return aEDPassword.GetText(); }
+    OUString        GetOldPassword() const { return m_pEDOldPassword->GetText(); }
+    OUString        GetNewPassword() const { return m_pEDPassword->GetText(); }
 };
 
-OPasswordDialog::OPasswordDialog(Window* _pParent,const OUString& _sUserName) :
-
-    ModalDialog( _pParent, ModuleRes( DLG_PASSWORD) ),
-
-    aFLUser             ( this, ModuleRes( FL_USER ) ),
-    aFTOldPassword      ( this, ModuleRes( FT_OLDPASSWORD ) ),
-    aEDOldPassword      ( this, ModuleRes( ED_OLDPASSWORD ) ),
-    aFTPassword         ( this, ModuleRes( FT_PASSWORD ) ),
-    aEDPassword         ( this, ModuleRes( ED_PASSWORD ) ),
-    aFTPasswordRepeat   ( this, ModuleRes( FT_PASSWORD_REPEAT ) ),
-    aEDPasswordRepeat   ( this, ModuleRes( ED_PASSWORD_REPEAT ) ),
-    aOKBtn              ( this, ModuleRes( BTN_PASSWORD_OK ) ),
-    aCancelBtn          ( this, ModuleRes( BTN_PASSWORD_CANCEL ) ),
-    aHelpBtn            ( this, ModuleRes( BTN_PASSWORD_HELP ) )
+OPasswordDialog::OPasswordDialog(Window* _pParent,const OUString& _sUserName)
+    : ModalDialog(_pParent, "PasswordDialog", "dbaccess/ui/password.ui")
 {
-    // hide until a help is available
-    aHelpBtn.Hide();
+    get(m_pUser, "userframe");
+    get(m_pEDOldPassword, "oldpassword");
+    get(m_pEDPassword, "newpassword");
+    get(m_pEDPasswordRepeat, "confirmpassword");
+    get(m_pOKBtn, "ok");
 
-    FreeResource();
-    OUString sUser = aFLUser.GetText();
+    OUString sUser = m_pUser->get_label();
     sUser = sUser.replaceFirst("$name$:  $",_sUserName);
-    aFLUser.SetText(sUser);
-    aOKBtn.Disable();
+    m_pUser->set_label(sUser);
+    m_pOKBtn->Disable();
 
-    aOKBtn.SetClickHdl( LINK( this, OPasswordDialog, OKHdl_Impl ) );
-    aEDOldPassword.SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, OPasswordDialog, OKHdl_Impl ) );
+    m_pEDOldPassword->SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
 }
 
 IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
 {
-    if( aEDPassword.GetText() == aEDPasswordRepeat.GetText() )
+    if( m_pEDPassword->GetText() == m_pEDPasswordRepeat->GetText() )
         EndDialog( RET_OK );
     else
     {
         OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
-        aEDPassword.SetText( OUString() );
-        aEDPasswordRepeat.SetText( OUString() );
-        aEDPassword.GrabFocus();
+        m_pEDPassword->SetText( OUString() );
+        m_pEDPasswordRepeat->SetText( OUString() );
+        m_pEDPassword->GrabFocus();
     }
     return 0;
 }
 
 IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 {
-    aOKBtn.Enable(!pEdit->GetText().isEmpty());
+    m_pOKBtn->Enable(!pEdit->GetText().isEmpty());
     return 0;
 }
 

@@ -190,7 +190,6 @@
 #define HID_BROWSER_OPEN_DOCUMENT                         "DBACCESS_HID_BROWSER_OPEN_DOCUMENT"
 #define HID_BROWSER_EDIT_DOCUMENT                         "DBACCESS_HID_BROWSER_EDIT_DOCUMENT"
 #define HID_BROWSER_BEW_DOCUMENT                          "DBACCESS_HID_BROWSER_BEW_DOCUMENT"
-#define HID_DLG_PASSWORD                                  "DBACCESS_HID_DLG_PASSWORD"
 
 #define HID_DLGIDX_NEWINDEX                               "DBACCESS_HID_DLGIDX_NEWINDEX"
 #define HID_DLGIDX_DROPINDEX                              "DBACCESS_HID_DLGIDX_DROPINDEX"

@@ -22,6 +22,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/generalpagewizard \
     dbaccess/uiconfig/ui/generatedvaluespage \
     dbaccess/uiconfig/ui/joindialog \
+    dbaccess/uiconfig/ui/password \
     dbaccess/uiconfig/ui/queryfilterdialog \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/relationdialog \

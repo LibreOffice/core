@@ -34,20 +34,6 @@
 #define PB_CHANGEPWD        3
 #define PB_DELETEUSER       4
 
-
-
-#define FT_OLDPASSWORD      19
-#define ED_OLDPASSWORD      19
-#define FT_PASSWORD         20
-#define ED_PASSWORD         21
-#define FT_PASSWORD_REPEAT  22
-#define ED_PASSWORD_REPEAT  23
-
-#define BTN_PASSWORD_OK     50
-#define BTN_PASSWORD_CANCEL 51
-#define BTN_PASSWORD_HELP   52
-
-
 #endif // DBAUI_USERADMIN_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

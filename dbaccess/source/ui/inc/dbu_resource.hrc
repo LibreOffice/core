@@ -88,7 +88,7 @@
     // FREE
     // FREE
     // FREE
-#define DLG_PASSWORD                    RID_DIALOG_START + 23
+    // FREE
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
 #define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
 #define DLG_DATABASE_WIZARD             RID_DIALOG_START + 29
