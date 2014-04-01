@@ -47,6 +47,9 @@ class SwAccessibleCell : public SwAccessibleContext,
     SwAccessibleSelectionHelper aSelectionHelper;
     sal_Bool    bIsSelected;    // protected by base class mutex
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xTableReference;
+    SwAccessibleTable *m_pAccTable;
+
     sal_Bool    IsSelected();
 
     sal_Bool _InvalidateMyCursorPos();
@@ -171,9 +174,6 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
-    SwAccessibleTable *GetTable();
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTableReference;
-    SwAccessibleTable *m_pAccTable;
 };
 
 
