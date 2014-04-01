@@ -919,7 +919,7 @@ OUString SfxObjectShell::GetTitle
         else if ( nMaxLength == SFX_TITLE_FILENAME )
         {
             OUString aName( aURL.GetBase() );
-            aName = INetURLObject::decode( aName, INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET );
+            aName = INetURLObject::decode( aName, '%', INetURLObject::DECODE_WITH_CHARSET );
             if( aName.isEmpty() )
                 aName = aURL.GetURLNoPass();
             return X(aName);

@@ -2574,7 +2574,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
     {   // remember selected filter
         aFilterName = pGrfDlg->GetCurrentFilter();
         aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
-                                        INET_HEX_ESCAPE,
+                                        '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
         m_pConnectED->SetModifyFlag();
@@ -2761,7 +2761,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     {
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
         pURLED->SetText( INetURLObject::decode( pFmtURL->GetURL(),
-                                        INET_HEX_ESCAPE,
+                                        '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
         pNameED->SetText( pFmtURL->GetName());

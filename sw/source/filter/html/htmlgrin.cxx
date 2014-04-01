@@ -1138,7 +1138,7 @@ ANCHOR_SETEVENT:
     // wir hier ganz rigoros raus.
     if( !aName.isEmpty() )
     {
-        OUString sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
+        OUString sDecoded( INetURLObject::decode( aName, '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
         sal_Int32 nPos = sDecoded.lastIndexOf( cMarkSeparator );

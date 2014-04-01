@@ -1918,7 +1918,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
 
         const SwFmtINetFmt* pINet;
         OUString sCmp;
-        OUString  sMark( INetURLObject::decode( rMark, INET_HEX_ESCAPE,
+        OUString  sMark( INetURLObject::decode( rMark, '%',
                                            INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 

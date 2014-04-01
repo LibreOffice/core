@@ -839,7 +839,7 @@ struct ConventionOOO_A1 : public Convention_A1
             if (bEncodeUrl)
                 aFile = rFileName;
             else
-                aFile = INetURLObject::decode(rFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+                aFile = INetURLObject::decode(rFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
 
             rBuffer.append("'" + aFile.replaceAll("'", "''") + "'#");
 
@@ -1069,7 +1069,7 @@ struct ConventionXL
         if (bEncodeUrl)
             aFullName = rFullName;
         else
-            aFullName = INetURLObject::decode(rFullName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+            aFullName = INetURLObject::decode(rFullName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
 
         const sal_Unicode* pBuf = aFullName.getStr();
         sal_Int32 nLen = aFullName.getLength();

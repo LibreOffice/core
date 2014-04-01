@@ -291,7 +291,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
     rpPam = 0;
     rpRange = 0;
 
-    OUString sItem( INetURLObject::decode( rStr, INET_HEX_ESCAPE,
+    OUString sItem( INetURLObject::decode( rStr, '%',
                                          INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 

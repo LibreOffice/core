@@ -225,7 +225,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 
         OUString aFileName;
         pLinkMgr->GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
-        aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+        aFileName = INetURLObject::decode(aFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
         FileName().SetText( aFileName );
         SourceName().SetText( sLink );
         TypeName().SetText( sType );
@@ -640,7 +640,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, sal_B
     OUString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
     OUString aFileName = aPath.getName();
-    aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+    aFileName = INetURLObject::decode(aFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
 
     if( aFileName.getLength() > aTxt.getLength() )
         aTxt = aFileName;

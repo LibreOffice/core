@@ -30,9 +30,6 @@ namespace com { namespace sun { namespace star { namespace util {
     class XStringWidth;
 } } } }
 
-// Special tokens:
-#define INET_HEX_ESCAPE '%'
-
 // Common URL prefixes for various schemes:
 #define INET_FTP_SCHEME "ftp://"
 #define INET_HTTP_SCHEME "http://"

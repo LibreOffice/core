@@ -2298,7 +2298,7 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
             Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
 
             OUString sNewName = INetURLObject::decode( aURL.getName(),
-                                                     INET_HEX_ESCAPE,
+                                                     '%',
                                                      INetURLObject::DECODE_UNAMBIGUOUS,
                                                      RTL_TEXTENCODING_UTF8 );
             sal_Int32 nExtLen = aURL.GetExtension().getLength();

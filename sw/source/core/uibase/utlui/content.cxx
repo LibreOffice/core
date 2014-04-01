@@ -363,7 +363,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                                     p->sText,
                                     INetURLObject::decode(
                                         p->rINetAttr.GetINetFmt().GetValue(),
-                                        INET_HEX_ESCAPE,
+                                        '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
                                     &p->rINetAttr,
@@ -566,7 +566,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     OUString sLink;
                     pWrtShell->GetGrfNms( &sLink, 0, (SwFlyFrmFmt*) pFrmFmt);
                     pCnt = new SwGraphicContent(this, sFrmName,
-                                INetURLObject::decode( sLink, INET_HEX_ESCAPE,
+                                INetURLObject::decode( sLink, '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
                                 pFrmFmt->FindLayoutRect(sal_False, &aNullPt).Top());
@@ -668,7 +668,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                                     p->sText,
                                     INetURLObject::decode(
                                         p->rINetAttr.GetINetFmt().GetValue(),
-                                        INET_HEX_ESCAPE,
+                                        '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
                                     &p->rINetAttr,
