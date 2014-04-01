@@ -44,7 +44,7 @@ namespace oox { namespace ppt {
 SlideTransitionContext::SlideTransitionContext( FragmentHandler2& rParent, const AttributeList& rAttribs, PropertyMap & aProperties ) throw()
 : FragmentHandler2( rParent )
 , maSlideProperties( aProperties )
-, mbHasTransition( sal_False )
+, mbHasTransition( false )
 {
     // ST_TransitionSpeed
     maTransition.setOoxTransitionSpeed( rAttribs.getToken( XML_spd, XML_fast ) );

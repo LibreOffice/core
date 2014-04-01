@@ -413,7 +413,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "mso-width-relative" ) mrTypeModel.maWidthRelative = aValue;
             else if( aName == "mso-height-percent" ) mrTypeModel.maHeightPercent = aValue;
             else if( aName == "mso-height-relative" ) mrTypeModel.maHeightRelative = aValue;
-            else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = sal_True;
+            else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = true;
             else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
             else if( aName.equalsAscii( "visibility" ) )

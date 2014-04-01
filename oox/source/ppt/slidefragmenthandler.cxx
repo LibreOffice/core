@@ -104,7 +104,7 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         if( aIter == rMasterPages.end() && !mpSlidePersistPtr->getMasterPersist() )
         {
             TextListStylePtr pTextListStyle(new TextListStyle);
-            SlidePersistPtr pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_True, mpSlidePersistPtr->getPage(),
+            SlidePersistPtr pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, true, true, mpSlidePersistPtr->getPage(),
                                 ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpSlidePersistPtr->getNotesTextStyle() ) );
             pMasterPersistPtr->setPath( aNotesFragmentPath );
             rFilter.getMasterPages().push_back( pMasterPersistPtr );

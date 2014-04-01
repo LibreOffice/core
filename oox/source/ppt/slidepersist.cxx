@@ -41,7 +41,7 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool bNotes,
+SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxPage,
         oox::drawingml::ShapePtr pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
 : mpDrawingPtr( new oox::vml::Drawing( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )

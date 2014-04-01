@@ -190,9 +190,9 @@ namespace oox { namespace ppt {
         return nOdpDirection;
     }
 
-    sal_Bool SlideTransition::ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType )
+    bool SlideTransition::ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType )
     {
-    sal_Bool nOdpDirection = true;
+        bool nOdpDirection = true;
         switch( nOoxType )
         {
         case XML_u:

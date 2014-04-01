@@ -56,7 +56,7 @@ class SlidePersist : public boost::enable_shared_from_this< SlidePersist >
 {
 
 public:
-    SlidePersist( oox::core::XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool bNotes,
+    SlidePersist( oox::core::XmlFilterBase& rFilter, bool bMaster, bool bNotes,
                     const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >&,
                     oox::drawingml::ShapePtr pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
     ~SlidePersist();
@@ -89,8 +89,8 @@ public:
     oox::drawingml::FillPropertiesPtr getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
     oox::drawingml::Color& getBackgroundColor() { return maBackgroundColor; }
 
-    sal_Bool isMasterPage() const { return mbMaster; }
-    sal_Bool isNotesPage() const { return mbNotes; }
+    bool isMasterPage() const { return mbMaster; }
+    bool isNotesPage() const { return mbNotes; }
 
     void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
     short getLayoutFromValueToken();
@@ -137,8 +137,8 @@ private:
 
     oox::ppt::HeaderFooter                                                  maHeaderFooter;
     sal_Int32                                                               mnLayoutValueToken;
-    sal_Bool                                                                mbMaster;
-    sal_Bool                                                                mbNotes;
+    bool                                                                    mbMaster;
+    bool                                                                    mbNotes;
 
     oox::drawingml::TextListStylePtr                                        maDefaultTextStylePtr;
     oox::drawingml::TextListStylePtr                                        maTitleTextStylePtr;

@@ -44,7 +44,7 @@ namespace oox { namespace ppt {
 PPTShape::PPTShape( const oox::ppt::ShapeLocation eShapeLocation, const sal_Char* pServiceName )
 : Shape( pServiceName )
 , meShapeLocation( eShapeLocation )
-, mbReferenced( sal_False )
+, mbReferenced( false )
 {
 }
 

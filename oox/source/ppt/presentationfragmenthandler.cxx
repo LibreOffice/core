@@ -135,7 +135,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
     }
 }
 
-void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirstPage, sal_Bool bImportNotesPage)
+void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage, bool bImportNotesPage)
 {
     PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
 
@@ -157,7 +157,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
         if( !aSlideFragmentPath.isEmpty() )
         {
             SlidePersistPtr pMasterPersistPtr;
-            SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, sal_False, sal_False, xSlide,
+            SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, false, false, xSlide,
                                 ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
 
             FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
@@ -196,7 +196,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                         else
                             xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
 
-                        pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_False, xMasterPage,
+                        pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, true, false, xMasterPage,
                             ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
                         pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
                         rFilter.getMasterPages().push_back( pMasterPersistPtr );
@@ -264,7 +264,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                         Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
                         if ( xNotesPage.is() )
                         {
-                            SlidePersistPtr pNotesPersistPtr( new SlidePersist( rFilter, sal_False, sal_True, xNotesPage,
+                            SlidePersistPtr pNotesPersistPtr( new SlidePersist( rFilter, false, true, xNotesPage,
                                 ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
                             FragmentHandlerRef xNotesFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesFragmentPath, pNotesPersistPtr, Slide ) );
                             rFilter.getNotesPages().push_back( pNotesPersistPtr );
@@ -285,7 +285,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                 Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
                 Reference< XDrawPage > xCommentAuthorsPage( xPresentationPage->getNotesPage() );
                 SlidePersistPtr pCommentAuthorsPersistPtr(
-                    new SlidePersist( rFilter, sal_False, sal_True, xCommentAuthorsPage,
+                    new SlidePersist( rFilter, false, true, xCommentAuthorsPage,
                                       ShapePtr(
                                           new PPTShape(
                                               Slide, "com.sun.star.drawing.GroupShape" ) ),
@@ -305,7 +305,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                 Reference< XDrawPage > xCommentsPage( xPresentationPage->getNotesPage() );
                 SlidePersistPtr pCommentsPersistPtr(
                     new SlidePersist(
-                        rFilter, sal_False, sal_True, xCommentsPage,
+                        rFilter, false, true, xCommentsPage,
                         ShapePtr(
                             new PPTShape(
                                 Slide, "com.sun.star.drawing.GroupShape" ) ),
@@ -485,7 +485,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
 
         oox::ppt::HeaderFooter aHeaderFooter( pSlidePersistPtr->getHeaderFooter() );
         if ( !pSlidePersistPtr->isMasterPage() )
-            aHeaderFooter.mbSlideNumber = aHeaderFooter.mbHeader = aHeaderFooter.mbFooter = aHeaderFooter.mbDateTime = sal_False;
+            aHeaderFooter.mbSlideNumber = aHeaderFooter.mbHeader = aHeaderFooter.mbFooter = aHeaderFooter.mbDateTime = false;
         try
         {
             if ( pSlidePersistPtr->isNotesPage() )

@@ -41,27 +41,27 @@ namespace oox { namespace ppt {
         void setOoxTransitionSpeed( sal_Int32 nToken );
         void setFadeColor( sal_Int32 nColor )
             { mnFadeColor = nColor; }
-        void setMode( sal_Bool bMode )
+        void setMode( bool bMode )
             { mbMode = bMode; }
-            void setOoxAdvanceTime( sal_Int32 nAdvanceTime )
-                { mnAdvanceTime = nAdvanceTime; }
+        void setOoxAdvanceTime( sal_Int32 nAdvanceTime )
+            { mnAdvanceTime = nAdvanceTime; }
 
     static sal_Int16 ooxToOdpDirection( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpEightDirections( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpCornerDirections( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpBorderDirections( ::sal_Int32 nOoxType );
     static sal_Int16 ooxToOdpSideDirections( ::sal_Int32 nOoxType );
-    static sal_Bool  ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType );
+    static bool      ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType );
 
         void setOoxTransitionType( ::sal_Int32 OoxType,
                                                              ::sal_Int32 param1, ::sal_Int32 param2 );
     private:
         ::sal_Int16 mnTransitionType;
         ::sal_Int16 mnTransitionSubType;
-        ::sal_Bool  mbTransitionDirectionNormal;
+        bool  mbTransitionDirectionNormal;
         ::sal_Int16 mnAnimationSpeed;
         ::sal_Int32 mnFadeColor;
-        ::sal_Bool  mbMode; /**< http://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
+        bool  mbMode; /**< http://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
         ::sal_Int32 mnAdvanceTime;
     };
 

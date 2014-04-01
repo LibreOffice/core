@@ -41,7 +41,7 @@ namespace oox { namespace ppt {
 
     private:
         PropertyMap&                    maSlideProperties;
-        ::sal_Bool                      mbHasTransition;
+        bool                            mbHasTransition;
         SlideTransition                 maTransition;
     };
 

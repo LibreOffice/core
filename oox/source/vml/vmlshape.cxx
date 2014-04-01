@@ -112,8 +112,8 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
 
 
 ShapeTypeModel::ShapeTypeModel():
-    mbAutoHeight( sal_False ),
-    mbVisible( sal_True )
+    mbAutoHeight( false ),
+    mbVisible( true )
 {
 }
 

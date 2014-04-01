@@ -26,16 +26,16 @@ namespace oox { namespace ppt {
 
     struct HeaderFooter
     {
-        sal_Bool mbSlideNumber;
-        sal_Bool mbHeader;
-        sal_Bool mbFooter;
-        sal_Bool mbDateTime;
+        bool mbSlideNumber;
+        bool mbHeader;
+        bool mbFooter;
+        bool mbDateTime;
 
         HeaderFooter()
-        : mbSlideNumber( sal_True )
-        , mbHeader( sal_True )
-        , mbFooter( sal_True )
-        , mbDateTime( sal_True ) {};
+        : mbSlideNumber( true )
+        , mbHeader( true )
+        , mbFooter( true )
+        , mbDateTime( true ) {};
     };
 
 } }

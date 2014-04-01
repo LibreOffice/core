@@ -29,7 +29,7 @@ class PPTShape : public oox::drawingml::Shape
 {
     OUString                    msModelId;              // fallback dgs smartart shape reference
     ShapeLocation               meShapeLocation;        // placeholdershapes (mnSubType != 0) on Master are never displayed
-    sal_Bool                    mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
+    bool                        mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
 
 public:
@@ -53,8 +53,8 @@ public:
 
     void setShapeLocation( const oox::ppt::ShapeLocation eShapeLocation ) { meShapeLocation = eShapeLocation; };
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
-    sal_Bool isReferenced() const { return mbReferenced; };
-    void setReferenced( sal_Bool bReferenced ){ mbReferenced = bReferenced; };
+    bool isReferenced() const { return mbReferenced; };
+    void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };
     void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }
 

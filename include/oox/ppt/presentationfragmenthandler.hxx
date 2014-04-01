@@ -49,7 +49,7 @@ protected:
 
 private:
 
-    void importSlide(sal_uInt32 nSlide, sal_Bool bFirstSlide, sal_Bool bImportNotes);
+    void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
 
     std::vector< OUString > maSlideMasterVector;
     std::vector< OUString > maSlidesVector;

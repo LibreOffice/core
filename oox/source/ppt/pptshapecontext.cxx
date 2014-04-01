@@ -192,7 +192,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                                   mpShapePtr->applyShapeReference( *pPlaceholder.get() );
                                   PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                                   if ( pPPTShape )
-                                      pPPTShape->setReferenced( sal_True );
+                                      pPPTShape->setReferenced( true );
                                   pPPTShapePtr->setPlaceholder( pPlaceholder );
                               }
                           }

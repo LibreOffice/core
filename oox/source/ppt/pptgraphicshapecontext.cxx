@@ -170,7 +170,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                     mpShapePtr->applyShapeReference( *pPlaceholder.get(), bUseText );
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )
-                        pPPTShape->setReferenced( sal_True );
+                        pPPTShape->setReferenced( true );
                     pPPTShapePtr->setPlaceholder( pPlaceholder );
                 }
             }

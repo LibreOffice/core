@@ -80,8 +80,8 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OUString     maHeightRelative;       ///< To what the height is relative
     OUString     maRotation;             ///< Rotation of the shape, in degrees.
     OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
-    sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
-    sal_Bool            mbVisible;              ///< Visible or Hidden
+    bool         mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
+    bool         mbVisible;              ///< Visible or Hidden
     OUString     maWrapStyle;            ///< Wrapping mode for text.
     OUString     maArcsize;              ///< round rectangles arc size
     OUString     maEditAs;               ///< Edit As type (e.g. "canvas" etc)
