@@ -145,6 +145,7 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer) :
 
         default:
             OSL_FAIL("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");
+            mpFncGetPixel = NULL;
         break;
     }
 }
