@@ -879,9 +879,9 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 
 
 
-sal_Bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
+bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
 {
-    return sal_False;
+    return false;
 }
 
 void SdrPaintView::GlueInvalidate() const

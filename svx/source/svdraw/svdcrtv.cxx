@@ -319,7 +319,7 @@ void SdrCreateView::HideConnectMarker()
     ImpClearConnectMarker();
 }
 
-sal_Bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 {
     if(CheckEdgeMode() && pWin)
     {

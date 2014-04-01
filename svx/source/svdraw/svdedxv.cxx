@@ -1178,7 +1178,7 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 
 
 
-sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
@@ -1201,7 +1201,7 @@ sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     return SdrGlueEditView::KeyInput(rKEvt,pWin);
 }
 
-sal_Bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
+bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
         bool bPostIt=pTextEditOutliner->IsInSelectionMode();
@@ -1236,7 +1236,7 @@ sal_Bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
     return SdrGlueEditView::MouseButtonDown(rMEvt,pWin);
 }
 
-sal_Bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
+bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
         bool bPostIt=pTextEditOutliner->IsInSelectionMode();
@@ -1267,7 +1267,7 @@ sal_Bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
     return SdrGlueEditView::MouseButtonUp(rMEvt,pWin);
 }
 
-sal_Bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
         bool bSelMode=pTextEditOutliner->IsInSelectionMode();
@@ -1299,7 +1299,7 @@ sal_Bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
     return SdrGlueEditView::MouseMove(rMEvt,pWin);
 }
 
-sal_Bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
+bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
 {
     // as long as OutlinerView returns a sal_Bool, it only gets COMMAND_STARTDRAG
     if (pTextEditOutlinerView!=NULL)

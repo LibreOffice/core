@@ -214,11 +214,11 @@ public:
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
     OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
 
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
 
     // #97766# make virtual to change implementation e.g. for SdOutlineView
     virtual sal_uInt16 GetScriptType() const;

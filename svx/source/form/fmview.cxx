@@ -490,9 +490,9 @@ void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFor
 }
 
 
-sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if  (   IsDesignMode()
         &&  rKeyCode.GetCode() == KEY_RETURN
@@ -518,7 +518,7 @@ sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                     SetMoveOutside(true);
                     //OLMRefreshAllIAOManagers();
                     xWindow->setFocus();
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
         }
@@ -551,9 +551,9 @@ bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 }
 
 
-sal_Bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
+bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
 {
-    sal_Bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
+    bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
 
     if ( pFormShell && pFormShell->GetImpl() )
     {

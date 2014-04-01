@@ -111,7 +111,7 @@ public:
     using E3dView::Paste;
     virtual bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0) SAL_OVERRIDE;
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin ) SAL_OVERRIDE;
+    virtual bool MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin ) SAL_OVERRIDE;
 
     /** grab the focus to the first form control on the view
         @param _bForceSync
@@ -125,7 +125,7 @@ public:
             GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
-    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
+    bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
 
     /// shortcut to "GetSdrPageView() ? PTR_CAST( FmFormPage, GetSdrPageView() ) : NULL"
     FmFormPage* GetCurPage();

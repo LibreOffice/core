@@ -175,12 +175,12 @@ SdrView::~SdrView()
     maAccessibilityOptions.RemoveListener(this);
 }
 
-sal_Bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     SetActualWin(pWin);
-    sal_Bool bRet=SdrCreateView::KeyInput(rKEvt,pWin);
+    bool bRet = SdrCreateView::KeyInput(rKEvt,pWin);
     if (!bRet && !IsExtendedKeyInputDispatcherEnabled()) {
-        bRet=true;
+        bRet = true;
         switch (rKEvt.GetKeyCode().GetFullFunction()) {
             case KEYFUNC_CUT   : Cut(); break;
             case KEYFUNC_COPY  : Yank(); break;
@@ -218,51 +218,51 @@ sal_Bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     return bRet;
 }
 
-sal_Bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
+bool SdrView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
 {
     SetActualWin(pWin);
     if (rMEvt.IsLeft()) aDragStat.SetMouseDown(true);
-    sal_Bool bRet=SdrCreateView::MouseButtonDown(rMEvt,pWin);
+    bool bRet = SdrCreateView::MouseButtonDown(rMEvt,pWin);
     if (!bRet && !IsExtendedMouseEventDispatcherEnabled()) {
         SdrViewEvent aVEvt;
         PickAnything(rMEvt,SDRMOUSEBUTTONDOWN,aVEvt);
-        bRet=DoMouseEvent(aVEvt);
+        bRet = DoMouseEvent(aVEvt);
     }
     return bRet;
 }
 
-sal_Bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
+bool SdrView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
 {
     SetActualWin(pWin);
     if (rMEvt.IsLeft()) aDragStat.SetMouseDown(false);
-    sal_Bool bAction=IsAction();
-    sal_Bool bRet=!bAction && SdrCreateView::MouseButtonUp(rMEvt,pWin);
+    bool bAction = IsAction();
+    bool bRet = !bAction && SdrCreateView::MouseButtonUp(rMEvt,pWin);
     if (!bRet && !IsExtendedMouseEventDispatcherEnabled()) {
         SdrViewEvent aVEvt;
         PickAnything(rMEvt,SDRMOUSEBUTTONUP,aVEvt);
-        bRet=DoMouseEvent(aVEvt);
+        bRet = DoMouseEvent(aVEvt);
     }
     return bRet;
 }
 
-sal_Bool SdrView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+bool SdrView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 {
     SetActualWin(pWin);
     aDragStat.SetMouseDown(rMEvt.IsLeft());
-    sal_Bool bRet=SdrCreateView::MouseMove(rMEvt,pWin);
+    bool bRet = SdrCreateView::MouseMove(rMEvt,pWin);
     if (!IsExtendedMouseEventDispatcherEnabled() && !IsTextEditInSelectionMode()) {
         SdrViewEvent aVEvt;
         PickAnything(rMEvt,SDRMOUSEMOVE,aVEvt);
-        if (DoMouseEvent(aVEvt)) bRet=sal_True;
+        if (DoMouseEvent(aVEvt)) bRet=true;
     }
 
     return bRet;
 }
 
-sal_Bool SdrView::Command(const CommandEvent& rCEvt, Window* pWin)
+bool SdrView::Command(const CommandEvent& rCEvt, Window* pWin)
 {
     SetActualWin(pWin);
-    sal_Bool bRet=SdrCreateView::Command(rCEvt,pWin);
+    bool bRet = SdrCreateView::Command(rCEvt,pWin);
     return bRet;
 }
 

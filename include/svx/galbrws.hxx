@@ -74,7 +74,7 @@ public:
                                             Window* pParent, const ResId& rResId );
                             virtual ~GalleryBrowser();
 
-    sal_Bool                KeyInput( const KeyEvent& rKEvt, Window* pWindow );
+    bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
 #endif // INCLUDED_SVX_GALBRWS_HXX

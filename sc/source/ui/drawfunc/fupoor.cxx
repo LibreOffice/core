@@ -191,7 +191,7 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
         if ( pOutView )
-            return pOutView->HasSelection() ? pView->Command(rCEvt,pWindow) : SC_CMD_NONE;
+            return pOutView->HasSelection() ? (pView->Command(rCEvt,pWindow) ? 1 : 0) : SC_CMD_NONE;
         else
             return pView->Command(rCEvt,pWindow);
     }

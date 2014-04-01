@@ -82,7 +82,7 @@ public:
     virtual void BrkAction() SAL_OVERRIDE;
     virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
 
     void SetMeasureLayer(const OUString& rName) { aMeasureLayer=rName; }
     const OUString& GetMeasureLayer() const { return aMeasureLayer; }

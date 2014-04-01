@@ -479,12 +479,12 @@ public:
     // Default=FALSE. Flag ist nicht persistent.
     bool IsSwapAsynchron() const { return bSwapAsynchron; }
     void SetSwapAsynchron(bool bJa=true) { bSwapAsynchron=bJa; }
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
 
-    virtual sal_Bool MouseButtonDown(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return sal_False; }
-    virtual sal_Bool MouseButtonUp(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return sal_False; }
-    virtual sal_Bool MouseMove(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return sal_False; }
-    virtual sal_Bool Command(const CommandEvent& /*rCEvt*/, Window* /*pWin*/) { return sal_False; }
+    virtual bool MouseButtonDown(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return false; }
+    virtual bool MouseButtonUp(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return false; }
+    virtual bool MouseMove(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return false; }
+    virtual bool Command(const CommandEvent& /*rCEvt*/, Window* /*pWin*/) { return false; }
     bool Cut(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
     bool Yank(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
     bool Paste(Window* /*pWin*/=NULL, sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }

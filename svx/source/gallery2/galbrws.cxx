@@ -180,10 +180,10 @@ void GalleryBrowser::Resize()
     maLastSize = aNewSize;
 }
 
-sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
+bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 {
     const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
-    sal_Bool            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
+    bool                bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
                            ( ( KEY_TAB == nCode ) || ( KEY_F6 == nCode && rKEvt.GetKeyCode().IsMod2() ) ) );
 
     if( bRet )

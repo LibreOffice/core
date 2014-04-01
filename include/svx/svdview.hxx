@@ -194,11 +194,11 @@ public:
     void SetMasterPagePaintCaching(bool bOn);
     bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
 
-    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
-    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
+    bool KeyInput(const KeyEvent& rKEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin) SAL_OVERRIDE;
+    virtual bool Command(const CommandEvent& rCEvt, Window* pWin) SAL_OVERRIDE;
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 
