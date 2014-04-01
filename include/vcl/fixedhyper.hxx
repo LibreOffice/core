@@ -23,10 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
 
-
-    //= FixedHyperlink
-
-    class VCL_DLLPUBLIC FixedHyperlink : public FixedText
+class VCL_DLLPUBLIC FixedHyperlink : public FixedText
     {
     private:
         long                m_nTextLen;
@@ -39,6 +36,9 @@
             Called by the Ctors.
         */
         void                Initialize();
+
+        /** is position X positon hitting text */
+        SAL_DLLPRIVATE bool ImplIsOverText(Point rPosition);
 
     protected:
         /** overwrites Window::MouseMove().

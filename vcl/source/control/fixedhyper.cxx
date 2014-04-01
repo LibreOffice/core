@@ -52,10 +52,33 @@ void FixedHyperlink::Initialize()
     m_nTextLen = GetCtrlTextWidth( GetText() );
 }
 
+bool FixedHyperlink::ImplIsOverText(Point aPosition)
+{
+    Size aSize = GetOutputSizePixel();
+
+    bool bIsOver = false;
+
+    if (GetStyle() & WB_RIGHT)
+    {
+        return aPosition.X() > (aSize.Width() - m_nTextLen);
+    }
+    else if (GetStyle() & WB_CENTER)
+    {
+        bIsOver = aPosition.X() > (aSize.Width() / 2 - m_nTextLen / 2) &&
+                  aPosition.X() < (aSize.Width() / 2 + m_nTextLen / 2);
+    }
+    else
+    {
+        bIsOver = aPosition.X() < m_nTextLen;
+    }
+
+    return bIsOver;
+}
+
 void FixedHyperlink::MouseMove( const MouseEvent& rMEvt )
 {
     // changes the pointer if the control is enabled and the mouse is over the text.
-    if ( !rMEvt.IsLeaveWindow() && IsEnabled() && GetPointerPosPixel().X() < m_nTextLen )
+    if ( !rMEvt.IsLeaveWindow() && IsEnabled() && ImplIsOverText(GetPointerPosPixel()) )
         SetPointer( POINTER_REFHAND );
     else
         SetPointer( m_aOldPointer );
@@ -64,13 +87,13 @@ void FixedHyperlink::MouseMove( const MouseEvent& rMEvt )
 void FixedHyperlink::MouseButtonUp( const MouseEvent& )
 {
     // calls the link if the control is enabled and the mouse is over the text.
-    if ( IsEnabled() && GetPointerPosPixel().X() < m_nTextLen )
+    if ( IsEnabled() && ImplIsOverText(GetPointerPosPixel()) )
         ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, m_aClickHdl, this );
 }
 
 void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( IsEnabled() && GetPointerPosPixel().X() < m_nTextLen )
+    if ( IsEnabled() && ImplIsOverText(GetPointerPosPixel()) )
         FixedText::RequestHelp( rHEvt );
 }
 
