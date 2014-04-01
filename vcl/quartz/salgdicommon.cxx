@@ -308,6 +308,12 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
         return;
     }
 
+#ifdef IOS
+    // If called from idle layout, mrContext is NULL, no idea what to do
+    if (!mrContext)
+        return;
+#endif
+
     // accelerate trivial operations
     /*const*/ AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
     const bool bSameGraphics = (this == pSrc)
