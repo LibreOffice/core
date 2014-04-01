@@ -776,7 +776,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
 {
     sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
-    aDlg.SetTitle( "Open 3DModel" );
+    aDlg.SetTitle( "Insert 3D Model" );
     aDlg.AddFilter( "GL Transmission Format", "*.json" );
     aDlg.AddFilter( "All files", "*.*"  );
 
