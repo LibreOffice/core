@@ -403,7 +403,6 @@ class SmSymDefineDialog : public ModalDialog
     FixedText*       pSymbolName;
     SmShowChar*     pSymbolDisplay;
     FixedText*       pSymbolSetName;
-    HelpButton*      pHelpBtn;
     PushButton*      pAddBtn;
     PushButton*      pChangeBtn;
     PushButton*      pDeleteBtn;
