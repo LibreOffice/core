@@ -1064,7 +1064,7 @@ void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     if( aCompat.GetVersion() >= 2 )     // Version 2
     {
-        sal_uInt8 bHasPolyFlags;
+        sal_uInt8 bHasPolyFlags(0);
         rIStm >> bHasPolyFlags;
         if ( bHasPolyFlags )
             maPoly.Read( rIStm );
