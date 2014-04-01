@@ -1785,6 +1785,13 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
         aFont.SetUnderline(UNDERLINE_SINGLE);
         SetControlFont(aFont);
     }
+    else if (rKey == "size")
+    {
+        Font aFont(GetControlFont());
+        sal_Int32 nHeight = rValue.toInt32() / 1000;
+        aFont.SetHeight(nHeight);
+        SetControlFont(aFont);
+    }
     else
     {
         SAL_INFO("vcl.layout", "unhandled font attribute: " << rKey.getStr());
