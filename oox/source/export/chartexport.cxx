@@ -248,7 +248,7 @@ Reference< chart2::data::XLabeledDataSequence >
     return aNoResult;
 }
 
-Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, sal_Bool& rOutSourceHasCategoryLabels )
+Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, bool& rOutSourceHasCategoryLabels )
 {
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
 
@@ -257,7 +257,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
     Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xDiagram ) );
     if( xCategories.is() )
         aLabeledSeqVector.push_back( xCategories );
-    rOutSourceHasCategoryLabels = sal_Bool(xCategories.is());
+    rOutSourceHasCategoryLabels = xCategories.is();
 
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeriesSeqVector(
             lcl_getAllSeriesSequences( xChartDoc ) );
@@ -441,9 +441,9 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mnSeriesCount(0)
     , maFraction( 1, 576 )
     , mxChartModel( xModel )
-    , mbHasCategoryLabels( sal_False )
-    , mbHasZAxis( sal_False )
-    , mbIs3DChart( sal_False )
+    , mbHasCategoryLabels( false )
+    , mbHasZAxis( false )
+    , mbIs3DChart( false )
 {
 }
 
@@ -673,7 +673,7 @@ void ChartExport::_ExportContent()
     if( xChartDoc.is())
     {
         // determine if data comes from the outside
-        sal_Bool bIncludeTable = sal_True;
+        bool bIncludeTable = true;
 
         Reference< chart2::XChartDocument > xNewDoc( xChartDoc, uno::UNO_QUERY );
         if( xNewDoc.is())
@@ -684,7 +684,7 @@ void ChartExport::_ExportContent()
             Reference< lang::XServiceInfo > xDPServiceInfo( xNewDoc->getDataProvider(), uno::UNO_QUERY );
             if( ! (xDPServiceInfo.is() && xDPServiceInfo->getImplementationName() == "com.sun.star.comp.chart.InternalDataProvider" ))
             {
-                bIncludeTable = sal_False;
+                bIncludeTable = false;
             }
         }
         else
@@ -729,7 +729,7 @@ void ChartExport::_ExportContent()
 }
 
 void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc,
-                                      sal_Bool bIncludeTable )
+                                      bool bIncludeTable )
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_chartSpace ),
@@ -1007,7 +1007,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
 
     pFS->startElement( FSNS( XML_a, XML_r ),
             FSEND );
-    WriteRunProperties( xPropSet, sal_False );
+    WriteRunProperties( xPropSet, false );
     pFS->startElement( FSNS( XML_a, XML_t ),
             FSEND );
     pFS->writeEscaped( sText );
@@ -1309,7 +1309,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
             XML_val, bardir,
             FSEND );
 
-    exportGrouping( sal_True );
+    exportGrouping( true );
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
     exportSeries( xChartType, nAttachedAxis );
 
@@ -1835,7 +1835,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
 
 void ChartExport::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
-    sal_Bool /*bJapaneseCandleSticks*/,
+    bool /*bJapaneseCandleSticks*/,
     sal_Int32& nAttachedAxis )
 {
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
@@ -2766,7 +2766,7 @@ void ChartExport::exportAxesId( sal_Int32 nAttachedAxis )
     }
 }
 
-void ChartExport::exportGrouping( sal_Bool isBar )
+void ChartExport::exportGrouping( bool isBar )
 {
     FSHelperPtr pFS = GetFS();
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
@@ -3266,7 +3266,7 @@ void ChartExport::exportView3D()
     pFS->endElement( FSNS( XML_c, XML_view3D ) );
 }
 
-sal_Bool ChartExport::isDeep3dChart()
+bool ChartExport::isDeep3dChart()
 {
     sal_Bool isDeep = sal_False;
     if( mbIs3DChart )

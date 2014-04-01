@@ -90,7 +90,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > mxNewDiagram;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
-    sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
+    bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     OUString msChartAddress;
     ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
 
@@ -98,8 +98,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > mxCategoriesValues;
 
     AxisVector          maAxes;
-    sal_Bool            mbHasZAxis;
-    sal_Bool            mbIs3DChart;
+    bool                mbHasZAxis;
+    bool                mbIs3DChart;
 
 
 private:
@@ -110,8 +110,8 @@ private:
 
     void _ExportContent();
     void exportChartSpace( com::sun::star::uno::Reference<
-                          com::sun::star::chart::XChartDocument > rChartDoc,
-                      sal_Bool bIncludeTable );
+                           com::sun::star::chart::XChartDocument > rChartDoc,
+                           bool bIncludeTable );
     void exportChart( com::sun::star::uno::Reference<
                           com::sun::star::chart::XChartDocument > rChartDoc );
     void exportExternalData( com::sun::star::uno::Reference<
@@ -146,7 +146,7 @@ private:
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > > & aSeriesSeq,
-        sal_Bool bJapaneseCandleSticks, sal_Int32& nAttachedAxis );
+        bool bJapaneseCandleSticks, sal_Int32& nAttachedAxis );
     void exportSeriesText(
         const com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xValueSeq );
     void exportSeriesCategory(
@@ -160,7 +160,7 @@ private:
     void exportDataLabels(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength );
-    void exportGrouping( sal_Bool isBar = sal_False );
+    void exportGrouping( bool isBar = false );
     void exportTrendlines( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > xSeries );
     void exportMarker();
     void exportSmooth();
@@ -181,7 +181,7 @@ private:
         AxisIdPair aAxisIdPair );
     void exportAxesId( sal_Int32 nAttachedAxis );
     void exportView3D();
-    sal_Bool isDeep3dChart();
+    bool isDeep3dChart();
 
 public:
 

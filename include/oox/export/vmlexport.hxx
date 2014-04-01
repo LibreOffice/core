@@ -88,7 +88,7 @@ public:
     /// Call this when you need to export the object as VML.
     sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
-            sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const sal_Bool bOOxmlExport = false );
+            sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const bool bOOxmlExport = false );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) SAL_OVERRIDE;
     static bool IsWaterMarkShape(const OUString& rStr);
 protected:
@@ -133,7 +133,7 @@ private:
     void AddLineDimensions( const Rectangle& rRectangle );
 
     /// Add position and size to the OStringBuffer.
-    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, sal_Bool rbAbsolutePos = true );
+    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, bool rbAbsolutePos = true );
 };
 
 } // namespace vml

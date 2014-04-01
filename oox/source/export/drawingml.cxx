@@ -453,7 +453,7 @@ void DrawingML::WriteGradientFill( awt::Gradient rGradient )
     }
 }
 
-void DrawingML::WriteLineArrow( Reference< XPropertySet > rXPropSet, sal_Bool bLineStart )
+void DrawingML::WriteLineArrow( Reference< XPropertySet > rXPropSet, bool bLineStart )
 {
     ESCHER_LineEnd eLineEnd;
     sal_Int32 nArrowLength;
@@ -528,10 +528,10 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nColor = 0;
-    sal_Bool bColorSet = sal_False;
+    bool bColorSet = false;
     const char* cap = NULL;
     drawing::LineDash aLineDash;
-    sal_Bool bDashSet = sal_False;
+    bool bDashSet = false;
     bool bNoFill = false;
 
     // get InteropGrabBag and search the relevant attributes
@@ -576,7 +576,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         case drawing::LineStyle_DASH:
             if( GETA( LineDash ) ) {
                 aLineDash = *(drawing::LineDash*) mAny.getValue();
-                bDashSet = sal_True;
+                bDashSet = true;
                 if( aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE )
                     cap = "rnd";
 
@@ -588,7 +588,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         default:
             if ( GETA( LineColor ) ) {
                 nColor = *((sal_uInt32*) mAny.getValue()) & 0xffffff;
-                bColorSet = sal_True;
+                bColorSet = true;
             }
             break;
     }
@@ -661,8 +661,8 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     if( !bNoFill )
     {
-        WriteLineArrow( rXPropSet, sal_True );
-        WriteLineArrow( rXPropSet, sal_False );
+        WriteLineArrow( rXPropSet, true );
+        WriteLineArrow( rXPropSet, false );
     }
     else
     {
@@ -987,7 +987,7 @@ void DrawingML::WriteStretch( ::com::sun::star::uno::Reference< ::com::sun::star
 }
 
 void DrawingML::WriteTransformation( const Rectangle& rRect,
-        sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+        sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
 {
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
                           XML_flipH, bFlipH ? "1" : NULL,
@@ -1009,7 +1009,7 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Bool bSuppressRotation  )
+void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation  )
 {
     DBG(fprintf(stderr,  "write shape transformation\n" ));
 
@@ -1047,14 +1047,14 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, PPTX_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
-void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIsField )
+void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsField )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
     OUString usLanguage;
     PropertyState eState;
     sal_Int16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
-    sal_Bool bComplex = ( nScriptType == ScriptType::COMPLEX );
+    bool bComplex = ( nScriptType == ScriptType::COMPLEX );
     const char* bold = NULL;
     const char* italic = NULL;
     const char* underline = NULL;
@@ -1166,7 +1166,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         DBG(fprintf(stderr, "run color: %x auto: %x\n", static_cast<unsigned int>( color ), static_cast<unsigned int>( COL_AUTO )));
 
         if( color == COL_AUTO ) { // nCharColor depends to the background color
-            sal_Bool bIsDark = sal_False;
+            bool bIsDark = false;
             GET( bIsDark, IsBackgroundDark );
             color = bIsDark ? 0xffffff : 0x000000;
         }
@@ -1233,7 +1233,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     mpFS->endElementNS( XML_a, XML_rPr );
 }
 
-const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField )
+const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsField )
 {
     const char* sType = NULL;
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
@@ -1248,10 +1248,10 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() ) {
-        bIsField = sal_True;
+        bIsField = true;
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
-                OUString aFieldKind( rXTextField->getPresentation( sal_True ) );
+                OUString aFieldKind( rXTextField->getPresentation( true ) );
                 DBG(fprintf (stderr, "field kind: %s\n", USS(aFieldKind) ));
                 if( aFieldKind == "Page" ) {
                     return "slidenum";
@@ -1271,7 +1271,7 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
 {
     Sequence< sal_uInt8 > aSeq( 16 );
     static const char cDigits[17] = "0123456789ABCDEF";
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, true );
     int i;
 
     rBuffer.append( '{' );
@@ -1305,7 +1305,7 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
 void DrawingML::WriteRun( Reference< XTextRange > rRun )
 {
     const char* sFieldType;
-    sal_Bool bIsField = sal_False;
+    bool bIsField = false;
     OUString sText = rRun->getString();
 
     if( sText.isEmpty()) {
@@ -1548,7 +1548,7 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     sal_Int16 nAlignment( style::ParagraphAdjust_LEFT );
     GET( nAlignment, ParaAdjust );
 
-    sal_Bool bHasLinespacing = sal_False;
+    bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
     if( GETAD( ParaLineSpacing ) )
         bHasLinespacing = ( mAny >>= aLineSpacing );
@@ -1586,7 +1586,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
 
     mpFS->startElementNS( XML_a, XML_p, FSEND );
 
-    sal_Bool bPropertiesWritten = sal_False;
+    bool bPropertiesWritten = false;
     while( enumeration->hasMoreElements() ) {
         Reference< XTextRange > run;
         Any any ( enumeration->nextElement() );
@@ -1594,7 +1594,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
         if (any >>= run) {
             if( !bPropertiesWritten ) {
                 WriteParagraphProperties( rParagraph );
-                bPropertiesWritten = sal_True;
+                bPropertiesWritten = true;
             }
             WriteRun( run );
         }
@@ -1632,13 +1632,13 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
         sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
 
     const char* sWritingMode = NULL;
-    sal_Bool bVertical = sal_False;
+    bool bVertical = false;
     if( GETA( TextWritingMode ) ) {
         WritingMode eMode;
 
         if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL ) {
             sWritingMode = "vert";
-            bVertical = sal_True;
+            bVertical = true;
         }
     }
 
@@ -1655,7 +1655,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
                     if ( nTextRotateAngle == -90 )
                     {
                         sWritingMode = "vert";
-                        bVertical = sal_True;
+                        bVertical = true;
                     }
                     break;
                 }
@@ -1671,12 +1671,12 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
     else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
         sVerticalAlignment = "b";
 
-    sal_Bool bHasWrap = sal_False;
-    sal_Bool bWrap = sal_False;
+    bool bHasWrap = false;
+    bool bWrap = false;
     // Only custom shapes obey the TextWordWrap option, normal text always wraps.
     if( dynamic_cast<SvxCustomShape*>(rXIface.get()) && GETA( TextWordWrap ) ) {
         mAny >>= bWrap;
-        bHasWrap = sal_True;
+        bHasWrap = true;
     }
 
     if (bBodyPr)
@@ -1760,7 +1760,7 @@ void DrawingML::WritePresetShape( const char* pShape )
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
-void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const PropertyValue& rProp )
+void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const PropertyValue& rProp )
 {
     static std::map< OString, std::vector<OString> > aAdjMap = ooxDrawingMLGetAdjNames();
     // If there are predefined adj names for this shape type, look them up now.
@@ -1893,12 +1893,12 @@ void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorE
     if( nStartID != -1 )
         mpFS->singleElementNS( XML_a, XML_stCxn,
                                XML_id, I32S( nStartID ),
-                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( sal_True ) ),
+                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( true ) ),
                                FSEND );
     if( nEndID != -1 )
         mpFS->singleElementNS( XML_a, XML_endCxn,
                                XML_id, I32S( nEndID ),
-                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( sal_False ) ),
+                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( false ) ),
                                FSEND );
 }
 

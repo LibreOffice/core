@@ -146,7 +146,7 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
+bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
 {
     Reference< XPropertySet > xPropSet( xIface, UNO_QUERY );
 
@@ -162,7 +162,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 {
                     DBG(fprintf(stderr, "empty presentation object %d, props:\n", bIsEmptyPresObj));
                     if( bIsEmptyPresObj )
-                       return sal_True;
+                       return true;
                 }
             }
 
@@ -173,7 +173,7 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
                 {
                     DBG(fprintf(stderr, "presentation object %d, props:\n", bIsPresObj));
                     if( bIsPresObj )
-                       return sal_True;
+                       return true;
                 }
             }
         }
@@ -184,10 +184,10 @@ sal_Bool ShapeExport::NonEmptyText( Reference< XInterface > xIface )
     if( xText.is() )
         return xText->getString().getLength();
 
-    return sal_False;
+    return false;
 }
 
-ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool bClosed )
+ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bClosed )
 {
     DBG(fprintf(stderr, "write open bezier shape\n"));
 
@@ -241,12 +241,12 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
 ShapeExport& ShapeExport::WriteClosedBezierShape( Reference< XShape > xShape )
 {
-    return WriteBezierShape( xShape, sal_True );
+    return WriteBezierShape( xShape, true );
 }
 
 ShapeExport& ShapeExport::WriteOpenBezierShape( Reference< XShape > xShape )
 {
-    return WriteBezierShape( xShape, sal_False );
+    return WriteBezierShape( xShape, false );
 }
 
 ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape)
@@ -293,19 +293,19 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     DBG(fprintf(stderr, "write custom shape\n"));
 
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
-    sal_Bool bPredefinedHandlesUsed = sal_True;
+    bool bPredefinedHandlesUsed = true;
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
     SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
-    sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
+    bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
     const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
     DBG(fprintf(stderr, "custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
 
-    sal_Bool bFlipH = false;
-    sal_Bool bFlipV = false;
+    bool bFlipH = false;
+    bool bFlipV = false;
 
     if( GETA( CustomShapeGeometry ) ) {
         DBG(fprintf(stderr, "got custom shape geometry\n"));
@@ -325,7 +325,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                     nAdjustmentValuesIndex = i;
                 else if ( rProp.Name == "Handles" ) {
                     if( !bIsDefaultObject )
-                        bPredefinedHandlesUsed = sal_False;
+                        bPredefinedHandlesUsed = false;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
                 }
             }
@@ -416,7 +416,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a,0,0,false);
+    WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "ellipse" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -524,7 +524,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a,0,0,false);
+    WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
@@ -535,8 +535,8 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
 ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 {
-    sal_Bool bFlipH = false;
-    sal_Bool bFlipV = false;
+    bool bFlipH = false;
+    bool bFlipV = false;
 
     DBG(fprintf(stderr, "write connector shape\n"));
 
@@ -580,13 +580,13 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 
     Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
     if( aRect.getWidth() < 0 ) {
-        bFlipH = sal_True;
+        bFlipH = true;
         aRect.setX( aEndPoint.X );
         aRect.setWidth( aStartPoint.X - aEndPoint.X );
     }
 
     if( aRect.getHeight() < 0 ) {
-        bFlipV = sal_True;
+        bFlipV = true;
         aRect.setY( aEndPoint.Y );
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
     }
@@ -626,8 +626,8 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 
 ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
 {
-    sal_Bool bFlipH = false;
-    sal_Bool bFlipV = false;
+    bool bFlipH = false;
+    bool bFlipV = false;
 
     DBG(fprintf(stderr, "write line shape\n"));
 
@@ -728,7 +728,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a,0,0,false);
+    WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -940,7 +940,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a,0,0,false);
+    WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "rect" );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
     WriteBlipOrNormalFill(xPropertySet, "GraphicURL");

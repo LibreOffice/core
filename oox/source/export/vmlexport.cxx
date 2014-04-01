@@ -129,7 +129,7 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* p
     if ( rShapeName.getLength() )
         pAttrList->add( XML_alt, OUStringToOString( rShapeName, RTL_TEXTENCODING_UTF8 ) );
 
-    sal_Bool rbAbsolutePos = true;
+    bool rbAbsolutePos = true;
     //editAs
     OUString rEditAs = EscherEx::GetEditAs();
     if (!rEditAs.isEmpty())
@@ -893,7 +893,7 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
             .makeStringAndClear() );
 }
 
-void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, sal_Bool rbAbsolutePos)
+void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, bool rbAbsolutePos)
 {
     if ( !rBuffer.isEmpty() )
         rBuffer.append( ";" );
@@ -1107,7 +1107,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const sal_Bool bOOxmlExport )
+sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
