@@ -227,9 +227,7 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet)
     m_pPreview->SetBorderStyle( WINDOW_BORDER_MONO );
 
     SwDBData aData = pSh->GetDBData();
-    sActDBName = aData.sDataSource;
-    sActDBName += OUString(DB_DELIM);
-    sActDBName += aData.sCommand;
+    sActDBName = aData.sDataSource + OUString(DB_DELIM) + aData.sCommand;
     InitDatabaseBox();
 }
 
