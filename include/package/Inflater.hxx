@@ -32,18 +32,18 @@ class DLLPUBLIC_PACKAGE Inflater
     typedef struct z_stream_s z_stream;
 
 protected:
-    sal_Bool                bFinished, bSetParams, bNeedDict;
+    bool                    bFinished, bSetParams, bNeedDict;
     sal_Int32               nOffset, nLength, nLastInflateError;
     z_stream*               pStream;
     com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;
     sal_Int32   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
-    Inflater(sal_Bool bNoWrap = sal_False);
+    Inflater(bool bNoWrap = false);
     ~Inflater();
     void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    sal_Bool SAL_CALL needsDictionary(  );
-    sal_Bool SAL_CALL finished(  );
+    bool SAL_CALL needsDictionary(  );
+    bool SAL_CALL finished(  );
     sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void SAL_CALL end(  );
 

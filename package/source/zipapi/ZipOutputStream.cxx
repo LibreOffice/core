@@ -44,7 +44,7 @@ ZipOutputStream::ZipOutputStream( const uno::Reference< uno::XComponentContext >
 : m_xContext( rxContext )
 , xStream(xOStream)
 , m_aDeflateBuffer(n_ConstBufferSize)
-, aDeflater(DEFAULT_COMPRESSION, sal_True)
+, aDeflater(DEFAULT_COMPRESSION, true)
 , aChucker(xOStream)
 , pCurrentEntry(NULL)
 , nMethod(DEFLATED)

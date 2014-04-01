@@ -68,7 +68,7 @@ using ZipUtils::Inflater;
 ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise )
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
-, aInflater (sal_True)
+, aInflater( true )
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
 , m_xContext ( rxContext )
@@ -87,7 +87,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise, sal_Bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
     throw(IOException, ZipException, RuntimeException)
 : aGrabber(xInput)
-, aInflater (sal_True)
+, aInflater( true )
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
 , m_xContext ( rxContext )
@@ -1093,7 +1093,7 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
     sal_Int64 nRealSize = 0;
-    Inflater aInflaterLocal( sal_True );
+    Inflater aInflaterLocal( true );
     sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nCompressedSize, static_cast< sal_Int64 >( 32000 ) ) );
 
     aGrabber.seek( nOffset );

@@ -26,10 +26,10 @@ using namespace ZipUtils;
 
 /** Provides general purpose decompression using the ZLIB library */
 
-Inflater::Inflater(sal_Bool bNoWrap)
-: bFinished(sal_False),
-  bSetParams(sal_False),
-  bNeedDict(sal_False),
+Inflater::Inflater(bool bNoWrap)
+: bFinished(false),
+  bSetParams(false),
+  bNeedDict(false),
   nOffset(0),
   nLength(0),
   nLastInflateError(0),
@@ -67,12 +67,12 @@ void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
     nLength = rBuffer.getLength();
 }
 
-sal_Bool SAL_CALL Inflater::needsDictionary(  )
+bool SAL_CALL Inflater::needsDictionary(  )
 {
     return bNeedDict;
 }
 
-sal_Bool SAL_CALL Inflater::finished(  )
+bool SAL_CALL Inflater::finished(  )
 {
     return bFinished;
 }
@@ -124,14 +124,14 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     switch (nResult)
     {
         case Z_STREAM_END:
-            bFinished = sal_True;
+            bFinished = true;
         case Z_OK:
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
             return nNewLength - pStream->avail_out;
 
         case Z_NEED_DICT:
-            bNeedDict = sal_True;
+            bNeedDict = true;
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
             return 0;

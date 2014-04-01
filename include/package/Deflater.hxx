@@ -33,24 +33,24 @@ class DLLPUBLIC_PACKAGE Deflater
 
 protected:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;
-    sal_Bool                bFinish;
-    sal_Bool                bFinished;
-    sal_Bool                bSetParams;
+    bool                    bFinish;
+    bool                    bFinished;
+    bool                    bSetParams;
     sal_Int32               nLevel, nStrategy;
     sal_Int64               nOffset, nLength;
     z_stream*               pStream;
 
-    void init (sal_Int32 nLevel, sal_Int32 nStrategy, sal_Bool bNowrap);
+    void init (sal_Int32 nLevel, sal_Int32 nStrategy, bool bNowrap);
     sal_Int32 doDeflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     ~Deflater();
-    Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap);
+    Deflater(sal_Int32 nSetLevel, bool bNowrap);
     void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void SAL_CALL setLevel( sal_Int32 nNewLevel );
-    sal_Bool SAL_CALL needsInput(  );
+    bool SAL_CALL needsInput(  );
     void SAL_CALL finish(  );
-    sal_Bool SAL_CALL finished(  );
+    bool SAL_CALL finished(  );
     sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     sal_Int64 SAL_CALL getTotalIn(  );
     sal_Int64 SAL_CALL getTotalOut(  );

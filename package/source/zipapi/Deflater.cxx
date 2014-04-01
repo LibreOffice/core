@@ -34,7 +34,7 @@ Deflater::~Deflater(void)
 {
     end();
 }
-void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, sal_Bool bNowrap)
+void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, bool bNowrap)
 {
     pStream = new z_stream;
     /* Memset it to 0...sets zalloc/zfree/opaque to NULL */
@@ -56,10 +56,10 @@ void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, sal_Bool bNowr
     }
 }
 
-Deflater::Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap)
-: bFinish(sal_False)
-, bFinished(sal_False)
-, bSetParams(sal_False)
+Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
+: bFinish(false)
+, bFinished(false)
+, bSetParams(false)
 , nLevel(nSetLevel)
 , nStrategy(DEFAULT_STRATEGY)
 , nOffset(0)
@@ -86,12 +86,12 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
         switch (nResult)
         {
             case Z_OK:
-                bSetParams = sal_False;
+                bSetParams = false;
                 nOffset += nLength - pStream->avail_in;
                 nLength = pStream->avail_in;
                 return nNewLength - pStream->avail_out;
             case Z_BUF_ERROR:
-                bSetParams = sal_False;
+                bSetParams = false;
                 return 0;
             default:
                 return 0;
@@ -112,13 +112,13 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
         switch (nResult)
         {
             case Z_STREAM_END:
-                bFinished = sal_True;
+                bFinished = true;
             case Z_OK:
                 nOffset += nLength - pStream->avail_in;
                 nLength = pStream->avail_in;
                 return nNewLength - pStream->avail_out;
             case Z_BUF_ERROR:
-                bSetParams = sal_False;
+                bSetParams = false;
                 return 0;
             default:
                 return 0;
@@ -143,18 +143,18 @@ void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
     if (nNewLevel != nLevel)
     {
         nLevel = nNewLevel;
-        bSetParams = sal_True;
+        bSetParams = true;
     }
 }
-sal_Bool SAL_CALL Deflater::needsInput(  )
+bool SAL_CALL Deflater::needsInput(  )
 {
     return nLength <=0;
 }
 void SAL_CALL Deflater::finish(  )
 {
-    bFinish = sal_True;
+    bFinish = true;
 }
-sal_Bool SAL_CALL Deflater::finished(  )
+bool SAL_CALL Deflater::finished(  )
 {
     return bFinished;
 }
@@ -178,8 +178,8 @@ void SAL_CALL Deflater::reset(  )
 #else
     z_deflateReset(pStream);
 #endif
-    bFinish = sal_False;
-    bFinished = sal_False;
+    bFinish = false;
+    bFinished = false;
     nOffset = nLength = 0;
 }
 void SAL_CALL Deflater::end(  )
