@@ -41,7 +41,7 @@ void* osl_aligned_alloc( sal_Size align, sal_Size size )
 
 void osl_aligned_free( void* p )
 {
-#if defined __APPLE__ && MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if defined MAC_OS_X_VERSION_MAX_ALLOWED && MAC_OS_X_VERSION_MAX_ALLOWED < 1060
     free(((void**)p)[-1]);
 #else
     free(p);
