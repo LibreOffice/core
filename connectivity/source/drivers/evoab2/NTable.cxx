@@ -40,7 +40,7 @@ OEvoabTable::OEvoabTable( sdbcx::OCollection* _pTables,
                 const OUString& _Description ,
                 const OUString& _SchemaName,
                 const OUString& _CatalogName
-                ) : OEvoabTable_TYPEDEF(_pTables,sal_True,
+                ) : OEvoabTable_TYPEDEF(_pTables,true,
                                   _Name,
                                   _Type,
                                   _Description,

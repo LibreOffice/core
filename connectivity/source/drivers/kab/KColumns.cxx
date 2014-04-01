@@ -62,10 +62,10 @@ sdbcx::ObjectType KabColumns::createObject(const OUString& _rName)
                         xRow->getInt(7),
                         xRow->getInt(9),
                         xRow->getInt(5),
-                        sal_False,
-                        sal_False,
-                        sal_False,
-                        sal_True,
+                        false,
+                        false,
+                        false,
+                        true,
                         sCatalogName,
                         sSchemaName,
                         sTableName);
@@ -86,7 +86,7 @@ void KabColumns::impl_refresh() throw(RuntimeException)
 KabColumns::KabColumns( KabTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector)
-    : sdbcx::OCollection(*_pTable, sal_True, _rMutex, _rVector),
+    : sdbcx::OCollection(*_pTable, true, _rMutex, _rVector),
       m_pTable(_pTable)
 {
 }

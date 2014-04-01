@@ -41,7 +41,7 @@ KabTable::KabTable( sdbcx::OCollection* _pTables,
                 const OUString& _Description ,
                 const OUString& _SchemaName,
                 const OUString& _CatalogName
-                ) : KabTable_TYPEDEF(_pTables,sal_True,
+                ) : KabTable_TYPEDEF(_pTables,true,
                                   _Name,
                                   _Type,
                                   _Description,

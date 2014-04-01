@@ -41,7 +41,7 @@ namespace connectivity
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector)
-                : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector),
+                : sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
                   m_xMetaData(_rMetaData)
                 { }
 

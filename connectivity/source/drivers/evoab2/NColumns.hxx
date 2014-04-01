@@ -39,7 +39,7 @@ namespace connectivity
             OEvoabColumns(  OEvoabTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector
-                        ) : sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector),
+                        ) : sdbcx::OCollection(*_pTable,true,_rMutex,_rVector),
                             m_pTable(_pTable)
             { }
         };

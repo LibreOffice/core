@@ -35,7 +35,7 @@ namespace connectivity
             OEvoabTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,
                          ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                          const TStringVector &_rVector) :
-                    sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector),
+                    sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
                     m_xMetaData(_rMetaData)
                         {}
             virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
