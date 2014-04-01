@@ -25,6 +25,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <libxml/encoding.h>
@@ -319,6 +320,13 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CHRATR_FONT: pWhich = "character font"; oValue = OUStringToOString(static_cast<const SvxFontItem*>(pItem)->GetFamilyName(), RTL_TEXTENCODING_UTF8); break;
             case RES_CHRATR_BACKGROUND: pWhich = "character background"; break;
             case RES_CHRATR_CTL_FONT: pWhich = "character ctl font"; break;
+            case RES_CHRATR_FONTSIZE:
+            {
+                pWhich = "character font size";
+                const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
+                oValue = "nHeight: " + OString::number(pFontHeightItem->GetHeight()) + ", nProp: " + OString::number(pFontHeightItem->GetProp());
+            }
+            break;
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
