@@ -3615,7 +3615,9 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     bNeedButtonStyleAsEditBackgroundWorkaround = false;
 
     // setup some workarounds for "blueprint" theme
-    if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
+    if( pThemeName
+        && (   strncasecmp( pThemeName, "blueprint", 9 ) == 0
+            || strncasecmp( pThemeName, "Adwaita", 7 ) == 0 ))
     {
         bNeedButtonStyleAsEditBackgroundWorkaround = true;
         if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
