@@ -79,9 +79,6 @@ public:
                                 : m_xLockBytes( pLockBytes )
                             {}
 
-    SvLockBytes*            getLockBytes (void)
-                            { return m_xLockBytes; }
-
     // XActiveDataControl.
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException, std::exception) SAL_OVERRIDE {}
