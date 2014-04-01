@@ -1207,6 +1207,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
                     aDocument.SetAllFormulasDirty(aCxt);
+                    INetURLObject aURLObjForDefaultNameSheetName(rMedium.GetName());
+                    aDocument.RenameTab(0,aURLObjForDefaultNameSheetName.GetBase());
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();
                     bOverflowCell = aImpEx.IsOverflowCell();
