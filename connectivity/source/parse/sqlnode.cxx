@@ -688,7 +688,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
         if ( bEscapeProcessing && rParam.pParser )
         {
             OUString sError;
-            boost::scoped_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand, sal_False ) );
+            boost::scoped_ptr< OSQLParseNode > pSubQueryNode( rParam.pParser->parseTree( sError, sCommand, false ) );
             if ( pSubQueryNode.get() )
             {
                 // parse the sub-select to SDBC level, too
@@ -778,7 +778,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
 
 
 
-sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
+bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::com::sun::star::uno::Any &_rCatalog,
                                             OUString &_rSchema,
                                             OUString &_rTable,
@@ -1021,7 +1021,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* const& pAppend, OSQLParseNode
                 switch(pLiteral->getNodeType())
                 {
                     case SQL_NODE_STRING:
-                        pLiteral->m_aNodeValue = ConvertLikeToken(pLiteral, pEscape, sal_False);
+                        pLiteral->m_aNodeValue = ConvertLikeToken(pLiteral, pEscape, false);
                         pAppend->append(pLiteral);
                         nErg = 1;
                         break;
@@ -1280,7 +1280,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     else
         s_pScanner->SetRule(s_pScanner->GetSQLRule());
 
-    s_pScanner->prepareScan(rStatement, m_pContext, sal_True);
+    s_pScanner->prepareScan(rStatement, m_pContext, true);
 
     SQLyylval.pParseNode = NULL;
     //  SQLyypvt = NULL;
@@ -1499,7 +1499,7 @@ OSQLParser::~OSQLParser()
         OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : has a refcount of 0 !");
         if (!--s_nRefCount)
         {
-            s_pScanner->setScanner(sal_True);
+            s_pScanner->setScanner(true);
             delete s_pScanner;
             s_pScanner = NULL;
 
@@ -1691,10 +1691,10 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
 }
 
 
-sal_Bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
+bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
 {
     // The members must be equal
-    sal_Bool bResult = (m_nNodeID  == rParseNode.m_nNodeID) &&
+    bool bResult = (m_nNodeID  == rParseNode.m_nNodeID) &&
                    (m_eNodeType == rParseNode.m_eNodeType) &&
                    (m_aNodeValue == rParseNode.m_aNodeValue) &&
                     count() == rParseNode.count();
@@ -1734,7 +1734,7 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
     m_aChildren.push_back(pNewNode);
 }
 
-sal_Bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
+bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseNode::addDateValue" );
     // special display for date/time values
@@ -1761,7 +1761,7 @@ sal_Bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNode
                  if (rParam.aMetaData.shouldEscapeDateTime())
                  {
                      // suQuote = "'";
-                     return sal_False;
+                     return false;
                  }
             }
 
@@ -1782,10 +1782,10 @@ sal_Bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNode
                 rString.append(rParam.bPredicate ? convertDateTimeString(rParam, sTokenValue) : sTokenValue);
             }
             rString.append(suQuote);
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void OSQLParseNode::replaceNodeValue(const OUString& rTableAlias, const OUString& rColumnName)
@@ -1915,7 +1915,7 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
     }
 }
 
-void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_Bool bNegate)
+void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool bNegate)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseNode::negateSearchCondition" );
     if(!pSearchCondition) // no where condition at entry point
@@ -1976,7 +1976,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
         replaceAndReset(pSearchCondition,pBooleanTest);
 
         if (!bNegate)
-            negateSearchCondition(pSearchCondition,sal_True); // negate all deeper values
+            negateSearchCondition(pSearchCondition, true); // negate all deeper values
     }
     // row_value_constructor comparison row_value_constructor
     // row_value_constructor comparison any_all_some subquery

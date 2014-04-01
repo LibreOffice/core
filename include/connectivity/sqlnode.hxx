@@ -251,7 +251,7 @@ namespace connectivity
         OSQLParseNode(const OSQLParseNode& rParseNode);
         OSQLParseNode& operator=(const OSQLParseNode& rParseNode);
 
-        sal_Bool operator==(OSQLParseNode& rParseNode) const;
+        bool operator==(OSQLParseNode& rParseNode) const;
 
         // destructor destructs the tree recursively
         virtual ~OSQLParseNode();
@@ -359,21 +359,21 @@ namespace connectivity
 
             // IsRule tests whether a node is a rule (NonTerminal)
             // ATTENTION: rules can be leaves, for example empty lists
-        sal_Bool isRule() const
+        bool isRule() const
             { return (m_eNodeType == SQL_NODE_RULE) || (m_eNodeType == SQL_NODE_LISTRULE)
                 || (m_eNodeType == SQL_NODE_COMMALISTRULE);}
 
             // IsToken tests whether a Node is a Token (Terminal but not a rule)
-        sal_Bool isToken() const {return !isRule();}
+        bool isToken() const {return !isRule();}
 
         const OUString& getTokenValue() const {return m_aNodeValue;}
 
         void setTokenValue(const OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
 
-        sal_Bool isLeaf() const {return m_aChildren.empty();}
+        bool isLeaf() const {return m_aChildren.empty();}
 
         // negate only a searchcondition, any other rule could cause a gpf
-        static void negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_Bool bNegate=sal_False);
+        static void negateSearchCondition(OSQLParseNode*& pSearchCondition, bool bNegate=false);
 
         // normalize a logic form
         // e.q. (a or b) and (c or d) <=> a and c or a and d or b and c or b and d
@@ -393,7 +393,7 @@ namespace connectivity
         static void compress(OSQLParseNode*& pSearchCondition);
         // return the catalog, schema and tablename form this node
         // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
-        static sal_Bool getTableComponents(const OSQLParseNode* _pTableNode,
+        static bool getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::com::sun::star::uno::Any &_rCatalog,
                                             OUString &_rSchema,
                                             OUString &_rTable
@@ -434,7 +434,7 @@ namespace connectivity
         */
         bool impl_parseTableNameNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
-        sal_Bool addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
+        bool addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
         OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
         OUString convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
         OUString convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const;

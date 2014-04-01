@@ -2922,7 +2922,7 @@ OUString OQueryDesignView::getStatement()
     {
         ::connectivity::OSQLParser& rParser( rController.getParser() );
         OUString sErrorMessage;
-        boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, sal_True ) );
+        boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, true ) );
         if ( pParseNode.get() )
         {
             OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
@@ -3034,7 +3034,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
             sSql += " FROM x WHERE ";
             sSql += pEntry->GetField();
             sSql += _sCriteria;
-            boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, sal_True ) );
+            boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, true ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )
             {

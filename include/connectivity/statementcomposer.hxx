@@ -52,8 +52,8 @@ namespace dbtools
         StatementComposer(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const OUString&  _rCommand,
-            const sal_Int32         _nCommandType,
-            const sal_Bool          _bEscapeProcessing
+            const sal_Int32  _nCommandType,
+            const bool       _bEscapeProcessing
         );
 
         ~StatementComposer();

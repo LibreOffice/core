@@ -37,7 +37,7 @@ namespace connectivity
         OUString         m_sErrorMessage;
 
         sal_Int32               m_nCurrentPos;             // next position to read from the statement
-        sal_Bool                m_bInternational;          // do we have a statement which may uses
+        bool                    m_bInternational;          // do we have a statement which may uses
         sal_Int32               m_nRule;                   // rule to be set
 
     public:
@@ -60,13 +60,13 @@ namespace connectivity
         virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
-        void prepareScan(const OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational);
+        void prepareScan(const OUString & rNewStatement, const IParseContext* pContext, bool bInternational);
         const OUString& getErrorMessage() const {return m_sErrorMessage;}
         OString getStatement() const { return m_sStatement; }
 
         sal_Int32 SQLlex();
         // set this as scanner for flex
-        void setScanner(sal_Bool _bNull=sal_False);
+        void setScanner(bool _bNull=false);
         // rules settings
         void SetRule(sal_Int32 nRule) {m_nRule = nRule;}
         sal_Int32   GetGERRule() const;

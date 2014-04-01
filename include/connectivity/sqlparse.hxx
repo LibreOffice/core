@@ -186,7 +186,7 @@ namespace connectivity
         // Parsing an SQLStatement
         OSQLParseNode* parseTree(OUString& rErrorMessage,
                        const OUString& rStatement,
-                       sal_Bool bInternational = sal_False);
+                       bool bInternational = false);
 
         // Check a Predicate
         OSQLParseNode* predicateTree(OUString& rErrorMessage, const OUString& rStatement,
@@ -229,10 +229,10 @@ namespace connectivity
 
         // Is the parse in a special mode?
         // Predicate chack is used to check a condition for a field
-        sal_Bool inPredicateCheck() const {return m_xField.is();}
+        bool inPredicateCheck() const {return m_xField.is();}
         const OUString& getFieldName() const {return m_sFieldName;}
 
-        void reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank);
+        void reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank);
          // does not change the pLiteral argument
         sal_Int16 buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2);
 

@@ -766,7 +766,7 @@ void OSQLScanner::SQLyyerror(char const *fmt)
 }
 
 //------------------------------------------------------------------------------
-void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational)
+void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, bool bInternational)
 {
     YY_FLUSH_BUFFER;
     BEGIN(m_nRule);
@@ -799,7 +799,7 @@ sal_Int32	OSQLScanner::GetSQLRule() const		{ return SQL; }
 sal_Int32	OSQLScanner::GetDATERule() const	{ return DATE; }
 sal_Int32	OSQLScanner::GetSTRINGRule() const	{ return STRING; }
 // -------------------------------------------------------------------------
-void OSQLScanner::setScanner(sal_Bool _bNull)
+void OSQLScanner::setScanner(bool _bNull)
 {
 	xxx_pGLOBAL_SQLSCAN = _bNull ? NULL : this;
 }

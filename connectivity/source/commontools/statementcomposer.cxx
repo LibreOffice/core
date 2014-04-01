@@ -238,7 +238,7 @@ namespace dbtools
 
 
     StatementComposer::StatementComposer( const Reference< XConnection >& _rxConnection,
-        const OUString&  _rCommand, const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing )
+        const OUString&  _rCommand, const sal_Int32 _nCommandType, const bool _bEscapeProcessing )
         :m_pData( new StatementComposer_Data( _rxConnection ) )
     {
         OSL_PRECOND( _rxConnection.is(), "StatementComposer::StatementComposer: illegal connection!" );

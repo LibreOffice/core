@@ -4409,7 +4409,7 @@ const Locale& OParseContext::getDefaultLocale()
 // Member-Variable.
 
 
-OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational)
+OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, bool bInternational)
 {
 	OUStringBuffer aMatchStr(0);
 	if (pTokenNode->isToken())
@@ -4554,8 +4554,8 @@ static OUString delComment( const OUString& rQuery )
 }
 
 OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
-									 const OUString& rStatement,
-								     sal_Bool bInternational)
+                                     const OUString& rStatement,
+                                     bool bInternational)
 {
 
 
@@ -4751,7 +4751,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 
 
 
-void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
+void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, bool bAppendBlank)
 {
 	OSL_ENSURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
 	OSL_ENSURE(pLiteral->count() == 2, "OSQLParser::ReduceLiteral() Invalid count");

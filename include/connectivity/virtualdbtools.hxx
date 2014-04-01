@@ -197,17 +197,17 @@ namespace connectivity
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
                 @param      _rxCursorSet    the property set
             */
-            virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
+            virtual bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
                 @param      _rxCursorSet    the property set
             */
-            virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
+            virtual bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
                 @param      _rxCursorSet    the property set
             */
-            virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
+            virtual bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const = 0;
 
             /** determines whether the given component is part of a document which is an embedded database
                 document (such as a form)

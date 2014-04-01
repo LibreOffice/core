@@ -340,7 +340,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         break;
 
     OUString sError;
-    boost::scoped_ptr< OSQLParseNode > pSubQueryNode( const_cast< OSQLParser& >( m_rParser ).parseTree( sError, sSubQueryCommand, sal_False ) );
+    boost::scoped_ptr< OSQLParseNode > pSubQueryNode( const_cast< OSQLParser& >( m_rParser ).parseTree( sError, sSubQueryCommand, false ) );
     if ( !pSubQueryNode.get() )
         break;
 
@@ -1040,11 +1040,11 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 bool OSQLParseTreeIterator::traverseOrderByColumnNames(const OSQLParseNode* pSelectNode)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseOrderByColumnNames" );
-    traverseByColumnNames( pSelectNode, sal_True );
+    traverseByColumnNames( pSelectNode, true );
     return !hasErrors();
 }
 
-void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder)
+void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNode, bool _bOrder)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseByColumnNames" );
     //  aIteratorStatus.Clear();
@@ -1132,7 +1132,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
 bool OSQLParseTreeIterator::traverseGroupByColumnNames(const OSQLParseNode* pSelectNode)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::traverseGroupByColumnNames" );
-    traverseByColumnNames( pSelectNode, sal_False );
+    traverseByColumnNames( pSelectNode, false );
     return !hasErrors();
 }
 
@@ -1693,7 +1693,7 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColum
     }
 }
 
-void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType,sal_Bool bAggFkt)
+void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setSelectColumnName" );
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
@@ -1874,7 +1874,7 @@ OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName
     return aAlias;
 }
 
-void OSQLParseTreeIterator::setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, sal_Bool bAscending)
+void OSQLParseTreeIterator::setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, bool bAscending)
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::setOrderByColumnName" );
     Reference<XPropertySet> xColumn = findSelectColumn( rColumnName );
@@ -2020,7 +2020,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     return pHavingClause;
 }
 
-sal_Bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) const
+bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) const
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::isTableNode" );
     return _pTableNode && (SQL_ISRULE(_pTableNode,catalog_name) ||

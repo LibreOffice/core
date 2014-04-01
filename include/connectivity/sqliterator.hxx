@@ -77,7 +77,7 @@ namespace connectivity
                                                 OSQLParseNode * pColumnRef,
                                                 OUString& aValue,
                                                 OSQLParseNode * pParameter);
-        void traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder);
+        void traverseByColumnNames(const OSQLParseNode* pSelectNode, bool _bOrder);
         void                traverseParameters(const OSQLParseNode* pSelectNode);
 
         const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, OUString& aTableRange );
@@ -120,7 +120,7 @@ namespace connectivity
             const OUString & rColumnName );
 
       protected:
-        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
+        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR, bool bAggFkt=false);
         void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
@@ -275,7 +275,7 @@ namespace connectivity
         bool getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const;
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
-        sal_Bool isTableNode(const OSQLParseNode* _pTableNode) const;
+        bool isTableNode(const OSQLParseNode* _pTableNode) const;
 
         // tries to find the correct type of the function
         sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );
@@ -330,7 +330,7 @@ namespace connectivity
         */
         void    impl_getQueryParameterColumns( const OSQLTable& _rQuery );
 
-        void setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, sal_Bool bAscending);
+        void setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, bool bAscending);
         void setGroupByColumnName(const OUString & rColumnName, OUString & rTableRange);
 
     private:

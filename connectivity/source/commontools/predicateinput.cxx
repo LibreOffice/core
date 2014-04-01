@@ -345,7 +345,7 @@ namespace dbtools
         {
             // first try the international version
             OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
-            boost::scoped_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, sal_True ) );
+            boost::scoped_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, true ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )
             {

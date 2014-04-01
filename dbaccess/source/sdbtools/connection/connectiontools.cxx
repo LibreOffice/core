@@ -91,7 +91,7 @@ namespace sdbtools
     Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
-        dbtools::StatementComposer aComposer(getConnection(), command, commandType, sal_True );
+        dbtools::StatementComposer aComposer(getConnection(), command, commandType, true );
         aComposer.setDisposeComposer(false);
         return aComposer.getComposer();
     }

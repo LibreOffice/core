@@ -145,19 +145,19 @@ namespace connectivity
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
             @param      _rxCursorSet    the property set
         */
-        virtual sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const SAL_OVERRIDE;
+        virtual bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const SAL_OVERRIDE;
 
 
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
             @param      _rxCursorSet    the property set
         */
-        virtual sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const SAL_OVERRIDE;
+        virtual bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const SAL_OVERRIDE;
 
 
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
             @param      _rxCursorSet    the property set
         */
-        virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const SAL_OVERRIDE;
+        virtual bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const SAL_OVERRIDE;
 
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >

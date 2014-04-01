@@ -155,19 +155,19 @@ namespace connectivity
     }
 
 
-    sal_Bool ODataAccessStaticTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
+    bool ODataAccessStaticTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
     {
         return ::dbtools::canInsert( _rxCursorSet );
     }
 
 
-    sal_Bool ODataAccessStaticTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
+    bool ODataAccessStaticTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
     {
         return ::dbtools::canUpdate( _rxCursorSet );
     }
 
 
-    sal_Bool ODataAccessStaticTools::canDelete(const Reference< XPropertySet>& _rxCursorSet) const
+    bool ODataAccessStaticTools::canDelete(const Reference< XPropertySet>& _rxCursorSet) const
     {
         return ::dbtools::canDelete( _rxCursorSet );
     }
