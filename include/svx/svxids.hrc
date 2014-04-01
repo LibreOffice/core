@@ -1020,9 +1020,10 @@
 
 #define SID_ATTR_BORDER_STYLES                          ( SID_SVX_START + 1140 )
 #define SID_ATTR_BORDER_DEFAULT_WIDTH                   ( SID_SVX_START + 1141 )
+// 1142 is used by editeng (SID_ATTR_CHAR_GRABBAG)
 
 //UUUU
-#define SID_OFFER_IMPORT                                ( SID_SVX_START + 1142 )
+#define SID_OFFER_IMPORT                                ( SID_SVX_START + 1143 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_OFFER_IMPORT + 1)
