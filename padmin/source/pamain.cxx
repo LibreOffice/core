@@ -145,7 +145,7 @@ void MyApp::Main()
 
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        sal_Bool bQuitApp;
+        sal_Bool bQuitApp (sal_False);
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
                 return;

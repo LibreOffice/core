@@ -1917,7 +1917,7 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
-            sal_Bool bQuitApp;
+            sal_Bool bQuitApp (sal_False);
 
             if( !InitAccessBridge( true, bQuitApp ) )
                 if( bQuitApp )
