@@ -207,11 +207,7 @@ bool QuartzSalBitmap::CreateContext()
         AllocateUserData();
 
     // default to RGBA color space
-#ifdef IOS
-    CGColorSpaceRef aCGColorSpace = CGColorSpaceCreateDeviceRGB();
-#else
     CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-#endif
     CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
 
     // convert data into something accepted by CGBitmapContextCreate()
@@ -226,11 +222,7 @@ bool QuartzSalBitmap::CreateContext()
     {
         // no conversion needed for grayscale
         maContextBuffer = maUserBuffer;
-#ifdef IOS
-        aCGColorSpace = CGColorSpaceCreateDeviceGray();
-#else
         aCGColorSpace = GetSalData()->mxGraySpace;
-#endif
         aCGBmpInfo = kCGImageAlphaNone;
         bitsPerComponent = mnBits;
     }
