@@ -84,7 +84,7 @@ public:
   AquaClipboard(NSPasteboard* pasteboard = NULL,
                 bool bUseSystemClipboard = true);
 
-  ~AquaClipboard();
+  virtual ~AquaClipboard();
 
 
   // XClipboard

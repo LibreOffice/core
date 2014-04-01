@@ -349,7 +349,7 @@ public:
 
     */
     SRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
-    ~SRotate(){}
+    virtual ~SRotate(){}
 private:
     /** axis to rotate CCW about
     */
@@ -391,7 +391,7 @@ public:
 
     */
     SScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,bool bInter, double T0, double T1);
-    ~SScale(){}
+    virtual ~SScale(){}
 private:
     basegfx::B3DVector scale;
     basegfx::B3DVector origin;
@@ -421,7 +421,7 @@ public:
 
     */
     STranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T1);
-    ~STranslate(){}
+    virtual ~STranslate(){}
 private:
     /** vector to translate by
     */
@@ -452,7 +452,7 @@ public:
 
     */
     SEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1);
-    ~SEllipseTranslate(){}
+    virtual ~SEllipseTranslate(){}
 private:
     /** width and length of the ellipse
      */
@@ -473,7 +473,7 @@ public:
     RotateAndScaleDepthByWidth* clone() SAL_OVERRIDE;
 
     RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
-    ~RotateAndScaleDepthByWidth(){}
+    virtual ~RotateAndScaleDepthByWidth(){}
 private:
     basegfx::B3DVector axis;
     basegfx::B3DVector origin;
@@ -489,7 +489,7 @@ public:
     RotateAndScaleDepthByHeight* clone() SAL_OVERRIDE;
 
     RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
-    ~RotateAndScaleDepthByHeight(){}
+    virtual ~RotateAndScaleDepthByHeight(){}
 private:
     basegfx::B3DVector axis;
     basegfx::B3DVector origin;

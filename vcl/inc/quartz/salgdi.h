@@ -65,7 +65,7 @@ class CoreTextFontData : public PhysicalFontFace
 public:
     CoreTextFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
 
-    ~CoreTextFontData();
+    virtual ~CoreTextFontData();
 
     PhysicalFontFace*   Clone() const SAL_OVERRIDE;
     ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;

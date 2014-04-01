@@ -39,7 +39,7 @@ class DragSourceContext: public cppu::BaseMutex,
 {
 public:
   DragSourceContext();
-  ~DragSourceContext();
+  virtual ~DragSourceContext();
 
   virtual sal_Int32 SAL_CALL getCurrentCursor(  )
     throw( com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
