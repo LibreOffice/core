@@ -97,17 +97,6 @@ struct FSStorage_Impl
     uno::Reference< uno::XComponentContext > m_xContext;
 
 
-    FSStorage_Impl( const OUString& aURL, sal_Int32 nMode, uno::Reference< uno::XComponentContext > xContext )
-    : m_aURL( aURL )
-    , m_pContent( NULL )
-    , m_nMode( nMode )
-    , m_pListenersContainer( NULL )
-    , m_pTypeCollection( NULL )
-    , m_xContext( xContext )
-    {
-        OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
-    }
-
     FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > xContext )
     : m_aURL( aContent.getURL() )
     , m_pContent( new ::ucbhelper::Content( aContent ) )
