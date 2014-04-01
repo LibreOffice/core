@@ -146,22 +146,22 @@ public:
     sal_Int32 hashBookmark(const ::com::sun::star::uno::Any& bookmark) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
 
     // ::com::sun::star::sdbc::XResultSet
-    sal_Bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }
-    sal_Bool isAfterLast() const                { return m_xMoveOperations->isAfterLast(); }
-    sal_Bool isFirst() const                    { return m_xMoveOperations->isFirst(); }
-    sal_Bool isLast() const                     { return m_xMoveOperations->isLast(); }
+    bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }
+    bool isAfterLast() const                { return m_xMoveOperations->isAfterLast(); }
+    bool isFirst() const                    { return m_xMoveOperations->isFirst(); }
+    bool isLast() const                     { return m_xMoveOperations->isLast(); }
     void beforeFirst()                          { m_xMoveOperations->beforeFirst(); }
-    sal_Bool first()                            { return m_xMoveOperations->first(); }
-    sal_Bool last()                             { return m_xMoveOperations->last(); }
+    bool first()                            { return m_xMoveOperations->first(); }
+    bool last()                             { return m_xMoveOperations->last(); }
     sal_Int32 getRow() const                    { return m_xMoveOperations->getRow(); }
-    sal_Bool absolute(sal_Int32 nPosition)          { return m_xMoveOperations->absolute(nPosition); }
-    sal_Bool relative(sal_Int32 nCount)             { return m_xMoveOperations->relative(nCount); }
-    sal_Bool previous()                         { return m_xMoveOperations->previous(); }
-    sal_Bool next()                             { return m_xMoveOperations->next(); }
+    bool absolute(sal_Int32 nPosition)          { return m_xMoveOperations->absolute(nPosition); }
+    bool relative(sal_Int32 nCount)             { return m_xMoveOperations->relative(nCount); }
+    bool previous()                         { return m_xMoveOperations->previous(); }
+    bool next()                             { return m_xMoveOperations->next(); }
     void refreshRow()                       { m_xMoveOperations->refreshRow(); }
-    sal_Bool rowUpdated()                       { return m_xMoveOperations->rowUpdated(); }
-    sal_Bool rowInserted()                      { return m_xMoveOperations->rowInserted(); }
-    sal_Bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
+    bool rowUpdated()                       { return m_xMoveOperations->rowUpdated(); }
+    bool rowInserted()                      { return m_xMoveOperations->rowInserted(); }
+    bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> getStatement()         { return m_xMoveOperations->getStatement(); }
     // ::com::sun::star::sdbcx::XColumnsSupplier
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getColumns() const throw( ::com::sun::star::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
