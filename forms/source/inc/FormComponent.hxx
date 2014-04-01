@@ -529,7 +529,7 @@ public:
 
 // simple destructor
 #define DECLARE_DEFAULT_DTOR( classname )   \
-    ~classname()override/*TODO*/            \
+    virtual ~classname()
 
 // constructor for cloning a class
 #define DECLARE_DEFAULT_CLONE_CTOR( classname )  \
