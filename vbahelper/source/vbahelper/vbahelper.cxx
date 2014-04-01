@@ -339,7 +339,7 @@ XLRGBToOORGB(  const uno::Any& aCol )
     return uno::makeAny( nCol );
 }
 
-void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& /*ActivePrinter*/, const uno::Any& /*PrintToFile*/, const uno::Any& Collate, const uno::Any& PrToFileName, sal_Bool bUseSelection  )
+void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& /*ActivePrinter*/, const uno::Any& /*PrintToFile*/, const uno::Any& Collate, const uno::Any& PrToFileName, bool bUseSelection  )
 {
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
@@ -635,7 +635,7 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
     return sResult.makeStringAndClear( );
 }
 
-double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical)
+double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical)
 {
     double fConvertFactor = 1.0;
     if( bVertical )
@@ -649,12 +649,12 @@ double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css
     return fConvertFactor;
 }
 
-double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical)
+double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
     return PointsToHmm( fPoints ) * fConvertFactor;
 }
-double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical)
+double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
     return HmmToPoints(static_cast<sal_Int32>(fPixels/fConvertFactor));
@@ -702,7 +702,7 @@ sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
 // #FIXME this method looks wrong, shouldn't it just affect calc *or* writer
 // document/frame/window(s) but not both ( and depending on what api called
 // this )
-void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Pointer& rPointer, sal_Bool bOverWrite )
+void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Pointer& rPointer, bool bOverWrite )
 {
     ::std::vector< uno::Reference< frame::XController > > aControllers;
 
@@ -774,17 +774,17 @@ uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, c
     return result;
 }
 
-sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
+bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )
 {
     for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
     {
         if ( aProp[i].Name.equals(aName) )
         {
             aProp[i].Value = aValue;
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const uno::Any& aValue )

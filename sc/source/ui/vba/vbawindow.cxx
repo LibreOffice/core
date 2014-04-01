@@ -673,14 +673,14 @@ double SAL_CALL
 ScVbaWindow::getSplitHorizontal() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
-    return PixelsToPoints( getDevice(), xViewSplitable->getSplitHorizontal(), sal_True );
+    return PixelsToPoints( getDevice(), xViewSplitable->getSplitHorizontal(), true );
 }
 
 void SAL_CALL
 ScVbaWindow::setSplitHorizontal( double _splithorizontal ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
-    double fHoriPixels = PointsToPixels( getDevice(), _splithorizontal, sal_True );
+    double fHoriPixels = PointsToPixels( getDevice(), _splithorizontal, true );
     xViewSplitable->splitAtPosition( static_cast< sal_Int32 >( fHoriPixels ), 0 );
 }
 
@@ -706,14 +706,14 @@ double SAL_CALL
 ScVbaWindow::getSplitVertical() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
-    return PixelsToPoints( getDevice(), xViewSplitable->getSplitVertical(), sal_False );
+    return PixelsToPoints( getDevice(), xViewSplitable->getSplitVertical(), false );
 }
 
 void SAL_CALL
 ScVbaWindow::setSplitVertical(double _splitvertical ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XViewSplitable > xViewSplitable( getController(), uno::UNO_QUERY_THROW );
-    double fVertiPixels = PointsToPixels( getDevice(), _splitvertical, sal_False );
+    double fVertiPixels = PointsToPixels( getDevice(), _splitvertical, false );
     xViewSplitable->splitAtPosition( 0, static_cast<sal_Int32>( fVertiPixels ) );
 }
 
@@ -857,7 +857,7 @@ ScVbaWindow::PrintOut( const css::uno::Any& From, const css::uno::Any&To, const 
 {
     // need test, print current active sheet
     // !! TODO !! get view shell from controller
-    PrintOutHelper( excel::getBestViewShell( m_xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, sal_True );
+    PrintOutHelper( excel::getBestViewShell( m_xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, true );
 }
 
 void SAL_CALL

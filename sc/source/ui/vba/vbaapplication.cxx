@@ -687,7 +687,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, s
             {
                 const Pointer& rPointer( static_cast< PointerStyle >( _cursor ) );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
-                setCursorHelper( xModel, rPointer, sal_True );
+                setCursorHelper( xModel, rPointer, true );
                 break;
             }
             case excel::XlMousePointer::xlDefault:

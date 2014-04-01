@@ -235,7 +235,7 @@ typedef InheritedHelperInterfaceImpl< Ifc1 > BaseColBase;
 protected:
     css::uno::Reference< css::container::XIndexAccess > m_xIndexAccess;
     css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
-    sal_Bool mbIgnoreCase;
+    bool mbIgnoreCase;
 
     virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) throw (css::uno::RuntimeException)
     {
@@ -279,7 +279,7 @@ protected:
     }
 
 public:
-    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, sal_Bool bIgnoreCase = sal_False ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
+    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
     {
@@ -343,7 +343,7 @@ class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper1<
 typedef ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc >  > ImplBase1;
 
 public:
-    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, sal_Bool bIgnoreCase = sal_False ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
+    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
 };
 
 
