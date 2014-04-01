@@ -35,7 +35,7 @@ using namespace ::com::sun::star::lang;
 
 
 MacabTable::MacabTable( sdbcx::OCollection* _pTables, MacabConnection* _pConnection)
-    : MacabTable_TYPEDEF(_pTables, sal_True),
+    : MacabTable_TYPEDEF(_pTables, true),
     m_pConnection(_pConnection)
 {
     construct();
@@ -48,7 +48,7 @@ MacabTable::MacabTable( sdbcx::OCollection* _pTables,
                 const OUString& _Description ,
                 const OUString& _SchemaName,
                 const OUString& _CatalogName
-                ) : MacabTable_TYPEDEF(_pTables,sal_True,
+                ) : MacabTable_TYPEDEF(_pTables,true,
                                   _Name,
                                   _Type,
                                   _Description,
