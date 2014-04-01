@@ -419,7 +419,7 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
             aPos = OutputToScreenPixel(aPos);
             Rectangle aItemRect( aPos, aSize );
             GlosBibUserData* pData = (GlosBibUserData*)pEntry->GetUserData();
-            const OUString sMsg = pData->sPath + OUString(INET_PATH_TOKEN)
+            const OUString sMsg = pData->sPath + "/"
                                 + pData->sGroupName.getToken(0, GLOS_DELIM)
                                 + SwGlossaries::GetExtension();
 

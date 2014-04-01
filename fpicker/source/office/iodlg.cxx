@@ -2165,7 +2165,7 @@ short SvtFileDialog::PrepareExecute()
     OUString aFileName( aFolderURL.getName( INetURLObject::LAST_SEGMENT, false ) );
     sal_Int32 nFileNameLen = aFileName.getLength();
     bool bFileToSelect = nFileNameLen != 0;
-    if ( bFileToSelect && aFileName[ nFileNameLen - 1 ] != INET_PATH_TOKEN )
+    if ( bFileToSelect && aFileName[ nFileNameLen - 1 ] != '/' )
     {
         _pImp->_pEdFileName->SetText( GET_DECODED_NAME( aFolderURL ) );
         aFolderURL.removeSegment();
@@ -2507,7 +2507,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& r
 
     if ( nWildCardPos != -1 )
     {
-        sal_Int32 nPathTokenPos = aReversePath.indexOf( INET_PATH_TOKEN );
+        sal_Int32 nPathTokenPos = aReversePath.indexOf( '/' );
 
         if ( nPathTokenPos == -1 )
         {

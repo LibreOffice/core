@@ -359,7 +359,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
     if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
     {
         OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
-        OUString aType = aURLPath.getToken( 0, INET_PATH_TOKEN );
+        OUString aType = aURLPath.getToken( 0, '/' );
         if ( aType == "factory" )
         {
             // detect an image id for our "private:factory" urls
@@ -369,7 +369,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
             return nImage;
         }
         else if ( aType == "image" )
-            nImage = (sal_uInt16)aURLPath.getToken( 1, INET_PATH_TOKEN ).toInt32();
+            nImage = (sal_uInt16)aURLPath.getToken( 1, '/' ).toInt32();
     }
     else
     {
@@ -530,10 +530,10 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
             if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
             {
                 OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
-                OUString aType = aURLPath.getToken( 0, INET_PATH_TOKEN );
+                OUString aType = aURLPath.getToken( 0, '/' );
                 if ( aType == "factory" )
                 {
-                    sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( INET_PATH_TOKEN ) + 1 ) );
+                    sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( '/' ) + 1 ) );
                     bDetected = true;
                 }
             }

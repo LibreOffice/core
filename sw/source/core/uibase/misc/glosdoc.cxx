@@ -52,7 +52,7 @@ namespace
 
 inline OUString lcl_FullPathName(const OUString& sPath, const OUString& sName)
 {
-    return sPath + OUString(INET_PATH_TOKEN) + sName + SwGlossaries::GetExtension();
+    return sPath + "/" + sName + SwGlossaries::GetExtension();
 }
 
 OUString lcl_CheckFileName( const OUString& rNewFilePath,

@@ -261,7 +261,7 @@ void SwGlossaryList::Update()
                 pGroup->sName = sGrpName;
 
                 FillGroup(pGroup, pGlossaries);
-                OUString sName = rPathArr[nPath] + OUString(INET_PATH_TOKEN) +
+                OUString sName = rPathArr[nPath] + "/" +
                     pGroup->sName.getToken(0, GLOS_DELIM) + sExt;
                 FStatHelper::GetModifiedDateTimeOfFile( sName,
                                                 &pGroup->aDateModified,

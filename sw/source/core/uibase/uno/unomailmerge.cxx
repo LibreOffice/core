@@ -723,7 +723,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aURLObj.SetSmartURL( aCurOutputURL );
         OUString aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 
-        const OUString aDelim = OUString(INET_PATH_TOKEN);
+        const OUString aDelim( "/" );
         if (!aPath.isEmpty() && !aPath.endsWith(aDelim))
             aPath += aDelim;
         if (bCurFileNameFromColumn)

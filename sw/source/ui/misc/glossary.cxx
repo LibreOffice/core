@@ -878,7 +878,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                 if( !rPathArr.empty() )
                 {
                     INetURLObject aTmp(rPathArr[pData->nPathIdx]
-                                       + OUString(INET_PATH_TOKEN)
+                                       + "/"
                                        + pData->sGroupName
                                        + SwGlossaries::GetExtension());
                     sMsg = aTmp.GetPath();

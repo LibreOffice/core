@@ -664,9 +664,8 @@ bool SwMailMergeDlg::ExecQryShell()
                 aAbs, aPathED.GetText(), URIHelper::GetMaybeFileHdl()));
         pModOpt->SetMailingPath(sPath);
 
-        const OUString sDelim(INET_PATH_TOKEN);
-        if (!sPath.endsWith(sDelim))
-            sPath += sDelim;
+        if (!sPath.endsWith("/"))
+            sPath += "/";
 
         pModOpt->SetIsNameFromColumn(aGenerateFromDataBaseCB.IsChecked());
 

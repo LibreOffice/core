@@ -70,9 +70,7 @@ SwBaseNumRules::~SwBaseNumRules()
     if( bModified )
     {
         SvtPathOptions aPathOpt;
-        OUString sNm( aPathOpt.GetUserConfigPath() );
-        sNm += OUString(INET_PATH_TOKEN);
-        sNm += sFileName;
+        OUString sNm( aPathOpt.GetUserConfigPath() + "/" + sFileName );
         INetURLObject aTempObj(sNm);
         sNm = aTempObj.GetFull();
         SfxMedium aStrm( sNm, STREAM_WRITE | STREAM_TRUNC |
