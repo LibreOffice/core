@@ -346,13 +346,7 @@ void OutputDevice::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
 
     aDstRect.Intersection( aPolyRect );
 
-    if( OUTDEV_WINDOW == meOutDevType )
-    {
-        const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
-
-        if( !aPaintRgn.IsNull() )
-            aDstRect.Intersection( LogicToPixel( aPaintRgn ).GetBoundRect() );
-    }
+    ClipToPaintRegion( aDstRect );
 
     if( !aDstRect.IsEmpty() )
     {
@@ -632,13 +626,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         mpMetaFile = NULL;
         aDstRect.Intersection( aOutRect );
 
-        if( OUTDEV_WINDOW == meOutDevType )
-        {
-            const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
-
-            if( !aPaintRgn.IsNull() )
-                aDstRect.Intersection( LogicToPixel( aPaintRgn.GetBoundRect() ) );
-        }
+        ClipToPaintRegion( aDstRect );
 
         if( !aDstRect.IsEmpty() )
         {

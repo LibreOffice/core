@@ -852,13 +852,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
             aDstRect.Intersection( aBoundRect );
 
-            if( OUTDEV_WINDOW == meOutDevType )
-            {
-                const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
-
-                if( !aPaintRgn.IsNull() )
-                    aDstRect.Intersection( LogicToPixel( aPaintRgn ).GetBoundRect() );
-            }
+            ClipToPaintRegion( aDstRect );
 
             if( !aDstRect.IsEmpty() )
             {
