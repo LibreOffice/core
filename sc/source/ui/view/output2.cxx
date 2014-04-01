@@ -1434,7 +1434,10 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
         else if (nDirection == FRMDIR_ENVIRONMENT)
         {
             SAL_WARN_IF( !pDoc, "sc.ui", "getAlignmentFromContext - pDoc==NULL");
-            eHorJustContext = (pDoc && pDoc->IsLayoutRTL(nTab)) ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+            // fdo#73588: The content of the cell must also
+            // begin with a RTL character to be right
+            // aligned; otherwise, it should be left aligned.
+            eHorJustContext = (pDoc && pDoc->IsLayoutRTL(nTab) && (beginsWithRTLCharacter( rText))) ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
         }
         else
             eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
