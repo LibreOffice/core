@@ -33,7 +33,7 @@ class SwDPage : public FmFormPage, public SdrObjUserCall
 
 public:
     SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage=sal_False);
-    ~SwDPage();
+    virtual ~SwDPage();
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.

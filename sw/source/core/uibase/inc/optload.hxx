@@ -161,7 +161,7 @@ private:
 public:
                         SwCaptionOptPage( Window* pParent,
                                          const SfxItemSet& rSet );
-                        ~SwCaptionOptPage();
+                        virtual ~SwCaptionOptPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

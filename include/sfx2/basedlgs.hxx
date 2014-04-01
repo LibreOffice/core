@@ -81,7 +81,7 @@ protected:
     SfxItemSet*         GetOutputSetImpl() { return pOutputSet; }
 
 public:
-    ~SfxModalDialog();
+    virtual ~SfxModalDialog();
     const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
     const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
 };
@@ -104,7 +104,7 @@ protected:
                                 Window*, const ResId& );
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const OString& rID, const OUString& rUIXMLDescription );
-                            ~SfxModelessDialog();
+                            virtual ~SfxModelessDialog();
     virtual bool            Close() SAL_OVERRIDE;
     virtual void            Resize() SAL_OVERRIDE;
     virtual void            Move() SAL_OVERRIDE;
@@ -141,7 +141,7 @@ protected:
                                               SfxChildWindow *pCW,
                                               Window* pParent,
                                               const ResId& rResId);
-                            ~SfxFloatingWindow();
+                            virtual ~SfxFloatingWindow();
 
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual bool            Close() SAL_OVERRIDE;

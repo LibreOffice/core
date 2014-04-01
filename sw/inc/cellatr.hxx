@@ -57,7 +57,7 @@ class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
 
 public:
     SwTblBoxFormula( const OUString& rFormula );
-    ~SwTblBoxFormula() {};
+    virtual ~SwTblBoxFormula() {};
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

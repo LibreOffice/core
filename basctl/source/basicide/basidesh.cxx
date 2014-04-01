@@ -74,7 +74,7 @@ public:
 
     ContainerListenerImpl (Shell* pShell) : mpShell(pShell) { }
 
-    ~ContainerListenerImpl()
+    virtual ~ContainerListenerImpl()
     { }
 
     void addContainerListener( const ScriptDocument& rScriptDocument, const OUString& aLibName )

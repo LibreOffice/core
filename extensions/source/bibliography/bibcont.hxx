@@ -41,7 +41,7 @@ class BibWindowContainer : public BibWindow     //Window
 
     public:
         BibWindowContainer( Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
-        ~BibWindowContainer();
+        virtual ~BibWindowContainer();
 
         inline Window*          GetChild();
 
@@ -84,7 +84,7 @@ class BibBookContainer: public BibSplitWindow
     public:
 
         BibBookContainer(Window* pParent, WinBits nStyle = WB_3DLOOK );
-        ~BibBookContainer();
+        virtual ~BibBookContainer();
 
         inline BibWindow*       GetTopWin() {return pTopWin;}
         inline BibWindow*       GetBottomWin() {return pBottomWin;}

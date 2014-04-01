@@ -56,7 +56,7 @@ public:
     SwWrtShell* GetWrtShell() const { return pSh; }
 
     SwLineNumberingDlg(SwView *pVw);
-    ~SwLineNumberingDlg();
+    virtual ~SwLineNumberingDlg();
 };
 
 #endif

@@ -118,7 +118,7 @@ class GridWindow : public ModalDialog
 public:
     GridWindow( double* pXValues, double* pYValues, int nValues,
                 Window* pParent, sal_Bool bCutValues = sal_True );
-    ~GridWindow();
+    virtual ~GridWindow();
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
     double getMinX() { return m_fMinX; }

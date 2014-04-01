@@ -179,7 +179,7 @@ class LtcUtBenValueStream : public SvStream
 {
 public:
     LtcUtBenValueStream(pCBenValue pValue);
-    ~LtcUtBenValueStream();
+    virtual ~LtcUtBenValueStream();
 
 public: // Overridden methods
 

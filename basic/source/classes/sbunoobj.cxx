@@ -3904,7 +3904,7 @@ public:
     OUString        aPrefixName;
 
     BasicAllListener_Impl( const OUString& aPrefixName );
-    ~BasicAllListener_Impl();
+    virtual ~BasicAllListener_Impl();
 
     // Methods of XAllListener
     virtual void SAL_CALL firing(const AllEventObject& Event) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -4348,7 +4348,7 @@ class ModuleInvocationProxy : public OMutexBasis,
 
 public:
     ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj );
-    ~ModuleInvocationProxy()
+    virtual ~ModuleInvocationProxy()
     {}
 
     // XInvocation

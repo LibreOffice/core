@@ -76,7 +76,7 @@ private:
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
             SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
-            ~SdrCustomShapeGeometryItem();
+            virtual ~SdrCustomShapeGeometryItem();
 
             virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,

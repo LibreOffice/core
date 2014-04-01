@@ -53,7 +53,7 @@ namespace dbaui
 
     public:
         MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink );
-        ~MySQLNativeSettings();
+        virtual ~MySQLNativeSettings();
 
         void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );

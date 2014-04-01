@@ -82,7 +82,7 @@ protected:
 public:
     SvtFileView( Window* pParent, const ResId& rResId, bool bOnlyFolder, bool bMultiSelection );
     SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
-    ~SvtFileView();
+    virtual ~SvtFileView();
 
     const OUString&         GetViewURL() const;
     OUString                GetURL( SvTreeListEntry* pEntry ) const;

@@ -67,7 +67,7 @@ protected:
 public:
 
                         ImplWheelWindow( Window* pParent );
-                        ~ImplWheelWindow();
+                        virtual ~ImplWheelWindow();
 
     void                ImplStop();
     void                ImplSetWheelMode( sal_uLong nWheelMode );

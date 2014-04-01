@@ -44,7 +44,7 @@ class SdTransferable : public TransferableHelper, public SfxListener
 public:
 
                                     SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, sal_Bool bInitOnGetData );
-                                    ~SdTransferable();
+                                    virtual ~SdTransferable();
 
     void                            SetDocShell( const SfxObjectShellRef& rRef ) { maDocShellRef = rRef; }
     const SfxObjectShellRef&        GetDocShell() const { return maDocShellRef; }

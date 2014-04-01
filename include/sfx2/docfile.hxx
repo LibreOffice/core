@@ -100,7 +100,7 @@ public:
                                     const SfxItemSet* pSet=0 );
                         SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
-                        ~SfxMedium();
+                        virtual ~SfxMedium();
 
     void                UseInteractionHandler( bool );
     css::uno::Reference< css::task::XInteractionHandler >

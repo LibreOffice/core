@@ -74,7 +74,7 @@ public:
     }
 
     Test();
-    ~Test();
+    virtual ~Test();
 
     ScDocShell& getDocShell();
 

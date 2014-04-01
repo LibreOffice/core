@@ -141,7 +141,7 @@ public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXAPP)
 
                                 SfxApplication();
-                                ~SfxApplication();
+                                virtual ~SfxApplication();
     static SfxApplication*      GetOrCreate();
 
     // Resource Manager

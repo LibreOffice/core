@@ -86,7 +86,7 @@ namespace bib
     public:
 
             BibGridwin(Window* pParent, WinBits nStyle = WB_3DLOOK );
-            ~BibGridwin();
+            virtual ~BibGridwin();
 
             void createGridWin(const Reference< awt::XControlModel > & xDbForm);
             void disposeGridWin();

@@ -141,7 +141,7 @@ class SaxExpatParser
 
 public:
     SaxExpatParser();
-    ~SaxExpatParser();
+    virtual ~SaxExpatParser();
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)

@@ -84,7 +84,7 @@ public:
     StructRefInfo getStructMember( const OUString& rMember );
     StructRefInfo getStructInfo() { return maMemberInfo; }
     SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
-    ~SbUnoStructRefObject();
+    virtual ~SbUnoStructRefObject();
 
     // Find overloaded to support e. g. NameAccess
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
@@ -121,7 +121,7 @@ public:
     static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
     TYPEINFO_OVERRIDE();
     SbUnoObject( const OUString& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
-    ~SbUnoObject();
+    virtual ~SbUnoObject();
 
     // #76470 do introspection on demand
     void doIntrospection( void );

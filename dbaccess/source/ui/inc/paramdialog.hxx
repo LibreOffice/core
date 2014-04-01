@@ -85,7 +85,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & _rParamContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-        ~OParameterDialog();
+        virtual ~OParameterDialog();
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     getValues() const { return m_aFinalValues; }

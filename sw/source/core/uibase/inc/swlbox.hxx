@@ -67,7 +67,7 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
 public:
 
     SwComboBox(Window* pParent, WinBits nStyle);
-    ~SwComboBox();
+    virtual ~SwComboBox();
 
     void                    InsertSwEntry(const SwBoxEntry&);
     virtual sal_Int32       InsertEntry(const OUString& rStr, sal_Int32 = 0) SAL_OVERRIDE;

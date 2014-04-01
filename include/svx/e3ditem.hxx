@@ -38,7 +38,7 @@ public:
                             SvxB3DVectorItem();
                             SvxB3DVectorItem( sal_uInt16 nWhich, const basegfx::B3DVector& rVal );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
-                            ~SvxB3DVectorItem();
+                            virtual ~SvxB3DVectorItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;

@@ -329,7 +329,7 @@ protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
     CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
-    ~CustomPropertiesDurationField();
+    virtual ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
     const com::sun::star::util::Duration& GetDuration() const { return m_aDuration; }
@@ -341,7 +341,7 @@ class CustomPropertiesEditButton : public PushButton
 
 public:
     CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
-    ~CustomPropertiesEditButton();
+    virtual ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, void *);
 };
@@ -444,7 +444,7 @@ public:
         const OUString &rHeaderAccName,
         const OUString &rHeaderAccType,
         const OUString &rHeaderAccValue);
-    ~CustomPropertiesWindow();
+    virtual ~CustomPropertiesWindow();
 
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16              GetVisibleLineCount() const;
@@ -479,7 +479,7 @@ private:
 
 public:
     CustomPropertiesControl(Window* pParent);
-    ~CustomPropertiesControl();
+    virtual ~CustomPropertiesControl();
 
     void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
@@ -556,7 +556,7 @@ struct CmisPropertyLine : public VclBuilderContainer
     sal_Int32                     m_nNumValue;
     long getItemHeight() const;
     CmisPropertyLine( Window* pParent );
-    ~CmisPropertyLine();
+    virtual ~CmisPropertyLine();
 };
 
 // class CmisPropertiesWindow ------------------------------------------

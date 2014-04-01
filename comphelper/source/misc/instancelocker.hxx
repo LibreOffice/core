@@ -56,7 +56,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
 
 public:
     OInstanceLocker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
-    ~OInstanceLocker();
+    virtual ~OInstanceLocker();
 
     static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
             getSupportedServiceNames_static();
@@ -103,7 +103,7 @@ public:
                     sal_Int32 nMode,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XActionsApproval > xApproval );
 
-    ~OLockListener();
+    virtual ~OLockListener();
 
     bool Init();
     void Dispose();

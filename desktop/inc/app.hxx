@@ -71,7 +71,7 @@ class Desktop : public Application
         };
 
                                 Desktop();
-                                ~Desktop();
+                                virtual ~Desktop();
         virtual int             Main( ) SAL_OVERRIDE;
         virtual void            Init() SAL_OVERRIDE;
         virtual void            InitFinished() SAL_OVERRIDE;

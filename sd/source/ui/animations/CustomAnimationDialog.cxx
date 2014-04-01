@@ -105,7 +105,7 @@ class PresetPropertyBox  : public PropertySubControl
 {
 public:
     PresetPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const OUString& aPresetId, const Link& rModifyHdl );
-    ~PresetPropertyBox();
+    virtual ~PresetPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
     virtual void setValue( const Any& rValue, const OUString& rPresetId ) SAL_OVERRIDE;
@@ -192,7 +192,7 @@ class ColorPropertyBox  : public PropertySubControl
 {
 public:
     ColorPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
-    ~ColorPropertyBox();
+    virtual ~ColorPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
     virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
@@ -361,7 +361,7 @@ class DropdownMenuBox : public Edit
 {
 public:
     DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
-    ~DropdownMenuBox();
+    virtual ~DropdownMenuBox();
 
     void Resize() SAL_OVERRIDE;
     bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -536,7 +536,7 @@ class TransparencyPropertyBox : public PropertySubControl
 {
 public:
     TransparencyPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
-    ~TransparencyPropertyBox();
+    virtual ~TransparencyPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
     virtual void setValue( const Any& rValue, const OUString& rPresetId  ) SAL_OVERRIDE;
@@ -658,7 +658,7 @@ class RotationPropertyBox : public PropertySubControl
 {
 public:
     RotationPropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
-    ~RotationPropertyBox();
+    virtual ~RotationPropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
     virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
@@ -799,7 +799,7 @@ class ScalePropertyBox : public PropertySubControl
 {
 public:
     ScalePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
-    ~ScalePropertyBox();
+    virtual ~ScalePropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
     virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
@@ -978,7 +978,7 @@ class FontStylePropertyBox : public PropertySubControl
 {
 public:
     FontStylePropertyBox( sal_Int32 nControlType, Window* pParent, const Any& rValue, const Link& rModifyHdl );
-    ~FontStylePropertyBox();
+    virtual ~FontStylePropertyBox();
 
     virtual Any getValue() SAL_OVERRIDE;
     virtual void setValue( const Any& rValue, const OUString& ) SAL_OVERRIDE;
@@ -1115,7 +1115,7 @@ class CustomAnimationEffectTabPage : public TabPage
 {
 public:
     CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet );
-    ~CustomAnimationEffectTabPage();
+    virtual ~CustomAnimationEffectTabPage();
 
     void update( STLPropertySet* pSet );
     DECL_LINK( implSelectHdl, Control* );
@@ -1697,7 +1697,7 @@ class CustomAnimationDurationTabPage : public TabPage
 {
 public:
     CustomAnimationDurationTabPage( Window* pParent, const STLPropertySet* pSet );
-    ~CustomAnimationDurationTabPage();
+    virtual ~CustomAnimationDurationTabPage();
 
     void update( STLPropertySet* pSet );
 

@@ -49,7 +49,7 @@ namespace dbaui
     public:
         ORelationController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
-        ~ORelationController();
+        virtual ~ORelationController();
         // temp
         void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 

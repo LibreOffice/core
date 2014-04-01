@@ -41,7 +41,7 @@ class TVFactory: public cppu::WeakImplHelper2 <
 
         TVFactory( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
-        ~TVFactory();
+        virtual ~TVFactory();
 
         // XServiceInfo
         virtual OUString SAL_CALL

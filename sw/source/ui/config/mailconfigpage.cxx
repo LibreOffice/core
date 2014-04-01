@@ -109,7 +109,7 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
 
 public:
     SwAuthenticationSettingsDialog(SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem);
-    ~SwAuthenticationSettingsDialog();
+    virtual ~SwAuthenticationSettingsDialog();
 };
 
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :

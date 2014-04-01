@@ -75,7 +75,7 @@ class OMarkableOutputStream :
 {
 public:
     OMarkableOutputStream(  );
-    ~OMarkableOutputStream();
+    virtual ~OMarkableOutputStream();
 
 public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
@@ -490,7 +490,7 @@ class OMarkableInputStream :
 {
 public:
     OMarkableInputStream(  );
-    ~OMarkableInputStream();
+    virtual ~OMarkableInputStream();
 
 
 public: // XInputStream

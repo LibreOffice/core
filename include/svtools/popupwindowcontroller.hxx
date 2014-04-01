@@ -39,7 +39,7 @@ public:
     PopupWindowController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
-    ~PopupWindowController();
+    virtual ~PopupWindowController();
 
     virtual ::Window* createPopupWindow( ::Window* pParent ) = 0;
 

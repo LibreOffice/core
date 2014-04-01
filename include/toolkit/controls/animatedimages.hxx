@@ -76,7 +76,7 @@ namespace toolkit
         virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-                                        ~AnimatedImagesControlModel();
+                                        virtual ~AnimatedImagesControlModel();
 
         ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const SAL_OVERRIDE;
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() SAL_OVERRIDE;

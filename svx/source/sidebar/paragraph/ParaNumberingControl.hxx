@@ -49,7 +49,7 @@ private:
 public:
     ParaNumberingControl( Window* pParent,
                           svx::sidebar::ParaPropertyPanel& rPanel);
-    ~ParaNumberingControl();
+    virtual ~ParaNumberingControl();
     void UpdateValueSet();
 
 };

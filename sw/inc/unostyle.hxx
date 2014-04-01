@@ -114,7 +114,7 @@ class SwXStyleFamily : public cppu::WeakImplHelper4
     SwXStyle*               _FindStyle(const OUString& rStyleName) const;
 public:
     SwXStyleFamily(SwDocShell* pDocShell, sal_uInt16 nFamily);
-    ~SwXStyleFamily();
+    virtual ~SwXStyleFamily();
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -204,7 +204,7 @@ public:
                                 SwDoc*  pDoc,
                                 const OUString& rStyleName);
 
-    ~SwXStyle();
+    virtual ~SwXStyle();
 
     TYPEINFO_OVERRIDE();
 
@@ -282,7 +282,7 @@ public:
                                 const OUString& rStyleName) :
         SwXStyle(rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
     SwXFrameStyle( SwDoc *pDoc );
-    ~SwXFrameStyle();
+    virtual ~SwXFrameStyle();
 
     virtual void SAL_CALL acquire(  ) throw() SAL_OVERRIDE {SwXStyle::acquire();}
     virtual void SAL_CALL release(  ) throw() SAL_OVERRIDE {SwXStyle::release();}
@@ -311,7 +311,7 @@ public:
     SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam,
                                 const OUString& rStyleName);
     SwXPageStyle(SwDocShell* pDocSh);
-    ~SwXPageStyle();
+    virtual ~SwXPageStyle();
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -40,7 +40,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
-        ~StorageXMLOutputStream();
+        virtual ~StorageXMLOutputStream();
 
         // StorageOutputStream overridables
         virtual void close() SAL_OVERRIDE;
@@ -72,7 +72,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
-        ~StorageXMLInputStream();
+        virtual ~StorageXMLInputStream();
 
         void    import(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& i_rHandler

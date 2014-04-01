@@ -52,7 +52,7 @@ private:
 
 public:
     AssignComponentDialog( Window * pParent, const OUString& rURL );
-    ~AssignComponentDialog();
+    virtual ~AssignComponentDialog();
 
     OUString getURL( void ) const
         { return maURL; }

@@ -38,7 +38,7 @@ namespace comphelper {
 
     public:
         OIHWrapNoFilterDialog( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction );
-        ~OIHWrapNoFilterDialog();
+        virtual ~OIHWrapNoFilterDialog();
 
         static OUString SAL_CALL impl_staticGetImplementationName();
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();

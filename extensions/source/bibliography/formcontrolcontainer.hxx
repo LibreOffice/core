@@ -45,7 +45,7 @@ namespace bib
 
     protected:
         FormControlContainer( );
-        ~FormControlContainer( );
+        virtual ~FormControlContainer( );
 
         sal_Bool    isFormConnected() const { return NULL != m_pFormAdapter; }
         void        connectForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxForm );

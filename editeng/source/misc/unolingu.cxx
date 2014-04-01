@@ -84,7 +84,7 @@ class ThesDummy_Impl :
 
 public:
     ThesDummy_Impl() : pLocaleSeq(0)  {}
-    ~ThesDummy_Impl();
+    virtual ~ThesDummy_Impl();
 
     // XSupportedLocales
     virtual ::com::sun::star::uno::Sequence<

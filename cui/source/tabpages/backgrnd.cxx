@@ -179,7 +179,7 @@ class BackgroundPreviewImpl : public Window
 public:
     BackgroundPreviewImpl(Window* pParent);
     void setBmp(bool bBmp);
-    ~BackgroundPreviewImpl();
+    virtual ~BackgroundPreviewImpl();
 
     void            NotifyChange( const Color&  rColor );
     void            NotifyChange( const Bitmap* pBitmap );

@@ -39,7 +39,7 @@ public:
 
     SwPageFtnInfoItem(const sal_uInt16 nId, SwPageFtnInfo& rInfo);
     SwPageFtnInfoItem(const SwPageFtnInfoItem& rItem );
-    ~SwPageFtnInfoItem();
+    virtual ~SwPageFtnInfoItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

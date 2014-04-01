@@ -81,7 +81,7 @@ class ValueSetAcc :
 public:
 
     ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled );
-    ~ValueSetAcc();
+    virtual ~ValueSetAcc();
 
     void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     sal_Bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
@@ -217,7 +217,7 @@ private:
 public:
 
     ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled );
-    ~ValueItemAcc();
+    virtual ~ValueItemAcc();
 
     void    ParentDestroyed();
 

@@ -75,7 +75,7 @@ friend class BibFrameCtrl_Impl;
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);
-                                ~BibFrameController_Impl();
+                                virtual ~BibFrameController_Impl();
 
 
     void                        activate();

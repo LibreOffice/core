@@ -34,7 +34,7 @@ public:
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
                              SfxPointItem( const SfxPointItem& );
-                             ~SfxPointItem() {}
+                             virtual ~SfxPointItem() {}
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

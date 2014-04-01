@@ -100,7 +100,7 @@ namespace pcr
         PropertyHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
-        ~PropertyHandler();
+        virtual ~PropertyHandler();
 
         // default implementations for XPropertyHandler
         virtual void SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException, std::exception) SAL_OVERRIDE;

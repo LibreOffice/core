@@ -50,7 +50,7 @@ namespace accessibility
             does not contain text.
         */
         AccessibleEmptyEditSource(  SdrObject& rObj, SdrView& rView, const Window& rViewWindow );
-        ~AccessibleEmptyEditSource();
+        virtual ~AccessibleEmptyEditSource();
 
         // from the SvxEditSource interface
         SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE;

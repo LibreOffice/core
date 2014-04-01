@@ -120,7 +120,7 @@ public:
         m_nOffset(0)
         {}
 
-    ~SpellUndoAction_Impl();
+    virtual ~SpellUndoAction_Impl();
 
     virtual void            Undo() SAL_OVERRIDE;
     virtual sal_uInt16          GetId() const SAL_OVERRIDE;

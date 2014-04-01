@@ -35,7 +35,7 @@ class SwNavigationConfig : public utl::ConfigItem
 
 public:
     SwNavigationConfig();
-    ~SwNavigationConfig();
+    virtual ~SwNavigationConfig();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

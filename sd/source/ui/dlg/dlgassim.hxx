@@ -33,7 +33,7 @@ private:
 
 public:
     SdPageListControl( Window* pParent, const ResId& rResId );
-    ~SdPageListControl();
+    virtual ~SdPageListControl();
 
     void Fill( SdDrawDocument* pDoc );
     void Clear();

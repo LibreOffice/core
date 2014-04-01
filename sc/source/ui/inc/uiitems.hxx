@@ -63,7 +63,7 @@ public:
                                                const OUString& rString,
                                                const EditTextObject* pData );
                             ScInputStatusItem( const ScInputStatusItem& rItem );
-                            ~ScInputStatusItem();
+                            virtual ~ScInputStatusItem();
 
     virtual OUString        GetValueText() const;
 
@@ -106,7 +106,7 @@ class ScTablesHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2=0);
-                    ~ScTablesHint();
+                    virtual ~ScTablesHint();
 
     sal_uInt16          GetId() const           { return nId; }
     SCTAB           GetTab1() const         { return nTab1; }
@@ -121,7 +121,7 @@ class ScEditViewHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
-                    ~ScEditViewHint();
+                    virtual ~ScEditViewHint();
 
     SCCOL           GetCol() const      { return aCursorPos.Col(); }
     SCROW           GetRow() const      { return aCursorPos.Row(); }
@@ -140,7 +140,7 @@ class ScIndexHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx);
-                    ~ScIndexHint();
+                    virtual ~ScIndexHint();
 
     sal_uInt16          GetId() const           { return nId; }
     sal_uInt16          GetIndex() const        { return nIndex; }
@@ -159,7 +159,7 @@ public:
                             ScSortItem( sal_uInt16              nWhich,
                                         const ScSortParam*  pSortData );
                             ScSortItem( const ScSortItem& rItem );
-                            ~ScSortItem();
+                            virtual ~ScSortItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -186,7 +186,7 @@ public:
                             ScQueryItem( sal_uInt16                 nWhich,
                                          const ScQueryParam*    pQueryData );
                             ScQueryItem( const ScQueryItem& rItem );
-                            ~ScQueryItem();
+                            virtual ~ScQueryItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -217,7 +217,7 @@ public:
                 ScSubTotalItem( sal_uInt16                  nWhich,
                                 const ScSubTotalParam*  pSubTotalData );
                 ScSubTotalItem( const ScSubTotalItem&   rItem );
-                ~ScSubTotalItem();
+                virtual ~ScSubTotalItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -240,7 +240,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScUserListItem( sal_uInt16 nWhich );
                 ScUserListItem( const ScUserListItem& rItem );
-                ~ScUserListItem();
+                virtual ~ScUserListItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -262,7 +262,7 @@ public:
                 ScConsolidateItem( sal_uInt16                    nWhich,
                                    const ScConsolidateParam* pParam );
                 ScConsolidateItem( const ScConsolidateItem& rItem );
-                ~ScConsolidateItem();
+                virtual ~ScConsolidateItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -283,7 +283,7 @@ public:
                 ScPivotItem( sal_uInt16 nWhich, const ScDPSaveData* pData,
                              const ScRange* pRange, bool bNew );
                 ScPivotItem( const ScPivotItem& rItem );
-                ~ScPivotItem();
+                virtual ~ScPivotItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -308,7 +308,7 @@ public:
                 ScSolveItem( sal_uInt16              nWhich,
                              const ScSolveParam* pParam );
                 ScSolveItem( const ScSolveItem& rItem );
-                ~ScSolveItem();
+                virtual ~ScSolveItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -329,7 +329,7 @@ public:
                 ScTabOpItem( sal_uInt16              nWhich,
                              const ScTabOpParam* pParam );
                 ScTabOpItem( const ScTabOpItem& rItem );
-                ~ScTabOpItem();
+                virtual ~ScTabOpItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

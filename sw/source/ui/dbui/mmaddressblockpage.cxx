@@ -826,7 +826,7 @@ class SwAssignFieldsControl : public Control
 public:
     SwAssignFieldsControl(Window* pParent, const ResId& rResId,
                                 SwMailMergeConfigItem& rConfigItem);
-    ~SwAssignFieldsControl();
+    virtual ~SwAssignFieldsControl();
 
     void        SetModifyHdl(const Link& rModifyHdl)
                 {

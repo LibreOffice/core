@@ -218,7 +218,7 @@ namespace pcr
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (RuntimeException);
 
     protected:
-        ~FormGeometryHandler();
+        virtual ~FormGeometryHandler();
 
     protected:
         // XPropertyHandler overriables

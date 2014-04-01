@@ -99,7 +99,7 @@ private:
 
 public:
             SdTPAction( Window* pParent, const SfxItemSet& rInAttrs );
-            ~SdTPAction();
+            virtual ~SdTPAction();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
 

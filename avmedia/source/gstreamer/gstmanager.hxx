@@ -36,7 +36,7 @@ class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManag
 public:
 
     Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
-    ~Manager();
+    virtual ~Manager();
 
     // XManager
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer( const OUString& aURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

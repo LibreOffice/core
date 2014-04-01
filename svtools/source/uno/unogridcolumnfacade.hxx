@@ -50,7 +50,7 @@ namespace svt { namespace table
             UnoControlTableModel const & i_owner,
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > const & i_gridColumn
         );
-        ~UnoGridColumnFacade();
+        virtual ~UnoGridColumnFacade();
 
         // IColumnModel overridables
         virtual ::com::sun::star::uno::Any

@@ -1041,7 +1041,7 @@ public:
                             SwWrtShell& rSh,
                             sal_Bool bNewEntry,
                             bool bCreate);
-    ~SwCreateAuthEntryDlg_Impl();
+    virtual ~SwCreateAuthEntryDlg_Impl();
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 

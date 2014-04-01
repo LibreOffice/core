@@ -70,7 +70,7 @@ protected:
 public:
                         SwFldDBPage(Window* pParent, const SfxItemSet& rSet);
 
-                        ~SwFldDBPage();
+                        virtual ~SwFldDBPage();
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 

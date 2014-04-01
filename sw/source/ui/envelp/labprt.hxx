@@ -47,7 +47,7 @@ class SwLabPrtPage : public SfxTabPage
     PushButton*   m_pPrtSetup;
 
      SwLabPrtPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwLabPrtPage();
+    virtual ~SwLabPrtPage();
 
     DECL_LINK( CountHdl, Button * );
 

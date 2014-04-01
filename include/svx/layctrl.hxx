@@ -40,7 +40,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxTableToolBoxControl();
+    virtual ~SvxTableToolBoxControl();
 };
 
 // class SvxColumnsToolBoxControl ----------------------------------------
@@ -56,7 +56,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxColumnsToolBoxControl();
+    virtual ~SvxColumnsToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,

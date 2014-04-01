@@ -34,7 +34,7 @@ class ModelEventListener :
     bool m_bControls;
 public:
     ModelEventListener(bool bIndexes, bool bControls);
-    ~ModelEventListener();
+    virtual ~ModelEventListener();
 
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

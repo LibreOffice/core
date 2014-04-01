@@ -70,7 +70,7 @@ class LwpFribText : public LwpFrib
 {
 public:
     LwpFribText( LwpPara* pPara, sal_Bool bNoUnicode=false);
-    ~LwpFribText(){}
+    virtual ~LwpFribText(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
@@ -84,14 +84,14 @@ class LwpFribHardSpace : public LwpFrib
 {
 public:
     LwpFribHardSpace( LwpPara* pPara ) : LwpFrib(pPara){}
-    ~LwpFribHardSpace(){}
+    virtual ~LwpFribHardSpace(){}
 };
 
 class LwpFribSoftHyphen : public LwpFrib
 {
 public:
     LwpFribSoftHyphen( LwpPara* pPara ) : LwpFrib(pPara){}
-    ~LwpFribSoftHyphen(){}
+    virtual ~LwpFribSoftHyphen(){}
 };
 
 //add by , 02/03/2005
@@ -138,7 +138,7 @@ class LwpFribDocVar : public LwpFrib
 public:
     LwpFribDocVar( LwpPara* pPara );
 
-    ~LwpFribDocVar();
+    virtual ~LwpFribDocVar();
 
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
 
@@ -195,14 +195,14 @@ class LwpFribTab : public LwpFrib
 {
 public:
     LwpFribTab( LwpPara* pPara ) : LwpFrib(pPara){}
-    ~LwpFribTab(){}
+    virtual ~LwpFribTab(){}
 };
 
 class LwpFribUnicode: public LwpFrib
 {
 public:
     LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){}
-    ~LwpFribUnicode(){}
+    virtual ~LwpFribUnicode(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
@@ -216,7 +216,7 @@ class LwpFribPageNumber : public LwpFrib
 public:
     LwpFribPageNumber(LwpPara* pPara) : LwpFrib(pPara),
         m_nNumStyle(0), m_nStartNum(1), m_nStartOnPage(1), m_nFlag(0){}
-    ~LwpFribPageNumber(){}
+    virtual ~LwpFribPageNumber(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pXFPara);
 private:

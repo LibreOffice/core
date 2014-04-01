@@ -94,7 +94,7 @@ protected:
 public:
 
                         SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
-                        ~SfxCommonPrintOptionsTabPage();
+                        virtual ~SfxCommonPrintOptionsTabPage();
 
     virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;

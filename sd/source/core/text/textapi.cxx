@@ -42,7 +42,7 @@ class UndoTextAPIChanged : public SdrUndoAction
 {
 public:
     UndoTextAPIChanged( SdrModel& rModel, TextApiObject* pTextObj );
-    ~UndoTextAPIChanged();
+    virtual ~UndoTextAPIChanged();
 
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE;

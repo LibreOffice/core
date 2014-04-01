@@ -38,7 +38,7 @@ class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
     public:
 
     GraphicTransformer();
-    ~GraphicTransformer();
+    virtual ~GraphicTransformer();
 
     // XGraphicTransformer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL colorChange(

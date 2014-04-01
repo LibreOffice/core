@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 public:
     SwDDEFieldType( const OUString& rName, const OUString& rCmd,
                     sal_uInt16 = sfx2::LINKUPDATE_ONCALL );
-    ~SwDDEFieldType();
+    virtual ~SwDDEFieldType();
 
     OUString GetExpansion() const               { return aExpansion; }
     void SetExpansion( const OUString& rStr )   { aExpansion = rStr;
@@ -95,7 +95,7 @@ private:
 
 public:
     SwDDEField(SwDDEFieldType*);
-    ~SwDDEField();
+    virtual ~SwDDEField();
 
     /** Get parameter via types.
      Name cannot be changed. */

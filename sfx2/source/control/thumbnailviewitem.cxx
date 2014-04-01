@@ -53,7 +53,7 @@ class ResizableMultiLineEdit : public VclMultiLineEdit
 
     public:
         ResizableMultiLineEdit (Window* pParent, ThumbnailViewItem* pItem);
-        ~ResizableMultiLineEdit ();
+        virtual ~ResizableMultiLineEdit ();
 
         void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
 

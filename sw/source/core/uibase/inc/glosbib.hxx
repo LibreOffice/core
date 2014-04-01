@@ -106,7 +106,7 @@ public:
     SwGlossaryGroupDlg(Window * pParent,
                         std::vector<OUString> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
-    ~SwGlossaryGroupDlg();
+    virtual ~SwGlossaryGroupDlg();
 
     const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}
 };

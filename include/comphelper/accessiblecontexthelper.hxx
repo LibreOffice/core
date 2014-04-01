@@ -90,7 +90,7 @@ namespace comphelper
         OContextHelper_Impl*    m_pImpl;
 
     protected:
-        ~OAccessibleContextHelper( );
+        virtual ~OAccessibleContextHelper( );
 
         /** ctor
 

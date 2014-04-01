@@ -135,7 +135,7 @@ public:
     SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent,
                   const OString& rID, const OUString& rUIXMLDescription,
                   const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False );
-    ~SfxTabDialog();
+    virtual ~SfxTabDialog();
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
                                     CreateTabPage pCreateFunc,      // != 0

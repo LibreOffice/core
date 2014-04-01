@@ -40,7 +40,7 @@ private:
 
 public:
     ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal);
-    ~ScDataPilotSourceTypeDlg();
+    virtual ~ScDataPilotSourceTypeDlg();
 
     bool IsDatabase() const;
     bool IsExternal() const;
@@ -74,7 +74,7 @@ private:
 public:
             ScDataPilotServiceDlg( Window* pParent,
                     const com::sun::star::uno::Sequence<OUString>& rServices );
-            ~ScDataPilotServiceDlg();
+            virtual ~ScDataPilotServiceDlg();
 
     OUString  GetServiceName() const;
     OUString  GetParSource() const;

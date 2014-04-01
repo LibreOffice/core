@@ -127,7 +127,7 @@ protected:
                            sal_Int32 lDefId );
                 RscDefine( sal_uLong lFileKey, const OString& rDefName,
                            RscExpression * pExpression );
-                ~RscDefine();
+                virtual ~RscDefine();
     void        IncRef(){ nRefCount++; }
     sal_uInt32  GetRefCount() const    { return nRefCount; }
     void        DecRef();

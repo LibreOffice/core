@@ -100,7 +100,7 @@ protected:
 public:
 
                     ImplGrafMetricField( Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
-                    ~ImplGrafMetricField();
+                    virtual ~ImplGrafMetricField();
 
     void            Update( const SfxPoolItem* pItem );
     const OUString& GetCommand() const { return maCommand; }
@@ -254,7 +254,7 @@ protected:
 public:
 
                             ImplGrafControl( Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
-                            ~ImplGrafControl();
+                            virtual ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
     void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField.SetText( rStr ); }
@@ -324,7 +324,7 @@ private:
 public:
 
                     ImplGrafModeControl( Window* pParent, const Reference< XFrame >& rFrame );
-                    ~ImplGrafModeControl();
+                    virtual ~ImplGrafModeControl();
 
     void            Update( const SfxPoolItem* pItem );
 };

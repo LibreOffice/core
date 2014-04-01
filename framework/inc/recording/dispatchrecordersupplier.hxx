@@ -87,7 +87,7 @@ class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
     public:
 
          DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        ~DispatchRecorderSupplier();
+        virtual ~DispatchRecorderSupplier();
 
 };      //  class DispatchRecorderSupplier
 

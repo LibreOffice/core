@@ -95,7 +95,7 @@ class PluginObject : public ::cppu::WeakImplHelper5 <
 
 public:
     PluginObject();
-    ~PluginObject();
+    virtual ~PluginObject();
 
     virtual sal_Bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
             const css::uno::Reference < css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

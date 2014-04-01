@@ -307,7 +307,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //  constructor / destructor
 
          SvtModuleOptions_Impl();
-        ~SvtModuleOptions_Impl();
+        virtual ~SvtModuleOptions_Impl();
 
 
         //  overloaded methods of baseclass

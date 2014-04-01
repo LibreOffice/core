@@ -50,7 +50,7 @@ protected:
 
 public:
                             StdTabController();
-                            ~StdTabController();
+                            virtual ~StdTabController();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  FindControl( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rxCtrlModel );
 

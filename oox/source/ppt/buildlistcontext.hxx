@@ -32,7 +32,7 @@ namespace oox { namespace ppt {
     public:
         BuildListContext( ::oox::core::FragmentHandler2& rParent );
 
-        ~BuildListContext( );
+        virtual ~BuildListContext( );
 
         virtual void onEndElement() SAL_OVERRIDE;
 

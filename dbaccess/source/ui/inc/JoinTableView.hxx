@@ -60,7 +60,7 @@ namespace dbaui
 
     public:
         OScrollWindowHelper( Window* pParent);
-        ~OScrollWindowHelper();
+        virtual ~OScrollWindowHelper();
 
         void setTableView(OJoinTableView* _pTableView);
 

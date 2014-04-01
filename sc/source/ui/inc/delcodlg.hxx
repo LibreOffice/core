@@ -50,7 +50,7 @@ private:
 public:
             ScDeleteContentsDlg( Window* pParent,
                                  sal_uInt16  nCheckDefaults = 0 );
-            ~ScDeleteContentsDlg();
+            virtual ~ScDeleteContentsDlg();
     void    DisableObjects();
 
     sal_uInt16  GetDelContentsCmdBits() const;

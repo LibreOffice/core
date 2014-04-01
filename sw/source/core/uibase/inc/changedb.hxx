@@ -60,7 +60,7 @@ class SwChangeDBDlg: public SvxStandardDialog
 
 public:
     SwChangeDBDlg(SwView& rVw);
-    ~SwChangeDBDlg();
+    virtual ~SwChangeDBDlg();
 };
 
 #endif

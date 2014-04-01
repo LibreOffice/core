@@ -76,7 +76,7 @@ public:
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
 
-    ~SvxBrushItem();
+    virtual ~SvxBrushItem();
 
 public:
 

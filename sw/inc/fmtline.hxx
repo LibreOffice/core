@@ -33,7 +33,7 @@ class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
 
 public:
     SwFmtLineNumber();
-    ~SwFmtLineNumber();
+    virtual ~SwFmtLineNumber();
 
     TYPEINFO_OVERRIDE();
 

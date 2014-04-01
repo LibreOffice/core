@@ -170,7 +170,7 @@ class LwpParallelColumns : public LwpTable
 {
 public:
     LwpParallelColumns(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpParallelColumns();
+    virtual ~LwpParallelColumns();
 protected:
     void Read() SAL_OVERRIDE;
     LwpObjectID     cDefaultLeftColumnStyle;
@@ -181,7 +181,7 @@ class LwpGlossary : public LwpParallelColumns
 {
 public:
     LwpGlossary(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpGlossary();
+    virtual ~LwpGlossary();
 protected:
     void Read() SAL_OVERRIDE;
     sal_uInt16 GetNumIndexRows(void);

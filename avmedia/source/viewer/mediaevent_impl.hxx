@@ -42,7 +42,7 @@ namespace avmedia
         public:
 
                     MediaEventListenersImpl( Window& rNotifyWindow );
-                    ~MediaEventListenersImpl();
+                    virtual ~MediaEventListenersImpl();
 
         void        cleanUp();
 

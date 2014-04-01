@@ -33,7 +33,7 @@ public:
                             SfxLockBytesItem();
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             SfxLockBytesItem( const SfxLockBytesItem& );
-                            ~SfxLockBytesItem();
+                            virtual ~SfxLockBytesItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;

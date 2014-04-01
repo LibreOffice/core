@@ -73,7 +73,7 @@ public:
                     SvLBoxColorString( SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rStr,
                                     const Color& rCol);
                     SvLBoxColorString();
-                    ~SvLBoxColorString();
+                    virtual ~SvLBoxColorString();
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
@@ -113,7 +113,7 @@ protected:
 public:
 
     SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    ~SvxRedlinTable();
+    virtual ~SvxRedlinTable();
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag=true);
@@ -315,7 +315,7 @@ private:
 
 public:
     SvxTPView(Window * pParent);
-    ~SvxTPView();
+    virtual ~SvxTPView();
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
@@ -375,7 +375,7 @@ private:
 public:
                     SvxAcceptChgCtr(Window* pParent);
 
-                    ~SvxAcceptChgCtr();
+                    virtual ~SvxAcceptChgCtr();
 
     void            ShowFilterPage();
     void            ShowViewPage();

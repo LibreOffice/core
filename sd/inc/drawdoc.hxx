@@ -211,7 +211,7 @@ public:
                         TYPEINFO_OVERRIDE();
 
                         SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
-                        ~SdDrawDocument();
+                        virtual ~SdDrawDocument();
 
     virtual SdrModel*   AllocModel() const SAL_OVERRIDE;
     virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE;

@@ -408,7 +408,7 @@ public:
                                BrowserMode nMode = 0 );
                     BrowseBox( Window* pParent, const ResId& rId,
                                BrowserMode nMode = 0 );
-                    ~BrowseBox();
+                    virtual ~BrowseBox();
 
     // ererbte ueberladene Handler
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

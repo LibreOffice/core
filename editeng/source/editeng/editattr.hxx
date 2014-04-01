@@ -355,7 +355,7 @@ class EditCharAttribField: public EditCharAttrib
 public:
     EditCharAttribField( const SvxFieldItem& rAttr, sal_uInt16 nPos );
     EditCharAttribField( const EditCharAttribField& rAttr );
-    ~EditCharAttribField();
+    virtual ~EditCharAttribField();
 
     bool operator == ( const EditCharAttribField& rAttr ) const;
     bool operator != ( const EditCharAttribField& rAttr ) const

@@ -48,7 +48,7 @@ public:
         const OUString& rLocalName,
         XMLLineNumberingImportContext& rLineNumbering);
 
-    ~XMLLineNumberingSeparatorImportContext();
+    virtual ~XMLLineNumberingSeparatorImportContext();
 
 protected:
 

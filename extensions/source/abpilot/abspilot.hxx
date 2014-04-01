@@ -50,7 +50,7 @@ namespace abp
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         /// dtor
-        ~OAddessBookSourcePilot();
+        virtual ~OAddessBookSourcePilot();
 
         /// get the service factory which was used to create the dialog
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&

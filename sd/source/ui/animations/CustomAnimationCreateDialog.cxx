@@ -73,7 +73,7 @@ class CategoryListBox : public ListBox
 {
 public:
     CategoryListBox( Window* pParent );
-    ~CategoryListBox();
+    virtual ~CategoryListBox();
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
@@ -176,7 +176,7 @@ class CustomAnimationCreateTabPage : public TabPage
 {
 public:
     CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText );
-    ~CustomAnimationCreateTabPage();
+    virtual ~CustomAnimationCreateTabPage();
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;

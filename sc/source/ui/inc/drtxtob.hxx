@@ -45,7 +45,7 @@ public:
     SFX_DECL_INTERFACE(SCID_DRAW_TEXT_SHELL)
 
         ScDrawTextObjectBar(ScViewData* pData);
-        ~ScDrawTextObjectBar();
+        virtual ~ScDrawTextObjectBar();
 
     void StateDisableItems( SfxItemSet &rSet );
 

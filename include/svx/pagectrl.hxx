@@ -79,7 +79,7 @@ protected:
 
 public:
     SvxPageWindow( Window* pParent );
-    ~SvxPageWindow();
+    virtual ~SvxPageWindow();
 
     void        SetWidth( long nW )                     { aSize.Width()  = nW; }
     void        SetHeight( long nH )                    { aSize.Height() = nH; }

@@ -78,7 +78,7 @@ class SwEnvCfgItem : public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     SwEnvCfgItem();
-    ~SwEnvCfgItem();
+    virtual ~SwEnvCfgItem();
 
     SwEnvItem& GetItem() {return aEnvItem;}
 

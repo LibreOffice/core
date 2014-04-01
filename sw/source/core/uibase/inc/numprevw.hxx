@@ -52,7 +52,7 @@ class NumberingPreview : public Window
         {
         }
 
-        ~NumberingPreview();
+        virtual ~NumberingPreview();
 
         void    SetNumRule(const SwNumRule* pNum)
                     {pActNum = pNum; Invalidate();};

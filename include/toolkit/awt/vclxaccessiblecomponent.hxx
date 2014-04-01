@@ -80,7 +80,7 @@ protected:
 
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXindow );
-    ~VCLXAccessibleComponent();
+    virtual ~VCLXAccessibleComponent();
 
     VCLXWindow*    GetVCLXWindow() const { return mpVCLXindow; }
     Window*        GetWindow() const;

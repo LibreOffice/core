@@ -38,7 +38,7 @@ class SwFmtRefMark : public SfxPoolItem
 public:
     SwFmtRefMark( const OUString& rTxt );
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
-    ~SwFmtRefMark( );
+    virtual ~SwFmtRefMark( );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

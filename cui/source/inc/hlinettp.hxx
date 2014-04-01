@@ -80,7 +80,7 @@ protected:
 
 public:
     SvxHyperlinkInternetTp ( Window *pParent, const SfxItemSet& rItemSet);
-    ~SvxHyperlinkInternetTp ();
+    virtual ~SvxHyperlinkInternetTp ();
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 

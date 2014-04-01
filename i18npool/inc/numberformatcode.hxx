@@ -38,7 +38,7 @@ class NumberFormatCodeMapper : public cppu::WeakImplHelper2
 public:
     NumberFormatCodeMapper( const ::com::sun::star::uno::Reference <
                     ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~NumberFormatCodeMapper();
+    virtual ~NumberFormatCodeMapper();
 
     virtual ::com::sun::star::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

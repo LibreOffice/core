@@ -38,7 +38,7 @@ class Interceptor : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XDi
 public:
 
     Interceptor( DocumentHolder* pDocHolder );
-    ~Interceptor();
+    virtual ~Interceptor();
 
     void DisconnectDocHolder();
     // overwritten to release the statuslistner.

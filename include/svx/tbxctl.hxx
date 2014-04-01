@@ -40,7 +40,7 @@ protected:
 
 public:
     SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxTbxCtlDraw() {}
+    virtual ~SvxTbxCtlDraw() {}
 
     SFX_DECL_TOOLBOX_CONTROL();
 

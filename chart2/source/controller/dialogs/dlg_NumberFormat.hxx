@@ -31,7 +31,7 @@ class NumberFormatDialog : public SfxSingleTabDialog
 {
 public:
      NumberFormatDialog(Window* pParent, SfxItemSet& rSet);
-    ~NumberFormatDialog();
+    virtual ~NumberFormatDialog();
 
     static SfxItemSet CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool );
 };

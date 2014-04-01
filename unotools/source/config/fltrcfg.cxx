@@ -60,7 +60,7 @@ public:
         utl::ConfigItem(rRoot),
         bLoadVBA(false),
         bSaveVBA(false)  {}
-    ~SvtAppFilterOptions_Impl();
+    virtual ~SvtAppFilterOptions_Impl();
     virtual void            Commit() SAL_OVERRIDE;
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
     void                    Load();

@@ -367,7 +367,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
         DXFVector*  pP;
 
         DXFLWPolyLineEntity();
-        ~DXFLWPolyLineEntity();
+        virtual ~DXFLWPolyLineEntity();
 
     protected :
 
@@ -480,7 +480,7 @@ class DXFHatchEntity : public DXFBasicEntity
         DXFBoundaryPathData* pBoundaryPathData;
 
         DXFHatchEntity();
-        ~DXFHatchEntity();
+        virtual ~DXFHatchEntity();
 
     protected :
 

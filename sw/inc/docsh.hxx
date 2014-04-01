@@ -159,7 +159,7 @@ public:
     SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
     SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
-    ~SwDocShell();
+    virtual ~SwDocShell();
 
     /// OLE 2.0-notification.
     DECL_LINK( Ole2ModifiedHdl, void * );

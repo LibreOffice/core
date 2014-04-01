@@ -47,7 +47,7 @@ public:
         SvxAutoCorrect &rNewAutoCorrect,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage);
 
-    ~SvXMLAutoCorrectImport ( void ) throw ();
+    virtual ~SvXMLAutoCorrectImport ( void ) throw ();
 };
 
 class SvXMLWordListContext : public SvXMLImportContext
@@ -64,7 +64,7 @@ public:
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    ~SvXMLWordListContext ( void );
+    virtual ~SvXMLWordListContext ( void );
 };
 
 class SvXMLWordContext : public SvXMLImportContext
@@ -77,7 +77,7 @@ public:
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    ~SvXMLWordContext ( void );
+    virtual ~SvXMLWordContext ( void );
 };
 
 
@@ -98,7 +98,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         SvStringsISortDtor & rNewList );
 
-    ~SvXMLExceptionListImport ( void ) throw ();
+    virtual ~SvXMLExceptionListImport ( void ) throw ();
 };
 
 class SvXMLExceptionListContext : public SvXMLImportContext
@@ -115,7 +115,7 @@ public:
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    ~SvXMLExceptionListContext ( void );
+    virtual ~SvXMLExceptionListContext ( void );
 };
 
 class SvXMLExceptionContext : public SvXMLImportContext
@@ -128,7 +128,7 @@ public:
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    ~SvXMLExceptionContext ( void );
+    virtual ~SvXMLExceptionContext ( void );
 };
 
 

@@ -198,7 +198,7 @@ class SwAutoMarkDlg_Impl : public ModalDialog
 public:
     SwAutoMarkDlg_Impl(Window* pParent, const OUString& rAutoMarkURL,
                         const OUString& rAutoMarkType, bool bCreate);
-    ~SwAutoMarkDlg_Impl();
+    virtual ~SwAutoMarkDlg_Impl();
 
 };
 
@@ -655,7 +655,7 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 
 public:
     SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
-    ~SwAddStylesDlg_Impl();
+    virtual ~SwAddStylesDlg_Impl();
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,

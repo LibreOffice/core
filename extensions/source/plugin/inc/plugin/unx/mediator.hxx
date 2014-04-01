@@ -154,7 +154,7 @@ class MediatorListener : public osl::Thread
     ::osl::Mutex    m_aMutex;
 
     MediatorListener( Mediator* );
-    ~MediatorListener();
+    virtual ~MediatorListener();
 
     virtual void run() SAL_OVERRIDE;
     virtual void onTerminated() SAL_OVERRIDE;

@@ -33,7 +33,7 @@ class SwSyncBtnDlg : public SfxFloatingWindow
 
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, Window *pParent);
-    ~SwSyncBtnDlg();
+    virtual ~SwSyncBtnDlg();
 };
 #endif
 

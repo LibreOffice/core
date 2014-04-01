@@ -71,7 +71,7 @@ namespace basctl
     {
     public:
         Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
-        ~Impl ();
+        virtual ~Impl ();
 
         // XDocumentEventListener
         virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;

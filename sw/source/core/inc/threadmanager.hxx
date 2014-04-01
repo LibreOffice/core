@@ -48,7 +48,7 @@ class ThreadManager : public IThreadListenerOwner
     public:
 
         explicit ThreadManager( ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& rThreadJoiner );
-        ~ThreadManager();
+        virtual ~ThreadManager();
 
         // --> IThreadListenerOwner
         virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef() SAL_OVERRIDE;

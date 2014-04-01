@@ -32,7 +32,7 @@ namespace ucbhelper
 
             StdOutputStream( boost::shared_ptr< std::ostream > pStream );
 
-            ~StdOutputStream( );
+            virtual ~StdOutputStream( );
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
                 throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

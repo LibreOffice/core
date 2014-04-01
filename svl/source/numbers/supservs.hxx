@@ -52,7 +52,7 @@ protected:
 
 public:
     SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
-    ~SvNumberFormatsSupplierServiceObject();
+    virtual ~SvNumberFormatsSupplierServiceObject();
 
     // XInterface
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { SvNumberFormatsSupplierObj::acquire(); }

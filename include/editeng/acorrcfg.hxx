@@ -31,7 +31,7 @@ class EDITENG_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
 
 public:
     SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rParent);
-    ~SvxBaseAutoCorrCfg();
+    virtual ~SvxBaseAutoCorrCfg();
 
     void                    Load(bool bInit);
     virtual void            Commit() SAL_OVERRIDE;
@@ -46,7 +46,7 @@ class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 
 public:
     SvxSwAutoCorrCfg(SvxAutoCorrCfg& rParent);
-    ~SvxSwAutoCorrCfg();
+    virtual ~SvxSwAutoCorrCfg();
 
     void                    Load(bool bInit);
     virtual void            Commit() SAL_OVERRIDE;

@@ -67,7 +67,7 @@ namespace dbaui
         OTableFieldDesc();
         OTableFieldDesc(const OUString& rTable, const OUString& rField );
         OTableFieldDesc(const OTableFieldDesc& rRS);
-        ~OTableFieldDesc();
+        virtual ~OTableFieldDesc();
 
         inline sal_Bool IsEmpty() const;
 

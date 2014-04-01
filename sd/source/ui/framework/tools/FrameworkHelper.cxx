@@ -313,7 +313,7 @@ class FrameworkHelper::DisposeListener
 {
 public:
     DisposeListener (const ::boost::shared_ptr<FrameworkHelper>& rpHelper);
-    ~DisposeListener (void);
+    virtual ~DisposeListener (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 

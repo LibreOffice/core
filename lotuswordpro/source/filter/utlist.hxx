@@ -134,7 +134,7 @@ private: // Data
 class CUtOwningList : public CUtList
 {
 public: // Methods
-    ~CUtOwningList();
+    virtual ~CUtOwningList();
 };
 }//end namespace OpenStormBento
 #endif

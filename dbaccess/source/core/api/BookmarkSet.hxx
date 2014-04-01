@@ -34,7 +34,7 @@ namespace dbaccess
     public:
         OBookmarkSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
         {}
-        ~OBookmarkSet()
+        virtual ~OBookmarkSet()
         {
             m_xRowLocate = NULL;
         }

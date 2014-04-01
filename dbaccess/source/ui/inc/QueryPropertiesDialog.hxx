@@ -29,7 +29,7 @@ public:
 
     QueryPropertiesDialog(
         Window* pParent, const sal_Bool bDistinct, const sal_Int64 nLimit );
-    ~QueryPropertiesDialog();
+    virtual ~QueryPropertiesDialog();
 
     sal_Bool getDistinct() const;
     sal_Int64 getLimit() const;

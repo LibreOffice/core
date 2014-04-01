@@ -49,7 +49,7 @@ protected:
 public:
 
     BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    ~BibToolBarListener();
+    virtual ~BibToolBarListener();
 
     OUString           GetCommand() const;
 
@@ -69,7 +69,7 @@ class BibTBListBoxListener: public BibToolBarListener
 public:
 
     BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    ~BibTBListBoxListener();
+    virtual ~BibTBListBoxListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
                                             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -81,7 +81,7 @@ class BibTBEditListener: public BibToolBarListener
 public:
 
     BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    ~BibTBEditListener();
+    virtual ~BibTBEditListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
                                             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -93,7 +93,7 @@ class BibTBQueryMenuListener:   public BibToolBarListener
 public:
 
     BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    ~BibTBQueryMenuListener();
+    virtual ~BibTBQueryMenuListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
                                             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -149,7 +149,7 @@ class BibToolBar:   public ToolBox
     public:
 
         BibToolBar(Window* pParent, Link aLink, WinBits nStyle = WB_3DLOOK );
-        ~BibToolBar();
+        virtual ~BibToolBar();
 
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
 

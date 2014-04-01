@@ -185,7 +185,7 @@ namespace connectivity
                             public ::com::sun::star::lang::XServiceInfo
         {
         protected:
-            ~OStatement(){}
+            virtual ~OStatement(){}
         public:
             // a constructor, for when the object needs to be returned:
             OStatement( OConnection* _pConnection);

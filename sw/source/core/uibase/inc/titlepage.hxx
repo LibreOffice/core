@@ -62,7 +62,7 @@ private:
     DECL_LINK(StartPageHdl, void *);
 public:
     SwTitlePageDlg( Window *pParent );
-    ~SwTitlePageDlg();
+    virtual ~SwTitlePageDlg();
 };
 
 #endif

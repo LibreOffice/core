@@ -95,7 +95,7 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
     Window*                     m_pWindow;
 
 protected:
-    ~FormViewPageWindowAdapter();
+    virtual ~FormViewPageWindowAdapter();
 
 public:
     FormViewPageWindowAdapter(  const css::uno::Reference<css::uno::XComponentContext>& _rContext,
@@ -185,7 +185,7 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
 
 protected:
     FmXFormView( FmFormView* _pView );
-    ~FmXFormView();
+    virtual ~FmXFormView();
 
     void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
     void    restoreMarkList( SdrMarkList& _rRestoredMarkList );

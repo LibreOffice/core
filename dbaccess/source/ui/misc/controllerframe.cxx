@@ -76,7 +76,7 @@ namespace dbaui
         void dispose();
 
     protected:
-        ~FrameWindowActivationListener();
+        virtual ~FrameWindowActivationListener();
 
         // XTopWindowListener
         virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

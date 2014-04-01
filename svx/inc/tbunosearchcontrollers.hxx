@@ -92,7 +92,7 @@ class FindTextToolbarController : public svt::ToolboxController,
 public:
 
     FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
-    ~FindTextToolbarController();
+    virtual ~FindTextToolbarController();
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -132,7 +132,7 @@ class ExitSearchToolboxController   : public svt::ToolboxController,
 {
 public:
     ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    ~ExitSearchToolboxController();
+    virtual ~ExitSearchToolboxController();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -164,7 +164,7 @@ public:
     enum Type { UP, DOWN };
 
     UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
-    ~UpDownSearchToolboxController();
+    virtual ~UpDownSearchToolboxController();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -197,7 +197,7 @@ class MatchCaseToolboxController : public svt::ToolboxController,
 {
 public:
     MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    ~MatchCaseToolboxController();
+    virtual ~MatchCaseToolboxController();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -230,7 +230,7 @@ class FindAllToolboxController   : public svt::ToolboxController,
 {
 public:
     FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    ~FindAllToolboxController();
+    virtual ~FindAllToolboxController();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -260,7 +260,7 @@ class SearchLabelToolboxController : public svt::ToolboxController,
 {
 public:
     SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    ~SearchLabelToolboxController();
+    virtual ~SearchLabelToolboxController();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

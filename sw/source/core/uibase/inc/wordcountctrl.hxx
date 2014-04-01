@@ -25,7 +25,7 @@ public:
     SFX_DECL_STATUSBAR_CONTROL();
 
     SwWordCountStatusBarControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
-    ~SwWordCountStatusBarControl();
+    virtual ~SwWordCountStatusBarControl();
 };
 
 #endif

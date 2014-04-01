@@ -37,7 +37,7 @@ public:
         Window* pParent,
         PagePropertyPanel& rPanel,
         const sal_Bool bLandscape );
-    ~PageOrientationControl(void);
+    virtual ~PageOrientationControl(void);
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpOrientationValueSet;

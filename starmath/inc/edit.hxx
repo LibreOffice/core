@@ -89,7 +89,7 @@ class SmEditWindow : public Window, public DropTargetHelper
 
 public:
     SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );
-    ~SmEditWindow();
+    virtual ~SmEditWindow();
 
     SmDocShell *    GetDoc();
     SmViewShell *   GetView();

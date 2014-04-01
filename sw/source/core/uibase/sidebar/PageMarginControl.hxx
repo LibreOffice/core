@@ -60,7 +60,7 @@ public:
         const sal_Bool bLandscape,
         const FieldUnit eFUnit,
         const SfxMapUnit eUnit );
-    ~PageMarginControl(void);
+    virtual ~PageMarginControl(void);
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpMarginValueSet;

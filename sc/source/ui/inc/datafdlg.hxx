@@ -63,7 +63,7 @@ private:
 
 public:
     ScDataFormDlg( Window* pParent, ScTabViewShell* pTabViewShell);
-    ~ScDataFormDlg();
+    virtual ~ScDataFormDlg();
 
     void FillCtrls(SCROW nCurrentRow);
 private:

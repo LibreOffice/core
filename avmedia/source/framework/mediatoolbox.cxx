@@ -40,7 +40,7 @@ class MediaToolBoxControl_Impl : public MediaControl
 public:
 
                             MediaToolBoxControl_Impl( Window& rParent, MediaToolBoxControl& rControl );
-                            ~MediaToolBoxControl_Impl();
+                            virtual ~MediaToolBoxControl_Impl();
 
     void                    update() SAL_OVERRIDE;
     void                    execute( const MediaItem& rItem ) SAL_OVERRIDE;

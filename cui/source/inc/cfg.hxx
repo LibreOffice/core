@@ -104,7 +104,7 @@ public:
         const OUString& aModuleId,
         bool docConfig );
 
-    ~SaveInData() {}
+    virtual ~SaveInData() {}
 
     bool PersistChanges(
         const com::sun::star::uno::Reference
@@ -198,7 +198,7 @@ public:
         const OUString& aModuleId,
         bool docConfig );
 
-    ~MenuSaveInData();
+    virtual ~MenuSaveInData();
 
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries() SAL_OVERRIDE;
@@ -322,7 +322,7 @@ protected:
 
 public:
     SvxMenuEntriesListBox(Window*, SvxConfigPage*);
-    ~SvxMenuEntriesListBox();
+    virtual ~SvxMenuEntriesListBox();
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
 
@@ -482,7 +482,7 @@ private:
 
 public:
     SvxMenuConfigPage( Window *pParent, const SfxItemSet& rItemSet );
-    ~SvxMenuConfigPage();
+    virtual ~SvxMenuConfigPage();
 
     SaveInData* CreateSaveInData(
         const ::com::sun::star::uno::Reference <
@@ -516,7 +516,7 @@ public:
         Window*, SvxEntries*,
         SvxConfigEntry*, bool bCreateMenu = false );
 
-    ~SvxMainMenuOrganizerDialog ();
+    virtual ~SvxMainMenuOrganizerDialog ();
 
     SvxEntries*     GetEntries();
     void            SetEntries( SvxEntries* );
@@ -543,7 +543,7 @@ protected:
 public:
 
     SvxToolbarEntriesListBox(Window* pParent, SvxToolbarConfigPage* pPg);
-    ~SvxToolbarEntriesListBox();
+    virtual ~SvxToolbarEntriesListBox();
 
     void            SetChangedListener( const Link& aChangedListener )
         { m_aChangedListener = aChangedListener; }
@@ -583,7 +583,7 @@ private:
 
 public:
     SvxToolbarConfigPage( Window *pParent, const SfxItemSet& rItemSet );
-    ~SvxToolbarConfigPage();
+    virtual ~SvxToolbarConfigPage();
 
     SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
                                              bool bFront = false,
@@ -632,7 +632,7 @@ public:
         const OUString& aModuleId,
         bool docConfig );
 
-    ~ToolbarSaveInData();
+    virtual ~ToolbarSaveInData();
 
     void            CreateToolbar( SvxConfigEntry* pToolbar );
     void            RestoreToolbar( SvxConfigEntry* pToolbar );
@@ -737,7 +737,7 @@ public:
             ::com::sun::star::ui::XImageManager >& rXParentImageManager
             );
 
-    ~SvxIconSelectorDialog();
+    virtual ~SvxIconSelectorDialog();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
         GetSelectedIcon();

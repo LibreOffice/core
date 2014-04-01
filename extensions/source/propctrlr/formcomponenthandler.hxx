@@ -108,7 +108,7 @@ namespace pcr
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        ~FormComponentPropertyHandler();
+        virtual ~FormComponentPropertyHandler();
 
     protected:
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;

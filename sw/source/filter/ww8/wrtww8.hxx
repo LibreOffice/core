@@ -232,7 +232,7 @@ class WW8_WrPlcSepx : public MSWordSections
 
 public:
     WW8_WrPlcSepx( MSWordExportBase& rExport );
-    ~WW8_WrPlcSepx();
+    virtual ~WW8_WrPlcSepx();
 
     virtual bool HeaderFooterWritten() SAL_OVERRIDE; // override
 
@@ -1241,7 +1241,7 @@ private:
     std::map<const OUString, WW8_CP> m_aRangeStartPositions;
 public:
     WW8_WrPlcAnnotations() {}
-    ~WW8_WrPlcAnnotations();
+    virtual ~WW8_WrPlcAnnotations();
 
     void AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp);
     void Append( WW8_CP nCp, const SwPostItField* pPostIt );

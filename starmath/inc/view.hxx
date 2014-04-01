@@ -89,7 +89,7 @@ private:
     void CaretBlinkStop();
 public:
     SmGraphicWindow(SmViewShell* pShell);
-    ~SmGraphicWindow();
+    virtual ~SmGraphicWindow();
 
     // Window
     virtual void    MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
@@ -278,7 +278,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
-    ~SmViewShell();
+    virtual ~SmViewShell();
 
     SmDocShell * GetDoc()
     {

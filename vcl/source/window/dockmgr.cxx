@@ -57,7 +57,7 @@ private:
 public:
     ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
-    ~ImplDockFloatWin2();
+    virtual ~ImplDockFloatWin2();
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -496,7 +496,7 @@ private:
 
 public:
     ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
-    ~ImplPopupFloatWin();
+    virtual ~ImplPopupFloatWin();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

@@ -26,7 +26,7 @@ class SVX_DLLPUBLIC SvxPrtQryBox : public MessBox
 {
 public:
     SvxPrtQryBox(Window* pParent);
-    ~SvxPrtQryBox();
+    virtual ~SvxPrtQryBox();
 };
 
 #endif

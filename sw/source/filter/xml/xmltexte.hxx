@@ -68,7 +68,7 @@ public:
     SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& rAutoStylePool );
-    ~SwXMLTextParagraphExport();
+    virtual ~SwXMLTextParagraphExport();
 
     virtual void setTextEmbeddedGraphicURL(
         const ::com::sun::star::uno::Reference <

@@ -27,7 +27,7 @@ private:
 
 public:
     SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet );
-    ~SvxPersonalizationTabPage();
+    virtual ~SvxPersonalizationTabPage();
 
     static SfxTabPage* Create( Window *pParent, const SfxItemSet &rSet );
 

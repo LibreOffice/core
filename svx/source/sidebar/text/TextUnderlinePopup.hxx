@@ -31,7 +31,7 @@ public :
     TextUnderlinePopup (
         Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    ~TextUnderlinePopup (void);
+    virtual ~TextUnderlinePopup (void);
 
     void Rearrange (FontUnderline eLine);
 };

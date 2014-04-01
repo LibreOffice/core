@@ -309,7 +309,7 @@ class PluginProgressWindow : public Window
 
         PluginProgressWindow(      Window*                                       pParent  ,
                              const css::uno::Reference< css::lang::XComponent >& xProgress);
-        ~PluginProgressWindow();
+        virtual ~PluginProgressWindow();
 };
 
 class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicator ,

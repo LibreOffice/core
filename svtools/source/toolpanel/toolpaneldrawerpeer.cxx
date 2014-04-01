@@ -66,7 +66,7 @@ namespace svt
         virtual void    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet ) SAL_OVERRIDE;
 
     protected:
-        ~ToolPanelDrawerContext()
+        virtual ~ToolPanelDrawerContext()
         {
         }
     };

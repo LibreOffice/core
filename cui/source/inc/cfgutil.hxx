@@ -112,7 +112,7 @@ class SfxConfigFunctionListBox : public SvTreeListBox
 
 public:
     SfxConfigFunctionListBox(Window*, WinBits nStyle);
-    ~SfxConfigFunctionListBox();
+    virtual ~SfxConfigFunctionListBox();
 
     void          ClearAll();
     using Window::GetHelpText;
@@ -164,7 +164,7 @@ protected:
 
 public:
     SfxConfigGroupListBox(Window* pParent, WinBits nStyle);
-    ~SfxConfigGroupListBox();
+    virtual ~SfxConfigGroupListBox();
     void                ClearAll();
 
     void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,

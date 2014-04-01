@@ -60,7 +60,7 @@ public:
 
     ActiveMSPList(  const css::uno::Reference<
         css::uno::XComponentContext > & xContext  );
-    ~ActiveMSPList();
+    virtual ~ActiveMSPList();
 
     css::uno::Reference< css::script::provider::XScriptProvider >
         getMSPFromStringContext( const OUString& context )

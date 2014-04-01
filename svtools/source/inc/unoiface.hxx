@@ -62,7 +62,7 @@ protected:
 
 public:
                     VCLXMultiLineEdit();
-                    ~VCLXMultiLineEdit();
+                    virtual ~VCLXMultiLineEdit();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -122,7 +122,7 @@ protected:
 
 public:
                     VCLXFileControl();
-                    ~VCLXFileControl();
+                    virtual ~VCLXFileControl();
 
     void            SetWindow( Window* pWindow ) SAL_OVERRIDE;
 
@@ -180,7 +180,7 @@ protected:
 
 public:
     SVTXFormattedField();
-    ~SVTXFormattedField();
+    virtual ~SVTXFormattedField();
 
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -253,7 +253,7 @@ protected:
     ::svt::ORoadmap*                GetRoadmap() const { return (::svt::ORoadmap*)GetWindow(); }
     void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
 
-    ~SVTXRoadmap();
+    virtual ~SVTXRoadmap();
 
 public:
     SVTXRoadmap();
@@ -295,7 +295,7 @@ class SVTXNumericField : public ::com::sun::star::awt::XNumericField, public SVT
 {
 public:
                     SVTXNumericField();
-                    ~SVTXNumericField();
+                    virtual ~SVTXNumericField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -335,7 +335,7 @@ class SVTXCurrencyField : public ::com::sun::star::awt::XCurrencyField, public S
 {
 public:
                     SVTXCurrencyField();
-                    ~SVTXCurrencyField();
+                    virtual ~SVTXCurrencyField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -388,7 +388,7 @@ protected:
 
 public:
                     VCLXProgressBar();
-                    ~VCLXProgressBar();
+                    virtual ~VCLXProgressBar();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -421,7 +421,7 @@ class SVTXDateField : public VCLXDateField
 {
 public:
                     SVTXDateField();
-                    ~SVTXDateField();
+                    virtual ~SVTXDateField();
 
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

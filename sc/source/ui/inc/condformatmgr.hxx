@@ -63,7 +63,7 @@ class ScCondFormatManagerDlg : public ModalDialog
 {
 public:
     ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos);
-    ~ScCondFormatManagerDlg();
+    virtual ~ScCondFormatManagerDlg();
 
     ScConditionalFormatList* GetConditionalFormatList();
 

@@ -34,7 +34,7 @@ public:
                 ScAttrDlg( SfxViewFrame*     pFrame,
                            Window*           pParent,
                            const SfxItemSet* pCellAttrs );
-                ~ScAttrDlg();
+                virtual ~ScAttrDlg();
 
 protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;

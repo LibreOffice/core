@@ -173,7 +173,7 @@ namespace svt { namespace table
 
     public:
         TableControl_Impl( TableControl& _rAntiImpl );
-        ~TableControl_Impl();
+        virtual ~TableControl_Impl();
 
 #ifdef DBG_UTIL
         const sal_Char* impl_checkInvariants() const;

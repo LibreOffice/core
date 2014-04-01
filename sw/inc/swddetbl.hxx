@@ -33,7 +33,7 @@ public:
     // After that SwTable is empty and has to be deleted.
     SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
                 sal_Bool bUpdate = sal_True );
-    ~SwDDETable();
+    virtual ~SwDDETable();
 
     void ChangeContent();
     sal_Bool  NoDDETable();

@@ -43,7 +43,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxClipBoardControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxClipBoardControl();
+    virtual ~SvxClipBoardControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;

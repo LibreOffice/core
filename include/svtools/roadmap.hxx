@@ -57,7 +57,7 @@ namespace svt
 
     public:
         ORoadmap( Window* _pParent, WinBits _nWinStyle = 0 );
-        ~ORoadmap( );
+        virtual ~ORoadmap( );
 
         void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
 

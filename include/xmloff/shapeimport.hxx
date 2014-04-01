@@ -314,7 +314,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::frame::XModel>& rModel,
     SvXMLImportPropertyMapper *pExtMapper=0 );
 
-    ~XMLShapeImportHelper();
+    virtual ~XMLShapeImportHelper();
 
     SvXMLShapeContext* CreateGroupChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,

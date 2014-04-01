@@ -42,7 +42,7 @@ private:
 
 public:
     AssistentDlg(Window* pParent, sal_Bool bAutoPilot);
-    ~AssistentDlg();
+    virtual ~AssistentDlg();
 
     DECL_LINK( FinishHdl, void * );
 

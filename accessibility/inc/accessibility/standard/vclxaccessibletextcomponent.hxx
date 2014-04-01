@@ -52,7 +52,7 @@ protected:
 
 public:
     VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow );
-    ~VCLXAccessibleTextComponent();
+    virtual ~VCLXAccessibleTextComponent();
 
     // XInterface
     DECLARE_XINTERFACE()

@@ -133,7 +133,7 @@ namespace {
         virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
    protected:
-        ~Wizard();
+        virtual ~Wizard();
 
     protected:
         virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;

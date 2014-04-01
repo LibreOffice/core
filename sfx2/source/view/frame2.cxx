@@ -68,7 +68,7 @@ public:
     SfxFrame*           pFrame;
 
     SfxFrameWindow_Impl( SfxFrame* pF, Window& i_rContainerWindow );
-    ~SfxFrameWindow_Impl( );
+    virtual ~SfxFrameWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

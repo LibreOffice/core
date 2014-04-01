@@ -140,7 +140,7 @@ class EDITENG_DLLPUBLIC SvxEditSourceAdapter : public SvxEditSource
 {
 public:
     SvxEditSourceAdapter();
-    ~SvxEditSourceAdapter();
+    virtual ~SvxEditSourceAdapter();
 
     virtual SvxEditSource*                      Clone() const SAL_OVERRIDE;
     virtual SvxTextForwarder*                   GetTextForwarder() SAL_OVERRIDE;

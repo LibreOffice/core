@@ -281,7 +281,7 @@ protected:
 public:
                     DockingWindow( Window* pParent, WinBits nStyle = WB_STDDOCKWIN );
                     DockingWindow( Window* pParent, const ResId& rResId );
-                    ~DockingWindow();
+                    virtual ~DockingWindow();
 
     virtual void    StartDocking();
     virtual bool    Docking( const Point& rPos, Rectangle& rRect );

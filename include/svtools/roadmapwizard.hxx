@@ -77,7 +77,7 @@ namespace svt
             const WinBits i_nStyle,
             sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
         );
-        ~RoadmapWizard( );
+        virtual ~RoadmapWizard( );
 
         void            SetRoadmapHelpId( const OString& _rId );
 

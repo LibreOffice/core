@@ -49,7 +49,7 @@ protected:
 public:
 
                         ContourWindow( Window* pParent, const ResId& rResId );
-                        ~ContourWindow();
+                        virtual ~ContourWindow();
 
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
     const PolyPolygon&  GetPolyPolygon();

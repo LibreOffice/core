@@ -178,7 +178,7 @@ class SwFrmPage: public SfxTabPage
     void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
 
     SwFrmPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwFrmPage();
+    virtual ~SwFrmPage();
 
     SwWrtShell *getFrmDlgParentShell();
 
@@ -227,7 +227,7 @@ class SwGrfExtPage: public SfxTabPage
 
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     SwGrfExtPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwGrfExtPage();
+    virtual ~SwGrfExtPage();
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -256,7 +256,7 @@ class SwFrmURLPage : public SfxTabPage
     DECL_LINK(InsertFileHdl, void *);
 
     SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwFrmURLPage();
+    virtual ~SwFrmURLPage();
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -306,7 +306,7 @@ class SwFrmAddPage : public SfxTabPage
     DECL_LINK(ChainModifyHdl, ListBox*);
 
     SwFrmAddPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwFrmAddPage();
+    virtual ~SwFrmAddPage();
 
 public:
 

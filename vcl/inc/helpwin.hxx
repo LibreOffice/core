@@ -53,7 +53,7 @@ protected:
 
 public:
                         HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
-                        ~HelpTextWindow();
+                        virtual ~HelpTextWindow();
 
     const OUString&     GetHelpText() const { return maHelpText; }
     void                SetHelpText( const OUString& rHelpText );

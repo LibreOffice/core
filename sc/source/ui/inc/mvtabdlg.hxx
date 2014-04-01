@@ -34,7 +34,7 @@ class ScMoveTableDlg : public ModalDialog
 {
 public:
     ScMoveTableDlg(Window* pParent, const OUString& rDefault);
-    ~ScMoveTableDlg();
+    virtual ~ScMoveTableDlg();
 
     sal_uInt16  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;

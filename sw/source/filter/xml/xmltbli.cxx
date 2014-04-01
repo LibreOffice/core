@@ -1079,7 +1079,7 @@ public:
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
 
-    ~SwXMLDDETableContext_Impl();
+    virtual ~SwXMLDDETableContext_Impl();
 
     virtual void StartElement(
         const Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;

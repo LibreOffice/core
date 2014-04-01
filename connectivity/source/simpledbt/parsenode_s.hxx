@@ -42,7 +42,7 @@ namespace connectivity
 
     public:
         OSimpleParseNode(const OSQLParseNode* _pNode, sal_Bool _bTakeOwnership = sal_True);
-        ~OSimpleParseNode();
+        virtual ~OSimpleParseNode();
 
         // ISQLParseNode
         virtual void parseNodeToStr(OUString& _rString,

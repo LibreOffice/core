@@ -66,7 +66,7 @@ protected:
 
 public:
     OfaMiscTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~OfaMiscTabPage();
+    virtual ~OfaMiscTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
@@ -121,7 +121,7 @@ private:
 
 public:
     OfaViewTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~OfaViewTabPage();
+    virtual ~OfaViewTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
@@ -163,7 +163,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 
 public:
     OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~OfaLanguagesTabPage();
+    virtual ~OfaLanguagesTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 

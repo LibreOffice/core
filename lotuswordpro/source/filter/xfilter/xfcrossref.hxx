@@ -70,7 +70,7 @@ class XFCrossRefStart : public XFContent
 {
 public:
     XFCrossRefStart();
-    ~XFCrossRefStart();
+    virtual ~XFCrossRefStart();
     void SetRefType(sal_uInt8 nType);
     void SetMarkName(const OUString& sName);
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
@@ -99,7 +99,7 @@ class XFCrossRefEnd : public XFContent
 {
 public:
     XFCrossRefEnd();
-    ~XFCrossRefEnd();
+    virtual ~XFCrossRefEnd();
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 

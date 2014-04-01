@@ -50,7 +50,7 @@ protected:
 
 public:
     XMLTableMasterPageExport( ScXMLExport& rExp );
-    ~XMLTableMasterPageExport();
+    virtual ~XMLTableMasterPageExport();
 };
 
 

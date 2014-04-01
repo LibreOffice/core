@@ -59,7 +59,7 @@ friend class SfxTemplateDialog_Impl;
 
 public:
     SfxTemplateDialog( SfxBindings*, SfxChildWindow*, Window* );
-    ~SfxTemplateDialog();
+    virtual ~SfxTemplateDialog();
 
     virtual void                Update();
 

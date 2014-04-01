@@ -36,7 +36,7 @@ namespace dbaui
         virtual TypeSelectionPageFactory
                                 getTypeSelectionPageFactory() SAL_OVERRIDE;
 
-        ~ORTFReader();
+        virtual ~ORTFReader();
 
     public:
         ORTFReader( SvStream& rIn,

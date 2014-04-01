@@ -153,7 +153,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
 public:
     SwMailMergeConfigItem_Impl();
-    ~SwMailMergeConfigItem_Impl();
+    virtual ~SwMailMergeConfigItem_Impl();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

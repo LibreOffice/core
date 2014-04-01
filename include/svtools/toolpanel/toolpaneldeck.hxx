@@ -137,7 +137,7 @@ namespace svt
     {
     public:
         ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle = WB_DIALOGCONTROL );
-        ~ToolPanelDeck();
+        virtual ~ToolPanelDeck();
 
         // attributes
         PDeckLayouter       GetLayouter() const;

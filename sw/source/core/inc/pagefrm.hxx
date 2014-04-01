@@ -109,7 +109,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
     SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
-    ~SwPageFrm();
+    virtual ~SwPageFrm();
 
     //public, damit die SwViewShell beim Umschalten vom BrowseMode darauf
     //zugreifen kann.

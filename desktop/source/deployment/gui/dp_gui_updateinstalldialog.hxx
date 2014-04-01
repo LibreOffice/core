@@ -60,7 +60,7 @@ public:
     UpdateInstallDialog(Window * parent, std::vector<UpdateData> & aVecUpdateData,
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCtx);
 
-    ~UpdateInstallDialog();
+    virtual ~UpdateInstallDialog();
 
     bool Close() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;

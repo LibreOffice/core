@@ -56,7 +56,7 @@ private:
 
 public:
     SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet );
-    ~SvxZoomDialog();
+    virtual ~SvxZoomDialog();
 
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 

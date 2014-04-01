@@ -59,7 +59,7 @@ class DAVSession;
 class DAVSessionFactory : public salhelper::SimpleReferenceObject
 {
 public:
-    ~DAVSessionFactory() SAL_THROW(());
+    virtual ~DAVSessionFactory() SAL_THROW(());
 
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,

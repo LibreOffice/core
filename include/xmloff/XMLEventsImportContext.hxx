@@ -85,7 +85,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xNameRepl);
 
-    ~XMLEventsImportContext();
+    virtual ~XMLEventsImportContext();
 
     void AddEventValues(
         const OUString& rEventName,

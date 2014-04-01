@@ -100,7 +100,7 @@ protected:
         sal_Int32 rowCount,
         sal_Int32 columnCount,
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter > &tc );
-    ~BaseResultSet();
+    virtual ~BaseResultSet();
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }

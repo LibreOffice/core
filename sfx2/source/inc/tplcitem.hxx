@@ -37,7 +37,7 @@ protected:
 
 public:
     SfxTemplateControllerItem( sal_uInt16 nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
-    ~SfxTemplateControllerItem();
+    virtual ~SfxTemplateControllerItem();
 };
 
 

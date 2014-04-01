@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 
 public:
     SwStdFontConfig();
-    ~SwStdFontConfig();
+    virtual ~SwStdFontConfig();
 
     virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

@@ -91,7 +91,7 @@ protected:
 
 protected:
     SvtFileDialogURLSelector( SvtFileDialog* _pParent, const ResId& _rResId, sal_uInt16 _nButtonId );
-    ~SvtFileDialogURLSelector();
+    virtual ~SvtFileDialogURLSelector();
 
     virtual void        Activate() SAL_OVERRIDE;
 };
@@ -103,7 +103,7 @@ private:
 
 public:
     SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId );
-    ~SvtUpButton_Impl();
+    virtual ~SvtUpButton_Impl();
 
 protected:
     virtual void        FillURLMenu( PopupMenu* _pMenu ) SAL_OVERRIDE;

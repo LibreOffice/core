@@ -67,7 +67,7 @@ public:
 
     PowerPointExport( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxCtxt  );
 
-    ~PowerPointExport();
+    virtual ~PowerPointExport();
 
     // from FilterBase
     virtual bool importDocument() throw() SAL_OVERRIDE;

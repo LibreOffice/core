@@ -59,7 +59,7 @@ public:
         bool                                    bDirectionForward,
         bool                                    bModeIn );
 
-    ~ClippingAnimation();
+    virtual ~ClippingAnimation();
 
     // Animation interface
 

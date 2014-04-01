@@ -239,7 +239,7 @@ protected:
 public:
             Svx3DWin( SfxBindings* pBindings, SfxChildWindow *pCW,
                         Window* pParent );
-            ~Svx3DWin();
+            virtual ~Svx3DWin();
 
     void    InitColorLB( const SdrModel* pDoc );
     bool    IsUpdateMode() const { return bUpdate; }

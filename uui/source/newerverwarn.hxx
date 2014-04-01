@@ -45,7 +45,7 @@ namespace uui
 
     public:
         NewerVersionWarningDialog( Window* pParent, const OUString& rVersion, ResMgr& rResMgr );
-        ~NewerVersionWarningDialog();
+        virtual ~NewerVersionWarningDialog();
     };
 } // namespace uui
 

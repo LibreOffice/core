@@ -50,7 +50,7 @@ namespace chelp {
             com::sun::star::ucb::XCommandEnvironment >& rxEnv,
             ResultSetFactory* pFactory );
 
-        ~DynamicResultSet();
+        virtual ~DynamicResultSet();
     };
 
 }

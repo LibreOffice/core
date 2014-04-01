@@ -65,7 +65,7 @@ public:
         m_Nodes[ 0 ] = node;
     }
 
-    ~BrowseNodeAggregator()
+    virtual ~BrowseNodeAggregator()
     {
     }
 
@@ -190,7 +190,7 @@ public:
         m_origNode.set( node );
     }
 
-    ~LocationBrowseNode()
+    virtual ~LocationBrowseNode()
     {
         if (m_hBNA)
         {
@@ -420,7 +420,7 @@ public:
         }
     }
 
-    ~DefaultBrowseNode()
+    virtual ~DefaultBrowseNode()
     {
         if ( m_xAggProxy.is() )
         {
@@ -552,7 +552,7 @@ public:
         m_Name = "Root";
     }
 
-    ~DefaultRootBrowseNode()
+    virtual ~DefaultRootBrowseNode()
     {
     }
 
@@ -610,7 +610,7 @@ public:
     {
     }
 
-    ~SelectorBrowseNode()
+    virtual ~SelectorBrowseNode()
     {
     }
 

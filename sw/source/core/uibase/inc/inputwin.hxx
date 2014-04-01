@@ -105,7 +105,7 @@ public:
                         sal_uInt16 nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );
-    ~SwInputChild();
+    virtual ~SwInputChild();
     SFX_DECL_CHILDWINDOW_WITHID( SwInputChild );
     void            SetFormula( const OUString& rFormula, sal_Bool bDelSel = sal_True )
                         { ((SwInputWindow*)pWindow)->SetFormula(

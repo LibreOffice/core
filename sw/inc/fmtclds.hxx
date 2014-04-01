@@ -92,7 +92,7 @@ class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 public:
     SwFmtCol();
     SwFmtCol( const SwFmtCol& );
-    ~SwFmtCol();
+    virtual ~SwFmtCol();
     //#i120133#
     sal_Int16 GetAdjustValue() const { return aWidthAdjustValue; }
     void SetAdjustValue( const sal_Int16& n ) { aWidthAdjustValue = n; }

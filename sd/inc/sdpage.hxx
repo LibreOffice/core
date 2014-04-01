@@ -158,7 +158,7 @@ public:
 
     SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage=sal_False);
     SdPage(const SdPage& rSrcPage);
-    ~SdPage();
+    virtual ~SdPage();
     virtual SdrPage* Clone() const SAL_OVERRIDE;
     virtual SdrPage* Clone(SdrModel* pNewModel) const SAL_OVERRIDE;
 

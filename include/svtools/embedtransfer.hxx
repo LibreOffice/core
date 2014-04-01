@@ -44,7 +44,7 @@ public:
     SvEmbedTransferHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
                            const Graphic* pGraphic,
                             sal_Int64 nAspect );
-    ~SvEmbedTransferHelper();
+    virtual ~SvEmbedTransferHelper();
 
     static void         FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,

@@ -140,7 +140,7 @@ protected:
 
 public:
     SwContentTree(Window* pParent, const ResId& rResId);
-    ~SwContentTree();
+    virtual ~SwContentTree();
     OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);

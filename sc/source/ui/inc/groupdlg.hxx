@@ -31,7 +31,7 @@ class ScGroupDlg : public ModalDialog
 {
 public:
     ScGroupDlg(Window* pParent, bool bUnGroup = false, bool bRows = true);
-    ~ScGroupDlg();
+    virtual ~ScGroupDlg();
 
     bool GetColsChecked() const;
 

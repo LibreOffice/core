@@ -85,7 +85,7 @@ public:
                 const Rectangle& rBounds,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xParent,
                 long nIndexInParent );
-    ~SvxPixelCtlAccessibleChild();
+    virtual ~SvxPixelCtlAccessibleChild();
 
     //XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -174,7 +174,7 @@ class SvxPixelCtlAccessible :
 
 public:
     SvxPixelCtlAccessible(SvxPixelCtl& rWindow);
-    ~SvxPixelCtlAccessible();
+    virtual ~SvxPixelCtlAccessible();
 
     void ensureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
 

@@ -140,7 +140,7 @@ namespace svx
         HangulHanjaConversionDialog(
                 Window* _pParent,
                 editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
-        ~HangulHanjaConversionDialog( );
+        virtual ~HangulHanjaConversionDialog( );
 
     public:
         void    SetOptionsChangedHdl( const Link& _rHdl );
@@ -321,7 +321,7 @@ namespace svx
 
     public:
                         HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
-                        ~HangulHanjaEditDictDialog();
+                        virtual ~HangulHanjaEditDictDialog();
 
         void            UpdateScrollbar( void );
     };

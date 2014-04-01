@@ -50,7 +50,7 @@ public :
 
      PlaceEditDialog( Window* pParent);
      PlaceEditDialog(Window* pParent, const boost::shared_ptr<Place> &pPlace );
-     ~PlaceEditDialog();
+     virtual ~PlaceEditDialog();
 
      // Returns a place instance with given information
      boost::shared_ptr<Place> GetPlace();

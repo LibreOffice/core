@@ -68,7 +68,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
 
-    ~SwitchablePersistenceStream();
+    virtual ~SwitchablePersistenceStream();
 
     void SwitchPersistenceTo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 

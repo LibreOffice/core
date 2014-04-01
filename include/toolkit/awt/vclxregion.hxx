@@ -47,7 +47,7 @@ protected:
 
 public:
                     VCLXRegion();
-                    ~VCLXRegion();
+                    virtual ~VCLXRegion();
 
     void            SetRegion( const Region& rRegion )  { maRegion = rRegion; }
     const Region&   GetRegion() const                   { return maRegion; }

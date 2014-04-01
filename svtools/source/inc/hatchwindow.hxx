@@ -35,7 +35,7 @@ class VCLXHatchWindow : public ::com::sun::star::embed::XHatchWindow,
 
 public:
     VCLXHatchWindow();
-    ~VCLXHatchWindow();
+    virtual ~VCLXHatchWindow();
 
     void initializeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
                 const ::com::sun::star::awt::Rectangle& aBounds,

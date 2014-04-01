@@ -97,7 +97,7 @@ namespace svxform
         void SAL_CALL dispose();
 
     protected:
-        ~FormScriptListener();
+        virtual ~FormScriptListener();
 
     private:
         /** determines whether calling a given method at a given listener interface can be done asynchronously

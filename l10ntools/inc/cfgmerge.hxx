@@ -151,7 +151,7 @@ public:
         const OString &rOutputFile,
         const OString &rFilePath
     );
-    ~CfgExport();
+    virtual ~CfgExport();
 };
 
 /// Merge strings to *.xcu files
@@ -177,7 +177,7 @@ public:
     CfgMerge(
         const OString &rMergeSource, const OString &rOutputFile,
         const OString &rFilename, const OString &rLanguage );
-    ~CfgMerge();
+    virtual ~CfgMerge();
 };
 
 #endif

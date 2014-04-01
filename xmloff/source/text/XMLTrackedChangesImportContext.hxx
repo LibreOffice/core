@@ -44,7 +44,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName);
 
-    ~XMLTrackedChangesImportContext();
+    virtual ~XMLTrackedChangesImportContext();
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<

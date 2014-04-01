@@ -69,7 +69,7 @@ public:
     XMLVersionListImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions );
-    ~XMLVersionListImport() throw();
+    virtual ~XMLVersionListImport() throw();
 
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >&
         GetList() { return maVersions; }
@@ -88,7 +88,7 @@ public:
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    ~XMLVersionListContext();
+    virtual ~XMLVersionListContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
@@ -114,7 +114,7 @@ public:
                           const ::com::sun::star::uno::Reference<
                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    ~XMLVersionContext();
+    virtual ~XMLVersionContext();
 };
 
 class XMLVersionListPersistence : public ::cppu::WeakImplHelper1< ::com::sun::star::document::XDocumentRevisionListPersistence >

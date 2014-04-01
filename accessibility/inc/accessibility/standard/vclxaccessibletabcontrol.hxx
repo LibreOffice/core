@@ -62,7 +62,7 @@ protected:
 
 public:
     VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow );
-    ~VCLXAccessibleTabControl();
+    virtual ~VCLXAccessibleTabControl();
 
     // XInterface
     DECLARE_XINTERFACE()

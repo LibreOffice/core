@@ -28,7 +28,7 @@ namespace sd
 
         private:
             DiscoveryService();
-            ~DiscoveryService();
+            virtual ~DiscoveryService();
 
             /**
              * Networking related setup -- must be run within our own thread

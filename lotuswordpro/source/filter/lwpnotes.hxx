@@ -75,7 +75,7 @@ class LwpFribNote: public LwpFrib
 {
 public:
     LwpFribNote(LwpPara* pPara );
-    ~LwpFribNote(){}
+    virtual ~LwpFribNote(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);

@@ -31,7 +31,7 @@ public:
         sal_Int32 nNumberOfLines,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext );
-    ~ColumnLineDataInterpreter();
+    virtual ~ColumnLineDataInterpreter();
 
 protected:
     // ____ XDataInterpreter ____

@@ -102,7 +102,7 @@ class ExtensionRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::sta
 public:
 
     ExtensionRemovedListener( ExtensionBox_Impl *pParent ) { m_pParent = pParent; }
-   ~ExtensionRemovedListener();
+   virtual ~ExtensionRemovedListener();
 
 
     // XEventListener
@@ -181,7 +181,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 public:
                     ExtensionBox_Impl(Window* pParent);
                     ExtensionBox_Impl(Window* pParent, TheExtensionManager *pManager);
-                   ~ExtensionBox_Impl();
+                   virtual ~ExtensionBox_Impl();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;

@@ -39,7 +39,7 @@ protected:
 
 public:
     SvxRadioButtonListBox(SvSimpleTableContainer& rParent, WinBits nBits);
-    ~SvxRadioButtonListBox();
+    virtual ~SvxRadioButtonListBox();
 
     void                HandleEntryChecked( SvTreeListEntry* _pEntry );
 

@@ -47,7 +47,7 @@ class SfxPickList : public SfxListener
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > m_xStringLength;
 
                             SfxPickList( sal_uInt32 nMenuSize );
-                            ~SfxPickList();
+                            virtual ~SfxPickList();
 
     void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const OUString& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );

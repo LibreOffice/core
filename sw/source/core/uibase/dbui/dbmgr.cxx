@@ -211,7 +211,7 @@ class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 public:
     SwConnectionDisposedListener_Impl(SwNewDBMgr& rMgr);
-    ~SwConnectionDisposedListener_Impl();
+    virtual ~SwConnectionDisposedListener_Impl();
 
 };
 

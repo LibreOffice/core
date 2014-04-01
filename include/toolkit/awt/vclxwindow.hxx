@@ -126,7 +126,7 @@ protected:
 
 public:
     VCLXWindow( bool bWithDefaultProps = false );
-    ~VCLXWindow();
+    virtual ~VCLXWindow();
 
     virtual void    SetWindow( Window* pWindow );
     Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }

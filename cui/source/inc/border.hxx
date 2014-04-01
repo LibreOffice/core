@@ -58,7 +58,7 @@ protected:
 
 private:
     SvxBorderTabPage( Window* pParent, const SfxItemSet& rCoreAttrs );
-    ~SvxBorderTabPage();
+    virtual ~SvxBorderTabPage();
 
     // Controls
     ValueSet*           m_pWndPresets;

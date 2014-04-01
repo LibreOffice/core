@@ -67,7 +67,7 @@ public:
         </ul>
 
     */
-    ~SvtDocumentTemplateDialog();
+    virtual ~SvtDocumentTemplateDialog();
 
     void        SelectTemplateFolder();
 

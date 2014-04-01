@@ -40,7 +40,7 @@ public:
     SFX_DECL_STATUSBAR_CONTROL();
 
     SvxZoomSliderControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& _rStb );
-    ~SvxZoomSliderControl();
+    virtual ~SvxZoomSliderControl();
 
     virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual void  Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;

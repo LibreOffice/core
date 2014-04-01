@@ -143,7 +143,7 @@ public:
                                             , pController(0)
                                         {}
 
-                                        ~BibFrameCtrl_Impl();
+                                        virtual ~BibFrameCtrl_Impl();
 
     virtual void                        SAL_CALL frameAction(const FrameActionEvent& aEvent) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void                        SAL_CALL disposing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

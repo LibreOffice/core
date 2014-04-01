@@ -36,7 +36,7 @@ public:
 
 private:
             ScDocStatPage( Window *pParent, const SfxItemSet& rSet );
-            ~ScDocStatPage();
+            virtual ~ScDocStatPage();
 
 protected:
     virtual bool    FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;

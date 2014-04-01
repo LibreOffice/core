@@ -32,7 +32,7 @@ class CancellableJob : public ::cppu::WeakImplHelper1<com::sun::star::util::XCan
 {
 public:
     explicit CancellableJob( const ::rtl::Reference< ObservableThread >& rThread );
-    ~CancellableJob() {}
+    virtual ~CancellableJob() {}
 
     // ::com::sun::star::util::XCancellable:
     virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

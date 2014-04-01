@@ -73,7 +73,7 @@ class ClientRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::
 public:
 
     ClientRemovedListener( ClientBox *pParent ) { m_pParent = pParent; }
-   ~ClientRemovedListener();
+   virtual ~ClientRemovedListener();
 
 
     // XEventListener
@@ -135,7 +135,7 @@ class ClientBox:
 
 public:
                     ClientBox( Window* pParent, WinBits nStyle );
-                   ~ClientBox();
+                   virtual ~ClientBox();
 
     void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;

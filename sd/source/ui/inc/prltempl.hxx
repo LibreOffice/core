@@ -87,7 +87,7 @@ private:
 
 public:
     SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
-    ~SdPresLayoutTemplateDlg();
+    virtual ~SdPresLayoutTemplateDlg();
 
     const SfxItemSet* GetOutputItemSet() const;
 };

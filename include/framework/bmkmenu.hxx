@@ -48,7 +48,7 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
                  BmkMenuType nType
         );
 
-        ~BmkMenu();
+        virtual ~BmkMenu();
 
         void Initialize(); // Synchrones Laden der Eintraege
 

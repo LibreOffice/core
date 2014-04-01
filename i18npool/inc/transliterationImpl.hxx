@@ -46,7 +46,7 @@ public:
     // Constructors
     TransliterationImpl(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& xContext);
     // Destructor
-    ~TransliterationImpl();
+    virtual ~TransliterationImpl();
 
     // Methods
     virtual OUString SAL_CALL getName(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;

@@ -57,7 +57,7 @@ private:
 public:
 
     SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
-    ~SfxNewFileDialog();
+    virtual ~SfxNewFileDialog();
 
     // Returns false, when '- No -' is set as Template
     // Template names can only be obtained when IsTemplate() returns true.

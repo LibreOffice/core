@@ -31,7 +31,7 @@ class BreakIterator_CTL : public BreakIterator_Unicode
 {
 public:
     BreakIterator_CTL();
-    ~BreakIterator_CTL();
+    virtual ~BreakIterator_CTL();
     virtual sal_Int32 SAL_CALL previousCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

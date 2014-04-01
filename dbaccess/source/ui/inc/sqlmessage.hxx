@@ -89,7 +89,7 @@ public:
                 MessageType _eType = Info,
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 
-    ~OSQLMessageBox();
+    virtual ~OSQLMessageBox();
 
 private:
     void Construct( WinBits nStyle, MessageType eImage );

@@ -220,7 +220,7 @@ class ODatabaseForm :public OFormComponents
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
     ODatabaseForm( const ODatabaseForm& _cloneSource );
-    ~ODatabaseForm();
+    virtual ~ODatabaseForm();
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(ODatabaseForm, OFormComponents);

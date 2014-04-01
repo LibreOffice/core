@@ -61,7 +61,7 @@ private:
 
 public:
     PageBordersHandler( );
-    ~PageBordersHandler( );
+    virtual ~PageBordersHandler( );
 
     inline sal_Int32 GetDisplayOffset( )
     {

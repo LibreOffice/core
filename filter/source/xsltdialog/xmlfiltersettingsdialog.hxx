@@ -49,7 +49,7 @@ public:
     SvxPathControl(Window* pParent);
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
-    ~SvxPathControl();
+    virtual ~SvxPathControl();
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };

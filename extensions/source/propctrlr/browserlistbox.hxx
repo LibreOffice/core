@@ -124,7 +124,7 @@ namespace pcr
     public:
                                     OBrowserListBox( Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
 
-                                    ~OBrowserListBox();
+                                    virtual ~OBrowserListBox();
 
         void                        UpdateAll();
 

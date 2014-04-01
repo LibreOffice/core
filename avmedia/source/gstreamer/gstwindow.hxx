@@ -40,7 +40,7 @@ public:
 
             Window( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr,
                     Player& rPlayer );
-            ~Window();
+            virtual ~Window();
 
     bool    create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
     void    processGraphEvent();

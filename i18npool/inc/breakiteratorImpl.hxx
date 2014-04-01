@@ -48,7 +48,7 @@ class BreakIteratorImpl : public cppu::WeakImplHelper2
 public:
     BreakIteratorImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     BreakIteratorImpl();
-    ~BreakIteratorImpl();
+    virtual ~BreakIteratorImpl();
 
     virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,

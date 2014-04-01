@@ -156,7 +156,7 @@ public:
 
     ScAddress       aPos;
 
-                    ~ScFormulaCell();
+                    virtual ~ScFormulaCell();
 
     ScFormulaCell* Clone() const;
 

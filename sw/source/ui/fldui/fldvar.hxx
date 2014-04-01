@@ -92,7 +92,7 @@ protected:
 public:
                         SwFldVarPage(Window* pParent, const SfxItemSet& rSet);
 
-                        ~SwFldVarPage();
+                        virtual ~SwFldVarPage();
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 

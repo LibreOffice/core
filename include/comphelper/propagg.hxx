@@ -256,7 +256,7 @@ public:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw ( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
 protected:
-    ~OPropertySetAggregationHelper();
+    virtual ~OPropertySetAggregationHelper();
 
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
     void disposing();

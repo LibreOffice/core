@@ -47,7 +47,7 @@ protected:
 
 public:
     VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow );
-    ~VCLXAccessibleTabPageWindow();
+    virtual ~VCLXAccessibleTabPageWindow();
 
     // XAccessibleContext
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

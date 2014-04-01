@@ -62,7 +62,7 @@ protected:
 
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
-    ~AnnotationTextWindow();
+    virtual ~AnnotationTextWindow();
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
 

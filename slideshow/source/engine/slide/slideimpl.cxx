@@ -107,7 +107,7 @@ public:
                bool                                              bIntrinsicAnimationsAllowed,
                bool                                              bDisableAnimationZOrder );
 
-    ~SlideImpl();
+    virtual ~SlideImpl();
 
 
     // Disposable interface

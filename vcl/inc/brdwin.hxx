@@ -122,7 +122,7 @@ public:
                                               sal_uInt16 nTypeStyle = 0 );
                             ImplBorderWindow( Window* pParent, WinBits nStyle = 0,
                                               sal_uInt16 nTypeStyle = 0 );
-                            ~ImplBorderWindow();
+                            virtual ~ImplBorderWindow();
 
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -281,7 +281,7 @@ class ImplStdBorderWindowView : public ImplBorderWindowView
 
 public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
-                            ~ImplStdBorderWindowView();
+                            virtual ~ImplStdBorderWindowView();
 
     virtual bool        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

@@ -110,7 +110,7 @@ private:
 
 public:
     FwkTabWindow( Window* pParent );
-    ~FwkTabWindow();
+    virtual ~FwkTabWindow();
 
     void            AddEventListener( const Link& rEventListener );
     void            RemoveEventListener( const Link& rEventListener );

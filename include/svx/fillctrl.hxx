@@ -60,7 +60,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFillToolBoxControl();
+    virtual ~SvxFillToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -87,7 +87,7 @@ private:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
     FillControl( Window* pParent, WinBits nStyle = 0 );
-    ~FillControl();
+    virtual ~FillControl();
 
     virtual void Resize() SAL_OVERRIDE;
 };

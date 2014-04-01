@@ -107,7 +107,7 @@ class LwpRowList : public LwpDLVList
 {
 public:
     LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpRowList();
+    virtual ~LwpRowList();
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetChildHeadID(){return *cChild.GetHead();}
@@ -127,7 +127,7 @@ class LwpNumericValue : public LwpObject
 {
 public:
     LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpNumericValue();
+    virtual ~LwpNumericValue();
 
     double GetValue(){return cNumber;}
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
@@ -145,7 +145,7 @@ class LwpTableRange: public LwpDLVList
 {
 public:
     LwpTableRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpTableRange();
+    virtual ~LwpTableRange();
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetCellRangeID(){return cpCellRange;}
@@ -164,7 +164,7 @@ class LwpCellRange: public LwpObject
 {
 public:
     LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpCellRange();
+    virtual ~LwpCellRange();
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetFolderID(){return cpFolder;}
@@ -180,7 +180,7 @@ class LwpFolder: public LwpDLVList
 {
 public:
     LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpFolder();
+    virtual ~LwpFolder();
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetChildHeadID(){ return *cChild.GetHead();}
@@ -198,7 +198,7 @@ class LwpDependent: public LwpDLVList
 {
 public:
     LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpDependent();
+    virtual ~LwpDependent();
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
 protected:

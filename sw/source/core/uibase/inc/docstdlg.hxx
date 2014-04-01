@@ -33,7 +33,7 @@ class SwDocStatPage: public SfxTabPage
 {
 public:
     SwDocStatPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwDocStatPage();
+    virtual ~SwDocStatPage();
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 

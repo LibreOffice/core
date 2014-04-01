@@ -65,7 +65,7 @@ namespace svt
             const TabAlignment i_eAlignment,
             const TabItemContent i_eItemContent
         );
-        ~TabDeckLayouter();
+        virtual ~TabDeckLayouter();
 
         // attribute access
         TabItemContent  GetTabItemContent() const;

@@ -117,7 +117,7 @@ public:
 
     DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                     OCommonEmbeddedObject* pEmbObj );
-    ~DocumentHolder();
+    virtual ~DocumentHolder();
 
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 

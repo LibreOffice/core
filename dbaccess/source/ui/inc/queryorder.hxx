@@ -84,7 +84,7 @@ namespace dbaui
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);
 
-                        ~DlgOrderCrit();
+                        virtual ~DlgOrderCrit();
         void            BuildOrderPart();
 
         OUString GetOrderList( ) const;

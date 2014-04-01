@@ -40,7 +40,7 @@ class OMarkableTreeListBox : public DBTreeListBox
 public:
     OMarkableTreeListBox( Window* pParent, WinBits nWinStyle=0 );
     OMarkableTreeListBox( Window* pParent, const ResId& rResId );
-    ~OMarkableTreeListBox();
+    virtual ~OMarkableTreeListBox();
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    CheckButtonHdl() SAL_OVERRIDE;

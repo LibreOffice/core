@@ -108,7 +108,7 @@ class LwpDivisionOptions : public LwpObject
 {
 public:
     LwpDivisionOptions(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpDivisionOptions();
+    virtual ~LwpDivisionOptions();
 protected:
     void Read() SAL_OVERRIDE;
 private:

@@ -174,7 +174,7 @@ protected:
     void            SetWindowStateData( const WindowStateData& rData );
 
 public:
-                    ~SystemWindow();
+                    virtual ~SystemWindow();
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

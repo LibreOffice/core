@@ -49,7 +49,7 @@ class SC_DLLPUBLIC ScAutoFmtPreview : public Window
 public:
     ScAutoFmtPreview(Window* pParent);
     void DetectRTL(ScViewData *pViewData);
-    ~ScAutoFmtPreview();
+    virtual ~ScAutoFmtPreview();
 
     void NotifyChange( ScAutoFormatData* pNewData );
 

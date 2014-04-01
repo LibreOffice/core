@@ -48,7 +48,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    ~XMLIndexBodyContext();
+    virtual ~XMLIndexBodyContext();
 
     /// return whether any content elements were encountered
     inline sal_Bool HasContent();

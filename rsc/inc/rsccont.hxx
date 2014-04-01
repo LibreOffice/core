@@ -58,7 +58,7 @@ public:
                     RscBaseCont( Atom nId, sal_uInt32 nTypId,
                                  RscTop * pSuper = NULL,
                                  bool bNoId = true );
-                    ~RscBaseCont();
+                    virtual ~RscBaseCont();
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     void            SetTypeClass( RscTop * pClass, RscTop * pClass1 = NULL )
                         {

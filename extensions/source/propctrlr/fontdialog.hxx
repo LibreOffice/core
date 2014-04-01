@@ -36,7 +36,7 @@ namespace pcr
     {
     public:
         ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet);
-        ~ControlCharacterDialog();
+        virtual ~ControlCharacterDialog();
 
         /// creates an item set to be used with this dialog
         static SfxItemSet*  createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults);

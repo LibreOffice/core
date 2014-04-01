@@ -110,7 +110,7 @@ protected:
 
 public:
     AccessibleDialogWindow (basctl::DialogWindow*);
-    ~AccessibleDialogWindow();
+    virtual ~AccessibleDialogWindow();
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

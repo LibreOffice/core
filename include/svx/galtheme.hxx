@@ -129,7 +129,7 @@ private:
 
                                 GalleryTheme();
                                 GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
-                                ~GalleryTheme();
+                                virtual ~GalleryTheme();
 
 public:
 

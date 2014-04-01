@@ -213,7 +213,7 @@ class EventAttacherImpl : public WeakImplHelper3 < XEventAttacher2, XInitializat
 {
 public:
     EventAttacherImpl( const Reference< XComponentContext >& );
-    ~EventAttacherImpl();
+    virtual ~EventAttacherImpl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

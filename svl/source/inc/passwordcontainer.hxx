@@ -296,7 +296,7 @@ bool createUrlRecord(
 
 public:
     PasswordContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
-    ~PasswordContainer();
+    virtual ~PasswordContainer();
 
     virtual void SAL_CALL add( const OUString& aUrl,
                                const OUString& aUserName,

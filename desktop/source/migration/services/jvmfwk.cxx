@@ -197,7 +197,7 @@ public:
 
 
 
-    ~JavaMigration();
+    virtual ~JavaMigration();
 
 private:
     OUString m_sUserDir;

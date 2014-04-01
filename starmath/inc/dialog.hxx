@@ -222,7 +222,7 @@ class SmDistanceDialog : public ModalDialog
 
 public:
     SmDistanceDialog(Window *pParent);
-    ~SmDistanceDialog();
+    virtual ~SmDistanceDialog();
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) /*const*/;
@@ -455,7 +455,7 @@ class SmSymDefineDialog : public ModalDialog
 
 public:
     SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
-    ~SmSymDefineDialog();
+    virtual ~SmSymDefineDialog();
 
     using OutputDevice::SetFont;
 

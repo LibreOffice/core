@@ -64,7 +64,7 @@ private:
 
 public:
     CertificateChooser( Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
-    ~CertificateChooser();
+    virtual ~CertificateChooser();
 
     short Execute() SAL_OVERRIDE;
 

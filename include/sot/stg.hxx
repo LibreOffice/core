@@ -154,7 +154,7 @@ class StorageStream : public BaseStorageStream, public OLEStorageBase
 //friend class Storage;
     sal_uLong           nPos;                             // current position
 protected:
-                        ~StorageStream();
+                        virtual ~StorageStream();
 public:
                         TYPEINFO_OVERRIDE();
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
@@ -183,7 +183,7 @@ class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
     void                        Init( bool bCreate );
                                 Storage( StgIo*, StgDirEntry*, StreamMode );
 protected:
-                                ~Storage();
+                                virtual ~Storage();
 public:
                                 TYPEINFO_OVERRIDE();
                                 Storage( const OUString &, StreamMode = STREAM_STD_READWRITE, bool bDirect = true );
@@ -247,7 +247,7 @@ friend class UCBStorage;
     UCBStorageStream_Impl*
             pImp;
 protected:
-                                ~UCBStorageStream();
+                                virtual ~UCBStorageStream();
 public:
                                 TYPEINFO_OVERRIDE();
                                 UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
@@ -284,7 +284,7 @@ class SOT_DLLPUBLIC UCBStorage : public BaseStorage
     UCBStorage_Impl*            pImp;
 
 protected:
-                                ~UCBStorage();
+                                virtual ~UCBStorage();
 public:
     static bool                 IsStorageFile( SvStream* );
     static bool                 IsDiskSpannedFile( SvStream* );

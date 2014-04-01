@@ -84,7 +84,7 @@ public:
                         TabControl( Window* pParent,
                                     WinBits nStyle = WB_STDTABCONTROL );
                         TabControl( Window* pParent, const ResId& rResId );
-                        ~TabControl();
+                        virtual ~TabControl();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

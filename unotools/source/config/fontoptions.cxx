@@ -50,7 +50,7 @@ class SvtFontOptions_Impl : public ConfigItem
     public:
 
          SvtFontOptions_Impl();
-        ~SvtFontOptions_Impl();
+        virtual ~SvtFontOptions_Impl();
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

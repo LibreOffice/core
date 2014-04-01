@@ -40,7 +40,7 @@ class SwFldEditDlg : public SfxSingleTabDialog
 public:
 
      SwFldEditDlg(SwView& rVw);
-    ~SwFldEditDlg();
+    virtual ~SwFldEditDlg();
 
     DECL_LINK(OKHdl, void *);
 

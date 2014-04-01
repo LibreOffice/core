@@ -47,7 +47,7 @@ class ScRedlineOptionsTabPage : public SfxTabPage
 public:
 
     ScRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~ScRedlineOptionsTabPage();
+    virtual ~ScRedlineOptionsTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 

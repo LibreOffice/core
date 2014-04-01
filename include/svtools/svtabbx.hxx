@@ -65,7 +65,7 @@ protected:
 public:
     SvTabListBox( Window* pParent, WinBits = WB_BORDER );
     SvTabListBox( Window* pParent, const ResId& );
-    ~SvTabListBox();
+    virtual ~SvTabListBox();
     void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
     sal_uInt16          TabCount() const { return (sal_uInt16)nTabCount; }
     using SvTreeListBox::GetTab;
@@ -140,7 +140,7 @@ private:
 
 public:
     SvHeaderTabListBox( Window* pParent, WinBits nBits );
-    ~SvHeaderTabListBox();
+    virtual ~SvHeaderTabListBox();
 
     virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
 

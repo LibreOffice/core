@@ -47,7 +47,7 @@ public:
     SvXMLAttributeList( const SvXMLAttributeList& );
     SvXMLAttributeList( const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & rAttrList );
-    ~SvXMLAttributeList();
+    virtual ~SvXMLAttributeList();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static SvXMLAttributeList* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ) throw();

@@ -884,7 +884,7 @@ public:
         , m_nLevel(0)
     {
     }
-    ~SAXWriter()
+    virtual ~SAXWriter()
     {
         delete m_pSaxWriterHelper;
     }

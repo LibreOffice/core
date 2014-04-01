@@ -85,7 +85,7 @@ class LwpDocument : public LwpDLNFPVList
 {
 public:
     LwpDocument(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpDocument();
+    virtual ~LwpDocument();
 
 private:
     LwpFoundry* m_pOwnedFoundry;
@@ -226,7 +226,7 @@ class LwpDocSock : public LwpDLNFVList
 {
 public:
     LwpDocSock(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpDocSock(){}
+    virtual ~LwpDocSock(){}
 private:
     LwpObjectID m_Doc;
 protected:

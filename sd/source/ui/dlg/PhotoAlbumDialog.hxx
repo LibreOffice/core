@@ -45,7 +45,7 @@ class SdPhotoAlbumDialog : public ModalDialog
 {
 public:
     SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc);
-    ~SdPhotoAlbumDialog();
+    virtual ~SdPhotoAlbumDialog();
 
     virtual short Execute() SAL_OVERRIDE;
 

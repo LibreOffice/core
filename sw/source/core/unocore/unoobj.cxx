@@ -689,7 +689,7 @@ public:
         }
     }
 
-    ~Impl() {
+    virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
         delete GetRegisteredIn();
     }

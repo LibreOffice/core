@@ -43,7 +43,7 @@ namespace dbaui
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
         OTableBorderWindow(Window* pParent);
-        ~OTableBorderWindow();
+        virtual ~OTableBorderWindow();
         // window overloads
         virtual void Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;

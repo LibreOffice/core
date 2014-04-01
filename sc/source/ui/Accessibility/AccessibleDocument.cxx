@@ -254,7 +254,7 @@ class ScChildrenShapes : public SfxListener,
 {
 public:
     ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
-    ~ScChildrenShapes();
+    virtual ~ScChildrenShapes();
 
     ///=====  SfxListener  =====================================================
 

@@ -84,7 +84,7 @@ public:
                         const OUString& rData,
                         const Link& rNotifyEditEnd );
 
-                    ~IcnViewEdit_Impl();
+                    virtual ~IcnViewEdit_Impl();
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     sal_Bool            EditingCanceled() const { return bCanceled; }

@@ -513,7 +513,7 @@ public:
     ScIAccessibleViewForwarder(ScPreviewShell* pViewShell,
                                 ScAccessibleDocumentPagePreview* pAccDoc,
                                 const MapMode& aMapMode);
-    ~ScIAccessibleViewForwarder();
+    virtual ~ScIAccessibleViewForwarder();
 
     ///=====  IAccessibleViewForwarder  ========================================
 
@@ -684,7 +684,7 @@ class ScShapeChildren : public SfxListener,
 {
 public:
     ScShapeChildren(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc);
-    ~ScShapeChildren();
+    virtual ~ScShapeChildren();
 
     ///=====  SfxListener  =====================================================
 

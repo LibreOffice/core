@@ -25,7 +25,7 @@ class TryLaterQueryBox : public MessBox
 {
 public:
     TryLaterQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage );
-    ~TryLaterQueryBox();
+    virtual ~TryLaterQueryBox();
 };
 
 #endif

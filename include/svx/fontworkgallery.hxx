@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     FontWorkShapeTypeControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~FontWorkShapeTypeControl();
+    virtual ~FontWorkShapeTypeControl();
 
     virtual void                Select( sal_Bool bMod1 = sal_False );
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
@@ -100,7 +100,7 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 
 public:
     FontWorkGalleryDialog( SdrView* pView, Window* pParent, sal_uInt16 nSID );
-    ~FontWorkGalleryDialog();
+    virtual ~FontWorkGalleryDialog();
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
     void SetSdrObjectRef( SdrObject**, SdrModel* pModel );

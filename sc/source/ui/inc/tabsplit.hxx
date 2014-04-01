@@ -40,7 +40,7 @@ protected:
 public:
                     ScTabSplitter( Window* pParent, WinBits nWinStyle,
                                     ScViewData* pData );
-                    ~ScTabSplitter();
+                    virtual ~ScTabSplitter();
 
     void            SetFixed(bool bSet);
     virtual void    Paint( const Rectangle& rPaintRect ) SAL_OVERRIDE;

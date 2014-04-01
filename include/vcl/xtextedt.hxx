@@ -37,7 +37,7 @@ private:
 
 public:
                         ExtTextEngine();
-                        ~ExtTextEngine();
+                        virtual ~ExtTextEngine();
 
     const OUString&     GetGroupChars() const { return maGroupChars; }
     void                SetGroupChars( const OUString& r ) { maGroupChars = r; }
@@ -53,7 +53,7 @@ protected:
 
 public:
                         ExtTextView( ExtTextEngine* pEng, Window* pWindow );
-                        ~ExtTextView();
+                        virtual ~ExtTextView();
 
     bool            MatchGroup();
 

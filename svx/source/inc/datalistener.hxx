@@ -45,7 +45,7 @@ namespace svxform
         DataListener( DataNavigatorWindow* pNaviWin );
 
     protected:
-        ~DataListener();
+        virtual ~DataListener();
 
     public:
         // XContainerListener

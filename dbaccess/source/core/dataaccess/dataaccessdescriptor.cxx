@@ -89,7 +89,7 @@ namespace dbaccess
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~DataAccessDescriptor();
+        virtual ~DataAccessDescriptor();
 
     protected:
         // XPropertySet
@@ -234,7 +234,7 @@ namespace dbaccess
 
     protected:
         DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext );
-        ~DataAccessDescriptorFactory();
+        virtual ~DataAccessDescriptorFactory();
 
     private:
         Reference<XComponentContext>  m_xContext;

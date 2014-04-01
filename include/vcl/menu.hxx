@@ -384,7 +384,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
 public:
                         MenuBar();
                         MenuBar( const MenuBar& rMenu );
-                        ~MenuBar();
+                        virtual ~MenuBar();
 
     MenuBar&            operator =( const MenuBar& rMenu );
 

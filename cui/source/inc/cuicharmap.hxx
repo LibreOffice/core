@@ -41,7 +41,7 @@ class SvxShowText : public Control
 public:
                     SvxShowText( Window* pParent,
                                  sal_Bool bCenter = sal_False );
-                    ~SvxShowText();
+                    virtual ~SvxShowText();
 
     void            SetFont( const Font& rFont );
     void            SetText( const OUString& rText ) SAL_OVERRIDE;
@@ -98,7 +98,7 @@ private:
 
 public:
                     SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
-                    ~SvxCharacterMap();
+                    virtual ~SvxCharacterMap();
 
     void            DisableFontSelection();
 

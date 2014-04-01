@@ -89,7 +89,7 @@ namespace dbaccess
         ) SAL_OVERRIDE;
 
     private:
-        ~IgnoringSettingsImport()
+        virtual ~IgnoringSettingsImport()
         {
         }
     };
@@ -106,7 +106,7 @@ namespace dbaccess
         ) SAL_OVERRIDE;
 
     protected:
-        ~OfficeSettingsImport();
+        virtual ~OfficeSettingsImport();
 
     private:
         // the settings collection to which |this| will contribute a single setting
@@ -120,7 +120,7 @@ namespace dbaccess
         ConfigItemImport( ::comphelper::NamedValueCollection& o_rSettings );
 
     protected:
-        ~ConfigItemImport();
+        virtual ~ConfigItemImport();
 
     public:
         // SettingsImport overridables
@@ -146,7 +146,7 @@ namespace dbaccess
         ConfigItemSetImport( ::comphelper::NamedValueCollection& o_rSettings );
 
     protected:
-        ~ConfigItemSetImport();
+        virtual ~ConfigItemSetImport();
 
     public:
         // SettingsImport overridables

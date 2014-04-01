@@ -76,7 +76,7 @@ private:
 
 public:
     PresLayoutPreview( ::Window* pParent );
-    ~PresLayoutPreview();
+    virtual ~PresLayoutPreview();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -160,7 +160,7 @@ private:
 
 public:
     HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
-    ~HeaderFooterTabPage();
+    virtual ~HeaderFooterTabPage();
 
     static  SfxTabPage* Create( ::Window*, const SfxItemSet& );
     static  sal_uInt16*    GetRanges();

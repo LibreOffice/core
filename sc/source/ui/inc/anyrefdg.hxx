@@ -211,7 +211,7 @@ private:
     template<class TParentWindow, class TArg>
     ScRefHdlrImplBase( TParentWindow* pParent, const OString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = NULL );
 
-    ~ScRefHdlrImplBase();
+    virtual ~ScRefHdlrImplBase();
 
     template<class, class, bool> friend struct ScRefHdlrImpl;
 };

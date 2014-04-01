@@ -182,7 +182,7 @@ protected:
 public:
     SvxPixelCtl( Window* pParent, sal_uInt16 nNumber = 8 );
 
-    ~SvxPixelCtl();
+    virtual ~SvxPixelCtl();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

@@ -179,7 +179,7 @@ protected:
         OUString            RemoveNewline(const OUString&);
 public:
         SwContentType(SwWrtShell* pParent, sal_uInt16 nType, sal_uInt8 nLevel );
-        ~SwContentType();
+        virtual ~SwContentType();
 
         void                Init(sal_Bool* pbInvalidateWindow = 0);
         void                FillMemberList(sal_Bool* pbLevelChanged = NULL);

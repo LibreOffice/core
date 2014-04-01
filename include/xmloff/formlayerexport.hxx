@@ -58,7 +58,7 @@ namespace xmloff
         OFormLayerXMLExport_Impl*   m_pImpl;
 
     protected:
-        ~OFormLayerXMLExport();
+        virtual ~OFormLayerXMLExport();
 
     public:
         OFormLayerXMLExport(SvXMLExport& _rContext);

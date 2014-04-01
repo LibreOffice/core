@@ -252,7 +252,7 @@ public:
             RuntimeException
         );
 
-    ~Moderator();
+    virtual ~Moderator();
 
 
     enum ResultType {
@@ -373,7 +373,7 @@ public:
 
     ModeratorsActiveDataStreamer(Moderator &theModerator);
 
-    ~ModeratorsActiveDataStreamer();
+    virtual ~ModeratorsActiveDataStreamer();
 
     // XActiveDataStreamer
     virtual void SAL_CALL
@@ -411,7 +411,7 @@ public:
 
     ModeratorsActiveDataSink(Moderator &theModerator);
 
-    ~ModeratorsActiveDataSink();
+    virtual ~ModeratorsActiveDataSink();
 
     // XActiveDataSink.
     virtual void SAL_CALL
@@ -502,7 +502,7 @@ public:
 
     ModeratorsInteractionHandler(Moderator &theModerator);
 
-    ~ModeratorsInteractionHandler();
+    virtual ~ModeratorsInteractionHandler();
 
     virtual void SAL_CALL
     handle( const Reference<XInteractionRequest >& Request )
@@ -520,7 +520,7 @@ class ModeratorsProgressHandler
 public:
     ModeratorsProgressHandler(Moderator &theModerator);
 
-    ~ModeratorsProgressHandler();
+    virtual ~ModeratorsProgressHandler();
 
     virtual void SAL_CALL push( const Any& Status )
         throw (

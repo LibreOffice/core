@@ -129,7 +129,7 @@ public:
                 SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pGlobalFact );
 
-    ~SwModule();
+    virtual ~SwModule();
 
     // Set view for internal use only. It is public only for technical reasons.
     inline  void        SetView(SwView* pVw) { pView = pVw; }

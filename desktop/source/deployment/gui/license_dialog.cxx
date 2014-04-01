@@ -56,7 +56,7 @@ class LicenseView : public MultiLineEdit, public SfxListener
 
 public:
     LicenseView( Window* pParent, WinBits nStyle );
-    ~LicenseView();
+    virtual ~LicenseView();
 
     void ScrollDown( ScrollType eScroll );
 

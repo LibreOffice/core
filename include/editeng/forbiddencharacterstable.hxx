@@ -43,7 +43,7 @@ private:
 
 public:
     SvxForbiddenCharactersTable( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-    ~SvxForbiddenCharactersTable() {}
+    virtual ~SvxForbiddenCharactersTable() {}
 
     Map& GetMap() { return maMap; }
     const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault );

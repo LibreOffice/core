@@ -79,7 +79,7 @@ public:
                                           SfxChildWindow *pCW,
                                           Window* pParent,
                                           const ResId& rResId);
-                        ~SfxDockingWindow();
+                        virtual ~SfxDockingWindow();
 
     void                Initialize (SfxChildWinInfo* pInfo);
     virtual void        FillInfo(SfxChildWinInfo&) const;

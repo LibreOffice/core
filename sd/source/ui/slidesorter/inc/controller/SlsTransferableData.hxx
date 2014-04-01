@@ -67,7 +67,7 @@ public:
     TransferableData (
         SlideSorterViewShell* pViewShell,
         const ::std::vector<TransferableData::Representative>& rRepresentatives);
-    ~TransferableData (void);
+    virtual ~TransferableData (void);
 
     virtual void DragFinished (sal_Int8 nDropAction);
 

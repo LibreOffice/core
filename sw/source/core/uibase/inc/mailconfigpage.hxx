@@ -56,7 +56,7 @@ class SwMailConfigPage : public SfxTabPage
 
 public:
     SwMailConfigPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwMailConfigPage();
+    virtual ~SwMailConfigPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

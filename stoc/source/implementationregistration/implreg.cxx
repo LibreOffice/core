@@ -1209,7 +1209,7 @@ class ImplementationRegistration
 {
 public:
     ImplementationRegistration( const Reference < XComponentContext > & rSMgr );
-    ~ImplementationRegistration();
+    virtual ~ImplementationRegistration();
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;

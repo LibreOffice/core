@@ -54,7 +54,7 @@ namespace frm
             ITextSelectionListener* _pSelectionListener
         );
 
-        ~RichTextControl( );
+        virtual ~RichTextControl( );
 
         /* enables the change notifications for a particular attribute
 

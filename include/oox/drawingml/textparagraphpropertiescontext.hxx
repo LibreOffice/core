@@ -36,7 +36,7 @@ public:
     TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
             const ::oox::AttributeList& rAttributes,
             TextParagraphProperties& rTextParagraphProperties );
-    ~TextParagraphPropertiesContext();
+    virtual ~TextParagraphPropertiesContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

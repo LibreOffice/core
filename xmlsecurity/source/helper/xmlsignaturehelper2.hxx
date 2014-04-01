@@ -55,7 +55,7 @@ private:
 
 public:
     ImplXMLSignatureListener( const Link& rCreationResultListenerListener, const Link rVerifyResultListenerListener, const Link rStartVerifySignatureElement );
-    ~ImplXMLSignatureListener();
+    virtual ~ImplXMLSignatureListener();
 
     void setNextHandler(com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler > xNextHandler);

@@ -40,7 +40,7 @@ class BASIC_DLLPUBLIC SbStdPicture : public SbxObject
 protected:
     Graphic     aGraphic;
 
-   ~SbStdPicture();
+   virtual ~SbStdPicture();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
@@ -69,7 +69,7 @@ protected:
     sal_uInt16  nSize;
     OUString  aName;
 
-   ~SbStdFont();
+   virtual ~SbStdFont();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
@@ -105,7 +105,7 @@ class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
 {
 protected:
 
-   ~SbStdClipboard();
+   virtual ~SbStdClipboard();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 

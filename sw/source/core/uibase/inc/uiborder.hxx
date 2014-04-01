@@ -33,7 +33,7 @@ public:
      // SW_BORDER_MODE_FRAME
 
      SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType);
-    ~SwBorderDlg();
+    virtual ~SwBorderDlg();
 };
 
 #endif

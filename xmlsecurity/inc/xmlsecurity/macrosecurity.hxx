@@ -139,7 +139,7 @@ private:
 
 public:
     MacroSecurityTrustedSourcesTP(Window* pParent, MacroSecurity* _pDlg);
-    ~MacroSecurityTrustedSourcesTP();
+    virtual ~MacroSecurityTrustedSourcesTP();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual void        ClosePage( void ) SAL_OVERRIDE;

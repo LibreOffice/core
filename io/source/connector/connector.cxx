@@ -54,7 +54,7 @@ namespace stoc_connector
         Reference< XComponentContext > _xCtx;
     public:
         OConnector(const Reference< XComponentContext > &xCtx);
-        ~OConnector();
+        virtual ~OConnector();
         // Methods
         virtual Reference< XConnection > SAL_CALL connect(
             const OUString& sConnectionDescription )

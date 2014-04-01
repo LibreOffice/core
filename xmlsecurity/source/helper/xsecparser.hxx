@@ -104,7 +104,7 @@ public:
     XSecParser( XSecController* pXSecController,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xNextHandler );
-    ~XSecParser(){};
+    virtual ~XSecParser(){};
 
     /*
      * XDocumentHandler

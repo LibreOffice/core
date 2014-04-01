@@ -84,7 +84,7 @@ public:
                     ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                ScViewData*      ptrViewData);
 
-                    ~ScHighlightChgDlg();
+                    virtual ~ScHighlightChgDlg();
 
     virtual void    SetActive() SAL_OVERRIDE;
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;

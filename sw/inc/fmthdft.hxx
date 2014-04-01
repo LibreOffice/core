@@ -39,7 +39,7 @@ public:
     SwFmtHeader( sal_Bool bOn = sal_False );
     SwFmtHeader( SwFrmFmt *pHeaderFmt );
     SwFmtHeader( const SwFmtHeader &rCpy );
-    ~SwFmtHeader();
+    virtual ~SwFmtHeader();
     SwFmtHeader& operator=( const SwFmtHeader &rCpy );
 
     TYPEINFO_OVERRIDE();
@@ -72,7 +72,7 @@ public:
     SwFmtFooter( sal_Bool bOn = sal_False );
     SwFmtFooter( SwFrmFmt *pFooterFmt );
     SwFmtFooter( const SwFmtFooter &rCpy );
-    ~SwFmtFooter();
+    virtual ~SwFmtFooter();
     SwFmtFooter& operator=( const SwFmtFooter &rCpy );
 
     TYPEINFO_OVERRIDE();

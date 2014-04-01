@@ -530,7 +530,7 @@ protected:
 
 public:
                     MenuFloatingWindow( Menu* pMenu, Window* pParent, WinBits nStyle );
-                    ~MenuFloatingWindow();
+                    virtual ~MenuFloatingWindow();
 
             void    doShutdown();
 
@@ -737,7 +737,7 @@ private:
 
 public:
                     MenuBarWindow( Window* pParent );
-                    ~MenuBarWindow();
+                    virtual ~MenuBarWindow();
 
     void            ShowButtons( bool bClose, bool bFloat, bool bHide );
 

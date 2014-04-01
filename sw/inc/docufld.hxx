@@ -530,7 +530,7 @@ public:
                    const OUString& rInitials,
                    const OUString& rName,
                    const DateTime& rDate);
-    ~SwPostItField();
+    virtual ~SwPostItField();
 
     virtual OUString        Expand() const SAL_OVERRIDE;
     virtual SwField*        Copy() const SAL_OVERRIDE;

@@ -66,7 +66,7 @@ public:
 
     ImpSVGDialog( Window* pParent, /*ResMgr& rResMgr,*/
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
-    ~ImpSVGDialog();
+    virtual ~ImpSVGDialog();
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
 };

@@ -38,7 +38,7 @@ protected:
 
 public:
     SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
-    ~SwCellFrm();
+    virtual ~SwCellFrm();
 
     virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
     virtual void Paint( SwRect const&,

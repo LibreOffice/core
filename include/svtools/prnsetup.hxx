@@ -60,7 +60,7 @@ private:
 
 public:
                     PrinterSetupDialog( Window* pWindow );
-                    ~PrinterSetupDialog();
+                    virtual ~PrinterSetupDialog();
 
     void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
     Printer*        GetPrinter() const { return mpPrinter; }

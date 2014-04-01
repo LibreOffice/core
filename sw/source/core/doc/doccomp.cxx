@@ -222,7 +222,7 @@ private:
 
 public:
     WordArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 );
-    ~WordArrayComparator();
+    virtual ~WordArrayComparator();
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const SAL_OVERRIDE;
     virtual int GetLen1() const SAL_OVERRIDE { return nCnt1; }

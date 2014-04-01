@@ -63,7 +63,7 @@ namespace svx
 
     public:
         WebConnectionInfoDialog( Window* pParent );
-        ~WebConnectionInfoDialog();
+        virtual ~WebConnectionInfoDialog();
     };
 
 

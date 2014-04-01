@@ -66,7 +66,7 @@ public:
 
     // bDontLoad is for referencing purposes only
     SvtLanguageOptions( bool _bDontLoad = false );
-    ~SvtLanguageOptions();
+    virtual ~SvtLanguageOptions();
 
     // CJK options
     bool    IsCJKFontEnabled() const;
@@ -102,7 +102,7 @@ private:
 
 public:
     SvtSystemLanguageOptions();
-    ~SvtSystemLanguageOptions();
+    virtual ~SvtSystemLanguageOptions();
 
     virtual void    Commit() SAL_OVERRIDE;
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;

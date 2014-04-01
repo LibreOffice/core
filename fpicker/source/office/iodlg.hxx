@@ -200,7 +200,7 @@ protected:
 public:
                                 SvtFileDialog( Window* _pParent, WinBits nBits, WinBits nExtraBits );
                                 SvtFileDialog( Window* _pParent, WinBits nBits );
-                                ~SvtFileDialog();
+                                virtual ~SvtFileDialog();
 
     virtual long                OK();
     virtual short               Execute() SAL_OVERRIDE;

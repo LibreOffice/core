@@ -59,7 +59,7 @@ class DllComponentLoader
 {
 public:
     DllComponentLoader( const Reference<XComponentContext> & xCtx );
-    ~DllComponentLoader();
+    virtual ~DllComponentLoader();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

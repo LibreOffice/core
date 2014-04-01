@@ -399,7 +399,7 @@ public:
             bool const bProgress = false, bool const bBlockMode = false,
             bool const bOrganizerMode = false);
 
-    ~XMLTextImportHelper();
+    virtual ~XMLTextImportHelper();
 
     void SetCursor(
             const ::com::sun::star::uno::Reference <

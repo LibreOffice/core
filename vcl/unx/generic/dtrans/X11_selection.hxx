@@ -378,7 +378,7 @@ namespace x11 {
         bool                        m_bShutDown;
 
         SelectionManager();
-        ~SelectionManager();
+        virtual ~SelectionManager();
 
         SelectionAdaptor* getAdaptor( Atom selection );
         PixmapHolder* getPixmapHolder( Atom selection );

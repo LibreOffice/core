@@ -36,7 +36,7 @@ class FWE_DLLPUBLIC AddonMenu : public PopupMenu
 {
     public:
         AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-        ~AddonMenu();
+        virtual ~AddonMenu();
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
@@ -47,7 +47,7 @@ class AddonMenuManager;
 class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
 {
     public:
-        ~AddonPopupMenu();
+        virtual ~AddonPopupMenu();
 
         // Check if command URL string has the unique prefix to identify addon popup menus
         static bool        IsCommandURLPrefix( const OUString& aCmdURL );

@@ -72,7 +72,7 @@ private:
 public:
     ImplDockFloatWin( Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
-    ~ImplDockFloatWin();
+    virtual ~ImplDockFloatWin();
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;

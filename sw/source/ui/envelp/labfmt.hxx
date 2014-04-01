@@ -93,7 +93,7 @@ class SwLabFmtPage : public SfxTabPage
     SwLabItem    aItem;
 
      SwLabFmtPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwLabFmtPage();
+    virtual ~SwLabFmtPage();
 
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK(PreviewHdl, void *);

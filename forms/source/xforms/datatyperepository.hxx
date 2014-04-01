@@ -50,7 +50,7 @@ namespace xforms
         ODataTypeRepository( );
 
     protected:
-        ~ODataTypeRepository( );
+        virtual ~ODataTypeRepository( );
 
         // XDataTypeRepository
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

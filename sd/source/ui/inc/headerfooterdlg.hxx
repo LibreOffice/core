@@ -68,7 +68,7 @@ private:
 
 public:
     HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
-    ~HeaderFooterDialog();
+    virtual ~HeaderFooterDialog();
 
     void ApplyToAll();
     void Apply();

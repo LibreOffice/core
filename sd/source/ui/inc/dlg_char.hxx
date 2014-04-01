@@ -45,7 +45,7 @@ public:
 
             SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
                         const SfxObjectShell* pDocShell );
-            ~SdCharDlg() {};
+            virtual ~SdCharDlg() {};
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX

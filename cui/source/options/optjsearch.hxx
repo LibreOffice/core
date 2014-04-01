@@ -62,7 +62,7 @@ protected:
                         SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet );
 
 public:
-                        ~SvxJSearchOptionsPage();
+                        virtual ~SvxJSearchOptionsPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 

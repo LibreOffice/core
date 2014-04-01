@@ -29,7 +29,7 @@ class BreakIterator_th : public BreakIterator_CTL
 {
 public:
     BreakIterator_th();
-    ~BreakIterator_th();
+    virtual ~BreakIterator_th();
 
 protected:
     void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

@@ -148,7 +148,7 @@ class LwpPara : public LwpDLVList
 {
 public:
     LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpPara();
+    virtual ~LwpPara();
 public:
     void Read() SAL_OVERRIDE;
     void RegisterStyle() SAL_OVERRIDE;

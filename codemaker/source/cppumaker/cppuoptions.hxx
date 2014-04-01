@@ -28,7 +28,7 @@ public:
     CppuOptions()
         : Options() {}
 
-    ~CppuOptions() {}
+    virtual ~CppuOptions() {}
 
     bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
             throw( IllegalArgument ) SAL_OVERRIDE;

@@ -94,7 +94,7 @@ class LwpSection : public LwpOrderedObject
 {
 public:
     LwpSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpSection();
+    virtual ~LwpSection();
     inline sal_uInt16 GetFlags();
     inline LwpPageLayout* GetPageLayout();
     inline LwpColor* GetColor();
@@ -152,7 +152,7 @@ class LwpIndexSection : public LwpSection
 {
 public:
     LwpIndexSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpIndexSection();
+    virtual ~LwpIndexSection();
     sal_Bool IsFormatRunin();
     sal_Bool IsFormatSeparator();
 protected:

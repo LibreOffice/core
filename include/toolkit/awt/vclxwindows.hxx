@@ -162,7 +162,7 @@ protected:
 
 public:
                     VCLXButton();
-    ~VCLXButton();
+    virtual ~VCLXButton();
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -198,7 +198,7 @@ class VCLXImageControl : public VCLXGraphicControl
 {
 public:
                     VCLXImageControl();
-                    ~VCLXImageControl();
+                    virtual ~VCLXImageControl();
 
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -340,7 +340,7 @@ class VCLXMessageBox :  public ::com::sun::star::awt::XMessageBox,
 {
 public:
                         VCLXMessageBox();
-                        ~VCLXMessageBox();
+                        virtual ~VCLXMessageBox();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -376,7 +376,7 @@ protected:
 
 public:
     VCLXFrame();
-    ~VCLXFrame();
+    virtual ~VCLXFrame();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -410,7 +410,7 @@ class TOOLKIT_DLLPUBLIC VCLXDialog :    public ::com::sun::star::awt::XDialog2,
 {
 public:
                         VCLXDialog();
-                        ~VCLXDialog();
+                        virtual ~VCLXDialog();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -452,7 +452,7 @@ class VCLXTabPage : public VCLXContainer
 {
 public:
                         VCLXTabPage();
-                        ~VCLXTabPage();
+                        virtual ~VCLXTabPage();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -485,7 +485,7 @@ protected:
     void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
 public:
     VCLXMultiPage();
-    ~VCLXMultiPage();
+    virtual ~VCLXMultiPage();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -545,7 +545,7 @@ protected:
 
 public:
     VCLXFixedHyperlink();
-    ~VCLXFixedHyperlink();
+    virtual ~VCLXFixedHyperlink();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -593,7 +593,7 @@ protected:
 
 public:
                         VCLXFixedText();
-                        ~VCLXFixedText();
+                        virtual ~VCLXFixedText();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -844,7 +844,7 @@ protected:
 
 public:
                         VCLXComboBox();
-    ~VCLXComboBox();
+    virtual ~VCLXComboBox();
 
      // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -940,7 +940,7 @@ protected:
 
 public:
                     VCLXFormattedSpinField();
-                    ~VCLXFormattedSpinField();
+                    virtual ~VCLXFormattedSpinField();
 
     void            SetFormatter( FormatterBase* pFormatter ) { mpFormatter = pFormatter; }
 
@@ -965,7 +965,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;
 public:
                     VCLXDateField();
-                    ~VCLXDateField();
+                    virtual ~VCLXDateField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1013,7 +1013,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;
 public:
                     VCLXTimeField();
-                    ~VCLXTimeField();
+                    virtual ~VCLXTimeField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1056,7 +1056,7 @@ class VCLXNumericField :    public ::com::sun::star::awt::XNumericField,
 {
 public:
                     VCLXNumericField();
-                    ~VCLXNumericField();
+                    virtual ~VCLXNumericField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1106,7 +1106,7 @@ class VCLXMetricField : public ::com::sun::star::awt::XMetricField,
     void CallListeners();
 public:
     VCLXMetricField();
-    ~VCLXMetricField();
+    virtual ~VCLXMetricField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1153,7 +1153,7 @@ class VCLXCurrencyField :   public ::com::sun::star::awt::XCurrencyField,
 {
 public:
                     VCLXCurrencyField();
-                    ~VCLXCurrencyField();
+                    virtual ~VCLXCurrencyField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1199,7 +1199,7 @@ class VCLXPatternField :    public ::com::sun::star::awt::XPatternField,
 {
 public:
                     VCLXPatternField();
-                    ~VCLXPatternField();
+                    virtual ~VCLXPatternField();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1240,7 +1240,7 @@ protected:
 
 public:
                         VCLXToolBox();
-                        ~VCLXToolBox();
+                        virtual ~VCLXToolBox();
 };
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX

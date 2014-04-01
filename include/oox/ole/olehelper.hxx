@@ -173,7 +173,7 @@ protected:
                                   sal_Int32 nSize );
 public:
     MSConvertOCXControls( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
-    ~MSConvertOCXControls();
+    virtual ~MSConvertOCXControls();
     sal_Bool ReadOCXStorage( SotStorageRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
     sal_Bool ReadOCXCtlsStream(SotStorageStreamRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );

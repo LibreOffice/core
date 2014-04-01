@@ -373,7 +373,7 @@ protected:
 
 public:
     FmXGridPeer(const ::css::uno::Reference< ::css::uno::XComponentContext >&);
-    ~FmXGridPeer();
+    virtual ~FmXGridPeer();
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !
     void Create(Window* pParent, WinBits nStyle);

@@ -67,7 +67,7 @@ protected:
 
 public:
     SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
-    ~SwUndoFmtDelete();
+    virtual ~SwUndoFmtDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -89,7 +89,7 @@ public:
     SwUndoRenameFmt(SwUndoId nUndoId, const OUString & sOldName,
                     const OUString & sNewName,
                     SwDoc * pDoc);
-    ~SwUndoRenameFmt();
+    virtual ~SwUndoRenameFmt();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;

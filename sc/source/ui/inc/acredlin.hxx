@@ -77,7 +77,7 @@ class ScRedlinData : public RedlinData
 public:
 
                     ScRedlinData();
-                    ~ScRedlinData();
+                    virtual ~ScRedlinData();
     SCTAB           nTable;
     SCCOL           nCol;
     SCROW           nRow;
@@ -209,7 +209,7 @@ public:
                     ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                ScViewData*      ptrViewData);
 
-                    ~ScAcceptChgDlg();
+                    virtual ~ScAcceptChgDlg();
 
     void            ReInit(ScViewData* ptrViewData);
 

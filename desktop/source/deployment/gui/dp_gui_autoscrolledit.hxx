@@ -32,7 +32,7 @@ class AutoScrollEdit : public ExtMultiLineEdit, public SfxListener
 {
 public:
     AutoScrollEdit( Window* pParent, const ResId& rResId );
-    ~AutoScrollEdit();
+    virtual ~AutoScrollEdit();
 
     using ExtMultiLineEdit::Notify;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

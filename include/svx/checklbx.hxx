@@ -47,7 +47,7 @@ public:
     SvxCheckListBox( Window* pParent, const ResId& rResId );
     SvxCheckListBox( Window* pParent, const ResId& rResId,
                      const Image& rNormalStaticImage );
-    ~SvxCheckListBox();
+    virtual ~SvxCheckListBox();
 
     void            InsertEntry         ( const OUString& rStr,
                                           sal_uLong  nPos = TREELIST_APPEND,

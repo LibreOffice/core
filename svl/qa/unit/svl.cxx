@@ -46,7 +46,7 @@ namespace {
 class Test : public CppUnit::TestFixture {
 public:
     Test();
-    ~Test();
+    virtual ~Test();
 
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;

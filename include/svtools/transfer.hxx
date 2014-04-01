@@ -392,7 +392,7 @@ private:
     public:
 
         DragGestureListener( DragSourceHelper& rDragSourceHelper );
-        ~DragGestureListener();
+        virtual ~DragGestureListener();
     };
 
     friend class DragSourceHelper::DragGestureListener;
@@ -443,7 +443,7 @@ private:
     public:
 
         DropTargetListener( DropTargetHelper& rDropTargetHelper );
-        ~DropTargetListener();
+        virtual ~DropTargetListener();
     };
 
     friend class DropTargetHelper::DropTargetListener;
@@ -499,7 +499,7 @@ protected:
 public:
 
                         TransferDataContainer();
-                        ~TransferDataContainer();
+                        virtual ~TransferDataContainer();
 
     void                CopyINetBookmark( const INetBookmark& rBkmk );
     void                CopyINetImage( const INetImage& rINtImg );

@@ -82,7 +82,7 @@ public:
     , m_bWaitSaveCompleted( sal_False )
     {}
 
-    ~ODummyEmbeddedObject();
+    virtual ~ODummyEmbeddedObject();
 
 // XEmbeddedObject
 

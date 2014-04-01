@@ -58,7 +58,7 @@ namespace dbaui
             const OUString& _rRelativeRoot
         );
 
-        ~HierarchicalNameCheck();
+        virtual ~HierarchicalNameCheck();
 
         // IObjectNameCheck overridables
         virtual bool    isNameValid(
@@ -108,7 +108,7 @@ namespace dbaui
             sal_Int32 _nCommandType
         );
 
-        ~DynamicTableOrQueryNameCheck();
+        virtual ~DynamicTableOrQueryNameCheck();
 
         // IObjectNameCheck overridables
         virtual bool    isNameValid(

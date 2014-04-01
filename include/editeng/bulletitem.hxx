@@ -83,7 +83,7 @@ public:
     explicit SvxBulletItem( sal_uInt16 nWhich = 0 );
     explicit SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );
     SvxBulletItem( const SvxBulletItem& );
-    ~SvxBulletItem();
+    virtual ~SvxBulletItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVersion ) const SAL_OVERRIDE;

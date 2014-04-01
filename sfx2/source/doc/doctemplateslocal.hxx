@@ -45,7 +45,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper1 < com::sun::star::xml:
     throw( ::com::sun::star::uno::Exception );
 
 public:
-    ~DocTemplLocaleHelper();
+    virtual ~DocTemplLocaleHelper();
 
     // returns sequence of pairs ( GroupName, GroupUIName )
     static

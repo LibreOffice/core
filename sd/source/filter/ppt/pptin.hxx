@@ -75,7 +75,7 @@ public:
     OUString        ReadMedia( sal_uInt32 nMediaRef ) const;
 
     ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
-    ~ImplSdPPTImport();
+    virtual ~ImplSdPPTImport();
 
     sal_Bool        Import();
     virtual bool ReadFormControl(  SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const SAL_OVERRIDE;

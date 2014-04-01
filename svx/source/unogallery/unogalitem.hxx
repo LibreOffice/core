@@ -48,7 +48,7 @@ class GalleryItem : public ::cppu::OWeakAggObject,
 public:
 
             GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject );
-            ~GalleryItem() throw();
+            virtual ~GalleryItem() throw();
 
     bool    isValid() const;
 

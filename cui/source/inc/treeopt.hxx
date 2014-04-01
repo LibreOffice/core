@@ -208,7 +208,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame,
         bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId );
-    ~OfaTreeOptionsDialog();
+    virtual ~OfaTreeOptionsDialog();
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
     sal_uInt16              AddGroup(   const OUString& rGroupName,  SfxShell* pCreateShell,

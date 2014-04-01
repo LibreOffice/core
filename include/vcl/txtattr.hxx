@@ -69,7 +69,7 @@ private:
 public:
                             TextAttribFontColor( const Color& rColor );
                             TextAttribFontColor( const TextAttribFontColor& rAttr );
-                            ~TextAttribFontColor();
+                            virtual ~TextAttribFontColor();
 
     const Color&            GetColor() const { return maColor; }
 
@@ -87,7 +87,7 @@ private:
 public:
                             TextAttribFontWeight( FontWeight eWeight );
                             TextAttribFontWeight( const TextAttribFontWeight& rAttr );
-                            ~TextAttribFontWeight();
+                            virtual ~TextAttribFontWeight();
 
     virtual void            SetFont( Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
@@ -106,7 +106,7 @@ private:
 
 public:
                             TextAttribHyperLink( const TextAttribHyperLink& rAttr );
-                            ~TextAttribHyperLink();
+                            virtual ~TextAttribHyperLink();
 
     void                    SetURL( const OUString& rURL )             { maURL = rURL; }
     const OUString&         GetURL() const                              { return maURL; }
@@ -127,7 +127,7 @@ class VCL_DLLPUBLIC TextAttribProtect : public TextAttrib
 public:
                             TextAttribProtect();
                             TextAttribProtect( const TextAttribProtect& rAttr );
-                            ~TextAttribProtect();
+                            virtual ~TextAttribProtect();
 
     virtual void            SetFont( Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;

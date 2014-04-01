@@ -222,7 +222,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
     public:
 
          SvtDynamicMenuOptions_Impl();
-        ~SvtDynamicMenuOptions_Impl();
+        virtual ~SvtDynamicMenuOptions_Impl();
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

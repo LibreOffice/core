@@ -214,7 +214,7 @@ class SectionPropertyMap : public PropertyMap
 
 public:
         explicit SectionPropertyMap(bool bIsFirstSection);
-        ~SectionPropertyMap();
+        virtual ~SectionPropertyMap();
 
     enum PageType
     {
@@ -428,7 +428,7 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     sal_Int32               mnNumId;
 public:
     explicit StyleSheetPropertyMap();
-    ~StyleSheetPropertyMap();
+    virtual ~StyleSheetPropertyMap();
 
     void SetCT_Spacing_line(       sal_Int32 nSet )
         {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
@@ -508,7 +508,7 @@ class ParagraphPropertyMap : public PropertyMap, public ParagraphProperties
 {
 public:
     explicit ParagraphPropertyMap();
-    ~ParagraphPropertyMap();
+    virtual ~ParagraphPropertyMap();
 
 };
 
@@ -543,7 +543,7 @@ private:
 
 public:
     explicit TablePropertyMap();
-    ~TablePropertyMap();
+    virtual ~TablePropertyMap();
 
     bool    getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill );
     void    setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet );

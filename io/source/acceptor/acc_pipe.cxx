@@ -42,7 +42,7 @@ namespace io_acceptor
     {
     public:
         PipeConnection( const OUString &sConnectionDescription);
-        ~PipeConnection();
+        virtual ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,

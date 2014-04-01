@@ -35,7 +35,7 @@ public :
     ParaLineSpacingPopup (
         Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    ~ParaLineSpacingPopup (void);
+    virtual ~ParaLineSpacingPopup (void);
 
     void Rearrange (SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem ,const ::sfx2::sidebar::EnumContext currentContext);
 private:

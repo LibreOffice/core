@@ -36,7 +36,7 @@ namespace frm
         OSelectAllDispatcher( EditView& _rView, const ::com::sun::star::util::URL&  _rURL );
 
     protected:
-        ~OSelectAllDispatcher();
+        virtual ~OSelectAllDispatcher();
 
         // XDispatch
         virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )

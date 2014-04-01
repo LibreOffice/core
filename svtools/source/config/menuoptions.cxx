@@ -86,7 +86,7 @@ class SvtMenuOptions_Impl : public ConfigItem
 
 
          SvtMenuOptions_Impl();
-        ~SvtMenuOptions_Impl();
+        virtual ~SvtMenuOptions_Impl();
 
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );

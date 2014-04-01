@@ -28,7 +28,7 @@ public:
     SfxGrabBagItem();
     SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, com::sun::star::uno::Any>* pMap = 0);
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
-    ~SfxGrabBagItem();
+    virtual ~SfxGrabBagItem();
 
     const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const;
 

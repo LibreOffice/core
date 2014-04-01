@@ -390,7 +390,7 @@ class DummyChart : public DummyXShapes
 {
 public:
     DummyChart(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xDrawPage);
-    ~DummyChart();
+    virtual ~DummyChart();
     virtual DummyChart* getRootShape() SAL_OVERRIDE;
 
     virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

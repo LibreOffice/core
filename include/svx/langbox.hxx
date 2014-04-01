@@ -69,7 +69,7 @@ private:
 
 public:
     SvxLanguageBox(Window* pParent, WinBits nBits, bool bCheck = false);
-    ~SvxLanguageBox();
+    virtual ~SvxLanguageBox();
 
     void            SetLanguageList( sal_Int16 nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,

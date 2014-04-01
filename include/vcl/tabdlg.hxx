@@ -42,7 +42,7 @@ public:
                                    WinBits nStyle = WB_STDTABDIALOG );
                         TabDialog( Window* pParent, const ResId& rResId );
                         TabDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-                        ~TabDialog();
+                        virtual ~TabDialog();
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 

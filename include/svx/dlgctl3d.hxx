@@ -57,7 +57,7 @@ protected:
 public:
     Svx3DPreviewControl(Window* pParent, const ResId& rResId);
     Svx3DPreviewControl(Window* pParent, WinBits nStyle = 0);
-    ~Svx3DPreviewControl();
+    virtual ~Svx3DPreviewControl();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -112,7 +112,7 @@ class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
 
 public:
     Svx3DLightControl(Window* pParent, WinBits nStyle = 0);
-    ~Svx3DLightControl();
+    virtual ~Svx3DLightControl();
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -167,7 +167,7 @@ private:
 public:
     SvxLightCtl3D( Window* pParent, const ResId& rResId);
     SvxLightCtl3D( Window* pParent);
-    ~SvxLightCtl3D();
+    virtual ~SvxLightCtl3D();
 
     // react to size changes
     virtual void Resize() SAL_OVERRIDE;

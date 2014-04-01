@@ -45,7 +45,7 @@ public:
                              double         fStep,
                              double         fMax,
                              sal_uInt16     nPossDir );
-            ~ScFillSeriesDlg();
+            virtual ~ScFillSeriesDlg();
 
     FillDir     GetFillDir() const          { return theFillDir; }
     FillCmd     GetFillCmd() const          { return theFillCmd; }

@@ -84,7 +84,7 @@ class SwSortDlg : public SvxStandardDialog
 
 public:
     SwSortDlg(Window * pParent, SwWrtShell &rSh);
-    ~SwSortDlg();
+    virtual ~SwSortDlg();
 };
 
 #endif

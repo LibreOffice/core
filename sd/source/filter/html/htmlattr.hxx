@@ -32,7 +32,7 @@ protected:
 
 public:
     SdHtmlAttrPreview( Window* pParent, const ResId& rResId );
-    ~SdHtmlAttrPreview();
+    virtual ~SdHtmlAttrPreview();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 

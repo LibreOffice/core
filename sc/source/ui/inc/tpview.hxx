@@ -70,7 +70,7 @@ class ScTpContentOptions : public SfxTabPage
 
             ScTpContentOptions( Window*         pParent,
                              const SfxItemSet&  rArgSet );
-            ~ScTpContentOptions();
+            virtual ~ScTpContentOptions();
 
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
@@ -120,7 +120,7 @@ class ScTpLayoutOptions : public SfxTabPage
 
             ScTpLayoutOptions( Window*          pParent,
                              const SfxItemSet&  rArgSet );
-            ~ScTpLayoutOptions();
+            virtual ~ScTpLayoutOptions();
 
 public:
     static  SfxTabPage* Create          ( Window*               pParent,

@@ -54,7 +54,7 @@ namespace svt { namespace table
 
     public:
         UnoControlTableModel();
-        ~UnoControlTableModel();
+        virtual ~UnoControlTableModel();
 
     public:
         // ITableModel overridables

@@ -66,7 +66,7 @@ namespace utl
 
         protected:
             OObserverImpl();
-            ~OObserverImpl();
+            virtual ~OObserverImpl();
 
         private:
             // XTerminateListener

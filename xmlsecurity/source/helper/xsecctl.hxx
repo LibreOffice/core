@@ -390,7 +390,7 @@ private:
 
 public:
     XSecController(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxCtx);
-    ~XSecController();
+    virtual ~XSecController();
 
     sal_Int32 getNewSecurityId(  );
 

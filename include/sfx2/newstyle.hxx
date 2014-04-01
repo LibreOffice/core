@@ -44,7 +44,7 @@ private:
 
 public:
     SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );
-    ~SfxNewStyleDlg();
+    virtual ~SfxNewStyleDlg();
 
     OUString                GetName() const { return comphelper::string::stripStart(m_pColBox->GetText(), ' '); }
 };

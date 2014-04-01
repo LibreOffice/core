@@ -167,7 +167,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
         OfaSwAutoFmtOptionsPage( Window* pParent,
                             const SfxItemSet& rSet );
-        ~OfaSwAutoFmtOptionsPage();
+        virtual ~OfaSwAutoFmtOptionsPage();
 
     public:
         static SfxTabPage*  Create( Window* pParent,
@@ -261,7 +261,7 @@ private:
         void setTabs();
 public:
                         OfaAutocorrReplacePage( Window* pParent, const SfxItemSet& rSet );
-                        ~OfaAutocorrReplacePage();
+                        virtual ~OfaAutocorrReplacePage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
 
@@ -319,7 +319,7 @@ private:
                                         LanguageType eNewLanguage);
 public:
                         OfaAutocorrExceptPage( Window* pParent, const SfxItemSet& rSet );
-                        ~OfaAutocorrExceptPage();
+                        virtual ~OfaAutocorrExceptPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -385,7 +385,7 @@ private:
 
                         OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet );
 public:
-                        ~OfaQuoteTabPage();
+                        virtual ~OfaQuoteTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

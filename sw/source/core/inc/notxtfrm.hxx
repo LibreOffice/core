@@ -44,7 +44,7 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 public:
     SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
-    ~SwNoTxtFrm();
+    virtual ~SwNoTxtFrm();
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;

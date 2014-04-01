@@ -32,7 +32,7 @@ class Receiver : Timer
     std::deque< std::vector< OString > > maExecQueue;
 public:
     Receiver( Transmitter *aTransmitter );
-    ~Receiver();
+    virtual ~Receiver();
     virtual void Timeout() SAL_OVERRIDE;
     void pushCommand( const std::vector<OString> &rCommand );
     void executeCommand( const std::vector<OString> &aCommand );

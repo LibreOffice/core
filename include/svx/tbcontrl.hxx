@@ -174,7 +174,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxStyleToolBoxControl();
+    virtual ~SvxStyleToolBoxControl();
 
     virtual Window* CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
 
@@ -247,7 +247,7 @@ class SVX_DLLPUBLIC SvxFontColorToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFontColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFontColorToolBoxControl();
+    virtual ~SvxFontColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -275,7 +275,7 @@ class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorExtToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxColorExtToolBoxControl();
+    virtual ~SvxColorExtToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -298,7 +298,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 
 public:
     SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxColorToolBoxControl();
+    virtual ~SvxColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -362,7 +362,7 @@ public:
     SvxFrameLineColorToolBoxControl( sal_uInt16 nSlotId,
                                      sal_uInt16 nId,
                                      ToolBox& rTbx );
-    ~SvxFrameLineColorToolBoxControl();
+    virtual ~SvxFrameLineColorToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -378,7 +378,7 @@ private:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxSimpleUndoRedoController();
+    virtual ~SvxSimpleUndoRedoController();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;

@@ -49,7 +49,7 @@ protected:
 
                             LongCurrencyFormatter();
 public:
-                            ~LongCurrencyFormatter();
+                            virtual ~LongCurrencyFormatter();
 
     virtual void            Reformat() SAL_OVERRIDE;
     virtual void            ReformatAll() SAL_OVERRIDE;
@@ -90,7 +90,7 @@ private:
 
 public:
                     LongCurrencyField( Window* pParent, WinBits nWinStyle );
-                    ~LongCurrencyField();
+                    virtual ~LongCurrencyField();
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -117,7 +117,7 @@ class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormat
 {
 public:
                     LongCurrencyBox( Window* pParent, WinBits nWinStyle );
-                    ~LongCurrencyBox();
+                    virtual ~LongCurrencyBox();
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

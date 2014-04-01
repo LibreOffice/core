@@ -196,7 +196,7 @@ class ScCheckListBox : public SvTreeListBox
     public:
 
     ScCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
-    ~ScCheckListBox() { delete mpCheckButton; }
+    virtual ~ScCheckListBox() { delete mpCheckButton; }
     void Init();
     void            CheckEntry( OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
     void            CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );

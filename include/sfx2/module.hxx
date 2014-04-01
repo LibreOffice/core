@@ -71,7 +71,7 @@ public:
 
                                 SfxModule( ResMgr* pMgrP, bool bDummy,
                                     SfxObjectFactory* pFactoryP, ... );
-                                ~SfxModule();
+                                virtual ~SfxModule();
 
     ResMgr*                     GetResMgr() const { return SfxShell::GetResMgr(); }
     virtual ResMgr*             GetResMgr();

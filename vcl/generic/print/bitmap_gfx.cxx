@@ -293,7 +293,7 @@ private:
 public:
 
     LZWEncoder (osl::File* pOutputFile);
-    ~LZWEncoder ();
+    virtual ~LZWEncoder ();
 
     virtual void    EncodeByte (sal_uInt8 nByte) SAL_OVERRIDE;
 };

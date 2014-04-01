@@ -223,7 +223,7 @@ protected:
 
 public:
                         TextEngine();
-                        ~TextEngine();
+                        virtual ~TextEngine();
 
     void                SetText( const OUString& rStr );
     OUString            GetText( LineEnd aSeparator = LINEEND_LF ) const;

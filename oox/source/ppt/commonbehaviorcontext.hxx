@@ -43,7 +43,7 @@ namespace oox { namespace ppt {
         CommonBehaviorContext( ::oox::core::FragmentHandler2& rParent,
              const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
              const TimeNodePtr & pNode );
-        ~CommonBehaviorContext( )
+        virtual ~CommonBehaviorContext( )
             throw( );
 
         virtual void onEndElement() SAL_OVERRIDE;

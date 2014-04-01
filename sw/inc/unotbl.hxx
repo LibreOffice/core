@@ -458,7 +458,7 @@ class SwXCellRange : public cppu::WeakImplHelper7
 
 public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
-    ~SwXCellRange();
+    virtual ~SwXCellRange();
 
     TYPEINFO_OVERRIDE();
 

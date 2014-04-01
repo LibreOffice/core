@@ -36,7 +36,7 @@ public:
     TimerManager();
 
 
-    ~TimerManager();
+    virtual ~TimerManager();
 
     /// register timer
     bool SAL_CALL registerTimer(salhelper::Timer* pTimer);

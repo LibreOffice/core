@@ -67,7 +67,7 @@ namespace abp
 
     public:
         TypeSelectionPage( OAddessBookSourcePilot* _pParent );
-        ~TypeSelectionPage();
+        virtual ~TypeSelectionPage();
 
         // retrieves the currently selected type
         AddressSourceType   getSelectedType() const;

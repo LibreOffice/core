@@ -291,7 +291,7 @@ public:
 
     public:
         AssignmentPersistentData();
-        ~AssignmentPersistentData();
+        virtual ~AssignmentPersistentData();
 
         // IAssigmentData overridables
         virtual OUString getDatasourceName() const SAL_OVERRIDE;

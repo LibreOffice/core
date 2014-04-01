@@ -33,7 +33,7 @@ namespace oox { namespace ppt {
     {
     public:
         CommonTimeNodeContext( ::oox::core::FragmentHandler2& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode);
-        ~CommonTimeNodeContext( ) throw( );
+        virtual ~CommonTimeNodeContext( ) throw( );
 
         virtual void onEndElement() SAL_OVERRIDE;
 

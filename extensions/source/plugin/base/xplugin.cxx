@@ -78,7 +78,7 @@ public:
                           salhelper::TTimeValue( 2, 0 ) ),
         m_pPlugin( pPlugin )
         { start(); }
-    ~PluginDisposer() {}
+    virtual ~PluginDisposer() {}
 };
 
 void PluginDisposer::onShot()

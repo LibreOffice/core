@@ -36,7 +36,7 @@ protected:
 
 public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
-                        ~OutlinerEditEng();
+                        virtual ~OutlinerEditEng();
 
     virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev ) SAL_OVERRIDE;
 

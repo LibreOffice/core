@@ -27,7 +27,7 @@ class Transmitter
 public:
     enum Priority { PRIORITY_LOW = 1, PRIORITY_HIGH };
     Transmitter( ::sd::IBluetoothSocket* aSocket );
-    ~Transmitter();
+    virtual ~Transmitter();
     void addMessage( const OString& aMessage, const Priority aPriority );
     void notifyFinished();
 

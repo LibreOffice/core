@@ -74,7 +74,7 @@ private:
 
 public:
     ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
-    ~ManageLanguageDialog();
+    virtual ~ManageLanguageDialog();
 };
 
 class SetDefaultLanguageDialog : public ModalDialog

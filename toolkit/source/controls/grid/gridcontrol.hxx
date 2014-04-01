@@ -113,7 +113,7 @@ public:
     using UnoControl::getPeer;
 
 protected:
-    ~UnoGridControl();
+    virtual ~UnoGridControl();
 
 private:
     SelectionListenerMultiplexer                m_aSelectionListeners;

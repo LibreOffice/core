@@ -59,7 +59,7 @@ private:
 
 public:
     SvtCTLOptions_Impl();
-    ~SvtCTLOptions_Impl();
+    virtual ~SvtCTLOptions_Impl();
 
     virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) SAL_OVERRIDE;
     virtual void    Commit() SAL_OVERRIDE;

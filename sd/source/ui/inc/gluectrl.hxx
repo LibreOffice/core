@@ -33,7 +33,7 @@ private:
 public:
                 GlueEscDirLB( Window* pParent,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-                 ~GlueEscDirLB();
+                 virtual ~GlueEscDirLB();
 
     virtual void Select() SAL_OVERRIDE;
 
@@ -56,7 +56,7 @@ public:
             SFX_DECL_TOOLBOX_CONTROL();
 
             SdTbxCtlGlueEscDir( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-            ~SdTbxCtlGlueEscDir() {}
+            virtual ~SdTbxCtlGlueEscDir() {}
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX

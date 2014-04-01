@@ -60,7 +60,7 @@ class SwPagePreviewWin : public Window
 
 public:
     SwPagePreviewWin( Window* pParent, SwPagePreview& rView );
-    ~SwPagePreviewWin();
+    virtual ~SwPagePreviewWin();
 
     // calls SwViewShell::Paint
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -287,7 +287,7 @@ public:
     void SetVScrollbarThumbPos( const sal_uInt16 _nNewThumbPos );
 
     SwPagePreview( SfxViewFrame* pFrame, SfxViewShell* );
-    ~SwPagePreview();
+    virtual ~SwPagePreview();
 };
 
 // ----------------- inline methods ----------------------

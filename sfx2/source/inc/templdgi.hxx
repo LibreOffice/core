@@ -321,7 +321,7 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 public:
     DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
-    ~DropToolBox_Impl();
+    virtual ~DropToolBox_Impl();
 };
 // class SfxTemplateDialog_Impl ------------------------------------------
 
@@ -367,7 +367,7 @@ public:
 
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplateDialog* pDlgWindow );
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
-    ~SfxTemplateDialog_Impl();
+    virtual ~SfxTemplateDialog_Impl();
 
     void Initialize (void);
 };

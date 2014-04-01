@@ -75,7 +75,7 @@ public:
         ,m_outline(false)
         {}
 
-    ~ListLevel( ){ }
+    virtual ~ListLevel( ){ }
 
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );

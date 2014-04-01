@@ -85,7 +85,7 @@ class UnoTreeListBoxImpl : public SvTreeListBox
 {
 public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent, WinBits nWinStyle );
-    ~UnoTreeListBoxImpl();
+    virtual ~UnoTreeListBoxImpl();
 
     sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 

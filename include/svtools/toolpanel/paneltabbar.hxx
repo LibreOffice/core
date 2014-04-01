@@ -51,7 +51,7 @@ namespace svt
     {
     public:
         PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
-        ~PanelTabBar();
+        virtual ~PanelTabBar();
 
         // attribute access
         TabItemContent  GetTabItemContent() const;

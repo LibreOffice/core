@@ -232,7 +232,7 @@ public:
     using cppu::WeakComponentImplHelperBase::disposing;
 
 protected:
-    ~SlideShowView() {}
+    virtual ~SlideShowView() {}
 
 private:
     void init();

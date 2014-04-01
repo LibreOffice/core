@@ -70,7 +70,7 @@ class SwTextGridPage: public SfxTabPage
     sal_Bool        m_bVRulerChanged;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwTextGridPage();
+    virtual ~SwTextGridPage();
 
     void UpdatePageSize(const SfxItemSet& rSet);
     void PutGridItem(SfxItemSet& rSet);

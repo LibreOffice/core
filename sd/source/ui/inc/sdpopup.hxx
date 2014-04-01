@@ -38,7 +38,7 @@ private:
 
 public:
                         SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage );
-                        ~SdFieldPopup();
+                        virtual ~SdFieldPopup();
 
     //virtual void      Select();
 

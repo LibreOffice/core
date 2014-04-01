@@ -86,7 +86,7 @@ protected:
 public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    ~SvSimpleTable();
+    virtual ~SvSimpleTable();
 
     void UpdateViewSize();
 

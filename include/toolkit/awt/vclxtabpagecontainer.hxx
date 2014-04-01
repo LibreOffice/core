@@ -42,7 +42,7 @@ class VCLXTabPageContainer : public VCLXTabPageContainer_Base
 {
 public:
     VCLXTabPageContainer();
-    ~VCLXTabPageContainer();
+    virtual ~VCLXTabPageContainer();
 
     // ::com::sun::star::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

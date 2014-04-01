@@ -34,7 +34,7 @@ public:
     SFX_DECL_STATUSBAR_CONTROL();
 
     SwZoomControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
-    ~SwZoomControl();
+    virtual ~SwZoomControl();
 
 };
 

@@ -43,7 +43,7 @@ namespace comphelper
     protected:
         /// see the respective base class ctor for an extensive comment on this, please
         OCommonAccessibleComponent( IMutex* _pExternalLock );
-        ~OCommonAccessibleComponent();
+        virtual ~OCommonAccessibleComponent();
 
     protected:
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten

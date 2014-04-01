@@ -112,7 +112,7 @@ protected:
 
 public:
     ExtTreeListBox(Window* pParent, WinBits nStyle);
-    ~ExtTreeListBox();
+    virtual ~ExtTreeListBox();
 };
 
 class CheckBox : public SvTabListBox
@@ -125,7 +125,7 @@ private:
 
 public:
     CheckBox(Window* pParent, WinBits nStyle);
-    ~CheckBox();
+    virtual ~CheckBox();
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvTreeListEntry*    FindEntry( const OUString& rName );
@@ -172,7 +172,7 @@ private:
 
 public:
     OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
-    ~OrganizeDialog();
+    virtual ~OrganizeDialog();
 
     virtual short   Execute() SAL_OVERRIDE;
 

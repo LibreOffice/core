@@ -31,7 +31,7 @@ class Index;
 class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_Unicode( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
-    ~IndexEntrySupplier_Unicode();
+    virtual ~IndexEntrySupplier_Unicode();
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
         const com::sun::star::lang::Locale& rLocale,

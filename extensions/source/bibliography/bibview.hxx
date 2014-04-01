@@ -60,7 +60,7 @@ namespace bib
 
     public:
                             BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
-                            ~BibView();
+                            virtual ~BibView();
 
         void                UpdatePages();
 

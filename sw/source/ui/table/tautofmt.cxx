@@ -47,7 +47,7 @@ class AutoFmtPreview : public Window
 {
 public:
     AutoFmtPreview(Window* pParent);
-    ~AutoFmtPreview();
+    virtual ~AutoFmtPreview();
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
 
@@ -104,7 +104,7 @@ public:
                             const OUString& rTitle,
                             const OUString& rEditTitle,
                             const OUString& rDefault );
-            ~SwStringInputDlg();
+            virtual ~SwStringInputDlg();
 
     OUString GetInputString() const;
 

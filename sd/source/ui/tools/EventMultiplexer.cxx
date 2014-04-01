@@ -66,7 +66,7 @@ class EventMultiplexer::Implementation
 {
 public:
     Implementation (ViewShellBase& rBase);
-    ~Implementation (void);
+    virtual ~Implementation (void);
 
     void AddEventListener (
         Link& rCallback,

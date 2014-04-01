@@ -123,7 +123,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
 public:
     SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
-    ~SvxSwPosSizeTabPage();
+    virtual ~SvxSwPosSizeTabPage();
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
     static sal_uInt16*     GetRanges();

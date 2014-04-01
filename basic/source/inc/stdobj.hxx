@@ -29,7 +29,7 @@ class SbiStdObject : public SbxObject
 {
     SbStdFactory* pStdFactory;
 
-   ~SbiStdObject();
+   virtual ~SbiStdObject();
     using SbxVariable::GetInfo;
     SbxInfo* GetInfo( short );
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,

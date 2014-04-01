@@ -106,7 +106,7 @@ private:
 
 public:
                     DragAndDropWrapper( DragAndDropClient* pClient );
-                    ~DragAndDropWrapper();
+                    virtual ~DragAndDropWrapper();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

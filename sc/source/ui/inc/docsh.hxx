@@ -178,7 +178,7 @@ public:
 
                     ScDocShell( const ScDocShell& rDocShell );
                     ScDocShell( const sal_uInt64 i_nSfxCreationFlags = SFXMODEL_EMBEDDED_OBJECT );
-                    ~ScDocShell();
+                    virtual ~ScDocShell();
 
     using SotObject::GetInterface;
     using SfxShell::Activate;           // with sal_Bool bMDI

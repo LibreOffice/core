@@ -49,7 +49,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rSectPropSet);
 
-    ~XMLSectionSourceDDEImportContext();
+    virtual ~XMLSectionSourceDDEImportContext();
 
 protected:
 

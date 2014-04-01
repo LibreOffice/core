@@ -56,7 +56,7 @@ public:
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    ~SvXMLSectionListContext ( void );
+    virtual ~SvXMLSectionListContext ( void );
 };
 
 class SvXMLIgnoreSectionListContext : public SvXMLImportContext
@@ -73,7 +73,7 @@ public:
                            const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    ~SvXMLIgnoreSectionListContext ( void );
+    virtual ~SvXMLIgnoreSectionListContext ( void );
 };
 #endif
 

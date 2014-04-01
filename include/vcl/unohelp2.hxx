@@ -41,7 +41,7 @@ namespace vcl { namespace unohelper {
 
     public:
                         TextDataObject( const OUString& rText );
-                        ~TextDataObject();
+                        virtual ~TextDataObject();
 
         OUString&       GetString() { return maText; }
 

@@ -34,7 +34,7 @@ public :
     ParaBulletsPopup (
         Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    ~ParaBulletsPopup (void);
+    virtual ~ParaBulletsPopup (void);
 
     void UpdateValueSet ();
 //private:

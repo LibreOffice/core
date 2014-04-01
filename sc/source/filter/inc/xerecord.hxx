@@ -49,7 +49,7 @@ class XclExpDelegatingRecord : public XclExpRecordBase
 {
 public:
                         XclExpDelegatingRecord( XclExpRecordBase* pRecord );
-                        ~XclExpDelegatingRecord();
+                        virtual ~XclExpDelegatingRecord();
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:

@@ -77,7 +77,7 @@ class SwIdxFormDlg : public SvxStandardDialog
 
 public:
     SwIdxFormDlg( Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
-    ~SwIdxFormDlg();
+    virtual ~SwIdxFormDlg();
 
     const SwForm&   GetTOXForm();
 };

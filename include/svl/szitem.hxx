@@ -35,7 +35,7 @@ public:
                              SfxSizeItem();
                              SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
                              SfxSizeItem( const SfxSizeItem& );
-                             ~SfxSizeItem() {}
+                             virtual ~SfxSizeItem() {}
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

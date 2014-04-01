@@ -48,7 +48,7 @@ public:
 public:
                     Throbber( Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet = IMAGES_AUTO );
                     Throbber( Window* i_parentWindow, const ResId& i_resId, const ImageSet i_imageSet = IMAGES_AUTO );
-                    ~Throbber();
+                    virtual ~Throbber();
 
     // Properties
     void            setStepTime( sal_Int32 nStepTime )  { mnStepTime = nStepTime; }

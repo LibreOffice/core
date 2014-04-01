@@ -46,7 +46,7 @@ class DefaultNumberingProvider : public cppu::WeakImplHelper4
 public:
     DefaultNumberingProvider(
         const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
-    ~DefaultNumberingProvider();
+    virtual ~DefaultNumberingProvider();
 
     //XDefaultNumberingProvider
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<

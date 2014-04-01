@@ -74,7 +74,7 @@ protected:
 public:
 
     SvxSwFrameExample(Window* pParent, WinBits nStyle);
-    ~SvxSwFrameExample();
+    virtual ~SvxSwFrameExample();
 
     inline void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }
 

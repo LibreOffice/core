@@ -57,7 +57,7 @@ public:
 
      SwLabDlg( Window* pParent, const SfxItemSet& rSet,
                  SwNewDBMgr* pNewDBMgr, sal_Bool bLabel);
-    ~SwLabDlg();
+    virtual ~SwLabDlg();
 
     SwLabRec*   GetRecord(const OUString &rRecName, sal_Bool bCont);
     void        GetLabItem(SwLabItem &rItem);

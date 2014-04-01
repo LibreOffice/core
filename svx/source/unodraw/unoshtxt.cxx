@@ -123,7 +123,7 @@ private:
 public:
     SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText, XInterface* pOwner );
     SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow );
-    ~SvxTextEditSourceImpl();
+    virtual ~SvxTextEditSourceImpl();
 
     void SAL_CALL acquire();
     void SAL_CALL release();

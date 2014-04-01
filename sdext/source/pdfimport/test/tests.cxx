@@ -82,7 +82,7 @@ namespace
             m_bImageSeen(false)
         {}
 
-        ~TestSink()
+        virtual ~TestSink()
         {
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Width", m_aPageSize.Width, 79400, 0.00000001);
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "A4 page size (in 100th of points): Height" , m_aPageSize.Height, 59500, 0.0000001 );

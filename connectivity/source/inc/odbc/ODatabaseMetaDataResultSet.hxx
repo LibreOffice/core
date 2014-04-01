@@ -111,7 +111,7 @@ namespace connectivity
                                                                         ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const SAL_OVERRIDE;
-            ~ODatabaseMetaDataResultSet();
+            virtual ~ODatabaseMetaDataResultSet();
             template < typename T, SQLSMALLINT sqlTypeId > T getInteger ( sal_Int32 columnIndex );
 
         public:

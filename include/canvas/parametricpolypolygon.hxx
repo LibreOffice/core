@@ -116,7 +116,7 @@ namespace canvas
         Values getValues() const;
 
     protected:
-        ~ParametricPolyPolygon(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        virtual ~ParametricPolyPolygon(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
         static ParametricPolyPolygon* createLinearHorizontalGradient( const ::com::sun::star::uno::Reference<

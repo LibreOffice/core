@@ -116,7 +116,7 @@ class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
 {
 public:
     SdUnoForbiddenCharsTable( SdrModel* pModel );
-    ~SdUnoForbiddenCharsTable();
+    virtual ~SdUnoForbiddenCharsTable();
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () SAL_OVERRIDE;

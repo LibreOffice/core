@@ -77,7 +77,7 @@ namespace canvas
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~CachedPrimitiveBase(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        virtual ~CachedPrimitiveBase(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
         CachedPrimitiveBase( const CachedPrimitiveBase& );

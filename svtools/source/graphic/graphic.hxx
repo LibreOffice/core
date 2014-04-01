@@ -39,7 +39,7 @@ class Graphic : public ::com::sun::star::graphic::XGraphic,
 public:
 
     Graphic();
-    ~Graphic() throw();
+    virtual ~Graphic() throw();
 
     using ::unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();

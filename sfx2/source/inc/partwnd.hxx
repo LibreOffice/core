@@ -50,7 +50,7 @@ public:
                                    SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SfxPartChildWnd_Impl);
-                            ~SfxPartChildWnd_Impl();
+                            virtual ~SfxPartChildWnd_Impl();
 
     virtual bool            QueryClose() SAL_OVERRIDE;
 };
@@ -69,7 +69,7 @@ public:
                                   Window* pParent,
                                   WinBits nBits );
 
-                            ~SfxPartDockWnd_Impl();
+                            virtual ~SfxPartDockWnd_Impl();
     sal_Bool                    QueryClose();
     virtual void            FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();

@@ -34,7 +34,7 @@ namespace oox { namespace ppt {
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
             TimeAnimationValueList & aTavList );
 
-        ~TimeAnimValueListContext( );
+        virtual ~TimeAnimValueListContext( );
 
         virtual void onEndElement() SAL_OVERRIDE;
 

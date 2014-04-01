@@ -254,7 +254,7 @@ private:
 public:
     WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
     WizardDialog( Window* pParent, const ResId& rResId );
-    ~WizardDialog();
+    virtual ~WizardDialog();
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

@@ -382,7 +382,7 @@ namespace pcr
 
     public:
         DropDownEditControl( Window* _pParent, WinBits _nStyle );
-        ~DropDownEditControl();
+        virtual ~DropDownEditControl();
 
         void setOperationMode( MultiLineOperationMode _eMode ) { m_nOperationMode = _eMode; }
         MultiLineOperationMode getOperationMode() const { return m_nOperationMode; }

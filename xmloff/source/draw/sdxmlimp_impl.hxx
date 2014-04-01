@@ -222,7 +222,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         sal_Bool bIsDraw, sal_uInt16 nImportFlags );
-    ~SdXMLImport() throw ();
+    virtual ~SdXMLImport() throw ();
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

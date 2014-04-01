@@ -51,7 +51,7 @@ public:
     sal_Bool    IsAuto() { return bAuto;}
 
     SwScrollbar(Window *pParent, sal_Bool bHori = sal_True );
-    ~SwScrollbar();
+    virtual ~SwScrollbar();
 };
 
 #endif

@@ -42,7 +42,7 @@ public:
                                 SFX_DECL_TOOLBOX_CONTROL();
 
                                 MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbX );
-                                ~MediaToolBoxControl();
+                                virtual ~MediaToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual Window*             CreateItemWindow( Window* pParent ) SAL_OVERRIDE;

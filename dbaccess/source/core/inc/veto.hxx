@@ -45,7 +45,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Any SAL_CALL getDetails() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~Veto();
+        virtual ~Veto();
 
     private:
         Veto();                         // never implemented

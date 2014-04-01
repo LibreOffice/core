@@ -295,7 +295,7 @@ class ColorFieldControl : public Control
 {
 public:
     ColorFieldControl( Window* pParent, const ResId& rResId );
-    ~ColorFieldControl();
+    virtual ~ColorFieldControl();
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -668,7 +668,7 @@ class ColorSliderControl : public Control
 {
 public:
     ColorSliderControl( Window* pParent, const ResId& rResId );
-    ~ColorSliderControl();
+    virtual ~ColorSliderControl();
 
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

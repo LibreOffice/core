@@ -101,7 +101,7 @@ public:
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                         sal_Bool bGlobal = sal_False);
-    ~SwMultiTOXTabDialog();
+    virtual ~SwMultiTOXTabDialog();
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
@@ -220,7 +220,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
 public:
     SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet);
-    ~SwTOXSelectTabPage();
+    virtual ~SwTOXSelectTabPage();
 
     virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
@@ -282,7 +282,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
 
 public:
     SwTokenWindow(Window* pParent);
-    ~SwTokenWindow();
+    virtual ~SwTokenWindow();
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
@@ -433,7 +433,7 @@ class SwTOXEntryTabPage : public SfxTabPage
 
 public:
     SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet);
-    ~SwTOXEntryTabPage();
+    virtual ~SwTOXEntryTabPage();
 
     virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
@@ -479,7 +479,7 @@ class SwTOXStylesTabPage : public SfxTabPage
 
 public:
     SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet);
-    ~SwTOXStylesTabPage();
+    virtual ~SwTOXStylesTabPage();
 
     virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;

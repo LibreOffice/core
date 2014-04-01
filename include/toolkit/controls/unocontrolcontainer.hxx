@@ -58,7 +58,7 @@ protected:
 public:
                 UnoControlContainer();
                 UnoControlContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xPeer );
-                ~UnoControlContainer();
+                virtual ~UnoControlContainer();
 
 
     // ::com::sun::star::lang::XComponent

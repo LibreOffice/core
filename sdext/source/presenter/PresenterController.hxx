@@ -87,7 +87,7 @@ public:
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
         const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxMainPaneId);
-    ~PresenterController (void);
+    virtual ~PresenterController (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 

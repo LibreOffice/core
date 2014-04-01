@@ -185,7 +185,7 @@ namespace framework
         }
 
     protected:
-        ~UndoManagerRequest()
+        virtual ~UndoManagerRequest()
         {
         }
 

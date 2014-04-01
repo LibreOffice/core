@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
 public:
     SwFmtCntnt( const SwStartNode* pStartNode = 0 );
     SwFmtCntnt( const SwFmtCntnt &rCpy );
-    ~SwFmtCntnt();
+    virtual ~SwFmtCntnt();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

@@ -32,7 +32,7 @@ private:
 
 public:
     Coverage();
-    ~Coverage();
+    virtual ~Coverage();
 
     void Coverage_Iterator();
 

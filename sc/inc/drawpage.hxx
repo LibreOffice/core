@@ -29,7 +29,7 @@ class ScDrawPage: public FmFormPage
 {
 public:
     ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage = false);
-    ~ScDrawPage();
+    virtual ~ScDrawPage();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 };

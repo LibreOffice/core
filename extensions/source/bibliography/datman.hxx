@@ -58,7 +58,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > xInterception;
 
 protected:
-    ~BibInterceptorHelper( );
+    virtual ~BibInterceptorHelper( );
 
 public:
     BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch);
@@ -130,7 +130,7 @@ protected:
 public:
 
         BibDataManager();
-        ~BibDataManager();
+        virtual ~BibDataManager();
 
         virtual void                SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
                                                                 throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

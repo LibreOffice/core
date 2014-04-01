@@ -52,7 +52,7 @@ public:
     SwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
               sal_uInt8 nDialogMode, const OUString* pFmtStr = 0);
 
-    ~SwCharDlg();
+    virtual ~SwCharDlg();
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 };
@@ -81,7 +81,7 @@ public:
                         SwCharURLPage( Window* pParent,
                                            const SfxItemSet& rSet );
 
-                        ~SwCharURLPage();
+                        virtual ~SwCharURLPage();
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 

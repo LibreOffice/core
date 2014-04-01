@@ -149,7 +149,7 @@ public:
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             Window* pParentWindow,
                                             const ResId &rId );
-                            ~SfxPopupWindow();
+                            virtual ~SfxPopupWindow();
 
     virtual SfxPopupWindow* Clone() const;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -372,7 +372,7 @@ protected:
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-                            ~SfxAddonsToolBoxControl_Impl();
+                            virtual ~SfxAddonsToolBoxControl_Impl();
 
                             void RefreshMenuImages( Menu* pMenu );
 };

@@ -45,7 +45,7 @@ namespace pcr
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        ~EditPropertyHandler();
+        virtual ~EditPropertyHandler();
 
     protected:
         // XPropertyHandler overriables

@@ -48,7 +48,7 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
     void UpdateButtons();
 public:
     SwCustomizeAddressListDialog(Window* pParent, const SwCSVData& rOldData);
-    ~SwCustomizeAddressListDialog();
+    virtual ~SwCustomizeAddressListDialog();
 
     SwCSVData*    GetNewData();
 };

@@ -608,7 +608,7 @@ private:
 
 public:
                                 XclExpChangeTrack( const XclExpRoot& rRoot );
-                                ~XclExpChangeTrack();
+                                virtual ~XclExpChangeTrack();
 
     void                        Write();
     void                        WriteXml( XclExpXmlStream& rStrm );

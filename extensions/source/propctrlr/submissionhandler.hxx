@@ -81,7 +81,7 @@ namespace pcr
         static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        ~SubmissionPropertyHandler();
+        virtual ~SubmissionPropertyHandler();
 
     protected:
         // XPropertyHandler overriables

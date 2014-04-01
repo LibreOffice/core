@@ -86,7 +86,7 @@ namespace dbaui
         DBTreeListBox( Window* pParent
             ,const ResId& rResId
             ,sal_Bool _bHandleEnterKey = sal_False);
-        ~DBTreeListBox();
+        virtual ~DBTreeListBox();
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
         void                    setContextMenuProvider( IContextMenuProvider* _pContextMenuProvider ) { m_pContextMenuProvider = _pContextMenuProvider; }

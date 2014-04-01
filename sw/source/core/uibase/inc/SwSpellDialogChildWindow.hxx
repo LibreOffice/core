@@ -54,7 +54,7 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
-    ~SwSpellDialogChildWindow();
+    virtual ~SwSpellDialogChildWindow();
 
     SFX_DECL_CHILDWINDOW_WITHID(SwSpellDialogChildWindow);
 

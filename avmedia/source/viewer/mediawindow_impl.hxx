@@ -46,7 +46,7 @@ namespace avmedia
         public:
 
                     MediaWindowControl( Window* pParent );
-                    ~MediaWindowControl();
+                    virtual ~MediaWindowControl();
 
         protected:
 
@@ -63,7 +63,7 @@ namespace avmedia
         public:
 
                             MediaChildWindow( Window* pParent );
-                            ~MediaChildWindow();
+                            virtual ~MediaChildWindow();
 
         protected:
 

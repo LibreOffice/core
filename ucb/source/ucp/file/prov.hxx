@@ -60,7 +60,7 @@ namespace fileaccess {
     public:
 
         FileProvider( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
-        ~FileProvider();
+        virtual ~FileProvider();
 
         // XServiceInfo
         virtual OUString SAL_CALL

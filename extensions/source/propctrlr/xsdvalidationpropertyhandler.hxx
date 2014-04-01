@@ -49,7 +49,7 @@ namespace pcr
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        ~XSDValidationPropertyHandler();
+        virtual ~XSDValidationPropertyHandler();
 
     protected:
         // XPropertyHandler overriables

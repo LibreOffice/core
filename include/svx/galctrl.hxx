@@ -109,7 +109,7 @@ private:
 public:
 
                         GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme );
-                        ~GalleryIconView();
+                        virtual ~GalleryIconView();
 };
 
 class GalleryListView : public BrowseBox
@@ -144,7 +144,7 @@ private:
 public:
 
                         GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme );
-                        ~GalleryListView();
+                        virtual ~GalleryListView();
 
     void                SetSelectHdl( const Link& rSelectHdl ) { maSelectHdl = rSelectHdl; }
 

@@ -327,7 +327,7 @@ private:
 
     FrameworkHelper (ViewShellBase& rBase);
     FrameworkHelper (const FrameworkHelper& rHelper); // Not implemented.
-    ~FrameworkHelper (void);
+    virtual ~FrameworkHelper (void);
     class Deleter; friend class Deleter;
     FrameworkHelper& operator= (const FrameworkHelper& rHelper); // Not implemented.
 

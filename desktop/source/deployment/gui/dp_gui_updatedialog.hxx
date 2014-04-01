@@ -84,7 +84,7 @@ public:
         com::sun::star::deployment::XPackage > > & vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
 
-    ~UpdateDialog();
+    virtual ~UpdateDialog();
 
     virtual bool Close() SAL_OVERRIDE;
 

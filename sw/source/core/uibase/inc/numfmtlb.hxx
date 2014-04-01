@@ -47,7 +47,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 public:
     NumFormatListBox(Window* pWin, WinBits nStyle);
 
-    ~NumFormatListBox();
+    virtual ~NumFormatListBox();
 
     void            Clear();
 

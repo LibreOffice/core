@@ -72,7 +72,7 @@ private:
 public:
                 ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
                                                 const ScAddress& rNS, const ScAddress& rNE );
-                ~ScUndoObjData();
+                virtual ~ScUndoObjData();
 
     virtual void     Undo() SAL_OVERRIDE;
     virtual void     Redo() SAL_OVERRIDE;

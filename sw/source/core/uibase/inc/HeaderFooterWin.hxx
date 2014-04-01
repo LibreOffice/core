@@ -30,7 +30,7 @@ class SwHeaderFooterWin : public MenuButton, public SwFrameControl
 
 public:
     SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
-    ~SwHeaderFooterWin( );
+    virtual ~SwHeaderFooterWin( );
 
     void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
 

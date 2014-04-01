@@ -48,7 +48,7 @@ namespace svt { namespace table
 
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
-        ~TableDataWindow();
+        virtual ~TableDataWindow();
 
         inline void         SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
         inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }

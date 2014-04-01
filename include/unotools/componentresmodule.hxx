@@ -51,7 +51,7 @@ namespace utl
 
     public:
         OComponentResourceModule( const OString& _rResFilePrefix );
-        ~OComponentResourceModule();
+        virtual ~OComponentResourceModule();
 
         /// get the vcl res manager of the module
         ResMgr* getResManager();

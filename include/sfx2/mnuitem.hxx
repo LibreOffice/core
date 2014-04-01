@@ -50,7 +50,7 @@ public:
     static SfxMenuControl*  CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
     static void             RegisterControl( sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL );
 
-                            ~SfxMenuControl();
+                            virtual ~SfxMenuControl();
 
         using SfxControllerItem::Bind;
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
@@ -79,7 +79,7 @@ public:
                             SfxUnoMenuControl( const OUString&, sal_uInt16 nId, Menu&,
                                                const OUString&,
                                                 SfxBindings&, SfxVirtualMenu* );
-                            ~SfxUnoMenuControl();
+                            virtual ~SfxUnoMenuControl();
 };
 
 typedef SfxMenuControl* (*SfxMenuControlCtor)( sal_uInt16 nId, Menu &, SfxBindings & );
@@ -131,7 +131,7 @@ protected:
 public:
     SFX_DECL_MENU_CONTROL();
     SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
-    ~SfxAppMenuControl_Impl();
+    virtual ~SfxAppMenuControl_Impl();
 
     struct ExecuteInfo
     {

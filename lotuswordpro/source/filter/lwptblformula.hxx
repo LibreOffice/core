@@ -200,7 +200,7 @@ class LwpFormulaInfo : public LwpCellList
 {
 public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpFormulaInfo();
+    virtual ~LwpFormulaInfo();
     sal_Bool IsFormula() SAL_OVERRIDE {return sal_True;}
     void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
     OUString Convert(LwpTableLayout* pCellsMap);

@@ -179,7 +179,7 @@ namespace oox { namespace ppt {
 
             }
 
-        ~SetTimeNodeContext() throw ()
+        virtual ~SetTimeNodeContext() throw ()
             {
                 if( maTo.hasValue() )
                 {
@@ -240,7 +240,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        ~CmdTimeNodeContext() throw ()
+        virtual ~CmdTimeNodeContext() throw ()
             {
             }
 
@@ -355,7 +355,7 @@ namespace oox { namespace ppt {
                 mnPrevAc = xAttribs->getOptionalValueToken( XML_prevAc, 0 );
             }
 
-        ~SequenceTimeNodeContext() throw()
+        virtual ~SequenceTimeNodeContext() throw()
             {
             }
 
@@ -431,7 +431,7 @@ namespace oox { namespace ppt {
             , m_byColor( AnimationColorSpace::RGB, 0, 0, 0)
             {
             }
-        ~AnimColorContext() throw()
+        virtual ~AnimColorContext() throw()
             {
             }
 
@@ -564,7 +564,7 @@ namespace oox { namespace ppt {
             }
 
 
-        ~AnimContext() throw ()
+        virtual ~AnimContext() throw ()
             {
                 ::std::list< TimeAnimationValue >::iterator iter, end;
                 int nKeyTimes = maTavList.size();
@@ -638,7 +638,7 @@ namespace oox { namespace ppt {
                     = makeAny((sal_Int16)AnimationTransformType::SCALE);
             }
 
-        ~AnimScaleContext( ) throw( )
+        virtual ~AnimScaleContext( ) throw( )
             {
             }
 
@@ -738,7 +738,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        ~AnimRotContext( ) throw( )
+        virtual ~AnimRotContext( ) throw( )
             {
             }
 
@@ -797,7 +797,7 @@ namespace oox { namespace ppt {
                 // TODO make sure the units are right. Likely not.
             }
 
-        ~AnimMotionContext( ) throw()
+        virtual ~AnimMotionContext( ) throw()
             {
             }
 
@@ -883,7 +883,7 @@ namespace oox { namespace ppt {
             }
 
 
-        ~AnimEffectContext( ) throw()
+        virtual ~AnimEffectContext( ) throw()
             {
             }
 

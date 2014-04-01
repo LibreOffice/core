@@ -35,7 +35,7 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
 public:
 
     XMLTableShapeImportHelper( ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper=0 );
-    ~XMLTableShapeImportHelper();
+    virtual ~XMLTableShapeImportHelper();
 
     void SetLayer(com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType) const;
     virtual void finishShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,

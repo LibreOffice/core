@@ -56,7 +56,7 @@ class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
             ScEditWindow( Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
-            ~ScEditWindow();
+            virtual ~ScEditWindow();
 
     using Control::SetFont;
     void            SetFont( const ScPatternAttr& rPattern );

@@ -93,7 +93,7 @@ protected:
     ::osl::Mutex                                    m_aMutex;
 
 protected:
-    ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
+    virtual ~OSequenceOutputStream() { if (m_bConnected) closeOutput(); }
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded

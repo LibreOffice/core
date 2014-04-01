@@ -68,7 +68,7 @@ class SvxNumberFormatTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    ~SvxNumberFormatTabPage();
+    virtual ~SvxNumberFormatTabPage();
 
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );

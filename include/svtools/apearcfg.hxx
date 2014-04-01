@@ -58,7 +58,7 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 
 public:
     SvtTabAppearanceCfg( );
-    ~SvtTabAppearanceCfg( );
+    virtual ~SvtTabAppearanceCfg( );
 
     virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;

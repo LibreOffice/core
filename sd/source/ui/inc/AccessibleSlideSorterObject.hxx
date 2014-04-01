@@ -69,7 +69,7 @@ public:
             ::com::sun::star::accessibility::XAccessible >& rxParent,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         sal_uInt16 nPageNumber);
-    ~AccessibleSlideSorterObject (void);
+    virtual ~AccessibleSlideSorterObject (void);
 
     /** Return the page that is made accessible by the called object.
     */

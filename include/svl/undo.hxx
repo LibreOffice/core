@@ -455,7 +455,7 @@ private:
 public:
                             TYPEINFO_OVERRIDE();
                             SfxLinkUndoAction(::svl::IUndoManager *pManager);
-                            ~SfxLinkUndoAction();
+                            virtual ~SfxLinkUndoAction();
 
     virtual void            Undo() SAL_OVERRIDE;
     virtual void            Redo() SAL_OVERRIDE;

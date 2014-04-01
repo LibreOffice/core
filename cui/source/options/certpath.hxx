@@ -34,7 +34,7 @@ private:
     void AddCertPath(const OUString &rProfile, const OUString &rPath);
 public:
     CertPathDialog(Window* pParent);
-    ~CertPathDialog();
+    virtual ~CertPathDialog();
 
     OUString getDirectory() const;
 };

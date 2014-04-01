@@ -30,7 +30,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SwGlobalDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
-    ~SwGlobalDocShell();
+    virtual ~SwGlobalDocShell();
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,

@@ -28,7 +28,7 @@ class SwToolbarConfigItem : public utl::ConfigItem
 
 public:
     SwToolbarConfigItem( bool bWeb );
-    ~SwToolbarConfigItem();
+    virtual ~SwToolbarConfigItem();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

@@ -215,7 +215,7 @@ private:
 
 public:
                         SfxDocTemplate_Impl();
-                        ~SfxDocTemplate_Impl();
+                        virtual ~SfxDocTemplate_Impl();
 
     void                IncrementLock();
     void                DecrementLock();

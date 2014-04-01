@@ -91,7 +91,7 @@ public:
     {
     }
 
-    ~Context()
+    virtual ~Context()
     {
     }
 

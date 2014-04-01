@@ -189,7 +189,7 @@ namespace dbaui
 
     protected:
         CopyTableWizard( const Reference< XComponentContext >& _rxORB );
-        ~CopyTableWizard();
+        virtual ~CopyTableWizard();
 
         // OGenericUnoDialog overridables
         virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;

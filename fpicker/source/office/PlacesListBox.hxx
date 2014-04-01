@@ -28,7 +28,7 @@ class PlacesListBox_Impl : public SvHeaderTabListBox
 
     public:
         PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
-        ~PlacesListBox_Impl( );
+        virtual ~PlacesListBox_Impl( );
 
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 };
@@ -49,7 +49,7 @@ class PlacesListBox : public Control
 
     public:
         PlacesListBox( SvtFileDialog* pFileDlg, const OUString& rTitle, const ResId& rResId );
-        ~PlacesListBox( );
+        virtual ~PlacesListBox( );
 
         void AppendPlace( PlacePtr pPlace );
         void RemovePlace( sal_uInt16 nPos );

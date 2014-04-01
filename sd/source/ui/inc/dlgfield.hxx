@@ -51,7 +51,7 @@ private:
 
 public:
     SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );
-    ~SdModifyFieldDlg() {}
+    virtual ~SdModifyFieldDlg() {}
 
     SvxFieldData*       GetField();
     SfxItemSet          GetItemSet();

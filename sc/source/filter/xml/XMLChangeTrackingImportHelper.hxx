@@ -131,7 +131,7 @@ struct ScMyBaseAction
 struct ScMyInsAction : public ScMyBaseAction
 {
     ScMyInsAction(const ScChangeActionType nActionType);
-    ~ScMyInsAction();
+    virtual ~ScMyInsAction();
 };
 
 struct ScMyDelAction : public ScMyBaseAction
@@ -142,7 +142,7 @@ struct ScMyDelAction : public ScMyBaseAction
     sal_Int32 nD;
 
     ScMyDelAction(const ScChangeActionType nActionType);
-    ~ScMyDelAction();
+    virtual ~ScMyDelAction();
 };
 
 struct ScMyMoveAction : public ScMyBaseAction
@@ -151,7 +151,7 @@ struct ScMyMoveAction : public ScMyBaseAction
     ScMyMoveRanges* pMoveRanges;
 
     ScMyMoveAction();
-    ~ScMyMoveAction();
+    virtual ~ScMyMoveAction();
 };
 
 struct ScMyContentAction : public ScMyBaseAction
@@ -159,13 +159,13 @@ struct ScMyContentAction : public ScMyBaseAction
     ScMyCellInfo*   pCellInfo;
 
     ScMyContentAction();
-    ~ScMyContentAction();
+    virtual ~ScMyContentAction();
 };
 
 struct ScMyRejAction : public ScMyBaseAction
 {
     ScMyRejAction();
-    ~ScMyRejAction();
+    virtual ~ScMyRejAction();
 };
 
 typedef std::list<ScMyBaseAction*> ScMyActions;

@@ -51,7 +51,7 @@ class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
     SfxErrorHandler(sal_uInt16 nId, sal_uLong lStart, sal_uLong lEnd, ResMgr *pMgr=0);
-    ~SfxErrorHandler();
+    virtual ~SfxErrorHandler();
 
 protected:
     virtual bool     GetErrorString(sal_uLong lErrId, OUString &, sal_uInt16&) const;

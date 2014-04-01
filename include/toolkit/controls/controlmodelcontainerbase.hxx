@@ -100,7 +100,7 @@ protected:
 public:
                         ControlModelContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );
-                        ~ControlModelContainerBase();
+                        virtual ~ControlModelContainerBase();
 
     UnoControlModel*    Clone() const SAL_OVERRIDE;
 
@@ -236,7 +236,7 @@ protected:
 
 public:
     ControlContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~ControlContainerBase();
+    virtual ~ControlContainerBase();
 
     DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, "toolkit.ControlContainerBase" )
 

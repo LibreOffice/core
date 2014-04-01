@@ -132,7 +132,7 @@ class SvxStyleBox_Impl : public ComboBox
 public:
     SvxStyleBox_Impl( Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
                         const Reference< XFrame >& _xFrame,const OUString& rClearFormatKey, const OUString& rMoreKey, bool bInSpecialMode );
-    ~SvxStyleBox_Impl();
+    virtual ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
     inline bool IsVisible() { return bVisible; }
@@ -272,7 +272,7 @@ protected:
 
 public:
     SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
-    ~SvxFrameWindow_Impl();
+    virtual ~SvxFrameWindow_Impl();
     void            StartSelection();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

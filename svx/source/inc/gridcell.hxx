@@ -397,7 +397,7 @@ class DbTextField : public DbLimitedLengthField
     sal_Bool                    m_bIsSimpleEdit;
 
 protected:
-    ~DbTextField( );
+    virtual ~DbTextField( );
 
 public:
     TYPEINFO_OVERRIDE();

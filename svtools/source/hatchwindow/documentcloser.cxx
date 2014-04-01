@@ -55,7 +55,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::
 
 public:
     ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
-    ~ODocumentCloser();
+    virtual ~ODocumentCloser();
 
 // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -44,7 +44,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rSectPropSet);
 
-    ~XMLSectionSourceImportContext();
+    virtual ~XMLSectionSourceImportContext();
 
 protected:
 

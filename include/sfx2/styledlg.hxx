@@ -39,7 +39,7 @@ public:
     SfxStyleDialog(Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription, SfxStyleSheetBase&);
 
-    ~SfxStyleDialog();
+    virtual ~SfxStyleDialog();
 
     SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }
     const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }

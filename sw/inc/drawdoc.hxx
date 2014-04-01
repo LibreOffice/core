@@ -29,7 +29,7 @@ class SwDrawDocument : public FmFormModel
     SwDoc* pDoc;
 public:
     SwDrawDocument( SwDoc* pDoc );
-    ~SwDrawDocument();
+    virtual ~SwDrawDocument();
 
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }

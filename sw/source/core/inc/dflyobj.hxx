@@ -47,7 +47,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SwFlyDrawObj();
-    ~SwFlyDrawObj();
+    virtual ~SwFlyDrawObj();
 
     // for instantiation of this class while loading (via factory)
     virtual sal_uInt32 GetObjInventor()     const SAL_OVERRIDE;
@@ -79,7 +79,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
-    ~SwVirtFlyDrawObj();
+    virtual ~SwVirtFlyDrawObj();
 
     // overloaded method of base class SdrVirtObj
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const SAL_OVERRIDE;

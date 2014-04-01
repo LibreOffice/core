@@ -47,7 +47,7 @@ public:
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    ~SpinningProgressControlModel();
+    virtual ~SpinningProgressControlModel();
 };
 
     SpinningProgressControlModel::SpinningProgressControlModel( Reference< XComponentContext > const & i_factory )

@@ -61,7 +61,7 @@ class DummyHandler_Impl : public ::cppu::WeakImplHelper1< task::XInteractionHand
 {
 public:
     DummyHandler_Impl() {}
-    ~DummyHandler_Impl();
+    virtual ~DummyHandler_Impl();
 
     virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& xRequest )
             throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;

@@ -104,7 +104,7 @@ class BibConfig : public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     BibConfig();
-    ~BibConfig();
+    virtual ~BibConfig();
 
     virtual void    Commit() SAL_OVERRIDE;
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;

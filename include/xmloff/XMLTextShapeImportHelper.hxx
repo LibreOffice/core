@@ -35,7 +35,7 @@ class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
 public:
 
     XMLTextShapeImportHelper( SvXMLImport& rImp );
-    ~XMLTextShapeImportHelper();
+    virtual ~XMLTextShapeImportHelper();
 
     virtual void addShape(
         ::com::sun::star::uno::Reference<

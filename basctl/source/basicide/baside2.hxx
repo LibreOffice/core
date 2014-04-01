@@ -148,7 +148,7 @@ protected:
 
 public:
                     EditorWindow (Window* pParent, ModulWindow*);
-                    ~EditorWindow();
+                    virtual ~EditorWindow();
 
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
     ExtTextView*    GetEditView() const     { return pEditView.get(); }
@@ -196,7 +196,7 @@ protected:
 
 public:
                     BreakPointWindow (Window* pParent, ModulWindow*);
-                    ~BreakPointWindow();
+                    virtual ~BreakPointWindow();
 
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
     void            SetNoMarker ();
@@ -220,7 +220,7 @@ protected:
 
 public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
-    ~WatchTreeListBox();
+    virtual ~WatchTreeListBox();
 
     void            RequestingChildren( SvTreeListEntry * pParent ) SAL_OVERRIDE;
     void            UpdateWatches( bool bBasicStopped = false );
@@ -252,7 +252,7 @@ protected:
 
 public:
                     WatchWindow (Layout* pParent);
-                    ~WatchWindow();
+                    virtual ~WatchWindow();
 
     void            AddWatch( const OUString& rVName );
     bool            RemoveSelectedWatch();
@@ -274,7 +274,7 @@ protected:
 
 public:
                     StackWindow (Layout* pParent);
-                    ~StackWindow();
+                    virtual ~StackWindow();
 
     void            UpdateCalls();
 };
@@ -337,7 +337,7 @@ public:
 
     ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString& aModule );
 
-                    ~ModulWindow();
+                    virtual ~ModulWindow();
 
     virtual void    ExecuteCommand (SfxRequest& rReq) SAL_OVERRIDE;
     virtual void    ExecuteGlobal (SfxRequest& rReq) SAL_OVERRIDE;
@@ -462,7 +462,7 @@ private:
     {
     public:
         SyntaxColors ();
-        ~SyntaxColors ();
+        virtual ~SyntaxColors ();
     public:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
         void SettingsChanged ();
@@ -522,7 +522,7 @@ private:
 
 public:
     CodeCompleteWindow( EditorWindow* pPar );
-    ~CodeCompleteWindow(){ delete pListBox; }
+    virtual ~CodeCompleteWindow(){ delete pListBox; }
 
     void InsertEntry( const OUString& aStr );
     void ClearListBox();

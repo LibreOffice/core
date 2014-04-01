@@ -44,7 +44,7 @@ class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 
 public:
     SvxHtmlOptions();
-    ~SvxHtmlOptions();
+    virtual ~SvxHtmlOptions();
 
     virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;

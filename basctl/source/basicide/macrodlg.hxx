@@ -90,7 +90,7 @@ private:
 
 public:
                         MacroChooser( Window* pParent, bool bCreateEntries = true );
-                        ~MacroChooser();
+                        virtual ~MacroChooser();
 
     SbMethod*           GetMacro();
     void                DeleteMacro();

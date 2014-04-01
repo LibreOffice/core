@@ -90,7 +90,7 @@ protected:
 
 public:
     XMLPageExport( SvXMLExport& rExp );
-    ~XMLPageExport();
+    virtual ~XMLPageExport();
 
     void    collectAutoStyles( bool bUsed )     { exportStyles( bUsed, true ); }
     void    exportAutoStyles();

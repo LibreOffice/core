@@ -1320,7 +1320,7 @@ public:
         : SvLBoxString( pEntry, 0, rStr )
     { }
 
-    ~PopupPainter() { }
+    virtual ~PopupPainter() { }
 
     virtual void Paint( const Point& rPos, SvTreeListBox& rOutDev,
         const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE

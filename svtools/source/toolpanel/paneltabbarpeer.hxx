@@ -39,7 +39,7 @@ namespace svt
         PanelTabBarPeer( PanelTabBar& i_rTabBar );
 
     protected:
-        ~PanelTabBarPeer();
+        virtual ~PanelTabBarPeer();
 
         // VCLXWindow overridables
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;

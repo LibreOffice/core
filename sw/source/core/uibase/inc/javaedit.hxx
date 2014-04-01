@@ -72,7 +72,7 @@ private:
 
 public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
-    ~SwJavaEditDialog();
+    virtual ~SwJavaEditDialog();
 
     OUString GetScriptText() const { return aText; }
 

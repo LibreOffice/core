@@ -71,7 +71,7 @@ class SwContentOptPage : public SfxTabPage
 public:
                         SwContentOptPage( Window* pParent,
                                            const SfxItemSet& rSet );
-                        ~SwContentOptPage();
+                        virtual ~SwContentOptPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -191,7 +191,7 @@ class SwStdFontTabPage : public SfxTabPage
 
             SwStdFontTabPage( Window* pParent,
                                        const SfxItemSet& rSet );
-            ~SwStdFontTabPage();
+            virtual ~SwStdFontTabPage();
 
 public:
     static SfxTabPage*  Create( Window* pParent,
@@ -232,7 +232,7 @@ class SwTableOptionsTabPage : public SfxTabPage
 
                 SwTableOptionsTabPage( Window* pParent,
                                            const SfxItemSet& rSet );
-                ~SwTableOptionsTabPage();
+                virtual ~SwTableOptionsTabPage();
 
 public:
 
@@ -279,7 +279,7 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     SwWrtShell *    m_pWrtShell;
 
     SwShdwCrsrOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwShdwCrsrOptionsTabPage();
+    virtual ~SwShdwCrsrOptionsTabPage();
 
 public:
 
@@ -357,7 +357,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     OUString             sNone;
 
     SwRedlineOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwRedlineOptionsTabPage();
+    virtual ~SwRedlineOptionsTabPage();
 
     DECL_LINK( AttribHdl, ListBox *pLB );
     DECL_LINK(ChangedMaskPrevHdl, void * = 0);
@@ -422,7 +422,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
     NumericField* m_pLenNF;
 
     SwCompareOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwCompareOptionsTabPage();
+    virtual ~SwCompareOptionsTabPage();
 
     DECL_LINK(ComparisonHdl, void *);
     DECL_LINK(IgnoreHdl, void *);

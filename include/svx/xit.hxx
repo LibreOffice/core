@@ -50,7 +50,7 @@ public:
                         const OUString& rName = OUString());
             NameOrIndex(sal_uInt16 nWhich, SvStream& rIn);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
-           ~NameOrIndex() {};
+           virtual ~NameOrIndex() {};
 
     virtual bool         operator==(const SfxPoolItem& rItem) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;

@@ -73,7 +73,7 @@ protected:
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                  ScViewData*    ptrViewData );
-                    ~ScSimpleRefDlg();
+                    virtual ~ScSimpleRefDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 

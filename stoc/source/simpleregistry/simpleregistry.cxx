@@ -59,7 +59,7 @@ class SimpleRegistry:
 public:
     SimpleRegistry() {}
 
-    ~SimpleRegistry() {}
+    virtual ~SimpleRegistry() {}
 
     osl::Mutex mutex_;
 

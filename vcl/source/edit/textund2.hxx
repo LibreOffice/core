@@ -33,7 +33,7 @@ private:
 public:
                     TYPEINFO_OVERRIDE();
                     TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
-                    ~TextUndoDelPara();
+                    virtual ~TextUndoDelPara();
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
@@ -51,7 +51,7 @@ private:
 public:
                     TYPEINFO_OVERRIDE();
                     TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
-                    ~TextUndoConnectParas();
+                    virtual ~TextUndoConnectParas();
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
@@ -69,7 +69,7 @@ private:
 public:
                     TYPEINFO_OVERRIDE();
                     TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
-                    ~TextUndoSplitPara();
+                    virtual ~TextUndoSplitPara();
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
@@ -122,7 +122,7 @@ private:
 public:
                         TYPEINFO_OVERRIDE();
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
-                        ~TextUndoSetAttribs();
+                        virtual ~TextUndoSetAttribs();
 
     virtual void        Undo() SAL_OVERRIDE;
     virtual void        Redo() SAL_OVERRIDE;

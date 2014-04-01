@@ -72,7 +72,7 @@ class SwAddressControl_Impl : public Control
 
 public:
     SwAddressControl_Impl(Window* pParent, const ResId& rResId );
-    ~SwAddressControl_Impl();
+    virtual ~SwAddressControl_Impl();
 
     void        SetData(SwCSVData& rDBData);
 

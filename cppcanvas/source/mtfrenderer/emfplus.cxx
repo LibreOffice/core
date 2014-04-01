@@ -140,7 +140,7 @@ namespace cppcanvas
                     pPointTypes = NULL;
             }
 
-            ~EMFPPath ()
+            virtual ~EMFPPath ()
             {
                 delete [] pPoints;
                 delete [] pPointTypes;
@@ -282,7 +282,7 @@ namespace cppcanvas
                 initialPath = NULL;
             }
 
-            ~EMFPRegion ()
+            virtual ~EMFPRegion ()
             {
                 if (combineMode) {
                     delete [] combineMode;
@@ -353,7 +353,7 @@ namespace cppcanvas
                 hasTransformation = false;
             }
 
-            ~EMFPBrush ()
+            virtual ~EMFPBrush ()
             {
                 if (blendPositions != NULL) {
                     delete[] blendPositions;
@@ -633,7 +633,7 @@ namespace cppcanvas
             {
             }
 
-            ~EMFPCustomLineCap()
+            virtual ~EMFPCustomLineCap()
             {
             }
 
@@ -761,7 +761,7 @@ namespace cppcanvas
                 customEndCap = NULL;
             }
 
-            ~EMFPPen ()
+            virtual ~EMFPPen ()
             {
                 delete[] dashPattern;
                 delete[] compoundArray;

@@ -40,11 +40,29 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     // external QtCore/qobjectdefs.h:
     if (ignoreLocation(decl) || !compat::isFirstDecl(*decl)
         || decl->begin_overridden_methods() == decl->end_overridden_methods()
-        || decl->hasAttr<OverrideAttr>() || isa<CXXDestructorDecl>(decl)
+        || decl->hasAttr<OverrideAttr>()
         || ignoreLocation(
             compiler.getSourceManager().getSpellingLoc(
                 decl->getNameInfo().getLoc())))
     {
+        return true;
+    }
+    // It appears that the C++ standard allows overriding destructors to be
+    // marked "override," but at least some MSVC versions complain about it, so
+    // at least make sure such destructors are explicitly marked "virtual":
+    if (isa<CXXDestructorDecl>(decl)) {
+        if (!decl->isVirtualAsWritten()
+            && (rewriter == nullptr
+                || !insertTextBefore(
+                    decl->getSourceRange().getBegin(), "virtual ")))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                ("overriding destructor declaration not explicitly marked"
+                 " 'virtual'"),
+                decl->getLocation())
+                << decl->getSourceRange();
+        }
         return true;
     }
 #if LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion

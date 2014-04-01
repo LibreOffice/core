@@ -46,7 +46,7 @@ private:
 
 public:
     ParaBulletsControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
-    ~ParaBulletsControl();
+    virtual ~ParaBulletsControl();
     void UpdateValueSet();
 };
 

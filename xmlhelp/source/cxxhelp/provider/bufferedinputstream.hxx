@@ -42,7 +42,7 @@ namespace chelp {
         BufferedInputStream(
             const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream);
 
-        ~BufferedInputStream();
+        virtual ~BufferedInputStream();
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface( const com::sun::star::uno::Type& rType )

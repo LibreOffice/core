@@ -83,7 +83,7 @@ namespace pcr
             const OUString& _sDetailLabel = OUString(),
             const OUString& _sMasterLabel = OUString()
         );
-        ~FormLinkDialog( );
+        virtual ~FormLinkDialog( );
 
         // Dialog overridables
         virtual short   Execute() SAL_OVERRIDE;

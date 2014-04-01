@@ -187,7 +187,7 @@ public:
 
     SdPageObjsTLB( Window* pParent, const SdResId& rSdResId );
     SdPageObjsTLB( Window* pParent, WinBits nStyle );
-                            ~SdPageObjsTLB();
+                            virtual ~SdPageObjsTLB();
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
     OUString          getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool isAltText) const;

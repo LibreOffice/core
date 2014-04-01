@@ -172,7 +172,7 @@ namespace pcr
         virtual void SAL_CALL release() throw() SAL_OVERRIDE;
 
     protected:
-        ~PropertyControlContext_Impl();
+        virtual ~PropertyControlContext_Impl();
 
         // XPropertyControlObserver
         virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception) SAL_OVERRIDE;

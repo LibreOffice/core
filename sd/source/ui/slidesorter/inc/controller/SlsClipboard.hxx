@@ -61,7 +61,7 @@ class Clipboard
 {
 public:
     Clipboard (SlideSorter& rSlideSorter);
-    ~Clipboard (void);
+    virtual ~Clipboard (void);
 
     /** Create a slide sorter transferable from the given sd
         transferable.  The returned transferable is set up with all

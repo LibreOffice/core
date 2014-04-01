@@ -37,7 +37,7 @@ private:
 public:
 
                     GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits );
-                    ~GalleryButton();
+                    virtual ~GalleryButton();
 };
 
 // - GalleryThemeListBox -
@@ -54,7 +54,7 @@ protected:
 public:
 
                     GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits );
-                    ~GalleryThemeListBox();
+                    virtual ~GalleryThemeListBox();
 };
 
 // - GalleryBrowser1 -
@@ -123,7 +123,7 @@ public:
                                 Gallery* pGallery,
                                 const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
                                 const ::boost::function<void(void)>& rThemeSlectionHandler);
-                            ~GalleryBrowser1();
+                            virtual ~GalleryBrowser1();
 
     void                    SelectTheme( const OUString& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
     void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }

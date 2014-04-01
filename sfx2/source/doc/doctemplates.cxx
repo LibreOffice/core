@@ -139,7 +139,7 @@ class WaitWindow_Impl : public WorkWindow
 
     public:
                      WaitWindow_Impl();
-                    ~WaitWindow_Impl();
+                    virtual ~WaitWindow_Impl();
     virtual void     Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
@@ -323,7 +323,7 @@ private:
 
 public:
                              Updater_Impl( SfxDocTplService_Impl* pTemplates );
-                            ~Updater_Impl();
+                            virtual ~Updater_Impl();
 
     virtual void SAL_CALL   run() SAL_OVERRIDE;
     virtual void SAL_CALL   onTerminated() SAL_OVERRIDE;
@@ -2221,7 +2221,7 @@ class SfxDocTplService: public ::cppu::WeakImplHelper3< css::lang::XLocalizable,
 
 public:
     SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
-    ~SfxDocTplService();
+    virtual ~SfxDocTplService();
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE

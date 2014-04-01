@@ -43,7 +43,7 @@ public:
     View3DDialog( Window* pWindow,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
                   const XColorListRef &pColorTable );
-    ~View3DDialog();
+    virtual ~View3DDialog();
 
     // from Dialog (base of TabDialog)
     virtual short Execute() SAL_OVERRIDE;

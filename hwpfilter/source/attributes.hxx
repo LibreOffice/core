@@ -39,7 +39,7 @@ struct AttributeListImpl_impl;
 class AttributeListImpl : public WeakImplHelper1< XAttributeList >
 {
 protected:
-    ~AttributeListImpl();
+    virtual ~AttributeListImpl();
 
 public:
     AttributeListImpl();

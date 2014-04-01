@@ -48,7 +48,7 @@ namespace toolkit
     {
     public:
         WindowStyleSettings( ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
-        ~WindowStyleSettings();
+        virtual ~WindowStyleSettings();
 
         void dispose();
 

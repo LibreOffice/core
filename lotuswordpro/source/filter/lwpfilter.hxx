@@ -95,7 +95,7 @@ class LWPFilterReader : public WeakImplHelper1< XFilter >
 {
 public:
     LWPFilterReader();
-    ~LWPFilterReader();
+    virtual ~LWPFilterReader();
 
 public:
     /**
@@ -132,7 +132,7 @@ class LWPFilterImportFilter : public WeakImplHelper4< XFilter, XImporter, XServi
 {
 public:
     LWPFilterImportFilter( const uno::Reference< XMultiServiceFactory >& xFact );
-    ~LWPFilterImportFilter();
+    virtual ~LWPFilterImportFilter();
 
 public:
     /**

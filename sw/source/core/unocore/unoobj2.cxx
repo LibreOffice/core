@@ -465,7 +465,7 @@ public:
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    ~Impl() {
+    virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
         delete GetRegisteredIn();
     }
@@ -731,7 +731,7 @@ public:
     {
     }
 
-    ~Impl()
+    virtual ~Impl()
     {
         // Impl owns the bookmark; delete it here: SolarMutex is locked
         Invalidate();
@@ -1533,7 +1533,7 @@ public:
         MakeRanges();
     }
 
-    ~Impl() {
+    virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
         delete GetRegisteredIn();
     }
@@ -1718,7 +1718,7 @@ public:
         }
     }
 
-    ~Impl() {
+    virtual ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
         delete GetRegisteredIn();
     }

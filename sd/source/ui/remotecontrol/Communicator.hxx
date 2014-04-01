@@ -39,7 +39,7 @@ namespace sd
     {
         public:
             Communicator( IBluetoothSocket *pSocket );
-            ~Communicator();
+            virtual ~Communicator();
 
             void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );

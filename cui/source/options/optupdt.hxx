@@ -52,7 +52,7 @@ private:
 
 public:
     SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SvxOnlineUpdateTabPage();
+    virtual ~SvxOnlineUpdateTabPage();
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
 

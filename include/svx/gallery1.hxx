@@ -121,7 +121,7 @@ private:
     void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
                                 SVX_DLLPUBLIC Gallery( const OUString& rMultiPath );
-                                SVX_DLLPUBLIC ~Gallery();
+                                SVX_DLLPUBLIC virtual ~Gallery();
 
 public:
 

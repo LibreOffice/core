@@ -215,7 +215,7 @@ class AddonsOptions_Impl : public ConfigItem
 
 
          AddonsOptions_Impl();
-        ~AddonsOptions_Impl();
+        virtual ~AddonsOptions_Impl();
 
 
         //  overloaded methods of baseclass

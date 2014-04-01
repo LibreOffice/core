@@ -72,7 +72,7 @@ class GlobalEventConfig_Impl : public utl::ConfigItem
 
 public:
     GlobalEventConfig_Impl( );
-    ~GlobalEventConfig_Impl( );
+    virtual ~GlobalEventConfig_Impl( );
 
     void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
     void            Commit() SAL_OVERRIDE;
@@ -91,7 +91,7 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig:
 {
     public:
         GlobalEventConfig( );
-        ~GlobalEventConfig( );
+        virtual ~GlobalEventConfig( );
         static ::osl::Mutex& GetOwnStaticMutex();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

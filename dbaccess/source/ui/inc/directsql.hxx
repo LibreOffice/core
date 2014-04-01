@@ -69,7 +69,7 @@ namespace dbaui
         DirectSQLDialog(
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
-        ~DirectSQLDialog();
+        virtual ~DirectSQLDialog();
 
         /// number of history entries
         sal_Int32 getHistorySize() const;

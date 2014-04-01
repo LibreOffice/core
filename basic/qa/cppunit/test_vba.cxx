@@ -20,7 +20,7 @@ namespace
     {
         public:
         VBATest() : BootstrapFixture(true, false) {}
-        ~VBATest(){}
+        virtual ~VBATest(){}
         void testMiscVBAFunctions();
         void testMiscOLEStuff();
         // Adds code needed to register the test suite

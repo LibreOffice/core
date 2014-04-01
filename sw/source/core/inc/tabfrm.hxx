@@ -110,7 +110,7 @@ protected:
 public:
     SwTabFrm( SwTable &, SwFrm* );  // calling Regist Flys always after creation _and_pasting!
     SwTabFrm( SwTabFrm & ); // _only_ for the creation of follows
-    ~SwTabFrm();
+    virtual ~SwTabFrm();
 
     void JoinAndDelFollows();   // for DelFrms of the TableNodes!
 

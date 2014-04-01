@@ -187,7 +187,7 @@ class SwPostItMgr: public SfxListener
 
     public:
             SwPostItMgr(SwView* aDoc);
-            ~SwPostItMgr();
+            virtual ~SwPostItMgr();
 
             typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
             const_iterator begin()  const { return mvPostItFlds.begin(); }

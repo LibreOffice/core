@@ -116,7 +116,7 @@ protected:
 
 public:
                     SwSrcEditWindow( Window* pParent, SwSrcView* pParentView );
-                    ~SwSrcEditWindow();
+                    virtual ~SwSrcEditWindow();
 
     void            SetScrollBarRanges();
     void            InitScrollBars();

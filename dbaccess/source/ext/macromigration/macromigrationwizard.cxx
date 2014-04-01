@@ -84,7 +84,7 @@ namespace dbmm
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw(RuntimeException);
 
     protected:
-        ~MacroMigrationDialogService();
+        virtual ~MacroMigrationDialogService();
 
     protected:
         virtual Dialog* createDialog( Window* _pParent ) SAL_OVERRIDE;

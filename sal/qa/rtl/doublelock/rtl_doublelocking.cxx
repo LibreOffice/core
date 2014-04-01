@@ -133,7 +133,7 @@ public:
             ::osl::Thread::suspend();
         }
 
-    ~OGetThread()
+    virtual ~OGetThread()
         {
             if (isRunning())
             {

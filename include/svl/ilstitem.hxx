@@ -36,7 +36,7 @@ public:
     SfxIntegerListItem( sal_uInt16 nWhich, const ::std::vector < sal_Int32 >& rList );
     SfxIntegerListItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Sequence < sal_Int32 >& rList );
     SfxIntegerListItem( const SfxIntegerListItem& rItem );
-    ~SfxIntegerListItem();
+    virtual ~SfxIntegerListItem();
 
     ::com::sun::star::uno::Sequence < sal_Int32 > GetSequence()
     { return m_aList; }

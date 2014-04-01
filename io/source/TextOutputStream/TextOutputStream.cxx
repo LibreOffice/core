@@ -68,7 +68,7 @@ class OTextOutputStream : public TextOutputStreamHelper
 
 public:
     OTextOutputStream();
-    ~OTextOutputStream();
+    virtual ~OTextOutputStream();
 
     // Methods XTextOutputStream
     virtual void SAL_CALL writeString( const OUString& aString )

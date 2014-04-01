@@ -1208,7 +1208,7 @@ namespace oglcanvas
 #endif
             }
 
-            ~BufferContextImpl()
+            virtual ~BufferContextImpl()
             {
 #if 0
                 glBindTexture(GL_TEXTURE_2D, 0);

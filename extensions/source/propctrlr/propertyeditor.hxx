@@ -73,7 +73,7 @@ namespace pcr
     public:
                                     OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
-                                    ~OPropertyEditor();
+                                    virtual ~OPropertyEditor();
 
         void                        EnableUpdate();
         void                        DisableUpdate();

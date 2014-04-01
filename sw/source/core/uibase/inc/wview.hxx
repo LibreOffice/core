@@ -33,7 +33,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SwWebView(SfxViewFrame* pFrame, SfxViewShell*);
-    ~SwWebView();
+    virtual ~SwWebView();
 };
 
 #endif

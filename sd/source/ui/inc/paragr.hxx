@@ -35,7 +35,7 @@ private:
 
 public:
                     SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr );
-                    ~SdParagraphDlg() {};
+                    virtual ~SdParagraphDlg() {};
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX

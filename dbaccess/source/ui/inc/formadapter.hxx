@@ -152,7 +152,7 @@ namespace dbaui
 
     public:
         SbaXFormAdapter();
-        ~SbaXFormAdapter();
+        virtual ~SbaXFormAdapter();
 
     //  ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  getIdlClass();
     //  ::com::sun::star::uno::Sequence<::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > > getIdlClasses();

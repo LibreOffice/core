@@ -69,7 +69,7 @@ private:
 public:
 
     UnoControlTabPage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoControlTabPage();
+    virtual ~UnoControlTabPage();
     OUString             GetComponentServiceName() SAL_OVERRIDE;
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

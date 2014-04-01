@@ -73,7 +73,7 @@ class SwXRedline :
     SwRangeRedline*  pRedline;
 public:
     SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc);
-    ~SwXRedline();
+    virtual ~SwXRedline();
 
     TYPEINFO_OVERRIDE();
 

@@ -64,7 +64,7 @@ class RTSDialog : public TabDialog
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
     RTSDialog(const ::psp::PrinterInfo& rJobData, const OUString& rPrinter, Window* pParent = NULL);
-    ~RTSDialog();
+    virtual ~RTSDialog();
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
 };
@@ -87,7 +87,7 @@ class RTSPaperPage : public TabPage
     DECL_LINK( SelectHdl, ListBox* );
 public:
     RTSPaperPage( RTSDialog* );
-    ~RTSPaperPage();
+    virtual ~RTSPaperPage();
 
     void update();
 
@@ -116,7 +116,7 @@ class RTSDevicePage : public TabPage
     DECL_LINK( ModifyHdl, Edit* );
 public:
     RTSDevicePage( RTSDialog* );
-    ~RTSDevicePage();
+    virtual ~RTSDevicePage();
 
     void update();
 

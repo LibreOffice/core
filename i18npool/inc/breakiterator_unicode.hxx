@@ -37,7 +37,7 @@ class BreakIterator_Unicode : public BreakIteratorImpl
 {
 public:
     BreakIterator_Unicode();
-    ~BreakIterator_Unicode();
+    virtual ~BreakIterator_Unicode();
 
     virtual sal_Int32 SAL_CALL previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,

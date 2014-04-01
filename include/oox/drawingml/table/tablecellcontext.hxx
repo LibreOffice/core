@@ -31,7 +31,7 @@ class TableCellContext : public ::oox::core::ContextHandler2
 public:
     TableCellContext( ::oox::core::ContextHandler2Helper& rParent,
         const ::oox::AttributeList& rAttribs, TableCell& rTableCell );
-    ~TableCellContext();
+    virtual ~TableCellContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

@@ -94,7 +94,7 @@ public:
     TableProperties(const TableProperties& rProps, SdrObject& rObj );
 
     // destructor
-    ~TableProperties();
+    virtual ~TableProperties();
 
     // Clone() operator, normally just calls the local copy constructor
     BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;

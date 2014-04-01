@@ -31,7 +31,7 @@ public :
     TextCharacterSpacingPopup (
         Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    ~TextCharacterSpacingPopup (void);
+    virtual ~TextCharacterSpacingPopup (void);
 
     void Rearrange (bool bLBAvailable,bool bAvailable, long nKerning);
 private:

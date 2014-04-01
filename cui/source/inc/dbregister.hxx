@@ -129,7 +129,7 @@ namespace svx
     {
     public:
         DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rAttr );
-        ~DatabaseRegistrationDialog();
+        virtual ~DatabaseRegistrationDialog();
 
         virtual short   Execute() SAL_OVERRIDE;
     };

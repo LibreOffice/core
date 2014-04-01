@@ -48,7 +48,7 @@ class GalleryTheme : public ::cppu::WeakImplHelper2<
 public:
 
     GalleryTheme( const OUString& rThemeName );
-    ~GalleryTheme();
+    virtual ~GalleryTheme();
 
     static OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();

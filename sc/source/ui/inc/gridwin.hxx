@@ -305,7 +305,7 @@ public:
     enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
 
     ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
-    ~ScGridWindow();
+    virtual ~ScGridWindow();
 
     // #i70788# flush and get overlay
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();

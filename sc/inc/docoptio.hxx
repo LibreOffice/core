@@ -149,7 +149,7 @@ public:
                 ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );
-                ~ScTpCalcItem();
+                virtual ~ScTpCalcItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

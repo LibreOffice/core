@@ -64,7 +64,7 @@ public:
     bool         bInvalid;                  // true: invalid entry
     StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, bool * pbOk );
     StgDirEntry( const StgEntry& );
-    ~StgDirEntry();
+    virtual ~StgDirEntry();
 
     void Invalidate( bool=false );          // invalidate all open entries
     void Enum( sal_Int32& );                    // enumerate entries for iteration
@@ -98,7 +98,7 @@ class StgDirStrm : public StgDataStrm
     void         SetupEntry( sal_Int32, StgDirEntry* );
 public:
     StgDirStrm( StgIo& );
-    ~StgDirStrm();
+    virtual ~StgDirStrm();
     virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;              // change the size
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool=false );// get an entry

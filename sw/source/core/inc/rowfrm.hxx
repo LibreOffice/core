@@ -51,7 +51,7 @@ protected:
 
 public:
     SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
-    ~SwRowFrm();
+    virtual ~SwRowFrm();
 
     virtual void Cut() SAL_OVERRIDE;
 

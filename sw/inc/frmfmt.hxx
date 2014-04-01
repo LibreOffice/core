@@ -167,7 +167,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    ~SwFlyFrmFmt();
+    virtual ~SwFlyFrmFmt();
 
     /// Creates the views.
     virtual void MakeFrms() SAL_OVERRIDE;
@@ -264,7 +264,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    ~SwDrawFrmFmt();
+    virtual ~SwDrawFrmFmt();
 
     /** DrawObjects are removed from the arrays at the layout.
      The DrawObjects are marked as deleted. */

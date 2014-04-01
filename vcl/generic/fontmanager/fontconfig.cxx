@@ -1149,7 +1149,7 @@ class FontConfigFontOptions : public ImplFontOptions
 {
 public:
     FontConfigFontOptions() : mpPattern(0) {}
-    ~FontConfigFontOptions()
+    virtual ~FontConfigFontOptions()
     {
         FcPatternDestroy(mpPattern);
     }

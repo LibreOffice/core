@@ -31,7 +31,7 @@ private:
 
 public:
     IntroWindow();
-    ~IntroWindow();
+    virtual ~IntroWindow();
 };
 
 #endif // INCLUDED_VCL_INTROWIN_HXX

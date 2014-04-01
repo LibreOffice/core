@@ -49,7 +49,7 @@ namespace dbaui
         DECL_LINK( SplitHdl, void* );
     public:
         OQueryContainerWindow(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
-        ~OQueryContainerWindow();
+        virtual ~OQueryContainerWindow();
 
         virtual void Construct() SAL_OVERRIDE;
 

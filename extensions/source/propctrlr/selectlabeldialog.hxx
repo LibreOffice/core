@@ -60,7 +60,7 @@ namespace pcr
 
     public:
         OSelectLabelDialog(Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
-        ~OSelectLabelDialog();
+        virtual ~OSelectLabelDialog();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_aNoAssignment.IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
 

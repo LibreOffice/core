@@ -46,7 +46,7 @@ public:
     SvxColorItem( const Color& aColor, const sal_uInt16 nId  );
     SvxColorItem( SvStream& rStrm, const sal_uInt16 nId  );
     SvxColorItem( const SvxColorItem& rCopy );
-    ~SvxColorItem();
+    virtual ~SvxColorItem();
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

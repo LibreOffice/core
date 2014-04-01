@@ -107,7 +107,7 @@ private:
 public:
                             SpellErrorAttrib( const SpellErrorDescription& );
                             SpellErrorAttrib( const SpellErrorAttrib& rAttr );
-                            ~SpellErrorAttrib();
+                            virtual ~SpellErrorAttrib();
 
     const SpellErrorDescription& GetErrorDescription() const { return m_aSpellErrorDescription; }
 
@@ -128,7 +128,7 @@ class SpellLanguageAttrib : public TextAttrib
 public:
                             SpellLanguageAttrib(LanguageType eLanguage);
                             SpellLanguageAttrib( const SpellLanguageAttrib& rAttr );
-                            ~SpellLanguageAttrib();
+                            virtual ~SpellLanguageAttrib();
 
     LanguageType            GetLanguage() const {return m_eLanguage;}
     void                    SetLanguage(LanguageType eLang)
@@ -151,7 +151,7 @@ class SpellBackgroundAttrib : public TextAttrib
 public:
                             SpellBackgroundAttrib(const Color& rCol);
                             SpellBackgroundAttrib( const SpellBackgroundAttrib& rAttr );
-                            ~SpellBackgroundAttrib();
+                            virtual ~SpellBackgroundAttrib();
 
     const   Color&          GetColor() const { return m_aBackgroundColor;}
     void                    SetColor( const Color& rNewCol ){m_aBackgroundColor = rNewCol;}

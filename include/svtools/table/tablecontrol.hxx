@@ -66,7 +66,7 @@ namespace svt { namespace table
 
     public:
         TableControl( Window* _pParent, WinBits _nStyle );
-        ~TableControl();
+        virtual ~TableControl();
 
         /// sets a new table model
         void        SetModel( PTableModel _pModel );

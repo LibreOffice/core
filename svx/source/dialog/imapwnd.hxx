@@ -80,7 +80,7 @@ public:
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
-                            ~IMapUserData() { }
+                            virtual ~IMapUserData() { }
 
     virtual SdrObjUserData* Clone( SdrObject * ) const SAL_OVERRIDE { return new IMapUserData( *this ); }
 
@@ -132,7 +132,7 @@ protected:
 public:
 
                         IMapWindow( Window* pParent, const ResId& rResId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
-                        ~IMapWindow();
+                        virtual ~IMapWindow();
 
     sal_Bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 

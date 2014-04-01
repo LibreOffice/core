@@ -51,7 +51,7 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
 
 public:
         SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent);
-        ~SwMailMergeDocSelectPage();
+        virtual ~SwMailMergeDocSelectPage();
 
 };
 

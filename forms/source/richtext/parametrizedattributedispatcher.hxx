@@ -42,7 +42,7 @@ namespace frm
         );
 
     protected:
-        ~OParametrizedAttributeDispatcher();
+        virtual ~OParametrizedAttributeDispatcher();
 
         // XDispatch
         virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

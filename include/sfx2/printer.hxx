@@ -53,7 +53,7 @@ public:
                                         const OUString &rPrinterName,
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
-                            ~SfxPrinter();
+                            virtual ~SfxPrinter();
 
     SfxPrinter*             Clone() const;
 

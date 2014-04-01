@@ -277,7 +277,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
                                             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
                                                 SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
 
-                                ~PPTWriter();
+                                virtual ~PPTWriter();
 
         sal_Bool                IsValid() const { return mbStatus; };
 

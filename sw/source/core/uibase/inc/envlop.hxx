@@ -74,7 +74,7 @@ friend class SwEnvPreview;
 
 public:
      SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert);
-    ~SwEnvDlg();
+    virtual ~SwEnvDlg();
 };
 
 // class SwEnvPage ----------------------------------------------------------
@@ -93,7 +93,7 @@ class SwEnvPage : public SfxTabPage
     OUString      sActDBName;
 
      SwEnvPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwEnvPage();
+    virtual ~SwEnvPage();
 
     DECL_LINK( DatabaseHdl, ListBox * );
     DECL_LINK(FieldHdl, void *);

@@ -39,7 +39,7 @@ class SwDBTablePreviewDialog : public SfxModalDialog
 public:
     SwDBTablePreviewDialog(Window* pParent,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );
-    ~SwDBTablePreviewDialog();
+    virtual ~SwDBTablePreviewDialog();
 
 };
 #endif

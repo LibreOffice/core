@@ -78,7 +78,7 @@ namespace dbaccess
         DatabaseRegistrations( const Reference<XComponentContext>& _rxContext );
 
     protected:
-        ~DatabaseRegistrations();
+        virtual ~DatabaseRegistrations();
 
     public:
         virtual ::sal_Bool SAL_CALL hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;

@@ -160,7 +160,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
                         SfxChildWindow *pCW,
                         Window* pParent,
                         const ResId& rResId );
-    ~SvxFontWorkDialog();
+    virtual ~SvxFontWorkDialog();
 
     void SetColorList(const XColorListRef &pTable);
     void SetActive(bool bActivate = true);

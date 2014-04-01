@@ -47,7 +47,7 @@ public:
 
     SfxTemplateManagerDlg (Window *parent = DIALOG_NO_PARENT);
 
-    ~SfxTemplateManagerDlg ();
+    virtual ~SfxTemplateManagerDlg ();
 
     void setSaveMode();
 

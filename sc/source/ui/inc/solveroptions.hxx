@@ -62,7 +62,7 @@ public:
                            const com::sun::star::uno::Sequence<OUString>& rDescriptions,
                            const OUString& rEngine,
                            const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
-    ~ScSolverOptionsDialog();
+    virtual ~ScSolverOptionsDialog();
 
     const OUString& GetEngine() const;
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& GetProperties();

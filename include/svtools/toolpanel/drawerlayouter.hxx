@@ -50,7 +50,7 @@ namespace svt
             ::Window& i_rParentWindow,
             IToolPanelDeck& i_rPanels
         );
-        ~DrawerDeckLayouter();
+        virtual ~DrawerDeckLayouter();
 
         // IReference
         DECLARE_IREFERENCE()

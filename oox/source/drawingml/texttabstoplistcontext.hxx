@@ -33,7 +33,7 @@ namespace oox { namespace drawingml {
     public:
         TextTabStopListContext( ::oox::core::ContextHandler2Helper& rParent,
                 ::std::list< ::com::sun::star::style::TabStop >  & aTabList );
-        ~TextTabStopListContext();
+        virtual ~TextTabStopListContext();
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

@@ -150,7 +150,7 @@ class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
 public:
     TYPEINFO_OVERRIDE();
     SbClassModuleObject( SbModule* pClassModule );
-    ~SbClassModuleObject();
+    virtual ~SbClassModuleObject();
 
     // Overridden to support NameAccess etc.
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;

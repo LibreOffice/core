@@ -45,7 +45,7 @@ public:
                 const OUString *pCollName = 0,
                 sal_Bool bDraw = sal_False,
                 const OString& sDefPage = OString());
-    ~SwParaDlg();
+    virtual ~SwParaDlg();
 };
 
 #endif

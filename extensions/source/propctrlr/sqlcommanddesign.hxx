@@ -115,7 +115,7 @@ namespace pcr
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~SQLCommandDesigner();
+        virtual ~SQLCommandDesigner();
 
         /** opens a new frame for interactively designing an SQL command
             @precond

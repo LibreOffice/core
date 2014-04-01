@@ -53,7 +53,7 @@ class ContentWindow : public ::sd::Window
 {
 public:
     ContentWindow(::Window& rParent, SlideSorter& rSlideSorter);
-    ~ContentWindow (void);
+    virtual ~ContentWindow (void);
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;

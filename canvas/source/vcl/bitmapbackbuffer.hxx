@@ -45,7 +45,7 @@ namespace vclcanvas
         BitmapBackBuffer( const BitmapEx&       rBitmap,
                           const OutputDevice&   rRefDevice );
 
-        ~BitmapBackBuffer();
+        virtual ~BitmapBackBuffer();
 
         virtual OutputDevice&       getOutDev() SAL_OVERRIDE;
         virtual const OutputDevice& getOutDev() const SAL_OVERRIDE;

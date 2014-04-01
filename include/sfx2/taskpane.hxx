@@ -117,7 +117,7 @@ namespace sfx2
             Window& i_rParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
         );
-        ~ModuleTaskPane();
+        virtual ~ModuleTaskPane();
 
         /** determines whether a given module has any registered tool panels
         */

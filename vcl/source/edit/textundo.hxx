@@ -41,7 +41,7 @@ protected:
 
 public:
                     TextUndoManager( TextEngine* pTextEngine );
-                    ~TextUndoManager();
+                    virtual ~TextUndoManager();
 
     using SfxUndoManager::Undo;
     virtual bool Undo() SAL_OVERRIDE;

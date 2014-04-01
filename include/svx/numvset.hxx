@@ -68,7 +68,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
     public:
     SvxNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
     void init(sal_uInt16 nType);
-    ~SvxNumValueSet();
+    virtual ~SvxNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
@@ -106,7 +106,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
     public:
     SvxBmpNumValueSet(Window* pParent, WinBits nWinBits = WB_TABSTOP);
-    ~SvxBmpNumValueSet();
+    virtual ~SvxBmpNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 

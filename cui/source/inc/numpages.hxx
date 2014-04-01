@@ -108,7 +108,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     public:
         SvxSingleNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SvxSingleNumPickTabPage();
+        virtual ~SvxSingleNumPickTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -144,7 +144,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     public:
         SvxBulletPickTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SvxBulletPickTabPage();
+        virtual ~SvxBulletPickTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -187,7 +187,7 @@ class SvxNumPickTabPage : public SfxTabPage
     public:
         SvxNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SvxNumPickTabPage();
+        virtual ~SvxNumPickTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -232,7 +232,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     public:
         SvxBitmapPickTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SvxBitmapPickTabPage();
+        virtual ~SvxBitmapPickTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -344,7 +344,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     public:
         SvxNumOptionsTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SvxNumOptionsTabPage();
+        virtual ~SvxNumOptionsTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -447,7 +447,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 public:
         SvxNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SvxNumPositionTabPage();
+        virtual ~SvxNumPositionTabPage();
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;

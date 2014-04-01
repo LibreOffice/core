@@ -80,7 +80,7 @@ namespace toolkit
         DECLIMPL_SERVICEINFO_DERIVED( UnoControlFormattedFieldModel, UnoControlModel, szServiceName2_UnoControlFormattedFieldModel )
 
     protected:
-        ~UnoControlFormattedFieldModel();
+        virtual ~UnoControlFormattedFieldModel();
 
         // XComponent
         void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

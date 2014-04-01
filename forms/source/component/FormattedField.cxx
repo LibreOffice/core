@@ -87,7 +87,7 @@ public:
     using SvNumberFormatsSupplierObj::operator delete;
 protected:
     StandardFormatsSupplier(const Reference< XComponentContext >& _rxFactory,LanguageType _eSysLanguage);
-    ~StandardFormatsSupplier();
+    virtual ~StandardFormatsSupplier();
 protected:
     virtual bool    queryTermination() const SAL_OVERRIDE;
     virtual void    notifyTermination() SAL_OVERRIDE;

@@ -39,7 +39,7 @@ class ErrObject : public ErrObjectImpl_BASE
 
 public:
     ErrObject();
-    ~ErrObject();
+    virtual ~ErrObject();
     // Attributes
     virtual ::sal_Int32 SAL_CALL getNumber() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -65,7 +65,7 @@ private:
 public:
 
     SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs );
-    ~SvxMeasurePage();
+    virtual ~SvxMeasurePage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
     static  sal_uInt16*     GetRanges();

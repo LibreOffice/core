@@ -661,7 +661,7 @@ public:
                     // Switches to Read StreamMode on failed attempt of Write opening
                     SvFileStream( const OUString& rFileName, StreamMode eOpenMode );
                     SvFileStream();
-                    ~SvFileStream();
+                    virtual ~SvFileStream();
 
     virtual void    ResetError() SAL_OVERRIDE;
 
@@ -718,7 +718,7 @@ protected:
 public:
                     SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);
                     SvMemoryStream( sal_Size nInitSize=512, sal_Size nResize=64 );
-                    ~SvMemoryStream();
+                    virtual ~SvMemoryStream();
 
     virtual void    ResetError() SAL_OVERRIDE;
 
@@ -746,7 +746,7 @@ class TOOLS_DLLPUBLIC SvScriptStream: public SvStream
 
 public:
     SvScriptStream(const OUString& rUrl);
-    ~SvScriptStream();
+    virtual ~SvScriptStream();
 
     virtual bool ReadLine(OString &rStr, sal_Int32) SAL_OVERRIDE;
     virtual bool good() const SAL_OVERRIDE;

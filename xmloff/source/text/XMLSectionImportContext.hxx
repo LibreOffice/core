@@ -84,7 +84,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    ~XMLSectionImportContext();
+    virtual ~XMLSectionImportContext();
 
 protected:
 

@@ -312,7 +312,7 @@ class OslStream : public SvStream
 
 public:
                         OslStream( const OUString& rName, short nStrmMode );
-                       ~OslStream();
+                       virtual ~OslStream();
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
@@ -408,7 +408,7 @@ class UCBStream : public SvStream
 public:
                         UCBStream( Reference< XInputStream > & xIS );
                         UCBStream( Reference< XStream > & xS );
-                       ~UCBStream();
+                       virtual ~UCBStream();
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;

@@ -292,7 +292,7 @@ private:
 
 public:
     HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
-    ~HeaderBar();
+    virtual ~HeaderBar();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

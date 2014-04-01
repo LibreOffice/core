@@ -36,7 +36,7 @@ class ScTBC : public TBBase
     boost::shared_ptr<TBCData> tbcd;
 public:
     ScTBC();
-    ~ScTBC(){}
+    virtual ~ScTBC(){}
     void Print( FILE* ) SAL_OVERRIDE;
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportToolBarControl( ScCTBWrapper&, const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
@@ -52,7 +52,7 @@ class ScCTB : public TBBase
     bool ImportCustomToolBar_Impl( ScCTBWrapper&, CustomToolBarImportHelper& );
 public:
     ScCTB(sal_uInt16);
-    ~ScCTB(){}
+    virtual ~ScCTB(){}
     void Print( FILE* ) SAL_OVERRIDE;
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool IsMenuToolbar();
@@ -77,7 +77,7 @@ public:
     CTBS(const CTBS&);
     CTBS& operator = ( const CTBS&);
     CTBS();
-    ~CTBS(){}
+    virtual ~CTBS(){}
     void Print( FILE* ) SAL_OVERRIDE;
     bool Read(SvStream &rS) SAL_OVERRIDE;
 };
@@ -90,7 +90,7 @@ class ScCTBWrapper : public TBBase
 
 public:
     ScCTBWrapper();
-    ~ScCTBWrapper();
+    virtual ~ScCTBWrapper();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );

@@ -193,7 +193,7 @@ private:
 
 public:
                 IdleFormattter();
-                ~IdleFormattter();
+                virtual ~IdleFormattter();
 
     void        DoIdleFormat( EditView* pV );
     void        ForceTimeout();
@@ -267,7 +267,7 @@ protected:
 
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow );
-                    ~ImpEditView();
+                    virtual ~ImpEditView();
 
     EditView*       GetEditViewPtr() { return pEditView; }
 
@@ -687,7 +687,7 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
 public:
-                            ~ImpEditEngine();
+                            virtual ~ImpEditEngine();
 
     inline EditUndoManager& GetUndoManager();
     inline ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);

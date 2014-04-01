@@ -63,7 +63,7 @@ class QProToSc : public ConverterBase
     public:
     static const size_t nBufSize = 256;
     QProToSc( SvStream &aStr, const ScAddress& rRefPos );
-    ~QProToSc(){ };
+    virtual ~QProToSc(){ };
     ConvErr Convert( const ScTokenArray*& pArray, sal_uInt16 nLen,
                                                                          const FORMULA_TYPE eFT = FT_CellFormula );
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString );

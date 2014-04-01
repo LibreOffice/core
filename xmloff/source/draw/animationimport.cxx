@@ -1256,7 +1256,7 @@ class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 {
 public:
     AnimationsImport( const Reference< XComponentContext > & rxContext );
-    ~AnimationsImport() throw ();
+    virtual ~AnimationsImport() throw ();
 
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) SAL_OVERRIDE;
 

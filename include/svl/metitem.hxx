@@ -29,7 +29,7 @@ public:
     explicit                 SfxMetricItem( sal_uInt16 nWhich = 0, sal_uInt32 nValue = 0 );
                              SfxMetricItem( sal_uInt16 nWhich, SvStream & );
                              SfxMetricItem( const SfxMetricItem& );
-                             ~SfxMetricItem() {}
+                             virtual ~SfxMetricItem() {}
 
     virtual bool             ScaleMetrics( long lMult, long lDiv ) SAL_OVERRIDE;
     virtual bool             HasMetrics() const SAL_OVERRIDE;

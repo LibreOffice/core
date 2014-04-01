@@ -103,7 +103,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun:
         nFilterError( GRFILTER_OK )
         {}
 
-    ~SdGRFFilter_ImplInteractionHdl();
+    virtual ~SdGRFFilter_ImplInteractionHdl();
 
     sal_uInt16 GetErrorCode() const { return nFilterError; };
 

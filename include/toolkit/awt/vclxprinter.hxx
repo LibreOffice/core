@@ -111,7 +111,7 @@ class VCLXPrinter:  public VCLXPrinter_Base
     JobSetup                                        maInitJobSetup;
 public:
                     VCLXPrinter( const OUString& rPrinterName );
-                    ~VCLXPrinter();
+                    virtual ~VCLXPrinter();
 
     // ::com::sun::star::beans::XPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return VCLXPrinterPropertySet::getPropertySetInfo(); }
@@ -148,7 +148,7 @@ class VCLXInfoPrinter:  public VCLXInfoPrinter_Base
 {
 public:
                         VCLXInfoPrinter( const OUString& rPrinterName );
-                        ~VCLXInfoPrinter();
+                        virtual ~VCLXInfoPrinter();
 
     // ::com::sun::star::beans::XPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return VCLXPrinterPropertySet::getPropertySetInfo(); }

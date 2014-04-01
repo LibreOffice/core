@@ -42,7 +42,7 @@ class SVX_DLLPUBLIC FormatPaintBrushToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~FormatPaintBrushToolBoxControl();
+    virtual ~FormatPaintBrushToolBoxControl();
 
     virtual void    DoubleClick() SAL_OVERRIDE;
     virtual void    Click() SAL_OVERRIDE;

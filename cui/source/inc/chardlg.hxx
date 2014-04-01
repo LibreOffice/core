@@ -150,7 +150,7 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-                        ~SvxCharNamePage();
+                        virtual ~SvxCharNamePage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();
@@ -211,7 +211,7 @@ private:
     OUString            m_aTransparentColorName;
 
                         SvxCharEffectsPage( Window* pParent, const SfxItemSet& rSet );
-                        ~SvxCharEffectsPage();
+                        virtual ~SvxCharEffectsPage();
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -285,7 +285,7 @@ private:
     sal_uInt8                m_nSubProp;
 
                         SvxCharPositionPage( Window* pParent, const SfxItemSet& rSet );
-                        ~SvxCharPositionPage();
+                        virtual ~SvxCharPositionPage();
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -335,7 +335,7 @@ private:
     sal_uInt16              m_nEndBracketPosition;
 
     SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rSet);
-    ~SvxCharTwoLinesPage();
+    virtual ~SvxCharTwoLinesPage();
 
     void                UpdatePreview_Impl();
     void                Initialize();

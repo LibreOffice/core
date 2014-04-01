@@ -268,7 +268,7 @@ public:
     virtual void  FillLayoutData() const SAL_OVERRIDE;
 
                     ImplListBoxWindow( Window* pParent, WinBits nWinStyle );
-                    ~ImplListBoxWindow();
+                    virtual ~ImplListBoxWindow();
 
     ImplEntryList*  GetEntryList() const { return mpEntryList; }
 
@@ -413,7 +413,7 @@ protected:
 
 public:
                     ImplListBox( Window* pParent, WinBits nWinStyle );
-                    ~ImplListBox();
+                    virtual ~ImplListBox();
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow.GetEntryList(); }
     ImplListBoxWindow*      GetMainWindow()                 { return &maLBWindow; }
@@ -571,7 +571,7 @@ protected:
 public:
 
                     ImplWin( Window* pParent, WinBits nWinStyle = 0 );
-                    ~ImplWin() {};
+                    virtual ~ImplWin() {};
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -617,7 +617,7 @@ private:
 
 public:
                     ImplBtn( Window* pParent, WinBits nWinStyle = 0 );
-                    ~ImplBtn() {};
+                    virtual ~ImplBtn() {};
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 

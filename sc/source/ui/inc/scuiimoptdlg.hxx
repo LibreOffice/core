@@ -39,7 +39,7 @@ public:
                         bool                    bOnlyDbtoolsEncodings = false,
                         bool                    bImport = true );
 
-    ~ScImportOptionsDlg();
+    virtual ~ScImportOptionsDlg();
 
     void GetImportOptions( ScImportOptions& rOptions ) const;
 

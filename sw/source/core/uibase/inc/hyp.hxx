@@ -50,7 +50,7 @@ public:
                    ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
                    sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
-    ~SwHyphWrapper();
+    virtual ~SwHyphWrapper();
 };
 
 #endif

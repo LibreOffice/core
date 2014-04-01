@@ -106,7 +106,7 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
        );
 
-        ~EventHandler();
+        virtual ~EventHandler();
 
     protected:
         // XPropertyHandler overridables

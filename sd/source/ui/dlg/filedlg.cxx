@@ -68,7 +68,7 @@ private:
 
 public:
                                 SdFileDialog_Imp( const short nDialogType, sal_Bool bUsableSelection );
-                                   ~SdFileDialog_Imp();
+                                   virtual ~SdFileDialog_Imp();
 
     ErrCode                     Execute();
 

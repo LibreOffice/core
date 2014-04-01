@@ -103,7 +103,7 @@ public:
     {
     }
 
-    ~SwModelTestBase()
+    virtual ~SwModelTestBase()
     {
     }
 

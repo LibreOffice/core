@@ -43,7 +43,7 @@ private:
 
 public:
     SfxHelp();
-    ~SfxHelp();
+    virtual ~SfxHelp();
 
     inline void             SetTicket( const OUString& rTicket )  { aTicket = rTicket; }
     inline void             SetUser( const OUString& rUser )      { aUser = rUser; }

@@ -49,7 +49,7 @@ class SwAutoCompleteClient : public SwClient
 public:
     SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc);
     SwAutoCompleteClient(const SwAutoCompleteClient& rClient);
-    ~SwAutoCompleteClient();
+    virtual ~SwAutoCompleteClient();
 
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
@@ -86,7 +86,7 @@ class SwAutoCompleteString
     public:
         SwAutoCompleteString(const OUString& rStr, sal_Int32 nPos, sal_Int32 nLen);
 
-        ~SwAutoCompleteString();
+        virtual ~SwAutoCompleteString();
         void        AddDocument(const SwDoc& rDoc);
         //returns true if last document reference has been removed
         bool        RemoveDocument(const SwDoc& rDoc);

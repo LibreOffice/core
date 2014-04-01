@@ -682,7 +682,7 @@ class SdrUndoObjList::ObjListListener : public SfxListener
 {
 public:
     ObjListListener(SdrUndoObjList& rThat, SdrObject& rObject, SfxBroadcaster& rBroadcaster);
-    ~ObjListListener();
+    virtual ~ObjListListener();
 
 private:
     virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;

@@ -137,7 +137,7 @@ protected:
 
 public:
                 UnoControl();
-                ~UnoControl();
+                virtual ~UnoControl();
 
                 UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }
 

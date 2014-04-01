@@ -118,7 +118,7 @@ private:
 
 public:
     SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw();
-    ~SdXCustomPresentationAccess() throw();
+    virtual ~SdXCustomPresentationAccess() throw();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

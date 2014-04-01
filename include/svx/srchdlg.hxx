@@ -94,7 +94,7 @@ public:
     SvxSearchDialogWrapper( Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
-    ~SvxSearchDialogWrapper ();
+    virtual ~SvxSearchDialogWrapper ();
     SvxSearchDialog *getDialog ();
     static void SetSearchLabel(const SearchLabel& rSL);
     SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
@@ -119,7 +119,7 @@ friend class SvxJSearchOptionsDialog;
 
 public:
     SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
-    ~SvxSearchDialog();
+    virtual ~SvxSearchDialog();
 
     virtual bool    Close() SAL_OVERRIDE;
 

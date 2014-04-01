@@ -59,7 +59,7 @@ private:
 
 public:
     SearchDialog( Window* pWindow, const OUString& rConfigName );
-    ~SearchDialog();
+    virtual ~SearchDialog();
 
     void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
     void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }

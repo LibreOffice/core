@@ -59,7 +59,7 @@ protected:
 public:
     SwFldPortion( const SwFldPortion& rFld );
     SwFldPortion( const OUString &rExpand, SwFont *pFnt = 0, bool bPlaceHolder = false );
-    ~SwFldPortion();
+    virtual ~SwFldPortion();
 
     sal_uInt16 m_nAttrFldType;
     void TakeNextOffset( const SwFldPortion* pFld );
@@ -197,7 +197,7 @@ public:
                      const bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    ~SwGrfNumPortion();
+    virtual ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
 

@@ -57,7 +57,7 @@ protected:
                                           sal_uInt32 nTupelIdx, RscTypCont * pTC );
 public:
                     RscClass( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
-                    ~RscClass();
+                    virtual ~RscClass();
 
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
 

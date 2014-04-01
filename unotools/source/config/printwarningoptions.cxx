@@ -61,7 +61,7 @@ public:
 
 
      SvtPrintWarningOptions_Impl();
-    ~SvtPrintWarningOptions_Impl();
+    virtual ~SvtPrintWarningOptions_Impl();
 
 
 //  overloaded methods of baseclass

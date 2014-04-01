@@ -104,7 +104,7 @@ class MSFILTER_DLLPUBLIC WString : public TBBase
 
 public:
     WString(){};
-    ~WString(){};
+    virtual ~WString(){};
     bool Read(SvStream &rS) SAL_OVERRIDE;
     OUString getString(){ return sString; }
 };
@@ -123,7 +123,7 @@ class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
     TBCExtraInfo& operator = ( const TBCExtraInfo&);
 public:
     TBCExtraInfo();
-    ~TBCExtraInfo(){}
+    virtual ~TBCExtraInfo(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     OUString getOnAction();
@@ -139,7 +139,7 @@ class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
 
 public:
     TBCGeneralInfo();
-    ~TBCGeneralInfo() {}
+    virtual ~TBCGeneralInfo() {}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     bool ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
@@ -155,7 +155,7 @@ friend class TBCBSpecific; // #FIXME hacky access, need to fix
     Bitmap mBitMap;
 public:
     TBCBitMap();
-    ~TBCBitMap();
+    virtual ~TBCBitMap();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     Bitmap& getBitMap();
@@ -167,7 +167,7 @@ class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
     boost::shared_ptr< WString > name; //exist only if tbid equals 0x00000001
 public:
     TBCMenuSpecific();
-    ~TBCMenuSpecific(){}
+    virtual ~TBCMenuSpecific(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     OUString Name();
@@ -185,7 +185,7 @@ class MSFILTER_DLLPUBLIC TBCCDData : public TBBase
 
 public:
     TBCCDData();
-    ~TBCCDData();
+    virtual ~TBCCDData();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };
@@ -210,7 +210,7 @@ class TBCBSpecific :  public TBBase
 
 public:
     TBCBSpecific();
-    ~TBCBSpecific(){}
+    virtual ~TBCBSpecific(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     // #TODO just add a getGraphic member here
@@ -254,7 +254,7 @@ class MSFILTER_DLLPUBLIC TBCHeader : public TBBase
 
 public:
     TBCHeader();
-    ~TBCHeader();
+    virtual ~TBCHeader();
     sal_uInt8 getTct() const { return tct; }
     sal_uInt16 getTcID() const { return tcid; }
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
@@ -273,7 +273,7 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
     TBCData& operator = ( const TBCData&);
 public:
     TBCData( const TBCHeader& Header );
-    ~TBCData(){}
+    virtual ~TBCData(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
@@ -293,7 +293,7 @@ class MSFILTER_DLLPUBLIC TB : public TBBase
     WString name; //Structure of type WString that specifies the toolbar name
 public:
     TB();
-    ~TB(){}
+    virtual ~TB(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     sal_Int16 getcCL(){ return cCL; }
@@ -328,7 +328,7 @@ class MSFILTER_DLLPUBLIC TBVisualData : public TBBase
 
 public:
     TBVisualData();
-    ~TBVisualData(){}
+    virtual ~TBVisualData(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };

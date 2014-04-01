@@ -108,7 +108,7 @@ class SwVisitingCardPage : public SfxTabPage
                                     const OUString* pValues );
 
     SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwVisitingCardPage();
+    virtual ~SwVisitingCardPage();
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

@@ -83,7 +83,7 @@ namespace drivermanager
     private:
         OSDBCDriverManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
-        ~OSDBCDriverManager();
+        virtual ~OSDBCDriverManager();
 
     public:
 

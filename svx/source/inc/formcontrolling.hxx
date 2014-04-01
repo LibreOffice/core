@@ -195,7 +195,7 @@ namespace svx
                     getFormOperations() const { return m_xFormOperations; }
     protected:
         /// dtor
-        ~FormControllerHelper();
+        virtual ~FormControllerHelper();
 
         // XFeatureInvalidation
         virtual void SAL_CALL invalidateFeatures( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& Features ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

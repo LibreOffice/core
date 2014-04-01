@@ -99,7 +99,7 @@ namespace svt
             const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AliasProgrammaticPair >& _rMapping
         );
 
-        ~AddressBookSourceDialog();
+        virtual ~AddressBookSourceDialog();
 
         // to be used if the object was constructed for editing a field mapping only
         void        getFieldMapping(

@@ -57,7 +57,7 @@ private:
 public:
     ImpSWFDialog( Window* pParent,
                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rFilterData );
-    ~ImpSWFDialog();
+    virtual ~ImpSWFDialog();
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
 };

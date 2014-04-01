@@ -29,7 +29,7 @@ private:
     ImplData* mpImplData;
 public:
     PopupMenuFloatingWindow( Window* pParent, WinBits nStyle = (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER) );
-    ~PopupMenuFloatingWindow();
+    virtual ~PopupMenuFloatingWindow();
 
     sal_uInt16      GetMenuStackLevel() const;
     void            SetMenuStackLevel( sal_uInt16 nLevel );

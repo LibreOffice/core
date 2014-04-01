@@ -33,7 +33,7 @@ public:
     CustomShowContext( ::oox::core::FragmentHandler2& rParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
             CustomShow& rCustomShow );
-    ~CustomShowContext( );
+    virtual ~CustomShowContext( );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 

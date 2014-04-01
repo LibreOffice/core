@@ -35,7 +35,7 @@ private:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     ExtrusionColorControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~ExtrusionColorControl();
+    virtual ~ExtrusionColorControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;

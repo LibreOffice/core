@@ -26,7 +26,7 @@ public:
 
     SfxTemplateInfoDlg (Window *pParent = NULL);
 
-    ~SfxTemplateInfoDlg ();
+    virtual ~SfxTemplateInfoDlg ();
 
     void loadDocument (const OUString &rURL);
 

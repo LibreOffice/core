@@ -42,7 +42,7 @@ class GraphicRendererVCL : public ::cppu::OWeakAggObject,
 public:
 
     GraphicRendererVCL();
-    ~GraphicRendererVCL() throw();
+    virtual ~GraphicRendererVCL() throw();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

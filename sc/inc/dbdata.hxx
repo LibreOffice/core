@@ -81,7 +81,7 @@ public:
              bool bByR = true, bool bHasH = true);
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
-    ~ScDBData();
+    virtual ~ScDBData();
 
     ScDBData&   operator= (const ScDBData& rData);
 

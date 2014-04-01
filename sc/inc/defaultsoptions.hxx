@@ -49,7 +49,7 @@ public:
     ScTpDefaultsItem( sal_uInt16 nWhich,
                    const ScDefaultsOptions& rOpt );
     ScTpDefaultsItem( const ScTpDefaultsItem& rItem );
-    ~ScTpDefaultsItem();
+    virtual ~ScTpDefaultsItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

@@ -119,7 +119,7 @@ public:
 
                         SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
                                     Window* pParent, const ResId& rResId );
-                        ~SvxIMapDlg();
+                        virtual ~SvxIMapDlg();
 
     void                SetExecState( bool bEnable );
 

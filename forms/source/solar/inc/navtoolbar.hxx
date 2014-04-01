@@ -73,7 +73,7 @@ namespace frm
             const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider,
             const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
         );
-        ~NavigationToolBar( );
+        virtual ~NavigationToolBar( );
 
         /** sets the dispatcher which is to be used for the features
 
@@ -164,7 +164,7 @@ namespace frm
 
     public:
         RecordPositionInput( Window* _pParent );
-        ~RecordPositionInput();
+        virtual ~RecordPositionInput();
 
         /** sets the dispatcher which is to be used for the features
         */

@@ -59,7 +59,7 @@ namespace frm
 
     protected:
         ORichTextFeatureDispatcher( EditView& _rView, const ::com::sun::star::util::URL&  _rURL );
-        ~ORichTextFeatureDispatcher( );
+        virtual ~ORichTextFeatureDispatcher( );
 
     public:
         /// clean up resources associated with this instance

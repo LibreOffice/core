@@ -117,7 +117,7 @@ public:
 
     SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-    ~SwNumPositionTabPage();
+    virtual ~SwNumPositionTabPage();
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
@@ -159,7 +159,7 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
         SwSvxNumBulletTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
-        ~SwSvxNumBulletTabDialog();
+        virtual ~SwSvxNumBulletTabDialog();
 };
 #endif // INCLUDED_SW_SOURCE_UI_INC_NUM_HXX
 

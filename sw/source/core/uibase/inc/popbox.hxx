@@ -39,7 +39,7 @@ protected:
 
 public:
     SwHelpToolBox(SwNavigationPI* pParent, const ResId &);
-    ~SwHelpToolBox();
+    virtual ~SwHelpToolBox();
     void SetDoubleClickLink(const Link &);      // inline
     void SetRightClickLink(const Link &);       // inline
 };

@@ -64,7 +64,7 @@ namespace accessibility
 
     public:
         AccessibleTabBar( TabBar* pTabBar );
-        ~AccessibleTabBar();
+        virtual ~AccessibleTabBar();
 
         // XInterface
         DECLARE_XINTERFACE()

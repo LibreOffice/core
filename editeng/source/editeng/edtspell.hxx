@@ -137,7 +137,7 @@ protected:
 
 public:
     EdtAutoCorrDoc(EditEngine* pE, ContentNode* pCurNode, sal_uInt16 nCrsr, sal_Unicode cIns);
-    ~EdtAutoCorrDoc();
+    virtual ~EdtAutoCorrDoc();
 
     virtual bool    Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
     virtual bool    Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;

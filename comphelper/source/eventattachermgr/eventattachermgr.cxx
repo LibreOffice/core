@@ -98,7 +98,7 @@ class ImplEventAttacherManager
 public:
     ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
                               const Reference< XComponentContext > xContext );
-    ~ImplEventAttacherManager();
+    virtual ~ImplEventAttacherManager();
 
     // Methods of XEventAttacherManager
     virtual void SAL_CALL registerScriptEvent(sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent)

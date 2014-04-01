@@ -601,7 +601,7 @@ class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
 {
 public:
     CurrencyField( Window* pParent, WinBits nWinStyle );
-    ~CurrencyField();
+    virtual ~CurrencyField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -699,7 +699,7 @@ class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
 {
 public:
                             PatternBox( Window* pParent, WinBits nWinStyle );
-                            ~PatternBox();
+                            virtual ~PatternBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

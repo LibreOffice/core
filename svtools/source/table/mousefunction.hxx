@@ -72,7 +72,7 @@ namespace svt { namespace table
         {
         }
     protected:
-        ~MouseFunction()
+        virtual ~MouseFunction()
         {
         }
 

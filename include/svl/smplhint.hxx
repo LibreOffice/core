@@ -77,7 +77,7 @@ public:
         public: \
             TYPEINFO_OVERRIDE(); \
             Name( sal_uInt16 nId, const Type& rObject ); \
-            ~Name(); \
+            virtual ~Name(); \
             const Type& GetObject() const { return aObj; } \
         }
 

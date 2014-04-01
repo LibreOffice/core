@@ -62,7 +62,7 @@ class COMPHELPER_DLLPUBLIC OFOPXMLHelper : public cppu::WeakImplHelper1 < com::s
     throw( ::com::sun::star::uno::Exception );
 
 public:
-    ~OFOPXMLHelper();
+    virtual ~OFOPXMLHelper();
 
     // returns sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )

@@ -65,7 +65,7 @@ private:
 
 public:
             ScLinkedAreaDlg( Window* pParent );
-            ~ScLinkedAreaDlg();
+            virtual ~ScLinkedAreaDlg();
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,

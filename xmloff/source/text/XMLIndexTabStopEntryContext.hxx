@@ -54,7 +54,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    ~XMLIndexTabStopEntryContext();
+    virtual ~XMLIndexTabStopEntryContext();
 
 protected:
 

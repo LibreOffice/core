@@ -45,7 +45,7 @@ public:
             bool bInsertM, bool bStylesOnlyM, bool bProgress,
             bool bBlockM, bool bOrganizerM,
             sal_Bool bPreserveRedlineMode );
-    ~SwXMLTextImportHelper();
+    virtual ~SwXMLTextImportHelper();
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>

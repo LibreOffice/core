@@ -352,7 +352,7 @@ public:
         const OUString& rFileName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler );
 
-    ~SvxXMLTextExportComponent();
+    virtual ~SvxXMLTextExportComponent();
 
     // methods without content:
     virtual void _ExportAutoStyles() SAL_OVERRIDE;

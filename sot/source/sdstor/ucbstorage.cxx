@@ -402,7 +402,7 @@ enum RepresentModes {
 
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
 {
-                                ~UCBStorageStream_Impl();
+                                virtual ~UCBStorageStream_Impl();
 public:
 
     virtual sal_uLong           GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
@@ -466,7 +466,7 @@ typedef ::std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
 
 class UCBStorage_Impl : public SvRefBase
 {
-                                ~UCBStorage_Impl();
+                                virtual ~UCBStorage_Impl();
 public:
     UCBStorage*                 m_pAntiImpl;    // only valid if external references exists
 

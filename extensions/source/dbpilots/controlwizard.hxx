@@ -76,7 +76,7 @@ namespace dbp
 
     public:
         OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId );
-        ~OControlWizardPage();
+        virtual ~OControlWizardPage();
 
     protected:
         void fillListBox(
@@ -116,7 +116,7 @@ namespace dbp
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
-        ~OControlWizard();
+        virtual ~OControlWizard();
 
         // make the some base class methods public
         sal_Bool    travelNext() { return OControlWizard_Base::travelNext(); }

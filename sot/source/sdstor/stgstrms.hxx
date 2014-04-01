@@ -155,7 +155,7 @@ class StgTmpStrm : public SvMemoryStream
 
 public:
     StgTmpStrm( sal_uLong=16 );
-   ~StgTmpStrm();
+   virtual ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
     virtual void SetSize( sal_uInt64 ) SAL_OVERRIDE;
     sal_uLong GetSize() const;

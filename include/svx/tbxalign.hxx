@@ -37,7 +37,7 @@ public:
             SFX_DECL_TOOLBOX_CONTROL();
 
             SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-            ~SvxTbxCtlAlign() {}
+            virtual ~SvxTbxCtlAlign() {}
 private:
     OUString m_aSubTbName;
     OUString m_aSubTbResName;

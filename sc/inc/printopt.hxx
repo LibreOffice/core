@@ -59,7 +59,7 @@ public:
                 ScTpPrintItem( sal_uInt16 nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
-                ~ScTpPrintItem();
+                virtual ~ScTpPrintItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

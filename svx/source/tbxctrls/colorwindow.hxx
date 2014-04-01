@@ -57,7 +57,7 @@ public:
                          const OUString& rWndTitle,
                          Window* pParentWindow,
                          const Color rLastColor = COL_AUTO);
-    ~SvxColorWindow_Impl();
+    virtual ~SvxColorWindow_Impl();
     void                StartSelection();
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

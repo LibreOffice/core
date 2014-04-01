@@ -52,7 +52,7 @@ namespace frm
         ORichTextControl();
 
     protected:
-        ~ORichTextControl();
+        virtual ~ORichTextControl();
 
     public:
         // XServiceInfo - static version
@@ -113,7 +113,7 @@ namespace frm
 
     protected:
         ORichTextPeer();
-        ~ORichTextPeer();
+        virtual ~ORichTextPeer();
 
         // XView
         void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

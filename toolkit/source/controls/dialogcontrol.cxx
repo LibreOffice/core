@@ -156,7 +156,7 @@ protected:
 public:
     UnoControlDialogModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     UnoControlDialogModel( const UnoControlDialogModel& rModel );
-    ~UnoControlDialogModel();
+    virtual ~UnoControlDialogModel();
 
     UnoControlModel*    Clone() const SAL_OVERRIDE;
     // css::beans::XMultiPropertySet

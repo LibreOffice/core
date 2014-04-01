@@ -150,7 +150,7 @@ public:
         USENUMBER = 0x02
     };
     LwpTocLevelData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpTocLevelData();
+    virtual ~LwpTocLevelData();
     void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     inline sal_uInt16 GetLevel(void){return m_nLevel;}

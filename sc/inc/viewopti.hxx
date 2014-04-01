@@ -118,7 +118,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScTpViewItem( sal_uInt16 nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
-                ~ScTpViewItem();
+                virtual ~ScTpViewItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

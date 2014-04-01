@@ -60,7 +60,7 @@ protected:
 
 public:
     XMLTextMasterPageExport( SvXMLExport& rExp );
-    ~XMLTextMasterPageExport();
+    virtual ~XMLTextMasterPageExport();
 };
 
 #endif // INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX

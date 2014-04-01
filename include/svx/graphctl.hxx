@@ -82,7 +82,7 @@ public:
 
                         GraphCtrl( Window* pParent, const ResId& rResId );
                         GraphCtrl( Window* pParent, WinBits nStyle );
-                        ~GraphCtrl();
+                        virtual ~GraphCtrl();
 
     void                SetWinStyle( WinBits nWinBits );
     WinBits             GetWinStyle() const { return nWinStyle; }

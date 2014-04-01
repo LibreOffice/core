@@ -33,7 +33,7 @@ private:
 
 public:
     PanesIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ) {}
-    ~PanesIndexAccess(){}
+    virtual ~PanesIndexAccess(){}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE

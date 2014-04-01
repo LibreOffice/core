@@ -57,7 +57,7 @@ namespace pcr
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     protected:
-        ~DefaultHelpProvider();
+        virtual ~DefaultHelpProvider();
 
         // XPropertyControlObserver
         virtual void SAL_CALL focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& Control ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

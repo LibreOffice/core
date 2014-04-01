@@ -52,7 +52,7 @@ private:
 
 public:
                     SvxPasswordDialog( Window* pParent, bool bAllowEmptyPasswords = false, bool bDisableOldPassword = false );
-                    ~SvxPasswordDialog();
+                    virtual ~SvxPasswordDialog();
 
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
     OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }

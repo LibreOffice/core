@@ -80,7 +80,7 @@ public:
                                          const OUString&            rText,
                                          ToolBox&                   rParentTbx,
                                          const Reference< XFrame >& rFrame );
-                            ~TableWindow();
+                            virtual ~TableWindow();
 
     void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

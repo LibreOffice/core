@@ -36,7 +36,7 @@ protected:
     sal_uInt32      nEntries;   // Anzahle der Eintraege im Feld
 public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
-                    ~RscConst();
+                    virtual ~RscConst();
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     sal_uInt32      GetEntryCount() const { return nEntries; }
                     // Die erlaubten Werte werden gesetzt

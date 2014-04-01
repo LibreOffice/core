@@ -59,7 +59,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, OUString const & implementationName, sal_uInt16 nFlags
         );
 
-    ~XMLAutoTextEventExport();
+    virtual ~XMLAutoTextEventExport();
 
     // XInitialization
     virtual void SAL_CALL initialize(

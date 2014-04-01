@@ -65,7 +65,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
 
 public:
     SwXDispatchProviderInterceptor(SwView& rView);
-    ~SwXDispatchProviderInterceptor();
+    virtual ~SwXDispatchProviderInterceptor();
 
     //XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -106,7 +106,7 @@ class SwXDispatch : public cppu::WeakImplHelper2
     sal_Bool            m_bListenerAdded;
 public:
     SwXDispatch(SwView& rView);
-    ~SwXDispatch();
+    virtual ~SwXDispatch();
 
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
         throw (::com::sun::star::uno::RuntimeException,

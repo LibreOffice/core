@@ -63,7 +63,7 @@ namespace frm
             impl_init_nothrow( _rxContext, _rxDocument );
         }
 
-        ~DefaultCommandDescriptionProvider()
+        virtual ~DefaultCommandDescriptionProvider()
         {
         }
 

@@ -67,7 +67,7 @@ private:
     static ExtendedColorConfig_Impl* m_pImpl;
 public:
     ExtendedColorConfig();
-    ~ExtendedColorConfig();
+    virtual ~ExtendedColorConfig();
 
     virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

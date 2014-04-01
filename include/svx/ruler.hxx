@@ -253,7 +253,7 @@ public:
 
     SvxRuler(Window* pParent, Window *pEditWin, sal_uInt16 nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
-    ~SvxRuler();
+    virtual ~SvxRuler();
 
     void SetMinFrameSize(long lSize);
     long GetMinFrameSize() const ;

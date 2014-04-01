@@ -70,7 +70,7 @@ namespace io_acceptor {
     {
     public:
         SocketConnection( const OUString & sConnectionDescription );
-        ~SocketConnection();
+        virtual ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )

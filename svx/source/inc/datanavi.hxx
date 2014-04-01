@@ -123,7 +123,7 @@ namespace svxform
 
     public:
         DataTreeListBox( XFormsPage* pPage, DataGroupType _eGroup, const ResId& rResId );
-        ~DataTreeListBox();
+        virtual ~DataTreeListBox();
 
         virtual PopupMenu*      CreateContextMenu( void ) SAL_OVERRIDE;
         virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) SAL_OVERRIDE;
@@ -271,7 +271,7 @@ namespace svxform
 
     public:
         XFormsPage( Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
-        ~XFormsPage();
+        virtual ~XFormsPage();
 
         virtual void                Resize() SAL_OVERRIDE;
 
@@ -357,7 +357,7 @@ namespace svxform
 
     public:
         DataNavigatorWindow( Window* pParent, SfxBindings* pBindings );
-        ~DataNavigatorWindow();
+        virtual ~DataNavigatorWindow();
 
         void                        SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
@@ -456,7 +456,7 @@ namespace svxform
     public:
         AddDataItemDialog(
             Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
-        ~AddDataItemDialog();
+        virtual ~AddDataItemDialog();
 
         void                InitText( DataItemType _eType );
     };
@@ -519,7 +519,7 @@ namespace svxform
 
     public:
         NamespaceItemDialog( AddConditionDialog* pParent, XNameContainer_ref& _rContainer );
-        ~NamespaceItemDialog();
+        virtual ~NamespaceItemDialog();
     };
 
 
@@ -579,7 +579,7 @@ namespace svxform
     public:
         AddSubmissionDialog( Window* pParent, ItemNode* _pNode,
             const XFormsUIHelper1_ref& _rUIHelper );
-        ~AddSubmissionDialog();
+        virtual ~AddSubmissionDialog();
 
         inline const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
     };

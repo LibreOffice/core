@@ -249,7 +249,7 @@ namespace svt
         void    cancel();
 
     protected:
-        ~FileViewContentEnumerator();
+        virtual ~FileViewContentEnumerator();
 
     private:
         EnumerationResult enumerateFolderContent();

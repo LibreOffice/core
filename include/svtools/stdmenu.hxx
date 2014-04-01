@@ -140,7 +140,7 @@ private:
 
 public:
                     FontSizeMenu();
-                    ~FontSizeMenu();
+                    virtual ~FontSizeMenu();
 
     virtual void    Select() SAL_OVERRIDE;
     virtual void    Highlight() SAL_OVERRIDE;

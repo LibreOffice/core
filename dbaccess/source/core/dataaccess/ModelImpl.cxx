@@ -128,7 +128,7 @@ public:
     }
 
 protected:
-    ~DocumentStorageAccess()
+    virtual ~DocumentStorageAccess()
     {
     }
 

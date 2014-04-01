@@ -58,7 +58,7 @@ private:
 
 public:
     ContentListBox_Impl(Window* pParent, WinBits nStyle);
-    ~ContentListBox_Impl();
+    virtual ~ContentListBox_Impl();
 
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
@@ -138,7 +138,7 @@ private:
 
 public:
     IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
-    ~IndexTabPage_Impl();
+    virtual ~IndexTabPage_Impl();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
@@ -214,7 +214,7 @@ private:
 
 public:
     SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
-    ~SearchTabPage_Impl();
+    virtual ~SearchTabPage_Impl();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
@@ -239,7 +239,7 @@ private:
 
 public:
     BookmarksBox_Impl(Window* pParent, WinBits nStyle);
-    ~BookmarksBox_Impl();
+    virtual ~BookmarksBox_Impl();
 
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
@@ -310,7 +310,7 @@ private:
 
 public:
     SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
-    ~SfxHelpIndexWindow_Impl();
+    virtual ~SfxHelpIndexWindow_Impl();
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -448,7 +448,7 @@ private:
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
-    ~SfxHelpTextWindow_Impl();
+    virtual ~SfxHelpTextWindow_Impl();
 
     virtual void            Resize() SAL_OVERRIDE;
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -517,7 +517,7 @@ friend class SfxHelpIndexWindow_Impl;
 public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
                         Window* pParent, WinBits nBits );
-    ~SfxHelpWindow_Impl();
+    virtual ~SfxHelpWindow_Impl();
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

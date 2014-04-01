@@ -96,7 +96,7 @@ class IncreaseThread : public Thread
 public:
     IncreaseThread( struct resource *pData ): pResource( pData ) { }
 
-    ~IncreaseThread( )
+    virtual ~IncreaseThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#IncreaseThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -124,7 +124,7 @@ class DecreaseThread : public Thread
 public:
     DecreaseThread( struct resource *pData ): pResource( pData ) { }
 
-    ~DecreaseThread( )
+    virtual ~DecreaseThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#DecreaseThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -162,7 +162,7 @@ public:
     //get the struct pointer to write data to buffer
     PutThread( struct chain* pData ): pChain( pData ) { }
 
-    ~PutThread( )
+    virtual ~PutThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#PutThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -200,7 +200,7 @@ public:
     //get the Mutex pointer to operate
     HoldThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
-    ~HoldThread( )
+    virtual ~HoldThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#HoldThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -222,7 +222,7 @@ public:
     //get the Mutex pointer to operate
     WaitThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
-    ~WaitThread( )
+    virtual ~WaitThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#WaitThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -246,7 +246,7 @@ public:
     //get the Mutex pointer to operate
     GlobalMutexThread( ){ }
 
-    ~GlobalMutexThread( )
+    virtual ~GlobalMutexThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#GlobalMutexThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -567,7 +567,7 @@ public:
     //get the Mutex pointer to operate
     GuardThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
-    ~GuardThread( )
+    virtual ~GuardThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#GuardThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -653,7 +653,7 @@ public:
     //get the Mutex pointer to operate
     ClearGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
 
-    ~ClearGuardThread( )
+    virtual ~ClearGuardThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#ClearGuardThread does not shutdown properly.\n", !isRunning( ) );
     }
@@ -795,7 +795,7 @@ public:
     //get the Mutex pointer to operate
     ResetGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
 
-    ~ResetGuardThread( )
+    virtual ~ResetGuardThread( )
     {
         CPPUNIT_ASSERT_MESSAGE( "#ResetGuardThread does not shutdown properly.\n", !isRunning( ) );
     }

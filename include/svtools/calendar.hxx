@@ -258,7 +258,7 @@ protected:
 
 public:
                     Calendar( Window* pParent, WinBits nWinStyle = 0 );
-                    ~Calendar();
+                    virtual ~Calendar();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -416,7 +416,7 @@ private:
 
 public:
                         CalendarField( Window* pParent, WinBits nWinStyle );
-                        ~CalendarField();
+                        virtual ~CalendarField();
 
     virtual void        Select();
 

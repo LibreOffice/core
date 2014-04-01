@@ -59,7 +59,7 @@ private:
 
 public:
                 SdCustomShowDlg( Window* pWindow, SdDrawDocument& rDrawDoc );
-                ~SdCustomShowDlg();
+                virtual ~SdCustomShowDlg();
 
     sal_Bool        IsModified() const { return( bModified ); }
     sal_Bool        IsCustomShow() const;
@@ -95,7 +95,7 @@ public:
 
                     SdDefineCustomShowDlg( Window* pWindow,
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
-                    ~SdDefineCustomShowDlg();
+                    virtual ~SdDefineCustomShowDlg();
 
     sal_Bool            IsModified() const { return( bModified ); }
 };

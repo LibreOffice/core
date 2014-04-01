@@ -457,7 +457,7 @@ class SwFltFormatCollection : public SwFltOutBase
 public:
     SwFltFormatCollection(SwDoc&, RES_POOL_COLLFMT_TYPE nType);
     SwFltFormatCollection(SwDoc&, const OUString& rName );
-    ~SwFltFormatCollection() { if( pFlyAttrs ) delete pFlyAttrs; }
+    virtual ~SwFltFormatCollection() { if( pFlyAttrs ) delete pFlyAttrs; }
 
     void Reset()
     {

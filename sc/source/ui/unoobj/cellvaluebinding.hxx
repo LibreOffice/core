@@ -84,7 +84,7 @@ namespace calc
         using OCellValueBinding_PBase::getFastPropertyValue;
 
     protected:
-        ~OCellValueBinding( );
+        virtual ~OCellValueBinding( );
 
     protected:
         // XInterface

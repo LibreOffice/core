@@ -65,7 +65,7 @@ protected:
     void aCountParaFL();
 
 public:
-        ~SwParagraphNumTabPage();
+        virtual ~SwParagraphNumTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rSet );

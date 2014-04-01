@@ -81,7 +81,7 @@ class SwXDrawPage : public SwXDrawPageBaseClass
     SwFmDrawPage*   pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
-    ~SwXDrawPage();
+    virtual ~SwXDrawPage();
 
     //XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

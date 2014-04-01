@@ -50,7 +50,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
     public:
         FontHeightToolBoxControl(
             const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rServiceManager );
-        ~FontHeightToolBoxControl();
+        virtual ~FontHeightToolBoxControl();
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

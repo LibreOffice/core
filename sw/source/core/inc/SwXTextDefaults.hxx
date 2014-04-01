@@ -39,7 +39,7 @@ class SwXTextDefaults :  public cppu::WeakImplHelper3
 
 public:
     SwXTextDefaults ( SwDoc * pNewDoc );
-    ~SwXTextDefaults ();
+    virtual ~SwXTextDefaults ();
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )

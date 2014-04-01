@@ -39,7 +39,7 @@ private:
 
 public:
     SvxClickInfoCtr( Window* pParent, const ResId& rResId );
-    ~SvxClickInfoCtr();
+    virtual ~SvxClickInfoCtr();
 
     virtual void        SetText( const OUString& rStr ) SAL_OVERRIDE;
     virtual OUString    GetText() const SAL_OVERRIDE;

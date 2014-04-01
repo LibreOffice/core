@@ -41,7 +41,7 @@ protected:
 
 public:
     SvxUnoForbiddenCharsTable(rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars);
-    ~SvxUnoForbiddenCharsTable();
+    virtual ~SvxUnoForbiddenCharsTable();
 
     // XForbiddenCharacters
     virtual com::sun::star::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::container::NoSuchElementException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

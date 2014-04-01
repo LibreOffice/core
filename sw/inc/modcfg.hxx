@@ -60,7 +60,7 @@ class SwRevisionConfig : public utl::ConfigItem
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwRevisionConfig();
-        ~SwRevisionConfig();
+        virtual ~SwRevisionConfig();
 
     virtual void            Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
@@ -80,7 +80,7 @@ class SwCompareConfig : public utl::ConfigItem
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwCompareConfig();
-        ~SwCompareConfig();
+        virtual ~SwCompareConfig();
 
     virtual void    Commit() SAL_OVERRIDE;
     virtual void    Notify( const ::com::sun::star::uno::Sequence< OUString >& ) SAL_OVERRIDE { };
@@ -106,7 +106,7 @@ class SwInsertConfig : public utl::ConfigItem
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwInsertConfig(sal_Bool bWeb);
-        ~SwInsertConfig();
+        virtual ~SwInsertConfig();
 
     virtual void            Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
@@ -131,7 +131,7 @@ class SwTableConfig : public utl::ConfigItem
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwTableConfig(sal_Bool bWeb);
-        ~SwTableConfig();
+        virtual ~SwTableConfig();
 
     virtual void            Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
@@ -159,7 +159,7 @@ class SwMiscConfig : public utl::ConfigItem
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwMiscConfig();
-        ~SwMiscConfig();
+        virtual ~SwMiscConfig();
 
     virtual void            Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

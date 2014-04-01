@@ -35,7 +35,7 @@ public:
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
                              SfxRectangleItem( const SfxRectangleItem& );
-                             ~SfxRectangleItem() {}
+                             virtual ~SfxRectangleItem() {}
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

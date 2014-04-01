@@ -1165,7 +1165,7 @@ public:
         , m_pProps((pFmt) ? 0 : new SwFieldProperties_Impl)
     { }
 
-    ~Impl()
+    virtual ~Impl()
     {
         if (m_pTextObject)
         {

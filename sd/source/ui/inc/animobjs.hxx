@@ -70,7 +70,7 @@ private:
 
 public:
     SdDisplay( ::Window* pWin, SdResId Id );
-    ~SdDisplay();
+    virtual ~SdDisplay();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 

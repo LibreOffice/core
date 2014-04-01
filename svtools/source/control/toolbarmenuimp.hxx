@@ -117,7 +117,7 @@ class ToolbarMenuAcc :
 public:
 
     ToolbarMenuAcc( ToolbarMenu_Impl& rParent );
-    ~ToolbarMenuAcc();
+    virtual ~ToolbarMenuAcc();
 
     void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
@@ -209,7 +209,7 @@ class ToolbarMenuEntryAcc : public ::comphelper::OBaseMutex,
 {
 public:
     ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent );
-    ~ToolbarMenuEntryAcc();
+    virtual ~ToolbarMenuEntryAcc();
 
     bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 

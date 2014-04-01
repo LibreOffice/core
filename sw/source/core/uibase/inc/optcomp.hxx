@@ -62,7 +62,7 @@ private:
 
 public:
     SwCompatibilityOptPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwCompatibilityOptPage();
+    virtual ~SwCompatibilityOptPage();
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rAttrSet );
 

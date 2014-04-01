@@ -167,7 +167,7 @@ class SwAttrSetChg: public SwMsgPoolItem
 public:
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
-    ~SwAttrSetChg();
+    virtual ~SwAttrSetChg();
 
     /// What has changed
     const SwAttrSet* GetChgSet() const     { return pChgSet; }

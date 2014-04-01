@@ -40,7 +40,7 @@ class cclass_Unicode : public cppu::WeakImplHelper2 < XCharacterClassification, 
 {
 public:
     cclass_Unicode(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
-    ~cclass_Unicode();
+    virtual ~cclass_Unicode();
 
     virtual OUString SAL_CALL toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

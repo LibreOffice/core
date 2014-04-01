@@ -104,7 +104,7 @@ public:
                                            SfxChildWindow *pCW,
                                            Window* pParent,
                                            const ResId& rResId );
-                    ~SvxColorDockingWindow();
+                    virtual ~SvxColorDockingWindow();
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

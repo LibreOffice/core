@@ -34,7 +34,7 @@ public:
 
     explicit SvxLineColorItem( const sal_uInt16 nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
-    ~SvxLineColorItem();
+    virtual ~SvxLineColorItem();
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

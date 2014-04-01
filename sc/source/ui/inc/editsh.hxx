@@ -53,7 +53,7 @@ public:
     SFX_DECL_INTERFACE(SCID_EDIT_SHELL)
 
                     ScEditShell(EditView* pView, ScViewData* pData);
-                    ~ScEditShell();
+                    virtual ~ScEditShell();
 
     void    SetEditView(EditView* pView);
     EditView* GetEditView() {return pEditView;}

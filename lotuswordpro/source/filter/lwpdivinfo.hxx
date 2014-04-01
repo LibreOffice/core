@@ -78,7 +78,7 @@ class LwpDivInfo : public LwpObject
 {
 public:
     LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    ~LwpDivInfo();
+    virtual ~LwpDivInfo();
     LwpObjectID* GetInitialLayoutID(){ return &m_InitialLayoutID;}
     LwpObjectID* GetFillerPageTextID(){ return &m_FillerPageTextID;}
     // add by  ,03/14/2004

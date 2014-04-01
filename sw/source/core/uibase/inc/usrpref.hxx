@@ -34,7 +34,7 @@ class SwContentViewConfig : public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwContentViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
-        ~SwContentViewConfig();
+        virtual ~SwContentViewConfig();
 
     // utl::ConfigItem
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
@@ -52,7 +52,7 @@ class SwLayoutViewConfig : public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwLayoutViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
-        ~SwLayoutViewConfig();
+        virtual ~SwLayoutViewConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     virtual void            Commit() SAL_OVERRIDE;
@@ -67,7 +67,7 @@ class SwGridConfig : public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwGridConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
-        ~SwGridConfig();
+        virtual ~SwGridConfig();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
@@ -82,7 +82,7 @@ class SwCursorConfig : public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwCursorConfig(SwMasterUsrPref& rParent);
-        ~SwCursorConfig();
+        virtual ~SwCursorConfig();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
@@ -97,7 +97,7 @@ class SwWebColorConfig : public utl::ConfigItem
 
     public:
         SwWebColorConfig(SwMasterUsrPref& rParent);
-        ~SwWebColorConfig();
+        virtual ~SwWebColorConfig();
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

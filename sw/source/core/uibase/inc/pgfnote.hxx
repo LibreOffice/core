@@ -42,7 +42,7 @@ public:
 
 private:
     SwFootNotePage(Window *pParent, const SfxItemSet &rSet);
-    ~SwFootNotePage();
+    virtual ~SwFootNotePage();
 
     RadioButton*    m_pMaxHeightPageBtn;
     RadioButton*    m_pMaxHeightBtn;

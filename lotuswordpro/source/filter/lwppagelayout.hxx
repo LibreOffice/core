@@ -119,7 +119,7 @@ class LwpHeaderLayout: public LwpPlacableLayout
 {
 public:
     LwpHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpHeaderLayout();
+    virtual ~LwpHeaderLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_HEADER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle( XFPageMaster* pm1 );
@@ -145,7 +145,7 @@ class LwpFooterLayout: public LwpPlacableLayout
 {
 public:
     LwpFooterLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpFooterLayout();
+    virtual ~LwpFooterLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_FOOTER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle(XFPageMaster* pm1);

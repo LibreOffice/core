@@ -59,7 +59,7 @@ public:
                             ScPatternAttr(SfxItemPool* pItemPool);
                             ScPatternAttr(const ScPatternAttr& rPatternAttr);
 
-                            ~ScPatternAttr();
+                            virtual ~ScPatternAttr();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;

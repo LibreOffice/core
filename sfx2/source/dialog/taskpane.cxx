@@ -314,7 +314,7 @@ namespace sfx2
                     GetResourceURL() const { return m_sResourceURL; }
 
     protected:
-        ~CustomToolPanel();
+        virtual ~CustomToolPanel();
 
     private:
         bool    impl_ensureToolPanelWindow( Window& i_rPanelParentWindow );

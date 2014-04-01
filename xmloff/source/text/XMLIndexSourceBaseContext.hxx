@@ -101,7 +101,7 @@ public:
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_Bool bLevelFormats);
 
-    ~XMLIndexSourceBaseContext();
+    virtual ~XMLIndexSourceBaseContext();
 
 protected:
 

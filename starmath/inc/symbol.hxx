@@ -130,7 +130,7 @@ private:
 public:
     SmSymbolManager();
     SmSymbolManager(const SmSymbolManager& rSymbolSetManager);
-    ~SmSymbolManager();
+    virtual ~SmSymbolManager();
 
     SmSymbolManager &   operator = (const SmSymbolManager& rSymbolSetManager);
 

@@ -241,7 +241,7 @@ namespace svt
         TYPEINFO_OVERRIDE();
         EditCellController( Edit* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
-        ~EditCellController( );
+        virtual ~EditCellController( );
 
         const IEditImplementation* GetEditImplementation( ) const { return m_pEditImplementation; }
               IEditImplementation* GetEditImplementation( )       { return m_pEditImplementation; }
@@ -285,7 +285,7 @@ namespace svt
 
     public:
         CheckBoxControl(Window* pParent, WinBits nWinStyle = 0);
-        ~CheckBoxControl();
+        virtual ~CheckBoxControl();
 
         virtual void GetFocus() SAL_OVERRIDE;
         virtual bool PreNotify(NotifyEvent& rEvt) SAL_OVERRIDE;
@@ -593,7 +593,7 @@ namespace svt
     public:
         EditBrowseBox(Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = 0 );
         EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = 0 );
-        ~EditBrowseBox();
+        virtual ~EditBrowseBox();
 
         bool IsEditing() const {return aController.Is();}
         void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}

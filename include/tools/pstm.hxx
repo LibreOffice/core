@@ -211,7 +211,7 @@ public:
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
                                          sal_uInt32 nStartIdx = 1 );
-                        ~SvPersistStream();
+                        virtual ~SvPersistStream();
 
     void                SetStream( SvStream * pStream );
     SvStream *          GetStream() const { return pStm; }

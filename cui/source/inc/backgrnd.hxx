@@ -68,7 +68,7 @@ protected:
 
 private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
-    ~SvxBackgroundTabPage();
+    virtual ~SvxBackgroundTabPage();
 
     VclContainer*           m_pAsGrid;
     FixedText*              m_pSelectTxt;

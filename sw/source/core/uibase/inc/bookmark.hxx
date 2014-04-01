@@ -62,7 +62,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
 
 public:
     SwInsertBookmarkDlg(Window *pParent, SwWrtShell &rSh, SfxRequest& rReq);
-    ~SwInsertBookmarkDlg();
+    virtual ~SwInsertBookmarkDlg();
 };
 
 #endif

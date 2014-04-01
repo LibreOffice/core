@@ -34,7 +34,7 @@ public:
             ScInsertContentsDlg( Window*          pParent,
                                  sal_uInt16       nCheckDefaults = 0,
                                  const OUString*  pStrTitle = NULL );
-            ~ScInsertContentsDlg();
+            virtual ~ScInsertContentsDlg();
 
     sal_uInt16      GetInsContentsCmdBits() const;
     sal_uInt16      GetFormulaCmdBits() const;

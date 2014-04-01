@@ -80,7 +80,7 @@ class SwCreateAddressListDialog : public SfxModalDialog
 public:
     SwCreateAddressListDialog(
             Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
-    ~SwCreateAddressListDialog();
+    virtual ~SwCreateAddressListDialog();
 
     const OUString&         GetURL() const {    return m_sURL;    }
     void                    Find( const OUString& rSearch, sal_Int32 nColumn);

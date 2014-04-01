@@ -34,7 +34,7 @@ public:
     SFX_DECL_INTERFACE(SCID_PAGEBREAK_SHELL)
 
                     ScPageBreakShell( ScTabViewShell* pView );
-                    ~ScPageBreakShell();
+                    virtual ~ScPageBreakShell();
 
 };
 

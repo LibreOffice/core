@@ -46,7 +46,7 @@ namespace dbmm
     {
     public:
         MacroMigrationPage( MacroMigrationDialog& _rParentDialog, const ResId& _rRes );
-        ~MacroMigrationPage();
+        virtual ~MacroMigrationPage();
 
     protected:
         const MacroMigrationDialog& getDialog() const;

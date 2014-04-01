@@ -85,7 +85,7 @@ private:
             }
         }
 
-        ~TerminateListener()
+        virtual ~TerminateListener()
         {
             if ( m_xComponent.is() )
             {

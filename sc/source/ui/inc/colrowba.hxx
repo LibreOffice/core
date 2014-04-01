@@ -35,7 +35,7 @@ class ScColBar : public ScHeaderControl
 public:
                 ScColBar( Window* pParent, ScViewData* pData, ScHSplitPos eWhichPos,
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
-                ~ScColBar();
+                virtual ~ScColBar();
 
     virtual SCCOLROW    GetPos() const SAL_OVERRIDE;
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const SAL_OVERRIDE;
@@ -68,7 +68,7 @@ class ScRowBar : public ScHeaderControl
 public:
                 ScRowBar( Window* pParent, ScViewData* pData, ScVSplitPos eWhichPos,
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
-                ~ScRowBar();
+                virtual ~ScRowBar();
 
     virtual SCCOLROW    GetPos() const SAL_OVERRIDE;
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const SAL_OVERRIDE;

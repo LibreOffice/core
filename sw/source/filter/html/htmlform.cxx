@@ -372,7 +372,7 @@ class SwHTMLImageWatcher :
 public:
     SwHTMLImageWatcher( const uno::Reference< drawing::XShape > & rShape,
                         sal_Bool bWidth, sal_Bool bHeight );
-    ~SwHTMLImageWatcher();
+    virtual ~SwHTMLImageWatcher();
 
     // startProduction darf nicht im Konstruktor gerufen werden, weil
     // wir und ggf. selbst zerstoeren ... Deshlab eine eigene Methode.

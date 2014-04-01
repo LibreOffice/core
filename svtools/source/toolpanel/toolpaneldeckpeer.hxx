@@ -39,7 +39,7 @@ namespace svt
         ToolPanelDeckPeer( ToolPanelDeck& i_rDeck );
 
     protected:
-        ~ToolPanelDeckPeer();
+        virtual ~ToolPanelDeckPeer();
 
         // VCLXWindow overridables
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() SAL_OVERRIDE;

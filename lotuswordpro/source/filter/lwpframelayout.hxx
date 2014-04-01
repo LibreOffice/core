@@ -177,7 +177,7 @@ class LwpGroupFrame: public LwpContent
 {
 public:
     LwpGroupFrame(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpGroupFrame();
+    virtual ~LwpGroupFrame();
     virtual void RegisterStyle() SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
 protected:

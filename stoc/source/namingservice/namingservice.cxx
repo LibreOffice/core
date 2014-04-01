@@ -89,7 +89,7 @@ class NamingService_Impl
     HashMap_OWString_Interface          aMap;
 public:
     NamingService_Impl();
-    ~NamingService_Impl();
+    virtual ~NamingService_Impl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

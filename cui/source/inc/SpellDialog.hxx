@@ -76,7 +76,7 @@ protected:
 
 public:
     SentenceEditWindow_Impl(Window* pParent, WinBits nBits);
-    ~SentenceEditWindow_Impl();
+    virtual ~SentenceEditWindow_Impl();
 
     void            SetModifyHdl(const Link& rLink) SAL_OVERRIDE { m_aModifyLink = rLink;}
 
@@ -219,7 +219,7 @@ public:
         svx::SpellDialogChildWindow* pChildWindow,
         Window * pParent,
         SfxBindings* pBindings);
-    ~SpellDialog();
+    virtual ~SpellDialog();
 
     void            SetLanguage( sal_uInt16 nLang );
     virtual bool    Close() SAL_OVERRIDE;

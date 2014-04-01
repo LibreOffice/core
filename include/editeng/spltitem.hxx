@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxFmtSplitItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
-    ~SvxFmtSplitItem();
+    virtual ~SvxFmtSplitItem();
 
     inline SvxFmtSplitItem( const bool bSplit /*= true*/,
                             const sal_uInt16 nWh  );

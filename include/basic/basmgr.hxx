@@ -141,7 +141,7 @@ protected:
     bool            ImplEncryptStream( SvStream& rStream ) const;
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
     void            CheckModules( StarBASIC* pBasic, bool bReference ) const;
-    ~BasicManager();
+    virtual ~BasicManager();
 
 public:
                     TYPEINFO_OVERRIDE();

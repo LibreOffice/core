@@ -130,7 +130,7 @@ class SwTableColumnPage : public SfxTabPage
 
 public:
     SwTableColumnPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwTableColumnPage();
+    virtual ~SwTableColumnPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
     virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
@@ -178,7 +178,7 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
 
     SwTextFlowPage( Window* pParent, const SfxItemSet& rSet );
-    ~SwTextFlowPage();
+    virtual ~SwTextFlowPage();
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);

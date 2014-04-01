@@ -48,7 +48,7 @@ class SvxTabulatorTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    ~SvxTabulatorTabPage();
+    virtual ~SvxTabulatorTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();

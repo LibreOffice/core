@@ -84,7 +84,7 @@ private:
 
 protected:
                                 SvXMLGraphicHelper();
-                                ~SvXMLGraphicHelper();
+                                virtual ~SvXMLGraphicHelper();
     void                        Init( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       bool bDirect );

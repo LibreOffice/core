@@ -268,7 +268,7 @@ class SvxAsianTabPage : public SfxTabPage
     DECL_LINK( ClickHdl_Impl, CheckBox* );
 
 public:
-    ~SvxAsianTabPage();
+    virtual ~SvxAsianTabPage();
 
 
     static SfxTabPage*  Create( Window* pParent,

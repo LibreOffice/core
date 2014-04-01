@@ -54,7 +54,7 @@ class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
 
 public:
     SwCondCollItem(sal_uInt16 nWhich = FN_COND_COLL);
-    ~SwCondCollItem();
+    virtual ~SwCondCollItem();
 
                                 TYPEINFO_OVERRIDE();
 

@@ -37,7 +37,7 @@ protected:
 
 public:
             ScHintWindow( Window* pParent, const OUString& rTit, const OUString& rMsg );
-            ~ScHintWindow();
+            virtual ~ScHintWindow();
 };
 
 

@@ -58,7 +58,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    ~XMLIndexObjectSourceContext();
+    virtual ~XMLIndexObjectSourceContext();
 
 protected:
 

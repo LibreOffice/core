@@ -91,7 +91,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 
 public:
                             SvtSaveOptions_Impl();
-                            ~SvtSaveOptions_Impl();
+                            virtual ~SvtSaveOptions_Impl();
 
     virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     virtual void            Commit() SAL_OVERRIDE;
@@ -759,7 +759,7 @@ class SvtLoadOptions_Impl : public utl::ConfigItem
 
 public:
                             SvtLoadOptions_Impl();
-                            ~SvtLoadOptions_Impl();
+                            virtual ~SvtLoadOptions_Impl();
 
     virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     virtual void            Commit() SAL_OVERRIDE;

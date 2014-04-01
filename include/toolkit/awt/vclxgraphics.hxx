@@ -69,7 +69,7 @@ private:
 
 public:
                     VCLXGraphics();
-                    ~VCLXGraphics();
+                    virtual ~VCLXGraphics();
 
     void            Init( OutputDevice* pOutDev );
     void            InitOutputDevice( sal_uInt16 nFlags );

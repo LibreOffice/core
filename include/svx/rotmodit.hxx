@@ -41,7 +41,7 @@ public:
 
                 SvxRotateModeItem( SvxRotateMode eMode=SVX_ROTATE_MODE_STANDARD, sal_uInt16 nWhich=0);
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
-                ~SvxRotateModeItem();
+                virtual ~SvxRotateModeItem();
 
     virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE;
     virtual OUString            GetValueText( sal_uInt16 nVal ) const;

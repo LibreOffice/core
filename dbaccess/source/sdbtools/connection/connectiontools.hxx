@@ -77,7 +77,7 @@ namespace sdbtools
         virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~ConnectionTools();
+        virtual ~ConnectionTools();
 
     private:
         ConnectionTools();                                      // never implemented

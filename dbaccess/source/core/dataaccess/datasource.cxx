@@ -120,7 +120,7 @@ public:
 
 protected:
     FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener );
-    ~FlushNotificationAdapter();
+    virtual ~FlushNotificationAdapter();
 
     void SAL_CALL impl_dispose( bool _bRevokeListener );
 
@@ -302,7 +302,7 @@ class OSharedConnectionManager : public OConnectionHelper_BASE
     Reference< XProxyFactory >  m_xProxyFactory;
 
 protected:
-    ~OSharedConnectionManager();
+    virtual ~OSharedConnectionManager();
 
 public:
     OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);

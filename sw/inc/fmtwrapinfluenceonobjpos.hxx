@@ -38,7 +38,7 @@ public:
             com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     SwFmtWrapInfluenceOnObjPos(
             const SwFmtWrapInfluenceOnObjPos& _rCpy );
-    ~SwFmtWrapInfluenceOnObjPos();
+    virtual ~SwFmtWrapInfluenceOnObjPos();
 
     SwFmtWrapInfluenceOnObjPos& operator=(
             const SwFmtWrapInfluenceOnObjPos& _rSource );

@@ -108,7 +108,7 @@ private:
 public:
     SvInsertPlugInDialog(Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
-    ~SvInsertPlugInDialog();
+    virtual ~SvInsertPlugInDialog();
     virtual short Execute() SAL_OVERRIDE;
 };
 

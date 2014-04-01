@@ -47,7 +47,7 @@ public:
                                 const SdDrawDocument* pDoc,
                                 SfxMedium* pSfxMedium,
                                 const OUString& rFileName );
-                ~SdInsertPagesObjsDlg();
+                virtual ~SdInsertPagesObjsDlg();
 
     /** returns the list
           nType == 0 -> pages

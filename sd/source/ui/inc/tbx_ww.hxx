@@ -33,7 +33,7 @@ public:
             SFX_DECL_TOOLBOX_CONTROL();
 
             SdTbxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-            ~SdTbxControl() {}
+            virtual ~SdTbxControl() {}
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;

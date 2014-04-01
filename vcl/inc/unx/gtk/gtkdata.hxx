@@ -86,7 +86,7 @@ class GtkSalTimer : public SalTimer
     struct SalGtkTimeoutSource *m_pTimeout;
 public:
     GtkSalTimer();
-    ~GtkSalTimer();
+    virtual ~GtkSalTimer();
     virtual void Start( sal_uLong nMS ) SAL_OVERRIDE;
     virtual void Stop() SAL_OVERRIDE;
     bool         Expired();

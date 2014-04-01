@@ -105,7 +105,7 @@ class SwCaptionDialog : public SvxStandardDialog
     static OUString our_aSepTextSave; // Save caption separator text
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );
-    ~SwCaptionDialog();
+    virtual ~SwCaptionDialog();
 };
 
 #endif

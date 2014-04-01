@@ -65,7 +65,7 @@ class IFrameObject : public ::cppu::WeakImplHelper6 <
 public:
     IFrameObject(const css::uno::Reference < css::uno::XComponentContext>& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
-    ~IFrameObject();
+    virtual ~IFrameObject();
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE

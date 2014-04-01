@@ -85,7 +85,7 @@ class DavDetailsContainer : public HostDetailsContainer
 
     public:
         DavDetailsContainer( VclBuilderContainer* pBuilder );
-        ~DavDetailsContainer( ) { };
+        virtual ~DavDetailsContainer( ) { };
 
         virtual void show( bool bShow = true ) SAL_OVERRIDE;
 
@@ -105,7 +105,7 @@ class SmbDetailsContainer : public DetailsContainer
 
     public:
         SmbDetailsContainer( VclBuilderContainer* pBuilder );
-        ~SmbDetailsContainer( ) { };
+        virtual ~SmbDetailsContainer( ) { };
 
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
@@ -128,7 +128,7 @@ class CmisDetailsContainer : public DetailsContainer
 
     public:
         CmisDetailsContainer( VclBuilderContainer* pBuilder );
-        ~CmisDetailsContainer( ) { };
+        virtual ~CmisDetailsContainer( ) { };
 
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;

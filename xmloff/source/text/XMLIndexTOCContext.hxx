@@ -77,7 +77,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    ~XMLIndexTOCContext();
+    virtual ~XMLIndexTOCContext();
 
 protected:
 

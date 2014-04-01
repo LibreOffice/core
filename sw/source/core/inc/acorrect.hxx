@@ -55,7 +55,7 @@ class SwAutoCorrDoc : public SvxAutoCorrDoc
 
 public:
     SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam, sal_Unicode cIns = 0 );
-    ~SwAutoCorrDoc();
+    virtual ~SwAutoCorrDoc();
 
     virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
     virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;

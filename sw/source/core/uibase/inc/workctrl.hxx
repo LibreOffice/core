@@ -63,7 +63,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SwTbxInsertCtrl();
+    virtual ~SwTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
@@ -145,7 +145,7 @@ protected:
 
 public:
         SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window *pParent );
-        ~SwScrollNaviPopup();
+        virtual ~SwScrollNaviPopup();
 
     static OUString         GetQuickHelpText(sal_Bool bNext);
 
@@ -172,7 +172,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwPreviewZoomControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SwPreviewZoomControl();
+    virtual ~SwPreviewZoomControl();
 
     virtual void            StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,

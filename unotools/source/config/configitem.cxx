@@ -83,7 +83,7 @@ namespace utl{
             ConfigItem*                 pParent;
             const Sequence< OUString >  aPropertyNames;
             ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
-            ~ConfigChangeListener_Impl();
+            virtual ~ConfigChangeListener_Impl();
 
         //XChangesListener
         virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

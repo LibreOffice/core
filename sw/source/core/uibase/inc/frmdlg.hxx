@@ -60,7 +60,7 @@ public:
                 const OString& sDefPage = OString(),
                 const OUString* pFmtStr  = 0);
 
-    ~SwFrmDlg();
+    virtual ~SwFrmDlg();
 
     SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };

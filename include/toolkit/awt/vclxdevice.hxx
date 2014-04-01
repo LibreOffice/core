@@ -59,7 +59,7 @@ protected:
 
 public:
                             VCLXDevice();
-                            ~VCLXDevice();
+                            virtual ~VCLXDevice();
 
     void                    SetOutputDevice( OutputDevice* pOutDev ) { mpOutputDevice = pOutDev; }
     OutputDevice*           GetOutputDevice() const { return mpOutputDevice; }
@@ -105,7 +105,7 @@ public:
 class VCLXVirtualDevice : public VCLXDevice
 {
 public:
-                    ~VCLXVirtualDevice();
+                    virtual ~VCLXVirtualDevice();
 
     void            SetVirtualDevice( VirtualDevice* pVDev ) { SetOutputDevice( (OutputDevice*)pVDev ); }
 };

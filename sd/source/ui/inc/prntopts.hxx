@@ -62,7 +62,7 @@ private:
     using OutputDevice::SetDrawMode;
 public:
             SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs);
-            ~SdPrintOptions();
+            virtual ~SdPrintOptions();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
 

@@ -105,7 +105,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
 
 public:
     SwSelectAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig);
-    ~SwSelectAddressBlockDialog();
+    virtual ~SwSelectAddressBlockDialog();
 
     void    SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
@@ -146,7 +146,7 @@ protected:
     bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     AddressMultiLineEdit(Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
-    ~AddressMultiLineEdit();
+    virtual ~AddressMultiLineEdit();
 
     void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
@@ -243,7 +243,7 @@ private:
 
 public:
     SwCustomizeAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
-    ~SwCustomizeAddressBlockDialog();
+    virtual ~SwCustomizeAddressBlockDialog();
 
     void            SetAddress(const OUString& rAddress);
     OUString GetAddress();
@@ -278,7 +278,7 @@ public:
                 SwMailMergeConfigItem& rConfigItem,
                 const OUString& rPreview,
                 bool bIsAddressBlock);
-    ~SwAssignFieldsDialog();
+    virtual ~SwAssignFieldsDialog();
 };
 #endif
 

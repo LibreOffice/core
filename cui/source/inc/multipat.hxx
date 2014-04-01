@@ -50,7 +50,7 @@ private:
 
 public:
     SvxMultiPathDialog(Window* pParent);
-    ~SvxMultiPathDialog();
+    virtual ~SvxMultiPathDialog();
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );
@@ -69,7 +69,7 @@ private:
 
 public:
     SvxPathSelectDialog(Window* pParent);
-    ~SvxPathSelectDialog();
+    virtual ~SvxPathSelectDialog();
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );

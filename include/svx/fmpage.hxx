@@ -49,7 +49,7 @@ public:
 
     FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     FmFormPage(const FmFormPage& rPage);
-    ~FmFormPage();
+    virtual ~FmFormPage();
 
     virtual void    SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 

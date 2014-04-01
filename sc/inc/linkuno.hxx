@@ -503,7 +503,7 @@ class ScExternalSheetCacheObj : public cppu::WeakImplHelper1< ::com::sun::star::
 {
 public:
     explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
-    ~ScExternalSheetCacheObj();
+    virtual ~ScExternalSheetCacheObj();
 
                             // XExternalSheetCache
     virtual void SAL_CALL setCellValue(
@@ -537,7 +537,7 @@ class ScExternalDocLinkObj : public cppu::WeakImplHelper1< ::com::sun::star::she
 {
 public:
     ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
-    ~ScExternalDocLinkObj();
+    virtual ~ScExternalDocLinkObj();
 
                             // XExternalDocLink
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
@@ -585,7 +585,7 @@ class ScExternalDocLinksObj : public cppu::WeakImplHelper1< ::com::sun::star::sh
 {
 public:
     ScExternalDocLinksObj(ScDocShell* pDocShell);
-    ~ScExternalDocLinksObj();
+    virtual ~ScExternalDocLinksObj();
 
                             // XExternalDocLinks
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLink >

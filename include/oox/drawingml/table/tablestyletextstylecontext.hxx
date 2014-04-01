@@ -32,7 +32,7 @@ public:
     TableStyleTextStyleContext( ::oox::core::ContextHandler2Helper& rParent,
             const ::oox::AttributeList& rAttribs,
             TableStylePart& rTableStylePart );
-    ~TableStyleTextStyleContext();
+    virtual ~TableStyleTextStyleContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

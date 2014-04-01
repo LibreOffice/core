@@ -71,7 +71,7 @@ public:
         AccessibleSlideSorterView& rAccessibleSlideSorter,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         ::Window* pWindow);
-    ~Implementation (void);
+    virtual ~Implementation (void);
 
     void RequestUpdateChildren (void);
     void Clear (void);

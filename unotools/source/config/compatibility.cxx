@@ -225,7 +225,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
 
          SvtCompatibilityOptions_Impl();
-        ~SvtCompatibilityOptions_Impl();
+        virtual ~SvtCompatibilityOptions_Impl();
 
         void SetDefault( const OUString & sName, bool bValue );
 

@@ -62,7 +62,7 @@ protected:
 
 public:
                         ButtonDialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                        ~ButtonDialog();
+                        virtual ~ButtonDialog();
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

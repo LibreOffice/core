@@ -133,7 +133,7 @@ public:
     SmElementsDockingWindow( SfxBindings* pBindings,
                              SfxChildWindow* pChildWindow,
                              Window* pParent );
-    ~SmElementsDockingWindow();
+    virtual ~SmElementsDockingWindow();
 
     virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) SAL_OVERRIDE;
     virtual void ToggleFloatingMode() SAL_OVERRIDE;

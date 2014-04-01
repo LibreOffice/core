@@ -114,7 +114,7 @@ namespace comphelper
             );
 
     protected:
-        ~OAccessibleWrapper( );
+        virtual ~OAccessibleWrapper( );
 
     private:
         COMPHELPER_DLLPRIVATE OAccessibleWrapper( );                                        // never implemented
@@ -226,7 +226,7 @@ namespace comphelper
         virtual void notifyTranslatedEvent( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
     protected:
-        ~OAccessibleContextWrapperHelper( );
+        virtual ~OAccessibleContextWrapperHelper( );
 
         OAccessibleContextWrapperHelper( );                                             // never implemented
         OAccessibleContextWrapperHelper( const OAccessibleContextWrapperHelper& );              // never implemented
@@ -397,7 +397,7 @@ namespace comphelper
         void    implTranslateChildEventValue( const ::com::sun::star::uno::Any& _rInValue, ::com::sun::star::uno::Any& _rOutValue );
 
     protected:
-        ~OWrappedAccessibleChildrenManager( );
+        virtual ~OWrappedAccessibleChildrenManager( );
 
     private:
         COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( );                                                     // never implemented

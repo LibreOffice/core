@@ -68,7 +68,7 @@ namespace psp
 
         public:
         SystemQueueInfo();
-        ~SystemQueueInfo();
+        virtual ~SystemQueueInfo();
 
         bool hasChanged() const;
         OUString getCommand() const;

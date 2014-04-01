@@ -162,7 +162,7 @@ public:
     SvxThesaurusDialog( Window* pParent,
                         css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                         const OUString &rWord, LanguageType nLanguage );
-    ~SvxThesaurusDialog();
+    virtual ~SvxThesaurusDialog();
 
     void            SetWindowTitle( LanguageType nLanguage );
     OUString        GetWord();

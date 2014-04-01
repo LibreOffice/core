@@ -40,7 +40,7 @@ class ScDbNameDlg : public ScAnyRefDlg
 public:
                     ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                  ScViewData*    ptrViewData );
-                    ~ScDbNameDlg();
+                    virtual ~ScDbNameDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
 

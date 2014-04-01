@@ -52,7 +52,7 @@ public:
                              SfxChildWindow* pChild,
                              Window *pParent,
                              SfxChildWinInfo* pInfo);
-    ~SwWordCountFloatDlg();
+    virtual ~SwWordCountFloatDlg();
     void    UpdateCounts();
 
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);

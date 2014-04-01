@@ -67,7 +67,7 @@ protected:
 public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
-    ~OUserAdmin();
+    virtual ~OUserAdmin();
     OUString GetUser();
 
     // must be overloaded by subclasses, but it isn't pure virtual

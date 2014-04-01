@@ -70,7 +70,7 @@ class SwOutlineTabDialog : public SfxTabDialog
         SwOutlineTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
-        ~SwOutlineTabDialog();
+        virtual ~SwOutlineTabDialog();
 
     SwNumRule*          GetNumRule() {return pNumRule;}
     sal_uInt16              GetLevel(const OUString &rFmtName) const;
@@ -120,7 +120,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
 public:
     SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwOutlineSettingsTabPage();
+    virtual ~SwOutlineSettingsTabPage();
 
     void SetWrtShell(SwWrtShell* pShell);
 

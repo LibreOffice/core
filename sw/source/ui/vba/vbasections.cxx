@@ -88,7 +88,7 @@ public:
         mxSections.push_back( xPageProps );
     }
 
-    ~SectionCollectionHelper(){}
+    virtual ~SectionCollectionHelper(){}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE

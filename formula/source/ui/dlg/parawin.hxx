@@ -124,7 +124,7 @@ protected:
 
 public:
                         ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos);
-                        ~ParaWin();
+                        virtual ~ParaWin();
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);
         void            SetArgumentOffset(sal_uInt16 nOffset);

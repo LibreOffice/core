@@ -248,7 +248,7 @@ class LwpParaTabRackProperty : public LwpParaProperty
 {
 public:
     LwpParaTabRackProperty(LwpObjectStream* pStrm);
-    ~LwpParaTabRackProperty(void);
+    virtual ~LwpParaTabRackProperty(void);
     sal_uInt32 GetType() SAL_OVERRIDE { return PP_LOCAL_TABRACK; }
 
     inline LwpTabOverride* GetTab();

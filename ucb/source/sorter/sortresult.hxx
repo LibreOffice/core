@@ -165,7 +165,7 @@ private:
 
 public:
                         SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > aResult );
-                        ~SortedResultSet();
+                        virtual ~SortedResultSet();
 
     const SortedEntryList*      GetS2OList() const { return &maS2O; }
     const SimpleList*           GetO2SList() const { return &maO2S; }

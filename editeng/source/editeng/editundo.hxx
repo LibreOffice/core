@@ -86,7 +86,7 @@ private:
 
 public:
     EditUndoSplitPara(EditEngine* pEE, sal_Int32 nNode, sal_uInt16 nSepPos);
-    ~EditUndoSplitPara();
+    virtual ~EditUndoSplitPara();
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;

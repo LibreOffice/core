@@ -52,7 +52,7 @@ public:
                         MessBox( Window* pParent, WinBits nStyle,
                                  const OUString& rTitle, const OUString& rMessage );
                         MessBox( Window* pParent, const ResId& rResId );
-                        ~MessBox();
+                        virtual ~MessBox();
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 

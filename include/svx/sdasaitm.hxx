@@ -46,7 +46,7 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             TYPEINFO_OVERRIDE();
             SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
-            SVX_DLLPUBLIC ~SdrCustomShapeAdjustmentItem();
+            SVX_DLLPUBLIC virtual ~SdrCustomShapeAdjustmentItem();
 
             virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,

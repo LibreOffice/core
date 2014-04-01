@@ -70,7 +70,7 @@ class LocaleDataImpl : public cppu::WeakImplHelper2
 {
 public:
     LocaleDataImpl();
-    ~LocaleDataImpl();
+    virtual ~LocaleDataImpl();
 
     static com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > downcastCalendarItems( const com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem2 > & rCi );
     static com::sun::star::i18n::Calendar downcastCalendar( const com::sun::star::i18n::Calendar2 & rC );

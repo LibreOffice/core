@@ -47,7 +47,7 @@ namespace tdoc_ucp {
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext > & rxContext,
             const rtl::Reference< OfficeDocumentsManager > & xDocsMgr );
-        ~StorageElementFactory();
+        virtual ~StorageElementFactory();
 
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
         createTemporaryStorage()

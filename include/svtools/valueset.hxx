@@ -287,7 +287,7 @@ protected:
 public:
                     ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
                     ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
-                    ~ValueSet();
+                    virtual ~ValueSet();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

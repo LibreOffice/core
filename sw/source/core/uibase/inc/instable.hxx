@@ -64,7 +64,7 @@ class SwInsTableDlg : public SfxModalDialog
 
 public:
     SwInsTableDlg( SwView& rView );
-    ~SwInsTableDlg();
+    virtual ~SwInsTableDlg();
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                     SwInsertTableOptions& rInsTblOpts, OUString& rTableAutoFmtName,

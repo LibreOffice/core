@@ -49,7 +49,7 @@ public:
 
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );
-    ~SvxGalleryItem();
+    virtual ~SvxGalleryItem();
 
     sal_Int8 GetType() const { return m_nType; }
     const rtl::OUString GetURL() const { return m_aURL; }

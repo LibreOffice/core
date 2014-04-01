@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 public:
     SwFmtAnchor( RndStdIds eRnd = FLY_AT_PAGE, sal_uInt16 nPageNum = 0 );
     SwFmtAnchor( const SwFmtAnchor &rCpy );
-    ~SwFmtAnchor();
+    virtual ~SwFmtAnchor();
 
     SwFmtAnchor &operator=( const SwFmtAnchor& );
 

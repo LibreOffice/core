@@ -32,7 +32,7 @@ class ScTpPrintOptions : public SfxTabPage
     CheckBox*       m_pForceBreaksCB;
 
             ScTpPrintOptions( Window* pParent, const SfxItemSet& rCoreSet );
-            ~ScTpPrintOptions();
+            virtual ~ScTpPrintOptions();
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );

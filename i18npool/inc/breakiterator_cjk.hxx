@@ -54,7 +54,7 @@ protected:
 class BreakIterator_##lang : public BreakIterator_CJK {\
 public:\
     BreakIterator_##lang (); \
-    ~BreakIterator_##lang (); \
+    virtual ~BreakIterator_##lang (); \
 };
 
 #ifdef BREAKITERATOR_ALL

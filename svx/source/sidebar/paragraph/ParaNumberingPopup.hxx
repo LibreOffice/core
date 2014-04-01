@@ -34,7 +34,7 @@ public :
     ParaNumberingPopup (
         Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    ~ParaNumberingPopup (void);
+    virtual ~ParaNumberingPopup (void);
 
     void UpdateValueSet ();
 //private:

@@ -94,7 +94,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     public:
 
          SvtMiscOptions_Impl();
-        ~SvtMiscOptions_Impl();
+        virtual ~SvtMiscOptions_Impl();
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

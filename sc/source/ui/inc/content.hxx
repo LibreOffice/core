@@ -123,7 +123,7 @@ protected:
 
 public:
             ScContentTree( Window* pParent, const ResId& rResId );
-            ~ScContentTree();
+            virtual ~ScContentTree();
 
     OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;
     OUString GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;

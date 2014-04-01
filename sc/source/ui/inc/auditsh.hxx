@@ -38,7 +38,7 @@ public:
     SFX_DECL_INTERFACE(SCID_AUDITING_SHELL)
 
                     ScAuditingShell(ScViewData* pData);
-                    ~ScAuditingShell();
+                    virtual ~ScAuditingShell();
 
     void    Execute(SfxRequest& rReq);
     void    GetState(SfxItemSet& rSet);

@@ -113,7 +113,7 @@ class CGMImpressOutAct : public CGMOutAct
     void                        ImplSetTextBundle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & ) ;
 public:
                                 CGMImpressOutAct( CGM&, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & ) ;
-                                ~CGMImpressOutAct() {} ;
+                                virtual ~CGMImpressOutAct() {} ;
     virtual void                InsertPage() SAL_OVERRIDE ;
     virtual void                BeginGroup() SAL_OVERRIDE ;
     virtual void                EndGroup() SAL_OVERRIDE ;

@@ -63,7 +63,7 @@ protected:
 public:
                         SwFldDokPage(Window* pWindow, const SfxItemSet& rSet);
 
-                        ~SwFldDokPage();
+                        virtual ~SwFldDokPage();
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 

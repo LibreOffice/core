@@ -65,7 +65,7 @@ protected:
 
 public:
                     FileControl( Window* pParent, WinBits nStyle, FileControlMode = 0 );
-                    ~FileControl();
+                    virtual ~FileControl();
 
     Edit&           GetEdit() { return maEdit; }
     PushButton&     GetButton() { return maButton; }

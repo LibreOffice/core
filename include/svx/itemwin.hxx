@@ -49,7 +49,7 @@ public:
     SvxLineBox( Window* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                 WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    ~SvxLineBox();
+    virtual ~SvxLineBox();
 
     void FillControl();
 
@@ -81,7 +81,7 @@ public:
                  const OUString& rCommand,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                  WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    ~SvxColorBox();
+    virtual ~SvxColorBox();
 
     void            Update( const XLineColorItem* pItem );
 
@@ -120,7 +120,7 @@ public:
     SvxMetricField( Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                     WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
-    ~SvxMetricField();
+    virtual ~SvxMetricField();
 
     void            Update( const XLineWidthItem* pItem );
     void            SetCoreUnit( SfxMapUnit eUnit );
@@ -133,7 +133,7 @@ class SvxFillTypeBox : public FillTypeLB
 {
 public:
     SvxFillTypeBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    ~SvxFillTypeBox();
+    virtual ~SvxFillTypeBox();
 
     void            Selected() { bSelect = true; }
     bool            IsRelease() { return bRelease;}
@@ -156,7 +156,7 @@ class SvxFillAttrBox : public FillAttrLB
 {
 public:
     SvxFillAttrBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-    ~SvxFillAttrBox();
+    virtual ~SvxFillAttrBox();
 
     bool            IsRelease() { return bRelease;}
 

@@ -57,7 +57,7 @@ namespace pcr
         ::std::auto_ptr< InspectorModelProperties >                     m_pProperties;
 
     protected:
-        ~ImplInspectorModel();
+        virtual ~ImplInspectorModel();
 
     public:
         ImplInspectorModel();

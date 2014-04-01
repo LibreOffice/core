@@ -51,7 +51,7 @@ namespace pcr
 
     public:
         OTabOrderDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext );
-        ~OTabOrderDialog();
+        virtual ~OTabOrderDialog();
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

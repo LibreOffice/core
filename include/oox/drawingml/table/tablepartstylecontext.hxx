@@ -30,7 +30,7 @@ class TablePartStyleContext : public ::oox::core::ContextHandler2
 {
 public:
     TablePartStyleContext( ::oox::core::ContextHandler2Helper& rParent, TableStylePart& rTableStylePart );
-    ~TablePartStyleContext();
+    virtual ~TablePartStyleContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

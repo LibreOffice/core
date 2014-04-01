@@ -216,7 +216,7 @@ class SvxEMailTabPage : public SfxTabPage
 
 public:
     SvxEMailTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SvxEMailTabPage();
+    virtual ~SvxEMailTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 

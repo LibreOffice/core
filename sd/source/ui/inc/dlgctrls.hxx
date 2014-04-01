@@ -37,7 +37,7 @@ class SD_DLLPUBLIC FadeEffectLB : public ListBox
 {
 public:
                                 FadeEffectLB( Window* pParent, SdResId Id );
-                                ~FadeEffectLB();
+                                virtual ~FadeEffectLB();
     virtual void                Fill();
 
 /*  void                        selectEffectFromPage( SdPage* pPage ); */

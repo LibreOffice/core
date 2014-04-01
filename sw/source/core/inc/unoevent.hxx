@@ -68,7 +68,7 @@ public:
     SwFrameEventDescriptor( SwXTextGraphicObject& rGraphicRef );
     SwFrameEventDescriptor( SwXTextEmbeddedObject& rObjectRef );
 
-    ~SwFrameEventDescriptor();
+    virtual ~SwFrameEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -88,7 +88,7 @@ class SwFrameStyleEventDescriptor : public SvEventDescriptor
 public:
     SwFrameStyleEventDescriptor( SwXFrameStyle& rStyleRef );
 
-    ~SwFrameStyleEventDescriptor();
+    virtual ~SwFrameStyleEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

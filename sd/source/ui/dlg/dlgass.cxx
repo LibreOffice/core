@@ -138,7 +138,7 @@ class AssistentDlgImpl : public SfxListener
 {
 public:
     AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, sal_Bool bAutoPilot  );
-    ~AssistentDlgImpl();
+    virtual ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
     ::osl::Mutex maMutex;

@@ -49,7 +49,7 @@ class SfxMiscCfg : public utl::ConfigItem
 
 public:
     SfxMiscCfg( );
-    ~SfxMiscCfg( );
+    virtual ~SfxMiscCfg( );
 
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
     virtual void            Commit() SAL_OVERRIDE;

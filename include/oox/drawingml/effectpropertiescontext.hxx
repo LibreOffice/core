@@ -24,7 +24,7 @@ class OOX_DLLPUBLIC EffectPropertiesContext : public ::oox::core::ContextHandler
 public:
     EffectPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
             EffectProperties& rEffectProperties ) throw();
-    ~EffectPropertiesContext();
+    virtual ~EffectPropertiesContext();
 
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;

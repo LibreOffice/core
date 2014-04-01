@@ -123,7 +123,7 @@ namespace svt
     {
     protected:
         ToolPanelBase();
-        ~ToolPanelBase();
+        virtual ~ToolPanelBase();
 
     public:
         DECLARE_IREFERENCE()

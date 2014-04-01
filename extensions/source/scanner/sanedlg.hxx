@@ -135,7 +135,7 @@ private:
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 public:
     SaneDlg( Window*, Sane&, bool );
-    ~SaneDlg();
+    virtual ~SaneDlg();
 
     virtual short Execute() SAL_OVERRIDE;
     bool getDoScan();

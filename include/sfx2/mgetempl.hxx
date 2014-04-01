@@ -74,7 +74,7 @@ friend class SfxStyleDialog;
     void    SetDescriptionText_Impl();
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
-    ~SfxManageStyleSheetPage();
+    virtual ~SfxManageStyleSheetPage();
 
     static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rAttrSet );
 

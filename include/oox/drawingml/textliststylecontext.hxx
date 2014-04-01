@@ -29,7 +29,7 @@ class TextListStyleContext : public ::oox::core::ContextHandler2
 {
 public:
     TextListStyleContext( ::oox::core::ContextHandler2Helper& rParent, TextListStyle& rTextListStyle );
-    ~TextListStyleContext();
+    virtual ~TextListStyleContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

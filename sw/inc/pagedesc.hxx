@@ -247,7 +247,7 @@ public:
     SwPageDesc& operator=( const SwPageDesc& );
 
     SwPageDesc( const SwPageDesc& );
-    ~SwPageDesc();
+    virtual ~SwPageDesc();
 };
 
 inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )

@@ -32,7 +32,7 @@ class SvxFmAbsRecWin : public NumericField
         // for invalidating our content whe losing the focus
 public:
     SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController );
-    ~SvxFmAbsRecWin();
+    virtual ~SvxFmAbsRecWin();
 
     virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;
@@ -50,7 +50,7 @@ private:
 
 public:
     SvxFmConfigWin( sal_uInt16 nId, ResId aRIdWin, ResId aRIdTbx );
-    ~SvxFmConfigWin();
+    virtual ~SvxFmConfigWin();
 
     void            Update();
     virtual void    PopupModeEnd() SAL_OVERRIDE;
@@ -70,7 +70,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFmTbxCtlConfig() {}
+    virtual ~SvxFmTbxCtlConfig() {}
 
     virtual void                Select( sal_uInt16 nModifier ) SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
@@ -87,7 +87,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFmTbxCtlAbsRec();
+    virtual ~SvxFmTbxCtlAbsRec();
 
     virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
 
@@ -102,7 +102,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFmTbxCtlRecText();
+    virtual ~SvxFmTbxCtlRecText();
 
     virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
 };
@@ -114,7 +114,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFmTbxCtlRecFromText();
+    virtual ~SvxFmTbxCtlRecFromText();
 
     virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
 };
@@ -128,7 +128,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxFmTbxCtlRecTotal();
+    virtual ~SvxFmTbxCtlRecTotal();
 
     virtual Window* CreateItemWindow( Window* pParent ) SAL_OVERRIDE;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

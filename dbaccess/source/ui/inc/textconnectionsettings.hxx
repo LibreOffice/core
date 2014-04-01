@@ -38,7 +38,7 @@ namespace dbaui
     {
     public:
         TextConnectionSettingsDialog( Window* _pParent, SfxItemSet& _rItems );
-        ~TextConnectionSettingsDialog();
+        virtual ~TextConnectionSettingsDialog();
 
         /** initializes a set of PropertyStorage instaces, which are bound to
             the text-connection relevant items in our item sets

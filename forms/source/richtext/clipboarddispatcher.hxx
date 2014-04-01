@@ -79,7 +79,7 @@ namespace frm
         OPasteClipboardDispatcher( EditView& _rView );
 
     protected:
-        ~OPasteClipboardDispatcher();
+        virtual ~OPasteClipboardDispatcher();
 
         // OClipboardDispatcher
         virtual sal_Bool    implIsEnabled( ) const SAL_OVERRIDE;

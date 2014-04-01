@@ -440,7 +440,7 @@ struct SBBItem
     Sttb& operator = ( const Sttb&);
 public:
     Sttb();
-    ~Sttb();
+    virtual ~Sttb();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* fp ) SAL_OVERRIDE;
     OUString getStringAtIndex( sal_uInt32 );

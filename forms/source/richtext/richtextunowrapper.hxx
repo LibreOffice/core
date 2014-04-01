@@ -49,7 +49,7 @@ namespace frm
         ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener );
 
     protected:
-        ~ORichTextUnoWrapper() throw();
+        virtual ~ORichTextUnoWrapper() throw();
 
 
     private:
@@ -77,7 +77,7 @@ namespace frm
         virtual void                UpdateData() SAL_OVERRIDE;
 
     protected:
-        ~RichTextEditSource();
+        virtual ~RichTextEditSource();
 
     private:
         RichTextEditSource( );                                      // never implemented

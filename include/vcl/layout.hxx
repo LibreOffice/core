@@ -725,7 +725,7 @@ public:
     OUString get_secondary_text() const;
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
-    ~MessageDialog();
+    virtual ~MessageDialog();
 
     static void SetMessagesWidths(Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);

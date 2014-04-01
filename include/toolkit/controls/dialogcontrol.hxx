@@ -49,7 +49,7 @@ private:
 public:
 
                                 UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-                                ~UnoDialogControl();
+                                virtual ~UnoDialogControl();
     OUString             GetComponentServiceName() SAL_OVERRIDE;
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -165,7 +165,7 @@ class UnoMultiPageModel : public ControlModelContainerBase
 {
 public:
     UnoMultiPageModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoMultiPageModel();
+    virtual ~UnoMultiPageModel();
     UnoMultiPageModel( const UnoMultiPageModel& rModel );
 
     UnoControlModel*    Clone() const SAL_OVERRIDE;
@@ -193,7 +193,7 @@ class UnoMultiPageControl :  public ControlContainerBase
     void bindPage( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
 public:
     UnoMultiPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoMultiPageControl();
+    virtual ~UnoMultiPageControl();
     OUString     GetComponentServiceName() SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XServiceInfo
@@ -240,7 +240,7 @@ class UnoPageModel : public ControlModelContainerBase
 {
 public:
     UnoPageModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoPageModel();
+    virtual ~UnoPageModel();
     UnoPageModel( const UnoPageModel& rModel );
 
     UnoControlModel*    Clone() const SAL_OVERRIDE;
@@ -262,7 +262,7 @@ class UnoPageControl :  public ControlContainerBase
 {
 public:
     UnoPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoPageControl();
+    virtual ~UnoPageControl();
     OUString     GetComponentServiceName() SAL_OVERRIDE;
 
 
@@ -274,7 +274,7 @@ class UnoFrameModel : public ControlModelContainerBase
 {
 public:
     UnoFrameModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoFrameModel();
+    virtual ~UnoFrameModel();
     UnoFrameModel( const UnoFrameModel& rModel );
 
     UnoControlModel*    Clone() const SAL_OVERRIDE;
@@ -295,7 +295,7 @@ protected:
     virtual void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl ) SAL_OVERRIDE;
 public:
     UnoFrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ~UnoFrameControl();
+    virtual ~UnoFrameControl();
     OUString     GetComponentServiceName() SAL_OVERRIDE;
 
 // ::com::sun::star::lang::XServiceInfo

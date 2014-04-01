@@ -42,7 +42,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > & xTable,
         com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
 
-    ~SvxXMLXTableExportComponent();
+    virtual ~SvxXMLXTableExportComponent();
 
     static bool save( const OUString& rURL,
                       const com::sun::star::uno::Reference<

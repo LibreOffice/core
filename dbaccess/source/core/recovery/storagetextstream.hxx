@@ -37,7 +37,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
-        ~StorageTextOutputStream();
+        virtual ~StorageTextOutputStream();
 
         void    writeLine( const OUString& i_rLine );
         void    writeLine();

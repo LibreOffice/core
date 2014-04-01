@@ -74,7 +74,7 @@ public:
     DbGridRow(CursorWrapper* pCur, bool bPaintCursor);
     void SetState(CursorWrapper* pCur, bool bPaintCursor);
 
-    ~DbGridRow();
+    virtual ~DbGridRow();
 
     bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
     const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants[ nPos ]; }

@@ -118,7 +118,7 @@ protected:
 
 public:
             ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
-            ~ScPreview();
+            virtual ~ScPreview();
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

@@ -173,7 +173,7 @@ class ColorConfigWindow_Impl
 {
 public:
     ColorConfigWindow_Impl(Window* pParent);
-    ~ColorConfigWindow_Impl();
+    virtual ~ColorConfigWindow_Impl();
 
 public:
     void SetLinks (Link const&, Link const&, Link const&);
@@ -843,7 +843,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 public:
     ColorConfigCtrl_Impl(Window* pParent);
-    ~ColorConfigCtrl_Impl();
+    virtual ~ColorConfigCtrl_Impl();
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
         const OUString &rColorSetting, const OUString &rPreview);

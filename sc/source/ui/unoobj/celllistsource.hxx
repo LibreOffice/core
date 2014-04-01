@@ -78,7 +78,7 @@ namespace calc
         using OCellListSource_PBase::getFastPropertyValue;
 
     protected:
-        ~OCellListSource( );
+        virtual ~OCellListSource( );
 
     protected:
         // XInterface

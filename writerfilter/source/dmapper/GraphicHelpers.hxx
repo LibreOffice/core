@@ -35,7 +35,7 @@ class PositionHandler: public LoggedProperties
 {
 public:
     PositionHandler( bool vertical );
-    ~PositionHandler( );
+    virtual ~PositionHandler( );
     static void setPositionOffset(const OUString & sText, bool vertical);
     static int getPositionOffset(bool vertical);
     static void setAlignH(const OUString & sText);
@@ -58,7 +58,7 @@ class WrapHandler: public LoggedProperties
 {
 public:
     WrapHandler( );
-    ~WrapHandler( );
+    virtual ~WrapHandler( );
 
     sal_Int32 m_nType;
     sal_Int32 m_nSide;

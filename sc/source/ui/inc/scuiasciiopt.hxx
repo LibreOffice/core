@@ -84,7 +84,7 @@ public:
                                 ScImportAsciiDlg(
                                     Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
-                                ~ScImportAsciiDlg();
+                                virtual ~ScImportAsciiDlg();
 
     void                        GetOptions( ScAsciiOptions& rOpt );
     void                        SaveParameters();

@@ -36,7 +36,7 @@ class GalleryThemeProvider : public ::cppu::WeakImplHelper3< ::com::sun::star::l
 public:
 
     GalleryThemeProvider();
-    ~GalleryThemeProvider();
+    virtual ~GalleryThemeProvider();
 
 protected:
 

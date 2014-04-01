@@ -100,7 +100,7 @@ class GZCodec : public ZCodec
 {
 public:
                     GZCodec(){};
-                    ~GZCodec(){};
+                    virtual ~GZCodec(){};
     virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT ) SAL_OVERRIDE
     {
         ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );

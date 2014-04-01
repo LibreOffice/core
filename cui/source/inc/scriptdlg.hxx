@@ -76,7 +76,7 @@ public:
     void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
                     SFTreeListBox(Window* pParent);
-                    ~SFTreeListBox();
+                    virtual ~SFTreeListBox();
 
     void            ExpandAllTrees();
 
@@ -178,7 +178,7 @@ public:
                     // prob need another arg in the ctor
                     // to specify the language or provider
                     SvxScriptOrgDialog( Window* pParent, const OUString& language );
-                    ~SvxScriptOrgDialog();
+                    virtual ~SvxScriptOrgDialog();
 
     virtual short   Execute() SAL_OVERRIDE;
 
@@ -197,7 +197,7 @@ public:
     SvxScriptErrorDialog(
         Window* parent, ::com::sun::star::uno::Any aException );
 
-    ~SvxScriptErrorDialog();
+    virtual ~SvxScriptErrorDialog();
 
     short           Execute() SAL_OVERRIDE;
 };

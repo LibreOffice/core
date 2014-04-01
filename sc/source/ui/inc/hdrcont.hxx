@@ -103,7 +103,7 @@ protected:
 public:
             ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
                                 SCCOLROW nNewSize, bool bNewVertical );
-            ~ScHeaderControl();
+            virtual ~ScHeaderControl();
 
     void    SetIgnoreMove(bool bSet)            { bIgnoreMove = bSet; }
 

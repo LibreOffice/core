@@ -67,7 +67,7 @@ namespace xmlsearch {
             {
             }
 
-            ~StreamDecompressor() { }
+            virtual ~StreamDecompressor() { }
 
 
             virtual sal_Int32 getNextByte() SAL_OVERRIDE;
@@ -91,7 +91,7 @@ namespace xmlsearch {
             }
 
 
-            ~ByteArrayDecompressor() { }
+            virtual ~ByteArrayDecompressor() { }
 
             sal_Int32 bytesRead()
             {

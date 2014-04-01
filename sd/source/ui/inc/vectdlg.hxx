@@ -82,7 +82,7 @@ class SdVectorizeDlg : public ModalDialog
 public:
 
                         SdVectorizeDlg( Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
-                        ~SdVectorizeDlg();
+                        virtual ~SdVectorizeDlg();
 
     const GDIMetaFile&  GetGDIMetaFile() const { return aMtf; }
 };

@@ -107,7 +107,7 @@ public:
                                         Window* pParent,
                                         const ResId& rResId );
 
-                    ~ScFunctionDockWin();
+                    virtual ~ScFunctionDockWin();
 
     using SfxDockingWindow::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

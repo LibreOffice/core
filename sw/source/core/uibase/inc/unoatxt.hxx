@@ -253,7 +253,7 @@ class SwAutoTextEventDescriptor : public SvBaseEventDescriptor
 public:
     SwAutoTextEventDescriptor(  SwXAutoTextEntry& rAutoText );
 
-    ~SwAutoTextEventDescriptor();
+    virtual ~SwAutoTextEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

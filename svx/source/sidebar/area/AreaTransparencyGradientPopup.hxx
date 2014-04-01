@@ -35,7 +35,7 @@ public :
     AreaTransparencyGradientPopup (
         Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    ~AreaTransparencyGradientPopup (void);
+    virtual ~AreaTransparencyGradientPopup (void);
 
     void Rearrange (XFillFloatTransparenceItem* pItem);
 };

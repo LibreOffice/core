@@ -79,7 +79,7 @@ private:
 public:
 
                     GalleryToolBox( GalleryBrowser2* pParent );
-                    ~GalleryToolBox();
+                    virtual ~GalleryToolBox();
 };
 
 
@@ -152,7 +152,7 @@ public:
 public:
 
                         GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery );
-                        ~GalleryBrowser2();
+                        virtual ~GalleryBrowser2();
 
     void                SelectTheme( const OUString& rThemeName );
 

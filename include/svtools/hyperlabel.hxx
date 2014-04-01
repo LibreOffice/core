@@ -53,7 +53,7 @@ namespace svt
 
     public:
         HyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
-        ~HyperLabel( );
+        virtual ~HyperLabel( );
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

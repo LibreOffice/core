@@ -45,7 +45,7 @@ public:
 
     TYPEINFO_OVERRIDE();
     FileList() {};
-    ~FileList();
+    virtual ~FileList();
 
     // Zuweisungsoperator
     FileList&           operator=( const FileList& rFileList );

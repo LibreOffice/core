@@ -51,7 +51,7 @@ class SvxFramesComboBox : public ComboBox
 {
 public:
     SvxFramesComboBox (Window* pParent, const ResId& rResId, SfxDispatcher* pDispatch);
-    ~SvxFramesComboBox ();
+    virtual ~SvxFramesComboBox ();
 };
 
 /// ComboBox-Control for URL's with History and Autocompletion

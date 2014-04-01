@@ -93,7 +93,7 @@ namespace cairocanvas
                                const ::com::sun::star::rendering::RenderState&  renderState     ) const;
 
     protected:
-        ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        virtual ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
         ::com::sun::star::rendering::StringContext maText;

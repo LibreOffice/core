@@ -105,7 +105,7 @@ private:
 public:
                     BubbleWindow( Window* pParent, const OUString& rTitle,
                                   const OUString& rText, const Image& rImage );
-                   ~BubbleWindow();
+                   virtual ~BubbleWindow();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

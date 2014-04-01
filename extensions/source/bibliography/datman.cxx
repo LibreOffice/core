@@ -272,7 +272,7 @@ class MappingDialog_Impl : public ModalDialog
 
 public:
     MappingDialog_Impl(Window* pParent, BibDataManager* pDatMan);
-    ~MappingDialog_Impl();
+    virtual ~MappingDialog_Impl();
 
     void    SetModified() {bModified = sal_True;}
 
@@ -536,7 +536,7 @@ class DBChangeDialog_Impl : public ModalDialog
     DECL_LINK(DoubleClickHdl, SvTabListBox*);
 public:
     DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan );
-    ~DBChangeDialog_Impl();
+    virtual ~DBChangeDialog_Impl();
 
     OUString     GetCurrentURL()const;
 };

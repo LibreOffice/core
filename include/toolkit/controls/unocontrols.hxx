@@ -508,7 +508,7 @@ private:
 public:
 
                             UnoCheckBoxControl();
-                            ~UnoCheckBoxControl(){;}
+                            virtual ~UnoCheckBoxControl(){;}
     OUString         GetComponentServiceName() SAL_OVERRIDE;
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -748,7 +748,7 @@ public:
                             ConstructorMode const i_mode = ConstructDefault
                         );
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
-                        ~UnoControlListBoxModel();
+                        virtual ~UnoControlListBoxModel();
 
     UnoControlModel*    Clone() const SAL_OVERRIDE { return new UnoControlListBoxModel( *this ); }
 

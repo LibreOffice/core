@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 class IndexEntrySupplier_asian : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_asian( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
-    ~IndexEntrySupplier_asian();
+    virtual ~IndexEntrySupplier_asian();
 
     OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
             const com::sun::star::lang::Locale& rLocale, const OUString& rAlgorithm )

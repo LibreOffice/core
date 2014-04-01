@@ -42,7 +42,7 @@ public:
     TYPEINFO_OVERRIDE();
     XWindowItem();
     XWindowItem( const XWindowItem &rItem );
-    ~XWindowItem();
+    virtual ~XWindowItem();
 
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
     virtual bool operator == ( const SfxPoolItem& rAttr ) const SAL_OVERRIDE;

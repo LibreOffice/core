@@ -287,7 +287,7 @@ protected:
 public:
                         ToolBox( Window* pParent, WinBits nStyle = 0 );
                         ToolBox( Window* pParent, const ResId& rResId );
-                        ~ToolBox();
+                        virtual ~ToolBox();
 
     virtual void        Click();
     virtual void        DoubleClick();

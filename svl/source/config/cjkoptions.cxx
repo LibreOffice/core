@@ -61,7 +61,7 @@ class SvtCJKOptions_Impl : public utl::ConfigItem
 
 public:
     SvtCJKOptions_Impl();
-    ~SvtCJKOptions_Impl();
+    virtual ~SvtCJKOptions_Impl();
 
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
     virtual void    Commit() SAL_OVERRIDE;

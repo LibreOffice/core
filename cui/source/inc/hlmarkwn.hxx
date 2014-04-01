@@ -85,7 +85,7 @@ protected:
 
 public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
-    ~SvxHlinkDlgMarkWnd();
+    virtual ~SvxHlinkDlgMarkWnd();
 
     sal_Bool MoveTo ( Point aNewPos );
     void RefreshTree(const OUString& aStrURL);

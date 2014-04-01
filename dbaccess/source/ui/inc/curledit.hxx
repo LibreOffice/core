@@ -42,7 +42,7 @@ class OConnectionURLEdit : public Edit
 
 public:
     OConnectionURLEdit(Window* pParent, const ResId& rResId,sal_Bool _bShowPrefix = sal_False);
-    ~OConnectionURLEdit();
+    virtual ~OConnectionURLEdit();
 
 public:
     // Edit overridables

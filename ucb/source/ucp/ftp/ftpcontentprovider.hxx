@@ -49,7 +49,7 @@ namespace ftp
 
         FTPContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-        ~FTPContentProvider();
+        virtual ~FTPContentProvider();
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

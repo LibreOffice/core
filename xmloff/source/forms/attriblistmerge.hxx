@@ -45,7 +45,7 @@ namespace xmloff
         typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > > AttributeListArray;
         AttributeListArray  m_aLists;
 
-        ~OAttribListMerger() { }
+        virtual ~OAttribListMerger() { }
 
     public:
         OAttribListMerger() { }

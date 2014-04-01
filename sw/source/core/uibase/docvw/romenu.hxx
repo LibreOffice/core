@@ -51,7 +51,7 @@ class SwReadOnlyPopup : public PopupMenu
 
 public:
     SwReadOnlyPopup( const Point &rDPos, SwView &rV );
-    ~SwReadOnlyPopup();
+    virtual ~SwReadOnlyPopup();
 
     void Execute( Window* pWin, const Point &rPPos );
     void Execute( Window* pWin, sal_uInt16 nId );

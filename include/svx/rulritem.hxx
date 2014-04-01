@@ -180,7 +180,7 @@ public:
     SvxColumnItem(sal_uInt16 nAct = 0);
     SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Table with borders
     SvxColumnItem(const SvxColumnItem& aItem);
-    ~SvxColumnItem();
+    virtual ~SvxColumnItem();
 
     const SvxColumnItem &operator=(const SvxColumnItem &);
 

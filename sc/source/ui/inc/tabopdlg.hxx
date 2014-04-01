@@ -48,7 +48,7 @@ public:
                     ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                 ScDocument*     pDocument,
                                 const ScRefAddress& rCursorPos );
-                    ~ScTabOpDlg();
+                    virtual ~ScTabOpDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE { return true; }

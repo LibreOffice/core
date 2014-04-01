@@ -49,7 +49,7 @@ private:
 
 public:
                         SvtDummyHeaderBar_Impl( Window* pParent );
-                        ~SvtDummyHeaderBar_Impl();
+                        virtual ~SvtDummyHeaderBar_Impl();
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
@@ -73,7 +73,7 @@ private:
 
 public:
     SvtIconWindow_Impl( Window* pParent );
-    ~SvtIconWindow_Impl();
+    virtual ~SvtIconWindow_Impl();
 
     virtual void        Resize() SAL_OVERRIDE;
 
@@ -129,7 +129,7 @@ private:
 
 public:
     SvtFileViewWindow_Impl( SvtTemplateWindow* pParent );
-    ~SvtFileViewWindow_Impl();
+    virtual ~SvtFileViewWindow_Impl();
 
     virtual void        Resize() SAL_OVERRIDE;
 
@@ -195,7 +195,7 @@ private:
 
 public:
     SvtFrameWindow_Impl( Window* pParent );
-    ~SvtFrameWindow_Impl();
+    virtual ~SvtFrameWindow_Impl();
 
     virtual void            Resize() SAL_OVERRIDE;
 
@@ -253,7 +253,7 @@ protected:
 
 public:
     SvtTemplateWindow( Window* pParent );
-    ~SvtTemplateWindow();
+    virtual ~SvtTemplateWindow();
 
     inline void         SetSelectHdl( const Link& rLink ) { aSelectHdl = rLink; }
     inline void         SetDoubleClickHdl( const Link& rLink ) { aDoubleClickHdl = rLink; }

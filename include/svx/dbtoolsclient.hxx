@@ -158,7 +158,7 @@ namespace svxform
     {
     public:
         DBToolsObjectFactory();
-        ~DBToolsObjectFactory();
+        virtual ~DBToolsObjectFactory();
 
         ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
             const css::uno::Reference<css::uno::XComponentContext>& _rContext,

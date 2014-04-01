@@ -61,7 +61,7 @@ public:
                                     SvtURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
                                     SvtURLBox( Window* pParent, WinBits _nStyle, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
                                     SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
-                                    ~SvtURLBox();
+                                    virtual ~SvtURLBox();
 
     void                            SetBaseURL( const OUString& rURL );
     const OUString&                 GetBaseURL() const { return aBaseURL; }

@@ -56,7 +56,7 @@ public:
                                 pGridItem(0),
                                 m_bVertical(false){}
 
-    ~SwPageGridExample();
+    virtual ~SwPageGridExample();
     void UpdateExample( const SfxItemSet& rSet );
 };
 

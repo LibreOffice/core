@@ -112,7 +112,7 @@ namespace vclcanvas
         void initialize();
 
         /// For resource tracking
-        ~SpriteCanvas();
+        virtual ~SpriteCanvas();
 
         /// Dispose all internal references
         virtual void disposeThis() SAL_OVERRIDE;

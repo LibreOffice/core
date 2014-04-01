@@ -75,7 +75,7 @@ class MenuToolbarController : public GenericToolbarController
                                   const OUString& aModuleIdentifier,
                                   const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );
 
-    ~MenuToolbarController();
+    virtual ~MenuToolbarController();
     // XToolbarController
     virtual void SAL_CALL click() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

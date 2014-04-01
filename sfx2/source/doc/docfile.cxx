@@ -179,7 +179,7 @@ public:
         : m_xInter( xInteraction )
         {}
 
-    ~SfxMediumHandler_Impl();
+    virtual ~SfxMediumHandler_Impl();
 };
 
 

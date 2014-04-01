@@ -31,7 +31,7 @@ namespace oox { namespace ppt {
     {
     public:
         TimeTargetElementContext( ::oox::core::FragmentHandler2& rParent, const AnimTargetElementPtr & aValue );
-        ~TimeTargetElementContext( ) throw( );
+        virtual ~TimeTargetElementContext( ) throw( );
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
     private:

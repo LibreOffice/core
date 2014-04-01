@@ -54,7 +54,7 @@ public:
                 ScMergeAttr();
                 ScMergeAttr( SCsCOL nCol, SCsROW nRow = 0);
                 ScMergeAttr( const ScMergeAttr& );
-                ~ScMergeAttr();
+                virtual ~ScMergeAttr();
 
     virtual OUString        GetValueText() const;
 
@@ -80,7 +80,7 @@ class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
 public:
             ScMergeFlagAttr();
             ScMergeFlagAttr(sal_Int16 nFlags);
-            ~ScMergeFlagAttr();
+            virtual ~ScMergeFlagAttr();
 
     bool    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
     bool    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
@@ -108,7 +108,7 @@ public:
                                                 bool bHCell = false,
                                                 bool bHPrint = false);
                             ScProtectionAttr( const ScProtectionAttr& );
-                            ~ScProtectionAttr();
+                            virtual ~ScProtectionAttr();
 
     virtual OUString            GetValueText() const;
     virtual SfxItemPresentation GetPresentation(
@@ -213,7 +213,7 @@ public:
 
     inline  ScTableListItem( const sal_uInt16 nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
-            ~ScTableListItem();
+            virtual ~ScTableListItem();
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
 
@@ -251,7 +251,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScPageHFItem( sal_uInt16 nWhich );
                 ScPageHFItem( const ScPageHFItem& rItem );
-                ~ScPageHFItem();
+                virtual ~ScPageHFItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -283,7 +283,7 @@ public:
 
                 ScViewObjectModeItem( sal_uInt16 nWhich );
                 ScViewObjectModeItem( sal_uInt16 nWhich, ScVObjMode eMode );
-                ~ScViewObjectModeItem();
+                virtual ~ScViewObjectModeItem();
 
     virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE;
     virtual OUString            GetValueText( sal_uInt16 nVal ) const;
@@ -305,7 +305,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScDoubleItem( sal_uInt16 nWhich, double nVal=0 );
                 ScDoubleItem( const ScDoubleItem& rItem );
-                ~ScDoubleItem();
+                virtual ~ScDoubleItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

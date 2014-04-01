@@ -2206,7 +2206,7 @@ private:
 
 public:
                     ImplCFieldFloatWin( Window* pParent );
-                    ~ImplCFieldFloatWin();
+                    virtual ~ImplCFieldFloatWin();
 
     void            SetCalendar( Calendar* pCalendar )
                         { mpCalendar = pCalendar; }

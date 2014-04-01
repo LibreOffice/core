@@ -60,7 +60,7 @@ public:
         XMLChangedRegionImportContext& rChangedRegion,
         const OUString& rChangeType);
 
-    ~XMLChangeInfoContext();
+    virtual ~XMLChangeInfoContext();
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<

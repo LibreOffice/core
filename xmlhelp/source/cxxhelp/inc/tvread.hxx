@@ -168,7 +168,7 @@ namespace treeview {
     public:
         TVRead( const ConfigData& configData,TVDom* tvDom = 0 );
 
-        ~TVRead();
+        virtual ~TVRead();
 
         // XNameAccess
 
@@ -214,7 +214,7 @@ namespace treeview {
 
         TVChildTarget( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
-        ~TVChildTarget();
+        virtual ~TVChildTarget();
 
         virtual com::sun::star::uno::Any SAL_CALL
         getByName( const OUString& aName )

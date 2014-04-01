@@ -49,7 +49,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
     public:
 
          SvtLocalisationOptions_Impl();
-        ~SvtLocalisationOptions_Impl();
+        virtual ~SvtLocalisationOptions_Impl();
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

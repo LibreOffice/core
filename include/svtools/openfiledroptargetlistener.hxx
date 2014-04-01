@@ -50,7 +50,7 @@ class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1<
     public:
         OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                     const css::uno::Reference< css::frame::XFrame >& xFrame );
-        ~OpenFileDropTargetListener();
+        virtual ~OpenFileDropTargetListener();
 
     public:
         // XEventListener

@@ -378,7 +378,7 @@ public:
     {
     }
 
-    ~OEvoabVersion36Helper()
+    virtual ~OEvoabVersion36Helper()
     {
         freeContacts();
     }
@@ -528,7 +528,7 @@ public:
     {
     }
 
-    ~OEvoabVersion35Helper()
+    virtual ~OEvoabVersion35Helper()
     {
         freeContacts();
     }

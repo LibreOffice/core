@@ -42,7 +42,7 @@ public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FONTWORK_BAR)
 
      FontworkBar(SfxViewShell* pViewShell );
-    ~FontworkBar();
+    virtual ~FontworkBar();
 
     static void execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings );
     static void getState( SdrView* pSdrView, SfxItemSet& rSet );

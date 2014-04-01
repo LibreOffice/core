@@ -44,7 +44,7 @@ public:
                     SdPagesField( Window* pParent,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                   WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
-                    ~SdPagesField();
+                    virtual ~SdPagesField();
 
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };
@@ -63,7 +63,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SdTbxCtlDiaPages();
+    virtual ~SdTbxCtlDiaPages();
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX

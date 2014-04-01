@@ -127,7 +127,7 @@ public:
                        sal_uIntPtr nObjectPos,
                        sal_Bool bPreview,
                        GalleryBrowser2* pBrowser );
-    ~GalleryThemePopup();
+    virtual ~GalleryThemePopup();
 
     void ExecutePopup( Window *pParent, const ::Point &aPos );
 

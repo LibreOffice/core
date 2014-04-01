@@ -71,7 +71,7 @@ friend class SwDropCapsPict;
     SwWrtShell &rSh;
 
      SwDropCapsPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwDropCapsPage();
+    virtual ~SwDropCapsPage();
 
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     void    FillSet( SfxItemSet &rSet );

@@ -83,7 +83,7 @@ namespace dbaui
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~SbaExternalSourceBrowser();
+        virtual ~SbaExternalSourceBrowser();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm() SAL_OVERRIDE;
         virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) SAL_OVERRIDE;

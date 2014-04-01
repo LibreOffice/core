@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 {
 public:
                         GalleryChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
-                        ~GalleryChildWindow();
+                        virtual ~GalleryChildWindow();
 
                         SFX_DECL_CHILDWINDOW_WITHID( GalleryChildWindow );
 };
@@ -72,7 +72,7 @@ public:
 
                             GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
                                             Window* pParent, const ResId& rResId );
-                            ~GalleryBrowser();
+                            virtual ~GalleryBrowser();
 
     sal_Bool                KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };

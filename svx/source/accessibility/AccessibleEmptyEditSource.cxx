@@ -57,7 +57,7 @@ namespace accessibility
         AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                         SdrView&        rView,
                                         const Window&   rViewWindow );
-        ~AccessibleProxyEditSource_Impl();
+        virtual ~AccessibleProxyEditSource_Impl();
 
         // from the SvxEditSource interface
         SvxTextForwarder*       GetTextForwarder() SAL_OVERRIDE;
@@ -82,7 +82,7 @@ namespace accessibility
     public:
 
         AccessibleEmptyEditSource_Impl() {}
-        ~AccessibleEmptyEditSource_Impl() {}
+        virtual ~AccessibleEmptyEditSource_Impl() {}
 
         // from the SfxListener interface
         void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

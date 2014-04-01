@@ -126,7 +126,7 @@ public:
         const sal_Bool* aAllowedTokenTypes,
         sal_Bool bTOC=sal_False);
 
-    ~XMLIndexTemplateContext();
+    virtual ~XMLIndexTemplateContext();
 
     /** add template; to be called by child template entry contexts */
     void addTemplateEntry(

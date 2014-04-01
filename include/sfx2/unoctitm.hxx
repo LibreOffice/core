@@ -54,7 +54,7 @@ class SfxUnoControllerItem :    public ::cppu::WeakImplHelper1< css::frame::XSta
 public:
 
                                 SfxUnoControllerItem( SfxControllerItem*, SfxBindings&, const OUString& );
-                                ~SfxUnoControllerItem();
+                                virtual ~SfxUnoControllerItem();
 
     const ::com::sun::star::util::URL&                  GetCommand() const
                                 { return aCommand; }
@@ -115,7 +115,7 @@ public:
                                 SfxOfficeDispatch( SfxDispatcher* pDispat,
                                                    const SfxSlot* pSlot,
                                                    const ::com::sun::star::util::URL& rURL );
-                                ~SfxOfficeDispatch();
+                                virtual ~SfxOfficeDispatch();
 
     virtual void SAL_CALL       dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
                                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
@@ -165,7 +165,7 @@ public:
                                                     SfxDispatcher*                     pDispat,
                                                     const SfxSlot*                     pSlot,
                                                     const ::com::sun::star::util::URL& rURL );
-                        ~SfxDispatchController_Impl();
+                        virtual ~SfxDispatchController_Impl();
 
     static OUString getSlaveCommand( const ::com::sun::star::util::URL& rURL );
 

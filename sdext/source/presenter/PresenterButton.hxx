@@ -64,7 +64,7 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const OUString& rsConfigurationName);
-    ~PresenterButton (void);
+    virtual ~PresenterButton (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 

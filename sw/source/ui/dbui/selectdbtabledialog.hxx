@@ -57,7 +57,7 @@ public:
     SwSelectDBTableDialog(Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection
             );
-    ~SwSelectDBTableDialog();
+    virtual ~SwSelectDBTableDialog();
 
     OUString    GetSelectedTable(bool& bIsTable);
     void        SetSelectedTable(const OUString& rTable, bool bIsTable);

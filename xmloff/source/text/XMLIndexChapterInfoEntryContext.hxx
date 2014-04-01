@@ -54,7 +54,7 @@ public:
         const OUString& rLocalName,
         sal_Bool bTOC );
 
-    ~XMLIndexChapterInfoEntryContext();
+    virtual ~XMLIndexChapterInfoEntryContext();
 
 protected:
 

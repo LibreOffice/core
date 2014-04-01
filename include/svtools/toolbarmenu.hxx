@@ -54,7 +54,7 @@ public:
                                  Window* pParentWindow,
                                  const ResId& rResId );
 
-                    ~ToolbarMenu();
+                    virtual ~ToolbarMenu();
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

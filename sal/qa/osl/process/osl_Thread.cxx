@@ -256,7 +256,7 @@ public:
             m_aFlag.release();
         }
 
-    ~myThread()
+    virtual ~myThread()
         {
             if (isRunning())
             {
@@ -321,7 +321,7 @@ protected:
         }
 public:
 
-    ~OCountThread()
+    virtual ~OCountThread()
         {
             if (isRunning())
             {
@@ -368,7 +368,7 @@ protected:
         }
 public:
 
-    ~OSuspendThread()
+    virtual ~OSuspendThread()
         {
             if (isRunning())
             {
@@ -410,7 +410,7 @@ public:
         {
                 t_print("new thread id %u!\n", (unsigned) getIdentifier());
         }
-    ~ONoScheduleThread()
+    virtual ~ONoScheduleThread()
         {
             if (isRunning())
             {
@@ -451,7 +451,7 @@ protected:
         }
 public:
 
-    ~OAddThread()
+    virtual ~OAddThread()
         {
             if (isRunning())
             {
@@ -1924,7 +1924,7 @@ private:
             ThreadHelper::thread_sleep_tenth_sec(3);
         }
 public:
-    ~myKeyThread()
+    virtual ~myKeyThread()
         {
             if (isRunning())
             {
@@ -1952,7 +1952,7 @@ private:
         }
 
 public:
-    ~idThread()
+    virtual ~idThread()
         {
             if (isRunning())
             {

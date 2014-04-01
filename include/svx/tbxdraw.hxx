@@ -47,7 +47,7 @@ public:
                             WindowAlign eAlign,
                             ResId aRIdWin,
                             ResId aRIdTbx );
-    ~SvxPopupWindowTbxMgr();
+    virtual ~SvxPopupWindowTbxMgr();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState) SAL_OVERRIDE;

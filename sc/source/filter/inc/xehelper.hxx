@@ -180,7 +180,7 @@ public:
     typedef boost::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
-                        ~XclExpHyperlinkHelper();
+                        virtual ~XclExpHyperlinkHelper();
 
     /** Processes the passed URL field (tries to create a HLINK record).
         @return  The representation string of the URL field. */

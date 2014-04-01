@@ -58,7 +58,7 @@ public:
         const UniReference<XMLPropertySetMapper> & rMapperRef,
         sal_Int32 nIndex);
 
-    ~XMLFootnoteSeparatorImport();
+    virtual ~XMLFootnoteSeparatorImport();
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<

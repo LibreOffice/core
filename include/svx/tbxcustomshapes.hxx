@@ -41,7 +41,7 @@ public:
             SFX_DECL_TOOLBOX_CONTROL();
 
             SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-            ~SvxTbxCtlCustomShapes() {}
+            virtual ~SvxTbxCtlCustomShapes() {}
 
     //interface XSubToolbarController:
     virtual ::sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

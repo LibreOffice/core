@@ -50,7 +50,7 @@ protected:
     const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName ) const throw();
 public:
     SdUnoPageBackground( SdDrawDocument* pDoc = NULL, const SfxItemSet* pSet = NULL) throw();
-    ~SdUnoPageBackground() throw();
+    virtual ~SdUnoPageBackground() throw();
 
     // internal
     void fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) throw();

@@ -38,7 +38,7 @@ namespace pdfi
     public:
         explicit SaxEmitter( const com::sun::star::uno::Reference<
                                     com::sun::star::xml::sax::XDocumentHandler >& xDocHdl );
-        ~SaxEmitter();
+        virtual ~SaxEmitter();
 
         virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) SAL_OVERRIDE;
         virtual void write( const OUString& rString ) SAL_OVERRIDE;

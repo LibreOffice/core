@@ -85,7 +85,7 @@ struct SfxRequest_Impl: public SfxListener
                         , pInternalArgs( 0 )
                         , pViewFrame(0)
                         {}
-    ~SfxRequest_Impl() { delete pInternalArgs; }
+    virtual ~SfxRequest_Impl() { delete pInternalArgs; }
 
 
     void                SetPool( SfxItemPool *pNewPool );

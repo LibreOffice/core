@@ -158,7 +158,7 @@ class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
 public:
     ScValidityRefChildWin( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
     SFX_DECL_CHILDWINDOW_WITHID(ScValidityRefChildWin);
-    ~ScValidityRefChildWin();
+    virtual ~ScValidityRefChildWin();
     bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
     bool    LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }
     void                Hide() SAL_OVERRIDE { if( !m_bVisibleLock) SfxChildWindow::Hide(); }

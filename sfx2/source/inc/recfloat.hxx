@@ -31,7 +31,7 @@ public:
                                                 sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo );
-                        ~SfxRecordingFloatWrapper_Impl();
+                        virtual ~SfxRecordingFloatWrapper_Impl();
 
                         SFX_DECL_CHILDWINDOW(SfxRecordingFloatWrapper_Impl);
     virtual bool        QueryClose() SAL_OVERRIDE;

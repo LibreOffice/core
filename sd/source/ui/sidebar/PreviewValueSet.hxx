@@ -33,7 +33,7 @@ class PreviewValueSet
 {
 public:
     PreviewValueSet (::Window* pParent);
-    ~PreviewValueSet (void);
+    virtual ~PreviewValueSet (void);
 
     void SetRightMouseClickHandler (const Link& rLink);
     virtual void Resize (void) SAL_OVERRIDE;

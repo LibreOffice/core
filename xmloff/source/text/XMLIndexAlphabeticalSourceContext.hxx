@@ -75,7 +75,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    ~XMLIndexAlphabeticalSourceContext();
+    virtual ~XMLIndexAlphabeticalSourceContext();
 
 protected:
 

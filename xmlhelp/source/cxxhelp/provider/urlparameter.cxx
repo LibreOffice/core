@@ -329,7 +329,7 @@ public:
                             Databases*    pDatatabases,
                             bool isRoot = false );
 
-    ~InputStreamTransformer();
+    virtual ~InputStreamTransformer();
 
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire( void ) throw() SAL_OVERRIDE;

@@ -390,7 +390,7 @@ class MainSequence : public EffectSequenceHelper, public ISequenceListener
 public:
     MainSequence();
     MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
-    ~MainSequence();
+    virtual ~MainSequence();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode() SAL_OVERRIDE;
     void reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );

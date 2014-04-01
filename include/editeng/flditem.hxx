@@ -79,7 +79,7 @@ public:
 
             SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );
-            ~SvxFieldItem();
+            virtual ~SvxFieldItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;

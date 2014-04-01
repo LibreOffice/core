@@ -129,7 +129,7 @@ class PropertyControl : public ListBox
 {
 public:
     PropertyControl( Window* pParent );
-    ~PropertyControl();
+    virtual ~PropertyControl();
 
     void setSubControl( PropertySubControl* pSubControl );
     PropertySubControl* getSubControl() const { return mpSubControl; }
@@ -151,7 +151,7 @@ class CustomAnimationDialog : public TabDialog
 {
 public:
     CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, const OString& Page = OString());
-    ~CustomAnimationDialog();
+    virtual ~CustomAnimationDialog();
 
     STLPropertySet* getDefaultSet() { return mpSet; }
     STLPropertySet* getResultSet();

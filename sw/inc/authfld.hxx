@@ -74,7 +74,7 @@ virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVER
 
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
-    ~SwAuthorityFieldType();
+    virtual ~SwAuthorityFieldType();
 
     virtual SwFieldType* Copy()    const SAL_OVERRIDE;
 
@@ -155,7 +155,7 @@ public:
 
     SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);
-    ~SwAuthorityField();
+    virtual ~SwAuthorityField();
 
     OUString            GetFieldText(ToxAuthorityField eField) const;
 

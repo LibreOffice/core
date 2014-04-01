@@ -60,7 +60,7 @@ namespace
 
     public:
         explicit ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
-        ~ImpTimedRefDev();
+        virtual ~ImpTimedRefDev();
         virtual void Timeout() SAL_OVERRIDE;
 
         VirtualDevice& acquireVirtualDevice();

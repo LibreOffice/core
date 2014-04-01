@@ -46,7 +46,7 @@ namespace dbaccess
     {
     public:
         DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData );
-        ~DocumentEvents();
+        virtual ~DocumentEvents();
 
         static bool needsSynchronousNotification( const OUString& _rEventName );
 

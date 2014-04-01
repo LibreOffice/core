@@ -34,7 +34,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SwTbxAnchor();
+    virtual ~SwTbxAnchor();
 };
 
 #endif

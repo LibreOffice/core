@@ -30,7 +30,7 @@ public:
     TYPEINFO_OVERRIDE();
     SbxMethod( const OUString& r, SbxDataType t );
     SbxMethod( const SbxMethod& r );
-    ~SbxMethod();
+    virtual ~SbxMethod();
     SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
 };

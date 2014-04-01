@@ -265,7 +265,7 @@ class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
             , mbSaveCntnt( bSaveCntnt )
         {}
 
-        ~SwSectionFrmMoveAndDeleteHint()
+        virtual ~SwSectionFrmMoveAndDeleteHint()
         {}
 
         sal_Bool IsSaveCntnt() const
@@ -300,7 +300,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();     // Already contained in base class client.
-    ~SwSectionFmt();
+    virtual ~SwSectionFmt();
 
     // Deletes all Frms in aDepend (Frms are recognized via PTR_CAST).
     virtual void DelFrms() SAL_OVERRIDE;

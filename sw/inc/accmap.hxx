@@ -132,7 +132,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 public:
 
     SwAccessibleMap( SwViewShell *pSh );
-    ~SwAccessibleMap();
+    virtual ~SwAccessibleMap();
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetDocumentView();

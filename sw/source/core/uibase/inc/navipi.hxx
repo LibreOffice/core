@@ -143,7 +143,7 @@ protected:
 public:
 
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
-    ~SwNavigationPI();
+    virtual ~SwNavigationPI();
 
     void            GotoPage(); // jump to page; bindable function
 

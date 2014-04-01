@@ -54,7 +54,7 @@ public:
     SmToolBoxWindow(SfxBindings    *pBindings,
                     SfxChildWindow *pChildWindow,
                     Window         *pParent);
-    ~SmToolBoxWindow();
+    virtual ~SmToolBoxWindow();
 
     // Window
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

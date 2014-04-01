@@ -32,7 +32,7 @@ namespace
             {
             }
 
-            ~SfxCloseButton( ) { }
+            virtual ~SfxCloseButton( ) { }
 
             virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     };

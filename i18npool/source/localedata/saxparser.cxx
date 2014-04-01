@@ -166,7 +166,7 @@ public:
         theLocale[sizeof(theLocale)-1] = 0;
     }
 
-    ~TestDocumentHandler(  )
+    virtual ~TestDocumentHandler(  )
     {
         of.closeOutput();
         delete rootNode;

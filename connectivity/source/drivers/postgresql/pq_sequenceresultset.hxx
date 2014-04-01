@@ -77,7 +77,7 @@ public:
         const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
         const com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > &tc,
         const ColumnMetaDataVector *pVec = 0);
-    ~SequenceResultSet();
+    virtual ~SequenceResultSet();
 
 public: // XCloseable
     virtual void SAL_CALL close(  )

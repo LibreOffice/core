@@ -112,7 +112,7 @@ private:
 public:
                         StatusBar( Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
-                        ~StatusBar();
+                        virtual ~StatusBar();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

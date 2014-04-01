@@ -92,7 +92,7 @@ private:
 
 public:
                         SearchProgress( Window* pParent, const INetURLObject& rStartURL );
-                        ~SearchProgress() {};
+                        virtual ~SearchProgress() {};
 
                         DECL_LINK( CleanUpHdl, void* );
 
@@ -160,7 +160,7 @@ private:
 
 public:
                         ActualizeProgress( Window* pWindow, GalleryTheme* pThm );
-                        ~ActualizeProgress() {};
+                        virtual ~ActualizeProgress() {};
 
     virtual short       Execute() SAL_OVERRIDE;
 };
@@ -220,7 +220,7 @@ private:
 public:
 
                         TPGalleryThemeGeneral( Window* pParent, const SfxItemSet& rSet );
-                        ~TPGalleryThemeGeneral() {}
+                        virtual ~TPGalleryThemeGeneral() {}
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
@@ -285,7 +285,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
 public:
                         TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet );
-                        ~TPGalleryThemeProperties();
+                        virtual ~TPGalleryThemeProperties();
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }

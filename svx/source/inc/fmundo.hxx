@@ -96,7 +96,7 @@ public:
                           const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xCont,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElem,
                           sal_Int32 nIdx = -1);
-    ~FmUndoContainerAction();
+    virtual ~FmUndoContainerAction();
 
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE;
@@ -118,7 +118,7 @@ class FmUndoModelReplaceAction : public SdrUndoAction
 
 public:
     FmUndoModelReplaceAction(FmFormModel& rMod, SdrUnoObj* pObject, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced);
-    ~FmUndoModelReplaceAction();
+    virtual ~FmUndoModelReplaceAction();
 
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE { Undo(); }
@@ -148,7 +148,7 @@ class SVX_DLLPRIVATE FmXUndoEnvironment
 
 public:
     FmXUndoEnvironment(FmFormModel& _rModel);
-    ~FmXUndoEnvironment();
+    virtual ~FmXUndoEnvironment();
 
     // UNO Anbindung
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);

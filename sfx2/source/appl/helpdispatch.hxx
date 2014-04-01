@@ -34,7 +34,7 @@ private:
 public:
     HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDisp );
-    ~HelpDispatch_Impl();
+    virtual ~HelpDispatch_Impl();
 
     // XDispatch
     virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

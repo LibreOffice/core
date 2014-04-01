@@ -170,7 +170,7 @@ private:
 protected:
 
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy );
-                                    ~GalleryTransferable();
+                                    virtual ~GalleryTransferable();
 
     void                            InitData( bool bLazy );
 

@@ -77,7 +77,7 @@ protected:
 public:
                         SwFldRefPage(Window* pParent, const SfxItemSet& rSet);
 
-                        ~SwFldRefPage();
+                        virtual ~SwFldRefPage();
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 

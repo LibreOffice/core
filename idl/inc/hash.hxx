@@ -69,7 +69,7 @@ public:
         , bHasId(true)
     {
     }
-    ~SvStringHashEntry();
+    virtual ~SvStringHashEntry();
 
     const OString&  GetName() const { return aName; }
     sal_Bool        HasId() const { return bHasId; }

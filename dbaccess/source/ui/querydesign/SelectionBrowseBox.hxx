@@ -79,7 +79,7 @@ namespace dbaui
 
         DECL_LINK(OnInvalidateTimer, void*);
     public:                         OSelectionBrowseBox( Window* pParent );
-                                    ~OSelectionBrowseBox();
+                                    virtual ~OSelectionBrowseBox();
 
         void                        initialize();
         OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );

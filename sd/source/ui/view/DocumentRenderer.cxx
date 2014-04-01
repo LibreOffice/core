@@ -1110,7 +1110,7 @@ namespace {
         {
         }
 
-        ~OutlinerPrinterPage()
+        virtual ~OutlinerPrinterPage()
         {
             mpParaObject.reset();
         }

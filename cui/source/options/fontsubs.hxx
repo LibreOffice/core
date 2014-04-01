@@ -92,7 +92,7 @@ class SvxFontSubstTabPage : public SfxTabPage
 
 
     SvxFontSubstTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SvxFontSubstTabPage();
+    virtual ~SvxFontSubstTabPage();
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);

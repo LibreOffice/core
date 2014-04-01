@@ -45,7 +45,7 @@ public:
 private:
             ScTpUserLists( Window*              pParent,
                            const SfxItemSet&    rArgSet );
-            ~ScTpUserLists();
+            virtual ~ScTpUserLists();
 
 private:
     FixedText*          mpFtLists;

@@ -48,7 +48,7 @@ namespace pcr
         static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        ~ButtonNavigationHandler();
+        virtual ~ButtonNavigationHandler();
 
         static bool    isNavigationCapableButton( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponent );
 

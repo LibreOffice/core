@@ -62,7 +62,7 @@ namespace frm
         void    notifyAttributeState( const AttributeState& _rState ) SAL_THROW (());
 
     protected:
-        ~OAttributeDispatcher( );
+        virtual ~OAttributeDispatcher( );
 
     protected:
         // XDispatch

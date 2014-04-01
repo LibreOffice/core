@@ -33,7 +33,7 @@ public:
     // Constructors
     ChapterCollator( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     // Destructor
-    ~ChapterCollator();
+    virtual ~ChapterCollator();
 
     sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -275,7 +275,7 @@ private:
 
 public:
             ScTPValidationHelp( Window* pParent, const SfxItemSet& rArgSet );
-            ~ScTPValidationHelp();
+            virtual ~ScTPValidationHelp();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
     static  sal_uInt16*     GetRanges   ();
@@ -303,7 +303,7 @@ private:
 
 public:
             ScTPValidationError( Window* pParent, const SfxItemSet& rArgSet );
-            ~ScTPValidationError();
+            virtual ~ScTPValidationError();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
     static  sal_uInt16*     GetRanges   ();

@@ -83,7 +83,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) SAL_OVERRIDE;
 public:
         SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
-        ~SwMailMergeLayoutPage();
+        virtual ~SwMailMergeLayoutPage();
 
     static SwFrmFmt*        InsertAddressAndGreeting(SwView* pView,
                                             SwMailMergeConfigItem& rConfigItem,

@@ -90,7 +90,7 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
 
-        ~GenericPropertyHandler();
+        virtual ~GenericPropertyHandler();
 
     protected:
         // XPropertyHandler overridables

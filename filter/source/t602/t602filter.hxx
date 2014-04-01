@@ -104,7 +104,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper4 <
     OUString getResStr( sal_Int16 resid );
     void initLocale();
 
-    ~T602ImportFilterDialog();
+    virtual ~T602ImportFilterDialog();
 
     // XExecutableDialog
        virtual void SAL_CALL setTitle( const OUString& aTitle )
@@ -217,7 +217,7 @@ private:
 
     public:
         T602ImportFilter(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r );
-        ~T602ImportFilter();
+        virtual ~T602ImportFilter();
 
     // XFilter
         virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )

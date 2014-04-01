@@ -139,7 +139,7 @@ private:
 
 public:
     SvxMessDialog( Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );
-    ~SvxMessDialog();
+    virtual ~SvxMessDialog();
 
     void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt );
 };

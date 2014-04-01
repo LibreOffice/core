@@ -52,7 +52,7 @@ public:
     SFX_DECL_INTERFACE(SCID_DRAW_SHELL)
 
                     ScDrawShell(ScViewData* pData);
-                    ~ScDrawShell();
+                    virtual ~ScDrawShell();
 
     void    StateDisableItems( SfxItemSet &rSet );
 

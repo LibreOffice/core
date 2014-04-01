@@ -1989,7 +1989,7 @@ public:
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
             mvSubArguments[i]->DumpInlineFun(decls,funs);
     }
-   ~DynamicKernelSoPArguments()
+   virtual ~DynamicKernelSoPArguments()
     {
         if (mpClmem2)
         {
@@ -3176,7 +3176,7 @@ public:
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
     }
-    ~DynamicKernel();
+    virtual ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
 
 private:

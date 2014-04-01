@@ -101,7 +101,7 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
     OUString msPassword;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxInputStream;
 
-    ~WordPerfectImportFilterDialog();
+    virtual ~WordPerfectImportFilterDialog();
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle( const OUString &aTitle )

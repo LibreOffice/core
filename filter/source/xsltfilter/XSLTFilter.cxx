@@ -131,7 +131,7 @@ namespace XSLT
         // ctor...
         XSLTFilter(const css::uno::Reference<XComponentContext> &r);
 
-        ~XSLTFilter();
+        virtual ~XSLTFilter();
 
         // XStreamListener
         virtual void SAL_CALL

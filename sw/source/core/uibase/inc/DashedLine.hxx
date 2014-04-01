@@ -20,7 +20,7 @@ class SwDashedLine : public FixedLine
 
 public:
     SwDashedLine( Window* pParent, Color& ( *pColorFn )() );
-    ~SwDashedLine( );
+    virtual ~SwDashedLine( );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };

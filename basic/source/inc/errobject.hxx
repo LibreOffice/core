@@ -29,7 +29,7 @@ class SbxErrObject : public SbUnoObject
     com::sun::star::uno::Reference< ooo::vba::XErrObject > m_xErr;
 
     SbxErrObject( const OUString& aName_, const com::sun::star::uno::Any& aUnoObj_ );
-    ~SbxErrObject();
+    virtual ~SbxErrObject();
 
     class ErrObject* getImplErrObject( void )
         { return m_pErrObject; }

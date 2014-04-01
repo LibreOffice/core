@@ -702,7 +702,7 @@ public:
 
     // Life cycle
     SwDoc();
-    ~SwDoc();
+    virtual ~SwDoc();
 
     bool IsInDtor() const { return mbDtor; }
 

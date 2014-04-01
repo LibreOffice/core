@@ -69,7 +69,7 @@ public:
 
                         SvxSuperContourDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
                                             Window* pParent, const ResId& rResId );
-                        ~SvxSuperContourDlg();
+                        virtual ~SvxSuperContourDlg();
 
     void                SetExecState( sal_Bool bEnable );
 

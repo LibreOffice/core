@@ -62,7 +62,7 @@ protected:
 
 public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
-                    ~SdDocPreviewWin();
+                    virtual ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     virtual void    Resize() SAL_OVERRIDE;
     void            startPreview();

@@ -31,7 +31,7 @@ protected:
 
 public:
     LineNumberWindow (Window* pParent, ModulWindow* pModulWin);
-    ~LineNumberWindow();
+    virtual ~LineNumberWindow();
 
     void DoScroll( long nHorzScroll, long nVertScroll );
 

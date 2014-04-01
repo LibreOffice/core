@@ -215,7 +215,7 @@ namespace svxform
         FormController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxORB );
 
     protected:
-        ~FormController();
+        virtual ~FormController();
 
     // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

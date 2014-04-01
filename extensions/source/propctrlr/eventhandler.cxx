@@ -349,7 +349,7 @@ namespace pcr
         virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        ~EventHolder( );
+        virtual ~EventHolder( );
 
     private:
         ScriptEventDescriptor impl_getDescriptor_throw( const OUString& _rEventName ) const;

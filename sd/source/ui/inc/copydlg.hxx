@@ -40,7 +40,7 @@ class CopyDlg
 public:
     CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
         const XColorListRef &pColList, ::sd::View* pView );
-    ~CopyDlg();
+    virtual ~CopyDlg();
 
     void    GetAttr( SfxItemSet& rOutAttrs );
     void Reset();

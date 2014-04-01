@@ -83,7 +83,7 @@ class SwWrapTabPage: public SfxTabPage
     sal_Bool bContourImage;
 
     SwWrapTabPage(Window *pParent, const SfxItemSet &rSet);
-    ~SwWrapTabPage();
+    virtual ~SwWrapTabPage();
 
     void            ApplyImageList();
     void            EnableModes(const SfxItemSet& rSet);

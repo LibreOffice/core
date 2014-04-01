@@ -57,7 +57,7 @@ public:
 
     SwSrcView(SfxViewFrame* pFrame, SfxViewShell*);
 
-    ~SwSrcView();
+    virtual ~SwSrcView();
 
     SwDocShell*         GetDocShell();
     SwSrcEditWindow&    GetEditWin() {return aEditWin;}

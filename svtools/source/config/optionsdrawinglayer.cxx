@@ -168,7 +168,7 @@ public:
 
 
      SvtOptionsDrawinglayer_Impl();
-    ~SvtOptionsDrawinglayer_Impl();
+    virtual ~SvtOptionsDrawinglayer_Impl();
 
 
 //  overloaded methods of baseclass

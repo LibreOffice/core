@@ -39,7 +39,7 @@ private:
 
 public:
             ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = false );
-            ~ScInsertCellDlg();
+            virtual ~ScInsertCellDlg();
 
     InsCellCmd GetInsCellCmd() const;
 };

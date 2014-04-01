@@ -119,7 +119,7 @@ namespace dbaui
     // attribute access
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
-        ~SbaTableQueryBrowser();
+        virtual ~SbaTableQueryBrowser();
 
         enum EntryType
         {

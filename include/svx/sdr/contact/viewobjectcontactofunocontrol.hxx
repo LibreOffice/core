@@ -89,7 +89,7 @@ namespace sdr { namespace contact {
         void onControlChangedOrModified( ImplAccess ) { impl_onControlChangedOrModified(); }
 
     protected:
-        ~ViewObjectContactOfUnoControl();
+        virtual ~ViewObjectContactOfUnoControl();
 
         // support for Primitive2D
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
@@ -112,7 +112,7 @@ namespace sdr { namespace contact {
     {
     public:
         UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-        ~UnoControlPrintOrPreviewContact();
+        virtual ~UnoControlPrintOrPreviewContact();
 
     private:
         UnoControlPrintOrPreviewContact();                                                 // never implemented

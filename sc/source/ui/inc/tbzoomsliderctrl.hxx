@@ -32,7 +32,7 @@ class ScZoomSliderControl: public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     ScZoomSliderControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~ScZoomSliderControl();
+    virtual ~ScZoomSliderControl();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual Window* CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
@@ -54,7 +54,7 @@ private:
 public:
     ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom );
-    ~ScZoomSliderWnd();
+    virtual ~ScZoomSliderWnd();
     void            UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
 
 protected:

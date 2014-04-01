@@ -38,7 +38,7 @@ class SdParagraphNumTabPage : public SfxTabPage
 {
 public:
     SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
-    ~SdParagraphNumTabPage();
+    virtual ~SdParagraphNumTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*  GetRanges();

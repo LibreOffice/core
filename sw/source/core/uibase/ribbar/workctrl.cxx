@@ -619,7 +619,7 @@ public:
         Window* pParent,
         sal_uInt16 nSlot,
         const Reference< XDispatchProvider >& rDispatchProvider );
-    ~SwZoomBox_Impl();
+    virtual ~SwZoomBox_Impl();
 
 protected:
     virtual void    Select() SAL_OVERRIDE;

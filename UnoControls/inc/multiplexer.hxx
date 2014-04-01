@@ -121,7 +121,7 @@ public:
         @onerror    -
     */
 
-    ~OMRCListenerMultiplexerHelper();
+    virtual ~OMRCListenerMultiplexerHelper();
 
 
     //  XInterface

@@ -123,7 +123,7 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
         LocaleBackend();
 
         /** Destructor */
-        ~LocaleBackend(void) ;
+        virtual ~LocaleBackend(void) ;
 
     private:
         // Returns the user locale

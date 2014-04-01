@@ -245,7 +245,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 
 public:
     IntrospectionAccessStatic_Impl( Reference< XIdlReflection > xCoreReflection_ );
-    ~IntrospectionAccessStatic_Impl()
+    virtual ~IntrospectionAccessStatic_Impl()
     {
         delete[] mpOrgPropertyHandleArray;
     }
@@ -717,7 +717,7 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
 
 public:
     ImplIntrospectionAccess( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
-    ~ImplIntrospectionAccess();
+    virtual ~ImplIntrospectionAccess();
 
     // Methoden von XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts(void)

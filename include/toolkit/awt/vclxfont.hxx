@@ -50,7 +50,7 @@ protected:
 
 public:
                     VCLXFont();
-                    ~VCLXFont();
+                    virtual ~VCLXFont();
 
     void            Init( ::com::sun::star::awt::XDevice& rxDev, const Font& rFont );
     const Font&     GetFont() const { return maFont; }

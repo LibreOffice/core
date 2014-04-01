@@ -158,7 +158,7 @@ public:
     {
         CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf );
     }
-    ~SwTxtFormatter();
+    virtual ~SwTxtFormatter();
 
     sal_Int32 FormatLine( const sal_Int32 nStart );
 

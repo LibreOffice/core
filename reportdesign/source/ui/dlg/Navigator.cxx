@@ -123,7 +123,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
         NavigatorTree*                                              m_pTree;
     public:
         UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent);
-        ~UserData();
+        virtual ~UserData();
 
         inline uno::Reference< uno::XInterface > getContent() const { return m_xContent; }
         inline void setContent(const uno::Reference< uno::XInterface >& _xContent) { m_xContent = _xContent; }

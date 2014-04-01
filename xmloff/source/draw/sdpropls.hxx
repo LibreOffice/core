@@ -224,7 +224,7 @@ class XMLShapePropertySetMapper : public XMLPropertySetMapper
 {
 public:
     XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef, bool bForExport);
-    ~XMLShapePropertySetMapper();
+    virtual ~XMLShapePropertySetMapper();
 };
 
 class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper

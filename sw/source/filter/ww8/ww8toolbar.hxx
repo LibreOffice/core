@@ -32,7 +32,7 @@ class SwTBC : public TBBase
 
 public:
     SwTBC();
-    ~SwTBC();
+    virtual ~SwTBC();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
@@ -56,7 +56,7 @@ class SwCTB : public TBBase
 
 public:
     SwCTB();
-    ~SwCTB();
+    virtual ~SwCTB();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* fp ) SAL_OVERRIDE;
     bool IsMenuToolbar();
@@ -78,7 +78,7 @@ class TBDelta : public TBBase
 
 public:
     TBDelta();
-    ~TBDelta(){}
+    virtual ~TBDelta(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     bool ControlIsModified();
@@ -103,7 +103,7 @@ protected:
 
 public:
     Tcg255SubStruct( bool bReadId );
-    ~Tcg255SubStruct(){}
+    virtual ~Tcg255SubStruct(){}
     virtual sal_uInt8 id() const { return ch; }
     bool Read(SvStream &rS) SAL_OVERRIDE;
 };
@@ -125,7 +125,7 @@ class Customization : public TBBase
 
 public:
     Customization( SwCTBWrapper* rapper );
-    ~Customization();
+    virtual ~Customization();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenu( SwCTBWrapper&, CustomToolBarImportHelper& );
@@ -157,7 +157,7 @@ class SwCTBWrapper : public Tcg255SubStruct
 
 public:
     SwCTBWrapper( bool bReadId = true );
-    ~SwCTBWrapper();
+    virtual ~SwCTBWrapper();
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
     bool Read(SvStream &rS) SAL_OVERRIDE;
@@ -210,7 +210,7 @@ class Acd : public TBBase
 
 public:
     Acd();
-    ~Acd(){}
+    virtual ~Acd(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };
@@ -224,7 +224,7 @@ class PlfAcd: public Tcg255SubStruct
 
 public:
     PlfAcd( bool bReadId = true );
-    ~PlfAcd();
+    virtual ~PlfAcd();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print(FILE*) SAL_OVERRIDE;
 };
@@ -243,7 +243,7 @@ class Kme : public TBBase
 
 public:
     Kme();
-    ~Kme();
+    virtual ~Kme();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };
@@ -257,7 +257,7 @@ class PlfKme : public Tcg255SubStruct
 
 public:
     PlfKme( bool bReadId = true );
-    ~PlfKme();
+    virtual ~PlfKme();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };
@@ -281,7 +281,7 @@ class TcgSttbfCore : public TBBase
 
 public:
     TcgSttbfCore();
-    ~TcgSttbfCore();
+    virtual ~TcgSttbfCore();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* fp ) SAL_OVERRIDE;
 };
@@ -294,7 +294,7 @@ class TcgSttbf : public Tcg255SubStruct
 
 public:
     TcgSttbf( bool bReadId = true );
-    ~TcgSttbf(){}
+    virtual ~TcgSttbf(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* fp ) SAL_OVERRIDE;
 };
@@ -309,7 +309,7 @@ class Xstz : public TBBase
 
 public:
     Xstz();
-    ~Xstz(){}
+    virtual ~Xstz(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* fp ) SAL_OVERRIDE;
 };
@@ -323,7 +323,7 @@ class MacroName : public TBBase
 
 public:
     MacroName();
-    ~MacroName(){}
+    virtual ~MacroName(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };
@@ -338,7 +338,7 @@ class MacroNames : public Tcg255SubStruct
 
 public:
     MacroNames( bool bReadId = true );
-    ~MacroNames();
+    virtual ~MacroNames();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
 };
@@ -352,7 +352,7 @@ class Tcg255 : public TBBase
 
 public:
     Tcg255();
-    ~Tcg255();
+    virtual ~Tcg255();
     bool Read(SvStream &rS) SAL_OVERRIDE;
     void Print( FILE* ) SAL_OVERRIDE;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
@@ -367,7 +367,7 @@ class Tcg: public TBBase
 
 public:
     Tcg();
-    ~Tcg(){}
+    virtual ~Tcg(){}
     bool Read(SvStream &rS) SAL_OVERRIDE;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
     void Print( FILE* ) SAL_OVERRIDE;

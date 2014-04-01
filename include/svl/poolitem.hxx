@@ -324,7 +324,7 @@ public:
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );
-                            ~SfxVoidItem();
+                            virtual ~SfxVoidItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
@@ -352,7 +352,7 @@ public:
                             SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );
-                            ~SfxSetItem();
+                            virtual ~SfxSetItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 

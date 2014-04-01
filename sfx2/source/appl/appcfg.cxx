@@ -89,7 +89,7 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     SfxEventAsyncer_Impl( const SfxEventHint& rHint );
-    ~SfxEventAsyncer_Impl();
+    virtual ~SfxEventAsyncer_Impl();
     DECL_LINK( TimerHdl, Timer*);
 };
 

@@ -56,7 +56,7 @@ protected:
 
 public:
                         SalYieldMutex();
-                        ~SalYieldMutex();
+                        virtual ~SalYieldMutex();
 
     virtual void        acquire() SAL_OVERRIDE;
     virtual void        release() SAL_OVERRIDE;

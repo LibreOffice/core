@@ -35,7 +35,7 @@ public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
                         LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        ~LibBoxControl();
+                        virtual ~LibBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -50,7 +50,7 @@ class DocListenerBox    :public ListBox
 {
 protected:
     DocListenerBox( Window* pParent );
-    ~DocListenerBox();
+    virtual ~DocListenerBox();
 
 protected:
     virtual void    FillBox() = 0;
@@ -97,7 +97,7 @@ protected:
 public:
                     LibBox( Window* pParent,
                                  const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-                    ~LibBox();
+                    virtual ~LibBox();
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );
@@ -109,7 +109,7 @@ public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
                         LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        ~LanguageBoxControl();
+                        virtual ~LanguageBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
@@ -136,7 +136,7 @@ protected:
 
 public:
     LanguageBox( Window* pParent );
-    ~LanguageBox();
+    virtual ~LanguageBox();
 
     using           Window::Update;
     void            Update( const SfxStringItem* pItem );

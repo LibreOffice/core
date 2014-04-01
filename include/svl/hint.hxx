@@ -41,7 +41,7 @@ public:
         public: \
             TYPEINFO_OVERRIDE(); \
             explicit Name( Type* Object, bool bOwnedByHint = false ); \
-            ~Name(); \
+            virtual ~Name(); \
         \
             Type* GetObject() const { return pObj; } \
             bool  IsOwner() const { return bIsOwner; } \

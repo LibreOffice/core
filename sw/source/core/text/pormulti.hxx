@@ -120,7 +120,7 @@ protected:
     bool GetTab1() const { return bTab1; }
     bool GetTab2() const { return bTab2; }
 public:
-    ~SwMultiPortion();
+    virtual ~SwMultiPortion();
     const SwLineLayout& GetRoot() const { return aRoot; }
     SwLineLayout& GetRoot() { return aRoot; }
     SwFldPortion* GetFldRest() { return pFldRest; }
@@ -168,7 +168,7 @@ class SwDoubleLinePortion : public SwMultiPortion
 public:
     SwDoubleLinePortion( SwDoubleLinePortion& rDouble, sal_Int32 nEnd );
     SwDoubleLinePortion( const SwMultiCreator& rCreate, sal_Int32 nEnd );
-    ~SwDoubleLinePortion();
+    virtual ~SwDoubleLinePortion();
 
     inline SwBracket* GetBrackets() const { return pBracket; }
     void SetBrackets( const SwDoubleLinePortion& rDouble );

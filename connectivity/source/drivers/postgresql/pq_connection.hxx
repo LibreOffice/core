@@ -184,7 +184,7 @@ public:
         const rtl::Reference< RefCountedMutex > &refMutex,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & ctx );
 
-    ~Connection( );
+    virtual ~Connection( );
 
 public: // XCloseable
     virtual void SAL_CALL close()

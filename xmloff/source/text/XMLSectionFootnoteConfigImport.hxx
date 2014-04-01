@@ -56,7 +56,7 @@ public:
         ::std::vector<XMLPropertyState> & rProperties,
         const UniReference<XMLPropertySetMapper> & rMapperRef);
 
-    ~XMLSectionFootnoteConfigImport();
+    virtual ~XMLSectionFootnoteConfigImport();
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<

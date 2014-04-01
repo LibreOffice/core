@@ -70,7 +70,7 @@ private:
 
 public:
     SvxPathTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SvxPathTabPage();
+    virtual ~SvxPathTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*      GetRanges();

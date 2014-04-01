@@ -51,7 +51,7 @@ private:
 
 public:
                         ScShareDocumentDlg( Window* pParent, ScViewData* pViewData );
-                        ~ScShareDocumentDlg();
+                        virtual ~ScShareDocumentDlg();
 
     bool                IsShareDocumentChecked() const;
     void                UpdateView();

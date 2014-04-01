@@ -25,7 +25,7 @@ class FileChangedQueryBox : public MessBox
 {
 public:
     FileChangedQueryBox( Window* pParent, ResMgr* pResMgr );
-    ~FileChangedQueryBox();
+    virtual ~FileChangedQueryBox();
 };
 
 #endif

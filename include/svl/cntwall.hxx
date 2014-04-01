@@ -41,7 +41,7 @@ public:
                             CntWallpaperItem( sal_uInt16 nWhich );
                             CntWallpaperItem( sal_uInt16 nWhich, SvStream& rStream, sal_uInt16 nVersion );
                             CntWallpaperItem( const CntWallpaperItem& rCpy );
-                            ~CntWallpaperItem();
+                            virtual ~CntWallpaperItem();
 
     virtual sal_uInt16 GetVersion(sal_uInt16) const SAL_OVERRIDE;
 

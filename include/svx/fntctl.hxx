@@ -44,7 +44,7 @@ private:
 
 public:
     SvxFontMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
-    ~SvxFontMenuControl();
+    virtual ~SvxFontMenuControl();
 
     virtual PopupMenu*  GetPopup() const SAL_OVERRIDE;
 

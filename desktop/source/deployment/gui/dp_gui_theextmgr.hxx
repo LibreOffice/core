@@ -65,7 +65,7 @@ public:
 
          TheExtensionManager( Window * pParent,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext );
-        ~TheExtensionManager();
+        virtual ~TheExtensionManager();
 
     void createDialog( const bool bCreateUpdDlg );
     sal_Int16 execute();

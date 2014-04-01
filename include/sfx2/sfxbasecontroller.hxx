@@ -112,7 +112,7 @@ public:
         @onerror    -
     */
 
-    ~SfxBaseController() ;
+    virtual ~SfxBaseController() ;
 
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();

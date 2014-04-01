@@ -64,7 +64,7 @@ public:
         /// (usually before a section or table)
         sal_Bool bIsOutsideOfParagraph = sal_False);
 
-    ~XMLChangeImportContext();
+    virtual ~XMLChangeImportContext();
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<

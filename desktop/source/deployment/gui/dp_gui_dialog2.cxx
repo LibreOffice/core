@@ -140,7 +140,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 
 public:
                     ExtBoxWithBtns_Impl(Window* pParent);
-                   ~ExtBoxWithBtns_Impl();
+                   virtual ~ExtBoxWithBtns_Impl();
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 

@@ -49,7 +49,7 @@ namespace svx
 
     public:
         SecurityOptionsDialog( Window* pParent, SvtSecurityOptions* pOptions );
-        ~SecurityOptionsDialog();
+        virtual ~SecurityOptionsDialog();
 
         bool IsSaveOrSendDocsChecked() const { return m_pSaveOrSendDocsCB->IsChecked(); }
         bool IsSignDocsChecked() const { return m_pSignDocsCB->IsChecked(); }

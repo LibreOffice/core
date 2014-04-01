@@ -63,7 +63,7 @@ protected:
 
 public:
     SwBreakDlg( Window *pParent, SwWrtShell &rSh );
-    ~SwBreakDlg();
+    virtual ~SwBreakDlg();
 
     OUString    GetTemplateName() { return aTemplate; }
     sal_uInt16  GetKind() { return nKind; }

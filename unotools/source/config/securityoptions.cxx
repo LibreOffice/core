@@ -117,7 +117,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
 
          SvtSecurityOptions_Impl();
-        ~SvtSecurityOptions_Impl();
+        virtual ~SvtSecurityOptions_Impl();
 
 
         //  overloaded methods of baseclass

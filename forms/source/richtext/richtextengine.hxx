@@ -56,7 +56,7 @@ namespace frm
         static  RichTextEngine* Create();
                 RichTextEngine* Clone();
 
-                ~RichTextEngine( );
+                virtual ~RichTextEngine( );
 
         // for multiplexing the StatusChanged events of the edit engine
         void registerEngineStatusListener( IEngineStatusListener* _pListener );

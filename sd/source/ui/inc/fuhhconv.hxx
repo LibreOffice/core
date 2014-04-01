@@ -44,7 +44,7 @@ class FuHangulHanjaConversion : public FuPoor
     Outliner* GetOutliner() const { return pSdOutliner; }
 
  protected:
-    ~FuHangulHanjaConversion();
+    virtual ~FuHangulHanjaConversion();
 
     Outliner*   pSdOutliner;
     sal_Bool            bOwnOutliner;

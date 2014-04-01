@@ -62,7 +62,7 @@ class DispatchRecorder
     // public interface
     public:
         DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xSMGR );
-        ~DispatchRecorder();
+        virtual ~DispatchRecorder();
 
         // XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO

@@ -96,7 +96,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
     SfxShell_Impl()  : pViewSh(0), pFrame(0), pRepeatTarget(0), pExecuter(0), pUpdater(0) {}
-    ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
+    virtual ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
 
 

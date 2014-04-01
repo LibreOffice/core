@@ -37,7 +37,7 @@ class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public ::com::sun::star::awt
 {
 public:
     VCLXSystemDependentWindow();
-    ~VCLXSystemDependentWindow();
+    virtual ~VCLXSystemDependentWindow();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

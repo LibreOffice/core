@@ -76,7 +76,7 @@ public:
                             const css::uno::Reference < css::ucb::XAnyCompareFactory >   &xCompFac,
                             const css::uno::Reference < css::uno::XComponentContext >    &rxContext );
 
-    ~SortedDynamicResultSet();
+    virtual ~SortedDynamicResultSet();
 
 
     // XServiceInfo
@@ -141,7 +141,7 @@ class SortedDynamicResultSetListener: public cppu::WeakImplHelper1 <
 
 public:
      SortedDynamicResultSetListener( SortedDynamicResultSet *mOwner );
-    ~SortedDynamicResultSetListener();
+    virtual ~SortedDynamicResultSetListener();
 
     // XEventListener ( base of XDynamicResultSetListener )
 
@@ -172,7 +172,7 @@ public:
     SortedDynamicResultSetFactory(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
-    ~SortedDynamicResultSetFactory();
+    virtual ~SortedDynamicResultSetFactory();
 
 
     // XServiceInfo

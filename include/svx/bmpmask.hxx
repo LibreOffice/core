@@ -148,7 +148,7 @@ public:
                                     SfxChildWindow *pCW,
                                     Window* pParent,
                                     const ResId& rResId );
-                        ~SvxBmpMask();
+                        virtual ~SvxBmpMask();
 
     void                SetColor( const Color& rColor );
     void                PipetteClicked();

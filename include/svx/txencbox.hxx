@@ -34,7 +34,7 @@ private:
 
 public:
     SvxTextEncodingBox( Window* pParent, WinBits nBits );
-    ~SvxTextEncodingBox();
+    virtual ~SvxTextEncodingBox();
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h

@@ -85,7 +85,7 @@ public:
     ScTpFormulaItem( sal_uInt16 nWhich,
                    const ScFormulaOptions& rOpt );
     ScTpFormulaItem( const ScTpFormulaItem& rItem );
-    ~ScTpFormulaItem();
+    virtual ~ScTpFormulaItem();
 
     virtual OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

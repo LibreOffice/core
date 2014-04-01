@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwBoldFixedInfo : public FixedInfo
 {
 public:
     SwBoldFixedInfo(Window* pParent, const ResId& rResId);
-    ~SwBoldFixedInfo();
+    virtual ~SwBoldFixedInfo();
 };
 struct SwAddressPreview_Impl;
 
@@ -161,7 +161,7 @@ public:
         m_aPassword(password),
         m_pParentWindow( pParent )
     {}
-    ~SwAuthenticator();
+    virtual ~SwAuthenticator();
 
     virtual OUString SAL_CALL getUserName( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -177,7 +177,7 @@ class SW_DLLPUBLIC SwConnectionContext :
 
 public:
     SwConnectionContext(const OUString& rMailServer, sal_Int16 nPort, const OUString& rConnectionType);
-    ~SwConnectionContext();
+    virtual ~SwConnectionContext();
 
     virtual ::com::sun::star::uno::Any SAL_CALL     getValueByName( const OUString& Name )
                                                             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -199,7 +199,7 @@ public:
     SwConnectionListener() :
         cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener>(m_aMutex)
     {}
-    ~SwConnectionListener();
+    virtual ~SwConnectionListener();
 
     virtual void SAL_CALL connected(const ::com::sun::star::lang::EventObject& aEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -228,7 +228,7 @@ class SwMailTransferable :
     public:
     SwMailTransferable(const OUString& rURL, const OUString& rName, const OUString& rMimeType);
     SwMailTransferable(const OUString& rBody, const OUString& rMimeType);
-    ~SwMailTransferable();
+    virtual ~SwMailTransferable();
     virtual ::com::sun::star::uno::Any SAL_CALL
                         getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
                             throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -269,7 +269,7 @@ class SwMailMessage :
     ::com::sun::star::uno::Sequence<  ::com::sun::star::mail::MailAttachment >              m_aAttachments;
 public:
     SwMailMessage();
-    ~SwMailMessage();
+    virtual ~SwMailMessage();
 
     // attributes
     virtual OUString SAL_CALL    getSenderName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

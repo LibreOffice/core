@@ -33,7 +33,7 @@ class GraphicProvider : public ::cppu::WeakImplHelper2< ::com::sun::star::graphi
 public:
 
     GraphicProvider();
-    ~GraphicProvider();
+    virtual ~GraphicProvider();
 
 protected:
 

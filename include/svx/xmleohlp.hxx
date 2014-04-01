@@ -100,7 +100,7 @@ private:
 protected:
 
                                 SvXMLEmbeddedObjectHelper();
-                                ~SvXMLEmbeddedObjectHelper();
+                                virtual ~SvXMLEmbeddedObjectHelper();
     void                        Init( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
                                       ::comphelper::IEmbeddedHelper& rDocPersist,
                                       SvXMLEmbeddedObjectHelperMode eCreateMode );

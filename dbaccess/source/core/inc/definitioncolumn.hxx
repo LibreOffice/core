@@ -145,7 +145,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xOriginalTableColumn;
 
     protected:
-        ~OQueryColumn();
+        virtual ~OQueryColumn();
 
     public:
         OQueryColumn(
@@ -274,7 +274,7 @@ namespace dbaccess
                                 ,public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnWrapper >
     {
     protected:
-        ~OTableColumnWrapper();
+        virtual ~OTableColumnWrapper();
 
     public:
         OTableColumnWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rCol,

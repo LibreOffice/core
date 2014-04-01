@@ -101,7 +101,7 @@ class ScScenarioWindow : public Window
 {
 public:
             ScScenarioWindow( Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
-            ~ScScenarioWindow();
+            virtual ~ScScenarioWindow();
 
     void    NotifyState( const SfxPoolItem* pState );
     void    SetComment( const OUString& rComment )
@@ -125,7 +125,7 @@ class ColumnEdit : public SpinField
 {
 public:
             ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId );
-            ~ColumnEdit();
+            virtual ~ColumnEdit();
 
     SCCOL   GetCol() { return nCol; }
     void    SetCol( SCCOL nColNo );
@@ -158,7 +158,7 @@ class RowEdit : public NumericField
 {
 public:
             RowEdit( ScNavigatorDlg* pParent, const ResId& rResId );
-            ~RowEdit();
+            virtual ~RowEdit();
 
     SCROW   GetRow()                { return (SCROW)GetValue(); }
     void    SetRow( SCROW nRow ){ SetValue( nRow ); }
@@ -181,7 +181,7 @@ class ScDocListBox : public ListBox
 {
 public:
             ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId );
-            ~ScDocListBox();
+            virtual ~ScDocListBox();
 
 protected:
     virtual void    Select() SAL_OVERRIDE;
@@ -198,7 +198,7 @@ class CommandToolBox : public ToolBox
 {
 public:
             CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId );
-            ~CommandToolBox();
+            virtual ~CommandToolBox();
 
     void Select( sal_uInt16 nId );
     void UpdateButtons();
@@ -322,7 +322,7 @@ protected:
 public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent,
                     const bool bUseStyleSettingsBackground);
-                ~ScNavigatorDlg();
+                virtual ~ScNavigatorDlg();
 
     using Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

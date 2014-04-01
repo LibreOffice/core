@@ -62,7 +62,7 @@ class ImplErrorDialog : public MessageDialog
     DECL_LINK(SelectHdl, void *);
     public:
     ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
-    ~ImplErrorDialog();
+    virtual ~ImplErrorDialog();
 };
 
 class ImpPDFTabSecurityPage;
@@ -169,7 +169,7 @@ public:
                      Sequence< PropertyValue >& rFilterData,
                      const Reference< XComponent >& rDoc
                      );
-    ~ImpPDFTabDialog();
+    virtual ~ImpPDFTabDialog();
 
     Sequence< PropertyValue >   GetFilterData();
 
@@ -241,7 +241,7 @@ public:
     ImpPDFTabGeneralPage( Window* pParent,
                           const SfxItemSet& rSet );
 
-    ~ImpPDFTabGeneralPage();
+    virtual ~ImpPDFTabGeneralPage();
     static SfxTabPage*          Create( Window* pParent,
                                         const SfxItemSet& rAttrSet);
 
@@ -280,7 +280,7 @@ public:
     ImpPDFTabOpnFtrPage( Window* pParent,
                          const SfxItemSet& rSet );
 
-    ~ImpPDFTabOpnFtrPage();
+    virtual ~ImpPDFTabOpnFtrPage();
     static SfxTabPage*          Create( Window* pParent,
                                         const SfxItemSet& rAttrSet );
 
@@ -313,7 +313,7 @@ public:
     ImpPDFTabViewerPage( Window* pParent,
                          const SfxItemSet& rSet );
 
-    ~ImpPDFTabViewerPage();
+    virtual ~ImpPDFTabViewerPage();
     static SfxTabPage*          Create( Window* pParent,
                                         const SfxItemSet& rAttrSet );
 
@@ -368,7 +368,7 @@ public:
     ImpPDFTabSecurityPage( Window* pParent,
                            const SfxItemSet& rSet );
 
-    ~ImpPDFTabSecurityPage();
+    virtual ~ImpPDFTabSecurityPage();
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
 
@@ -399,7 +399,7 @@ public:
     ImpPDFTabLinksPage( Window* pParent,
                            const SfxItemSet& rSet );
 
-    ~ImpPDFTabLinksPage();
+    virtual ~ImpPDFTabLinksPage();
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
 
@@ -428,7 +428,7 @@ public:
     ImpPDFTabSigningPage( Window* pParent,
                           const SfxItemSet& rSet );
 
-    ~ImpPDFTabSigningPage();
+    virtual ~ImpPDFTabSigningPage();
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
 

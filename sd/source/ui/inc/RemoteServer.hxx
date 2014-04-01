@@ -77,7 +77,7 @@ namespace sd
             static void removeCommunicator( Communicator* pCommunicator );
         private:
             RemoteServer();
-            ~RemoteServer();
+            virtual ~RemoteServer();
             static RemoteServer *spServer;
             static ::osl::Mutex sDataMutex;
             static ::std::vector<Communicator*> sCommunicators;

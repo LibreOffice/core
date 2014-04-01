@@ -37,7 +37,7 @@ namespace svt
     {
     public:
         DummyPanel();
-        ~DummyPanel();
+        virtual ~DummyPanel();
 
         // IToolPanel
         virtual OUString GetDisplayName() const SAL_OVERRIDE;

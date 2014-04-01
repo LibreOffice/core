@@ -156,7 +156,7 @@ public:
         mbSuccess = true;
     }
 
-    ~PluginSlideChange()
+    virtual ~PluginSlideChange()
     {
         mxFactory.clear();
 

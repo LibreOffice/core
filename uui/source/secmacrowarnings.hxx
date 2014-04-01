@@ -73,7 +73,7 @@ private:
 
 public:
     MacroWarning( Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
-    ~MacroWarning();
+    virtual ~MacroWarning();
 
     virtual short   Execute() SAL_OVERRIDE;
 

@@ -52,7 +52,7 @@ namespace xmloff
 
     public:
         OFormLayerXMLImport(SvXMLImport& _rImporter);
-        ~OFormLayerXMLImport();
+        virtual ~OFormLayerXMLImport();
 
         /** start importing the forms of the given page
 

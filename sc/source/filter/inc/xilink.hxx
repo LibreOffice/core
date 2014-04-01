@@ -185,7 +185,7 @@ class XclImpLinkManager : protected XclImpRoot
 {
 public:
     explicit            XclImpLinkManager( const XclImpRoot& rRoot );
-                        ~XclImpLinkManager();
+                        virtual ~XclImpLinkManager();
 
     /** Reads the EXTERNSHEET record. */
     void                ReadExternsheet( XclImpStream& rStrm );

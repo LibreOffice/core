@@ -166,7 +166,7 @@ class XclImpHFConverter : protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpHFConverter( const XclImpRoot& rRoot );
-                        ~XclImpHFConverter();
+                        virtual ~XclImpHFConverter();
 
     /** Parses the passed string and creates three new edit engine text objects. */
     void                ParseString( const OUString& rHFString );

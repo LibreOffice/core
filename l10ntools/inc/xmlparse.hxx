@@ -152,7 +152,7 @@ public:
         const OString &rFileName // the file name, empty if created from memory stream
     );
     XMLFile( const XMLFile& rObj ) ;
-    ~XMLFile();
+    virtual ~XMLFile();
 
     void Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
     virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
@@ -220,7 +220,7 @@ public:
         XMLParentNode *pParent   // parent node of this element
     );
 
-    ~XMLElement();
+    virtual ~XMLElement();
     XMLElement(const XMLElement&);
 
     XMLElement& operator=(const XMLElement& rObj);

@@ -48,7 +48,7 @@ namespace ftp {
 
         FTPContentIdentifier(const OUString& ident);
 
-        ~FTPContentIdentifier();
+        virtual ~FTPContentIdentifier();
 
         // XInterface
 

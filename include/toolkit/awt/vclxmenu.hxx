@@ -72,7 +72,7 @@ protected:
 public:
     VCLXMenu();
     VCLXMenu( Menu* pMenu );
-    ~VCLXMenu();
+    virtual ~VCLXMenu();
 
 
     Menu*    GetMenu() const { return mpMenu; }

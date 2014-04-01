@@ -91,7 +91,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
     bool                            bHasSelectionChanged;
     public:
         SvxRubyData_Impl();
-        ~SvxRubyData_Impl();
+        virtual ~SvxRubyData_Impl();
 
     void    SetController(Reference<XController> xCtrl);
     Reference<XModel>               GetModel()

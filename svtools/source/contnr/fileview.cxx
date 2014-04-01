@@ -194,7 +194,7 @@ protected:
 
 public:
     ViewTabListBox_Impl( Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
-   ~ViewTabListBox_Impl();
+   virtual ~ViewTabListBox_Impl();
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

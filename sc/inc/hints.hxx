@@ -35,7 +35,7 @@ class ScPaintHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
-                    ~ScPaintHint();
+                    virtual ~ScPaintHint();
 
     void            SetPrintFlag(bool bSet) { bPrint = bSet; }
 
@@ -63,7 +63,7 @@ public:
 
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                         SCsCOL nX, SCsROW nY, SCsTAB nZ );
-                    ~ScUpdateRefHint();
+                    virtual ~ScUpdateRefHint();
 
     UpdateRefMode   GetMode() const         { return eUpdateRefMode; }
     const ScRange&  GetRange() const        { return aRange; }
@@ -81,7 +81,7 @@ class ScPointerChangedHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
 
-                    ~ScPointerChangedHint();
+                    virtual ~ScPointerChangedHint();
 
     sal_uInt16          GetFlags() const            { return nFlags; }
 };
@@ -107,7 +107,7 @@ class ScLinkRefreshedHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScLinkRefreshedHint();
-                    ~ScLinkRefreshedHint();
+                    virtual ~ScLinkRefreshedHint();
 
     void            SetSheetLink( const OUString& rSourceUrl );
     void            SetDdeLink( const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM );
@@ -135,7 +135,7 @@ public:
                     TYPEINFO_OVERRIDE();
                     ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
                                         sal_uLong nT, const OUString& rSt2 );
-                    ~ScAutoStyleHint();
+                    virtual ~ScAutoStyleHint();
 
     const ScRange&  GetRange() const    { return aRange; }
     const OUString& GetStyle1() const   { return aStyle1; }
@@ -150,7 +150,7 @@ class ScDBRangeRefreshedHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
-                    ~ScDBRangeRefreshedHint();
+                    virtual ~ScDBRangeRefreshedHint();
 
     const ScImportParam&  GetImportParam() const    { return aParam; }
 };
@@ -162,7 +162,7 @@ class ScDataPilotModifiedHint : public SfxHint
 public:
                     TYPEINFO_OVERRIDE();
                     ScDataPilotModifiedHint( const OUString& rName );
-                    ~ScDataPilotModifiedHint();
+                    virtual ~ScDataPilotModifiedHint();
 
     const OUString&   GetName() const { return maName; }
 };

@@ -47,7 +47,7 @@ public:
                     ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                  ScDocument* pDocument,
                                  ScAddress aCursorPos );
-                    ~ScSolverDlg();
+                    virtual ~ScSolverDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;

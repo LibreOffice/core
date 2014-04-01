@@ -57,7 +57,7 @@ class SidebarTxtControl : public Control
                            WinBits nBits,
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr );
-        ~SidebarTxtControl();
+        virtual ~SidebarTxtControl();
 
         virtual void GetFocus() SAL_OVERRIDE;
 

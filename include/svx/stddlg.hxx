@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC SvxStandardDialog: public SfxModalDialog
 public:
     SvxStandardDialog( Window* pParent, const ResId& rResId );
     SvxStandardDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-    ~SvxStandardDialog();
+    virtual ~SvxStandardDialog();
 
     short           Execute() SAL_OVERRIDE;
 

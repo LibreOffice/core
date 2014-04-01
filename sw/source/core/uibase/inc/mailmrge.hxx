@@ -131,7 +131,7 @@ public:
         sal_Int32 nCommandType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
-    ~SwMailMergeDlg();
+    virtual ~SwMailMergeDlg();
 
     inline sal_uInt16   GetMergeType() { return nMergeType; }
 

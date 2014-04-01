@@ -38,7 +38,7 @@ public:
     DependencyDialog(
         Window * parent, std::vector< OUString > const & dependencies);
 
-    ~DependencyDialog();
+    virtual ~DependencyDialog();
 
 private:
     DependencyDialog(DependencyDialog &); // not defined

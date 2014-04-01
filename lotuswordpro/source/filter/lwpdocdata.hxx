@@ -164,7 +164,7 @@ class LwpDocData : public LwpObject
 {
 public:
     LwpDocData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpDocData();
+    virtual ~LwpDocData();
 private:
     LwpDocOptions m_DocOptions;
     LwpDocInfo m_DocInfo;

@@ -117,7 +117,7 @@ public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference<
         cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         sal_Bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
-    ~DigitalSignaturesDialog();
+    virtual ~DigitalSignaturesDialog();
 
     // Initialize the dialog and the security environment, returns TRUE on success
     sal_Bool    Init();

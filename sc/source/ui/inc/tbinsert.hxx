@@ -33,7 +33,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     ScTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-    ~ScTbxInsertCtrl();
+    virtual ~ScTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;

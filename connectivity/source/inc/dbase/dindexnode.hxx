@@ -173,7 +173,7 @@ namespace connectivity
 
         protected:
             ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage* = NULL);
-            ~ONDXPage();
+            virtual ~ONDXPage();
 
             virtual void QueryDelete() SAL_OVERRIDE;
 

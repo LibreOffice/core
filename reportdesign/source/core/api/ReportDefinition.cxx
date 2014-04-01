@@ -243,7 +243,7 @@ class OStyle :   public ::comphelper::OMutexAndBroadcastHelper
 
 protected:
     void getPropertyDefaultByHandle( sal_Int32 _nHandle, uno::Any& _rDefault ) const SAL_OVERRIDE;
-    ~OStyle(){}
+    virtual ~OStyle(){}
 public:
     OStyle();
 

@@ -42,7 +42,7 @@ namespace pcr
 
     public:
         OBrowserPage(Window* pParent, WinBits nWinStyle = 0);
-        ~OBrowserPage();
+        virtual ~OBrowserPage();
 
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();

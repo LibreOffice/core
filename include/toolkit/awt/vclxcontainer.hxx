@@ -40,7 +40,7 @@ class TOOLKIT_DLLPUBLIC VCLXContainer : public ::com::sun::star::awt::XVclContai
 {
 public:
                     VCLXContainer();
-                    ~VCLXContainer();
+                    virtual ~VCLXContainer();
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

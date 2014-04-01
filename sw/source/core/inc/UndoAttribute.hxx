@@ -137,7 +137,7 @@ class SwUndoFmtResetAttr : public SwUndo
     public:
         SwUndoFmtResetAttr( SwFmt& rChangedFormat,
                             const sal_uInt16 nWhichId );
-        ~SwUndoFmtResetAttr();
+        virtual ~SwUndoFmtResetAttr();
 
         virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
         virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;

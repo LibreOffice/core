@@ -48,7 +48,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
 
 public:
     SvxColorOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~SvxColorOptionsTabPage(  );
+    virtual ~SvxColorOptionsTabPage(  );
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 

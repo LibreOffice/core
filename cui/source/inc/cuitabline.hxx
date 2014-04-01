@@ -64,7 +64,7 @@ public:
     SvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr,
                       SdrModel* pModel, const SdrObject* pObj = NULL,
                       sal_Bool bHasObj = sal_True );
-    ~SvxLineTabDialog();
+    virtual ~SvxLineTabDialog();
 
     void                SetNewDashList( XDashListRef pInLst)
                         { pNewDashList = pInLst; }
@@ -371,7 +371,7 @@ private:
 
 public:
     SvxLineEndDefTabPage( Window* pParent, const SfxItemSet& rInAttrs );
-    ~SvxLineEndDefTabPage();
+    virtual ~SvxLineEndDefTabPage();
 
     void    Construct();
 

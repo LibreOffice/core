@@ -72,7 +72,7 @@ protected:
 
 public:
     SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet);
-    ~SvxHyperlinkDocTp ();
+    virtual ~SvxHyperlinkDocTp ();
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 

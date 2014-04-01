@@ -49,7 +49,7 @@ protected:
                 SwGrfFmtColl *pGrColl, SwAttrSet* pAutoAttr = 0 );
 
 public:
-    ~SwNoTxtNode();
+    virtual ~SwNoTxtNode();
 
     virtual SwCntntFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
 

@@ -190,7 +190,7 @@ public :
     // the IconChoiceCtrl's could also be set in the Ctor
     IconChoiceDialog ( Window* pParent, const ResId &rResId,
                        const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
-    ~IconChoiceDialog ();
+    virtual ~IconChoiceDialog ();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;

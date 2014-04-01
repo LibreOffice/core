@@ -36,7 +36,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
-    ~SwWebDocShell();
+    virtual ~SwWebDocShell();
 
     virtual void        FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,

@@ -67,7 +67,7 @@ protected:
 
 public:
                     ScTabControl( Window* pParent, ScViewData* pData );
-                    ~ScTabControl();
+                    virtual ~ScTabControl();
 
     using TabBar::StartDrag;
 

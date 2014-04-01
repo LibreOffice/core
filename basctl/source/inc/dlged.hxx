@@ -142,7 +142,7 @@ public:
         com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
         com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xDialogModel
     );
-    ~DlgEditor();
+    virtual ~DlgEditor();
 
     Window& GetWindow() const { return rWindow; }
 

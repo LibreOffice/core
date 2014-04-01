@@ -32,7 +32,7 @@ class AVMEDIA_DLLPUBLIC MediaPlayer : public SfxChildWindow
 {
 public:
                         MediaPlayer( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
-                        ~MediaPlayer();
+                        virtual ~MediaPlayer();
 
                         SFX_DECL_CHILDWINDOW_WITHID( MediaPlayer );
 };
@@ -44,7 +44,7 @@ class AVMEDIA_DLLPUBLIC MediaFloater : public SfxDockingWindow
 public:
 
                             MediaFloater( SfxBindings* pBindings, SfxChildWindow* pCW, Window* pParent );
-                            ~MediaFloater();
+                            virtual ~MediaFloater();
 
     void                    setURL( const OUString& rURL, const OUString& rReferer, bool bPlayImmediately );
 

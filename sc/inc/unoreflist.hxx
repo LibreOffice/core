@@ -65,7 +65,7 @@ class ScUnoRefUndoHint : public SfxHint
 public:
                 TYPEINFO_OVERRIDE();
                 ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry );
-                ~ScUnoRefUndoHint();
+                virtual ~ScUnoRefUndoHint();
 
     sal_Int64   GetObjectId() const         { return aEntry.nObjectId; }
     const ScRangeList& GetRanges() const    { return aEntry.aRanges; }

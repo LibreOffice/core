@@ -50,7 +50,7 @@ public:
                                 SFX_DECL_TOOLBOX_CONTROL();
 
                                 SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                                ~SvxGrafFilterToolBoxControl();
+                                virtual ~SvxGrafFilterToolBoxControl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
@@ -65,7 +65,7 @@ class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
 public:
     SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    ~SvxGrafToolBoxControl();
+    virtual ~SvxGrafToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
@@ -157,7 +157,7 @@ class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
                         SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        ~SvxGrafModeToolBoxControl();
+                        virtual ~SvxGrafModeToolBoxControl();
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;

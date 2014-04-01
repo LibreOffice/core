@@ -69,7 +69,7 @@ public:
     bool    isInitialized() const { return m_isInitialized; }
 
 protected:
-    ~SortableGridDataModel();
+    virtual ~SortableGridDataModel();
 
 public:
     // XSortableGridData

@@ -243,7 +243,7 @@ class ScColumnStyles : public ScColumnRowStylesBase
 
 public:
     ScColumnStyles();
-    ~ScColumnStyles();
+    virtual ~ScColumnStyles();
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) SAL_OVERRIDE;
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
@@ -270,7 +270,7 @@ class ScRowStyles : public ScColumnRowStylesBase
 
 public:
     ScRowStyles();
-    ~ScRowStyles();
+    virtual ~ScRowStyles();
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) SAL_OVERRIDE;
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField);

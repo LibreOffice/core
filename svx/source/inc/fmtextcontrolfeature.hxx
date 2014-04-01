@@ -79,7 +79,7 @@ namespace svx
         void    dispose() SAL_THROW(());
 
     protected:
-        ~FmTextControlFeature();
+        virtual ~FmTextControlFeature();
 
     protected:
         // XStatusListener

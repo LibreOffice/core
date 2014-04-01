@@ -53,7 +53,7 @@ namespace frm
         );
 
     protected:
-        ~ONavigationBarControl();
+        virtual ~ONavigationBarControl();
 
     public:
         // XServiceInfo - static version
@@ -106,7 +106,7 @@ namespace frm
         ONavigationBarPeer(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
-        ~ONavigationBarPeer();
+        virtual ~ONavigationBarPeer();
 
     public:
         // XInterface

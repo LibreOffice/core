@@ -58,7 +58,7 @@ protected:
 
 public:
     SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rItemSet);
-    ~SvxHyperlinkMailTp ();
+    virtual ~SvxHyperlinkMailTp ();
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 

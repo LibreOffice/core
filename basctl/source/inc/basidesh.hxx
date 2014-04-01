@@ -153,7 +153,7 @@ public:
     SFX_DECL_VIEWFACTORY(Shell);
 
     Shell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
-    ~Shell();
+    virtual ~Shell();
 
     BaseWindow*      GetCurWindow() const    { return pCurWin; }
     ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }

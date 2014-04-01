@@ -74,7 +74,7 @@ class XFChangeList : public XFContentContainer
 {
 public:
     XFChangeList(){}
-    ~XFChangeList(){}
+    virtual ~XFChangeList(){}
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
@@ -82,7 +82,7 @@ class XFChangeRegion : public XFContentContainer
 {
 public:
     XFChangeRegion(){}
-    ~XFChangeRegion(){}
+    virtual ~XFChangeRegion(){}
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
@@ -96,7 +96,7 @@ class XFChangeInsert : public XFChangeRegion
 {
 public:
     XFChangeInsert(){}
-    ~XFChangeInsert(){}
+    virtual ~XFChangeInsert(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
@@ -104,7 +104,7 @@ class XFChangeDelete : public XFChangeRegion
 {
 public:
     XFChangeDelete(){}
-    ~XFChangeDelete(){}
+    virtual ~XFChangeDelete(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 };
 
@@ -112,7 +112,7 @@ class XFChange : public XFContent
 {
 public:
     XFChange(){}
-    ~XFChange(){}
+    virtual ~XFChange(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
@@ -124,7 +124,7 @@ class XFChangeStart : public XFContent
 {
 public:
     XFChangeStart(){}
-    ~XFChangeStart(){}
+    virtual ~XFChangeStart(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}
@@ -136,7 +136,7 @@ class XFChangeEnd : public XFContent
 {
 public:
     XFChangeEnd(){}
-    ~XFChangeEnd(){}
+    virtual ~XFChangeEnd(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
     OUString GetChangeID(){return m_sID;}

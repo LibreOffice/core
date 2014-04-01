@@ -41,7 +41,7 @@ public:
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
                             SfxAllEnumItem( sal_uInt16 nWhich, SvStream &rStream );
                             SfxAllEnumItem( const SfxAllEnumItem & );
-                            ~SfxAllEnumItem();
+                            virtual ~SfxAllEnumItem();
 
     void                    InsertValue( sal_uInt16 nValue );
     void                    InsertValue( sal_uInt16 nValue, const OUString &rText );

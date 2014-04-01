@@ -51,7 +51,7 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XNameReplace > & rEvents );
 
-    ~XMLAutoTextContainerEventImport();
+    virtual ~XMLAutoTextContainerEventImport();
 
 
 protected:

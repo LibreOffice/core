@@ -220,7 +220,7 @@ protected:
 public:
                 ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
-                ~ScFilterListBox();
+                virtual ~ScFilterListBox();
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    Select() SAL_OVERRIDE;

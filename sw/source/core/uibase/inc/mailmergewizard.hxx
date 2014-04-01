@@ -67,7 +67,7 @@ protected:
 
 public:
     SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);
-    ~SwMailMergeWizard();
+    virtual ~SwMailMergeWizard();
 
     SwView*                     GetSwView() {return m_pSwView;}
     SwMailMergeConfigItem&      GetConfigItem() { return m_rConfigItem;}

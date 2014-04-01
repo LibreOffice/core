@@ -45,7 +45,7 @@ public:
 private:
                 ScTpCalcOptions( Window*            pParent,
                                  const SfxItemSet&  rCoreSet );
-                ~ScTpCalcOptions();
+                virtual ~ScTpCalcOptions();
 
 private:
     CheckBox*       m_pBtnIterate;

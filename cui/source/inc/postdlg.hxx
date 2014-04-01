@@ -45,7 +45,7 @@ class SvxPostItDialog : public SfxModalDialog
 public:
     SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
                      bool bPrevNext = false);
-    ~SvxPostItDialog();
+    virtual ~SvxPostItDialog();
 
     static sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }

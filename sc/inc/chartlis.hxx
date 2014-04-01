@@ -81,7 +81,7 @@ public:
     ScChartListener( const OUString& rName, ScDocument* pDoc,
                      ::std::vector<ScTokenRef>* pTokens );
     ScChartListener( const ScChartListener& );
-    ~ScChartListener();
+    virtual ~ScChartListener();
 
     const OUString& GetName() const;
 

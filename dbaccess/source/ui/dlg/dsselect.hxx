@@ -53,7 +53,7 @@ protected:
 
 public:
     ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
-    ~ODatasourceSelectDialog();
+    virtual ~ODatasourceSelectDialog();
 
     OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}
     void     Select( const OUString& _rEntry ) { m_pDatasource->SelectEntry(_rEntry); }

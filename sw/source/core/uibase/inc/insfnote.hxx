@@ -66,7 +66,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 
 public:
     SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False);
-    ~SwInsFootNoteDlg();
+    virtual ~SwInsFootNoteDlg();
 
     rtl_TextEncoding GetCharSet() { return eCharSet; }
     sal_Bool        IsExtCharAvailable() { return bExtCharAvailable; }

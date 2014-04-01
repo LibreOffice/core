@@ -98,7 +98,7 @@ class ScOptSolverDlg : public ScAnyRefDlg
 public:
                     ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                  ScDocShell* pDocSh, ScAddress aCursorPos );
-                    ~ScOptSolverDlg();
+                    virtual ~ScOptSolverDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;

@@ -119,7 +119,7 @@ class SvtCommandOptions_Impl : public ConfigItem
     public:
 
          SvtCommandOptions_Impl();
-        ~SvtCommandOptions_Impl();
+        virtual ~SvtCommandOptions_Impl();
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

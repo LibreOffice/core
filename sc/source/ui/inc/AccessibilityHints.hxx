@@ -42,7 +42,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScAccWinFocusLostHint(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
-                ~ScAccWinFocusLostHint();
+                virtual ~ScAccWinFocusLostHint();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 GetOldAccessible() const { return xOldAccessible; }
@@ -56,7 +56,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScAccWinFocusGotHint(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
-                ~ScAccWinFocusGotHint();
+                virtual ~ScAccWinFocusGotHint();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 GetNewAccessible() const { return xNewAccessible; }
@@ -69,7 +69,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
-                ~ScAccGridWinFocusLostHint();
+                virtual ~ScAccGridWinFocusLostHint();
 
     ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
 };
@@ -81,7 +81,7 @@ public:
                 TYPEINFO_OVERRIDE();
                 ScAccGridWinFocusGotHint( ScSplitPos eNewGridWin,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
-                ~ScAccGridWinFocusGotHint();
+                virtual ~ScAccGridWinFocusGotHint();
 
     ScSplitPos  GetNewGridWin() const { return eNewGridWin; }
 };

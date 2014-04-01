@@ -43,7 +43,7 @@ namespace svt
     {
     public:
         DrawerVisualization( ToolPanelDrawer& i_rParent );
-        ~DrawerVisualization();
+        virtual ~DrawerVisualization();
 
     protected:
         // Window overridables
@@ -61,7 +61,7 @@ namespace svt
     {
     public:
         ToolPanelDrawer( Window& i_rParent, const OUString& i_rTitle );
-        ~ToolPanelDrawer();
+        virtual ~ToolPanelDrawer();
 
         long    GetPreferredHeightPixel() const;
         void    SetExpanded( const bool i_bExpanded );

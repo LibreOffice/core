@@ -42,7 +42,7 @@ class CustomAnimationCreateDialog : public TabDialog
     friend class CustomAnimationCreateTabPage;
 public:
     CustomAnimationCreateDialog( ::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration );
-    ~CustomAnimationCreateDialog();
+    virtual ~CustomAnimationCreateDialog();
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;

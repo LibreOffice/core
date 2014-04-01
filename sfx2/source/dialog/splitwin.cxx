@@ -135,7 +135,7 @@ friend class SfxSplitWindow;
                             ShowFadeInHideButton( true );
                         }
 
-                        ~SfxEmptySplitWin_Impl()
+                        virtual ~SfxEmptySplitWin_Impl()
                         {
                             aTimer.Stop();
                         }

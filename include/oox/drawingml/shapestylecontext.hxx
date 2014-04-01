@@ -29,7 +29,7 @@ class ShapeStyleContext : public ::oox::core::ContextHandler2
 {
 public:
     ShapeStyleContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rShape );
-    ~ShapeStyleContext();
+    virtual ~ShapeStyleContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 

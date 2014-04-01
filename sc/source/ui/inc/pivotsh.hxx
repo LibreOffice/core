@@ -35,7 +35,7 @@ public:
     SFX_DECL_INTERFACE(SCID_PIVOT_SHELL)
 
                     ScPivotShell( ScTabViewShell* pView );
-                    ~ScPivotShell();
+                    virtual ~ScPivotShell();
 
     void    Execute ( SfxRequest& rReq );
     void    GetState( SfxItemSet& rSet );

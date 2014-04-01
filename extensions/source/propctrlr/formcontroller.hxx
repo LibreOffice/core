@@ -75,7 +75,7 @@ namespace pcr
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     protected:
-        ~FormController();
+        virtual ~FormController();
 
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()

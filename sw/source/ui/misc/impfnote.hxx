@@ -69,7 +69,7 @@ class SwEndNoteOptionPage : public SfxTabPage
 public:
     SwEndNoteOptionPage( Window *pParent, bool bEndNote,
                          const SfxItemSet &rSet );
-    ~SwEndNoteOptionPage();
+    virtual ~SwEndNoteOptionPage();
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     virtual bool FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
@@ -81,7 +81,7 @@ public:
 class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
     SwFootNoteOptionPage( Window *pParent, const SfxItemSet &rSet );
-    ~SwFootNoteOptionPage();
+    virtual ~SwFootNoteOptionPage();
 
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);

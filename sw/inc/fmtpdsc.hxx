@@ -53,7 +53,7 @@ public:
     SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
     SwFmtPageDesc( const SwFmtPageDesc &rCpy );
     SwFmtPageDesc &operator=( const SwFmtPageDesc &rCpy );
-    ~SwFmtPageDesc();
+    virtual ~SwFmtPageDesc();
 
     TYPEINFO_OVERRIDE();
 

@@ -50,7 +50,7 @@ private:
 
 public:
                     TextWindow( Window* pParent );
-                    ~TextWindow();
+                    virtual ~TextWindow();
 
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
     ExtTextView*    GetTextView() const { return mpExtTextView; }
@@ -104,7 +104,7 @@ protected:
 
 public:
                 ImpVclMEdit( VclMultiLineEdit* pVclMultiLineEdit, WinBits nWinStyle );
-                ~ImpVclMEdit();
+                virtual ~ImpVclMEdit();
 
     void        SetModified( bool bMod );
     bool        IsModified() const;

@@ -113,7 +113,7 @@ namespace cairocanvas
         void initialize();
 
         /// For resource tracking
-        ~Canvas();
+        virtual ~Canvas();
 
         /// Dispose all internal references
         virtual void disposeThis() SAL_OVERRIDE;

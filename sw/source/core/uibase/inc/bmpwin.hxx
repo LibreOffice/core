@@ -44,7 +44,7 @@ private:
 
 public:
     BmpWindow(Window* pPar, WinBits nStyle);
-    ~BmpWindow();
+    virtual ~BmpWindow();
     void MirrorVert(sal_Bool bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(sal_Bool bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
