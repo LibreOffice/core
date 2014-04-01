@@ -252,7 +252,7 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue( aProps, OUString("Autoincrement") );
+                m_IsAutoIncrement = static_cast<sal_Bool>( OTools::getValue( aProps, OUString("Autoincrement") ) ) == 1;
 
                 m_Description = OTools::getValue( aProps, OUString("Description") );
 
