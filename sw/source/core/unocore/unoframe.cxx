@@ -333,6 +333,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     if(bXFillStyleItemUsed)
     {
         XFillStyleItem aXFillStyleItem;
+        SvxBrushItem aBrush(RES_BACKGROUND);
 
         if(pXFillStyleItem)
         {
@@ -350,9 +351,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         }
         else if (aXFillStyleItem.GetValue() == XFILL_SOLID && pCol)
         {
-            // Fill style set to solid, but no fill color is given.
+            // Fill style is set to solid, but no fill color is given.
             // On the other hand, we have a BackColor, so use that.
-            SvxBrushItem aBrush(RES_BACKGROUND);
             aBrush.PutValue(*pCol, MID_BACK_COLOR);
             sw::setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
         }
@@ -446,6 +446,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
             aXFillTransparenceItem.PutValue(*pXFillTransparenceItem);
             rToSet.Put(aXFillTransparenceItem);
+        }
+        else if (aXFillStyleItem.GetValue() == XFILL_SOLID && pColTrans)
+        {
+            // Fill style is set to solid, but no fill transparency is given.
+            // On the other hand, we have a BackColorTransparency, so use that.
+            aBrush.PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+            sw::setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
         }
 
         if(pXGradientStepCountItem)

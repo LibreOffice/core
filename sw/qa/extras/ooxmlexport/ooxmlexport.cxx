@@ -518,8 +518,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -536,7 +534,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
@@ -830,8 +827,6 @@ DECLARE_OOXMLEXPORT_TEST(testN822175, "n822175.odt")
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, "Surround"));
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testFdo66688, "fdo66688.docx")
 {
     // The problem was that TextFrame imported and exported the wrong value for transparency
@@ -841,7 +836,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66688, "fdo66688.docx")
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 80 ), getProperty< sal_Int32 >( xFrame, "BackColorTransparency" ) );
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
 {
@@ -948,8 +942,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
     CPPUNIT_FAIL("Did not find bullet with level 0");
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
 {
     // The shape had no background, no paragraph adjust and no font color.
@@ -960,7 +952,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF00), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
 {
