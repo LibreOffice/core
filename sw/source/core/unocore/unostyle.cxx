@@ -2557,8 +2557,8 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
                 sal_Int32 nValue = 0;
-                aRet >>= nValue;
-                aRet <<= (sal_Int16)nValue;
+                if (aRet >>= nValue)
+                    aRet <<= (sal_Int16)nValue;
             }
 
             //UUUU check for needed metric translation
