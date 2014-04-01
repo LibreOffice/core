@@ -1295,8 +1295,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         {
             ScRange aDummy;
             ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy );
-            if ( eMarkType != SC_MARK_SIMPLE &&
-                    !(eFunc == KEYFUNC_COPY && eMarkType == SC_MARK_SIMPLE_FILTERED) )
+            if (eMarkType != SC_MARK_SIMPLE)
             {
                 ErrorMessage(STR_NOMULTISELECT);
                 bUsed = true;
