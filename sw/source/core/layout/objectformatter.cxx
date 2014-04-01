@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <objectformatter.hxx>
 #include <objectformattertxtfrm.hxx>
 #include <objectformatterlayfrm.hxx>
-#include <anchoredobject.hxx>
 #include <anchoreddrawobject.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
 #include <layact.hxx>
-#include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
 
