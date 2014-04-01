@@ -373,6 +373,7 @@ public:
 class SmShowChar : public Control
 {
     virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 
 public:
     SmShowChar(Window *pParent, WinBits nStyle)
@@ -424,7 +425,6 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(AddClickHdl, Button *);
     DECL_LINK(ChangeClickHdl, Button *);
     DECL_LINK(DeleteClickHdl, Button *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
 
     void    FillSymbols(ComboBox &rComboBox, bool bDeleteText = true);
     void    FillSymbolSets(ComboBox &rComboBox, bool bDeleteText = true);

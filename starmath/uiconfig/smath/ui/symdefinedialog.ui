@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="EditSymbols">
     <property name="can_focus">False</property>
@@ -15,57 +16,57 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="column_spacing">6</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">24</property>
                 <child>
-                  <object class="GtkLabel" id="oldSymbolText">
+                  <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_top">6</property>
-                    <property name="yalign">0.49000000953674316</property>
-                    <property name="label" translatable="yes">_Old symbol</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">oldSymbols</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="oldSymbolSetText">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0.56000000238418579</property>
-                    <property name="label" translatable="yes">O_ld symbol set</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">oldSymbolSets</property>
-                    <property name="ellipsize">start</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="oldSymbols">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="has_entry">True</property>
-                    <child internal-child="entry">
-                      <object class="GtkEntry" id="combobox-entry">
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="oldSymbolSetText">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">O_ld symbol set</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">oldSymbolSets</property>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="oldSymbolSets">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="combobox-entry1">
+                            <property name="can_focus">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -76,18 +77,51 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="oldSymbolSets">
+                  <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_entry">True</property>
-                    <child internal-child="entry">
-                      <object class="GtkEntry" id="combobox-entry1">
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="column_spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="oldSymbolText">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_top">6</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">_Old symbol</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">oldSymbols</property>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="oldSymbols">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="combobox-entry5">
+                            <property name="can_focus">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -106,7 +140,6 @@
                 <property name="height_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="valign">end</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
               </object>
@@ -120,17 +153,21 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="column_spacing">24</property>
                 <child>
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="row_spacing">2</property>
                     <property name="column_spacing">6</property>
+                    <property name="row_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="symbolText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Symbol</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">symbols</property>
@@ -146,8 +183,7 @@
                       <object class="GtkLabel" id="symbolSetText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">6</property>
-                        <property name="yalign">0.51999998092651367</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Symbol s_et</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">symbolSets</property>
@@ -163,6 +199,7 @@
                       <object class="GtkLabel" id="fontText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Font</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">fonts</property>
@@ -178,6 +215,7 @@
                       <object class="GtkLabel" id="styleText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Typeface</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">styles</property>
@@ -193,6 +231,7 @@
                       <object class="GtkLabel" id="fontsSubsetFT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Subset</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">fontsSubsetLB</property>
@@ -208,6 +247,8 @@
                       <object class="GtkComboBox" id="fonts">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -220,6 +261,8 @@
                       <object class="GtkComboBox" id="fontsSubsetLB">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -232,8 +275,8 @@
                       <object class="svtlo-FontStyleBox" id="styles">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="valign">center</property>
                         <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -246,6 +289,8 @@
                       <object class="GtkComboBox" id="symbols">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
                         <property name="has_entry">True</property>
                         <child internal-child="entry">
                           <object class="GtkEntry" id="combobox-entry2">
@@ -264,6 +309,8 @@
                       <object class="GtkComboBox" id="symbolSets">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
                         <property name="has_entry">True</property>
                         <child internal-child="entry">
                           <object class="GtkEntry" id="combobox-entry3">
@@ -298,7 +345,6 @@
                       <object class="GtkLabel" id="oldSymbolName">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="yalign">0.49000000953674316</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -308,7 +354,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="smlo-SmShowChar" id="oldSymbolDisplay">
+                      <object class="smlo-SmShowChar" id="oldSymbolDisplay:border">
                         <property name="width_request">60</property>
                         <property name="height_request">60</property>
                         <property name="visible">True</property>
@@ -337,8 +383,6 @@
                       <object class="GtkLabel" id="symbolName">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0.50999999046325684</property>
-                        <property name="yalign">0.49000000953674316</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -348,7 +392,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="smlo-SmShowChar" id="symbolDisplay">
+                      <object class="smlo-SmShowChar" id="symbolDisplay:border">
                         <property name="width_request">60</property>
                         <property name="height_request">60</property>
                         <property name="visible">True</property>
@@ -376,12 +420,9 @@
                     <child>
                       <object class="GtkButton" id="delete">
                         <property name="label">gtk-delete</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
-                        <property name="relief">half</property>
                         <property name="use_stock">True</property>
                       </object>
                       <packing>
@@ -394,11 +435,9 @@
                     <child>
                       <object class="GtkButton" id="modify">
                         <property name="label" translatable="yes">_Modify</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -411,11 +450,9 @@
                     <child>
                       <object class="GtkButton" id="add">
                         <property name="label">gtk-add</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_stock">True</property>
                       </object>
                       <packing>
@@ -429,6 +466,8 @@
                       <object class="GtkImage" id="rightArrow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
                         <property name="pixbuf">starmath/res/ar_right.png</property>
                       </object>
                       <packing>
@@ -477,8 +516,9 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">bottom</property>
               </object>
@@ -495,7 +535,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -511,7 +550,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>

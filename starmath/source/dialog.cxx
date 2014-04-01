@@ -269,7 +269,6 @@ void SmShowFont::SetFont(const Font& rFont)
     SetTextColor( aTxtColor );
 }
 
-
 IMPL_LINK_INLINE_START( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
 {
     Face.SetName(pComboBox->GetText());
@@ -1615,8 +1614,16 @@ void SmShowChar::SetSymbol( sal_UCS4 cChar, const Font &rFont )
     Invalidate();
 }
 
-
-
+void SmShowChar::Resize()
+{
+    Control::Resize();
+    const OUString &rText = GetText();
+    if (rText.isEmpty())
+        return;
+    sal_Int32 nStrIndex = 0;
+    sal_UCS4 cChar = rText.iterateCodePoints(&nStrIndex);
+    SetSymbol(cChar, GetFont()); //force recalculation of size
+}
 
 void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 {
@@ -1963,17 +1970,6 @@ void SmSymDefineDialog::UpdateButtons()
     pDeleteBtn->Enable(bDelete);
 }
 
-IMPL_LINK( SmSymDefineDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
-{
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_SYMDEFINEDIALOG" ), pHelpBtn );
-    }
-    return 0;
-}
-
 SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
         OutputDevice *pFntListDevice, SmSymbolManager &rMgr) :
     ModalDialog         (pParent, "EditSymbols", "modules/smath/ui/symdefinedialog.ui"),
@@ -1995,12 +1991,9 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
     get(pSymbolName, "symbolName");
     get(pSymbolDisplay, "symbolDisplay");
     get(pSymbolSetName, "symbolSetName");
-    get(pHelpBtn, "help");
     get(pAddBtn, "add");
     get(pChangeBtn, "modify");
     get(pDeleteBtn, "delete");
-
-    pHelpBtn->SetClickHdl(LINK(this, SmSymDefineDialog, HelpButtonClickHdl));
 
     pFontList = new FontList( pFntListDevice );
 
