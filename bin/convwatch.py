@@ -240,8 +240,11 @@ def loadFromURL(xContext, url):
     xGEB = xContext.getValueByName(
         "/singletons/com.sun.star.frame.theGlobalEventBroadcaster")
     xGEB.addDocumentEventListener(xListener)
+    xDoc = None
     try:
         xDoc = xDesktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        if xDoc is None:
+            raise Exception("No document loaded?")
         time_ = 0
         while time_ < 30:
             if xListener.layoutFinished:
@@ -280,6 +283,7 @@ class LoadPrintFileTest:
         self.prtsuffix = prtsuffix
     def run(self, xContext):
         print("Loading document: " + self.file)
+        xDoc = None
         try:
             url = "file://" + quote(self.file)
             xDoc = loadFromURL(xContext, url)
