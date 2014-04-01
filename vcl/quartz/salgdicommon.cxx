@@ -2002,6 +2002,7 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
         // We will return early a few lines lower.
         // Undo the "stack initialization" done at the initial call of
         // this method, see end.
+        CG_TRACE( "CGContextRestoreGState(" << mrContext << ")" );
         CGContextRestoreGState( mrContext );
     }
 #endif
@@ -2027,12 +2028,14 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     {
         mnWidth = CGBitmapContextGetWidth( mrContext );
         mnHeight = CGBitmapContextGetHeight( mrContext );
+        CG_TRACE( "CGBitmapContextGetWidth&Height(" << mrContext << ") = " << mnWidth << "x" << mnHeight );
     }
     else
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
         mnWidth = static_cast<int>(aSize.width);
         mnHeight = static_cast<int>(aSize.height);
+        CG_TRACE( "CGLayerGetSize(" << mxLayer << ") = " << aSize );
     }
 
     // prepare graphics for drawing
@@ -2049,6 +2052,7 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     }
 
     // initialize stack of CGContext states
+    CG_TRACE( "CGContextSaveGState(" << mrContext << ")" );
     CGContextSaveGState( mrContext );
     SetState();
 }
