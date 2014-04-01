@@ -233,7 +233,15 @@ namespace drawinglayer
 
         if(isVisible())
         {
+#ifdef IOS
+            // Exact mechanism unknown, but for some reason SmartArt
+            // rendering, especially shadows, is broken on iOS unless
+            // we pass 'true' here. Are virtual devices always de
+            // facto cleared when created on other platforms?
+            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 0);
+#else
             mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, 0);
+#endif
 
             // #i93485# assert when copying from window to VDev is used
             OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
