@@ -1685,11 +1685,6 @@ bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
 
 bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
 {
-#ifdef IOS
-    if (mbForeignContext)
-        return true;
-#endif
-
     // release old clip path
     if( mxClipPath )
     {
