@@ -23,7 +23,7 @@
 
 namespace oox { namespace drawingml {
 
-sal_Bool ClrMap::getColorMap( sal_Int32& nClrToken )
+bool ClrMap::getColorMap( sal_Int32& nClrToken )
 {
     sal_Int32 nMapped = 0;
     std::map < sal_Int32, sal_Int32 >::const_iterator aIter( maClrMap.find( nClrToken ) );
@@ -32,10 +32,10 @@ sal_Bool ClrMap::getColorMap( sal_Int32& nClrToken )
     if ( nMapped )
     {
         nClrToken = nMapped;
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 void ClrMap::setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken )
@@ -52,7 +52,7 @@ ClrScheme::~ClrScheme()
 {
 }
 
-sal_Bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
+bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
 {
     OSL_ASSERT((nSchemeClrToken & sal_Int32(0xFFFF0000))==0);
     switch( nSchemeClrToken )

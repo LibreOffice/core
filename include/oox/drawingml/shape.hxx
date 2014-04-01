@@ -97,7 +97,7 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
-    EffectProperties&        getEffectProperties() { return *mpEffectPropertiesPtr; }
+    EffectProperties&               getEffectProperties() { return *mpEffectPropertiesPtr; }
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
@@ -109,17 +109,17 @@ public:
     const com::sun::star::awt::Size&  getSize() const { return maSize; }
 
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
-    void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
+    void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
     void                            addChild( const ShapePtr pChildPtr ) { maChildren.push_back( pChildPtr ); }
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
     void                            setName( const OUString& rName ) { msName = rName; }
-    OUString                 getName( ) { return msName; }
+    OUString                       getName( ) { return msName; }
     void                            setId( const OUString& rId ) { msId = rId; }
-    OUString                 getId() { return msId; }
-    void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
-    sal_Bool                        getHidden() const { return mbHidden; };
-    void                            setHiddenMasterShape( sal_Bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
+    OUString                        getId() { return msId; }
+    void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
+    bool                            getHidden() const { return mbHidden; };
+    void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_Int32 nSubTypeIndex ) { moSubTypeIndex = nSubTypeIndex; }
@@ -189,8 +189,8 @@ protected:
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
-                            sal_Bool bClearText,
-                            sal_Bool bDoNotInsertEmptyTextBody,
+                            bool bClearText,
+                            bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps
                              );
@@ -230,7 +230,7 @@ protected:
     com::sun::star::awt::Point  maChPosition;             // only used for group shapes
     com::sun::star::awt::Size   maAbsoluteSize;           // only used for group shapes
     com::sun::star::awt::Point  maAbsolutePosition;       // only used for group shapes
-    sal_Bool                    mbIsChild;
+    bool                        mbIsChild;
 
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
@@ -275,10 +275,10 @@ private:
     ChartShapeInfoRef   mxChartShapeInfo;   ///< Additional data for chart shapes.
 
     sal_Int32                       mnRotation;
-    sal_Bool                        mbFlipH;
-    sal_Bool                        mbFlipV;
-    sal_Bool                        mbHidden;
-    sal_Bool                        mbHiddenMasterShape; // master shapes can be hidden in layout slides
+    bool                            mbFlipH;
+    bool                            mbFlipV;
+    bool                            mbHidden;
+    bool                            mbHiddenMasterShape; // master shapes can be hidden in layout slides
                                                          // we need separate flag because we don't want
                                                          // to propagate it when applying reference shape
     bool mbLockedCanvas; ///< Is this shape part of a locked canvas?

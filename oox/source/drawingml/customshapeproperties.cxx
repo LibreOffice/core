@@ -44,9 +44,9 @@ namespace oox { namespace drawingml {
 
 CustomShapeProperties::CustomShapeProperties()
 : mnShapePresetType ( -1 )
-, mbShapeTypeOverride(sal_False)
-, mbMirroredX   ( sal_False )
-, mbMirroredY   ( sal_False )
+, mbShapeTypeOverride(false)
+, mbMirroredX   ( false )
+, mbMirroredY   ( false )
 , mnTextRotateAngle ( 0 )
 , mnArcNum ( 0 )
 {

@@ -230,7 +230,7 @@ void Shape::addShape(
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, sal_False, aMatrix, rShapeOrParentShapeFillProps ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, false, false, aMatrix, rShapeOrParentShapeFillProps ) );
 
             if( pShapeMap && !msId.isEmpty() )
             {
@@ -387,8 +387,8 @@ Reference< XShape > Shape::createAndInsert(
         const Theme* pTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
         const awt::Rectangle* /* pShapeRect */,
-        sal_Bool bClearText,
-        sal_Bool bDoNotInsertEmptyTextBody,
+        bool bClearText,
+        bool bDoNotInsertEmptyTextBody,
         basegfx::B2DHomMatrix& aParentTransformation,
         FillProperties& rShapeOrParentShapeFillProps )
 {
@@ -881,9 +881,9 @@ Reference< XShape > Shape::createAndInsert(
         if( bIsCustomShape )
         {
             if ( mbFlipH )
-                mpCustomShapePropertiesPtr->setMirroredX( sal_True );
+                mpCustomShapePropertiesPtr->setMirroredX( true );
             if ( mbFlipV )
-                mpCustomShapePropertiesPtr->setMirroredY( sal_True );
+                mpCustomShapePropertiesPtr->setMirroredY( true );
             if( getTextBody() )
             {
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );

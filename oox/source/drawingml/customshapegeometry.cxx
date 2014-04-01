@@ -785,13 +785,13 @@ ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementTo
 {
     if ( aElementToken == A_TOKEN( ahXY ) )         // CT_XYAdjustHandle
     {
-        AdjustHandle aAdjustHandle( sal_False );
+        AdjustHandle aAdjustHandle( false );
         mrAdjustHandleList.push_back( aAdjustHandle );
         return new XYAdjustHandleContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
     else if ( aElementToken == A_TOKEN( ahPolar ) ) // CT_PolarAdjustHandle
     {
-        AdjustHandle aAdjustHandle( sal_True );
+        AdjustHandle aAdjustHandle( true );
         mrAdjustHandleList.push_back( aAdjustHandle );
         return new PolarAdjustHandleContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }

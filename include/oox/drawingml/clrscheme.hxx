@@ -34,7 +34,7 @@ class ClrMap
 
 public:
 
-    sal_Bool getColorMap( sal_Int32& nClrToken );
+    bool     getColorMap( sal_Int32& nClrToken );
     void     setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken );
 };
 
@@ -49,7 +49,7 @@ public:
     ClrScheme();
     ~ClrScheme();
 
-    sal_Bool getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const;
+    bool     getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const;
     void     setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor );
 };
 

@@ -56,7 +56,7 @@ struct CustomShapeGuide
 
 struct AdjustHandle
 {
-    sal_Bool                                polar;
+    bool                                    polar;
     com::sun::star::drawing::EnhancedCustomShapeParameterPair
                                             pos;
 
@@ -72,7 +72,7 @@ struct AdjustHandle
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
                                             max2;   // maxY     or maxAng
 
-    AdjustHandle( sal_Bool bPolar ) : polar( bPolar ) {};
+    AdjustHandle( bool bPolar ) : polar( bPolar ) {};
 };
 
 struct ConnectionSite
@@ -96,11 +96,11 @@ struct Path2D
     sal_Int64   w;
     sal_Int64   h;
     sal_Int32   fill;
-    sal_Bool    stroke;
-    sal_Bool    extrusionOk;
+    bool        stroke;
+    bool        extrusionOk;
     std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > parameter;
 
-    Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( sal_True ), extrusionOk( sal_True ) {};
+    Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( true ), extrusionOk( true ) {};
 };
 
 
@@ -135,8 +135,8 @@ public:
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
     OUString getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
-    sal_Bool                            getShapeTypeOverride(){ return mbShapeTypeOverride; };
-    void                                setShapeTypeOverride( sal_Bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
+    bool                                getShapeTypeOverride(){ return mbShapeTypeOverride; };
+    void                                setShapeTypeOverride( bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
 
     std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
     std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
@@ -145,8 +145,8 @@ public:
     OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
     std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
-    void                                setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
-    void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
+    void                                setMirroredX( bool bMirroredX ) { mbMirroredX = bMirroredX; };
+    void                                setMirroredY( bool bMirroredY ) { mbMirroredY = bMirroredY; };
     void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
 
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
@@ -157,7 +157,7 @@ public:
 private:
 
     sal_Int32                       mnShapePresetType;
-    sal_Bool                        mbShapeTypeOverride;
+    bool                            mbShapeTypeOverride;
     std::vector< CustomShapeGuide > maAdjustmentGuideList;
     std::vector< CustomShapeGuide > maGuideList;
     std::vector< AdjustHandle >     maAdjustHandleList;
@@ -167,8 +167,8 @@ private:
 
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >
                                     maSegments;
-    sal_Bool                        mbMirroredX;
-    sal_Bool                        mbMirroredY;
+    bool                            mbMirroredX;
+    bool                            mbMirroredY;
     sal_Int32                       mnTextRotateAngle;
 
     typedef boost::unordered_map< sal_Int32, CustomShapeProvider * > PresetsMap;
