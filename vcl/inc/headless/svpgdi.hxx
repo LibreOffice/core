@@ -257,7 +257,7 @@ public:
     bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
     bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
     void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
-    CGPoint*                makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry);
+    CGPoint*            makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
     bool IsFlipped() const { return false; }
     void ApplyXorContext();
     void Pattern50Fill();
