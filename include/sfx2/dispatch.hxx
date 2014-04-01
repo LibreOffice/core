@@ -158,6 +158,7 @@ public:
     void                Flush();
     void                Lock( bool bLock );
     bool                IsLocked( sal_uInt16 nSID = 0 ) const;
+    // bEnable can be sal_True,sal_False, or 2(some kind of read-only override hack)
     void                SetSlotFilter( sal_Bool bEnable = sal_False,
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = 0 );
 
@@ -179,6 +180,7 @@ public:
                                               bool bOwnShellsOnly, bool bModal, bool bRealSlot=true );
     SAL_DLLPRIVATE void SetReadOnly_Impl( bool  bOn );
     SAL_DLLPRIVATE bool GetReadOnly_Impl() const;
+    // bEnable can be sal_True,sal_False, or 2(some kind of read-only override hack)
     SAL_DLLPRIVATE sal_Bool IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;
     SAL_DLLPRIVATE void SetQuietMode_Impl( bool bOn );
     SAL_DLLPRIVATE bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
