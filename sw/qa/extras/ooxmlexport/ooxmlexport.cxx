@@ -538,8 +538,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 }
 #endif
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -565,7 +563,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "LeftMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testCellBtlr, "cell-btlr.docx")
 {
@@ -1717,8 +1714,6 @@ DECLARE_OOXMLEXPORT_TEST(testHyperlineIsEnd, "hyperlink.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink",1);
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1773,7 +1768,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     awt::Gradient aGradient8 = getProperty<awt::Gradient>(xFrame8, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testCellGridSpan, "cell-grid-span.docx")
 {
@@ -2126,15 +2120,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t", "15");
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     CPPUNIT_ASSERT(!(getProperty<OUString>(xFrame,"BackGraphicURL")).isEmpty());
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
 {
