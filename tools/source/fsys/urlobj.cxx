@@ -591,8 +591,7 @@ INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
 {
     DBG_ASSERT(eStyle
                    & (INetURLObject::FSYS_UNX
-                          | INetURLObject::FSYS_DOS
-                          | INetURLObject::FSYS_MAC),
+                          | INetURLObject::FSYS_DOS),
                "guessFSysStyleByCounting(): Bad style");
     DBG_ASSERT(std::numeric_limits< sal_Int32 >::min() < pBegin - pEnd
                && pEnd - pBegin <= std::numeric_limits< sal_Int32 >::max(),
@@ -602,9 +601,6 @@ INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
               0 : std::numeric_limits< sal_Int32 >::min();
     sal_Int32 nBackslashCount
         = eStyle & INetURLObject::FSYS_DOS ?
-              0 : std::numeric_limits< sal_Int32 >::min();
-    sal_Int32 nColonCount
-        = eStyle & INetURLObject::FSYS_MAC ?
               0 : std::numeric_limits< sal_Int32 >::min();
     while (pBegin != pEnd)
         switch (*pBegin++)
@@ -616,16 +612,9 @@ INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
             case '\\':
                 ++nBackslashCount;
                 break;
-
-            case ':':
-                ++nColonCount;
-                break;
         }
     return nSlashCount >= nBackslashCount ?
-               nSlashCount >= nColonCount ?
-                   INetURLObject::FSYS_UNX : INetURLObject::FSYS_MAC :
-               nBackslashCount >= nColonCount ?
-                   INetURLObject::FSYS_DOS : INetURLObject::FSYS_MAC;
+                   INetURLObject::FSYS_UNX : INetURLObject::FSYS_DOS;
 }
 
 OUString parseScheme(
@@ -1126,17 +1115,16 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //  becomes
                     //    "file:///" *path ["#" *UCS4]
                     //  replacing the delimiter by "/" within <*path>.  The
-                    //  delimiter is that character from the set { "/", "\",
-                    //  ":" } which appears most often in <*path> (if FSYS_UNX
+                    //  delimiter is that character from the set { "/", "\"}
+                    // which appears most often in <*path> (if FSYS_UNX
                     //  is not among the style bits, "/" is removed from the
                     //  set; if FSYS_DOS is not among the style bits, "\" is
-                    //  removed from the set; if FSYS_MAC is not among the
-                    //  style bits, ":" is removed from the set).  If two or
+                    //  removed from the set).  If two or
                     //  more characters appear the same number of times, the
                     //  character mentioned first in that set is chosen.  If
                     //  the first character of <*path> is the delimiter, that
-                    //  character is not copied.
-                    if (eStyle & (FSYS_UNX | FSYS_DOS | FSYS_MAC))
+                    //  character is not copied
+                    if (eStyle & (FSYS_UNX | FSYS_DOS))
                     {
                         aSynAbsURIRef.appendAscii("//");
                         switch (guessFSysStyleByCounting(pPos, pEnd, eStyle))
@@ -1147,10 +1135,6 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
                             case FSYS_DOS:
                                 nSegmentDelimiter = '\\';
-                                break;
-
-                            case FSYS_MAC:
-                                nSegmentDelimiter = ':';
                                 break;
 
                             default:
@@ -1565,11 +1549,6 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 
                 case FSYS_DOS:
                     nSegmentDelimiter = '\\';
-                    bRelativeNonURIs = true;
-                    break;
-
-                case FSYS_MAC:
-                    nSegmentDelimiter = ':';
                     bRelativeNonURIs = true;
                     break;
 
@@ -4593,8 +4572,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
 
     switch ((eStyle & FSYS_VOS ? 1 : 0)
                 + (eStyle & FSYS_UNX ? 1 : 0)
-                + (eStyle & FSYS_DOS ? 1 : 0)
-                + (eStyle & FSYS_MAC ? 1 : 0))
+                + (eStyle & FSYS_DOS ? 1 : 0))
     {
         case 0:
             return false;
@@ -4653,7 +4631,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 break;
             }
 
-            if (!(eStyle & (FSYS_UNX | FSYS_DOS | FSYS_MAC)))
+            if (!(eStyle & (FSYS_UNX | FSYS_DOS)))
                 return false;
 
             eStyle = guessFSysStyleByCounting(pFSysBegin, pFSysEnd, eStyle);
@@ -4743,30 +4721,6 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             break;
         }
 
-        case FSYS_MAC:
-            aSynAbsURIRef.append('/');
-            for (sal_Unicode const * p = pFSysBegin; p != pFSysEnd; ++p)
-            {
-                switch (*p)
-                {
-                    case ':':
-                        aSynAbsURIRef.append('/');
-                        break;
-
-                    case '/':
-                    case '|':
-                    case '#':
-                    case '%':
-                        appendEscape(aSynAbsURIRef, '%', *p);
-                        break;
-
-                    default:
-                        aSynAbsURIRef.append(*p);
-                        break;
-                }
-            }
-            break;
-
         default:
             OSL_ASSERT(false);
             break;
@@ -4790,7 +4744,6 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
     if ((eStyle & FSYS_VOS ? 1 : 0)
                 + (eStyle & FSYS_UNX ? 1 : 0)
                 + (eStyle & FSYS_DOS ? 1 : 0)
-                + (eStyle & FSYS_MAC ? 1 : 0)
             > 1)
     {
         eStyle = eStyle & FSYS_VOS
@@ -4866,35 +4819,6 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                                              eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
                     aSynFSysPath.append('\\');
-                else
-                    aSynFSysPath.appendUtf32(nUTF32);
-            }
-            return aSynFSysPath.makeStringAndClear();
-        }
-
-        case FSYS_MAC:
-        {
-            if (m_aHost.isPresent() && m_aHost.getLength() > 0)
-                return OUString();
-
-            if (pDelimiter)
-                *pDelimiter = ':';
-
-            OUStringBuffer aSynFSysPath;
-            sal_Unicode const * p
-                = m_aAbsURIRef.getStr() + m_aPath.getBegin();
-            sal_Unicode const * pEnd = p + m_aPath.getLength();
-            DBG_ASSERT(p < pEnd && *p == '/',
-                       "INetURLObject::getFSysPath(): Bad path");
-            ++p;
-            while (p < pEnd)
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(p, pEnd, false, '%', WAS_ENCODED,
-                                             RTL_TEXTENCODING_UTF8,
-                                             eEscapeType);
-                if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
-                    aSynFSysPath.append(':');
                 else
                     aSynFSysPath.appendUtf32(nUTF32);
             }

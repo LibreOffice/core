@@ -526,7 +526,6 @@ OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseUR
             // take base URL and append current input
             bool bWasAbsolute = false;
 #ifdef UNX
-            // don't support FSYS_MAC under Unix, because here ':' is a valid character for a filename
             INetURLObject::FSysStyle eStyle = static_cast< INetURLObject::FSysStyle >( INetURLObject::FSYS_VOS | INetURLObject::FSYS_UNX | INetURLObject::FSYS_DOS );
             // encode file URL correctly
             aSmart = INetURLObject::encode( aSmart, INetURLObject::PART_FPATH, '%', INetURLObject::ENCODE_ALL );

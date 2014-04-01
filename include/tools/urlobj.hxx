@@ -251,10 +251,6 @@ public:
          */
         FSYS_DOS = 0x4,
 
-        /** Mac notation (e.g., "dir:file").
-         */
-        FSYS_MAC = 0x8,
-
         /** Detect the used notation.
 
             @descr  For the following descriptions, please note that
@@ -300,11 +296,10 @@ public:
               becomes
                 "file:///" *UCS4
               replacing the delimiter by "/" within <*UCS4>.  The delimiter is
-              that character from the set { "/", "\", ":" } which appears most
+              that character from the set { "/", "\" } which appears most
               often in <*UCS4> (if FSYS_UNX is not among the style bits, "/"
               is removed from the set; if FSYS_DOS is not among the style
-              bits, "\" is removed from the set; if FSYS_MAC is not among the
-              style bits, ":" is removed from the set).  If two or more
+              bits, "\" is removed from the set).  If two or more
               characters appear the same number of times, the character
               mentioned first in that set is chosen.  If the first character
               of <*UCS4> is the delimiter, that character is not copied.
@@ -843,7 +838,7 @@ public:
 
         @param pDelimiter  Upon successful return, this parameter can return
         the character that is the 'main' delimiter within the returned file
-        system path (e.g., "/" for Unix, "\" for DOS, ":" for Mac).  This is
+        system path (e.g., "/" for Unix, "\" for DOS).  This is
         especially useful for routines that later try to shorten the returned
         file system path at a 'good' position, e.g. to fit it into some
         limited display space.
