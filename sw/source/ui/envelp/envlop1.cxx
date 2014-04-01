@@ -290,7 +290,7 @@ void SwEnvPage::InitDatabaseBox()
         Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
 
-        for (long i = 0; i < aDataNames.getLength(); i++)
+        for (sal_Int32 i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);
 
         OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
