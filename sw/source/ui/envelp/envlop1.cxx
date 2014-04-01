@@ -80,12 +80,12 @@ void SwEnvPreview::Paint(const Rectangle &)
     const SwEnvItem& rItem =
         ((SwEnvDlg*) GetParentDialog())->aEnvItem;
 
-    sal_uInt16 nPageW = (sal_uInt16) std::max(rItem.lWidth, rItem.lHeight),
-           nPageH = (sal_uInt16) std::min(rItem.lWidth, rItem.lHeight);
+    const long nPageW = std::max(rItem.lWidth, rItem.lHeight);
+    const long nPageH = std::min(rItem.lWidth, rItem.lHeight);
 
-    float fx = (float)GetOutputSizePixel().Width () / (float)nPageW,
-          fy = (float)GetOutputSizePixel().Height() / (float)nPageH,
-          f  = 0.8f * ( fx < fy ? fx : fy );
+    const float f = 0.8 * std::min(
+        static_cast<float>(GetOutputSizePixel().Width())/static_cast<float>(nPageW),
+        static_cast<float>(GetOutputSizePixel().Height())/static_cast<float>(nPageH));
 
     Color aBack = rSettings.GetWindowColor( );
     Color aFront = SwViewOption::GetFontColor();
@@ -97,38 +97,38 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetLineColor( aFront );
 
     // Envelope
-    long   nW = (sal_uInt16) (f * nPageW),
-           nH = (sal_uInt16) (f * nPageH),
-           nX = (GetOutputSizePixel().Width () - nW) / 2,
-           nY = (GetOutputSizePixel().Height() - nH) / 2;
+    const long nW = static_cast<long>(f * nPageW);
+    const long nH = static_cast<long>(f * nPageH);
+    const long nX = (GetOutputSizePixel().Width () - nW) / 2;
+    const long nY = (GetOutputSizePixel().Height() - nH) / 2;
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 
     // Sender
     if (rItem.bSend)
     {
-        long   nSendX = nX + (sal_uInt16) (f * rItem.lSendFromLeft),
-               nSendY = nY + (sal_uInt16) (f * rItem.lSendFromTop ),
-               nSendW = (sal_uInt16) (f * (rItem.lAddrFromLeft - rItem.lSendFromLeft)),
-               nSendH = (sal_uInt16) (f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
+        const long nSendX = nX + static_cast<long>(f * rItem.lSendFromLeft);
+        const long nSendY = nY + static_cast<long>(f * rItem.lSendFromTop );
+        const long nSendW = static_cast<long>(f * (rItem.lAddrFromLeft - rItem.lSendFromLeft));
+        const long nSendH = static_cast<long>(f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
         SetFillColor( aMedium );
 
         DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
     // Addressee
-    long   nAddrX = nX + (sal_uInt16) (f * rItem.lAddrFromLeft),
-           nAddrY = nY + (sal_uInt16) (f * rItem.lAddrFromTop ),
-           nAddrW = (sal_uInt16) (f * (nPageW - rItem.lAddrFromLeft - 566)),
-           nAddrH = (sal_uInt16) (f * (nPageH - rItem.lAddrFromTop  - 566));
+    const long nAddrX = nX + static_cast<long>(f * rItem.lAddrFromLeft);
+    const long nAddrY = nY + static_cast<long>(f * rItem.lAddrFromTop );
+    const long nAddrW = static_cast<long>(f * (nPageW - rItem.lAddrFromLeft - 566));
+    const long nAddrH = static_cast<long>(f * (nPageH - rItem.lAddrFromTop  - 566));
     SetFillColor( aMedium );
     DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
     // Stamp
-    long   nStmpW = (sal_uInt16) (f * 1417 /* 2,5 cm */),
-           nStmpH = (sal_uInt16) (f * 1701 /* 3,0 cm */),
-           nStmpX = nX + nW - (sal_uInt16) (f * 566) - nStmpW,
-           nStmpY = nY + (sal_uInt16) (f * 566);
+    const long nStmpW = static_cast<long>(f * 1417 /* 2,5 cm */);
+    const long nStmpH = static_cast<long>(f * 1701 /* 3,0 cm */);
+    const long nStmpX = nX + nW - static_cast<long>(f * 566) - nStmpW;
+    const long nStmpY = nY + static_cast<long>(f * 566);
 
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
