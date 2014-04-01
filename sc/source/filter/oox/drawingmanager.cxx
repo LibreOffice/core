@@ -266,21 +266,21 @@ void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, c
 
         // line ends
         bool bLineStart = false;
-        bool bLineEnd = false;
+        bool bArrow = false;
         bool bFilled = false;
         switch( extractValue< sal_uInt8 >( nArrows, 0, 4 ) )
         {
-            case BIFF_OBJ_ARROW_OPEN:       bLineStart = false; bLineEnd = true;  bFilled = false;  break;
-            case BIFF_OBJ_ARROW_OPENBOTH:   bLineStart = true;  bLineEnd = true;  bFilled = false;  break;
-            case BIFF_OBJ_ARROW_FILLED:     bLineStart = false; bLineEnd = true;  bFilled = true;   break;
-            case BIFF_OBJ_ARROW_FILLEDBOTH: bLineStart = true;  bLineEnd = true;  bFilled = true;   break;
+            case BIFF_OBJ_ARROW_OPEN:       bLineStart = false; bArrow = true;  bFilled = false;  break;
+            case BIFF_OBJ_ARROW_OPENBOTH:   bLineStart = true;  bArrow = true;  bFilled = false;  break;
+            case BIFF_OBJ_ARROW_FILLED:     bLineStart = false; bArrow = true;  bFilled = true;   break;
+            case BIFF_OBJ_ARROW_FILLEDBOTH: bLineStart = true;  bArrow = true;  bFilled = true;   break;
         }
-        if( bLineStart || bLineEnd )
+        if (bArrow)
         {
             // arrow type (open or closed)
             sal_Int32 nArrowType = bFilled ? XML_triangle : XML_arrow;
+            aLineProps.maEndArrow.moArrowType   = nArrowType;
             aLineProps.maStartArrow.moArrowType = bLineStart ? nArrowType : XML_none;
-            aLineProps.maEndArrow.moArrowType   = bLineEnd   ? nArrowType : XML_none;
 
             // arrow width
             sal_Int32 nArrowWidth = XML_med;
