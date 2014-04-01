@@ -562,59 +562,51 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             break;
                         }
 
+                        assert(cChar != 0);
+
                         // 1 == Non Breaking Space
                         // 2 == SoftHyphen
 
-                        if( cChar < 3U )
+                        if (cChar == 1 || cChar == 2)
                         {
                             if( '>' == cBreak )
                             {
                                 // When reading the content of a tag we have
                                 // to change it to ' ' or '-'
-                                switch( cChar )
-                                {
-                                case 1U: cChar = ' '; break;
-                                case 2U: cChar = '-'; break;
-                                default:
-                                    DBG_ASSERT( cChar==1U,
-                            "\0x00 should be handled already!" );
-                                    break;
-                                }
+                                if( 1U == cChar )
+                                    cChar = ' ';
+                                else //2U
+                                    cChar = '-';
                             }
                             else
                             {
                                 // If not scanning a tag return token
                                 aToken += sTmpBuffer.makeStringAndClear();
-                                if( cChar )
-                                {
-                                    if( !aToken.isEmpty() )
-                                    {
-                                        // restart with character
-                                        nNextCh = '&';
-                                        DBG_ASSERT( rInput.Tell()-nStreamPos ==
-                                                    (sal_uLong)(nPos+1)*GetCharSize(),
-                                                    "Wrong stream position" );
-                                        DBG_ASSERT( nlLinePos-nLinePos ==
-                                                    (sal_uLong)(nPos+1),
-                                                    "Wrong line position" );
-                                        rInput.Seek( nStreamPos );
-                                        nlLinePos = nLinePos;
-                                        ClearTxtConvContext();
-                                        return HTML_TEXTTOKEN;
-                                    }
 
-                                    // Hack: _GetNextChar shall not read the
-                                    // next character
-                                    if( ';' != nNextCh )
-                                        aToken += " ";
-                                    if( 1U == cChar )
-                                        return HTML_NONBREAKSPACE;
-                                    if( 2U == cChar )
-                                        return HTML_SOFTHYPH;
+                                if( !aToken.isEmpty() )
+                                {
+                                    // restart with character
+                                    nNextCh = '&';
+                                    DBG_ASSERT( rInput.Tell()-nStreamPos ==
+                                                (sal_uLong)(nPos+1)*GetCharSize(),
+                                                "Wrong stream position" );
+                                    DBG_ASSERT( nlLinePos-nLinePos ==
+                                                (sal_uLong)(nPos+1),
+                                                "Wrong line position" );
+                                    rInput.Seek( nStreamPos );
+                                    nlLinePos = nLinePos;
+                                    ClearTxtConvContext();
+                                    return HTML_TEXTTOKEN;
                                 }
-                                aToken += "&";
-                                aToken += sEntityBuffer.makeStringAndClear();
-                                break;
+
+                                // Hack: _GetNextChar shall not read the
+                                // next character
+                                if( ';' != nNextCh )
+                                    aToken += " ";
+                                if( 1U == cChar )
+                                    return HTML_NONBREAKSPACE;
+                                else //2U
+                                    return HTML_SOFTHYPH;
                             }
                         }
                     }
