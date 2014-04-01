@@ -38,7 +38,7 @@ friend class SfxSlotPool;
     const char*             pName;          // Sfx-internal name of interface
     const SfxInterface*     pGenoType;      // base interface
     SfxSlot*                pSlots;         // SlotMap
-    sal_uInt16                  nCount;         // number of slots in SlotMap
+    sal_uInt16              nCount;         // number of slots in SlotMap
     SfxInterfaceId          nClassId;       // Id of interface
     ResId                   aNameResId;     // ResId of external interface name
     SfxInterface_Impl*      pImpData;
@@ -63,7 +63,7 @@ public:
 
     const char*             GetClassName() const { return pName; }
     bool                    HasName() const { return 0 != aNameResId.GetId(); }
-    OUString           GetName() const
+    OUString                GetName() const
                             { return HasName() ? aNameResId.toString() : OUString(); }
     ResMgr*                 GetResMgr() const
                             { return aNameResId.GetResMgr(); }
@@ -73,8 +73,8 @@ public:
 
     void                    RegisterObjectBar( sal_uInt16, const ResId&, const OUString* pST=0 );
     void                    RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const OUString* pST=0 );
-    void                    RegisterChildWindow( sal_uInt16, sal_Bool bContext, const OUString* pST=0 );
-    void                    RegisterChildWindow( sal_uInt16, sal_Bool bContext, sal_uInt32 nFeature, const OUString* pST=0 );
+    void                    RegisterChildWindow( sal_uInt16, bool bContext, const OUString* pST=0 );
+    void                    RegisterChildWindow( sal_uInt16, bool bContext, sal_uInt32 nFeature, const OUString* pST=0 );
     void                    RegisterStatusBar( const ResId& );
     const ResId&            GetObjectBarResId( sal_uInt16 nNo ) const;
     sal_uInt16              GetObjectBarPos( sal_uInt16 nNo ) const;
@@ -82,7 +82,7 @@ public:
     sal_uInt16              GetObjectBarCount() const;
     void                    SetObjectBarPos( sal_uInt16 nPos, sal_uInt16 nId );
     const OUString*         GetObjectBarName( sal_uInt16 nNo ) const;
-    sal_Bool                IsObjectBarVisible( sal_uInt16 nNo) const;
+    bool                    IsObjectBarVisible( sal_uInt16 nNo) const;
     sal_uInt32              GetChildWindowFeature( sal_uInt16 nNo ) const;
     sal_uInt32              GetChildWindowId( sal_uInt16 nNo ) const;
     sal_uInt16              GetChildWindowCount() const;

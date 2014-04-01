@@ -365,13 +365,13 @@ inline void SfxShell::SetPool
         GetStaticInterface()->RegisterObjectBar( nPos, rResId, nFeature )
 
 #define SFX_CHILDWINDOW_REGISTRATION(nId) \
-        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_False )
+        GetStaticInterface()->RegisterChildWindow( nId, false )
 
 #define SFX_FEATURED_CHILDWINDOW_REGISTRATION(nId,nFeature) \
-        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_False, nFeature )
+        GetStaticInterface()->RegisterChildWindow( nId, false, nFeature )
 
 #define SFX_CHILDWINDOW_CONTEXT_REGISTRATION(nId) \
-        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_True )
+        GetStaticInterface()->RegisterChildWindow( nId, true )
 
 #define SFX_POPUPMENU_REGISTRATION(rResId) \
         GetStaticInterface()->RegisterPopupMenu( rResId )

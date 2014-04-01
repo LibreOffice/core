@@ -53,17 +53,17 @@ SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )
 struct SfxObjectUI_Impl
 {
     sal_uInt16  nPos;
-    ResId   aResId;
-    sal_Bool    bVisible;
-    sal_Bool    bContext;
-    OUString* pName;
+    ResId       aResId;
+    bool        bVisible;
+    bool        bContext;
+    OUString*   pName;
     sal_uInt32  nFeature;
 
-    SfxObjectUI_Impl(sal_uInt16 n, const ResId& rResId, sal_Bool bVis, sal_uInt32 nFeat) :
+    SfxObjectUI_Impl(sal_uInt16 n, const ResId& rResId, bool bVis, sal_uInt32 nFeat) :
         nPos(n),
         aResId(rResId.GetId(), *rResId.GetResMgr()),
         bVisible(bVis),
-        bContext(sal_False),
+        bContext(false),
         pName(0),
         nFeature(nFeat)
     {
@@ -85,13 +85,13 @@ struct SfxInterface_Impl
     ResId                   aPopupRes;      // registered PopupMenu
     ResId                   aStatBarRes;    // registered StatusBar
     SfxModule*              pModule;
-    sal_Bool                bRegistered;
+    bool                    bRegistered;
 
     SfxInterface_Impl() :
         aPopupRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager()),
         aStatBarRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager())
     , pModule(NULL)
-    , bRegistered(sal_False)
+    , bRegistered(false)
     {
     }
 
@@ -129,7 +129,7 @@ SfxInterface::SfxInterface( const char *pClassName,
 
 void SfxInterface::Register( SfxModule* pMod )
 {
-    pImpData->bRegistered = sal_True;
+    pImpData->bRegistered = true;
     pImpData->pModule = pMod;
     if ( pMod )
         pMod->GetSlotPool()->RegisterInterface(*this);
@@ -287,7 +287,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
 SfxInterface::~SfxInterface()
 {
     SfxModule *pMod = pImpData->pModule;
-    sal_Bool bRegistered = pImpData->bRegistered;
+    bool bRegistered = pImpData->bRegistered;
     delete pImpData;
     assert( bRegistered );
     if ( bRegistered )
@@ -404,7 +404,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, 
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
 
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, sal_True, nFeature);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, true, nFeature);
 
     if (pStr == 0)
     {
@@ -426,7 +426,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, 
 
 const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
 {
-    sal_Bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -448,7 +448,7 @@ const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
 {
-    sal_Bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -477,14 +477,14 @@ sal_uInt16 SfxInterface::GetObjectBarCount() const
 }
 
 
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, const OUString* pChildWinName)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, const OUString* pChildWinName)
 {
     RegisterChildWindow( nId, bContext, 0UL, pChildWinName );
 }
 
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, sal_uInt32 nFeature, const OUString*)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, sal_uInt32 nFeature, const OUString*)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), sal_True, nFeature);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), true, nFeature);
     pUI->bContext = bContext;
     pImpData->aChildWindows.push_back(pUI);
 }
@@ -564,7 +564,7 @@ const ResId& SfxInterface::GetStatusBarResId() const
 
 const OUString* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
 {
-    sal_Bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -583,7 +583,7 @@ const OUString* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
 
 sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
 {
-    sal_Bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -600,9 +600,9 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
     return pImpData->aObjectBars[nNo]->nFeature;
 }
 
-sal_Bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
+bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
 {
-    sal_Bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
