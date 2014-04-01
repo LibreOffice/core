@@ -3062,7 +3062,8 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
         {
-            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
+            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) ||
+                xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.gltf+json" ))
                 mbMedia = true;
 
             // leave this loop
