@@ -21,7 +21,6 @@
 #include <txtfrm.hxx>
 #include <rowfrm.hxx>
 #include <pagefrm.hxx>
-#include <ndtxt.hxx>
 #include <switerator.hxx>
 
 SwMovedFwdFrmsByObjPos::SwMovedFwdFrmsByObjPos()
