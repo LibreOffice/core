@@ -2710,7 +2710,6 @@ class MaxNumStringLenHandler
 
         OUString aString;
         OUString aSep;
-        sal_Int32 nLen;
         sal_uInt16 nPrec;
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(
                 mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
@@ -2748,7 +2747,7 @@ class MaxNumStringLenHandler
             nPrec = SvNumberFormatter::UNLIMITED_PRECISION;
         }
 
-        nLen = aString.getLength();
+        sal_Int32 nLen = aString.getLength();
         if (nLen <= 0)
             // Ignore empty string.
             return;
