@@ -152,3 +152,39 @@ before running LibreOffice; it will give you lots of useful hints.
 You can also fallback to EMF (from EMF+) rendering via
 
 export EMF_PLUS_DISABLE=1
+
+
+== Printing/PDF export ==
+
+Printing from Writer works like this:
+
+1) individual pages print by passing an appropriate OutputDevice to XRenderable
+2) in drawinglayer, a VclMetafileProcessor2D is used to record everything on
+   the page (because the OutputDevice has been set up to record a MetaFile)
+3) the pages' MetaFiles are converted to PDF by the vcl::PDFWriter
+   in vcl/source/gdi/pdfwriter*
+
+Creating the ODF thumbnail for the first page works as above except step 3 is:
+
+3) the MetaFile is replayed to create the thumbnail
+
+On-screen display differs in step 1 and 2:
+
+1) the VCL Window gets invalidated somehow and paints itself
+2) in drawinglayer, a VclPixelProcessor2D is used to display the content
+
+
+=== Debugging PDF export ===
+
+Debugging the PDF export becomes much easier in higher debug-levels, where
+compression is disabled (so the PDF file is directly readable) and
+the MARK function puts comments into the PDF file about which method
+generated the following PDF content.
+
+touch vcl/source/gdi/pdfwriter* && make vcl dbglevel=3
+
+To de-compress the contents of a PDF file written by a release build or
+other programs, use the "pdfunzip" tool:
+
+LD_LIBRARY_PATH=$PWD/instdir/ure/lib workdir/LinkTarget/Executable/pdfunzip input.pdf output.pdf
+
