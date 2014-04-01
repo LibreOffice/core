@@ -125,9 +125,7 @@ void callVirtualMethod(
     sal_uInt64 *pStack,
     int nStack,
     sal_uInt64 *pGPR,
-    int nGPR,
-    double *pFPR,
-    int nFPR)
+    double *pFPR)
 {
     // never called
     if (! pThis)
@@ -140,9 +138,6 @@ void callVirtualMethod(
         sal_uInt32 *stack = (sal_uInt32 *) alloca( nStackBytes );
         memcpy( stack, pStack, nStackBytes );
     }
-
-    assert( nGPR <= arm::MAX_GPR_REGS );
-    assert( nFPR <= arm::MAX_FPR_REGS );
 
     sal_uInt64 pMethod = *((sal_uInt64*)pThis);
     pMethod += 8 * nVtableIndex;
@@ -348,6 +343,9 @@ static void cpp_call(
         }
     }
 
+    assert( nGPR <= arm::MAX_GPR_REGS );
+    assert( nFPR <= arm::MAX_FPR_REGS );
+
     try
     {
         callVirtualMethod(
@@ -355,8 +353,8 @@ static void cpp_call(
             pCppReturn, pReturnTypeRef,
             pStackStart,
             (pStack - pStackStart),
-            pGPR, nGPR,
-            pFPR, nFPR);
+            pGPR,
+            pFPR);
 
         // NO exception occurred...
         *ppUnoExc = 0;
