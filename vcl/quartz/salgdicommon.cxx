@@ -1615,7 +1615,9 @@ void AquaSalGraphics::SetState()
     }
 
     // set RGB colorspace and line and fill colors
+    CG_TRACE( "CGContextSetFillColor(" << mrContext << "," << maFillColor << ")" );
     CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    CG_TRACE( "CGContextSetStrokeColor(" << mrContext << "," << maLineColor << ")" );
     CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
     CGContextSetShouldAntialias( mrContext, false );
     if( mnXorMode == 2 )
