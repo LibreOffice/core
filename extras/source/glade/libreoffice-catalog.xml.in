@@ -254,6 +254,9 @@
     <glade-widget-class title="Show Math Symbol" name="smlo-SmShowSymbol"
                         generic-name="Show Math Symbol" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Show Math Char" name="smlo-SmShowChar"
+                        generic-name="Show Math Char" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Gallery Preview" name="svxcorelo-GalleryPreview"
                         generic-name="Gallery Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -262,6 +265,9 @@
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Math Symbol Selection" name="smlo-SmShowSymbolSet"
                         generic-name="Math Symbol Selection" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Math Char Selection" name="svxlo-SvxShowCharSet"
+                        generic-name="Math Char Selection" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
                         generic-name="Number Preview Window" parent="GtkDrawingArea"

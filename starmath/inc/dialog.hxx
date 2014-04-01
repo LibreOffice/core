@@ -375,8 +375,8 @@ class SmShowChar : public Control
     virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
 
 public:
-    SmShowChar(Window *pParent, const ResId& rResId)
-    : Control(pParent, rResId)
+    SmShowChar(Window *pParent, WinBits nStyle)
+    : Control(pParent, nStyle)
     {
     }
 
@@ -388,35 +388,24 @@ public:
 
 class SmSymDefineDialog : public ModalDialog
 {
-    FixedText       aOldSymbolText;
-    ComboBox        aOldSymbols;
-    FixedText       aOldSymbolSetText;
-    ComboBox        aOldSymbolSets;
-    SvxShowCharSet  aCharsetDisplay;
-    FixedText       aSymbolText;
-    ComboBox        aSymbols;
-    FixedText       aSymbolSetText;
-    ComboBox        aSymbolSets;
-    FixedText       aFontText;
-    ListBox         aFonts;
-    FixedText       aFontsSubsetFT;
-    ListBox         aFontsSubsetLB;
-    FixedText       aStyleText;
-    FontStyleBox    aStyles;
-    FixedText       aOldSymbolName;
-    SmShowChar      aOldSymbolDisplay;
-    FixedText       aOldSymbolSetName;
-    FixedText       aSymbolName;
-    SmShowChar      aSymbolDisplay;
-    FixedText       aSymbolSetName;
-    OKButton        aOkBtn;
-    HelpButton      aHelpBtn;
-    CancelButton    aCancelBtn;
-    PushButton      aAddBtn;
-    PushButton      aChangeBtn;
-    PushButton      aDeleteBtn;
-    FixedImage      aRightArrow;
-    Image           aRightArrow_Im;
+    ComboBox*        pOldSymbols;
+    ComboBox*        pOldSymbolSets;
+    SvxShowCharSet*  pCharsetDisplay;
+    ComboBox*        pSymbols;
+    ComboBox*        pSymbolSets;
+    ListBox*         pFonts;
+    ListBox*         pFontsSubsetLB;
+    FontStyleBox*    pStyles;
+    FixedText*       pOldSymbolName;
+    SmShowChar*     pOldSymbolDisplay;
+    FixedText*       pOldSymbolSetName;
+    FixedText*       pSymbolName;
+    SmShowChar*     pSymbolDisplay;
+    FixedText*       pSymbolSetName;
+    HelpButton*      pHelpBtn;
+    PushButton*      pAddBtn;
+    PushButton*      pChangeBtn;
+    PushButton*      pDeleteBtn;
 
     SmSymbolManager     aSymbolMgrCopy,
                        &rSymbolMgr;
@@ -465,7 +454,7 @@ class SmSymDefineDialog : public ModalDialog
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
-    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr, bool bFreeRes = true);
+    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     ~SmSymDefineDialog();
 
     using OutputDevice::SetFont;
@@ -475,22 +464,22 @@ public:
 
     bool SelectOldSymbolSet(const OUString &rSymbolSetName)
     {
-        return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, false);
+        return SelectSymbolSet(*pOldSymbolSets, rSymbolSetName, false);
     }
 
     bool SelectOldSymbol(const OUString &rSymbolName)
     {
-        return SelectSymbol(aOldSymbols, rSymbolName, false);
+        return SelectSymbol(*pOldSymbols, rSymbolName, false);
     }
 
     bool SelectSymbolSet(const OUString &rSymbolSetName)
     {
-        return SelectSymbolSet(aSymbolSets, rSymbolSetName, false);
+        return SelectSymbolSet(*pSymbolSets, rSymbolSetName, false);
     }
 
     bool SelectSymbol(const OUString &rSymbolName)
     {
-        return SelectSymbol(aSymbols, rSymbolName, false);
+        return SelectSymbol(*pSymbols, rSymbolName, false);
     }
 
     bool        SelectFont(const OUString &rFontName)   { return SelectFont(rFontName, true); }

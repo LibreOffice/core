@@ -75,7 +75,6 @@
 #define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
 #define SID_ELEMENTSDOCKINGWINDOW   (SID_SMA_START + 126)
 
-#define RID_SYMDEFINEDIALOG         (RID_APP_START + 9)
 #define RID_PRINTUIOPTIONS          (RID_APP_START + 11)
 
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
@@ -682,8 +681,6 @@
 #define RID_ALIGNLX_HELP                  (RID_APP_START + 4275)
 #define RID_ALIGNCX_HELP                  (RID_APP_START + 4276)
 #define RID_ALIGNRX_HELP                  (RID_APP_START + 4277)
-
-#define BMP_ARROW_RIGHT     1
 
 // 342 == SCH_IF_SMAVIEWSHELL, because SFX_INTERFACE_LIB is no
 // Define but latterly an Enum
