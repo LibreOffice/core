@@ -5399,6 +5399,9 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
          OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
+    if( nLen == STRING_LEN )
+        nLen = rStr.getLength() - nIndex;
+
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
     if( pVector )
