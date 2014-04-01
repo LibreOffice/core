@@ -1678,8 +1678,6 @@ DECLARE_OOXMLIMPORT_TEST(testMceWpg, "mce-wpg.docx")
     getParagraphOfText(1, xText, "DML1");
 }
 
-#if 0
-// FIXME port to FillAttributes
 DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
 {
     // Vertical position of the textbox was incorrect due to incorrect nested mce handling.
@@ -1704,7 +1702,6 @@ DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 1), "CharWeight"));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xGroup->getByIndex(1), "TextVerticalAdjust"));
 }
-#endif
 
 DECLARE_OOXMLIMPORT_TEST(testMissingPath, "missing-path.docx")
 {

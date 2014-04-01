@@ -332,10 +332,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
     if(bXFillStyleItemUsed)
     {
+        XFillStyleItem aXFillStyleItem;
+
         if(pXFillStyleItem)
         {
-            XFillStyleItem aXFillStyleItem;
-
             aXFillStyleItem.PutValue(*pXFillStyleItem);
             rToSet.Put(aXFillStyleItem);
         }
@@ -347,6 +347,14 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
             aXFillColorItem.PutValue(*pXFillColorItem);
             rToSet.Put(aXFillColorItem);
+        }
+        else if (aXFillStyleItem.GetValue() == XFILL_SOLID && pCol)
+        {
+            // Fill style set to solid, but no fill color is given.
+            // On the other hand, we have a BackColor, so use that.
+            SvxBrushItem aBrush(RES_BACKGROUND);
+            aBrush.PutValue(*pCol, MID_BACK_COLOR);
+            sw::setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
         }
 
         if(pXFillGradientItem || pXFillGradientNameItem)
