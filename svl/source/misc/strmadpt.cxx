@@ -87,8 +87,6 @@ public:
     bool addMark(sal_uInt32 nPosition);
     bool removeMark(sal_uInt32 nPosition);
 
-    inline sal_uInt32 getReadPosition() const;
-
     SeekResult setReadPosition(sal_uInt32 nPosition);
 };
 
@@ -122,15 +120,6 @@ inline bool SvDataPipe_Impl::isEOF() const
     return m_bEOF && m_pReadPage == m_pWritePage
            && (!m_pReadPage || m_pReadPage->m_pRead == m_pReadPage->m_pEnd);
 }
-
-inline sal_uInt32 SvDataPipe_Impl::getReadPosition() const
-{
-    return m_pReadPage == 0 ? 0 :
-                              m_pReadPage->m_nOffset
-                                  + (m_pReadPage->m_pRead
-                                         - m_pReadPage->m_aBuffer);
-}
-
 
 //  SvOutputStreamOpenLockBytes
 
