@@ -79,7 +79,6 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
     TokenId  nPush, nPush1;
 
     sal_Bool bAddIn = false;
-    sal_Bool bNeg = false;
 
     if( eOc == ocNoName )
     {
@@ -160,12 +159,6 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 
     aPool << ocClose;
     aPool >> aStack;
-
-    if( bNeg )
-    {
-        aPool << ocOpen << ocSub << aStack << ocClose;
-        aPool >> aStack;
-    }
 }
 
 void QProToSc::IncToken( TokenId &rParam )

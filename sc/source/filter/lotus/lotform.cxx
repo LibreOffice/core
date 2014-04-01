@@ -35,9 +35,6 @@ static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );
 
 static DefTokenId           lcl_KnownAddIn(const OString& rTest);
 
-//extern double decipher_Number123( sal_uInt32 nValue );
-
-
 void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtString )
 {
     TokenId                     eParam[ 256 ];
@@ -45,7 +42,6 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     TokenId                     nMerk0, nMerk1;
 
     sal_Bool                        bAddIn = false;
-    sal_Bool                        bNeg = false;
 
     OSL_ENSURE( nAnz < 128, "-LotusToSc::DoFunc(): Neee! -so viel kann ich nicht!" );
 
@@ -197,14 +193,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     aPool << ocClose;
 
     aPool >> aStack;
-
-    if( bNeg )
-    {
-        aPool << ocOpen << ocSub << aStack << ocClose;
-        aPool >> aStack;
-    }
 }
-
 
 void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefData& rSRD )
 {
