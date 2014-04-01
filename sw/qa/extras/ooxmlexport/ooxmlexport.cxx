@@ -1937,6 +1937,24 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeFill", "text2");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableThemePreservation, "table-theme-preservation.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // check cell theme colors have been preserved
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd", "themeFill", "accent6");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd", "themeFillShade", "");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd", "themeFillTint", "33");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd", "themeFill", "accent6");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd", "themeFillShade", "");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd", "themeFillTint", "");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeFill", "accent6");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeFillShade", "80");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeFillTint", "");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")
 {
     // if Split table value is true for a table then during export do not write <w:cantSplit w:val="false"/>

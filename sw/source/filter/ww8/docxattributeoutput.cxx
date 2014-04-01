@@ -2781,10 +2781,46 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
         aColor = COL_AUTO;
 
     OString sColor = msfilter::util::ConvertColor( aColor );
-    m_pSerializer->singleElementNS( XML_w, XML_shd,
-            FSNS( XML_w, XML_fill ), sColor.getStr( ),
-            FSNS( XML_w, XML_val ), "clear",
-            FSEND );
+
+    std::map<OUString, com::sun::star::uno::Any> aGrabBag;
+    if ( SFX_ITEM_ON == pFmt->GetAttrSet().GetItemState( RES_FRMATR_GRABBAG, false, &pI ) )
+        aGrabBag = dynamic_cast<const SfxGrabBagItem *>(pI)->GetGrabBag();
+
+    OString sOriginalColor;
+    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("fill");
+    if( aGrabBagElement != aGrabBag.end() )
+        sOriginalColor = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
+
+    if ( sOriginalColor != sColor )
+    {
+        // color changed by the user, or no grab bag: write sColor
+        m_pSerializer->singleElementNS( XML_w, XML_shd,
+                FSNS( XML_w, XML_fill ), sColor.getStr( ),
+                FSNS( XML_w, XML_val ), "clear",
+                FSEND );
+    }
+    else
+    {
+        ::sax_fastparser::FastAttributeList* aAttrList = NULL;
+        AddToAttrList( aAttrList, FSNS( XML_w, XML_fill ), sColor.getStr() );
+
+        for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
+        {
+            OString sValue = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
+            if( aGrabBagElement->first == "themeFill")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFill ), sValue.getStr() );
+            else if( aGrabBagElement->first == "themeFillTint")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFillTint ), sValue.getStr() );
+            else if( aGrabBagElement->first == "themeFillShade")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_themeFillShade ), sValue.getStr() );
+            else if( aGrabBagElement->first == "color")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_color ), sValue.getStr() );
+            else if( aGrabBagElement->first == "val")
+                AddToAttrList( aAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
+        }
+        m_pSerializer->singleElementNS( XML_w, XML_shd,
+                XFastAttributeListRef( aAttrList ) );
+    }
 }
 
 void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )

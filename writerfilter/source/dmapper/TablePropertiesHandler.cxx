@@ -322,12 +322,14 @@ namespace dmapper {
                 if( pProperties.get())
                 {
                     CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
-                    if (m_pCurrentInteropGrabBag)
-                        pCellColorHandler->enableInteropGrabBag("shd");
+                    pCellColorHandler->enableInteropGrabBag("shd"); //enable to store shd unsupported props in grab bag
                     pProperties->resolve( *pCellColorHandler );
+                    beans::PropertyValue aGrabBag = pCellColorHandler->getInteropGrabBag();
                     if (m_pCurrentInteropGrabBag)
-                        m_pCurrentInteropGrabBag->push_back(pCellColorHandler->getInteropGrabBag());
-                    cellProps( pCellColorHandler->getProperties());
+                        m_pCurrentInteropGrabBag->push_back(aGrabBag);
+                    TablePropertyMapPtr pPropertyMap = pCellColorHandler->getProperties();
+                    pPropertyMap->Insert( PROP_CELL_INTEROP_GRAB_BAG, aGrabBag.Value );
+                    cellProps( pPropertyMap );
                 }
             }
             break;
