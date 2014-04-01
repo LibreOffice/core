@@ -830,7 +830,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
     OUString sMark;
     OUString sURL;
 
-    if ( rUrl.getLength() > 1 && rUrl[0] == INET_MARK_TOKEN )
+    if ( rUrl.getLength() > 1 && rUrl[0] == '#' )
     {
         sMark = BookmarkToWriter( rUrl.copy(1) );
 

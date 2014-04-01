@@ -2852,7 +2852,7 @@ void WW8Export::StoreDoc1()
 
 void MSWordExportBase::AddLinkTarget(const OUString& rURL)
 {
-    if( rURL.isEmpty() || rURL[0] != INET_MARK_TOKEN )
+    if( rURL.isEmpty() || rURL[0] != '#' )
         return;
 
     OUString aURL( BookmarkToWriter( rURL.copy( 1 ) ) );

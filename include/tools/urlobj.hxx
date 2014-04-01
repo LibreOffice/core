@@ -31,7 +31,6 @@ namespace com { namespace sun { namespace star { namespace util {
 } } } }
 
 // Special tokens:
-#define INET_MARK_TOKEN '#'
 #define INET_HEX_ESCAPE '%'
 
 // Common URL prefixes for various schemes:

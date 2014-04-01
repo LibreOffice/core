@@ -52,7 +52,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         if( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() &&
             // If this is our Doc, we can also have local jumps!
             pDoc->GetDocShell()->GetMedium()->GetName().equals(sURL) )
-            sBkmk = OUString(INET_MARK_TOKEN) + pIURL->GetMark();
+            sBkmk = "#" + pIURL->GetMark();
 
         bool bAction = false, bUnLockView = false;
         sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );

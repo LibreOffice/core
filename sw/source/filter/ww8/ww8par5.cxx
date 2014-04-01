@@ -2059,7 +2059,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             {
                 sBookmarkName = sName;
             }
-            OUString sURL = OUString(INET_MARK_TOKEN) + sBookmarkName;
+            OUString sURL = "#" + sBookmarkName;
             const OUString sTarget;
             SwFmtINetFmt aURL( sURL, sTarget );
             const OUString sLinkStyle("Index Link");
@@ -3422,7 +3422,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
    OSL_ENSURE(!sURL.isEmpty() || !sMark.isEmpty(), "WW8: Empty URL");
 
     if( !sMark.isEmpty() )
-        ( sURL += OUString(INET_MARK_TOKEN) ) += sMark;
+        ( sURL += "#" ) += sMark;
 
     SwFmtINetFmt aURL( sURL, sTarget );
     // If on loading TOC field, change the default style into the "index link"
