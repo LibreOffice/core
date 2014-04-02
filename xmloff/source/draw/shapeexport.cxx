@@ -78,6 +78,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/processfactory.hxx>
@@ -91,6 +92,7 @@
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/urlobj.hxx>
 
 #include <xmloff/contextid.hxx>
 #include <xmloff/families.hxx>
@@ -3155,6 +3157,63 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
     }
 }
 
+static void lcl_StoreJsonExternals(
+    SvXMLExport& rExport, const OUString& rURL)
+{
+    OUString sUrlPath;
+    if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &sUrlPath))
+    {
+        sUrlPath = sUrlPath.copy(0,sUrlPath.lastIndexOf("/"));
+        try
+        {
+            // Base storage
+            uno::Reference<document::XStorageBasedDocument> const xSBD(
+                rExport.GetModel(), uno::UNO_QUERY_THROW);
+            const uno::Reference<embed::XStorage> xStorage(
+                xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
+
+            // Model source
+            ::comphelper::LifecycleProxy proxy;
+            const uno::Reference<embed::XStorage> xModelStorage(
+                ::comphelper::OStorageHelper::GetStorageAtPath(xStorage, sUrlPath,
+                    embed::ElementModes::READ, proxy));
+
+            // Target storage
+            uno::Reference<embed::XStorage> const xTarget(
+                    rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
+
+            // Target of all models
+            const uno::Reference<embed::XStorage> xModelsTarget(
+                xTarget->openStorageElement(sUrlPath.copy(0,sUrlPath.lastIndexOf("/")), embed::ElementModes::WRITE));
+
+            // Target of current model
+            const uno::Reference<embed::XStorage> xModelTarget(
+                xModelsTarget->openStorageElement(sUrlPath.copy(sUrlPath.lastIndexOf("/")+1), embed::ElementModes::WRITE));
+
+            xModelStorage->copyToStorage(xModelTarget);
+
+            uno::Reference<embed::XTransactedObject> const xTransaction(xModelsTarget, uno::UNO_QUERY);
+            if (xTransaction.is())
+            {
+                xTransaction->commit();
+            }
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_INFO("xmloff", "exception while storing embedded model: '" << e.Message << "'");
+        }
+    }
+}
+
+static OUString lcl_GetMimeType(const OUString& aMediaURL)
+{
+    // TODO: Find a better way to find out the mime type, maybe via propset
+    if( aMediaURL.endsWith(".json") )
+        return OUString("application/vnd.gltf+json");
+    else
+        return OUString("application/vnd.sun.star.media");
+}
+
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
@@ -3177,13 +3236,16 @@ void XMLShapeExport::ImpExportMediaShape(
         xPropSet->getPropertyValue("MediaURL") >>= aMediaURL;
         OUString const persistentURL =
             lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL);
+        if( aMediaURL.endsWith(".json") )
+            lcl_StoreJsonExternals(GetExport(), aMediaURL);
+
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
         // export mime-type
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, OUString(  "application/vnd.sun.star.media"  ) );
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, lcl_GetMimeType(aMediaURL) );
 
         // write plugin
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), true);
