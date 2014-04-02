@@ -2897,6 +2897,26 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_nSubEsc = (short)sUser.getToken( 1, ';' ).toInt32();
         m_nSuperProp = (sal_uInt8)sUser.getToken( 2, ';' ).toInt32();
         m_nSubProp = (sal_uInt8)sUser.getToken( 3, ';' ).toInt32();
+
+        //fdo#75307 validate all the entries and discard all of them if any are
+        //out of range
+        bool bValid = true;
+        if (m_nSuperEsc < m_pHighLowMF->GetMin() || m_nSuperEsc > m_pHighLowMF->GetMax())
+            bValid = false;
+        if (m_nSubEsc*-1 < m_pHighLowMF->GetMin() || m_nSubEsc*-1 > m_pHighLowMF->GetMax())
+            bValid = false;
+        if (m_nSuperProp < m_pFontSizeMF->GetMin() || m_nSuperProp > m_pFontSizeMF->GetMax())
+            bValid = false;
+        if (m_nSubProp < m_pFontSizeMF->GetMin() || m_nSubProp > m_pFontSizeMF->GetMax())
+            bValid = false;
+
+        if (!bValid)
+        {
+            m_nSuperEsc = DFLT_ESC_SUPER;
+            m_nSubEsc = DFLT_ESC_SUB;
+            m_nSuperProp = DFLT_ESC_PROP;
+            m_nSubProp = DFLT_ESC_PROP;
+        }
     }
 
     short nEsc = 0;
