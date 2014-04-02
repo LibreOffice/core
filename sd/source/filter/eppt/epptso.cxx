@@ -693,7 +693,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             }
             else
             {
-                if ( !pPara->mbFixedLineSpacing && pPortion && pPortion->mnCharHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+                if ( !pPara->mbFixedLineSpacing && pPortion->mnCharHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
                     nLineSpacing = nNormalSpacing;
                 else
                     nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
