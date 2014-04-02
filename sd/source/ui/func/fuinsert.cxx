@@ -805,7 +805,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
             aPos.Y() -= aSize.Height() >> 1;
         }
 
-        mpView->InsertMediaURL( sURL, nAction, aPos, aSize, false ) ;
+        mpView->Insert3DModelURL( sURL, nAction, aPos, aSize, false ) ;
 
         if( mpWindow )
             mpWindow->LeaveWait();

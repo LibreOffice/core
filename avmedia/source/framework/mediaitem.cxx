@@ -23,7 +23,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -313,7 +312,7 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
     return m_pImpl->m_eZoom;
 }
 
-static OUString lcl_GetFilename(OUString const& rSourceURL)
+OUString GetFilename(OUString const& rSourceURL)
 {
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
         uri::UriReferenceFactory::create(
@@ -337,8 +336,8 @@ static OUString lcl_GetFilename(OUString const& rSourceURL)
     return filename;
 }
 
-static uno::Reference<io::XStream>
-lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
+uno::Reference<io::XStream>
+CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         OUString const& rFilename)
 {
     OUString filename(rFilename);
@@ -397,10 +396,10 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         uno::Reference<embed::XStorage> const xSubStorage(
             xStorage->openStorageElement(media, embed::ElementModes::WRITE));
 
-        OUString filename(lcl_GetFilename(rSourceURL));
+        OUString filename(GetFilename(rSourceURL));
 
         uno::Reference<io::XStream> const xStream(
-            lcl_CreateStream(xSubStorage, filename), uno::UNO_SET_THROW);
+            CreateStream(xSubStorage, filename), uno::UNO_SET_THROW);
         uno::Reference<io::XOutputStream> const xOutStream(
             xStream->getOutputStream(), uno::UNO_SET_THROW);
 

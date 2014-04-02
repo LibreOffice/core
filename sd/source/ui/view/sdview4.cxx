@@ -35,6 +35,7 @@
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <avmedia/modeltools.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -268,8 +269,6 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     return pNewGrafObj;
 }
 
-
-
 SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize,
                                    bool const bLink )
@@ -287,6 +286,33 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         if (!bRet) { return 0; }
     }
 
+    return InsertMediaObj( realURL, rAction, rPos, rSize );
+}
+
+SdrMediaObj* View::Insert3DModelURL(
+    const OUString& rModelURL, sal_Int8& rAction,
+    const Point& rPos, const Size& rSize,
+    bool const bLink )
+{
+    OUString sRealURL;
+    if (bLink)
+    {
+        sRealURL = rModelURL;
+    }
+    else
+    {
+        uno::Reference<frame::XModel> const xModel(
+                GetDoc().GetObjectShell()->GetModel());
+        bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
+        if (!bRet) { return 0; }
+    }
+
+    return InsertMediaObj( sRealURL, rAction, rPos, rSize );
+}
+
+SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, sal_Int8& rAction,
+                                   const Point& rPos, const Size& rSize )
+{
     SdrEndTextEdit();
     mnAction = rAction;
 
@@ -309,7 +335,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
     {
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
-        pNewMediaObj->setURL( realURL, ""/*TODO?*/ );
+        pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/ );
 
         BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
@@ -345,7 +371,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         if (sh != 0 && sh->HasName()) {
             referer = sh->GetMedium()->GetName();
         }
-        pNewMediaObj->setURL( realURL, referer );
+        pNewMediaObj->setURL( rMediaURL, referer );
 
         if( pPickObj )
         {

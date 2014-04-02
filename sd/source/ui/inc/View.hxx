@@ -145,6 +145,13 @@ public:
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
 
+    SdrMediaObj*            Insert3DModelURL( const OUString& rModelURL, sal_Int8& rAction,
+                                              const Point& rPos, const Size& rSize,
+                                              bool const bLink );
+
+    SdrMediaObj*            InsertMediaObj( const OUString& rURL, sal_Int8& rAction,
+                                            const Point& rPos, const Size& rSize );
+
     bool PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions );
 
     sal_Bool                    IsPresObjSelected(sal_Bool bOnPage=sal_True, sal_Bool bOnMasterPage=sal_True, sal_Bool bCheckPresObjListOnly=sal_False, sal_Bool bCheckLayoutOnly=sal_False) const;

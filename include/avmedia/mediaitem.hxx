@@ -26,6 +26,7 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_SETMASK_NONE        ((sal_uInt32)(0x00000000))
@@ -128,6 +129,10 @@ bool AVMEDIA_DLLPUBLIC EmbedMedia(
         OUString const& rSourceURL,
         OUString & o_rEmbeddedURL);
 
+OUString GetFilename(OUString const& rSourceURL);
+
+::com::sun::star::uno::Reference<::com::sun::star::io::XStream> CreateStream(
+    ::com::sun::star::uno::Reference<::com::sun::star::embed::XStorage> const& xStorage, OUString const& rFilename);
 }
 
 #endif

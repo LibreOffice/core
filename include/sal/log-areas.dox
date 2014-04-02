@@ -448,10 +448,14 @@ certain functionality.
 @li @c svx
 @li @c svx.fmcmop
 
+@section avmedia
+
+@li @c avmedia
+@li @c avmedia.model - 3D models
+
 @section other
 
 @li @c accessibility
-@li @c avmedia
 @li @c basebmp
 @li @c binaryurp
 @li @c configmgr
