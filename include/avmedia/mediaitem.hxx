@@ -131,8 +131,8 @@ bool AVMEDIA_DLLPUBLIC EmbedMedia(
 
 OUString GetFilename(OUString const& rSourceURL);
 
-::com::sun::star::uno::Reference<::com::sun::star::io::XStream> CreateStream(
-    ::com::sun::star::uno::Reference<::com::sun::star::embed::XStorage> const& xStorage, OUString const& rFilename);
+::com::sun::star::uno::Reference< ::com::sun::star::io::XStream> CreateStream(
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> const& xStorage, OUString const& rFilename);
 }
 
 #endif
