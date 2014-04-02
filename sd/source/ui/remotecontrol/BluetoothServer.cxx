@@ -95,20 +95,38 @@ struct sd::BluetoothServer::Impl {
     GMainContext *mpContext;
     DBusConnection *mpConnection;
     DBusObject *mpService;
+    DBusObject *mpAdapter1;
     volatile bool mbExitMainloop;
+    enum BluezVersion { BLUEZ4, BLUEZ5, UNKNOWN };
+    BluezVersion maVersion = UNKNOWN;
 
     Impl()
         : mpContext( g_main_context_new() )
         , mpConnection( NULL )
         , mpService( NULL )
+        , mpAdapter1( NULL )
         , mbExitMainloop( false )
-    { }
+    {
+        // TODO: get Bluez version here :)
+        // But not really -- we can do that in adapter.
+    }
 
     DBusObject *getAdapter()
     {
-        if( !mpService )
+        if (mpService)
+        {
+            DBusObject* pAdapter = mpService->cloneForInterface( "org.bluez.Adapter" );
+            return pAdapter;
+        }
+        else if (mpAdapter1)
+        {
+            DBusObject* pAdapter = mpService->cloneForInterface( "org.bluez.Adapter1" );
+            return pAdapter;
+        }
+        else
+        {
             return NULL;
-        return mpService->cloneForInterface( "org.bluez.Adapter" );
+        }
     }
 };
 
@@ -156,37 +174,145 @@ sendUnrefAndWaitForReply( DBusConnection *pConnection, DBusMessage *pMsg )
     return pMsg;
 }
 
+
 static DBusObject *
-bluezGetDefaultService( DBusConnection *pConnection )
+lcl_getBluez5Adapter(DBusConnection *pConnection)
+{
+    DBusMessage *pMsg;
+    // This returns a list of objects where we need to find the first
+    // org.bluez.Adapter1 .
+    pMsg = DBusObject( "org.bluez", "/", "org.freedesktop.DBus.ObjectManager" ).getMethodCall( "GetManagedObjects" );
+    if (!pMsg)
+        return NULL;
+
+    const gchar* pInterfaceType = "org.bluez.Adapter1";
+
+    pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+
+    DBusMessageIter aObjectIterator;
+    if (pMsg && dbus_message_iter_init(pMsg, &aObjectIterator))
+    {
+        if (DBUS_TYPE_ARRAY == dbus_message_iter_get_arg_type(&aObjectIterator))
+        {
+            DBusMessageIter aObject;
+            dbus_message_iter_recurse(&aObjectIterator, &aObject);
+            do
+            {
+                if (DBUS_TYPE_DICT_ENTRY == dbus_message_iter_get_arg_type(&aObject))
+                {
+                    DBusMessageIter aContainerIter;
+                    dbus_message_iter_recurse(&aObject, &aContainerIter);
+                    char *pPath = 0;
+                    do
+                    {
+                        if (DBUS_TYPE_OBJECT_PATH == dbus_message_iter_get_arg_type(&aContainerIter))
+                        {
+                            dbus_message_iter_get_basic(&aContainerIter, &pPath);
+                            SAL_INFO( "sdremote.bluetooth", "Something retrieved: '"
+                            << pPath << "' '");
+                        }
+                        else if (DBUS_TYPE_ARRAY == dbus_message_iter_get_arg_type(&aContainerIter))
+                        {
+                            DBusMessageIter aInnerIter;
+                            dbus_message_iter_recurse(&aContainerIter, &aInnerIter);
+                            do
+                            {
+                                if (DBUS_TYPE_DICT_ENTRY == dbus_message_iter_get_arg_type(&aInnerIter))
+                                {
+                                    DBusMessageIter aInnerInnerIter;
+                                    dbus_message_iter_recurse(&aInnerIter, &aInnerInnerIter);
+                                    do
+                                    {
+                                        if (DBUS_TYPE_STRING == dbus_message_iter_get_arg_type(&aInnerInnerIter))
+                                        {
+                                            char* pMessage;
+
+                                            dbus_message_iter_get_basic(&aInnerInnerIter, &pMessage);
+                                            if (OString(pMessage) == "org.bluez.Adapter1")
+                                            {
+                                                dbus_message_unref(pMsg);
+                                                if (pPath)
+                                                {
+                                                    return new DBusObject( "org.bluez", pPath, pInterfaceType );
+                                                }
+                                                assert(false); // We should already have pPath provided for us.
+                                            }
+                                        }
+                                    }
+                                    while (dbus_message_iter_next(&aInnerInnerIter));
+                                }
+                            }
+                            while (dbus_message_iter_next(&aInnerIter));
+                        }
+                    }
+                    while (dbus_message_iter_next(&aContainerIter));
+                }
+            }
+            while (dbus_message_iter_next(&aObject));
+        }
+        dbus_message_unref(pMsg);
+    }
+
+    return NULL;
+}
+
+static DBusObject *
+bluez4GetDefaultService( DBusConnection *pConnection )
 {
     DBusMessage *pMsg;
     DBusMessageIter it;
     const gchar* pInterfaceType = "org.bluez.Service";
 
+    // org.bluez.manager only exists for bluez 4.
+    // getMethodCall should return NULL if there is any issue e.g. the
+    // if org.bluez.manager doesn't exist, hence we can hopefully
+    // determine what we're using thusly.
     pMsg = DBusObject( "org.bluez", "/", "org.bluez.Manager" ).getMethodCall( "DefaultAdapter" );
+
+    if (!pMsg)
+    {
+        SAL_WARN("sdremote.bluetooth", "Couldn't retrieve DBusObject for DefaultAdapter");
+        return NULL;
+    }
+
+    SAL_INFO("sdremote.bluetooth", "successfully retrieved org.bluez.Manager.DefaultAdapter, attempting to use.");
     pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
 
     if(!pMsg || !dbus_message_iter_init( pMsg, &it ) )
+    {
         return NULL;
+    }
 
-    if( DBUS_TYPE_OBJECT_PATH != dbus_message_iter_get_arg_type( &it ) )
-        SAL_INFO( "sdremote.bluetooth", "invalid type of reply to DefaultAdapter: '"
-                  << dbus_message_iter_get_arg_type( &it ) << "'" );
-    else
+    // This works for Bluez 4
+    if( DBUS_TYPE_OBJECT_PATH == dbus_message_iter_get_arg_type( &it ) )
     {
         const char *pObjectPath = NULL;
         dbus_message_iter_get_basic( &it, &pObjectPath );
         SAL_INFO( "sdremote.bluetooth", "DefaultAdapter retrieved: '"
-                  << pObjectPath << "' '" << pInterfaceType << "'" );
+                << pObjectPath << "' '" << pInterfaceType << "'" );
+        dbus_message_unref( pMsg );
         return new DBusObject( "org.bluez", pObjectPath, pInterfaceType );
     }
-    dbus_message_unref( pMsg );
-
+    // Some form of error, e.g. if we have bluez 5 we get a message that
+    // this method doesn't exist.
+    else if ( DBUS_TYPE_STRING == dbus_message_iter_get_arg_type( &it ) )
+    {
+        const char *pMessage = NULL;
+        dbus_message_iter_get_basic( &it, &pMessage );
+        SAL_INFO( "sdremote.bluetooth", "Error message: '"
+                << pMessage << "' '" << pInterfaceType << "'" );
+    }
+    else
+    {
+        SAL_INFO( "sdremote.bluetooth", "invalid type of reply to DefaultAdapter: '"
+                << (const char) dbus_message_iter_get_arg_type( &it ) << "'" );
+    }
+    dbus_message_unref(pMsg);
     return NULL;
 }
 
 static bool
-bluezRegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
+bluez4RegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
                             const char *pServiceRecord )
 {
     DBusMessage *pMsg;
@@ -532,52 +658,283 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
     if( !getBooleanProperty( pConnection, pAdapter, "Powered", &bPowered ) || !bPowered )
         return; // nothing to do
 
-    DBusMessage *pMsg;
-    DBusMessageIter it, varIt;
+    if (pAdapter->maInterface == "org.bluez.Adapter") // Bluez 4
+    {
+        DBusMessage *pMsg;
+        DBusMessageIter it, varIt;
 
-    // set timeout to zero
-    pMsg = pAdapter->getMethodCall( "SetProperty" );
-    dbus_message_iter_init_append( pMsg, &it );
-    const char *pTimeoutStr = "DiscoverableTimeout";
-    dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pTimeoutStr );
-    dbus_message_iter_open_container( &it, DBUS_TYPE_VARIANT,
-                                      DBUS_TYPE_UINT32_AS_STRING, &varIt );
-    dbus_uint32_t nTimeout = 0;
-    dbus_message_iter_append_basic( &varIt, DBUS_TYPE_UINT32, &nTimeout );
-    dbus_message_iter_close_container( &it, &varIt );
-    dbus_connection_send( pConnection, pMsg, NULL ); // async send - why not ?
-    dbus_message_unref( pMsg );
+        // set timeout to zero
+        pMsg = pAdapter->getMethodCall( "SetProperty" );
+        dbus_message_iter_init_append( pMsg, &it );
+        const char *pTimeoutStr = "DiscoverableTimeout";
+        dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pTimeoutStr );
+        dbus_message_iter_open_container( &it, DBUS_TYPE_VARIANT,
+                                        DBUS_TYPE_UINT32_AS_STRING, &varIt );
+        dbus_uint32_t nTimeout = 0;
+        dbus_message_iter_append_basic( &varIt, DBUS_TYPE_UINT32, &nTimeout );
+        dbus_message_iter_close_container( &it, &varIt );
+        dbus_connection_send( pConnection, pMsg, NULL ); // async send - why not ?
+        dbus_message_unref( pMsg );
 
-    // set discoverable value
-    pMsg = pAdapter->getMethodCall( "SetProperty" );
-    dbus_message_iter_init_append( pMsg, &it );
-    const char *pDiscoverableStr = "Discoverable";
-    dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pDiscoverableStr );
-    dbus_message_iter_open_container( &it, DBUS_TYPE_VARIANT,
-                                      DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
-    dbus_bool_t bValue = bDiscoverable;
-    dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bValue );
-    dbus_message_iter_close_container( &it, &varIt ); // async send - why not ?
-    dbus_connection_send( pConnection, pMsg, NULL );
-    dbus_message_unref( pMsg );
+        // set discoverable value
+        pMsg = pAdapter->getMethodCall( "SetProperty" );
+        dbus_message_iter_init_append( pMsg, &it );
+        const char *pDiscoverableStr = "Discoverable";
+        dbus_message_iter_append_basic( &it, DBUS_TYPE_STRING, &pDiscoverableStr );
+        dbus_message_iter_open_container( &it, DBUS_TYPE_VARIANT,
+                                        DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
+        dbus_bool_t bValue = bDiscoverable;
+        dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bValue );
+        dbus_message_iter_close_container( &it, &varIt ); // async send - why not ?
+        dbus_connection_send( pConnection, pMsg, NULL );
+        dbus_message_unref( pMsg );
+    }
+    else // Bluez 5?
+    {
+        // TODO: we now use the properties interface.
+    }
 }
 
 static DBusObject *
 registerWithDefaultAdapter( DBusConnection *pConnection )
 {
     DBusObject *pService;
-    pService = bluezGetDefaultService( pConnection );
-    if( !pService )
-        return NULL;
-
-    if( !bluezRegisterServiceRecord( pConnection, pService,
-                                     bluetooth_service_record ) )
+    pService = bluez4GetDefaultService( pConnection );
+    if( pService )
     {
-        delete pService;
-        return NULL;
+        if( !bluez4RegisterServiceRecord( pConnection, pService,
+                                     bluetooth_service_record ) )
+        {
+            delete pService;
+            return NULL;
+        }
     }
 
     return pService;
+}
+
+
+
+void ProfileUnregisterFunction
+(DBusConnection *connection, void *user_data)
+{
+    (void) connection;
+    (void) user_data;
+}
+
+
+
+DBusHandlerResult ProfileMessageFunction
+(DBusConnection *connection, DBusMessage *pMessage, void *user_data)
+{
+    (void) connection;
+    (void) user_data;
+
+    SAL_INFO("sdremote.bluetooth", "ProfileMessageFunction||" << dbus_message_get_interface(pMessage) << "||" <<  dbus_message_get_member(pMessage));
+
+    DBusHandlerResult aRet = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+
+    if (OString(dbus_message_get_interface(pMessage)).equals("org.bluez.Profile1"))
+    {
+        if (OString(dbus_message_get_member(pMessage)).equals("Release"))
+        {
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        else if (OString(dbus_message_get_member(pMessage)).equals("NewConnection"))
+        {
+            if (!dbus_message_has_signature(pMessage, "oha{sv}"))
+            {
+                SAL_WARN("sdremote.bluetooth", "wrong signature for NewConnection");
+            }
+
+            DBusMessageIter it;
+            dbus_message_iter_init(pMessage, &it);
+
+            char* pPath;
+            dbus_message_iter_get_basic(&it, &pPath);
+            SAL_INFO("sdremote.bluetooth", "Adapter path:" << pPath);
+
+            if (!dbus_message_iter_next(&it))
+                SAL_WARN("sdremote.bluetooth", "not enough parameters passed");
+
+            if (DBUS_TYPE_UNIX_FD == dbus_message_iter_get_arg_type(&it))
+            {
+
+                int nDescriptor;
+                dbus_message_iter_get_basic(&it, &nDescriptor);
+                std::vector<Communicator*>* pCommunicators = (std::vector<Communicator*>*) user_data;
+
+                // Bluez gives us non-blocking sockets, but our code relies
+                // on blocking behaviour.
+                fcntl(nDescriptor, F_SETFL, fcntl(nDescriptor, F_GETFL) & ~O_NONBLOCK);
+                SAL_INFO( "sdremote.bluetooth", "connection accepted " << nDescriptor);
+                Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nDescriptor ) );
+                pCommunicators->push_back( pCommunicator );
+                pCommunicator->launch();
+            }
+
+            // For some reason an (empty?) reply is expected.
+            DBusMessage* pRet = dbus_message_new_method_return(pMessage);
+            dbus_connection_send(connection, pRet, NULL);
+            dbus_message_unref(pRet);
+
+            // We could read the remote profile version and features here,
+            // however for us they are irrelevant (as our protocol handles
+            // equivalent functionality independently of whether we're on
+            // bluetooth or normal network connection).
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        else if (OString(dbus_message_get_member(pMessage)).equals("RequestDisconnection"))
+        {
+             return DBUS_HANDLER_RESULT_HANDLED;
+        }
+    }
+    SAL_WARN("sdremote.bluetooth", "Couldn't handle message correctly.");
+    return aRet;
+
+}
+
+static void
+setupBluez5Profile1(DBusConnection* pConnection, std::vector<Communicator*>* pCommunicators)
+{
+    DBusError aError;
+    dbus_error_init(&aError);
+
+    SAL_INFO("sdremote.bluetooth", "Attempting to register our org.bluez.Profile1");
+    static DBusObjectPathVTable aVTable {
+        .unregister_function = ProfileUnregisterFunction,
+        .message_function = ProfileMessageFunction
+    };
+
+
+    if (!dbus_connection_try_register_object_path(pConnection, "/org/libreoffice/bluez/profile1", &aVTable, pCommunicators, &aError))
+        SAL_WARN("sdremote.bluetooth", "Failed to register our Profile1 callback");
+
+    if (dbus_error_is_set(&aError))
+    {
+        // TODO: deal with this.
+    }
+
+    dbus_bus_request_name(pConnection, "org.libreoffice.bluez.profile1", DBUS_NAME_FLAG_DO_NOT_QUEUE, &aError);
+
+    if (dbus_error_is_set(&aError))
+    {
+        // TODO: same again
+    }
+}
+
+
+
+
+static DBusObject*
+registerWithBluez5Adapter(DBusConnection* pConnection, std::vector<Communicator*>* pCommunicators)
+{
+    DBusObject* pAdapter1 = lcl_getBluez5Adapter(pConnection);
+    if (pAdapter1)
+    {
+        setupBluez5Profile1(pConnection, pCommunicators);
+        dbus_connection_flush(pConnection);
+
+        DBusMessage *pMsg;
+        DBusMessageIter it;
+
+        pMsg = dbus_message_new_method_call("org.bluez", "/org/bluez",
+                                            "org.bluez.ProfileManager1", "RegisterProfile");
+        dbus_message_iter_init_append(pMsg, &it);
+
+        const char *pPath = "/org/libreoffice/bluez/profile1";
+        dbus_message_iter_append_basic(&it, DBUS_TYPE_OBJECT_PATH, &pPath);
+        const char *pUUID =  "spp"; // Bluez translates this to 0x1101 for spp
+        dbus_message_iter_append_basic(&it, DBUS_TYPE_STRING, &pUUID);
+
+        DBusMessageIter aOptionsIter;
+        dbus_message_iter_open_container(&it, DBUS_TYPE_ARRAY, "{sv}", &aOptionsIter);
+
+//         DBusMessageIter aEntry;
+
+//         {
+//             dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, NULL, &aEntry);
+//
+//             const char *pString = "Name";
+//             dbus_message_iter_append_basic(&aEntry, DBUS_TYPE_STRING, &pString);
+//
+//             const char *pValue = "LibreOffice Impress Remote";
+//             DBusMessageIter aValue;
+//             dbus_message_iter_open_container(&aEntry, DBUS_TYPE_VARIANT, "s", &aValue);
+//             dbus_message_iter_append_basic(&aValue, DBUS_TYPE_STRING, &pValue);
+//             dbus_message_iter_close_container(&aEntry, &aValue);
+//             dbus_message_iter_close_container(&aOptionsIter, &aEntry);
+//         }
+//
+//         {
+//             dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, NULL, &aEntry);
+//             const char *pString = "Service";
+//             dbus_message_iter_append_basic(&aEntry, DBUS_TYPE_STRING, &pString);
+//             const char *pValue = "0x1101";
+//             DBusMessageIter aValue;
+//             dbus_message_iter_open_container(&aEntry, DBUS_TYPE_VARIANT, "s", &aValue);
+//             dbus_message_iter_append_basic(&aValue, DBUS_TYPE_STRING, &pValue);
+//             dbus_message_iter_close_container(&aEntry, &aValue);
+//             dbus_message_iter_close_container(&aOptionsIter, &aEntry);
+//         }
+//
+//         {
+//             dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, NULL, &aEntry);
+//             const char *pString = "Role";
+//             dbus_message_iter_append_basic(&aEntry, DBUS_TYPE_STRING, &pString);
+//             const char *pValue = "server";
+//             DBusMessageIter aValue;
+//             dbus_message_iter_open_container(&aEntry, DBUS_TYPE_VARIANT, "s", &aValue);
+//             dbus_message_iter_append_basic(&aValue, DBUS_TYPE_STRING, &pValue);
+//             dbus_message_iter_close_container(&aEntry, &aValue);
+//             dbus_message_iter_close_container(&aOptionsIter, &aEntry);
+//         }
+
+//         {
+//             dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, NULL, &aEntry);
+//             const char *pString = "Channel";
+//             dbus_message_iter_append_basic(&aEntry, DBUS_TYPE_STRING, &pString);
+//             const sal_uInt16 nChannel = 5;
+//             DBusMessageIter aValue;
+//             dbus_message_iter_open_container(&aEntry, DBUS_TYPE_VARIANT, "q", &aValue);
+//             dbus_message_iter_append_basic(&aValue, DBUS_TYPE_UINT16, &nChannel);
+//             dbus_message_iter_close_container(&aEntry, &aValue);
+//             dbus_message_iter_close_container(&aOptionsIter, &aEntry);
+//         }
+
+
+//         {
+//             dbus_message_iter_open_container(&aOptionsIter, DBUS_TYPE_DICT_ENTRY, NULL, &aEntry);
+//             const char *pString = "AutoConnect";
+//             dbus_message_iter_append_basic(&aEntry, DBUS_TYPE_STRING, &pString);
+//             const dbus_bool_t bAutoConnect = TRUE;
+//             DBusMessageIter aValue;
+//             dbus_message_iter_open_container(&aEntry, DBUS_TYPE_VARIANT, "b", &aValue);
+//             dbus_message_iter_append_basic(&aValue, DBUS_TYPE_BOOLEAN, &bAutoConnect);
+//             dbus_message_iter_close_container(&aEntry, &aValue);
+//             dbus_message_iter_close_container(&aOptionsIter, &aEntry);
+//         }
+        // AutoConnect
+
+        dbus_message_iter_close_container(&it, &aOptionsIter);
+
+        pMsg = sendUnrefAndWaitForReply( pConnection, pMsg );
+
+
+        DBusError aError;
+        dbus_error_init(&aError);
+        if (dbus_set_error_from_message (&aError, pMsg))
+        {
+//                         const char* pErr = dbus_message_get_error_name(pMsg);
+            // TODO: log the errors?
+        }
+
+        dbus_message_unref(pMsg);
+
+        return pAdapter1;
+    }
+    SAL_WARN( "sdremote.bluetooth", "SDP registration failed" );
+    return NULL;
 }
 
 #endif // LINUX_BLUETOOTH
@@ -594,6 +951,7 @@ BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
         throw std::bad_alloc();
     }
 
+    // TODO: check whether dbus 4 or 5 here.
     mpImpl.reset(new BluetoothServer::Impl());
 #endif
 }
@@ -690,98 +1048,110 @@ void SAL_CALL BluetoothServer::run()
     if( !pConnection )
         return;
 
-    // listen for connection state and power changes - we need to close
-    // and re-create our socket code on suspend / resume, enable/disable
-    DBusError aError;
-    dbus_error_init( &aError );
-    dbus_bus_add_match( pConnection, "type='signal',interface='org.bluez.Manager'", &aError );
-    dbus_connection_flush( pConnection );
+
 
     // Try to setup the default adapter, otherwise wait for add/remove signal
     mpImpl->mpService = registerWithDefaultAdapter( pConnection );
+    if (!mpImpl->mpService)
+    {
+        mpImpl->mpAdapter1 = registerWithBluez5Adapter(pConnection, mpCommunicators);
+        dbus_connection_set_exit_on_disconnect(pConnection, false);
+        while (dbus_connection_read_write_dispatch(pConnection, -1));
+    }
 
-    // poll on our bluetooth socket - if we can.
-    GPollFD aSocketFD;
-    if( mpImpl->mpService )
+    if (mpImpl->mpService) // bluez 4 -- we handle sockets ourselves
+    {
+        // listen for connection state and power changes - we need to close
+        //     and re-create our socket code on suspend / resume, enable/disable
+        DBusError aError;
+        dbus_error_init( &aError );
+        dbus_bus_add_match( pConnection, "type='signal',interface='org.bluez.Manager'", &aError );
+        dbus_connection_flush( pConnection );
+
+        GPollFD aSocketFD;
+        // poll on our bluetooth socket - if we can.
         bluezCreateAttachListeningSocket( mpImpl->mpContext, &aSocketFD );
-
-    // also poll on our dbus connection
-    int fd = -1;
-    GPollFD aDBusFD;
-    if( dbus_connection_get_unix_fd( pConnection, &fd ) && fd >= 0 )
-    {
-        aDBusFD.fd = fd;
-        aDBusFD.events = G_IO_IN | G_IO_PRI;
-        g_main_context_add_poll( mpImpl->mpContext, &aDBusFD, G_PRIORITY_DEFAULT );
-    }
-    else
-        SAL_WARN( "sdremote.bluetooth", "failed to poll for incoming dbus signals" );
-
-    mpImpl->mpConnection = pConnection;
-
-    while( !mpImpl->mbExitMainloop )
-    {
-        aDBusFD.revents = 0;
-        aSocketFD.revents = 0;
-        g_main_context_iteration( mpImpl->mpContext, TRUE );
-
-        SAL_INFO( "sdremote.bluetooth", "main-loop spin "
-                  << aDBusFD.revents << " " << aSocketFD.revents );
-        if( aDBusFD.revents )
+        // also poll on our dbus connection
+        int fd = -1;
+        GPollFD aDBusFD;
+        if( dbus_connection_get_unix_fd( pConnection, &fd ) && fd >= 0 )
         {
-            dbus_connection_read_write( pConnection, 0 );
-            DBusMessage *pMsg = dbus_connection_pop_message( pConnection );
-            if( pMsg )
+            aDBusFD.fd = fd;
+            aDBusFD.events = G_IO_IN | G_IO_PRI;
+            g_main_context_add_poll( mpImpl->mpContext, &aDBusFD, G_PRIORITY_DEFAULT );
+        }
+        else
+            SAL_WARN( "sdremote.bluetooth", "failed to poll for incoming dbus signals" );
+
+
+        mpImpl->mpConnection = pConnection;
+
+        while( !mpImpl->mbExitMainloop )
+        {
+            aDBusFD.revents = 0;
+            aSocketFD.revents = 0;
+            g_main_context_iteration( mpImpl->mpContext, TRUE );
+
+            SAL_INFO( "sdremote.bluetooth", "main-loop spin "
+                    << aDBusFD.revents << " " << aSocketFD.revents );
+            if( aDBusFD.revents )
             {
-                if( dbus_message_is_signal( pMsg, "org.bluez.Manager", "AdapterRemoved" ) )
+                dbus_connection_read_write( pConnection, 0 );
+                DBusMessage *pMsg = dbus_connection_pop_message( pConnection );
+                if( pMsg )
                 {
-                    SAL_WARN( "sdremote.bluetooth", "lost adapter - cleaning up sockets" );
-                    bluezDetachCloseSocket( mpImpl->mpContext, &aSocketFD );
-                    cleanupCommunicators();
+                    if( dbus_message_is_signal( pMsg, "org.bluez.Manager", "AdapterRemoved" ) )
+                    {
+                        SAL_WARN( "sdremote.bluetooth", "lost adapter - cleaning up sockets" );
+                        bluezDetachCloseSocket( mpImpl->mpContext, &aSocketFD );
+                        cleanupCommunicators();
+                    }
+                    else if( dbus_message_is_signal( pMsg, "org.bluez.Manager", "AdapterAdded" ) ||
+                            dbus_message_is_signal( pMsg, "org.bluez.Manager", "DefaultAdapterChanged" ) )
+                    {
+                        SAL_WARN( "sdremote.bluetooth", "gained adapter - re-generating sockets" );
+                        bluezDetachCloseSocket( mpImpl->mpContext, &aSocketFD );
+                        cleanupCommunicators();
+                        mpImpl->mpService = registerWithDefaultAdapter( pConnection );
+//                         if (!mpImpl->mpService)
+//                             mpImpl->mpAdapter1 = registerWithBluez5Adapter(pConnection);
+                        if (mpImpl->mpService || mpImpl->mpAdapter1)
+                            bluezCreateAttachListeningSocket( mpImpl->mpContext, &aSocketFD );
+                    }
+                    else
+                        SAL_INFO( "sdremote.bluetooth", "unknown incoming dbus message, "
+                                << " type: " << dbus_message_get_type( pMsg )
+                                << " path: '" << dbus_message_get_path( pMsg )
+                                << "' interface: '" << dbus_message_get_interface( pMsg )
+                                << "' member: '" << dbus_message_get_member( pMsg ) );
                 }
-                else if( dbus_message_is_signal( pMsg, "org.bluez.Manager", "AdapterAdded" ) ||
-                         dbus_message_is_signal( pMsg, "org.bluez.Manager", "DefaultAdapterChanged" ) )
-                {
-                    SAL_WARN( "sdremote.bluetooth", "gained adapter - re-generating sockets" );
-                    bluezDetachCloseSocket( mpImpl->mpContext, &aSocketFD );
-                    cleanupCommunicators();
-                    mpImpl->mpService = registerWithDefaultAdapter( pConnection );
-                    if( mpImpl->mpService )
-                        bluezCreateAttachListeningSocket( mpImpl->mpContext, &aSocketFD );
-                }
-                else
-                    SAL_INFO( "sdremote.bluetooth", "unknown incoming dbus message, "
-                              << " type: " << dbus_message_get_type( pMsg )
-                              << " path: '" << dbus_message_get_path( pMsg )
-                              << "' interface: '" << dbus_message_get_interface( pMsg )
-                              << "' member: '" << dbus_message_get_member( pMsg ) );
+                dbus_message_unref( pMsg );
             }
-            dbus_message_unref( pMsg );
+
+            if( aSocketFD.revents )
+            {
+                sockaddr_rc aRemoteAddr;
+                socklen_t aRemoteAddrLen = sizeof(aRemoteAddr);
+
+                int nClient;
+                SAL_INFO( "sdremote.bluetooth", "performing accept" );
+                if ( ( nClient = accept( aSocketFD.fd, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 &&
+                    errno != EAGAIN )
+                {
+                    SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );
+                } else {
+                    SAL_INFO( "sdremote.bluetooth", "connection accepted " << nClient );
+                    Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nClient ) );
+                    mpCommunicators->push_back( pCommunicator );
+                    pCommunicator->launch();
+                }
+            }
         }
 
-        if( aSocketFD.revents )
-        {
-            sockaddr_rc aRemoteAddr;
-            socklen_t aRemoteAddrLen = sizeof(aRemoteAddr);
-
-            int nClient;
-            SAL_INFO( "sdremote.bluetooth", "performing accept" );
-            if ( ( nClient = accept( aSocketFD.fd, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 &&
-                 errno != EAGAIN )
-            {
-                SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );
-            } else {
-                SAL_INFO( "sdremote.bluetooth", "connection accepted " << nClient );
-                Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( nClient ) );
-                mpCommunicators->push_back( pCommunicator );
-                pCommunicator->launch();
-            }
-        }
+        g_main_context_unref( mpImpl->mpContext );
+        mpImpl->mpConnection = NULL;
+        mpImpl->mpContext = NULL;
     }
-
-    g_main_context_unref( mpImpl->mpContext );
-    mpImpl->mpConnection = NULL;
-    mpImpl->mpContext = NULL;
 
 #elif defined(WIN32)
     WORD wVersionRequested;
