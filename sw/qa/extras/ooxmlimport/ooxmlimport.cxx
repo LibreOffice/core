@@ -1498,12 +1498,26 @@ DECLARE_OOXMLIMPORT_TEST(testChartProp, "chart-prop.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8890), getProperty<sal_Int32>(xPropertySet, "Height"));
 }
 
+void lcl_countTextFrames(com::sun::star::uno::Reference< lang::XComponent >& xComponent,
+   sal_Int32 nExpected )
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( nExpected, xIndexAccess->getCount());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testBnc779620, "bnc779620.docx")
 {
     // The problem was that the floating table was imported as a non-floating one.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    lcl_countTextFrames( mxComponent, 1 );
+}
+
+DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
+{
+    // The problem was that the floating table was imported as a non-floating one.
+    // floating tables are imported as text frames, therefore the document should
+    // exactly 1 text frame.
+    lcl_countTextFrames( mxComponent, 1 );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo43093, "fdo43093.docx")

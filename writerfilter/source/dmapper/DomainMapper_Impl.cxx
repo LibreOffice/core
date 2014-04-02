@@ -130,6 +130,14 @@ struct FieldConversion
 typedef ::std::map< OUString, FieldConversion>
             FieldConversionMap_t;
 
+uno::Any FloatingTableInfo::getPropertyValue(OUString propertyName){
+
+    beans::PropertyValue* pFrameProperties = m_aFrameProperties.getArray();
+    for( int i = 0 ; i < m_aFrameProperties.getLength(); i++ )
+        if( pFrameProperties[i].Name == propertyName )
+            return pFrameProperties[i].Value ;
+    return uno::Any() ;
+}
 
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,

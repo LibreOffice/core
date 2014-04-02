@@ -286,6 +286,7 @@ struct FloatingTableInfo
         m_nTableWidth(nTableWidth)
     {
     }
+    uno::Any getPropertyValue(OUString propertyName);
 };
 
 class DomainMapper;

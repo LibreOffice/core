@@ -917,7 +917,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         // If the table is wider than the text area, then don't create a fly
         // for the table: no wrapping will be performed anyway, but multi-page
         // tables will be broken.
-        if (rInfo.m_nTableWidth < nTextAreaWidth)
+        // If the position is relative to the edge of the page, then we always
+        // create the fly.
+        if ( ( rInfo.getPropertyValue("HoriOrientRelation") == text::RelOrientation::PAGE_FRAME ) ||
+             ( rInfo.m_nTableWidth < nTextAreaWidth ) )
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
     rPendingFloatingTables.clear();
