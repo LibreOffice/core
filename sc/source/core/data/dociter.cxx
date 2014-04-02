@@ -114,16 +114,22 @@ void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rp
 }
 
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
-            bool bSTotal, bool bTextZero ) :
-    pDoc( pDocument ),
-    nNumFmtIndex(0),
-    maStartPos(rRange.aStart),
-    maEndPos(rRange.aEnd),
-    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    bNumValid( false ),
-    bSubTotal(bSTotal),
-    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
-    bTextAsZero( bTextZero )
+            bool bSTotal, bool bTextZero )
+    : pDoc(pDocument)
+    , pAttrArray(NULL)
+    , nNumFormat(0) // Initialized in GetNumberFormat
+    , nNumFmtIndex(0)
+    , maStartPos(rRange.aStart)
+    , maEndPos(rRange.aEnd)
+    , mnCol(0)
+    , mnTab(0)
+    , nAttrEndRow(0)
+    , nNumFmtType(NUMBERFORMAT_UNDEFINED)
+    , bNumValid(false)
+    , bSubTotal(bSTotal)
+    , bCalcAsShown(pDocument->GetDocOptions().IsCalcAsShown())
+    , bTextAsZero(bTextZero)
+    , mpCells(NULL)
 {
     SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
 
@@ -133,10 +139,6 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(MAXROW);
     if (!ValidTab(maStartPos.Tab()) || maStartPos.Tab() > nDocMaxTab) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab()) || maEndPos.Tab() > nDocMaxTab) maEndPos.SetTab(nDocMaxTab);
-
-    nNumFormat = 0; // Initialized in GetNumberFormat
-    pAttrArray = 0;
-    nAttrEndRow = 0;
 }
 
 SCROW ScValueIterator::GetRow() const
