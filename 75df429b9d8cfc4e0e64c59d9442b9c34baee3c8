@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_d8b8192d",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-02T13:59:44Z",
+      "side": 1,
+      "message": "Both functions are already defined in OOXML so don\u0027t have the _xlfn. prefix there. I\u0027ll change that. Btw, loading the functions-excel-2010.xlsx and have it recalc reveals that with a #NAME? error.",
+      "revId": "75df429b9d8cfc4e0e64c59d9442b9c34baee3c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1874719b",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-02T13:59:44Z",
+      "side": 1,
+      "message": "Both entries lack\n\n [ en-US ]\n\nto indicate a translatable string.\n\nI\u0027ll fix this and upload an amended patch.",
+      "revId": "75df429b9d8cfc4e0e64c59d9442b9c34baee3c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1882b152",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-02T13:59:44Z",
+      "side": 1,
+      "message": "Change to proper parameter classes, and for consistency let\u0027s move it to saFuncTable_Oox, I\u0027ll do.",
+      "revId": "75df429b9d8cfc4e0e64c59d9442b9c34baee3c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_38877563",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-02T13:59:44Z",
+      "side": 1,
+      "message": "Btw, I believe it is VR, VR, VR, RO and will use that. But if not obvious these class conversions are a mystery unless one analyzes the BIFF formulas written by Excel.",
+      "revId": "75df429b9d8cfc4e0e64c59d9442b9c34baee3c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_f8b5dd31",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-02T13:59:44Z",
+      "side": 1,
+      "message": "Also here, as the functions are defined in OOXML they should go into saFuncTableOox and not have the _xlfn. prefix. I\u0027ll change it.",
+      "revId": "75df429b9d8cfc4e0e64c59d9442b9c34baee3c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
