@@ -14,6 +14,7 @@
 using namespace com::sun::star;
 
 OpenGLContext::OpenGLContext():
+    mpWindow(NULL),
     mbInitialized(false)
 {
 }
@@ -319,13 +320,15 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 
 bool OpenGLContext::init( Window* pParent )
 {
-    m_pWindow.reset(pParent ? pParent : new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
     if(mbInitialized)
         return true;
 
+    m_pWindow.reset(pParent ? NULL : new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
+    mpWindow = pParent ? pParent : m_pWindow.get();
     SAL_INFO("vcl.opengl", "OpenGLContext::OpenGLContext----start");
     initWindow();
-    m_pWindow->setPosSizePixel(0,0,0,0);
+    if(m_pWindow)
+        m_pWindow->setPosSizePixel(0,0,0,0);
     m_aGLWin.Width = 0;
     m_aGLWin.Height = 0;
 
@@ -396,10 +399,10 @@ bool OpenGLContext::init( Window* pParent )
     double nGLXVersion = 0;
     if( glXQueryVersion( m_aGLWin.dpy, &glxMajor, &glxMinor ) )
       nGLXVersion = glxMajor + 0.1*glxMinor;
-    SAL_INFO("vcl.opengl", "available GLX version: %f", nGLXVersion);
+    SAL_INFO("vcl.opengl", "available GLX version: " << nGLXVersion);
 
     m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
-    SAL_INFO("vcl.opengl", "available GL  extensions: %s", m_aGLWin.GLExtensions);
+    SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
 
     if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
     {
@@ -451,7 +454,8 @@ bool OpenGLContext::init( Window* pParent )
 
 void OpenGLContext::setWinSize(const Size& rSize)
 {
-    m_pWindow->SetSizePixel(rSize);
+    if(m_pWindow)
+        m_pWindow->SetSizePixel(rSize);
     m_pChildWindow->SetSizePixel(rSize);
 }
 
@@ -464,11 +468,11 @@ GLWindow& OpenGLContext::getOpenGLWindow()
 
 bool OpenGLContext::initWindow()
 {
-    const SystemEnvData* sysData(m_pWindow->GetSystemData());
+    const SystemEnvData* sysData(mpWindow->GetSystemData());
     m_aGLWin.hWnd = sysData->hWnd;
     SystemWindowData winData;
     winData.nSize = sizeof(winData);
-    m_pChildWindow.reset(new SystemChildWindow(m_pWindow.get(), 0, &winData, sal_False));
+    m_pChildWindow.reset(new SystemChildWindow(mpWindow, 0, &winData, sal_False));
 
     if( m_pChildWindow )
     {
@@ -502,14 +506,13 @@ void initOpenGLFunctionPointers()
     glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
     glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
     glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-
 }
 
 }
 
 bool OpenGLContext::initWindow()
 {
-    const SystemEnvData* sysData(m_pWindow->GetSystemData());
+    const SystemEnvData* sysData(mpWindow->GetSystemData());
 
     m_aGLWin.dpy = reinterpret_cast<Display*>(sysData->pDisplay);
 
@@ -518,7 +521,7 @@ bool OpenGLContext::initWindow()
 
     m_aGLWin.win = sysData->aWindow;
 
-    SAL_INFO("vcl.opengl", "parent window: %d", m_aGLWin.win);
+    SAL_INFO("vcl.opengl", "parent window: " << m_aGLWin.win);
 
     XWindowAttributes xattr;
     XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xattr );
@@ -581,9 +584,9 @@ bool OpenGLContext::initWindow()
     {
         SystemWindowData winData;
         winData.nSize = sizeof(winData);
-        SAL_INFO("vcl.opengl", "using VisualID %08X", vi->visualid);
+        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
         winData.pVisual = (void*)(vi->visual);
-        m_pChildWindow.reset(new SystemChildWindow(m_pWindow.get(), 0, &winData, false));
+        m_pChildWindow.reset(new SystemChildWindow(mpWindow, 0, &winData, false));
         pChildSysData = m_pChildWindow->GetSystemData();
     }
 
@@ -600,7 +603,7 @@ bool OpenGLContext::initWindow()
     m_aGLWin.win = pChildSysData->aWindow;
     m_aGLWin.vi = vi;
     m_aGLWin.GLXExtensions = glXQueryExtensionsString( m_aGLWin.dpy, m_aGLWin.screen );
-    SAL_INFO("vcl.opengl", "available GLX extensions: %s", m_aGLWin.GLXExtensions);
+    SAL_INFO("vcl.opengl", "available GLX extensions: " << m_aGLWin.GLXExtensions);
 
     return true;
 }

@@ -108,6 +108,7 @@ private:
 
     GLWindow m_aGLWin;
     boost::scoped_ptr<Window> m_pWindow;
+    Window* mpWindow; //points to m_pWindow or the parent window, don't delete it
     boost::scoped_ptr<SystemChildWindow> m_pChildWindow;
     bool mbInitialized;
 };
