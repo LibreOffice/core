@@ -616,6 +616,8 @@ struct OReportDefinitionImpl
     ,m_aDocEventListeners(_aMutex)
     ,m_sMimeType(_aCopy.m_sMimeType)
     ,m_sIdentifier(_aCopy.m_sIdentifier)
+    ,m_aVisualAreaSize(_aCopy.m_aVisualAreaSize)
+    ,m_nAspect(_aCopy.m_nAspect)
     ,m_nGroupKeepTogether(_aCopy.m_nGroupKeepTogether)
     ,m_nPageHeaderOption(_aCopy.m_nPageHeaderOption)
     ,m_nPageFooterOption(_aCopy.m_nPageFooterOption)
@@ -623,6 +625,7 @@ struct OReportDefinitionImpl
     ,m_bControllersLocked(_aCopy.m_bControllersLocked)
     ,m_bModified(_aCopy.m_bModified)
     ,m_bEscapeProcessing(_aCopy.m_bEscapeProcessing)
+    ,m_bSetModifiedEnabled(_aCopy.m_bSetModifiedEnabled)
     {}
     ~OReportDefinitionImpl();
 };
