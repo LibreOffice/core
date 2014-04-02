@@ -346,11 +346,13 @@ static PyObject* initPoniesMode(
             .replaceAll(OString('/'), OString('\\'))
 #endif
             ;
-        oslModule const mod( osl_loadModuleAscii(libname.getStr(),
-                                SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL) );
-        if (!mod) { abort(); }
+
+        osl::Module &mod = runtime.getImpl()->cargo->testModule;
+        mod.load(OStringToOUString(libname, osl_getThreadTextEncoding()),
+                                SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+        if (!mod.is()) { abort(); }
         oslGenericFunction const pFunc(
-                osl_getAsciiFunctionSymbol(mod, "test_init"));
+                mod.getFunctionSymbol("test_init"));
         if (!pFunc) { abort(); }
         // guess casting pFunc is undefined behavior but don't see a better way
         ((void (SAL_CALL *)(XMultiServiceFactory*)) pFunc) (xMSF.get());

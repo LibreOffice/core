@@ -51,6 +51,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#include <osl/module.hxx>
+
 // In Python 3, the PyString_* functions have been replaced by PyBytes_*
 // and PyUnicode_* functions.
 #if PY_MAJOR_VERSION >= 3
@@ -276,6 +278,7 @@ struct RuntimeCargo
     com::sun::star::uno::Reference< com::sun::star::script::XInvocationAdapterFactory2 > xAdapterFactory;
     com::sun::star::uno::Reference< com::sun::star::beans::XIntrospection > xIntrospection;
     PyRef dictUnoModule;
+    osl::Module testModule;
     bool valid;
     ExceptionClassMap exceptionMap;
     ClassSet interfaceSet;
