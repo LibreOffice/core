@@ -8656,9 +8656,12 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
-    // force reemitting clip region
+    // force reemitting clip region inside the new stream, and
+    // prevent emitting an unbalanced "Q" at the start
     clearClipRegion();
-    updateGraphicsState();
+    // this is needed to point m_aCurrentPDFState at the pushed state
+    // ... but it's pointless to actually write into the "outer" stream here!
+    updateGraphicsState(NOWRITE);
 
     m_aOutputStreams.push_front( StreamRedirect() );
     m_aOutputStreams.front().m_pStream = pStream;
@@ -8695,14 +8698,12 @@ SvStream* PDFWriterImpl::endRedirect()
     }
 
     pop();
-    // force reemitting colors and clip region
-    clearClipRegion();
-    m_aCurrentPDFState.m_bClipRegion = m_aGraphicsStack.front().m_bClipRegion;
-    m_aCurrentPDFState.m_aClipRegion = m_aGraphicsStack.front().m_aClipRegion;
+
     m_aCurrentPDFState.m_aLineColor = Color( COL_TRANSPARENT );
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 
-    updateGraphicsState();
+    // needed after pop() to set m_aCurrentPDFState
+    updateGraphicsState(NOWRITE);
 
     return pStream;
 }
@@ -10491,7 +10492,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
     }
 }
 
-void PDFWriterImpl::updateGraphicsState()
+void PDFWriterImpl::updateGraphicsState(Mode const mode)
 {
     OStringBuffer aLine( 256 );
     GraphicsState& rNewState = m_aGraphicsStack.front();
@@ -10587,7 +10588,7 @@ void PDFWriterImpl::updateGraphicsState()
 
     // everything is up to date now
     m_aCurrentPDFState = m_aGraphicsStack.front();
-    if( !aLine.isEmpty() )
+    if ((mode != NOWRITE) &&  !aLine.isEmpty())
         writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
