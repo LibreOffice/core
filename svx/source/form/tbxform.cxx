@@ -221,7 +221,7 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
 }
 
 
-void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nModifier*/ )
+void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nSelectModifier*/ )
 {
 
     // Click auf den Button SID_FM_CONFIG in der ObjectBar

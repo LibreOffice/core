@@ -36,7 +36,6 @@ private:
     void                toggleToolbox();
 
 protected:
-    using SfxToolBoxControl::Select;
 
 public:
     SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
@@ -44,7 +43,7 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    virtual void                Select( bool bMod1 = false ) SAL_OVERRIDE;
+    virtual void                Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;

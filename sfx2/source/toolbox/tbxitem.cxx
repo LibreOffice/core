@@ -188,7 +188,6 @@ struct SfxToolBoxControl_Impl
 {
     ToolBox*                pBox;
     bool                    bShowString;
-    sal_uInt16              nSelectModifier;
     SfxTbxCtrlFactory*      pFact;
     sal_uInt16              nTbxId;
     sal_uInt16              nSlotId;
@@ -231,7 +230,6 @@ SfxToolBoxControl::SfxToolBoxControl(
 
     pImpl->pBox = &rBox;
     pImpl->bShowString = bShowStringItems;
-    pImpl->nSelectModifier = 0;
     pImpl->pFact = 0;
     pImpl->nTbxId = nID;
     pImpl->nSlotId = nSlotID;
@@ -627,6 +625,7 @@ void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::
     SolarMutexGuard aGuard;
     Select( (sal_uInt16)KeyModifier );
 }
+
 void SAL_CALL SfxToolBoxControl::click() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -969,17 +968,9 @@ void SfxToolBoxControl::StateChanged
 
 
 
-void SfxToolBoxControl::Select( sal_uInt16 nModifier )
+void SfxToolBoxControl::Select( sal_uInt16 nSelectModifier )
 {
-    pImpl->nSelectModifier = nModifier;
-    Select( (nModifier & KEY_MOD1) != 0 );
-}
-
-
-
-void SfxToolBoxControl::Select( bool /*bMod1*/ )
-{
-    svt::ToolboxController::execute( pImpl->nSelectModifier );
+    svt::ToolboxController::execute( nSelectModifier );
 }
 
 

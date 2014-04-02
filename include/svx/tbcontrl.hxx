@@ -266,7 +266,6 @@ public:
 class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
 {
     using SfxToolBoxControl::StateChanged;
-    using SfxToolBoxControl::Select;
 
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
     Color                               mLastColor;
@@ -281,7 +280,7 @@ public:
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
-    virtual void                Select( bool bMod1 = false ) SAL_OVERRIDE;
+    virtual void                Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 };
 
 

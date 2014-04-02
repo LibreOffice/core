@@ -195,8 +195,7 @@ protected:
 
     // old SfxToolBoxControl methods
     virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void               Select( bool bMod1 = false );
-    virtual void               Select( sal_uInt16 nModifier );
+    virtual void               Select( sal_uInt16 nSelectModifier );
 
     virtual void               DoubleClick();
     virtual void               Click();
@@ -311,8 +310,7 @@ public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
     virtual Window*         CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
-    using SfxToolBoxControl::Select;
-    virtual void            Select( bool bMod1 = false ) SAL_OVERRIDE;
+    virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 };
 
 
@@ -341,8 +339,7 @@ protected:
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
     protected:
-        using SfxToolBoxControl::Select;
-        virtual void Select( sal_uInt16 nSelectModifier ) SAL_OVERRIDE;
+        virtual void Select(sal_uInt16 nSelectModifier ) SAL_OVERRIDE;
 
     public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -365,8 +362,7 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 
 protected:
     virtual void            Click() SAL_OVERRIDE;
-    using SfxToolBoxControl::Select;
-    virtual void            Select( bool ) SAL_OVERRIDE;
+    virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
                             DECL_LINK( Activate, Menu * );
 public:

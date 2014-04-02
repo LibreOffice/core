@@ -50,14 +50,12 @@ namespace svx
 
 class SVX_DLLPUBLIC FontWorkShapeTypeControl : public SfxToolBoxControl
 {
-    using SfxToolBoxControl::Select;
-
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     FontWorkShapeTypeControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~FontWorkShapeTypeControl();
 
-    virtual void                Select( sal_Bool bMod1 = sal_False );
+    virtual void                Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual SfxPopupWindow*     CreatePopupWindow() SAL_OVERRIDE;
 };

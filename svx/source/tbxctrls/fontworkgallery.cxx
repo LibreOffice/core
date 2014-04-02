@@ -293,7 +293,7 @@ SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 
 
 
-void FontWorkShapeTypeControl::Select( sal_Bool )
+void FontWorkShapeTypeControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
 
 }

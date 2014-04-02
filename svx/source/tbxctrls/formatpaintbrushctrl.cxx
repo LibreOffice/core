@@ -93,7 +93,7 @@ IMPL_LINK_NOARG(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl)
 }
 
 
-void FormatPaintBrushToolBoxControl::Select( sal_Bool )
+void FormatPaintBrushToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
 }
 

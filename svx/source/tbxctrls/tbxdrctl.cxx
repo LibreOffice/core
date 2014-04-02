@@ -101,7 +101,7 @@ void SvxTbxCtlDraw::toggleToolbox()
 
 
 
-void SvxTbxCtlDraw::Select( bool )
+void SvxTbxCtlDraw::Select(sal_uInt16 /*nSelectModifier*/)
 {
     toggleToolbox();
 }

@@ -37,8 +37,6 @@ namespace svx
 
 class SVX_DLLPUBLIC FormatPaintBrushToolBoxControl : public SfxToolBoxControl
 {
-    using SfxToolBoxControl::Select;
-
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
@@ -46,7 +44,7 @@ public:
 
     virtual void    DoubleClick() SAL_OVERRIDE;
     virtual void    Click() SAL_OVERRIDE;
-    virtual void    Select( sal_Bool bMod1 = sal_False );
+    virtual void    Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;

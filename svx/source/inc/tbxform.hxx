@@ -64,7 +64,6 @@ private:
     sal_uInt16 nLastSlot;
 
 protected:
-    using SfxToolBoxControl::Select;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -72,7 +71,7 @@ public:
     SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlConfig() {}
 
-    virtual void                Select( sal_uInt16 nModifier ) SAL_OVERRIDE;
+    virtual void                Select( sal_uInt16 nSelectModifier ) SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;

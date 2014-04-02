@@ -2585,7 +2585,7 @@ void SvxColorExtToolBoxControl::StateChanged(
 
 
 
-void SvxColorExtToolBoxControl::Select( bool )
+void SvxColorExtToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
     OUString aCommand;
     OUString aParamName;
