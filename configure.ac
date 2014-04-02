@@ -5387,40 +5387,21 @@ else
     fi
 fi
 
-dnl check if we are using a buggy version of g++ (currently 3.4.0, 3.4.1 and trunk)
+dnl check for GNU C++ compiler version
 if test "$GXX" = "yes"; then
     AC_MSG_CHECKING([the GNU C++ compiler version])
 
     _gpp_version=`$CXX -dumpversion`
     _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    AC_MSG_RESULT([checked (g++ $_gpp_version)])
-
-    if test "$_gpp_majmin" = "304"; then
-        AC_MSG_CHECKING([whether $CXX has the enum bug])
-        AC_RUN_IFELSE([AC_LANG_SOURCE([[
-            extern "C" void abort (void);
-            extern "C" void exit (int status);
-
-            enum E { E0, E1, E2, E3, E4, E5 };
-
-            void test (enum E e)
-            {
-                if (e == E2 || e == E3 || e == E1)
-                    exit (1);
-            }
-
-            int main (void)
-            {
-                test (E4);
-                test (E5);
-                test (E0);
-                return 0;
-            }
-            ]])],[AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents LibreOffice from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])],[AC_MSG_RESULT([no])],[])
+    if test "$_gpp_majmin" -lt "410"; then
+        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 4.1 to build LibreOffice.])
+    else
+        AC_MSG_RESULT([checked (g++ $_gpp_version)])
     fi
+
     dnl see https://code.google.com/p/android/issues/detail?id=41770
-    if test "$_gpp_majmin" -ge "407"; then
+    if test "$_gpp_majmin" -ge "410"; then
             glibcxx_threads=no
             AC_LANG_PUSH([C++])
             AC_REQUIRE_CPP
