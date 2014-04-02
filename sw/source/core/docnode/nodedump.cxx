@@ -26,6 +26,8 @@
 #include <editeng/rsiditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <libxml/encoding.h>
@@ -109,6 +111,38 @@ static const char* TMP_FORMAT_I32 = "%" SAL_PRIdINT32;
 
 }
 
+void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
+{
+    writer.startElement("sdrModel");
+    writer.writeFormatAttribute("ptr", "%p", pModel);
+    if (pModel)
+    {
+        const SdrPage* pPage = pModel->GetPage(0);
+        writer.startElement("sdrPage");
+        writer.writeFormatAttribute("ptr", "%p", pPage);
+        if (pPage)
+        {
+            sal_Int32 nObjCount = pPage->GetObjCount();
+            for (sal_Int32 i = 0; i < nObjCount; ++i)
+            {
+                SdrObject* pObject = pPage->GetObj(i);
+                writer.startElement("sdrObject");
+                writer.writeFormatAttribute("ptr", "%p", pObject);
+                if (pObject)
+                {
+                    writer.writeFormatAttribute("symbol", "%s", BAD_CAST(typeid(*pObject).name()));
+                    writer.writeFormatAttribute("name", "%s", BAD_CAST(OUStringToOString(pObject->GetName(), RTL_TEXTENCODING_UTF8).getStr()));
+                    writer.writeFormatAttribute("title", "%s", BAD_CAST(OUStringToOString(pObject->GetTitle(), RTL_TEXTENCODING_UTF8).getStr()));
+                    writer.writeFormatAttribute("description", "%s", BAD_CAST(OUStringToOString(pObject->GetDescription(), RTL_TEXTENCODING_UTF8).getStr()));
+                }
+                writer.endElement();
+            }
+        }
+        writer.endElement();
+    }
+    writer.endElement();
+}
+
 void SwDoc::dumpAsXml( xmlTextWriterPtr w )
 {
     WriterHelper writer( w );
@@ -122,6 +156,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpNumRuleTbl->dumpAsXml( writer );
     mpRedlineTbl->dumpAsXml( writer );
     mpExtraRedlineTbl->dumpAsXml( writer );
+    lcl_dumpSdrModel( writer, mpDrawModel );
     writer.endElement();
 }
 
