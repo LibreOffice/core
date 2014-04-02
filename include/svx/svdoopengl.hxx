@@ -11,21 +11,20 @@
 #define INCLUDED_SVX_SVDO_OPENGL_HXX
 
 #include <svx/svdobj.hxx>
-#include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 #include <vcl/OpenGLContext.hxx>
+
+namespace sdr { namespace contact {
+    class ViewContact;
+} }
 
 class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject
 {
 public:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE
-    {
-        return new sdr::contact::ViewContactOfOpenGLObj(*this);
-    }
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
-    OpenGLContext& getOpenGLContext()
-    {
-        return maContext;
-    }
+    OpenGLContext& getOpenGLContext();
+
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
 private:
 
