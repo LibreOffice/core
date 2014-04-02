@@ -786,8 +786,11 @@ void OutputDevice::DrawTransformedBitmapEx(
     {
         // with no rotation, shear or mirroring it can be mapped to DrawBitmapEx
         // do *not* execute the mirroring here, it's done in the fallback
+        // #i124580# the correct DestSize needs to be calculated based on MaxXY values
         const Point aDestPt(basegfx::fround(aTranslate.getX()), basegfx::fround(aTranslate.getY()));
-        const Size aDestSize(basegfx::fround(aScale.getX()), basegfx::fround(aScale.getY()));
+        const Size aDestSize(
+            basegfx::fround(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
+            basegfx::fround(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
 
         DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
         return;
@@ -814,8 +817,11 @@ void OutputDevice::DrawTransformedBitmapEx(
         {
             // with no rotation or shear it can be mapped to DrawBitmapEx
             // do *not* execute the mirroring here, it's done in the fallback
+            // #i124580# the correct DestSize needs to be calculated based on MaxXY values
             const Point aDestPt(basegfx::fround(aTranslate.getX()), basegfx::fround(aTranslate.getY()));
-            const Size aDestSize(basegfx::fround(aScale.getX()), basegfx::fround(aScale.getY()));
+            const Size aDestSize(
+                basegfx::fround(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
+                basegfx::fround(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
 
             DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
             return;
@@ -879,8 +885,11 @@ void OutputDevice::DrawTransformedBitmapEx(
                     aTargetRange.getMinimum()));
 
             // extract point and size; do not remove size, the bitmap may have been prepared reduced by purpose
+            // #i124580# the correct DestSize needs to be calculated based on MaxXY values
             const Point aDestPt(basegfx::fround(aVisibleRange.getMinX()), basegfx::fround(aVisibleRange.getMinY()));
-            const Size aDestSize(basegfx::fround(aVisibleRange.getWidth()), basegfx::fround(aVisibleRange.getHeight()));
+            const Size aDestSize(
+                basegfx::fround(aVisibleRange.getMaxX()) - aDestPt.X(),
+                basegfx::fround(aVisibleRange.getMaxY()) - aDestPt.Y());
 
             DrawBitmapEx(aDestPt, aDestSize, aTransformed);
         }
