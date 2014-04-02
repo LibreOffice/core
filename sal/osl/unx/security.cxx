@@ -43,7 +43,7 @@
 static oslSecurityError SAL_CALL
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
-sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
+extern "C" sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
 static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
@@ -91,7 +91,7 @@ static oslSecurityImpl * growSecurityImpl(
             *bufSize = SIZE_MAX - offsetof(oslSecurityImpl, m_buffer);
             n = SIZE_MAX;
         }
-        p = realloc(impl, n);
+        p = static_cast<oslSecurityImpl *>(realloc(impl, n));
         memset (p, 0, n);
     }
     if (p == NULL) {
@@ -233,8 +233,8 @@ sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent,
         return sal_False;
 
     nChr = snprintf(buffer, sizeof(buffer), "%u", pSecImpl->m_pPasswd.pw_uid);
-    if ( nChr < 0 || SAL_INT_CAST(sal_uInt32, nChr) >= sizeof(buffer)
-         || SAL_INT_CAST(sal_uInt32, nChr) >= nMax )
+    if ( nChr < 0 || sal::static_int_cast<sal_uInt32>(nChr) >= sizeof(buffer)
+         || sal::static_int_cast<sal_uInt32>(nChr) >= nMax )
         return sal_False; /* leave *pszIdent unmodified in case of failure */
 
     memcpy(pszIdent, buffer, nChr+1);
@@ -483,7 +483,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 {
-    deleteSecurityImpl(Security);
+    deleteSecurityImpl(static_cast<oslSecurityImpl *>(Security));
 }
 
 
