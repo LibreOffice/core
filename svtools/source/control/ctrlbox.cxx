@@ -1879,12 +1879,12 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
 
             if ( bPtRelative )
             {
+                Clear(); //clear early because SetDecimalDigits is a slow recalc
+
                 SetDecimalDigits( 1 );
                 SetMin( nPtRelMin );
                 SetMax( nPtRelMax );
                 SetUnit( FUNIT_POINT );
-
-                Clear();
 
                 short i = nPtRelMin, n = 0;
                 // JP 30.06.98: more than 100 values are not useful
@@ -1896,13 +1896,14 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
             }
             else
             {
+                Clear(); //clear early because SetDecimalDigits is a slow recalc
+
                 SetDecimalDigits( 0 );
                 SetMin( nRelMin );
                 SetMax( nRelMax );
                 SetCustomUnitText(OUString('%'));
                 SetUnit( FUNIT_CUSTOM );
 
-                Clear();
                 sal_uInt16 i = nRelMin;
                 while ( i <= nRelMax )
                 {
@@ -1913,6 +1914,8 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
         }
         else
         {
+            if (pFontList)
+                Clear(); //clear early because SetDecimalDigits is a slow recalc
             bRelative = bPtRelative = sal_False;
             SetDecimalDigits( 1 );
             SetMin( 20 );
