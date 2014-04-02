@@ -1385,7 +1385,7 @@ void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEve
     implAdjustInSolarThread(false);
 }
 
-sal_Bool FmGridControl::commit()
+bool FmGridControl::commit()
 {
     // Commit nur ausfuehren, wenn nicht bereits ein Update vom ::com::sun::star::form::component::GridControl ausgefuehrt
     // wird
@@ -1394,10 +1394,10 @@ sal_Bool FmGridControl::commit()
         if (Controller().Is() && Controller()->IsModified())
         {
             if (!SaveModified())
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent*/)

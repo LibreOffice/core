@@ -120,7 +120,7 @@ public:
     void positioned(const ::com::sun::star::lang::EventObject& rEvent);
 
     // XBound
-    sal_Bool commit();
+    bool commit();
 
     // ::com::sun::star::form::XInsertListener
     void inserted(const ::com::sun::star::lang::EventObject& rEvent);
