@@ -18,9 +18,6 @@ ViewObjectContactOfOpenGLObj::ViewObjectContactOfOpenGLObj(
     ObjectContact& rObjectContact, ViewContact& rViewContact )
     : ViewObjectContactOfSdrObj( rObjectContact, rViewContact )
 {
-    m_aOpenGLContext.init(getWindow());
-    // Set a dummy size to make the window visible
-    m_aOpenGLContext.setWinSize(Size(200,200));
 }
 
 ViewObjectContactOfOpenGLObj::~ViewObjectContactOfOpenGLObj()
