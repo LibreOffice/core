@@ -1598,7 +1598,7 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
 
 void Polygon::ImplRead( SvStream& rIStream )
 {
-    sal_uInt8   bHasPolyFlags;
+    sal_uInt8 bHasPolyFlags(0);
 
     ReadPolygon( rIStream, *this );
     rIStream.ReadUChar( bHasPolyFlags );
