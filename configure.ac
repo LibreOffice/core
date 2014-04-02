@@ -5394,14 +5394,14 @@ if test "$GXX" = "yes"; then
     _gpp_version=`$CXX -dumpversion`
     _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    if test "$_gpp_majmin" -lt "410"; then
-        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 4.1 to build LibreOffice.])
+    if test "$_gpp_majmin" -lt "401"; then
+        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 4.1 to build LibreOffice, you have $_gpp_version.])
     else
         AC_MSG_RESULT([checked (g++ $_gpp_version)])
     fi
 
     dnl see https://code.google.com/p/android/issues/detail?id=41770
-    if test "$_gpp_majmin" -ge "410"; then
+    if test "$_gpp_majmin" -ge "401"; then
             glibcxx_threads=no
             AC_LANG_PUSH([C++])
             AC_REQUIRE_CPP
