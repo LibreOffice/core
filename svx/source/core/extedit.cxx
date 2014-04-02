@@ -32,10 +32,13 @@ using namespace css::uno;
 using namespace css::system;
 
 ExternalToolEdit::ExternalToolEdit()
-{}
+    : m_pGraphicObject(NULL)
+{
+}
 
 ExternalToolEdit::~ExternalToolEdit()
-{}
+{
+}
 
 void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
 {
@@ -116,3 +119,5 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     // Create the data that is needed by the thread later
     osl_createThread(ExternalToolEdit::threadWorker, this);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
