@@ -20,14 +20,16 @@
 
 #include "lzwdecom.hxx"
 
+#define MAX_TABLE_SIZE 4096
+
 LZWDecompressor::LZWDecompressor()
     : pOutBufData(NULL)
 {
     sal_uInt16 i;
 
-    pTable=new LZWTableEntry[4096];
-    pOutBuf=new sal_uInt8[4096];
-    for (i=0; i<4096; i++)
+    pTable=new LZWTableEntry[MAX_TABLE_SIZE];
+    pOutBuf=new sal_uInt8[MAX_TABLE_SIZE];
+    for (i=0; i<MAX_TABLE_SIZE; i++)
     {
         pTable[i].nPrevCode=0;
         pTable[i].nDataCount=1;
@@ -144,6 +146,15 @@ sal_uInt16 LZWDecompressor::GetNextCode()
 
 void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData)
 {
+    if (nTableSize >= MAX_TABLE_SIZE)
+    {
+        //It might be possible to force emit a 256 to flush the buffer and try
+        //to continue later?
+        SAL_WARN("filter.tiff", "Too much data at scanline");
+        bEOIFound = sal_True;
+        return;
+    }
+
     while (pTable[nCodeFirstData].nDataCount>1)
         nCodeFirstData=pTable[nCodeFirstData].nPrevCode;
 
@@ -160,20 +171,33 @@ void LZWDecompressor::DecompressSome()
     sal_uInt16 i,nCode;
 
     nCode=GetNextCode();
-    if (nCode==256) {
+    if (nCode==256)
+    {
         nTableSize=258;
         nCode=GetNextCode();
-        if (nCode==257) { bEOIFound=sal_True; return; }
+        if (nCode==257)
+        {
+            bEOIFound=sal_True;
+        }
     }
-    else if (nCode<nTableSize) AddToTable(nOldCode,nCode);
-    else if (nCode==nTableSize) AddToTable(nOldCode,nOldCode);
-    else { bEOIFound=sal_True; return; }
+    else if (nCode<nTableSize)
+        AddToTable(nOldCode,nCode);
+    else if (nCode==nTableSize)
+        AddToTable(nOldCode,nOldCode);
+    else
+    {
+        bEOIFound=sal_True;
+    }
+
+    if (bEOIFound)
+        return;
 
     nOldCode=nCode;
 
     nOutBufDataLen=pTable[nCode].nDataCount;
     pOutBufData=pOutBuf+nOutBufDataLen;
-    for (i=0; i<nOutBufDataLen; i++) {
+    for (i=0; i<nOutBufDataLen; i++)
+    {
         *(--pOutBufData)=pTable[nCode].nData;
         nCode=pTable[nCode].nPrevCode;
     }
