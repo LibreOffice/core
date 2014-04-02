@@ -26,7 +26,7 @@
 namespace writerfilter {
 namespace resourcemodel {
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Fraction
+class Fraction
 {
 public:
     explicit Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator = 1);

@@ -41,7 +41,7 @@ namespace writerfilter
         ~IdToString() {}
     };
 
-    class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC TagLogger
+    class TagLogger
     {
     public:
         typedef boost::shared_ptr<TagLogger> Pointer_t;

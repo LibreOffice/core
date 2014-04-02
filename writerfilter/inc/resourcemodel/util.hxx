@@ -29,10 +29,10 @@ namespace writerfilter
     using namespace ::std;
     using namespace ::com::sun::star;
 
-    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC xmlify(const string & str);
+    string xmlify(const string & str);
 
 #if OSL_DEBUG_LEVEL > 1
-    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(uno::Reference< text::XTextRange > textRange);
+    string toString(uno::Reference< text::XTextRange > textRange);
 #endif
 }
 #endif // INCLUDED_RESOURCEMODEL_UTIL_HXX

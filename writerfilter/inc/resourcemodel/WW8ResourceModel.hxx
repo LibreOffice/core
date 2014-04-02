@@ -116,7 +116,7 @@ class Sprm;
 /**
    Handler for properties.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Properties
+class Properties
 {
 public:
     /**
@@ -141,7 +141,7 @@ protected:
 /**
    Handler for tables.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Table
+class Table
 {
 public:
     typedef boost::shared_ptr<Table> Pointer_t;
@@ -161,7 +161,7 @@ protected:
 /**
    Handler for binary objects.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC BinaryObj
+class BinaryObj
 {
 public:
     /**
@@ -181,7 +181,7 @@ protected:
 /**
    Handler for a stream.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Stream
+class Stream
 {
 public:
 
@@ -291,7 +291,7 @@ protected:
    makes no sense for a certain value, e.g. the integer value of a
    string.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Value
+class Value
 {
 public:
     /**
@@ -343,7 +343,7 @@ public:
    An SPRM.
 
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Sprm
+class Sprm
 {
 public:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH

@@ -24,7 +24,7 @@
 namespace writerfilter {
 namespace resourcemodel {
 
-void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
+void resolveSprmProps(Properties & rHandler, Sprm & rSprm);
 
 }}
 

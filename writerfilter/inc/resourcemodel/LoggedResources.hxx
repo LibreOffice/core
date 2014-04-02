@@ -29,7 +29,7 @@ namespace writerfilter
 {
 
 #ifdef DEBUG_LOGGING
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedResourcesHelper
+class LoggedResourcesHelper
 {
 public:
     explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -48,7 +48,7 @@ private:
 };
 #endif
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedStream : public Stream
+class LoggedStream : public Stream
 {
 public:
     explicit LoggedStream(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -92,7 +92,7 @@ protected:
 #endif
 };
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedProperties : public Properties
+class LoggedProperties : public Properties
 {
 public:
     explicit LoggedProperties(TagLogger::Pointer_t pLogger, const string & sPrefix);
@@ -110,7 +110,7 @@ protected:
 #endif
 };
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedTable : public Table
+class LoggedTable : public Table
 {
 public:
     explicit LoggedTable(TagLogger::Pointer_t pLogger, const string & sPrefix);

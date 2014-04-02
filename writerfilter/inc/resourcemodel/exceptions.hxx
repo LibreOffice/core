@@ -26,7 +26,7 @@
 namespace writerfilter {
 using namespace ::std;
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Exception
+class Exception
 {
     string mText;
 
@@ -36,13 +36,13 @@ public:
     const string & getText() const { return mText; }
 };
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC ExceptionNotFound : public Exception
+class ExceptionNotFound : public Exception
 {
 public:
     ExceptionNotFound(string text) : Exception(text) {}
 };
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC ExceptionOutOfBounds : public Exception
+class ExceptionOutOfBounds : public Exception
 {
 public:
     ExceptionOutOfBounds(string text) : Exception(text) {}

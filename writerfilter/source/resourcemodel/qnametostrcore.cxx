@@ -23,7 +23,7 @@ namespace writerfilter
 
 QNameToString::Pointer_t QNameToString::pInstance;
 
-QNameToString::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString::Instance()
+QNameToString::Pointer_t QNameToString::Instance()
 {
     if (pInstance.get() == NULL)
         pInstance = QNameToString::Pointer_t(new QNameToString());
@@ -31,7 +31,7 @@ QNameToString::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString::Ins
     return pInstance;
 }
 
-string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString::operator()(Id qName)
+string QNameToString::operator()(Id qName)
 {
     string sResult;
 
