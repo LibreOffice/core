@@ -187,7 +187,7 @@ void* data = NULL;
  * this is a simplified implementation that
  * is _not_ thread safe.
  */
-struct pool* pool_create(int size_elem, int primary, int secondary)
+static struct pool* pool_create(int size_elem, int primary, int secondary)
 {
 struct pool* pool;
 
@@ -210,7 +210,7 @@ struct pool* pool;
 
 }
 
-void pool_destroy(struct pool* pool)
+static void pool_destroy(struct pool* pool)
 {
 void* extent;
 void* next;
