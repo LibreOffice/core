@@ -956,8 +956,17 @@ namespace
         sal_Bool            m_bCopy;
 
     public:
-        ApplySectionViewAction( sal_Bool _bCopy ) : m_eAction( eEndDragObj ), m_bCopy( _bCopy ) { }
-        ApplySectionViewAction(SectionViewAction _eAction = eEndAction ) : m_eAction( _eAction ) { }
+        ApplySectionViewAction(sal_Bool _bCopy)
+            : m_eAction(eEndDragObj)
+            , m_bCopy(_bCopy)
+        {
+        }
+
+        ApplySectionViewAction(SectionViewAction _eAction = eEndAction)
+            : m_eAction(_eAction)
+            , m_bCopy(false)
+        {
+        }
 
         void operator() ( const OViewsWindow::TSectionsMap::value_type& _rhs )
         {
