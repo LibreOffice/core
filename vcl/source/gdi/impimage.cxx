@@ -119,6 +119,8 @@ bool ImplImageData::IsEqual( const ImplImageData& rData )
 
 ImplImage::ImplImage()
     : mnRefCount(1)
+    , mpData(NULL)
+    , meType(IMAGETYPE_BITMAP)
 {
 }
 
