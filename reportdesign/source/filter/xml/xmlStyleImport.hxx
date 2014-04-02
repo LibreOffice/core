@@ -89,7 +89,6 @@ namespace rptxml
         const OUString m_sCellStyleFamilyName;
         ORptFilter&           m_rImport;
         sal_Int32 m_nNumberFormatIndex;
-        sal_Int32 nMasterPageNameIndex;
         sal_Bool bAutoStyles : 1;
 
         //mutable UniReference < SvXMLImportPropertyMapper > m_xControlImpPropMapper;
