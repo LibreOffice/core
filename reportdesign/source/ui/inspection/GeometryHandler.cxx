@@ -225,13 +225,15 @@ OUString GeometryHandler::impl_convertToFormula( const uno::Any& _rControlValue 
     aParser = ReportFormula( impl_isDataField(sName) ? ReportFormula::Field : ReportFormula::Expression, sName );
     return aParser.getCompleteFormula();
 }
-GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const & context) :
-    GeometryHandler_Base(m_aMutex)
-    ,m_aPropertyListeners( m_aMutex )
-    ,m_xContext(context)
-    ,m_pInfoService(new OPropertyInfoService())
-    ,m_nDataFieldType(0)
-    ,m_bIn(false)
+
+GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const & context)
+    : GeometryHandler_Base(m_aMutex)
+    , m_aPropertyListeners(m_aMutex)
+    , m_xContext(context)
+    , m_pInfoService(new OPropertyInfoService())
+    , m_nDataFieldType(0)
+    , m_bNewFunction(false)
+    , m_bIn(false)
 {
     try
     {
