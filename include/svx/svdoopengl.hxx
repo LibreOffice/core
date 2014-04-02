@@ -12,6 +12,7 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
+#include <vcl/OpenGLContext.hxx>
 
 class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject
 {
@@ -20,6 +21,15 @@ public:
     {
         return new sdr::contact::ViewContactOfOpenGLObj(*this);
     }
+
+    OpenGLContext& getOpenGLContext()
+    {
+        return maContext;
+    }
+
+private:
+
+    OpenGLContext maContext;
 };
 
 #endif

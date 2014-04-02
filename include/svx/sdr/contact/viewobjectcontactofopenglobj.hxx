@@ -24,11 +24,8 @@ public:
     ViewObjectContactOfOpenGLObj(ObjectContact& rObjectContact, ViewContact& rViewContact);
     virtual ~ViewObjectContactOfOpenGLObj();
 
-protected:
-    Window* getWindow() const;
-
 private:
-    OpenGLContext m_aOpenGLContext;
+    Window* getWindow() const;
 };
 
 } // namespace sdr
