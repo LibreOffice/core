@@ -28,6 +28,7 @@ $(call gb_ExternalProject_get_state_target,apr,build):
 	+$(call gb_ExternalProject_run,build,\
 		./configure \
 			--enable-static --disable-shared \
+			--with-pic \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 		&& $(MAKE) libapr-1.la \
 	)

@@ -30,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,apr_util,build):
 	+$(call gb_ExternalProject_run,build,\
 		./configure \
 			--enable-static --disable-shared \
+			--with-pic \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			--with-apr=$(call gb_UnpackedTarball_get_dir,apr)/apr-1-config \
 		&& $(MAKE) libaprutil-1.la \
