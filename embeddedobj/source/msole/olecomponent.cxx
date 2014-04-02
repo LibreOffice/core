@@ -40,6 +40,7 @@
 #include <advisesink.hxx>
 #include <oleembobj.hxx>
 #include <mtnotification.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -286,7 +287,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
     {
         // first the GDI-metafile must be generated
 
-        unsigned char* pBuf = NULL;
+        boost::scoped_array<unsigned char> pBuf;
         sal_uInt32 nBufSize = 0;
         OUString aFormat;
 
@@ -297,23 +298,23 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
             if ( pMF )
             {
                 nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, NULL ) + 22;
-                pBuf = new unsigned char[nBufSize];
+                pBuf.reset(new unsigned char[nBufSize]);
 
 
                 // TODO/LATER: the unit size must be calculated correctly
-                *( (long* )pBuf ) = 0x9ac6cdd7L;
-                *( (short* )( pBuf+6 )) = ( SHORT ) 0;
-                *( (short* )( pBuf+8 )) = ( SHORT ) 0;
-                *( (short* )( pBuf+10 )) = ( SHORT ) pMF->xExt;
-                *( (short* )( pBuf+12 )) = ( SHORT ) pMF->yExt;
-                *( (short* )( pBuf+14 )) = ( USHORT ) 2540;
+                *( (long* )pBuf.get() ) = 0x9ac6cdd7L;
+                *( (short* )( pBuf.get()+6 )) = ( SHORT ) 0;
+                *( (short* )( pBuf.get()+8 )) = ( SHORT ) 0;
+                *( (short* )( pBuf.get()+10 )) = ( SHORT ) pMF->xExt;
+                *( (short* )( pBuf.get()+12 )) = ( SHORT ) pMF->yExt;
+                *( (short* )( pBuf.get()+14 )) = ( USHORT ) 2540;
 
 
-                if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize - 22, pBuf + 22 ) )
+                if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize - 22, pBuf.get() + 22 ) )
                 {
                     if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", 57 ) )
                     {
-                        aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
+                        aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf.get(), nBufSize );
                         bAnyIsReady = sal_True;
                     }
                 }
@@ -325,12 +326,12 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         {
             aFormat = "image/x-emf";
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
-            pBuf = new unsigned char[nBufSize];
-            if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
+            pBuf.reset(new unsigned char[nBufSize]);
+            if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf.get() ) )
             {
                 if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"", 57 ) )
                 {
-                    aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
+                    aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf.get(), nBufSize );
                     bAnyIsReady = sal_True;
                 }
             }
@@ -339,12 +340,12 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         {
             aFormat = "image/x-MS-bmp";
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
-            pBuf = new unsigned char[nBufSize];
-            if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
+            pBuf.reset(new unsigned char[nBufSize]);
+            if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf.get() ) ) )
             {
                 if ( aFlavor.MimeType.matchAsciiL( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", 54 ) )
                 {
-                    aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf, nBufSize );
+                    aResult <<= uno::Sequence< sal_Int8 >( ( sal_Int8* )pBuf.get(), nBufSize );
                     bAnyIsReady = sal_True;
                 }
             }
@@ -357,12 +358,10 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
                   && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
                   && aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
             {
-                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf, nBufSize, aFormat, aResult );
+                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf.get(), nBufSize, aFormat, aResult );
                 break;
             }
         }
-
-        delete[] pBuf;
     }
 
     return bAnyIsReady;

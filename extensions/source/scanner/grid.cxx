@@ -29,6 +29,7 @@
 
 // for ::std::sort
 #include <algorithm>
+#include <boost/scoped_array.hpp>
 
 ResId SaneResId( sal_uInt32 );
 
@@ -258,8 +259,8 @@ void GridWindow::computeNew()
         int i;
 
         // get node arrays
-        double* nodex = new double[ nSorted ];
-        double* nodey = new double[ nSorted ];
+        boost::scoped_array<double> nodex(new double[ nSorted ]);
+        boost::scoped_array<double> nodey(new double[ nSorted ]);
 
         for( i = 0L; i < nSorted; i++ )
             transform( m_aHandles[i].maPos, nodex[ i ], nodey[ i ] );
@@ -267,7 +268,7 @@ void GridWindow::computeNew()
         for( i = 0; i < m_nValues; i++ )
         {
             double x = m_pXValues[ i ];
-            m_pNewYValues[ i ] = interpolate( x, nodex, nodey, nSorted );
+            m_pNewYValues[ i ] = interpolate( x, nodex.get(), nodey.get(), nSorted );
             if( m_bCutValues )
             {
                 if( m_pNewYValues[ i ] > m_fMaxY )
@@ -276,9 +277,6 @@ void GridWindow::computeNew()
                     m_pNewYValues[ i ] = m_fMinY;
             }
         }
-
-        delete [] nodex;
-        delete [] nodey;
     }
 }
 

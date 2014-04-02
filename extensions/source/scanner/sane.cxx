@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <sal/config.h>
 #include <sal/macros.h>
+#include <boost/scoped_array.hpp>
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #include <stdarg.h>
@@ -357,14 +358,13 @@ sal_Bool Sane::GetOptionValue( int n, OString& rRet )
     sal_Bool bSuccess = sal_False;
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return sal_False;
-    char* pRet = new char[mppOptions[n]->size+1];
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet );
+    boost::scoped_array<char> pRet(new char[mppOptions[n]->size+1]);
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet.get() );
     if( nStatus == SANE_STATUS_GOOD )
     {
         bSuccess = sal_True;
-        rRet = pRet;
+        rRet = pRet.get();
     }
-    delete [] pRet;
     return bSuccess;
 }
 
@@ -376,8 +376,8 @@ sal_Bool Sane::GetOptionValue( int n, double& rRet, int nElement )
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
         return sal_False;
 
-    SANE_Word* pRet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet );
+    boost::scoped_array<SANE_Word> pRet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pRet.get() );
     if( nStatus == SANE_STATUS_GOOD )
     {
         bSuccess = sal_True;
@@ -386,7 +386,6 @@ sal_Bool Sane::GetOptionValue( int n, double& rRet, int nElement )
         else
             rRet = SANE_UNFIX( pRet[nElement] );
     }
-    delete [] pRet;
     return bSuccess;
 }
 
@@ -396,13 +395,10 @@ sal_Bool Sane::GetOptionValue( int n, double* pSet )
                            mppOptions[n]->type == SANE_TYPE_INT ) )
         return sal_False;
 
-    SANE_Word* pFixedSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pFixedSet );
+    boost::scoped_array<SANE_Word> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pFixedSet.get() );
     if( nStatus != SANE_STATUS_GOOD )
-    {
-        delete [] pFixedSet;
         return sal_False;
-    }
     for( size_t i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
@@ -410,7 +406,6 @@ sal_Bool Sane::GetOptionValue( int n, double* pSet )
         else
             pSet[i] = (double) pFixedSet[i];
     }
-    delete [] pFixedSet;
     return sal_True;
 }
 
@@ -447,15 +442,14 @@ sal_Bool Sane::SetOptionValue( int n, double fSet, int nElement )
     SANE_Status nStatus;
     if( mppOptions[n]->size/sizeof(SANE_Word) > 1 )
     {
-        SANE_Word* pSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
-        nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pSet );
+        boost::scoped_array<SANE_Word> pSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
+        nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pSet.get() );
         if( nStatus == SANE_STATUS_GOOD )
         {
             pSet[nElement] = mppOptions[n]->type == SANE_TYPE_INT ?
                 (SANE_Word)fSet : SANE_FIX( fSet );
-            nStatus = ControlOption(  n, SANE_ACTION_SET_VALUE, pSet );
+            nStatus = ControlOption(  n, SANE_ACTION_SET_VALUE, pSet.get() );
         }
-        delete [] pSet;
     }
     else
     {
@@ -475,7 +469,7 @@ sal_Bool Sane::SetOptionValue( int n, double* pSet )
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
         return sal_False;
-    SANE_Word* pFixedSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
+    boost::scoped_array<SANE_Word> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);
     for( size_t i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
@@ -483,8 +477,7 @@ sal_Bool Sane::SetOptionValue( int n, double* pSet )
         else
             pFixedSet[i] = (SANE_Word)pSet[i];
     }
-    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet );
-    delete [] pFixedSet;
+    SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet.get() );
     if( nStatus != SANE_STATUS_GOOD )
         return sal_False;
     return sal_True;

@@ -28,6 +28,7 @@
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
+#include <boost/scoped_array.hpp>
 
 ResId SaneResId( sal_uInt32 nID )
 {
@@ -439,20 +440,17 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                 case SANE_TYPE_INT:
                 {
                     int nElements = mrSane.GetOptionElements( mnCurrentOption );
-                    double* x = new double[ nElements ];
-                    double* y = new double[ nElements ];
+                    boost::scoped_array<double> x(new double[ nElements ]);
+                    boost::scoped_array<double> y(new double[ nElements ]);
                     for( int i = 0; i < nElements; i++ )
                         x[ i ] = (double)i;
-                    mrSane.GetOptionValue( mnCurrentOption, y );
+                    mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
-                    GridWindow aGrid( x, y, nElements, this );
+                    GridWindow aGrid( x.get(), y.get(), nElements, this );
                     aGrid.SetText( mrSane.GetOptionName( mnCurrentOption ) );
                     aGrid.setBoundings( 0, mfMin, nElements, mfMax );
                     if( aGrid.Execute() && aGrid.getNewYValues() )
                         mrSane.SetOptionValue( mnCurrentOption, aGrid.getNewYValues() );
-
-                    delete [] x;
-                    delete [] y;
                 }
                 break;
                 case SANE_TYPE_BOOL:

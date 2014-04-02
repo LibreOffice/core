@@ -60,6 +60,8 @@
 #include <stdio.h>
 #endif
 
+#include <boost/scoped_array.hpp>
+
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
@@ -1085,21 +1087,20 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std
     {
         nBytes = (nBytes > nPos - m_nWritePos) ? nPos - m_nWritePos : nBytes;
 
-        char* pBuffer = new char[ nBytes ];
+        boost::scoped_array<char> pBuffer(new char[ nBytes ]);
         m_aFileStream.Seek( m_nWritePos );
-        nBytes = m_aFileStream.Read( pBuffer, nBytes );
+        nBytes = m_aFileStream.Read( pBuffer.get(), nBytes );
 
         int32_t nBytesRead = 0;
         try
         {
             nBytesRead = m_pPlugin->getPluginComm()->NPP_Write(
-                m_pPlugin->getNPPInstance(), &m_aNPStream, m_nWritePos, nBytes, pBuffer );
+                m_pPlugin->getNPPInstance(), &m_aNPStream, m_nWritePos, nBytes, pBuffer.get() );
         }
         catch( ... )
         {
             nBytesRead = 0;
         }
-        delete [] pBuffer;
 
         if( nBytesRead < 0 )
         {

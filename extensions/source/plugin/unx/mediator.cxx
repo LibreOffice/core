@@ -32,6 +32,7 @@
 #include <plugin/unx/mediator.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/scoped_array.hpp>
 
 #define MEDIATOR_MAGIC 0xf7a8d2f4
 
@@ -93,15 +94,14 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
     if( ! m_bValid )
         return nMessageID;
 
-    sal_uLong* pBuffer = new sal_uLong[ (nBytes/sizeof(sal_uLong)) + 4 ];
+    boost::scoped_array<sal_uLong> pBuffer(new sal_uLong[ (nBytes/sizeof(sal_uLong)) + 4 ]);
     pBuffer[ 0 ] = nMessageID;
     pBuffer[ 1 ] = nBytes;
     pBuffer[ 2 ] = MEDIATOR_MAGIC;
     memcpy( &pBuffer[3], pBytes, (size_t)nBytes );
     ssize_t nToWrite = nBytes + 3*sizeof( sal_uLong );
-    bool bSuccess = (nToWrite == write( m_nSocket, pBuffer, nToWrite ));
+    bool bSuccess = (nToWrite == write( m_nSocket, pBuffer.get(), nToWrite ));
     SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
-    delete [] pBuffer;
 
     return nMessageID;
 }
@@ -206,15 +206,15 @@ void MediatorListener::run()
         {
             if( nHeader[ 0 ] == 0 && nHeader[ 1 ] == 0 )
                 return;
-            char* pBuffer = new char[ nHeader[ 1 ] ];
-            if( m_pMediator && (sal_uLong)read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
+            boost::scoped_array<char> pBuffer(new char[ nHeader[ 1 ] ]);
+            if( m_pMediator && (sal_uLong)read( m_pMediator->m_nSocket, pBuffer.get(), nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
                 ::osl::MutexGuard aMyGuard( m_aMutex );
                 {
                     osl::MutexGuard
                         aGuard( m_pMediator->m_aQueueMutex );
                     MediatorMessage* pMessage =
-                        new MediatorMessage( nHeader[ 0 ], nHeader[ 1 ], pBuffer );
+                        new MediatorMessage( nHeader[ 0 ], nHeader[ 1 ], pBuffer.get() );
                     m_pMediator->m_aMessageQueue.push_back( pMessage );
                 }
                 m_pMediator->m_aNewMessageCdtn.set();
@@ -228,7 +228,6 @@ void MediatorListener::run()
                         << nHeader[1] << ", ... }");
                 bRun = false;
             }
-            delete [] pBuffer;
         }
         else
         {
