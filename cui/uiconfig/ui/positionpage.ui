@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <!-- interface-requires LibreOffice 1.0 -->
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -135,6 +136,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Raise/lower by</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">raiselowersb:0%</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -148,7 +151,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -163,7 +165,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -195,6 +196,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Relative font size</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">fontsizesb:0%</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -337,6 +340,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Scale width</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">scalewidthsb:0%</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -349,7 +354,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -460,7 +464,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">1</property>
                   </object>
