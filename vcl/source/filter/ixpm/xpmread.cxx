@@ -23,25 +23,31 @@
 #define _XPMPRIVATE
 #include "xpmread.hxx"
 
-XPMReader::XPMReader( SvStream& rStm ) :
-            mrIStm          ( rStm ),
-            mpAcc           ( NULL ),
-            mpMaskAcc       ( NULL ),
-            mnLastPos       ( rStm.Tell() ),
-            mnWidth         ( 0 ),
-            mnHeight        ( 0 ),
-            mnColors        ( 0 ),
-            mnCpp           ( 0 ),
-            mbTransparent   ( false ),
-            mbStatus        ( true ),
-            mnStatus        ( 0 ),
-            mnIdentifier    ( XPMIDENTIFIER ),
-            mcThisByte      ( 0 ),
-            mnTempAvail     ( 0 ),
-            mpFastColorTable( NULL ),
-            mpColMap        ( NULL )
+XPMReader::XPMReader(SvStream& rStm)
+    : mrIStm(rStm)
+    , mpAcc(NULL)
+    , mpMaskAcc(NULL)
+    , mnLastPos(rStm.Tell())
+    , mnWidth(0)
+    , mnHeight(0)
+    , mnColors(0)
+    , mnCpp(0)
+    , mbTransparent(false)
+    , mbStatus(true)
+    , mnStatus( 0 )
+    , mnIdentifier(XPMIDENTIFIER)
+    , mcThisByte(0)
+    , mcLastByte(0)
+    , mnTempAvail(0)
+    , mpTempBuf(NULL)
+    , mpTempPtr(NULL)
+    , mpFastColorTable(NULL)
+    , mpColMap(NULL)
+    , mnStringSize(0)
+    , mpStringBuf(NULL)
+    , mnParaSize(0)
+    , mpPara(NULL)
 {
-
 }
 
 XPMReader::~XPMReader()
