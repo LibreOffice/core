@@ -25,6 +25,7 @@
 #include <osl/security.h>
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.h>
+#include <sal/log.hxx>
 
 #include "osl/thread.h"
 #include "osl/file.h"
@@ -395,7 +396,6 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
     if (pStr == NULL || strlen(pStr) == 0 || access(pStr, 0) != 0)
     {
         size_t n = 0;
-        sal_Bool dirOK = sal_True;
 
         // a default equal to $HOME/.config should be used.
         if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
@@ -406,34 +406,44 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
             strncpy(pszDirectory+n, DOT_CONFIG, sizeof(DOT_CONFIG));
 
             // try to create dir if not present
-            if (access(pszDirectory, F_OK) != 0 && mkdir(pszDirectory, S_IRWXU) != 0)
-                dirOK = sal_False;
-            else
+            bool dirOK = true;
+            if (mkdir(pszDirectory, S_IRWXU) != 0)
+            {
+                int e = errno;
+                if (e != EEXIST)
+                {
+                    SAL_WARN(
+                        "sal.osl",
+                        "mkdir(" << pszDirectory << "): errno=" << e);
+                    dirOK = false;
+                }
+            }
+            if (dirOK)
             {
                 // check file type and permissions
                 struct stat st;
                 if (stat(pszDirectory, &st) != 0)
                 {
                     OSL_TRACE("Could not stat $HOME/.config");
-                    dirOK = sal_False;
+                    dirOK = false;
                 }
                 else
                 {
                     if (!S_ISDIR(st.st_mode))
                     {
                         OSL_TRACE("$HOME/.config is not a directory");
-                        dirOK = sal_False;
+                        dirOK = false;
                     }
                     if (!(st.st_mode & S_IRUSR && st.st_mode & S_IWUSR && st.st_mode & S_IXUSR))
                     {
                         OSL_TRACE("$HOME/.config has bad permissions");
-                        dirOK = sal_False;
+                        dirOK = false;
                     }
                 }
             }
 
             // resort to HOME
-            if (dirOK == sal_False)
+            if (!dirOK)
                 pszDirectory[n] = '\0';
         }
     }
