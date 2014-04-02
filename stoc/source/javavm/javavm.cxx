@@ -119,16 +119,14 @@ class NoJavaIniException: public css::uno::Exception
 };
 
 class SingletonFactory:
-    private cppu::WeakImplHelper1< css::lang::XEventListener >
+    private cppu::WeakImplHelper1< css::lang::XEventListener >,
+    private boost::noncopyable
 {
 public:
     static css::uno::Reference< css::uno::XInterface > getSingleton(
         css::uno::Reference< css::uno::XComponentContext > const & rContext);
 
 private:
-    SingletonFactory(SingletonFactory &); // not implemented
-    void operator =(SingletonFactory); // not implemented
-
     inline SingletonFactory() {}
 
     virtual inline ~SingletonFactory() {}
@@ -545,7 +543,7 @@ void initVMConfiguration(
 
 }
 
-class DetachCurrentThread {
+class DetachCurrentThread: private boost::noncopyable {
 public:
     explicit DetachCurrentThread(JavaVM * jvm): m_jvm(jvm) {}
 
@@ -556,9 +554,6 @@ public:
     }
 
 private:
-    DetachCurrentThread(DetachCurrentThread &); // not defined
-    void operator =(DetachCurrentThread &); // not defined
-
     JavaVM * m_jvm;
 };
 

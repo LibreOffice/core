@@ -20,6 +20,7 @@
 
 #include "interact.hxx"
 
+#include "boost/noncopyable.hpp"
 #include "com/sun/star/java/JavaDisabledException.hpp"
 #include "com/sun/star/java/JavaVMCreationFailureException.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -33,7 +34,8 @@ using stoc_javavm::InteractionRequest;
 namespace {
 
 class AbortContinuation:
-    public cppu::WeakImplHelper1< css::task::XInteractionAbort >
+    public cppu::WeakImplHelper1<css::task::XInteractionAbort>,
+    private boost::noncopyable
 {
 public:
     inline AbortContinuation() {}
@@ -41,9 +43,6 @@ public:
     virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
 
 private:
-    AbortContinuation(AbortContinuation &); // not implemented
-    void operator =(AbortContinuation); // not implemented
-
     virtual inline ~AbortContinuation() {}
 };
 

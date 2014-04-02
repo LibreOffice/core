@@ -23,6 +23,8 @@ $(eval $(call gb_Library_use_libraries,stocservices,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Library_use_external,stocservices,boost_headers))
+
 $(eval $(call gb_Library_set_componentfile,stocservices,stoc/util/stocservices))
 
 $(eval $(call gb_Library_add_exception_objects,stocservices,\

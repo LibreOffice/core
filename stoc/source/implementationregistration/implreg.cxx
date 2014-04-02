@@ -21,6 +21,7 @@
 #include <string.h>
 #include <list>
 
+#include <boost/noncopyable.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -64,7 +65,7 @@ using namespace osl;
 
 namespace {
 
-struct StringPool
+struct StringPool: private boost::noncopyable
 {
     OUString slash_UNO_slash_REGISTRY_LINKS;
     OUString slash_IMPLEMENTATIONS;
@@ -90,8 +91,6 @@ struct StringPool
         , com_sun_star_registry_SimpleRegistry("com.sun.star.registry.SimpleRegistry" )
         , Registry( "Registry" )
         {}
-private:
-    StringPool( const StringPool & );
 };
 
 const StringPool &spool()

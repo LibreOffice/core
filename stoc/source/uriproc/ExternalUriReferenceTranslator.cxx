@@ -20,6 +20,7 @@
 
 #include "stocservices.hxx"
 
+#include "boost/noncopyable.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -42,8 +43,10 @@
 
 namespace {
 
-class Translator: public cppu::WeakImplHelper2<
-    css::lang::XServiceInfo, css::uri::XExternalUriReferenceTranslator >
+class Translator:
+    public cppu::WeakImplHelper2<
+        css::lang::XServiceInfo, css::uri::XExternalUriReferenceTranslator>,
+    private boost::noncopyable
 {
 public:
     explicit Translator(
@@ -68,9 +71,6 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    Translator(Translator &); // not implemented
-    void operator =(Translator); // not implemented
-
     virtual ~Translator() {}
 
     css::uno::Reference< css::uno::XComponentContext > m_context;

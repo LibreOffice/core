@@ -22,6 +22,7 @@
 
 #include "UriReference.hxx"
 
+#include "boost/noncopyable.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -190,7 +191,8 @@ bool parseSchemeSpecificPart(OUString const & part) {
 }
 
 class UrlReference:
-    public cppu::WeakImplHelper1< css::uri::XVndSunStarScriptUrlReference >
+    public cppu::WeakImplHelper1<css::uri::XVndSunStarScriptUrlReference>,
+    private boost::noncopyable
 {
 public:
     UrlReference(OUString const & scheme, OUString const & path):
@@ -281,9 +283,6 @@ public:
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
 
 private:
-    UrlReference(UrlReference &); // not implemented
-    void operator =(UrlReference); // not implemented
-
     virtual ~UrlReference() {}
 
     sal_Int32 findParameter(OUString const & key);
@@ -376,8 +375,10 @@ sal_Int32 UrlReference::findParameter(OUString const & key) {
     }
 }
 
-class Parser: public cppu::WeakImplHelper2<
-    css::lang::XServiceInfo, css::uri::XUriSchemeParser >
+class Parser:
+    public cppu::WeakImplHelper2<
+        css::lang::XServiceInfo, css::uri::XUriSchemeParser>,
+    private boost::noncopyable
 {
 public:
     Parser() {}
@@ -397,9 +398,6 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    Parser(Parser &); // not implemented
-    void operator =(Parser); // not implemented
-
     virtual ~Parser() {}
 };
 
