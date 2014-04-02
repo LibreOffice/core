@@ -20,6 +20,7 @@
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticIDs.h"
+#include "clang/Basic/SourceManager.h"
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
@@ -98,6 +99,16 @@ inline unsigned getBuiltinCallee(clang::CallExpr const & expr) {
     return expr.getBuiltinCallee();
 #else
     return expr.isBuiltinCall();
+#endif
+}
+
+inline bool isInMainFile(
+    clang::SourceManager const & manager, clang::SourceLocation Loc)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+    return manager.isInMainFile(Loc);
+#else
+    return manager.isFromMainFile(Loc);
 #endif
 }
 

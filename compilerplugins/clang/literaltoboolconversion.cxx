@@ -151,17 +151,11 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
 bool LiteralToBoolConversion::isFromCIncludeFile(
     SourceLocation spellingLocation) const
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
-    if (compiler.getSourceManager().isInMainFile(spellingLocation)) {
-        return false;
-    }
-#else
-    if (compiler.getSourceManager().isFromMainFile(spellingLocation)) {
-        return false;
-    }
-#endif
-    return StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation)
-        .getFilename()).endswith(".h");
+    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+        && (StringRef(
+                compiler.getSourceManager().getPresumedLoc(spellingLocation)
+                .getFilename())
+            .endswith(".h"));
 }
 
 bool LiteralToBoolConversion::isMacroBodyExpansion(SourceLocation location)
