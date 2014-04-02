@@ -821,7 +821,7 @@ OUString XclXmlUtils::ToOUString(
     ScDocument& rDocument, const ScAddress& rAddress, const ScTokenArray* pTokenArray )
 {
     ScCompiler aCompiler( &rDocument, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
-    aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+    aCompiler.SetGrammar(FormulaGrammar::GRAM_OOXML);
 
     OUStringBuffer aBuffer( pTokenArray->GetLen() * 5 );
     aCompiler.CreateStringFromTokenArray( aBuffer );
