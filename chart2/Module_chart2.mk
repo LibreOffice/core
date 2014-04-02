@@ -28,6 +28,13 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_import \
 ))
 
+ifeq ($(ENABLE_CHART_TESTS),TRUE)
+$(eval $(call gb_Module_add_slowcheck_targets,chart2,\
+    CppunitTest_chart2_xshape \
+))
+
+endif
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
     JunitTest_chart2_unoapi \
 ))

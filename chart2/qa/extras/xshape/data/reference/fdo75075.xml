@@ -1,0 +1,1690 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="0" positionY="0" sizeX="16000" sizeY="9000" type="com.sun.star.drawing.RectangleShape" name="CID/Page=" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+  <FillBitmap/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="16001.000000" column2="0.000000" column3="0.000000"/>
+   <Line2 column1="0.000000" column2="9001.000000" column3="0.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="770" positionY="855" sizeX="12108" sizeY="7545" type="com.sun.star.drawing.GroupShape" name="CID/D=0">
+  <XShapes>
+   <XShape positionX="1947" positionY="1055" sizeX="9647" sizeY="6698" type="com.sun.star.drawing.RectangleShape" name="MarkHandles" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
+    <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+    <FillBitmap/>
+    <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+    <LineStart/>
+    <LineEnd/>
+    <Transformation>
+     <Line1 column1="9648.000000" column2="0.000000" column3="1947.000000"/>
+     <Line2 column1="0.000000" column2="6699.000000" column3="1055.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+   <XShape positionX="770" positionY="855" sizeX="12108" sizeY="7545" type="com.sun.star.drawing.RectangleShape" name="PlotAreaIncludingAxes" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
+    <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+    <FillBitmap/>
+    <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+    <LineStart/>
+    <LineEnd/>
+    <Transformation>
+     <Line1 column1="12109.000000" column2="0.000000" column3="770.000000"/>
+     <Line2 column1="0.000000" column2="7546.000000" column3="855.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+   <XShape positionX="770" positionY="855" sizeX="12108" sizeY="7545" type="com.sun.star.drawing.GroupShape">
+    <XShapes>
+     <XShape positionX="1797" positionY="1053" sizeX="9947" sizeY="6849" type="com.sun.star.drawing.GroupShape">
+      <XShapes>
+       <XShape positionX="1947" positionY="1055" sizeX="9647" sizeY="6698" type="com.sun.star.drawing.GroupShape" name="PlotAreaExcludingAxes">
+        <XShapes>
+         <XShape positionX="1947" positionY="1055" sizeX="9647" sizeY="6698" type="com.sun.star.drawing.RectangleShape" name="CID/DiagramWall=" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="e6e6e6" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="9648.000000" column2="0.000000" column3="1947.000000"/>
+           <Line2 column1="0.000000" column2="6699.000000" column3="1055.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+        </XShapes>
+        <Transformation>
+         <Line1 column1="9648.000000" column2="0.000000" column3="1947.000000"/>
+         <Line2 column1="0.000000" column2="6699.000000" column3="1055.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+       <XShape positionX="1797" positionY="1053" sizeX="9947" sizeY="6849" type="com.sun.star.drawing.GroupShape" name="testonly;CooContainer=XXX_CID">
+        <XShapes>
+         <XShape positionX="1947" positionY="1054" sizeX="9647" sizeY="6698" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape positionX="1947" positionY="1054" sizeX="9647" sizeY="6698" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,0:Grid=0">
+            <XShapes>
+             <XShape positionX="1947" positionY="1054" sizeX="9647" sizeY="6698" type="com.sun.star.drawing.PolyLineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="11594" positionY="7752"/>
+                <point positionX="1947" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="6914"/>
+                <point positionX="1947" positionY="6914"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="6077"/>
+                <point positionX="1947" positionY="6077"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="5240"/>
+                <point positionX="1947" positionY="5240"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="4403"/>
+                <point positionX="1947" positionY="4403"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="3565"/>
+                <point positionX="1947" positionY="3565"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="2728"/>
+                <point positionX="1947" positionY="2728"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="1891"/>
+                <point positionX="1947" positionY="1891"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="1054"/>
+                <point positionX="1947" positionY="1054"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="9647" positionY="6698"/>
+                <point positionX="0" positionY="6698"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="5860"/>
+                <point positionX="0" positionY="5860"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="5023"/>
+                <point positionX="0" positionY="5023"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="4186"/>
+                <point positionX="0" positionY="4186"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="3349"/>
+                <point positionX="0" positionY="3349"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="2511"/>
+                <point positionX="0" positionY="2511"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="1674"/>
+                <point positionX="0" positionY="1674"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="837"/>
+                <point positionX="0" positionY="837"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="9647.000000" column2="0.000000" column3="1947.000000"/>
+               <Line2 column1="0.000000" column2="6698.000000" column3="1054.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="1947" positionY="1054" sizeX="0" sizeY="6698" type="com.sun.star.drawing.PolyLineShape" name="HandlesOnly" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="NONE">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="1947" positionY="7752"/>
+                <point positionX="1947" positionY="6914"/>
+                <point positionX="1947" positionY="6077"/>
+                <point positionX="1947" positionY="5240"/>
+                <point positionX="1947" positionY="4403"/>
+                <point positionX="1947" positionY="3565"/>
+                <point positionX="1947" positionY="2728"/>
+                <point positionX="1947" positionY="1891"/>
+                <point positionX="1947" positionY="1054"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="6698"/>
+                <point positionX="0" positionY="5860"/>
+                <point positionX="0" positionY="5023"/>
+                <point positionX="0" positionY="4186"/>
+                <point positionX="0" positionY="3349"/>
+                <point positionX="0" positionY="2511"/>
+                <point positionX="0" positionY="1674"/>
+                <point positionX="0" positionY="837"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="0.000000" column2="0.000000" column3="1947.000000"/>
+               <Line2 column1="0.000000" column2="6698.000000" column3="1054.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+            </XShapes>
+            <Transformation>
+             <Line1 column1="9648.000000" column2="0.000000" column3="1947.000000"/>
+             <Line2 column1="0.000000" column2="6699.000000" column3="1054.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+          </XShapes>
+          <Transformation>
+           <Line1 column1="9648.000000" column2="0.000000" column3="1947.000000"/>
+           <Line2 column1="0.000000" column2="6699.000000" column3="1054.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="1797" positionY="1053" sizeX="9947" sizeY="6849" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape positionX="1947" positionY="7752" sizeX="9647" sizeY="150" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=0,0">
+            <XShapes>
+             <XShape positionX="1947" positionY="7752" sizeX="9647" sizeY="150" type="com.sun.star.drawing.PolyLineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="1947" positionY="7902"/>
+                <point positionX="1947" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1947" positionY="7902"/>
+                <point positionX="1947" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="3876" positionY="7902"/>
+                <point positionX="3876" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="3876" positionY="7902"/>
+                <point positionX="3876" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="5805" positionY="7902"/>
+                <point positionX="5805" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="5805" positionY="7902"/>
+                <point positionX="5805" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="7735" positionY="7902"/>
+                <point positionX="7735" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="7735" positionY="7902"/>
+                <point positionX="7735" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9664" positionY="7902"/>
+                <point positionX="9664" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9664" positionY="7902"/>
+                <point positionX="9664" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="7902"/>
+                <point positionX="11594" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11594" positionY="7902"/>
+                <point positionX="11594" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="150"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="150"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1929" positionY="150"/>
+                <point positionX="1929" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1929" positionY="150"/>
+                <point positionX="1929" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="3858" positionY="150"/>
+                <point positionX="3858" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="3858" positionY="150"/>
+                <point positionX="3858" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="5788" positionY="150"/>
+                <point positionX="5788" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="5788" positionY="150"/>
+                <point positionX="5788" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="7717" positionY="150"/>
+                <point positionX="7717" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="7717" positionY="150"/>
+                <point positionX="7717" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="150"/>
+                <point positionX="9647" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="9647" positionY="150"/>
+                <point positionX="9647" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="9647.000000" column2="0.000000" column3="1947.000000"/>
+               <Line2 column1="0.000000" column2="150.000000" column3="7752.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="1947" positionY="7752" sizeX="9647" sizeY="0" type="com.sun.star.drawing.LineShape" name="MarkHandles" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="1947" positionY="7752"/>
+                <point positionX="11594" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="0"/>
+                <point positionX="9647" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="9647.000000" column2="0.000000" column3="1947.000000"/>
+               <Line2 column1="0.000000" column2="0.000000" column3="7752.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+            </XShapes>
+            <Transformation>
+             <Line1 column1="9648.000000" column2="0.000000" column3="1947.000000"/>
+             <Line2 column1="0.000000" column2="151.000000" column3="7752.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+           <XShape positionX="1797" positionY="1054" sizeX="150" sizeY="6698" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,0">
+            <XShapes>
+             <XShape positionX="1797" positionY="1054" sizeX="150" sizeY="6698" type="com.sun.star.drawing.PolyLineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="1797" positionY="7752"/>
+                <point positionX="1947" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="7752"/>
+                <point positionX="1947" positionY="7752"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="6914"/>
+                <point positionX="1947" positionY="6914"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="6914"/>
+                <point positionX="1947" positionY="6914"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="6077"/>
+                <point positionX="1947" positionY="6077"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="6077"/>
+                <point positionX="1947" positionY="6077"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="5240"/>
+                <point positionX="1947" positionY="5240"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="5240"/>
+                <point positionX="1947" positionY="5240"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="4403"/>
+                <point positionX="1947" positionY="4403"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="4403"/>
+                <point positionX="1947" positionY="4403"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="3565"/>
+                <point positionX="1947" positionY="3565"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="3565"/>
+                <point positionX="1947" positionY="3565"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="2728"/>
+                <point positionX="1947" positionY="2728"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="2728"/>
+                <point positionX="1947" positionY="2728"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="1891"/>
+                <point positionX="1947" positionY="1891"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="1891"/>
+                <point positionX="1947" positionY="1891"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="1054"/>
+                <point positionX="1947" positionY="1054"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="1797" positionY="1054"/>
+                <point positionX="1947" positionY="1054"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="6698"/>
+                <point positionX="150" positionY="6698"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="6698"/>
+                <point positionX="150" positionY="6698"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="5860"/>
+                <point positionX="150" positionY="5860"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="5860"/>
+                <point positionX="150" positionY="5860"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="5023"/>
+                <point positionX="150" positionY="5023"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="5023"/>
+                <point positionX="150" positionY="5023"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="4186"/>
+                <point positionX="150" positionY="4186"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="4186"/>
+                <point positionX="150" positionY="4186"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="3349"/>
+                <point positionX="150" positionY="3349"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="3349"/>
+                <point positionX="150" positionY="3349"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="2511"/>
+                <point positionX="150" positionY="2511"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="2511"/>
+                <point positionX="150" positionY="2511"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="1674"/>
+                <point positionX="150" positionY="1674"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="1674"/>
+                <point positionX="150" positionY="1674"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="837"/>
+                <point positionX="150" positionY="837"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="837"/>
+                <point positionX="150" positionY="837"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="0"/>
+                <point positionX="150" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="0" positionY="0"/>
+                <point positionX="150" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="150.000000" column2="0.000000" column3="1797.000000"/>
+               <Line2 column1="0.000000" column2="6698.000000" column3="1054.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="1947" positionY="1054" sizeX="0" sizeY="6698" type="com.sun.star.drawing.LineShape" name="MarkHandles" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="1947" positionY="7752"/>
+                <point positionX="1947" positionY="1054"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="6698"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="0.000000" column2="0.000000" column3="1947.000000"/>
+               <Line2 column1="0.000000" column2="6698.000000" column3="1054.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+            </XShapes>
+            <Transformation>
+             <Line1 column1="151.000000" column2="0.000000" column3="1797.000000"/>
+             <Line2 column1="0.000000" column2="6699.000000" column3="1054.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+           <XShape positionX="11594" positionY="1053" sizeX="150" sizeY="6698" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,1">
+            <XShapes>
+             <XShape positionX="11594" positionY="1053" sizeX="150" sizeY="6698" type="com.sun.star.drawing.PolyLineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="11744" positionY="7751"/>
+                <point positionX="11594" positionY="7751"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="7751"/>
+                <point positionX="11594" positionY="7751"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="6795"/>
+                <point positionX="11594" positionY="6795"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="6795"/>
+                <point positionX="11594" positionY="6795"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="5838"/>
+                <point positionX="11594" positionY="5838"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="5838"/>
+                <point positionX="11594" positionY="5838"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="4881"/>
+                <point positionX="11594" positionY="4881"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="4881"/>
+                <point positionX="11594" positionY="4881"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="3924"/>
+                <point positionX="11594" positionY="3924"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="3924"/>
+                <point positionX="11594" positionY="3924"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="2967"/>
+                <point positionX="11594" positionY="2967"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="2967"/>
+                <point positionX="11594" positionY="2967"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="2010"/>
+                <point positionX="11594" positionY="2010"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="2010"/>
+                <point positionX="11594" positionY="2010"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="1053"/>
+                <point positionX="11594" positionY="1053"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="11744" positionY="1053"/>
+                <point positionX="11594" positionY="1053"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="150" positionY="6698"/>
+                <point positionX="0" positionY="6698"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="6698"/>
+                <point positionX="0" positionY="6698"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="5742"/>
+                <point positionX="0" positionY="5742"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="5742"/>
+                <point positionX="0" positionY="5742"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="4785"/>
+                <point positionX="0" positionY="4785"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="4785"/>
+                <point positionX="0" positionY="4785"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="3828"/>
+                <point positionX="0" positionY="3828"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="3828"/>
+                <point positionX="0" positionY="3828"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="2871"/>
+                <point positionX="0" positionY="2871"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="2871"/>
+                <point positionX="0" positionY="2871"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="1914"/>
+                <point positionX="0" positionY="1914"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="1914"/>
+                <point positionX="0" positionY="1914"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="957"/>
+                <point positionX="0" positionY="957"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="957"/>
+                <point positionX="0" positionY="957"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+               <pointSequence>
+                <point positionX="150" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="150.000000" column2="0.000000" column3="11594.000000"/>
+               <Line2 column1="0.000000" column2="6698.000000" column3="1053.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="11594" positionY="1053" sizeX="0" sizeY="6698" type="com.sun.star.drawing.LineShape" name="MarkHandles" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="11594" positionY="7751"/>
+                <point positionX="11594" positionY="1053"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="6698"/>
+                <point positionX="0" positionY="0"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="0.000000" column2="0.000000" column3="11594.000000"/>
+               <Line2 column1="0.000000" column2="6698.000000" column3="1053.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+            </XShapes>
+            <Transformation>
+             <Line1 column1="151.000000" column2="0.000000" column3="11594.000000"/>
+             <Line2 column1="0.000000" column2="6699.000000" column3="1053.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+          </XShapes>
+          <Transformation>
+           <Line1 column1="9948.000000" column2="0.000000" column3="1797.000000"/>
+           <Line2 column1="0.000000" column2="6850.000000" column3="1053.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="2429" positionY="1803" sizeX="8682" sizeY="5949" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape positionX="2429" positionY="1803" sizeX="8682" sizeY="5949" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:CT=0:Series=0">
+            <XShapes>
+             <XShape positionX="10146" positionY="2966" sizeX="965" sizeY="4786" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=4" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="004586" fillTransparence="0" fillTransparenceGradientName="">
+              <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+              <FillBitmap/>
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="10146" positionY="7752"/>
+                <point positionX="11111" positionY="7752"/>
+                <point positionX="11111" positionY="2966"/>
+                <point positionX="10146" positionY="2966"/>
+                <point positionX="10146" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="4786"/>
+                <point positionX="965" positionY="4786"/>
+                <point positionX="965" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+                <point positionX="0" positionY="4786"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="965.000000" column2="0.000000" column3="10146.000000"/>
+               <Line2 column1="0.000000" column2="4786.000000" column3="2966.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="8217" positionY="2039" sizeX="965" sizeY="5713" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=3" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="004586" fillTransparence="0" fillTransparenceGradientName="">
+              <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+              <FillBitmap/>
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="8217" positionY="7752"/>
+                <point positionX="9182" positionY="7752"/>
+                <point positionX="9182" positionY="2039"/>
+                <point positionX="8217" positionY="2039"/>
+                <point positionX="8217" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="5713"/>
+                <point positionX="965" positionY="5713"/>
+                <point positionX="965" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+                <point positionX="0" positionY="5713"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="965.000000" column2="0.000000" column3="8217.000000"/>
+               <Line2 column1="0.000000" column2="5713.000000" column3="2039.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="6288" positionY="1803" sizeX="964" sizeY="5949" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="004586" fillTransparence="0" fillTransparenceGradientName="">
+              <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+              <FillBitmap/>
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="6288" positionY="7752"/>
+                <point positionX="7252" positionY="7752"/>
+                <point positionX="7252" positionY="1803"/>
+                <point positionX="6288" positionY="1803"/>
+                <point positionX="6288" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="5949"/>
+                <point positionX="964" positionY="5949"/>
+                <point positionX="964" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+                <point positionX="0" positionY="5949"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="964.000000" column2="0.000000" column3="6288.000000"/>
+               <Line2 column1="0.000000" column2="5949.000000" column3="1803.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="4358" positionY="2442" sizeX="965" sizeY="5310" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="004586" fillTransparence="0" fillTransparenceGradientName="">
+              <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+              <FillBitmap/>
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="4358" positionY="7752"/>
+                <point positionX="5323" positionY="7752"/>
+                <point positionX="5323" positionY="2442"/>
+                <point positionX="4358" positionY="2442"/>
+                <point positionX="4358" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="5310"/>
+                <point positionX="965" positionY="5310"/>
+                <point positionX="965" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+                <point positionX="0" positionY="5310"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="965.000000" column2="0.000000" column3="4358.000000"/>
+               <Line2 column1="0.000000" column2="5310.000000" column3="2442.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="2429" positionY="3965" sizeX="965" sizeY="3787" type="com.sun.star.drawing.PolyPolygonShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="004586" fillTransparence="0" fillTransparenceGradientName="">
+              <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+              <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+              <FillBitmap/>
+              <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+              <LineStart/>
+              <LineEnd/>
+              <PolyPolygon>
+               <pointSequence>
+                <point positionX="2429" positionY="7752"/>
+                <point positionX="3394" positionY="7752"/>
+                <point positionX="3394" positionY="3965"/>
+                <point positionX="2429" positionY="3965"/>
+                <point positionX="2429" positionY="7752"/>
+               </pointSequence>
+              </PolyPolygon>
+              <Geometry>
+               <pointSequence>
+                <point positionX="0" positionY="3787"/>
+                <point positionX="965" positionY="3787"/>
+                <point positionX="965" positionY="0"/>
+                <point positionX="0" positionY="0"/>
+                <point positionX="0" positionY="3787"/>
+               </pointSequence>
+              </Geometry>
+              <Transformation>
+               <Line1 column1="965.000000" column2="0.000000" column3="2429.000000"/>
+               <Line2 column1="0.000000" column2="3787.000000" column3="3965.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+            </XShapes>
+            <Transformation>
+             <Line1 column1="8683.000000" column2="0.000000" column3="2429.000000"/>
+             <Line2 column1="0.000000" column2="5950.000000" column3="1803.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+          </XShapes>
+          <Transformation>
+           <Line1 column1="8683.000000" column2="0.000000" column3="2429.000000"/>
+           <Line2 column1="0.000000" column2="5950.000000" column3="1803.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="2911" positionY="1485" sizeX="7718" sizeY="3568" type="com.sun.star.drawing.GroupShape">
+          <XShapes>
+           <XShape positionX="2911" positionY="1485" sizeX="7718" sizeY="3568" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:CT=1:Series=0">
+            <XShapes>
+             <XShape positionX="2911" positionY="4631" sizeX="0" sizeY="422" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=1:Series=0:Point=0">
+              <XShapes>
+               <XShape positionX="2911" positionY="4631" sizeX="0" sizeY="422" type="com.sun.star.drawing.LineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+                <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+                <LineStart/>
+                <LineEnd/>
+                <PolyPolygon>
+                 <pointSequence>
+                  <point positionX="2911" positionY="5053"/>
+                  <point positionX="2911" positionY="4631"/>
+                 </pointSequence>
+                </PolyPolygon>
+                <Geometry>
+                 <pointSequence>
+                  <point positionX="0" positionY="422"/>
+                  <point positionX="0" positionY="0"/>
+                 </pointSequence>
+                </Geometry>
+                <Transformation>
+                 <Line1 column1="0.000000" column2="0.000000" column3="2911.000000"/>
+                 <Line2 column1="0.000000" column2="422.000000" column3="4631.000000"/>
+                 <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+                </Transformation>
+               </XShape>
+              </XShapes>
+              <Transformation>
+               <Line1 column1="1.000000" column2="0.000000" column3="2911.000000"/>
+               <Line2 column1="0.000000" column2="423.000000" column3="4631.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="4841" positionY="4056" sizeX="0" sizeY="911" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=1:Series=0:Point=1">
+              <XShapes>
+               <XShape positionX="4841" positionY="4056" sizeX="0" sizeY="911" type="com.sun.star.drawing.LineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+                <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+                <LineStart/>
+                <LineEnd/>
+                <PolyPolygon>
+                 <pointSequence>
+                  <point positionX="4841" positionY="4967"/>
+                  <point positionX="4841" positionY="4056"/>
+                 </pointSequence>
+                </PolyPolygon>
+                <Geometry>
+                 <pointSequence>
+                  <point positionX="0" positionY="911"/>
+                  <point positionX="0" positionY="0"/>
+                 </pointSequence>
+                </Geometry>
+                <Transformation>
+                 <Line1 column1="0.000000" column2="0.000000" column3="4841.000000"/>
+                 <Line2 column1="0.000000" column2="911.000000" column3="4056.000000"/>
+                 <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+                </Transformation>
+               </XShape>
+              </XShapes>
+              <Transformation>
+               <Line1 column1="1.000000" column2="0.000000" column3="4841.000000"/>
+               <Line2 column1="0.000000" column2="912.000000" column3="4056.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="6770" positionY="2981" sizeX="0" sizeY="1665" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=1:Series=0:Point=2">
+              <XShapes>
+               <XShape positionX="6770" positionY="2981" sizeX="0" sizeY="1665" type="com.sun.star.drawing.LineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+                <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+                <LineStart/>
+                <LineEnd/>
+                <PolyPolygon>
+                 <pointSequence>
+                  <point positionX="6770" positionY="4646"/>
+                  <point positionX="6770" positionY="2981"/>
+                 </pointSequence>
+                </PolyPolygon>
+                <Geometry>
+                 <pointSequence>
+                  <point positionX="0" positionY="1665"/>
+                  <point positionX="0" positionY="0"/>
+                 </pointSequence>
+                </Geometry>
+                <Transformation>
+                 <Line1 column1="0.000000" column2="0.000000" column3="6770.000000"/>
+                 <Line2 column1="0.000000" column2="1665.000000" column3="2981.000000"/>
+                 <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+                </Transformation>
+               </XShape>
+              </XShapes>
+              <Transformation>
+               <Line1 column1="1.000000" column2="0.000000" column3="6770.000000"/>
+               <Line2 column1="0.000000" column2="1666.000000" column3="2981.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="8699" positionY="2275" sizeX="0" sizeY="773" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=1:Series=0:Point=3">
+              <XShapes>
+               <XShape positionX="8699" positionY="2275" sizeX="0" sizeY="773" type="com.sun.star.drawing.LineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+                <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+                <LineStart/>
+                <LineEnd/>
+                <PolyPolygon>
+                 <pointSequence>
+                  <point positionX="8699" positionY="3048"/>
+                  <point positionX="8699" positionY="2275"/>
+                 </pointSequence>
+                </PolyPolygon>
+                <Geometry>
+                 <pointSequence>
+                  <point positionX="0" positionY="773"/>
+                  <point positionX="0" positionY="0"/>
+                 </pointSequence>
+                </Geometry>
+                <Transformation>
+                 <Line1 column1="0.000000" column2="0.000000" column3="8699.000000"/>
+                 <Line2 column1="0.000000" column2="773.000000" column3="2275.000000"/>
+                 <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+                </Transformation>
+               </XShape>
+              </XShapes>
+              <Transformation>
+               <Line1 column1="1.000000" column2="0.000000" column3="8699.000000"/>
+               <Line2 column1="0.000000" column2="774.000000" column3="2275.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+             <XShape positionX="10629" positionY="1485" sizeX="0" sizeY="1067" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=1:Series=0:Point=4">
+              <XShapes>
+               <XShape positionX="10629" positionY="1485" sizeX="0" sizeY="1067" type="com.sun.star.drawing.LineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+                <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+                <LineStart/>
+                <LineEnd/>
+                <PolyPolygon>
+                 <pointSequence>
+                  <point positionX="10629" positionY="2552"/>
+                  <point positionX="10629" positionY="1485"/>
+                 </pointSequence>
+                </PolyPolygon>
+                <Geometry>
+                 <pointSequence>
+                  <point positionX="0" positionY="1067"/>
+                  <point positionX="0" positionY="0"/>
+                 </pointSequence>
+                </Geometry>
+                <Transformation>
+                 <Line1 column1="0.000000" column2="0.000000" column3="10629.000000"/>
+                 <Line2 column1="0.000000" column2="1067.000000" column3="1485.000000"/>
+                 <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+                </Transformation>
+               </XShape>
+              </XShapes>
+              <Transformation>
+               <Line1 column1="1.000000" column2="0.000000" column3="10629.000000"/>
+               <Line2 column1="0.000000" column2="1068.000000" column3="1485.000000"/>
+               <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+              </Transformation>
+             </XShape>
+            </XShapes>
+            <Transformation>
+             <Line1 column1="7719.000000" column2="0.000000" column3="2911.000000"/>
+             <Line2 column1="0.000000" column2="3569.000000" column3="1485.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+          </XShapes>
+          <Transformation>
+           <Line1 column1="7719.000000" column2="0.000000" column3="2911.000000"/>
+           <Line2 column1="0.000000" column2="3569.000000" column3="1485.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="2429" positionY="4792" sizeX="964" sizeY="81" type="com.sun.star.drawing.GroupShape" name="CID/StockLoss=">
+          <XShapes>
+           <XShape positionX="2429" positionY="4792" sizeX="964" sizeY="81" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="000000" fillTransparence="0" fillTransparenceGradientName="">
+            <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+            <FillBitmap/>
+            <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+            <LineStart/>
+            <LineEnd/>
+            <Transformation>
+             <Line1 column1="965.000000" column2="0.000000" column3="2429.000000"/>
+             <Line2 column1="0.000000" column2="82.000000" column3="4792.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+          </XShapes>
+          <Transformation>
+           <Line1 column1="965.000000" column2="0.000000" column3="2429.000000"/>
+           <Line2 column1="0.000000" column2="82.000000" column3="4792.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="4358" positionY="1565" sizeX="6752" sizeY="3308" type="com.sun.star.drawing.GroupShape" name="CID/StockGain=">
+          <XShapes>
+           <XShape positionX="4358" positionY="4414" sizeX="964" sizeY="459" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+            <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+            <FillBitmap/>
+            <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+            <LineStart/>
+            <LineEnd/>
+            <Transformation>
+             <Line1 column1="965.000000" column2="0.000000" column3="4358.000000"/>
+             <Line2 column1="0.000000" column2="460.000000" column3="4414.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+           <XShape positionX="6288" positionY="3024" sizeX="964" sizeY="1390" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+            <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+            <FillBitmap/>
+            <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+            <LineStart/>
+            <LineEnd/>
+            <Transformation>
+             <Line1 column1="965.000000" column2="0.000000" column3="6288.000000"/>
+             <Line2 column1="0.000000" column2="1391.000000" column3="3024.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+           <XShape positionX="8217" positionY="2429" sizeX="964" sizeY="595" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+            <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+            <FillBitmap/>
+            <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+            <LineStart/>
+            <LineEnd/>
+            <Transformation>
+             <Line1 column1="965.000000" column2="0.000000" column3="8217.000000"/>
+             <Line2 column1="0.000000" column2="596.000000" column3="2429.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+           <XShape positionX="10146" positionY="1565" sizeX="964" sizeY="864" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+            <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+            <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+            <FillBitmap/>
+            <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+            <LineStart/>
+            <LineEnd/>
+            <Transformation>
+             <Line1 column1="965.000000" column2="0.000000" column3="10146.000000"/>
+             <Line2 column1="0.000000" column2="865.000000" column3="1565.000000"/>
+             <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+            </Transformation>
+           </XShape>
+          </XShapes>
+          <Transformation>
+           <Line1 column1="6753.000000" column2="0.000000" column3="4358.000000"/>
+           <Line2 column1="0.000000" column2="3309.000000" column3="1565.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+        </XShapes>
+        <Transformation>
+         <Line1 column1="9948.000000" column2="0.000000" column3="1797.000000"/>
+         <Line2 column1="0.000000" column2="6850.000000" column3="1053.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+      </XShapes>
+      <Transformation>
+       <Line1 column1="9948.000000" column2="0.000000" column3="1797.000000"/>
+       <Line2 column1="0.000000" column2="6850.000000" column3="1053.000000"/>
+       <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+      </Transformation>
+     </XShape>
+     <XShape positionX="770" positionY="855" sizeX="12108" sizeY="7545" type="com.sun.star.drawing.GroupShape">
+      <XShapes>
+       <XShape positionX="2064" positionY="8002" sizeX="9413" sizeY="398" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=0,0">
+        <XShapes>
+         <XShape positionX="2064" positionY="8002" sizeX="1695" sizeY="398" type="com.sun.star.drawing.TextShape" text="2014.02.10" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1696.000000" column2="0.000000" column3="2064.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="8002.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="4007" positionY="8002" sizeX="1669" sizeY="398" type="com.sun.star.drawing.TextShape" text="2014.02.11" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1670.000000" column2="0.000000" column3="4007.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="8002.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="5923" positionY="8002" sizeX="1695" sizeY="398" type="com.sun.star.drawing.TextShape" text="2014.02.12" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1696.000000" column2="0.000000" column3="5923.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="8002.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="7852" positionY="8002" sizeX="1695" sizeY="398" type="com.sun.star.drawing.TextShape" text="2014.02.13" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1696.000000" column2="0.000000" column3="7852.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="8002.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="9782" positionY="8002" sizeX="1695" sizeY="398" type="com.sun.star.drawing.TextShape" text="2014.02.14" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1696.000000" column2="0.000000" column3="9782.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="8002.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+        </XShapes>
+        <Transformation>
+         <Line1 column1="9414.000000" column2="0.000000" column3="2064.000000"/>
+         <Line2 column1="0.000000" column2="399.000000" column3="8002.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+       <XShape positionX="770" positionY="856" sizeX="928" sizeY="7096" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,0">
+        <XShapes>
+         <XShape positionX="1511" positionY="7554" sizeX="187" sizeY="398" type="com.sun.star.drawing.TextShape" text="0" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="188.000000" column2="0.000000" column3="1511.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="7554.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="6716" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="10000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="6716.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="5879" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="20000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="5879.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="5042" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="30000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="5042.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="4205" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="40000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="4205.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="3367" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="50000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="3367.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="2530" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="60000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="2530.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="1693" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="70000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="1693.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="770" positionY="856" sizeX="928" sizeY="398" type="com.sun.star.drawing.TextShape" text="80000" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="856.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+        </XShapes>
+        <Transformation>
+         <Line1 column1="929.000000" column2="0.000000" column3="770.000000"/>
+         <Line2 column1="0.000000" column2="7097.000000" column3="856.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+       <XShape positionX="11844" positionY="855" sizeX="1034" sizeY="7096" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:Axis=1,1">
+        <XShapes>
+         <XShape positionX="11844" positionY="7553" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6100" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="7553.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="6597" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6200" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="6597.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="5640" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6300" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="5640.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="4683" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6400" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="4683.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="3726" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6500" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="3726.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="2769" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6600" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="2769.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="1812" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6700" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="1812.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+         <XShape positionX="11844" positionY="855" sizeX="1034" sizeY="398" type="com.sun.star.drawing.TextShape" text="1.6800" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+          <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+          <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+          <FillBitmap/>
+          <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+          <LineStart/>
+          <LineEnd/>
+          <Transformation>
+           <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+           <Line2 column1="0.000000" column2="399.000000" column3="855.000000"/>
+           <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+          </Transformation>
+         </XShape>
+        </XShapes>
+        <Transformation>
+         <Line1 column1="1035.000000" column2="0.000000" column3="11844.000000"/>
+         <Line2 column1="0.000000" column2="7097.000000" column3="855.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+      </XShapes>
+      <Transformation>
+       <Line1 column1="12109.000000" column2="0.000000" column3="770.000000"/>
+       <Line2 column1="0.000000" column2="7546.000000" column3="855.000000"/>
+       <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+      </Transformation>
+     </XShape>
+    </XShapes>
+    <Transformation>
+     <Line1 column1="12109.000000" column2="0.000000" column3="770.000000"/>
+     <Line2 column1="0.000000" column2="7546.000000" column3="855.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+  </XShapes>
+  <Transformation>
+   <Line1 column1="12109.000000" column2="0.000000" column3="770.000000"/>
+   <Line2 column1="0.000000" column2="7546.000000" column3="855.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+ <XShape positionX="13518" positionY="3952" sizeX="2272" sizeY="1096" type="com.sun.star.drawing.GroupShape" name="CID/D=0:Legend=">
+  <XShapes>
+   <XShape positionX="13518" positionY="3952" sizeX="2272" sizeY="1096" type="com.sun.star.drawing.RectangleShape" name="MarkHandles" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="e6e6e6" fillTransparence="0" fillTransparenceGradientName="">
+    <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+    <FillBitmap/>
+    <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+    <LineStart/>
+    <LineEnd/>
+    <Transformation>
+     <Line1 column1="2273.000000" column2="0.000000" column3="13518.000000"/>
+     <Line2 column1="0.000000" column2="1097.000000" column3="3952.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+   <XShape positionX="13634" positionY="4145" sizeX="800" sizeY="211" type="com.sun.star.drawing.GroupShape">
+    <XShapes>
+     <XShape positionX="13634" positionY="4145" sizeX="800" sizeY="211" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=0:Series=0:LegendEntry=0">
+      <XShapes>
+       <XShape positionX="13634" positionY="4145" sizeX="800" sizeY="211" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
+        <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+        <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+        <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+        <FillBitmap/>
+        <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+        <LineStart/>
+        <LineEnd/>
+        <Transformation>
+         <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+         <Line2 column1="0.000000" column2="212.000000" column3="4145.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+       <XShape positionX="13634" positionY="4145" sizeX="800" sizeY="211" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="004586" fillTransparence="0" fillTransparenceGradientName="">
+        <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+        <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+        <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+        <FillBitmap/>
+        <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+        <LineStart/>
+        <LineEnd/>
+        <Transformation>
+         <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+         <Line2 column1="0.000000" column2="212.000000" column3="4145.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+      </XShapes>
+      <Transformation>
+       <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+       <Line2 column1="0.000000" column2="212.000000" column3="4145.000000"/>
+       <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+      </Transformation>
+     </XShape>
+    </XShapes>
+    <Transformation>
+     <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+     <Line2 column1="0.000000" column2="212.000000" column3="4145.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+   <XShape positionX="13634" positionY="4643" sizeX="800" sizeY="211" type="com.sun.star.drawing.GroupShape">
+    <XShapes>
+     <XShape positionX="13634" positionY="4643" sizeX="800" sizeY="211" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/D=0:CS=0:CT=1:Series=0:LegendEntry=0">
+      <XShapes>
+       <XShape positionX="13634" positionY="4643" sizeX="800" sizeY="211" type="com.sun.star.drawing.RectangleShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
+        <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+        <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+        <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+        <FillBitmap/>
+        <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+        <LineStart/>
+        <LineEnd/>
+        <Transformation>
+         <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+         <Line2 column1="0.000000" column2="212.000000" column3="4643.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+       <XShape positionX="13634" positionY="4748" sizeX="800" sizeY="0" type="com.sun.star.drawing.LineShape" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+        <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+        <LineStart/>
+        <LineEnd/>
+        <PolyPolygon>
+         <pointSequence>
+          <point positionX="13634" positionY="4748"/>
+          <point positionX="14434" positionY="4748"/>
+         </pointSequence>
+        </PolyPolygon>
+        <Geometry>
+         <pointSequence>
+          <point positionX="0" positionY="0"/>
+          <point positionX="800" positionY="0"/>
+         </pointSequence>
+        </Geometry>
+        <Transformation>
+         <Line1 column1="800.000000" column2="0.000000" column3="13634.000000"/>
+         <Line2 column1="0.000000" column2="0.000000" column3="4748.000000"/>
+         <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+        </Transformation>
+       </XShape>
+      </XShapes>
+      <Transformation>
+       <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+       <Line2 column1="0.000000" column2="212.000000" column3="4643.000000"/>
+       <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+      </Transformation>
+     </XShape>
+    </XShapes>
+    <Transformation>
+     <Line1 column1="801.000000" column2="0.000000" column3="13634.000000"/>
+     <Line2 column1="0.000000" column2="212.000000" column3="4643.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+   <XShape positionX="14534" positionY="4052" sizeX="1140" sizeY="398" type="com.sun.star.drawing.TextShape" text="Volume" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="4800" textMinimumFrameHeight="100" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+    <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+    <FillBitmap/>
+    <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+    <LineStart/>
+    <LineEnd/>
+    <Transformation>
+     <Line1 column1="1141.000000" column2="0.000000" column3="14534.000000"/>
+     <Line2 column1="0.000000" column2="399.000000" column3="4052.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+   <XShape positionX="14534" positionY="4550" sizeX="875" sizeY="398" type="com.sun.star.drawing.TextShape" text="Close" fontHeight="10.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="4800" textMinimumFrameHeight="100" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+    <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+    <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
+    <FillBitmap/>
+    <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+    <LineStart/>
+    <LineEnd/>
+    <Transformation>
+     <Line1 column1="876.000000" column2="0.000000" column3="14534.000000"/>
+     <Line2 column1="0.000000" column2="399.000000" column3="4550.000000"/>
+     <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+    </Transformation>
+   </XShape>
+  </XShapes>
+  <Transformation>
+   <Line1 column1="2273.000000" column2="0.000000" column3="13518.000000"/>
+   <Line2 column1="0.000000" column2="1097.000000" column3="3952.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+ </XShape>
+</XShapes>

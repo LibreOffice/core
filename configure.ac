@@ -1130,6 +1130,11 @@ AC_ARG_ENABLE(cve-tests,
         [Prevent CVE tests to be executed]),
 ,)
 
+AC_ARG_ENABLE(chart-tests,
+    AS_HELP_STRING([--enable-chart-tests],
+        [Executes chart XShape tests]),
+,)
+
 AC_ARG_ENABLE(build-unowinreg,
     AS_HELP_STRING([--enable-build-unowinreg],
         [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
@@ -9191,6 +9196,18 @@ if test "$enable_cve_tests" = "no"; then
     AC_SUBST(DISABLE_CVE_TESTS)
 else
     AC_MSG_RESULT([yes])
+fi
+
+dnl ===================================================================
+dnl Check for enabling chart XShape tests
+dnl ===================================================================
+AC_MSG_CHECKING([whether to execute chart XShape tests])
+if test "$enable_chart_tests" = "yes"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_CHART_TESTS=TRUE
+    AC_SUBST(ENABLE_CHART_TESTS)
+else
+    AC_MSG_RESULT([no])
 fi
 
 dnl ===================================================================
