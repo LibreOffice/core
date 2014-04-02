@@ -132,23 +132,19 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
             pParentWindow->EnableChildTransparentMode(true);
     }
 
-    if (pWindow != NULL)
+    pWindow->Show(bInitiallyVisible);
+
+    pWindow->SetMapMode(MAP_PIXEL);
+    pWindow->SetBackground();
+    if ( ! bEnableParentClip)
     {
-        pWindow->Show(bInitiallyVisible);
-
-        pWindow->SetMapMode(MAP_PIXEL);
-        pWindow->SetBackground();
-        if ( ! bEnableParentClip)
-        {
-            pWindow->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
-            pWindow->SetPaintTransparent(true);
-        }
-        else
-        {
-            pWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
-            pWindow->SetPaintTransparent(false);
-        }
-
+        pWindow->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        pWindow->SetPaintTransparent(true);
+    }
+    else
+    {
+        pWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
+        pWindow->SetPaintTransparent(false);
     }
 
     return xWindow;
