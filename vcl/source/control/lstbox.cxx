@@ -42,7 +42,9 @@ void ListBox::EnableQuickSelection( const bool& b )
     mpImplLB->GetMainWindow()->EnableQuickSelection(b);
 }
 
-ListBox::ListBox( WindowType nType ) : Control( nType )
+ListBox::ListBox(WindowType nType)
+    : Control(nType)
+    , mpImplLB(NULL)
 {
     ImplInitListBoxData();
 }
