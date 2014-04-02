@@ -290,8 +290,9 @@ void ScColorScaleEntry::SetColor(const Color& rColor)
     maColor = rColor;
 }
 
-ScColorFormat::ScColorFormat(ScDocument* pDoc):
-    ScFormatEntry(pDoc)
+ScColorFormat::ScColorFormat(ScDocument* pDoc)
+    : ScFormatEntry(pDoc)
+    , mpParent(NULL)
 {
 }
 
