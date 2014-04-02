@@ -692,10 +692,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case RES_PARATR_DROP:
             {
 #if OSL_DEBUG_LEVEL > 1
-                const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), sal_True);
+                const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), true);
                 rSet.Put(rItem);
 #else
-                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot), sal_True));
+                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot), true));
 #endif
                 nSlot = 0;
             }
@@ -716,7 +716,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
-                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
+                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
                 rSet.Put(rItem);
                 nSlot = 0;
             }

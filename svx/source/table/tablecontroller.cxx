@@ -2003,12 +2003,12 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
                             if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, false))
                                 rAttr.InvalidateItem(nWhich);
                             else
-                                rAttr.MergeValue(rSet.Get(nWhich), sal_True);
+                                rAttr.MergeValue(rSet.Get(nWhich), true);
                         }
                         else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
                         {
                             const SfxPoolItem& rItem = rSet.Get(nWhich);
-                            rAttr.MergeValue(rItem, sal_True);
+                            rAttr.MergeValue(rItem, true);
                         }
 
                         nWhich = aIter.NextWhich();

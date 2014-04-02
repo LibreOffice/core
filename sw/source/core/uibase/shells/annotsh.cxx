@@ -824,7 +824,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
         if(nEEWhich)
         {
-            rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
+            rSet.Put(aEditAttr.Get(nEEWhich, true), nWhich);
         if(nEEWhich == EE_CHAR_KERNING)
         {
             SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING, true );

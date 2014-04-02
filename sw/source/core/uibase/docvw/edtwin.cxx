@@ -2188,7 +2188,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             rSh.GetCurAttr(aSet);
                             if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
                             {
-                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
+                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
                                 bNormalChar = false;
                                 eKeyState = KS_End;
                                 rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);

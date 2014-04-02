@@ -884,7 +884,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                             if ( !pCurrentCharFmt || 0 == CharFmt::GetItem( *pCurrentCharFmt, pItem->Which() ) )
                             {
                                 if ( !pNewSet )
-                                    pNewSet = pNewStyle->Clone( sal_True );
+                                    pNewSet = pNewStyle->Clone( true );
                                 pNewSet->ClearItem( pItem->Which() );
                             }
                         }
@@ -1001,7 +1001,7 @@ SwTxtAttr* MakeTxtAttr(
         // different from rDoc's pool, we have to correct this:
         const StylePool::SfxItemSet_Pointer_t pAutoStyle = static_cast<const SwFmtAutoFmt&>(rAttr).GetStyleHandle();
         boost::scoped_ptr<const SfxItemSet> pNewSet(
-                pAutoStyle->SfxItemSet::Clone( sal_True, &rDoc.GetAttrPool() ));
+                pAutoStyle->SfxItemSet::Clone( true, &rDoc.GetAttrPool() ));
         SwTxtAttr* pNew = MakeTxtAttr( rDoc, *pNewSet, nStt, nEnd );
         return pNew;
     }

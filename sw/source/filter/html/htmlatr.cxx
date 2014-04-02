@@ -293,7 +293,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // sollen ist harte Attributierung noetig. Fuer Vorlagen, die
         // nicht von HTML-Tag-Vorlagen abgeleitet sind, gilt das immer
 
-        pItemSet->Set( pFmt->GetAttrSet(), sal_True );
+        pItemSet->Set( pFmt->GetAttrSet(), true );
 
         if( pReferenceFmt )
             SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFmt->GetAttrSet(),

@@ -1106,7 +1106,7 @@ short IconChoiceDialog::Ok()
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( sal_False ); // without items
+            pOutSet = pSet->Clone( false ); // without items
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }

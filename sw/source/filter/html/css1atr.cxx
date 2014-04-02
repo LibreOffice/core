@@ -1261,7 +1261,7 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
                 RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
                 0 );
-            aTstItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
+            aTstItemSet.Set( pDCCharFmt->GetAttrSet(), true );
             return HasScriptDependentItems( aTstItemSet, sal_False );
         }
     }
@@ -1413,7 +1413,7 @@ static void OutCSS1DropCapRule(
                                        RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
                                        0 );
             if( pDCCharFmt )
-                aScriptItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
+                aScriptItemSet.Set( pDCCharFmt->GetAttrSet(), true );
 
             OUString aNewSelector( aSelector );
             aNewSelector += ".western" + aPseudo;
@@ -1525,7 +1525,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // (all but for nDeep==1)
     const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
     SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
-    aItemSet.Set( rFmtItemSet, sal_True ); // Was nDeep!=1 that is not working
+    aItemSet.Set( rFmtItemSet, true ); // Was nDeep!=1 that is not working
                                        // for script dependent items buts should
                                        // not make a difference for any other
 
@@ -1727,7 +1727,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     const SwFrmFmt &rMaster = rPageDesc.GetMaster();
     SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
                          RES_LR_SPACE, RES_UL_SPACE );
-    aItemSet.Set( rMaster.GetAttrSet(), sal_True );
+    aItemSet.Set( rMaster.GetAttrSet(), true );
 
     if( pRefPageDesc )
     {
@@ -1779,7 +1779,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
     {
         const SfxItemSet& rFmtItemSet = pSymCharFmt->GetAttrSet();
         SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
-        aItemSet.Set( rFmtItemSet, sal_True );
+        aItemSet.Set( rFmtItemSet, true );
 
         // If there are footnotes or endnotes, then all Attributes have to be
         // exported, so that Netscape displays the document correctly.

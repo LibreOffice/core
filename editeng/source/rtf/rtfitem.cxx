@@ -814,7 +814,7 @@ ATTR_SETUNDERLINE:
                         aUL = *(SvxUnderlineItem*)pItem;
                     }
                     else
-                        aUL = (const SvxUnderlineItem&)pSet->Get( PLAINID->nUnderline, sal_False );
+                        aUL = (const SvxUnderlineItem&)pSet->Get( PLAINID->nUnderline, false );
 
                     if( UNDERLINE_NONE == aUL.GetLineStyle() )
                         aUL.SetLineStyle( UNDERLINE_SINGLE );
@@ -909,7 +909,7 @@ ATTR_SETOVERLINE:
                         aOL = *(SvxOverlineItem*)pItem;
                     }
                     else
-                        aOL = (const SvxOverlineItem&)pSet->Get( PLAINID->nOverline, sal_False );
+                        aOL = (const SvxOverlineItem&)pSet->Get( PLAINID->nOverline, false );
 
                     if( UNDERLINE_NONE == aOL.GetLineStyle() )
                         aOL.SetLineStyle( UNDERLINE_SINGLE );

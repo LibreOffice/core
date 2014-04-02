@@ -689,8 +689,8 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
             if( aClearItems[j] ||
                 (pParentItemSet &&
                  SFX_ITEM_SET == rItemSet.GetItemState( nWhich, false, &pItem ) &&
-                 (0==i ? swhtml_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, sal_True ) )
-                        : *pItem == pParentItemSet->Get(nWhich, sal_True ) ) ) )
+                 (0==i ? swhtml_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, true ) )
+                        : *pItem == pParentItemSet->Get(nWhich, true ) ) ) )
             {
                 rItemSet.ClearItem( nWhich );
             }

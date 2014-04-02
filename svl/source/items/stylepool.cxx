@@ -369,7 +369,7 @@ public:
         : maRoot(),
           mnCount(0),
           mpIgnorableItems( pIgnorableItems != 0
-                            ? pIgnorableItems->Clone( sal_False )
+                            ? pIgnorableItems->Clone( false )
                             : 0 )
     {
         DBG_ASSERT( !pIgnorableItems || !pIgnorableItems->Count(),

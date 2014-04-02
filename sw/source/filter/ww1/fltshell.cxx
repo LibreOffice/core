@@ -1918,7 +1918,7 @@ void SwFltOutDoc::EndFly()
 /*virtual*/ const SfxPoolItem& SwFltFormatCollection::GetFlyFrmAttr(sal_uInt16 nWhich)
 {
     if( pFlyAttrs )
-        return pFlyAttrs->Get( nWhich, sal_False );
+        return pFlyAttrs->Get( nWhich, false );
     else
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }

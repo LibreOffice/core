@@ -52,7 +52,7 @@ namespace sdr
         {
             if(rProps.mpItemSet)
             {
-                mpItemSet = rProps.mpItemSet->Clone(sal_True);
+                mpItemSet = rProps.mpItemSet->Clone(true);
 
                 // do not keep parent info, this may be changed by later construrtors.
                 // This class just copies the ItemSet, ignore parent.

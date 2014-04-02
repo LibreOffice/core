@@ -3230,19 +3230,19 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
             LanguageType nLang = LANGUAGE_DONTKNOW;
             if (bLatin)
             {
-                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_LANGUAGE, sal_False )).GetLanguage();
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_LANGUAGE, false )).GetLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aAllLangs.insert( nLang );
             }
             if (bAsian)
             {
-                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CJK_LANGUAGE, sal_False )).GetLanguage();
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CJK_LANGUAGE, false )).GetLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aAllLangs.insert( nLang );
             }
             if (bComplex)
             {
-                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CTL_LANGUAGE, sal_False )).GetLanguage();
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CTL_LANGUAGE, false )).GetLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aAllLangs.insert( nLang );
             }
@@ -3278,19 +3278,19 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
                     LanguageType nLang = LANGUAGE_DONTKNOW;
                     if (bLatin)
                     {
-                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE, sal_False )).GetLanguage();
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE, false )).GetLanguage();
                         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                             aAllLangs.insert( nLang );
                     }
                     if (bAsian)
                     {
-                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CJK, sal_False )).GetLanguage();
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CJK, false )).GetLanguage();
                         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                             aAllLangs.insert( nLang );
                     }
                     if (bComplex)
                     {
-                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CTL, sal_False )).GetLanguage();
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CTL, false )).GetLanguage();
                         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                             aAllLangs.insert( nLang );
                     }

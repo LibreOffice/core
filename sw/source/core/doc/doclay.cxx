@@ -1232,7 +1232,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
-                SfxItemSet* pNewSet = pNewFmt->GetAttrSet().Clone( sal_True );
+                SfxItemSet* pNewSet = pNewFmt->GetAttrSet().Clone( true );
 
                 // Copy only the set attributes.
                 // The others should apply from the Templates.
@@ -1537,7 +1537,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     // The TxtAttribute needs to be destroyed.
     // Unfortunately, this also destroys the Format next to the Frames.
     // To avoid this, we disconnect the attribute from the Format.
-    SfxItemSet* pNewSet = pOldFmt->GetAttrSet().Clone( sal_False );
+    SfxItemSet* pNewSet = pOldFmt->GetAttrSet().Clone( false );
 
     // Protect the Frame's size and position
     if ( rSdrObj.IsMoveProtect() || rSdrObj.IsResizeProtect() )

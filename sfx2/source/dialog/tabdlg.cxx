@@ -929,7 +929,7 @@ short SfxTabDialog::Ok()
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( sal_False );  // without Items
+            pOutSet = pSet->Clone( false );  // without Items
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }

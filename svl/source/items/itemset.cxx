@@ -351,7 +351,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
                         if ( nWhich <= SFX_WHICH_MAX )
                         {
                             const SfxPoolItem& rNew = _pParent
-                                    ? _pParent->Get( nWhich, sal_True )
+                                    ? _pParent->Get( nWhich, true )
                                     : _pPool->GetDefaultItem( nWhich );
 
                             Changed( *pItemToClear, rNew );
@@ -389,7 +389,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
                         if ( nWhich <= SFX_WHICH_MAX )
                         {
                             const SfxPoolItem& rNew = _pParent
-                                    ? _pParent->Get( nWhich, sal_True )
+                                    ? _pParent->Get( nWhich, true )
                                     : _pPool->GetDefaultItem( nWhich );
 
                             Changed( *pItemToClear, rNew );
@@ -417,7 +417,7 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
 
 
 
-void SfxItemSet::ClearInvalidItems( sal_Bool bHardDefault )
+void SfxItemSet::ClearInvalidItems( bool bHardDefault )
 {
     sal_uInt16* pPtr = _pWhichRanges;
     SfxItemArray ppFnd = _aItems;
@@ -592,7 +592,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
                     if (nWhich <= SFX_WHICH_MAX )
                     {
                         const SfxPoolItem& rOld = _pParent
-                            ? _pParent->Get( nWhich, sal_True )
+                            ? _pParent->Get( nWhich, true )
                             : _pPool->GetDefaultItem( nWhich );
                         Changed( rOld, rNew );
                     }
@@ -846,12 +846,12 @@ bool SfxItemSet::Set
     const SfxItemSet&   rSet,   /*  das SfxItemSet, dessen SfxPoolItems
                                     "ubernommen werden sollen */
 
-    sal_Bool                bDeep   /*  sal_True (default)
+    bool                bDeep   /*  true (default)
                                     auch die SfxPoolItems aus den ggf. an
                                     rSet vorhandenen Parents werden direkt
                                     in das SfxItemSet "ubernommen
 
-                                    sal_False
+                                    false
                                     die SfxPoolItems aus den Parents von
                                     rSet werden nicht ber"ucksichtigt */
 )
@@ -950,7 +950,7 @@ const SfxPoolItem* SfxItemSet::GetItem
 
 
 
-const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, sal_Bool bSrchInParent) const
+const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 {
     // suche den Bereich in dem das Which steht:
     const SfxItemSet* pAktSet = this;
@@ -1076,7 +1076,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = _pParent
-                            ? _pParent->Get( nWhich, sal_True )
+                            ? _pParent->Get( nWhich, true )
                             : _pPool->GetDefaultItem( nWhich );
 
                         Changed( **ppFnd1, rNew );
@@ -1146,7 +1146,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
                     if(nWhich <= SFX_WHICH_MAX)
                     {
                         const SfxPoolItem& rNew = _pParent
-                            ? _pParent->Get( nWhich, sal_True )
+                            ? _pParent->Get( nWhich, true )
                             : _pPool->GetDefaultItem( nWhich );
 
                         Changed( **ppFnd1, rNew );
@@ -1323,7 +1323,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
 
 
 
-void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
+void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
 {
     // Achtung!!! Bei Aenderungen/Bugfixes immer obenstehende Tabelle pflegen!
     DBG_ASSERT( GetPool() == rSet.GetPool(), "MergeValues mit verschiedenen Pools" );
@@ -1380,7 +1380,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
 
 
 
-void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, sal_Bool bIgnoreDefaults )
+void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, bool bIgnoreDefaults )
 {
     SfxItemArray ppFnd = _aItems;
     const sal_uInt16* pPtr = _pWhichRanges;
@@ -1470,7 +1470,7 @@ SvStream &SfxItemSet::Store
 
     [Querverweise]
 
-    <SfxItemSet::Load(SvStream&,sal_Bool,const SfxItemPool*)>
+    <SfxItemSet::Load(SvStream&,bool,const SfxItemPool*)>
 */
 
 {
@@ -1541,7 +1541,7 @@ SvStream &SfxItemSet::Load
 
     [Querverweise]
 
-    <SfxItemSet::Store(Stream&,sal_Bool)const>
+    <SfxItemSet::Store(Stream&,bool)const>
 */
 
 {
@@ -1660,7 +1660,7 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 
 
 
-SfxItemSet *SfxItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
+SfxItemSet *SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
     if ( pToPool && pToPool != _pPool )
     {
@@ -1944,7 +1944,7 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     {
         bIncrementCount = true;
         pOld = _pParent ?
-                &_pParent->Get( nWhich, sal_True )
+                &_pParent->Get( nWhich, true )
                 : nWhich <= SFX_WHICH_MAX ? &_pPool->GetDefaultItem( nWhich ) : 0;
     }
 
@@ -1975,7 +1975,7 @@ void SfxItemSet::DisableItem(sal_uInt16 nWhich)
 
 
 
-SfxItemSet *SfxAllItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
+SfxItemSet *SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
     if ( pToPool && pToPool != _pPool )
     {

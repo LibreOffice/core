@@ -631,7 +631,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+            (const SvxSetItem&)rSet.Get( nWhich, false );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -661,7 +661,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
+            (const SvxSetItem&)rSet.Get( nWhich, false );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );

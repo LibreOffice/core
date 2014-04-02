@@ -98,7 +98,7 @@ namespace sdr
                     }
                     else
                     {
-                        mpItemSet->MergeValue(rSet.Get(nWhich), sal_True);
+                        mpItemSet->MergeValue(rSet.Get(nWhich), true);
                     }
 
                     nWhich = aIter.NextWhich();

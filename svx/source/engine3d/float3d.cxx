@@ -501,7 +501,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         if(SFX_ITEM_DONTCARE == eState)
             mpRemember2DAttributes->InvalidateItem(nWhich);
         else if(SFX_ITEM_SET == eState)
-            mpRemember2DAttributes->Put(rAttrs.Get(nWhich, sal_False));
+            mpRemember2DAttributes->Put(rAttrs.Get(nWhich, false));
 
         nWhich = aIter.NextWhich();
     }
@@ -1723,7 +1723,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
             if(SFX_ITEM_DONTCARE == eState)
                 rAttrs.InvalidateItem(nWhich);
             else if(SFX_ITEM_SET == eState)
-                rAttrs.Put(mpRemember2DAttributes->Get(nWhich, sal_False));
+                rAttrs.Put(mpRemember2DAttributes->Get(nWhich, false));
 
             nWhich = aIter.NextWhich();
         }

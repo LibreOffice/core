@@ -2028,7 +2028,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                 {
                     if (!pSetParent.get())
                     {
-                        pSetParent.reset( pSet->Clone( sal_False ) );
+                        pSetParent.reset( pSet->Clone( false ) );
                         // #i63870#
                         SwUnoCursorHelper::GetCrsrAttr(
                                 rPaM, *pSetParent, true, false );

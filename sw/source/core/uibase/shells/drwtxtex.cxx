@@ -945,7 +945,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
             }
         }
         if(nEEWhich)
-            rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
+            rSet.Put(aEditAttr.Get(nEEWhich, true), nWhich);
 
         nWhich = aIter.NextWhich();
     }

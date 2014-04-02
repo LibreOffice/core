@@ -318,7 +318,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
                 MINFLY > ((SwFmtFrmSize*)pItem)->GetWidth() )
         {
-                SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, sal_True));
+                SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, true));
                 if (pItem)
                         aSz = (SwFmtFrmSize&)(*pItem);
 

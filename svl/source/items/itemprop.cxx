@@ -172,7 +172,7 @@ SfxItemPropertySet::~SfxItemPropertySet()
 {
 }
 
-bool SfxItemPropertySet::FillItem(SfxItemSet&, sal_uInt16, sal_Bool) const
+bool SfxItemPropertySet::FillItem(SfxItemSet&, sal_uInt16, bool) const
 {
     return false;
 }
@@ -194,7 +194,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     else
     {
         SfxItemSet aSet(*rSet.GetPool(), rEntry.nWID, rEntry.nWID);
-        if(FillItem(aSet, rEntry.nWID, sal_True))
+        if(FillItem(aSet, rEntry.nWID, true))
         {
             const SfxPoolItem& rItem = aSet.Get(rEntry.nWID);
             rItem.QueryValue( rAny, rEntry.nMemberId );
@@ -250,7 +250,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     if(eState < SFX_ITEM_DEFAULT)
     {
         SfxItemSet aSet(*rSet.GetPool(), rEntry.nWID, rEntry.nWID);
-        if(FillItem(aSet, rEntry.nWID, sal_False))
+        if(FillItem(aSet, rEntry.nWID, false))
         {
             const SfxPoolItem &rItem = aSet.Get(rEntry.nWID);
             pNewItem = rItem.Clone();

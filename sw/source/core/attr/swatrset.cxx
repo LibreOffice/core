@@ -162,7 +162,7 @@ SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
 {
 }
 
-SfxItemSet* SwAttrSet::Clone( sal_Bool bItems, SfxItemPool *pToPool ) const
+SfxItemSet* SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
 {
     if ( pToPool && pToPool != GetPool() )
     {

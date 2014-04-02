@@ -295,7 +295,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
 
         if( eState != SFX_ITEM_SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, sal_True ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, true ) );
             eState = SFX_ITEM_SET;
         }
     }
@@ -453,7 +453,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
 
         if( eState != SFX_ITEM_SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, sal_True ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, true ) );
             eState = SFX_ITEM_SET;
         }
 
@@ -650,7 +650,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
 
         if( eState != SFX_ITEM_SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, sal_True ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, true ) );
             eState = SFX_ITEM_SET;
         }
 
@@ -897,7 +897,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
 
         if( eState != SFX_ITEM_SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, sal_True ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, true ) );
             eState = SFX_ITEM_SET;
         }
 
@@ -1218,7 +1218,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
 
         if( eState != SFX_ITEM_SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, sal_True ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, true ) );
             eState = SFX_ITEM_SET;
         }
 
@@ -2986,7 +2986,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
 
         if( eState != SFX_ITEM_SET )
         {
-            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, sal_True ) );
+            pItem = &static_cast< const SvxNumBulletItem& >( rSet.Get( nNumItemId, true ) );
             eState = SFX_ITEM_SET;
         }
 

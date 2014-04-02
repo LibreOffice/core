@@ -1588,7 +1588,7 @@ sal_Bool SwCntntNode::GetAttr( SfxItemSet& rSet, sal_Bool bInParent ) const
 
     const SwAttrSet& rAttrSet = GetSwAttrSet();
     if( bInParent )
-        return rSet.Set( rAttrSet, sal_True ) ? sal_True : sal_False;
+        return rSet.Set( rAttrSet, true ) ? sal_True : sal_False;
 
     rSet.Put( rAttrSet );
     return rSet.Count() ? sal_True : sal_False;

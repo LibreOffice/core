@@ -87,13 +87,13 @@ public:
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
 
-    virtual SfxItemSet *        Clone(sal_Bool bItems = sal_True, SfxItemPool *pToPool = 0) const;
+    virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = 0) const;
 
     // Items erfragen
     sal_uInt16                      Count() const { return _nCount; }
     sal_uInt16                      TotalCount() const;
 
-    virtual const SfxPoolItem&  Get( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True ) const;
+    virtual const SfxPoolItem&  Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
     const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true,
                                          TypeId aItemType = 0 ) const;
 
@@ -109,8 +109,8 @@ public:
 
     virtual void                DisableItem(sal_uInt16 nWhich);
     virtual void                InvalidateItem( sal_uInt16 nWhich );
-    virtual sal_uInt16              ClearItem( sal_uInt16 nWhich = 0);
-    virtual void                ClearInvalidItems( sal_Bool bHardDefault = sal_False );
+    virtual sal_uInt16          ClearItem( sal_uInt16 nWhich = 0);
+    virtual void                ClearInvalidItems( bool bHardDefault = false );
             void                InvalidateAllItems(); // HACK(via nWhich = 0) ???
             void                InvalidateDefaultItems();
 
@@ -126,12 +126,12 @@ public:
                                              SfxItemState eDontCareAs = SFX_ITEM_UNKNOWN,
                                              SfxItemState eDefaultAs = SFX_ITEM_UNKNOWN );
 
-    virtual bool                Set( const SfxItemSet&, sal_Bool bDeep = sal_True );
+    virtual bool                Set( const SfxItemSet&, bool bDeep = true );
 
     virtual void                Intersect( const SfxItemSet& rSet );
-    virtual void                MergeValues( const SfxItemSet& rSet, sal_Bool bOverwriteDefaults = sal_False );
+    virtual void                MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
     virtual void                Differentiate( const SfxItemSet& rSet );
-    virtual void                MergeValue( const SfxPoolItem& rItem, sal_Bool bOverwriteDefaults = sal_False  );
+    virtual void                MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
     SfxItemPool*                GetPool() const { return _pPool; }
     const sal_uInt16*               GetRanges() const { return _pWhichRanges; }
@@ -170,7 +170,7 @@ public:
                                 SfxAllItemSet( const SfxItemSet & );
                                 SfxAllItemSet( const SfxAllItemSet & );
 
-    virtual SfxItemSet *        Clone( sal_Bool bItems = sal_True, SfxItemPool *pToPool = 0 ) const SAL_OVERRIDE;
+    virtual SfxItemSet *        Clone( bool bItems = true, SfxItemPool *pToPool = 0 ) const SAL_OVERRIDE;
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich ) SAL_OVERRIDE;
     using SfxItemSet::Put;
 };

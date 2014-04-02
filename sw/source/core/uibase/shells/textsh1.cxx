@@ -1281,7 +1281,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.GetCurAttr(aSet);
         if(SFX_ITEM_SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true ))
         {
-            const SwFmtINetFmt& rINetFmt = dynamic_cast<const SwFmtINetFmt&>( aSet.Get(RES_TXTATR_INETFMT, sal_True) );
+            const SwFmtINetFmt& rINetFmt = dynamic_cast<const SwFmtINetFmt&>( aSet.Get(RES_TXTATR_INETFMT, true) );
             if( nSlot == FN_COPY_HYPERLINK_LOCATION )
             {
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();

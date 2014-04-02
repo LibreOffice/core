@@ -182,7 +182,7 @@ public:
     SwAttrSet( SwAttrPool&, const sal_uInt16* nWhichPairTable );
     SwAttrSet( const SwAttrSet& );
 
-    virtual SfxItemSet* Clone(sal_Bool bItems = sal_True, SfxItemPool *pToPool = 0) const SAL_OVERRIDE;
+    virtual SfxItemSet* Clone(bool bItems = true, SfxItemPool *pToPool = 0) const SAL_OVERRIDE;
 
     bool Put_BC( const SfxPoolItem& rAttr, SwAttrSet* pOld, SwAttrSet* pNew );
     bool Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );

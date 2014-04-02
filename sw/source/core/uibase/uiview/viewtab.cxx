@@ -847,7 +847,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     SwFmtCol aCols(
                         bSect ?
                             pSectFmt->GetCol() :
-                                (const SwFmtCol&)aSet.Get( RES_COL, sal_False ));
+                                (const SwFmtCol&)aSet.Get( RES_COL, false ));
                     SwRect aCurRect = rSh.GetAnyCurRect(bSect ? RECT_SECTION_PRT : RECT_FLY_PRT_EMBEDDED);
                     const long lWidth = bVerticalWriting ? aCurRect.Height() : aCurRect.Width();
                     ::lcl_ConvertToCols( aColItem, sal_uInt16(lWidth), aCols );

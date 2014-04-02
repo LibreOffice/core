@@ -776,7 +776,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
         sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
         {
-            SfxItemSet* pSet = pFmt->GetAttrSet().Clone( sal_False );
+            SfxItemSet* pSet = pFmt->GetAttrSet().Clone( false );
             if( pFmt->GetCol() != pRepr->GetCol() )
                 pSet->Put( pRepr->GetCol() );
 
@@ -2025,9 +2025,9 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
 void SwSectionFtnEndTabPage::Reset( const SfxItemSet& rSet )
 {
     ResetState( sal_True, (const SwFmtFtnAtTxtEnd&)rSet.Get(
-                                    RES_FTN_AT_TXTEND, sal_False ));
+                                    RES_FTN_AT_TXTEND, false ));
     ResetState( sal_False, (const SwFmtEndAtTxtEnd&)rSet.Get(
-                                    RES_END_AT_TXTEND, sal_False ));
+                                    RES_END_AT_TXTEND, false ));
 }
 
 SfxTabPage* SwSectionFtnEndTabPage::Create( Window* pParent,

@@ -311,7 +311,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
         OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
         if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, false ) )
         {
-            pNewSet = rSet2.Clone( sal_True );
+            pNewSet = rSet2.Clone( true );
             pNewSet->ClearItem( nWhichId );
         }
     }
@@ -324,7 +324,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
             if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), false ) )
             {
                 if ( !pNewSet )
-                    pNewSet = rSet2.Clone( sal_True );
+                    pNewSet = rSet2.Clone( true );
                 pNewSet->ClearItem( pItem->Which() );
             }
 

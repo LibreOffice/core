@@ -3329,7 +3329,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
             {
                 const SwAttrSet& aSet = pAktColl->GetAttrSet();
                 SvxUnderlineItem *pUnderline
-                    = (SvxUnderlineItem *)(aSet.Get( RES_CHRATR_UNDERLINE, sal_False ).Clone());
+                    = (SvxUnderlineItem *)(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone());
                 if(pUnderline){
                     pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
                     pAktColl->SetFmtAttr( *pUnderline );
@@ -3342,7 +3342,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
             if ( SFX_ITEM_SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 SvxUnderlineItem *pUnderline
-                    = (SvxUnderlineItem *)(pAktItemSet->Get( RES_CHRATR_UNDERLINE, sal_False ) .Clone());
+                    = (SvxUnderlineItem *)(pAktItemSet->Get( RES_CHRATR_UNDERLINE, false ) .Clone());
                 if(pUnderline){
                     pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
                     pAktItemSet->Put( *pUnderline );

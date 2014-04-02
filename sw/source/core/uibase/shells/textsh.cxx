@@ -1083,17 +1083,17 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
             if( SCRIPTTYPE_LATIN & nScript )
             {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT, sal_True ) );
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT, true ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_FONT);
             }
             if( SCRIPTTYPE_ASIAN & nScript )
             {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT, sal_True ) );
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT, true ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CJK_FONT );
             }
             if( SCRIPTTYPE_COMPLEX & nScript )
             {
-                aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT, sal_True ) );
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT, true ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CTL_FONT );
             }
 

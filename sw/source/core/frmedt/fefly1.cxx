@@ -1047,7 +1047,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 
     SET_CURR_SHELL( (SwViewShell*)this );
 
-    if( !rSet.Set( pFly->GetFmt()->GetAttrSet(), sal_True ) )
+    if( !rSet.Set( pFly->GetFmt()->GetAttrSet(), true ) )
         return sal_False;
 
     // now examine all attributes. Remove forbidden attributes, then

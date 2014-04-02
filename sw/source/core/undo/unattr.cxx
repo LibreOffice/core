@@ -124,7 +124,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
                               bool bSaveDrawPt )
     : SwUndo( UNDO_INSFMTATTR )
     , m_pFmt( &rChgFmt )
-    , m_pOldSet( m_pFmt->GetAttrSet().Clone( sal_False ) )
+    , m_pOldSet( m_pFmt->GetAttrSet().Clone( false ) )
     , m_nNodeIndex( 0 )
     , m_nFmtWhich( rChgFmt.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
@@ -411,7 +411,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     }
 
     const SwFmtAnchor& rAnchor =
-        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, sal_False ) );
+        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, false ) );
     if( !rAnchor.GetCntntAnchor() )
         return;
 
@@ -443,7 +443,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     SwFlyFrmFmt* pFrmFmt = static_cast<SwFlyFrmFmt*>(m_pFmt);
     const SwFmtAnchor& rAnchor =
-        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, sal_False ) );
+        static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, false ) );
 
     SwFmtAnchor aNewAnchor( rAnchor.GetAnchorId() );
     if (FLY_AT_PAGE != rAnchor.GetAnchorId())
