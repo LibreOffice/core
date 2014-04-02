@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include "boost/noncopyable.hpp"
 #include "osl/process.h"
 #include "rtl/ustring.hxx"
 #include "rtl/string.hxx"
@@ -207,7 +209,8 @@ namespace /* private */ {
     // thrown if we encounter xml tags that we do not know
     class unknown_xml_format_exception {};
 
-    class recently_used_file_filter : public i_xml_parser_event_handler
+    class recently_used_file_filter:
+        public i_xml_parser_event_handler, private boost::noncopyable
     {
     public:
         recently_used_file_filter(recently_used_item_list_t& item_list) :
@@ -278,9 +281,6 @@ namespace /* private */ {
         std::map<string_t, SET_COMMAND> named_command_map_;
         string_t current_element_;
         recently_used_item_list_t& item_list_;
-    private:
-        recently_used_file_filter(const recently_used_file_filter&);
-        recently_used_file_filter& operator=(const recently_used_file_filter&);
     };
 
 

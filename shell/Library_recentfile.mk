@@ -15,6 +15,7 @@ $(eval $(call gb_Library_set_include,recentfile,\
 ))
 
 $(eval $(call gb_Library_use_externals,recentfile,\
+	boost_headers \
 	expat \
 ))
 
