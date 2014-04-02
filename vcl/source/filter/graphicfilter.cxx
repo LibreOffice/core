@@ -2311,7 +2311,7 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
             break;
     }
 
-    SAL_WARN_IF( nRes, "vcl.filter", "Problem importing graphic " << rPath << ". Reason: " << aReturnString );
+    SAL_INFO_IF( nRes, "vcl.filter", "Problem importing graphic " << rPath << ". Reason: " << aReturnString );
 #endif
 
     return nRes;
