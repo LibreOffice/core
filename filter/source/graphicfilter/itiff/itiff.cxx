@@ -123,7 +123,54 @@ private:
     bool HasAlphaChannel() const;
 public:
 
-    TIFFReader() : pAlphaMask(0), pMaskAcc(0) {}
+    TIFFReader()
+        : bStatus(false)
+        , nLastPercent(0)
+        , pTIFF(NULL)
+        , pAcc(NULL)
+        , nDstBitsPerPixel(0)
+        , pAlphaMask(NULL)
+        , pMaskAcc(NULL)
+        , nOrigPos(0)
+        , nOrigNumberFormat(0)
+        , nDataType(0)
+        , bByteSwap(false)
+        , nNewSubFile(0)
+        , nSubFile(0)
+        , nImageWidth(0)
+        , nImageLength(0)
+        , nBitsPerSample(1)
+        , nCompression(1)
+        , nPhotometricInterpretation(0)
+        , nThresholding(1)
+        , nCellWidth(1)
+        , nCellLength(1)
+        , nFillOrder(1)
+        , pStripOffsets(NULL)
+        , nNumStripOffsets(0)
+        , nOrientation(1)
+        , nSamplesPerPixel(1)
+        , nRowsPerStrip(0xffffffff)
+        , pStripByteCounts(NULL)
+        , nNumStripByteCounts(0)
+        , nMinSampleValue(0)
+        , nMaxSampleValue(0)
+        , fXResolution(0.0)
+        , fYResolution(0.0)
+        , nPlanarConfiguration(1)
+        , nGroup3Options(0)
+        , nGroup4Options(0)
+        , nResolutionUnit(2)
+        , nPredictor(0)
+        , pColorMap(NULL)
+        , nNumColors(0)
+        , nPlanes(0)
+        , nStripsPerPlane(0)
+        , nBytesPerRow(0)
+    {
+        pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = NULL;
+    }
+
     ~TIFFReader()
     {
         delete pAlphaMask;
