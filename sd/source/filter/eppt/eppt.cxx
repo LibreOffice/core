@@ -1206,11 +1206,11 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
         break;
 
         case ::com::sun::star::drawing::FillStyle_BITMAP :
-            aPropOpt.CreateGraphicProperties( rXPropSet, OUString( "FillBitmapURL" ), sal_True );
+            aPropOpt.CreateGraphicProperties( rXPropSet, OUString( "FillBitmapURL" ), true );
         break;
 
         case ::com::sun::star::drawing::FillStyle_HATCH :
-            aPropOpt.CreateGraphicProperties( rXPropSet, OUString( "FillHatch" ), sal_True );
+            aPropOpt.CreateGraphicProperties( rXPropSet, OUString( "FillHatch" ), true );
         break;
 
         case ::com::sun::star::drawing::FillStyle_SOLID :
@@ -1467,7 +1467,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
 {
     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
-    aMSVBas.SaveOrDelMSVBAStorage( sal_True, OUString( "_MS_VBA_Overhead" ) );
+    aMSVBas.SaveOrDelMSVBAStorage( true, OUString( "_MS_VBA_Overhead" ) );
 
     SvStorageRef xOverhead = xDest->OpenSotStorage( OUString( "_MS_VBA_Overhead") );
     if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )

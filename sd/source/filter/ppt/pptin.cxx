@@ -551,7 +551,7 @@ sal_Bool ImplSdPPTImport::Import()
         for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
         {
             SetPageNum( nMasterNum, PPT_MASTERPAGE );
-            SdPage* pPage = (SdPage*)MakeBlancPage( sal_True );
+            SdPage* pPage = (SdPage*)MakeBlancPage( true );
             if ( pPage )
             {
                 sal_Bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bNotesMaster;
@@ -724,7 +724,7 @@ sal_Bool ImplSdPPTImport::Import()
                     ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
-            else if ( pPersist->bStarDrawFiller == sal_False )
+            else if ( pPersist->bStarDrawFiller == false )
             {
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
@@ -735,7 +735,7 @@ sal_Bool ImplSdPPTImport::Import()
                     else
                         pE = (*pList)[ nNextMaster ];
                 }
-                SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, sal_True );   // import background
+                SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, true );   // import background
                 if ( pObj )
                     pMPage->NbcInsertObject( pObj );
 
@@ -867,7 +867,7 @@ sal_Bool ImplSdPPTImport::Import()
         PptPageKind     ePageKind = eAktPageKind;
         sal_uInt16          nPageNum = nAktPageNum;
 
-        SdPage* pHandoutPage = (SdPage*)MakeBlancPage( sal_False );
+        SdPage* pHandoutPage = (SdPage*)MakeBlancPage( false );
         pHandoutPage->SetPageKind( PK_HANDOUT );
         pSdrModel->InsertPage( pHandoutPage );
 
@@ -880,7 +880,7 @@ sal_Bool ImplSdPPTImport::Import()
 
                 mePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPage, PPT_SLIDEPAGE );
-                SdPage* pPage = (SdPage*)MakeBlancPage( sal_False );
+                SdPage* pPage = (SdPage*)MakeBlancPage( false );
                 PptSlidePersistEntry* pMasterPersist = NULL;
                 if ( HasMasterPage( nPage, PPT_SLIDEPAGE ) )     // try to get the LayoutName from the masterpage
                 {
@@ -951,7 +951,7 @@ sal_Bool ImplSdPPTImport::Import()
 
                 // creating the corresponding note page
                 eAktPageKind = PPT_NOTEPAGE;
-                SdPage* pNotesPage = (SdPage*)MakeBlancPage( sal_False );
+                SdPage* pNotesPage = (SdPage*)MakeBlancPage( false );
                 sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage, PPT_SLIDEPAGE ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
                 if ( nNotesPageId )
@@ -996,7 +996,7 @@ sal_Bool ImplSdPPTImport::Import()
         {
             // that can happen by document templates
             eAktPageKind = PPT_SLIDEPAGE;
-            SdrPage* pPage = MakeBlancPage( sal_False );
+            SdrPage* pPage = MakeBlancPage( false );
             pSdrModel->InsertPage( pPage );
 
             // #i37397#, trying to set the title master for the first page
@@ -1024,7 +1024,7 @@ sal_Bool ImplSdPPTImport::Import()
             ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, sal_True, sal_True );
 
             eAktPageKind = PPT_NOTEPAGE;
-            SdrPage* pNPage = MakeBlancPage( sal_False );
+            SdrPage* pNPage = MakeBlancPage( false );
             pSdrModel->InsertPage( pNPage );
         }
         SetPageNum( nPageNum, ePageKind );
@@ -1384,7 +1384,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
             bool bVisible = pHFE->IsToDisplay( i );
             if ( ( eAktPageKind == PPT_SLIDEPAGE )
                 && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PPT_LAYOUT_TITLESLIDE )
-                    && ( aDocAtom.bTitlePlaceholdersOmitted == sal_True ) )
+                    && ( aDocAtom.bTitlePlaceholdersOmitted  ) )
             {
                 bVisible = false;
             }

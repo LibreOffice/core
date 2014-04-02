@@ -25,7 +25,7 @@
 
 using namespace com::sun::star;
 
-sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( sal_Bool bSaveInto,
+sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
                                                 const OUString& rStorageName )
 {
     sal_uLong nRet = ERRCODE_NONE;

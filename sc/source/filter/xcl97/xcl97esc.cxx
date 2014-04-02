@@ -347,7 +347,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
     }
     if ( !pCurrXclObj )
-        pCurrAppData->SetDontWriteShape( sal_True );
+        pCurrAppData->SetDontWriteShape( true );
     return pCurrAppData;
 }
 

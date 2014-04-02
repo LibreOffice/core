@@ -157,7 +157,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     mpEscherEx->OpenContainer( ESCHER_SpContainer );                \
     ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                     \
     if ( bFill )                                                    \
-        aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );  \
+        aPropOpt.CreateFillProperties( rObj.mXPropSet, true );  \
     if( rObj.ImplGetText() )                                        \
         aPropOpt.CreateTextProperties( rObj.mXPropSet,              \
             mpEscherEx->QueryTextID( rObj.GetShapeRef(),            \
@@ -271,7 +271,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 pMemStrm->ObjectOwnsMemory( false );
                 sal_uInt8* pBuf = (sal_uInt8*) pMemStrm->GetData();
                 sal_uInt32 nSize = pMemStrm->Seek( STREAM_SEEK_TO_END );
-                aPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_False, nSize, pBuf, nSize );
+                aPropOpt.AddOpt( ESCHER_Prop_pihlShape, false, nSize, pBuf, nSize );
             }
             if ( pInteraction->hasInteraction() )
                 aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
@@ -287,7 +287,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
             {
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", false ) )
                 {
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
@@ -310,12 +310,12 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     sal::static_int_cast< sal_uInt16 >(eShapeType),
                     nMirrorFlags | 0xa00 );
                 aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
-                aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+                aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
                 if ( rObj.ImplGetText() )
                 {
                     if ( !aPropOpt.IsFontWork() )
                         aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
-                            rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True, sal_False );
+                            rObj.GetShapeRef(), rObj.GetShapeId() ), true, false );
                 }
             }
         }
@@ -342,11 +342,11 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
             }
-            aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+            aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             if( rObj.ImplGetText() )
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                        rObj.GetShapeId() ), sal_False, sal_False );
+                        rObj.GetShapeId() ), false, false );
         }
         else if ( rObj.GetType() == "drawing.Ellipse" )
         {
@@ -382,7 +382,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );         // Flags: Connector | HasSpt
-                aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+                aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             }
             else
             {
@@ -424,15 +424,15 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     case POLY_PIE :
                     case POLY_CHORD :
                     {
-                        aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, &aPolygon );
-                        aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True  );
+                        aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, &aPolygon );
+                        aPropOpt.CreateFillProperties( rObj.mXPropSet, true  );
                     }
                     break;
 
                     case POLY_ARC :
                     {
-                        aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, &aPolygon );
-                        aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
+                        aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, &aPolygon );
+                        aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
                     }
                     break;
                 }
@@ -442,7 +442,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( rObj.ImplGetText() )
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                        rObj.GetShapeId() ), sal_False, sal_False );
+                        rObj.GetShapeId() ), false, false );
 
         }
         else if ( rObj.GetType() == "drawing.Control" )
@@ -453,8 +453,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             sal_uInt16 nSpType, nSpFlags;
             ::com::sun::star::awt::Rectangle aNewRect;
-            if ( aPropOpt.CreateConnectorProperties( rObj.GetShapeRef(),
-                            rSolverContainer, aNewRect, nSpType, nSpFlags ) == sal_False )
+            if ( ! aPropOpt.CreateConnectorProperties( rObj.GetShapeRef(),
+                            rSolverContainer, aNewRect, nSpType, nSpFlags ) )
                 break;
             rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
                                         ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
@@ -469,7 +469,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         else if ( rObj.GetType() == "drawing.Line" )
         {
             ::com::sun::star::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect, NULL );
             MapRect(rObj);
             //i27942: Poly/Lines/Bezier do not support text.
 
@@ -482,7 +482,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
             ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
             aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-            aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
+            aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType() == "drawing.PolyPolygon" )
@@ -495,9 +495,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, NULL );
             MapRect(rObj);
-            aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+            aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType() == "drawing.PolyLine" )
@@ -507,9 +507,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, NULL );
             MapRect(rObj);
-            aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
+            aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType() == "drawing.OpenBezier" )
@@ -519,9 +519,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_True, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect, NULL );
             MapRect(rObj);
-            aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
+            aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType() == "drawing.ClosedBezier" )
@@ -534,9 +534,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
-            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_True, aNewRect, NULL );
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect, NULL );
             MapRect(rObj);
-            aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+            aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType() == "drawing.GraphicObject" )
@@ -562,7 +562,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                        have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                     */
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", sal_True,  sal_True, sal_False ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", true, true, false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                         aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -572,13 +572,13 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         if ( rObj.ImplGetText() )
                             aPropOpt.CreateTextProperties( rObj.mXPropSet,
                                 mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                                    rObj.GetShapeId() ), sal_False, sal_False );
+                                    rObj.GetShapeId() ), false, false );
                     }
                 }
                 else
                 {
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", sal_False, sal_True, sal_True, bOOxmlExport ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", false, true, true, bOOxmlExport ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
@@ -647,7 +647,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
 
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType() == "drawing.Caption" )
@@ -655,7 +655,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType() == "drawing.dontknow" )
@@ -663,7 +663,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", false ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else

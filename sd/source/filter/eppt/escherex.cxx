@@ -151,7 +151,7 @@ void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance 
         {
             if ( !mbEscherDg )
             {
-                mbEscherDg = sal_True;
+                mbEscherDg = true;
                 mnCurrentDg = mxGlobal->GenerateDrawingId();
                 AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                 PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
@@ -165,7 +165,7 @@ void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance 
         {
             if ( mbEscherDg )
             {
-                mbEscherSpgr = sal_True;
+                mbEscherSpgr = true;
             }
         }
         break;
@@ -196,7 +196,7 @@ void PptEscherEx::CloseContainer()
             {
                 if ( mbEscherDg )
                 {
-                    mbEscherDg = sal_False;
+                    mbEscherDg = false;
                     if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
                         mpOutStrm->WriteUInt32( mxGlobal->GetDrawingShapeCount( mnCurrentDg ) ).WriteUInt32( mxGlobal->GetLastShapeId( mnCurrentDg ) );
                 }
@@ -207,8 +207,7 @@ void PptEscherEx::CloseContainer()
             {
                 if ( mbEscherSpgr )
                 {
-                    mbEscherSpgr = sal_False;
-
+                    mbEscherSpgr = false;
                 }
             }
             break;

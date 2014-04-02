@@ -1264,9 +1264,9 @@ void DffPropSet::InitializePropSet( sal_uInt16 nPropSetType ) const
     }
 }
 
-sal_Bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
+bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
 {
-    sal_Bool bRetValue = sal_True;
+    bool bRetValue = true;
     nId &= 0x3ff;
     if ( ( nId & 0x3f ) >= 48 ) // is this a flag id
         bRetValue = (mpPropSetEntries[nId | 0x3f].nComplexIndexOrFlagsHAttr
@@ -1317,7 +1317,7 @@ OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
     return aBuffer.makeStringAndClear();
 }
 
-sal_Bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
+bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
 {
     nRecType &= 0x3ff;
     if ( mpPropSetEntries[ nRecType ].aFlags.bSet )
@@ -1328,11 +1328,11 @@ sal_Bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
             if ( nIndex < maOffsets.size() )
             {
                 rStrm.Seek( maOffsets[ nIndex ] );
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

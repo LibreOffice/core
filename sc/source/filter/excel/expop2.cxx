@@ -78,7 +78,7 @@ FltError ExportBiff5::Write()
     if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
     {
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg );
-        sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( sal_True, EXC_STORAGE_VBA_PROJECT );
+        sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
             pDocShell->SetError( nErr, OUString( OSL_LOG_PREFIX ) );
     }

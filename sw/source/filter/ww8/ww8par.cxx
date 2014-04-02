@@ -689,7 +689,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 }
                 if ( rSt.GetError() != 0 )
                     break;
-                pImpRec->bHasUDefProp = sal_True;
+                pImpRec->bHasUDefProp = true;
                 nBytesLeft  -= 6;
             }
         }
@@ -1007,11 +1007,11 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         // Means that fBehindDocument is set
         if (GetPropertyValue(DFF_Prop_fPrint) & 0x20)
-            pImpRec->bDrawHell = sal_True;
+            pImpRec->bDrawHell = true;
         else
-            pImpRec->bDrawHell = sal_False;
+            pImpRec->bDrawHell = false;
         if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
-            pImpRec->bHidden = sal_True;
+            pImpRec->bHidden = true;
         pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
 
         if ( nTextId )
@@ -6173,7 +6173,7 @@ sal_Bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, sal_Bool bSaveRelFiles
     return bRet ? true : false;
 }
 
-sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
+bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
     SvStorageRef& rSrcStorage, uno::Reference < embed::XStorage >& rDestStorage) const
 {
     bool bRet = false;
@@ -6264,7 +6264,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
  * So convert all of them as a precaution.
  * FIXME: Actually implement this!
  */
-sal_Bool SwMSDffManager::ShapeHasText(sal_uLong, sal_uLong) const
+bool SwMSDffManager::ShapeHasText(sal_uLong, sal_uLong) const
 {
     return true;
 }

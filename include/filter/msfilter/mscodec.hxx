@@ -53,7 +53,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    sal_Bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+    bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 
@@ -193,7 +193,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    sal_Bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
+    bool                InitCodec( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 

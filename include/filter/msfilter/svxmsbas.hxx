@@ -58,7 +58,7 @@ public:
     // form the ObjectShell
     // - returns a warning code if a modified basic exist, in all other
     //   cases return ERRCODE_NONE.
-    sal_uLong SaveOrDelMSVBAStorage( sal_Bool bSaveInto, const OUString& rStorageName );
+    sal_uLong SaveOrDelMSVBAStorage( bool bSaveInto, const OUString& rStorageName );
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for loosing the information.

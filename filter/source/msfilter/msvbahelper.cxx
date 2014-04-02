@@ -458,7 +458,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 }
 
 // Treat the args as possible inouts ( conversion at bottom of method )
-sal_Bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
+bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
 #ifdef DISABLE_SCRIPTING
     (void) pShell;
@@ -466,9 +466,9 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::
     (void) aArgs;
     (void) aRet;
 
-    return sal_False;
+    return false;
 #else
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if ( !pShell )
         return bRes;
     OUString sUrl = makeMacroURL( sMacroName );
@@ -497,7 +497,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::
     }
     catch ( const uno::Exception& )
     {
-       bRes = sal_False;
+       bRes = false;
     }
     return bRes;
 #endif

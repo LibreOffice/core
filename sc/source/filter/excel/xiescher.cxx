@@ -3511,7 +3511,7 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
 
         pDrawObj->SetAnchor( aAnchor );
         rObjData.aChildAnchor = rConvData.mrDrawing.CalcAnchorRect( aAnchor, true );
-        rObjData.bChildAnchor = sal_True;
+        rObjData.bChildAnchor = true;
         // page anchoring is the best approximation we have if mbMove
         // is set
         rObjData.bPageAnchor = ( nFlags & 0x1 );

@@ -727,9 +727,9 @@ private:
     SvStream *pFallbackStream;
     std::map<sal_uInt32,OString> aOldEscherBlipCache;
 
-    virtual sal_Bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
+    virtual bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const SAL_OVERRIDE;
-    virtual sal_Bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const SAL_OVERRIDE;
+    virtual bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const SAL_OVERRIDE;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( long nOLEId,

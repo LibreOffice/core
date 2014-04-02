@@ -642,15 +642,15 @@ enum ESCHER_LineCap
 // Transform
 #define ESCHER_Prop_Rotation                      4  /*  Fixed Point 16.16 degrees                  */
 // Protection
-#define ESCHER_Prop_LockRotation                119  /*  sal_Bool              No rotation                         */
-#define ESCHER_Prop_LockAspectRatio             120  /*  sal_Bool              Don't allow changes in aspect ratio */
-#define ESCHER_Prop_LockPosition                121  /*  sal_Bool              Don't allow the shape to be moved   */
-#define ESCHER_Prop_LockAgainstSelect           122  /*  sal_Bool              Shape may not be selected           */
-#define ESCHER_Prop_LockCropping                123  /*  sal_Bool              No cropping this shape              */
-#define ESCHER_Prop_LockVertices                124  /*  sal_Bool              Edit Points not allowed             */
-#define ESCHER_Prop_LockText                    125  /*  sal_Bool              Do not edit text                    */
-#define ESCHER_Prop_LockAdjustHandles           126  /*  sal_Bool              Do not adjust                       */
-#define ESCHER_Prop_LockAgainstGrouping         127  /*  sal_Bool              Do not group this shape             */
+#define ESCHER_Prop_LockRotation                119  /*  bool              No rotation                         */
+#define ESCHER_Prop_LockAspectRatio             120  /*  bool              Don't allow changes in aspect ratio */
+#define ESCHER_Prop_LockPosition                121  /*  bool              Don't allow the shape to be moved   */
+#define ESCHER_Prop_LockAgainstSelect           122  /*  bool              Shape may not be selected           */
+#define ESCHER_Prop_LockCropping                123  /*  bool              No cropping this shape              */
+#define ESCHER_Prop_LockVertices                124  /*  bool              Edit Points not allowed             */
+#define ESCHER_Prop_LockText                    125  /*  bool              Do not edit text                    */
+#define ESCHER_Prop_LockAdjustHandles           126  /*  bool              Do not adjust                       */
+#define ESCHER_Prop_LockAgainstGrouping         127  /*  bool              Do not group this shape             */
 // Text
 #define ESCHER_Prop_lTxid                       128  /*  LONG              id for the text, value determined by the host            */
 #define ESCHER_Prop_dxTextLeft                  129  /*  LONG              margins relative to shape's inscribed                    */
@@ -664,11 +664,11 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_cdirFont                    137  /*  MSOCDIR           Font rotation                                            */
 #define ESCHER_Prop_hspNext                     138  /*  MSOHSP            ID of the next shape (used by Word for linked textboxes) */
 #define ESCHER_Prop_txdir                       139  /*  MSOTXDIR          Bi-Di Text direction                                     */
-#define ESCHER_Prop_SelectText                  187  /*  sal_Bool              sal_True if single click selects text, sal_False if two clicks   */
-#define ESCHER_Prop_AutoTextMargin              188  /*  sal_Bool              use host's margin calculations                           */
-#define ESCHER_Prop_RotateText                  189  /*  sal_Bool              Rotate text with shape                                   */
-#define ESCHER_Prop_FitShapeToText              190  /*  sal_Bool              Size shape to fit text size                              */
-#define ESCHER_Prop_FitTextToShape              191  /*  sal_Bool              Size text to fit shape size                              */
+#define ESCHER_Prop_SelectText                  187  /*  bool              sal_True if single click selects text, sal_False if two clicks   */
+#define ESCHER_Prop_AutoTextMargin              188  /*  bool              use host's margin calculations                           */
+#define ESCHER_Prop_RotateText                  189  /*  bool              Rotate text with shape                                   */
+#define ESCHER_Prop_FitShapeToText              190  /*  bool              Size shape to fit text size                              */
+#define ESCHER_Prop_FitTextToShape              191  /*  bool              Size text to fit shape size                              */
 // GeoText
 #define ESCHER_Prop_gtextUNICODE                192  /*  WCHAR*            UNICODE text string       */
 #define ESCHER_Prop_gtextRTF                    193  /*  char*             RTF text string           */
@@ -676,22 +676,22 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_gtextSize                   195  /*  LONG              default point size        */
 #define ESCHER_Prop_gtextSpacing                196  /*  LONG              fixed point 16.16         */
 #define ESCHER_Prop_gtextFont                   197  /*  WCHAR*            font family name          */
-#define ESCHER_Prop_gtextFReverseRows           240  /*  sal_Bool              Reverse row order         */
-#define ESCHER_Prop_fGtext                      241  /*  sal_Bool              Has text effect           */
-#define ESCHER_Prop_gtextFVertical              242  /*  sal_Bool              Rotate characters         */
-#define ESCHER_Prop_gtextFKern                  243  /*  sal_Bool              Kern characters           */
-#define ESCHER_Prop_gtextFTight                 244  /*  sal_Bool              Tightening or tracking    */
-#define ESCHER_Prop_gtextFStretch               245  /*  sal_Bool              Stretch to fit shape      */
-#define ESCHER_Prop_gtextFShrinkFit             246  /*  sal_Bool              Char bounding box         */
-#define ESCHER_Prop_gtextFBestFit               247  /*  sal_Bool              Scale text-on-path        */
-#define ESCHER_Prop_gtextFNormalize             248  /*  sal_Bool              Stretch char height       */
-#define ESCHER_Prop_gtextFDxMeasure             249  /*  sal_Bool              Do not measure along path */
-#define ESCHER_Prop_gtextFBold                  250  /*  sal_Bool              Bold font                 */
-#define ESCHER_Prop_gtextFItalic                251  /*  sal_Bool              Italic font               */
-#define ESCHER_Prop_gtextFUnderline             252  /*  sal_Bool              Underline font            */
-#define ESCHER_Prop_gtextFShadow                253  /*  sal_Bool              Shadow font               */
-#define ESCHER_Prop_gtextFSmallcaps             254  /*  sal_Bool              Small caps font           */
-#define ESCHER_Prop_gtextFStrikethrough         255  /*  sal_Bool              Strike through font       */
+#define ESCHER_Prop_gtextFReverseRows           240  /*  bool              Reverse row order         */
+#define ESCHER_Prop_fGtext                      241  /*  bool              Has text effect           */
+#define ESCHER_Prop_gtextFVertical              242  /*  bool              Rotate characters         */
+#define ESCHER_Prop_gtextFKern                  243  /*  bool              Kern characters           */
+#define ESCHER_Prop_gtextFTight                 244  /*  bool              Tightening or tracking    */
+#define ESCHER_Prop_gtextFStretch               245  /*  bool              Stretch to fit shape      */
+#define ESCHER_Prop_gtextFShrinkFit             246  /*  bool              Char bounding box         */
+#define ESCHER_Prop_gtextFBestFit               247  /*  bool              Scale text-on-path        */
+#define ESCHER_Prop_gtextFNormalize             248  /*  bool              Stretch char height       */
+#define ESCHER_Prop_gtextFDxMeasure             249  /*  bool              Do not measure along path */
+#define ESCHER_Prop_gtextFBold                  250  /*  bool              Bold font                 */
+#define ESCHER_Prop_gtextFItalic                251  /*  bool              Italic font               */
+#define ESCHER_Prop_gtextFUnderline             252  /*  bool              Underline font            */
+#define ESCHER_Prop_gtextFShadow                253  /*  bool              Shadow font               */
+#define ESCHER_Prop_gtextFSmallcaps             254  /*  bool              Small caps font           */
+#define ESCHER_Prop_gtextFStrikethrough         255  /*  bool              Strike through font       */
 // Blip
 #define ESCHER_Prop_cropFromTop                 256  /*  LONG              16.16 fraction times total                          */
 #define ESCHER_Prop_cropFromBottom              257  /*  LONG                image width or height,                            */
@@ -711,10 +711,10 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_pibPrint                    271  /*  IMsoBlip*         Blip to display when printing                       */
 #define ESCHER_Prop_pibPrintName                272  /*  WCHAR*            Blip file name                                      */
 #define ESCHER_Prop_pibPrintFlags               273  /*  MSOBLIPFLAGS      Blip flags                                          */
-#define ESCHER_Prop_fNoHitTestPicture           316  /*  sal_Bool              Do not hit test the picture                         */
-#define ESCHER_Prop_pictureGray                 317  /*  sal_Bool              grayscale display                                   */
-#define ESCHER_Prop_pictureBiLevel              318  /*  sal_Bool              bi-level display                                    */
-#define ESCHER_Prop_pictureActive               319  /*  sal_Bool              Server is active (OLE objects only)                 */
+#define ESCHER_Prop_fNoHitTestPicture           316  /*  bool              Do not hit test the picture                         */
+#define ESCHER_Prop_pictureGray                 317  /*  bool              grayscale display                                   */
+#define ESCHER_Prop_pictureBiLevel              318  /*  bool              bi-level display                                    */
+#define ESCHER_Prop_pictureActive               319  /*  bool              Server is active (OLE objects only)                 */
 // Geometry
 #define ESCHER_Prop_geoLeft                     320  /*  LONG              Defines the G (geometry) coordinate space.  */
 #define ESCHER_Prop_geoTop                      321  /*  LONG                                                          */
@@ -733,12 +733,12 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_adjust8Value                334  /*  LONG                                                          */
 #define ESCHER_Prop_adjust9Value                335  /*  LONG                                                          */
 #define ESCHER_Prop_adjust10Value               336  /*  LONG                                                          */
-#define ESCHER_Prop_fShadowOK                   378  /*  sal_Bool              Shadow may be set                           */
-#define ESCHER_Prop_f3DOK                       379  /*  sal_Bool              3D may be set                               */
-#define ESCHER_Prop_fLineOK                     380  /*  sal_Bool              Line style may be set                       */
-#define ESCHER_Prop_fGtextOK                    381  /*  sal_Bool              Text effect (FontWork) supported             */
-#define ESCHER_Prop_fFillShadeShapeOK           382  /*  sal_Bool                                                          */
-#define ESCHER_Prop_fFillOK                     383  /*  sal_Bool              OK to fill the shape through the UI or VBA? */
+#define ESCHER_Prop_fShadowOK                   378  /*  bool              Shadow may be set                           */
+#define ESCHER_Prop_f3DOK                       379  /*  bool              3D may be set                               */
+#define ESCHER_Prop_fLineOK                     380  /*  bool              Line style may be set                       */
+#define ESCHER_Prop_fGtextOK                    381  /*  bool              Text effect (FontWork) supported             */
+#define ESCHER_Prop_fFillShadeShapeOK           382  /*  bool                                                          */
+#define ESCHER_Prop_fFillOK                     383  /*  bool              OK to fill the shape through the UI or VBA? */
 // FillStyle
 #define ESCHER_Prop_fillType                    384  /*  ESCHER_FillStyle  Type of fill                                  */
 #define ESCHER_Prop_fillColor                   385  /*  MSOCLR            Foreground color                              */
@@ -769,11 +769,11 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_fillShapeOriginX            410  /*  LONG                                                            */
 #define ESCHER_Prop_fillShapeOriginY            411  /*  LONG                                                            */
 #define ESCHER_Prop_fillShadeType               412  /*  MSOSHADETYPE      Type of shading, if a shaded (gradient) fill. */
-#define ESCHER_Prop_fFilled                     443  /*  sal_Bool              Is shape filled?                              */
-#define ESCHER_Prop_fHitTestFill                444  /*  sal_Bool              Should we hit test fill?                      */
-#define ESCHER_Prop_fillShape                   445  /*  sal_Bool              Register pattern on shape                     */
-#define ESCHER_Prop_fillUseRect                 446  /*  sal_Bool              Use the large rect?                           */
-#define ESCHER_Prop_fNoFillHitTest              447  /*  sal_Bool              Hit test a shape as though filled             */
+#define ESCHER_Prop_fFilled                     443  /*  bool              Is shape filled?                              */
+#define ESCHER_Prop_fHitTestFill                444  /*  bool              Should we hit test fill?                      */
+#define ESCHER_Prop_fillShape                   445  /*  bool              Register pattern on shape                     */
+#define ESCHER_Prop_fillUseRect                 446  /*  bool              Use the large rect?                           */
+#define ESCHER_Prop_fNoFillHitTest              447  /*  bool              Hit test a shape as though filled             */
 // LineStyle
 #define ESCHER_Prop_lineColor                   448  /*  MSOCLR            Color of line                              */
 #define ESCHER_Prop_lineOpacity                 449  /*  LONG              Not implemented                            */
@@ -799,11 +799,11 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_lineEndArrowLength          469  /*  MSOLINEENDLENGTH  Arrow at end                               */
 #define ESCHER_Prop_lineJoinStyle               470  /*  MSOLINEJOIN       How to join lines                          */
 #define ESCHER_Prop_lineEndCapStyle             471  /*  MSOLINECAP        How to end lines                           */
-#define ESCHER_Prop_fArrowheadsOK               507  /*  sal_Bool              Allow arrowheads if prop. is set           */
-#define ESCHER_Prop_fLine                       508  /*  sal_Bool              Any line?                                  */
-#define ESCHER_Prop_fHitTestLine                509  /*  sal_Bool              Should we hit test lines?                  */
-#define ESCHER_Prop_lineFillShape               510  /*  sal_Bool              Register pattern on shape                  */
-#define ESCHER_Prop_fNoLineDrawDash             511  /*  sal_Bool              Draw a dashed line if no line              */
+#define ESCHER_Prop_fArrowheadsOK               507  /*  bool              Allow arrowheads if prop. is set           */
+#define ESCHER_Prop_fLine                       508  /*  bool              Any line?                                  */
+#define ESCHER_Prop_fHitTestLine                509  /*  bool              Should we hit test lines?                  */
+#define ESCHER_Prop_lineFillShape               510  /*  bool              Register pattern on shape                  */
+#define ESCHER_Prop_fNoLineDrawDash             511  /*  bool              Draw a dashed line if no line              */
 // ShadowStyle
 #define ESCHER_Prop_shadowType                  512  /*  MSOSHADOWTYPE     Type of effect            */
 #define ESCHER_Prop_shadowColor                 513  /*  MSOCLR            Foreground color          */
@@ -823,8 +823,8 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_shadowWeight                527  /*  LONG              scaling factor            */
 #define ESCHER_Prop_shadowOriginX               528  /*  LONG                                        */
 #define ESCHER_Prop_shadowOriginY               529  /*  LONG                                        */
-#define ESCHER_Prop_fShadow                     574  /*  sal_Bool              Any shadow?               */
-#define ESCHER_Prop_fshadowObscured             575  /*  sal_Bool              Excel5-style shadow       */
+#define ESCHER_Prop_fShadow                     574  /*  bool              Any shadow?               */
+#define ESCHER_Prop_fshadowObscured             575  /*  bool              Excel5-style shadow       */
 // PerspectiveStyle
 #define ESCHER_Prop_perspectiveType             576  /*  MSOXFORMTYPE      Where transform applies        */
 #define ESCHER_Prop_perspectiveOffsetX          577  /*  LONG              The LONG values define a       */
@@ -838,7 +838,7 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_perspectiveWeight           585  /*  LONG              Scaling factor                 */
 #define ESCHER_Prop_perspectiveOriginX          586  /*  LONG                                             */
 #define ESCHER_Prop_perspectiveOriginY          587  /*  LONG                                             */
-#define ESCHER_Prop_fPerspective                639  /*  sal_Bool              On/off                         */
+#define ESCHER_Prop_fPerspective                639  /*  bool              On/off                         */
 // 3D Object
 #define ESCHER_Prop_c3DSpecularAmt              640  /*  LONG         Fixed-point 16.16                                                                                                   */
 #define ESCHER_Prop_c3DDiffuseAmt               641  /*  LONG         Fixed-point 16.16                                                                                                   */
@@ -849,10 +849,10 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_c3DExtrudePlane             646  /*  LONG         Extrusion direction                                                                                                 */
 #define ESCHER_Prop_c3DExtrusionColor           647  /*  MSOCLR       Basic color of extruded part of shape; the lighting model used will determine the exact shades used when rendering. */
 #define ESCHER_Prop_c3DCrMod                    648  /*  MSOCLR       Modification for BW views                                                                                           */
-#define ESCHER_Prop_f3D                         700  /*  sal_Bool         Does this shape have a 3D effect?                                                                                   */
-#define ESCHER_Prop_fc3DMetallic                701  /*  sal_Bool         Use metallic specularity?                                                                                           */
-#define ESCHER_Prop_fc3DUseExtrusionColor       702  /*  sal_Bool                                                                                                                             */
-#define ESCHER_Prop_fc3DLightFace               703  /*  sal_Bool                                                                                                                             */
+#define ESCHER_Prop_f3D                         700  /*  bool         Does this shape have a 3D effect?                                                                                   */
+#define ESCHER_Prop_fc3DMetallic                701  /*  bool         Use metallic specularity?                                                                                           */
+#define ESCHER_Prop_fc3DUseExtrusionColor       702  /*  bool                                                                                                                             */
+#define ESCHER_Prop_fc3DLightFace               703  /*  bool                                                                                                                             */
 // 3D Style
 #define ESCHER_Prop_c3DYRotationAngle           704  /*  LONG            degrees (16.16) about y axis         */
 #define ESCHER_Prop_c3DXRotationAngle           705  /*  LONG            degrees (16.16) about x axis         */
@@ -881,22 +881,22 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_c3DFillY                    728  /*  LONG            tion; only their relative            */
 #define ESCHER_Prop_c3DFillZ                    729  /*  LONG            magnitudes matter                    */
 #define ESCHER_Prop_c3DFillIntensity            730  /*  LONG            Fixed point intensity                */
-#define ESCHER_Prop_fc3DConstrainRotation       763  /*  sal_Bool                                                 */
-#define ESCHER_Prop_fc3DRotationCenterAuto      764  /*  sal_Bool                                                 */
-#define ESCHER_Prop_fc3DParallel                765  /*  sal_Bool            Parallel projection?                 */
-#define ESCHER_Prop_fc3DKeyHarsh                766  /*  sal_Bool            Is key lighting harsh?               */
-#define ESCHER_Prop_fc3DFillHarsh               767  /*  sal_Bool            Is fill lighting harsh?              */
+#define ESCHER_Prop_fc3DConstrainRotation       763  /*  bool                                                 */
+#define ESCHER_Prop_fc3DRotationCenterAuto      764  /*  bool                                                 */
+#define ESCHER_Prop_fc3DParallel                765  /*  bool            Parallel projection?                 */
+#define ESCHER_Prop_fc3DKeyHarsh                766  /*  bool            Is key lighting harsh?               */
+#define ESCHER_Prop_fc3DFillHarsh               767  /*  bool            Is fill lighting harsh?              */
 // Shape
 #define ESCHER_Prop_hspMaster                   769  /*  MSOHSP          master shape                                        */
 #define ESCHER_Prop_cxstyle                     771  /*  MSOCXSTYLE      Type of connector                                   */
 #define ESCHER_Prop_bWMode                      772  /*  ESCHERwMode     Settings for modifications to                       */
 #define ESCHER_Prop_bWModePureBW                773  /*  ESCHERwMode     be made when in different                         */
 #define ESCHER_Prop_bWModeBW                    774  /*  ESCHERwMode     forms of black-and-white mode.                    */
-#define ESCHER_Prop_fOleIcon                    826  /*  sal_Bool            For OLE objects, whether the object is in icon form */
-#define ESCHER_Prop_fPreferRelativeResize       827  /*  sal_Bool            For UI only. Prefer relative resizing.              */
-#define ESCHER_Prop_fLockShapeType              828  /*  sal_Bool            Lock the shape type (don't allow Change Shape)      */
-#define ESCHER_Prop_fDeleteAttachedObject       830  /*  sal_Bool                                                                */
-#define ESCHER_Prop_fBackground                 831  /*  sal_Bool            If sal_True, this is the background shape.              */
+#define ESCHER_Prop_fOleIcon                    826  /*  bool            For OLE objects, whether the object is in icon form */
+#define ESCHER_Prop_fPreferRelativeResize       827  /*  bool            For UI only. Prefer relative resizing.              */
+#define ESCHER_Prop_fLockShapeType              828  /*  bool            Lock the shape type (don't allow Change Shape)      */
+#define ESCHER_Prop_fDeleteAttachedObject       830  /*  bool                                                                */
+#define ESCHER_Prop_fBackground                 831  /*  bool            If sal_True, this is the background shape.              */
 // Callout
 #define ESCHER_Prop_spcot                       832  /*  MSOSPCOT        Callout type                                           */
 #define ESCHER_Prop_dxyCalloutGap               833  /*  LONG            Distance from box to first point.(EMUs)                */
@@ -904,13 +904,13 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_spcod                       835  /*  MSOSPCOD        Callout drop type                                      */
 #define ESCHER_Prop_dxyCalloutDropSpecified     836  /*  LONG            if msospcodSpecified, the actual drop distance         */
 #define ESCHER_Prop_dxyCalloutLengthSpecified   837  /*  LONG            if fCalloutLengthSpecified, the actual distance        */
-#define ESCHER_Prop_fCallout                    889  /*  sal_Bool            Is the shape a callout?                                */
-#define ESCHER_Prop_fCalloutAccentBar           890  /*  sal_Bool            does callout have accent bar                           */
-#define ESCHER_Prop_fCalloutTextBorder          891  /*  sal_Bool            does callout have a text border                        */
-#define ESCHER_Prop_fCalloutMinusX              892  /*  sal_Bool                                                                   */
-#define ESCHER_Prop_fCalloutMinusY              893  /*  sal_Bool                                                                   */
-#define ESCHER_Prop_fCalloutDropAuto            894  /*  sal_Bool            If true, then we occasionally invert the drop distance */
-#define ESCHER_Prop_fCalloutLengthSpecified     895  /*  sal_Bool            if true, we look at dxyCalloutLengthSpecified          */
+#define ESCHER_Prop_fCallout                    889  /*  bool            Is the shape a callout?                                */
+#define ESCHER_Prop_fCalloutAccentBar           890  /*  bool            does callout have accent bar                           */
+#define ESCHER_Prop_fCalloutTextBorder          891  /*  bool            does callout have a text border                        */
+#define ESCHER_Prop_fCalloutMinusX              892  /*  bool                                                                   */
+#define ESCHER_Prop_fCalloutMinusY              893  /*  bool                                                                   */
+#define ESCHER_Prop_fCalloutDropAuto            894  /*  bool            If true, then we occasionally invert the drop distance */
+#define ESCHER_Prop_fCalloutLengthSpecified     895  /*  bool            if true, we look at dxyCalloutLengthSpecified          */
 // GroupShape
 #define ESCHER_Prop_wzName                      896  /*  WCHAR*          Shape Name (present only if explicitly set)                                                            */
 #define ESCHER_Prop_wzDescription               897  /*  WCHAR*          alternate text                                                                                         */
@@ -923,13 +923,13 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_lidRegroup                  904  /*  LONG            Regroup ID                                                                                             */
 #define ESCHER_Prop_tableProperties             927
 #define ESCHER_Prop_tableRowProperties          928
-#define ESCHER_Prop_fEditedWrap                 953  /*  sal_Bool            Has the wrap polygon been edited?                                                                      */
-#define ESCHER_Prop_fBehindDocument             954  /*  sal_Bool            Word-only (shape is behind text)                                                                       */
-#define ESCHER_Prop_fOnDblClickNotify           955  /*  sal_Bool            Notify client on a double click                                                                        */
-#define ESCHER_Prop_fIsButton                   956  /*  sal_Bool            A button shape (i.e., clicking performs an action). Set for shapes with attached hyperlinks or macros. */
-#define ESCHER_Prop_fOneD                       957  /*  sal_Bool            1D adjustment                                                                                          */
-#define ESCHER_Prop_fHidden                     958  /*  sal_Bool            Do not display                                                                                         */
-#define ESCHER_Prop_fPrint                      959  /*  sal_Bool            Print this shape                                                                                       */
+#define ESCHER_Prop_fEditedWrap                 953  /*  bool            Has the wrap polygon been edited?                                                                      */
+#define ESCHER_Prop_fBehindDocument             954  /*  bool            Word-only (shape is behind text)                                                                       */
+#define ESCHER_Prop_fOnDblClickNotify           955  /*  bool            Notify client on a double click                                                                        */
+#define ESCHER_Prop_fIsButton                   956  /*  bool            A button shape (i.e., clicking performs an action). Set for shapes with attached hyperlinks or macros. */
+#define ESCHER_Prop_fOneD                       957  /*  bool            1D adjustment                                                                                          */
+#define ESCHER_Prop_fHidden                     958  /*  bool            Do not display                                                                                         */
+#define ESCHER_Prop_fPrint                      959  /*  bool            Print this shape                                                                                       */
 
 #define ESCHER_PERSISTENTRY_PREALLOCATE     64
 
@@ -963,7 +963,7 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
     ::com::sun::star::awt::Point            maPointB;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToB;
 
-    sal_uInt32      GetConnectorRule( sal_Bool bFirst );
+    sal_uInt32      GetConnectorRule( bool bFirst );
 
                     EscherConnectorListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rC,
                                         const ::com::sun::star::awt::Point& rPA,
@@ -999,11 +999,11 @@ struct MSFILTER_DLLPUBLIC EscherExAtom
 
 struct EscherPropertyValueHelper
 {
-    static sal_Bool GetPropertyValue(
+    static bool GetPropertyValue(
         ::com::sun::star::uno::Any& rAny,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
         const OUString& rPropertyName,
-        sal_Bool bTestPropertyAvailability = sal_False
+        bool bTestPropertyAvailability = false
     );
 
     static ::com::sun::star::beans::PropertyState GetPropertyState(
@@ -1045,8 +1045,8 @@ protected:
     Size            maPrefSize;
     MapMode         maPrefMapMode;
 
-    sal_Bool        mbIsEmpty;
-    sal_Bool        mbIsNativeGraphicPossible;
+    bool            mbIsEmpty;
+    bool            mbIsNativeGraphicPossible;
 
 public:
 
@@ -1059,10 +1059,10 @@ public:
 
                     ~EscherBlibEntry();
 
-    void            WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset, sal_uInt32 nResize = 0 );
-    sal_Bool        IsEmpty() const { return mbIsEmpty; };
+    void            WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, sal_uInt32 nResize = 0 );
+    bool            IsEmpty() const { return mbIsEmpty; };
 
-    sal_Bool        operator==( const EscherBlibEntry& ) const;
+    bool            operator==( const EscherBlibEntry& ) const;
 };
 
 
@@ -1088,21 +1088,21 @@ public:
 
     sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = NULL ) const;
     void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = NULL  );
-    sal_Bool    WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
-    sal_Bool    bWritePictureOffset, sal_uInt32 nResize = 0);
+    bool        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
+    bool        bWritePictureOffset, sal_uInt32 nResize = 0);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
                     const OString& rGraphicId,
                     const Rectangle& rBoundRect,
                     const com::sun::star::awt::Rectangle* pVisArea = NULL,
                     const GraphicAttr* pGrafikAttr = NULL,
-                    const sal_Bool ooxmlExport = false
+                    const bool ooxmlExport = false
                 );
-    sal_Bool    HasGraphics() const { return mnBlibEntrys != 0; };
+    bool        HasGraphics() const { return mnBlibEntrys != 0; };
 
     void        SetNewBlipStreamOffset( sal_Int32 nOffset );
 
-    sal_Bool    GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
+    bool        GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
 
     void        SetBaseURI( const OUString& rBaseURI ) { maBaseURI = rBaseURI; };
     const OUString& GetBaseURI() { return maBaseURI; };
@@ -1178,16 +1178,16 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
     sal_uInt32              nCountCount;
     sal_uInt32              nCountSize;
 
-    sal_Bool                bHasComplexData;
+    bool                    bHasComplexData;
 
 
-    sal_uInt32  ImplGetColor( const sal_uInt32 rColor, sal_Bool bSwap = sal_True );
+    sal_uInt32  ImplGetColor( const sal_uInt32 rColor, bool bSwap = true );
     void        ImplCreateGraphicAttributes(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                     sal_uInt32 nBlibId,
-                    sal_Bool bCreateCroppingAttributes
+                    bool bCreateCroppingAttributes
                 );
-    sal_Bool    ImplCreateEmbeddedBmp( const OString& rUniqueId );
+    bool        ImplCreateEmbeddedBmp( const OString& rUniqueId );
     void        ImplInit();
 
 public:
@@ -1207,46 +1207,46 @@ public:
     void        AddOpt(
                     sal_uInt16 nPropertyID,
                     sal_uInt32 nPropValue,
-                    sal_Bool bBlib = sal_False
+                    bool bBlib = false
                 );
 
     void        AddOpt(
                     sal_uInt16 nPropertyID,
-                    sal_Bool bBlib,
+                    bool bBlib,
                     sal_uInt32 nPropValue,
                     sal_uInt8* pProp,
                     sal_uInt32 nPropSize
                 );
 
-    sal_Bool    GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
+    bool        GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
 
-    sal_Bool    GetOpt( sal_uInt16 nPropertyID, EscherPropSortStruct& rPropValue ) const;
+    bool        GetOpt( sal_uInt16 nPropertyID, EscherPropSortStruct& rPropValue ) const;
 
     EscherProperties GetOpts() const;
 
     void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 
-    sal_Bool    CreateShapeProperties(
+    bool        CreateShapeProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape
                 );
-    sal_Bool    CreateOLEGraphicProperties(
+    bool        CreateOLEGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXOleObject
                 );
-    sal_Bool    CreateGraphicProperties(
+    bool        CreateGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                     const GraphicObject& rGraphicObj
                 );
-    sal_Bool    CreateMediaGraphicProperties(
+    bool        CreateMediaGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXMediaObject
                 );
 
     /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
-    sal_Bool    CreateEmbeddedBitmapProperties(
+    bool        CreateEmbeddedBitmapProperties(
                     const OUString& rBitmapUrl,
                     ::com::sun::star::drawing::BitmapMode eBitmapMode
                 );
     /** Creates a complex ESCHER_Prop_fillBlip containing a hatch style (for Excel charts). */
-    sal_Bool    CreateEmbeddedHatchProperties(
+    bool        CreateEmbeddedHatchProperties(
                     const ::com::sun::star::drawing::Hatch& rHatch,
                     const Color& rBackColor,
                     bool bFillBackground
@@ -1255,21 +1255,21 @@ public:
                     // the GraphicProperties will only be created if a GraphicProvider and PicOutStrm is known
                     // DR: #99897# if no GraphicProvider is present, a complex ESCHER_Prop_fillBlip
                     //             will be created, containing the BLIP directly (e.g. for Excel charts).
-    sal_Bool    CreateGraphicProperties(
+    bool        CreateGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                     const OUString& rSource,
-                    const sal_Bool bCreateFillBitmap,
-                    const sal_Bool bCreateCroppingAttributes = sal_False,
-                    const sal_Bool bFillBitmapModeAllowed = sal_True,
-                    const sal_Bool bOOxmlExport = false
+                    const bool bCreateFillBitmap,
+                    const bool bCreateCroppingAttributes = false,
+                    const bool bFillBitmapModeAllowed = true,
+                    const bool bOOxmlExport = false
                 );
 
-    sal_Bool   CreateBlipPropertiesforOLEControl( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape);
+    bool        CreateBlipPropertiesforOLEControl( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape);
 
-    sal_Bool    CreatePolygonProperties(
+    bool        CreatePolygonProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                     sal_uInt32 nFlags,
-                    sal_Bool bBezier,
+                    bool bBezier,
                     ::com::sun::star::awt::Rectangle& rGeoRect,
                     Polygon* pPolygon = NULL
                 );
@@ -1282,29 +1282,29 @@ public:
     void        CreateGradientProperties( const ::com::sun::star::awt::Gradient & rGradient );
     void        CreateGradientProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                    sal_Bool bTransparentGradient = sal_False
+                    bool bTransparentGradient = false
                 );
 
     void        CreateLineProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                    sal_Bool bEdge
+                    bool bEdge
                 );
     void        CreateFillProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                    sal_Bool bEdge,
-                    sal_Bool bTransparentGradient = sal_False );
+                    bool bEdge,
+                    bool bTransparentGradient = false );
     void        CreateFillProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                    sal_Bool bEdge,
+                    bool bEdge,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape );
     void        CreateTextProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                     sal_uInt32 nText,
-                    const sal_Bool bIsCustomShape = sal_False,
-                    const sal_Bool bIsTextFrame = sal_True
+                    const bool bIsCustomShape = false,
+                    const bool bIsTextFrame = true
                 );
 
-    sal_Bool    CreateConnectorProperties(
+    bool        CreateConnectorProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                     EscherSolverContainer& rSolver,
                     ::com::sun::star::awt::Rectangle& rGeoRect,
@@ -1314,18 +1314,18 @@ public:
 
                 // Because shadow properties depends to the line and fillstyle, the CreateShadowProperties method should be called at last.
                 // It activ only when at least a FillStyle or LineStyle is set.
-    sal_Bool    CreateShadowProperties(
+    bool        CreateShadowProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &
                 );
 
         sal_Int32   GetValueForEnhancedCustomShapeParameter( const ::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter,
-                            const std::vector< sal_Int32 >& rEquationOrder, sal_Bool bAdjustTrans = sal_False );
+                            const std::vector< sal_Int32 >& rEquationOrder, bool bAdjustTrans = false );
         // creates all necessary CustomShape properties, this includes also Text-, Shadow-, Fill-, and LineProperties
     void        CreateCustomShapeProperties(
                     const MSO_SPT eShapeType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
                 );
-    sal_Bool    IsFontWork() const;
+    bool        IsFontWork() const;
 
     // helper functions which are also used by the escher import
     static PolyPolygon  GetPolyPolygon(
@@ -1344,19 +1344,19 @@ public:
                         );
 
     // helper functions which are also used in ooxml export
-    static sal_Bool     GetLineArrow(
-                            const sal_Bool bLineStart,
+    static bool         GetLineArrow(
+                            const bool bLineStart,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                             ESCHER_LineEnd& reLineEnd,
                             sal_Int32& rnArrowLength,
                             sal_Int32& rnArrowWidth
                         );
-    static sal_Bool     IsDefaultObject( SdrObjCustomShape* pCustoShape, const MSO_SPT eShapeType );
+    static bool         IsDefaultObject( SdrObjCustomShape* pCustoShape, const MSO_SPT eShapeType );
     static void         LookForPolarHandles(
                             const MSO_SPT eShapeType,
                             sal_Int32& nAdjustmentsWhichNeedsToBeConverted
                         );
-    static sal_Bool     GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue );
+    static bool         GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue );
 };
 
 
@@ -1369,7 +1369,7 @@ class MSFILTER_DLLPUBLIC EscherPersistTable
 public:
     EscherPersistTable_impl maPersistTable;
 
-    sal_Bool    PtIsID( sal_uInt32 nID );
+    bool        PtIsID( sal_uInt32 nID );
     void        PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );
     sal_uInt32  PtDelete( sal_uInt32 nID );
     sal_uInt32  PtGetOffsetByID( sal_uInt32 nID );
@@ -1438,13 +1438,13 @@ private:
         EscherExClientAnchor_Base*  pClientAnchor;
         EscherExClientRecord_Base*  pClientData;
         EscherExClientRecord_Base*  pClientTextbox;
-        InteractionInfo*        pInteractionInfo;
+        InteractionInfo*            pInteractionInfo;
         // ignore single shape if entire pages are written
-        sal_Bool                        bDontWriteShape;
+        bool                        bDontWriteShape;
 
 public:
         EscherExHostAppData() : pClientAnchor(0), pClientData(0),
-                pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(sal_False)
+                pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(false)
         {}
 
         void SetInteractionInfo( InteractionInfo* p )
@@ -1455,7 +1455,7 @@ public:
             { pClientData = p; }
         void SetClientTextbox( EscherExClientRecord_Base* p )
             { pClientTextbox = p; }
-        void SetDontWriteShape( sal_Bool b )
+        void SetDontWriteShape( bool b )
             { bDontWriteShape = b; }
         InteractionInfo* GetInteractionInfo() const
             { return pInteractionInfo; }
@@ -1473,7 +1473,7 @@ public:
         void WriteClientTextbox( EscherEx& rEx )
             { if( pClientTextbox ) pClientTextbox->WriteData( rEx ); }
 
-        sal_Bool DontWriteShape() const { return bDontWriteShape; }
+        bool DontWriteShape() const { return bDontWriteShape; }
 };
 
 
@@ -1584,14 +1584,14 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         sal_uInt32                  mnGroupLevel;
         sal_uInt16                  mnHellLayerId;
 
-        sal_Bool                    mbEscherSpgr;
-        sal_Bool                    mbEscherDg;
-        sal_Bool                    mbOleEmf;                   // OLE is EMF instead of WMF
+        bool                        mbEscherSpgr;
+        bool                        mbEscherDg;
+        bool                        mbOleEmf;                   // OLE is EMF instead of WMF
         bool                        mbOOXML;
         OUString                    mEditAs;
 
 
-        virtual sal_Bool DoSeek( sal_uInt32 nKey );
+        virtual bool DoSeek( sal_uInt32 nKey );
 
 public:
     explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
@@ -1641,8 +1641,8 @@ public:
     void            InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset ); // It is not being checked if this key is already in the PersistantTable
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
     sal_uInt32      GetPersistOffset( sal_uInt32 nKey );
-    sal_Bool        SeekToPersistOffset( sal_uInt32 nKey );
-    virtual sal_Bool InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
+    bool            SeekToPersistOffset( sal_uInt32 nKey );
+    virtual bool    InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
                                                                                     // current StreamPosition changes
     void            SetEditAs( const OUString& rEditAs );
     rtl::OUString   GetEditAs() { return mEditAs; }
@@ -1668,8 +1668,8 @@ public:
     virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 );
     sal_uInt32  EnterGroup( const Rectangle* pBoundRect = NULL );
     sal_uInt32  GetGroupLevel() const { return mnGroupLevel; };
-    virtual sal_Bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
-    virtual sal_Bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
+    virtual bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
+    virtual bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
     virtual void LeaveGroup();
 
                 // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)
@@ -1677,8 +1677,8 @@ public:
 
     virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect);
 
-    sal_uInt32  GetColor( const sal_uInt32 nColor, sal_Bool bSwap = sal_True );
-    sal_uInt32  GetColor( const Color& rColor, sal_Bool bSwap = sal_True );
+    sal_uInt32  GetColor( const sal_uInt32 nColor, bool bSwap = true );
+    sal_uInt32  GetColor( const Color& rColor, bool bSwap = true );
 
                 // ...Sdr... implemented in eschesdo.cxx
 

@@ -51,14 +51,14 @@ class MSFILTER_DLLPUBLIC DffPropSet
         explicit DffPropSet();
         ~DffPropSet();
 
-        inline sal_Bool    IsProperty( sal_uInt32 nRecType ) const { return ( mpPropSetEntries[ nRecType & 0x3ff ].aFlags.bSet ); };
-        sal_Bool        IsHardAttribute( sal_uInt32 nId ) const;
-        sal_uInt32        GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
+        inline bool IsProperty( sal_uInt32 nRecType ) const { return ( mpPropSetEntries[ nRecType & 0x3ff ].aFlags.bSet ); };
+        bool        IsHardAttribute( sal_uInt32 nId ) const;
+        sal_uInt32  GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
         /** Returns a boolean property by its real identifier. */
         bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
         /** Returns a string property. */
-        OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
-        sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
+        OUString    GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
+        bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
         void        InitializePropSet( sal_uInt16 nPropSetType ) const;
 
         friend SvStream& ReadDffPropSet( SvStream& rIn, DffPropSet& rPropSet );

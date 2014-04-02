@@ -86,7 +86,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 
 public:
     sal_Int32 mnFix16Angle;
-    sal_Bool mbRotateGranientFillWithAngle;
+    bool      mbRotateGranientFillWithAngle;
 
     explicit DffPropertyReader( const SvxMSDffManager& rManager );
     ~DffPropertyReader();
@@ -257,14 +257,14 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     MSO_SPT         eShapeType;
     MSO_LineStyle   eLineStyle;     ///< border types
     MSO_LineDashing eLineDashing;
-    sal_Bool        bDrawHell       :1;
-    sal_Bool        bHidden         :1;
-    sal_Bool        bReplaceByFly   :1;
-    sal_Bool        bLastBoxInChain :1;
-    sal_Bool        bHasUDefProp    :1;
-    sal_Bool        bVFlip          :1;
-    sal_Bool        bHFlip          :1;
-    sal_Bool        bAutoWidth      :1;
+    bool            bDrawHell       :1;
+    bool            bHidden         :1;
+    bool            bReplaceByFly   :1;
+    bool            bLastBoxInChain :1;
+    bool            bHasUDefProp    :1;
+    bool            bVFlip          :1;
+    bool            bHFlip          :1;
+    bool            bAutoWidth      :1;
     int             relativeHorizontalWidth; ///< in 0.1% or -1 for none
     bool            isHorizontalRule;
 
@@ -300,8 +300,8 @@ struct SvxMSDffImportData
     explicit SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
     void SetNewRect(sal_Int32 left, sal_Int32 top, sal_Int32 right, sal_Int32 bottom )
         { aNewRect = Rectangle(left, top, right, bottom); }
-    sal_Bool HasParRect() const { return aParentRect.IsEmpty(); }
-    sal_Bool HasNewRect() const { return aNewRect.IsEmpty()   ; }
+    bool HasParRect() const { return aParentRect.IsEmpty(); }
+    bool HasNewRect() const { return aNewRect.IsEmpty()   ; }
     bool empty() const { return aRecords.empty(); }
     size_t size() const { return aRecords.size(); }
     MSDffImportRecords::const_iterator begin() const { return aRecords.begin();  }
@@ -319,16 +319,16 @@ struct DffObjData
     sal_uInt32  nSpFlags;
     MSO_SPT     eShapeType;
 
-    sal_Bool bShapeType     : 1;
-    sal_Bool bClientAnchor  : 1;
-    sal_Bool bClientData    : 1;
-    sal_Bool bChildAnchor   : 1;
-    sal_Bool bOpt           : 1;
-    sal_Bool bOpt2          : 1;
-    sal_Bool bIsAutoText    : 1;
-    sal_Bool bRotateTextWithShape : 1;
-    bool     bPageAnchor;
-    int nCalledByGroup;
+    bool        bShapeType     : 1;
+    bool        bClientAnchor  : 1;
+    bool        bClientData    : 1;
+    bool        bChildAnchor   : 1;
+    bool        bOpt           : 1;
+    bool        bOpt2          : 1;
+    bool        bIsAutoText    : 1;
+    bool        bRotateTextWithShape : 1;
+    bool        bPageAnchor;
+    int         nCalledByGroup;
 
     DffObjData( const DffRecordHeader& rObjHd,
                 const Rectangle& rBoundRect,
@@ -338,14 +338,14 @@ struct DffObjData
         nShapeId( 0 ),
         nSpFlags( 0 ),
         eShapeType( mso_sptNil ),
-        bShapeType( sal_False ),
-        bClientAnchor( sal_False ),
-        bClientData( sal_False ),
-        bChildAnchor( sal_False ),
-        bOpt( sal_False ),
-        bOpt2( sal_False ),
-        bIsAutoText( sal_False ),
-        bRotateTextWithShape( sal_True ),
+        bShapeType( false ),
+        bClientAnchor( false ),
+        bClientData( false ),
+        bChildAnchor( false ),
+        bOpt( false ),
+        bOpt2( false ),
+        bIsAutoText( false ),
+        bRotateTextWithShape( true ),
         bPageAnchor( true ),
         nCalledByGroup( nClByGroup ){}
 };
@@ -379,10 +379,10 @@ public :
 
         void             Clear();
         void             Consume( SvStream& rIn,
-                                  sal_Bool bAppend = sal_False,
+                                  bool bAppend = false,
                                   sal_uInt32 nStOfs = 0 );
 
-        sal_Bool         SeekToContent( SvStream& rIn,
+        bool             SeekToContent( SvStream& rIn,
                                         sal_uInt16 nRecType,
                                         DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
         DffRecordHeader* GetRecordHeader( sal_uInt16 nRecType,
@@ -468,11 +468,11 @@ protected :
     void GetDrawingContainerData( SvStream& rSt,
                                   sal_uLong nLenDg,
                                   const unsigned long nDrawingContainerId );
-    sal_Bool GetShapeGroupContainerData( SvStream& rSt,
+    bool GetShapeGroupContainerData( SvStream& rSt,
                                      sal_uLong nLenShapeGroupCont,
-                                     sal_Bool bPatriarch,
+                                     bool bPatriarch,
                                      const unsigned long nDrawingContainerId );
-    sal_Bool GetShapeContainerData( SvStream& rSt,
+    bool GetShapeContainerData( SvStream& rSt,
                                 sal_uLong nLenShapeCont,
                                 sal_uLong nPosGroup,
                                 const unsigned long nDrawingContainerId );
@@ -495,14 +495,14 @@ protected :
                 const Rectangle& rVisArea );
 
 // the following methods need to be overridden for Excel imports
-    virtual sal_Bool ProcessClientAnchor( SvStream& rStData,
+    virtual bool ProcessClientAnchor( SvStream& rStData,
                                           sal_uInt32 nDatLen,
                                           char*& rpBuff,
                                           sal_uInt32& rBuffLen ) const;
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
                                        void* pData, DffObjData& );
-    virtual sal_Bool ProcessClientData( SvStream& rStData,
+    virtual bool ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
                                         char*& rpBuff,
                                         sal_uInt32& rBuffLen ) const;
@@ -520,7 +520,7 @@ protected :
     static void ReadObjText( const OUString& rText, SdrObject* pObj );
 
 // the following method needs to be overridden for the import of OLE objects
-    virtual sal_Bool GetOLEStorageName( long nOLEId,
+    virtual bool GetOLEStorageName( long nOLEId,
                                         OUString& rStorageName,
                                         SotStorageRef& rSrcStorage,
                       com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg
@@ -529,9 +529,9 @@ protected :
     /** Prevent that (rounded) rectangles with wrapped text will always be
         converted into SdrRectObj( OBJ_TEXT ).
 
-        @return sal_True means "conversion".
+        @return true means "conversion".
     */
-    virtual sal_Bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
+    virtual bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
 
 public:
     DffPropertyReader* pSecPropSet;
@@ -540,12 +540,12 @@ public:
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;
 
-    sal_Bool            mbTracing;
+    bool                mbTracing;
 
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode,
                            sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
-    virtual sal_Bool SeekToShape( SvStream& rSt,
+    virtual bool SeekToShape( SvStream& rSt,
                                   void* pClientData,
                                   sal_uInt32 nId ) const;
     bool SeekToRec( SvStream& rSt,
@@ -613,9 +613,9 @@ public:
     sal_uInt32  GetSvxMSDffSettings() const { return nSvxMSDffSettings; };
     void    SetSvxMSDffSettings( sal_uInt32 nSettings ) { nSvxMSDffSettings = nSettings; };
 
-    static sal_Bool     MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
+    static bool         MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
     static void         ReadObjText( SvStream& rStream, SdrObject* pObj );
-    static sal_Bool     ConvertToOle2( SvStream& rStm,
+    static bool         ConvertToOle2( SvStream& rStm,
                                        sal_uInt32 nLen,
                                        const GDIMetaFile*,
                                        const SotStorageRef & rDest );
@@ -637,9 +637,9 @@ public:
                           into our documents)
         @param pVisArea   ???
 
-        @return sal_True if successful, sal_False otherwise
+        @return true if successful, false otherwise
     */
-    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL );
+    bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL );
 
 // TODO: provide proper documentation here
     /** read a BLIP out of a already positioned stream
@@ -649,11 +649,11 @@ public:
                                graphics into our documents)
         @param pVisArea        ???
 
-        @return sal_True if successful, sal_False otherwise
+        @return true if successful, false otherwise
     */
-    sal_Bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
 
-    sal_Bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
+    bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
 
     /** Get count of managed BLIPs
 
@@ -735,11 +735,11 @@ public:
     */
     void SolveSolver( const SvxMSDffSolverContainer& rSolver );
 
-    static sal_Bool SetPropValue(
+    static bool SetPropValue(
         const ::com::sun::star::uno::Any& rAny,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
         const OUString& rPropertyName,
-        sal_Bool bTestPropertyAvailability = sal_False
+        bool bTestPropertyAvailability = false
     );
 
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );
@@ -763,8 +763,8 @@ struct SvxMSDffShapeInfo
                          ///< potential later access to it
     sal_uInt32 nTxBxComp;
 
-    sal_Bool bReplaceByFly  :1; ///< shape can be replaced by a frame in Writer
-    sal_Bool bLastBoxInChain:1;
+    bool bReplaceByFly  :1; ///< shape can be replaced by a frame in Writer
+    bool bLastBoxInChain:1;
 
     explicit SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
                       sal_uInt16 nSeqId=0, sal_uInt16 nBoxId=0):
@@ -772,8 +772,8 @@ struct SvxMSDffShapeInfo
         nFilePos( nFPos ),
         nTxBxComp( (nSeqId << 16) + nBoxId )
         {
-            bReplaceByFly   = sal_False;
-            bLastBoxInChain = sal_True;
+            bReplaceByFly   = false;
+            bLastBoxInChain = true;
         }
     SvxMSDffShapeInfo(SvxMSDffShapeInfo& rInfo):
         nShapeId( rInfo.nShapeId ),

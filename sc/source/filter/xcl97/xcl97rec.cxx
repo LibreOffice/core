@@ -453,7 +453,7 @@ static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaptio
         Reference< XPropertySet > aXPropSet( aXShape, UNO_QUERY );
         if( aXPropSet.is() )
         {
-            rPropOpt.CreateFillProperties( aXPropSet,  sal_True);
+            rPropOpt.CreateFillProperties( aXPropSet, true);
 
             rPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // undocumented
             rPropOpt.AddOpt( 0x0158, 0x00000000 );                          // undocumented

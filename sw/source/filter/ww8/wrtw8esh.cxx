@@ -300,7 +300,7 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherProp
             WriteHyperlinkWithinFly( *rStrm, pINetFmt );
             sal_uInt8* pBuf = (sal_uInt8*) rStrm->GetData();
             sal_uInt32 nSize = rStrm->Seek( STREAM_SEEK_TO_END );
-            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_True, nSize, pBuf, nSize );
+            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, true, nSize, pBuf, nSize );
             sal_uInt32 nValue;
             OUString aNamestr = pINetFmt->GetName();
             if (!aNamestr.isEmpty())
@@ -1571,7 +1571,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
         Rectangle aRect( aEmptyPoint, aSize );
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId,aRect, NULL, 0 );
         if (nBlibId)
-            aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+            aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
     }
     aPropOpt.AddOpt( ESCHER_Prop_pibFlags, ESCHER_BlipFlagDefault );
     aPropOpt.AddOpt( ESCHER_Prop_dyTextTop, DrawModelToEmu(0));
@@ -1665,7 +1665,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
                 aUniqueId, aRect, NULL, 0 );
             if (nBlibId)
-                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
         }
     }
 
@@ -1871,7 +1871,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
             sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
                 aUniqueId, aRect, NULL, 0);
             if (nBlibId)
-                rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
+                rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,true);
         }
 
         if (0 != (nOpaque = pGraphicObject->GetAttr().GetTransparency()))
@@ -2234,7 +2234,7 @@ void SwBasicEscherEx::WritePictures()
     {
         // set the blip - entries to the correct stream pos
         sal_Int32 nEndPos = pPicStrm->Tell();
-        mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, sal_True, nEndPos);
+        mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, true, nEndPos);
 
         pPicStrm->Seek(0);
         pEscherStrm->WriteStream( *pPicStrm );
@@ -3036,7 +3036,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
             aId, aRect, pVisArea, 0);    // SJ: the fourth parameter (VisArea) should be set..
         if (nBlibId)
-            rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+            rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, true);
     }
 
     SetPicId(rObj, nShapeId, rPropOpt);

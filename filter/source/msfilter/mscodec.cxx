@@ -163,9 +163,9 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
     }
 }
 
-sal_Bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
+bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
     uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("XOR95EncryptionKey", uno::Sequence< sal_Int8 >() );
@@ -173,7 +173,7 @@ sal_Bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aDa
     if ( aKey.getLength() == 16 )
     {
         (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
-        bResult = sal_True;
+        bResult = true;
 
         mnKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95BaseKey", (sal_Int16)0 );
         mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95PasswordHash", (sal_Int16)0 );
@@ -285,12 +285,12 @@ static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 }
 #endif
 
-sal_Bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
+bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
 #if DEBUG_MSO_ENCRYPTION_STD97
     fprintf(stdout, "MSCodec_Std97::InitCodec: --begin\n");fflush(stdout);
 #endif
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
     uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("STD97EncryptionKey", uno::Sequence< sal_Int8 >() );
@@ -302,7 +302,7 @@ sal_Bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aDa
         if ( aUniqueID.getLength() == 16 )
         {
             (void)memcpy( m_pDocId, aUniqueID.getConstArray(), 16 );
-            bResult = sal_True;
+            bResult = true;
             lcl_PrintDigest(m_pDigestValue, "digest value");
             lcl_PrintDigest(m_pDocId, "DocId value");
         }
