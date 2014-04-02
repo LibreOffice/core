@@ -340,6 +340,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         PropertyMap::iterator aTableStyleIter =
         m_aTableProperties->find(META_PROP_TABLE_STYLE_NAME);
+        uno::Sequence< beans::PropertyValue > aGrabBag( 1 );
+        sal_Int32 nGrabBagSize = 0;
         if(aTableStyleIter != m_aTableProperties->end())
         {
             // Apply table style properties recursively
@@ -349,6 +351,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             const StyleSheetEntryPtr pStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( sTableStyleName );
             pTableStyle = dynamic_cast<TableStyleSheetEntry*>( pStyleSheet.get( ) );
             m_aTableProperties->erase( aTableStyleIter );
+
+            aGrabBag[0].Name = "TableStyleName";
+            aGrabBag[0].Value = uno::makeAny( sTableStyleName );
+            nGrabBagSize++;
 
             if( pStyleSheet )
             {
@@ -393,6 +399,11 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         rInfo.pTableDefaults->dumpXml( dmapper_logger );
         dmapper_logger->endElement();
 #endif
+
+        if( nGrabBagSize > 0 )
+        {
+            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::makeAny( aGrabBag ) );
+        }
 
         m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );
         m_aTableProperties->getValue( TablePropertyMap::LEFT_MARGIN, nLeftMargin );

@@ -1100,6 +1100,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     // #i29550#
                     { OUString(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     _REDLINE_NODE_PROPERTIES
+                    { OUString(UNO_NAME_TABLE_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 

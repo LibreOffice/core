@@ -2672,6 +2672,22 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FSNS( XML_w, XML_type ), widthType,
             FSEND );
 
+    // Look for the table style property in the table grab bag
+    const SfxPoolItem *pI = NULL;
+    std::map<OUString, com::sun::star::uno::Any> aGrabBag;
+    if ( SFX_ITEM_ON == pTblFmt->GetAttrSet().GetItemState( RES_FRMATR_GRABBAG, false, &pI ) )
+        aGrabBag = dynamic_cast<const SfxGrabBagItem *>(pI)->GetGrabBag();
+
+    // Write table style property if it exists
+    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("TableStyleName");
+    if( aGrabBagElement != aGrabBag.end() )
+    {
+        OString sStyleName = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
+        m_pSerializer->singleElementNS( XML_w, XML_tblStyle,
+                FSNS( XML_w, XML_val ), sStyleName.getStr(),
+                FSEND );
+    }
+
     // Output the table alignement
     const char* pJcVal;
     sal_Int32 nIndent = 0;

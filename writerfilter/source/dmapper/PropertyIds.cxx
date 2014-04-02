@@ -389,6 +389,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_CNTXTALTS_TEXT_EFFECT     :   sName = "CharCntxtAltsTextEffect"; break;
             case PROP_SDTPR                          :   sName = "SdtPr"; break;
             case PROP_CELL_INTEROP_GRAB_BAG          :   sName = "CellInteropGrabBag"; break;
+            case PROP_TABLE_INTEROP_GRAB_BAG         :   sName = "TableInteropGrabBag"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
