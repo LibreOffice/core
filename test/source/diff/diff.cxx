@@ -108,9 +108,12 @@ XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const c
     xmlFile1 = xmlParseFile(pFileName);
     xmlFile2 = xmlParseMemory(pContent, size);
 
-    xmlDocPtr xmlToleranceFile = xmlParseFile(pToleranceFile);
-    loadToleranceFile(xmlToleranceFile);
-    xmlFreeDoc(xmlToleranceFile);
+    if(pToleranceFile)
+    {
+        xmlDocPtr xmlToleranceFile = xmlParseFile(pToleranceFile);
+        loadToleranceFile(xmlToleranceFile);
+        xmlFreeDoc(xmlToleranceFile);
+    }
 }
 
 XMLDiff::~XMLDiff()
