@@ -1001,7 +1001,7 @@ void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
         ReadLineInfo( rIStm, maLineInfo );
     if ( aCompat.GetVersion() >= 3 )
     {
-        sal_uInt8 bHasPolyFlags;
+        sal_uInt8 bHasPolyFlags(0);
         rIStm.ReadUChar( bHasPolyFlags );
         if ( bHasPolyFlags )
             maPoly.Read( rIStm );
@@ -1183,10 +1183,11 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     if ( aCompat.GetVersion() >= 2 )    // Version 2
     {
-        sal_uInt16 i, nIndex, nNumberOfComplexPolygons;
+        sal_uInt16 nNumberOfComplexPolygons(0);
         rIStm.ReadUInt16( nNumberOfComplexPolygons );
-        for ( i = 0; i < nNumberOfComplexPolygons; i++ )
+        for (sal_uInt16 i = 0; i < nNumberOfComplexPolygons; ++i)
         {
+            sal_uInt16 nIndex(0);
             rIStm.ReadUInt16( nIndex );
             Polygon aPoly;
             aPoly.Read( rIStm );
@@ -1271,11 +1272,12 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    sal_uInt16 nTmp(0);
-    rIStm.ReadUInt16(nTmp);
-    mnIndex = nTmp;
-    rIStm.ReadUInt16(nTmp);
-    mnLen = nTmp;
+    sal_uInt16 nTmpIndex(0);
+    rIStm.ReadUInt16(nTmpIndex);
+    mnIndex = nTmpIndex;
+    sal_uInt16 nTmpLen(0);
+    rIStm.ReadUInt16(nTmpLen);
+    mnLen = nTmpLen;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
@@ -1419,13 +1421,15 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maStartPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    sal_uInt16 nTmp(0);
-    rIStm.ReadUInt16(nTmp);
-    mnIndex = nTmp;
-    rIStm.ReadUInt16(nTmp);
-    mnLen = nTmp;
-    rIStm.ReadUInt16(nTmp);
-    nAryLen = nTmp;
+    sal_uInt16 nTmpIndex(0);
+    rIStm.ReadUInt16(nTmpIndex);
+    mnIndex = nTmpIndex;
+    sal_uInt16 nTmpLen(0);
+    rIStm.ReadUInt16(nTmpLen);
+    mnLen = nTmpLen;
+    sal_uInt16 nTmpAryLen(0);
+    rIStm.ReadUInt16(nTmpAryLen);
+    nAryLen = nTmpAryLen;
 
     if ( mnIndex + mnLen > maStr.getLength() )
     {
@@ -1554,11 +1558,12 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm.ReadUInt32( mnWidth );
-    sal_uInt16 nTmp(0);
-    rIStm.ReadUInt16(nTmp);
-    mnIndex = nTmp;
-    rIStm.ReadUInt16(nTmp);
-    mnLen = nTmp;
+    sal_uInt16 nTmpIndex(0);
+    rIStm.ReadUInt16(nTmpIndex);
+    mnIndex = nTmpIndex;
+    sal_uInt16 nTmpLen(0);
+    rIStm.ReadUInt16(nTmpLen);
+    mnLen = nTmpLen;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
@@ -1726,18 +1731,20 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     COMPAT( rIStm );
 
     //#fdo39428 SvStream no longer supports operator>>(long&)
-    sal_uInt32 nTemp;
-    sal_Int32 nTemp2;
+    sal_Int32 nTempWidth(0);
     ReadPair( rIStm, maPos );
-    rIStm.ReadInt32( nTemp2 );
-    mnWidth = nTemp2;
-    rIStm.ReadUInt32( nTemp );
-    meStrikeout = (FontStrikeout)nTemp;
-    rIStm.ReadUInt32( nTemp );
-    meUnderline = (FontUnderline)nTemp;
+    rIStm.ReadInt32( nTempWidth );
+    mnWidth = nTempWidth;
+    sal_uInt32 nTempStrikeout(0);
+    rIStm.ReadUInt32( nTempStrikeout );
+    meStrikeout = (FontStrikeout)nTempStrikeout;
+    sal_uInt32 nTempUnderline(0);
+    rIStm.ReadUInt32( nTempUnderline );
+    meUnderline = (FontUnderline)nTempUnderline;
     if ( aCompat.GetVersion() >= 2 ) {
-        rIStm.ReadUInt32( nTemp );
-        meUnderline = (FontUnderline)nTemp;
+        sal_uInt32 nTempUnderline2(0);
+        rIStm.ReadUInt32(nTempUnderline2);
+        meUnderline = (FontUnderline)nTempUnderline2;
     }
 }
 
@@ -3432,7 +3439,7 @@ void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    sal_uInt16 nTmp16;
+    sal_uInt16 nTmp16(0);
 
     COMPAT( rIStm );
     rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
@@ -3707,7 +3714,7 @@ void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    sal_uInt16 nTmp16;
+    sal_uInt16 nTmp16(0);
 
     COMPAT( rIStm );
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
@@ -4180,9 +4187,9 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
 
-                sal_Int32 nLeft, nRight, nTop, nBottom;
-                sal_Int32 nPixX, nPixY, nMillX, nMillY;
-                float m11, m12, m21, m22, mdx, mdy;
+                sal_Int32 nLeft(0), nRight(0), nTop(0), nBottom(0);
+                sal_Int32 nPixX(0), nPixY(0), nMillX(0), nMillY(0);
+                float m11(0), m12(0), m21(0), m22(0), mdx(0), mdy(0);
 
                 // read data
                 aMemStm.ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
