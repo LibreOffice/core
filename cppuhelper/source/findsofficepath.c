@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <cppuhelper/findsofficepath.h>
+
 #if defined WNT
 
 #define WIN32_LEAN_AND_MEAN
