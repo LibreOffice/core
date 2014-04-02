@@ -242,7 +242,17 @@ private:
   static rtl_TextEncoding GetTextEncoding (sal_uInt16 fId = 0xFFFF);
 public:
 
-  PictReader() { aActFont.SetCharSet(GetTextEncoding()); }
+    PictReader()
+        : pPict(NULL)
+        , pVirDev(NULL)
+        , nOrigPos(0)
+        , nOrigNumberFormat(0)
+        , IsVersion2(false)
+        , eActROP(ROP_OVERPAINT)
+        , eActMethod(PDM_UNDEFINED)
+    {
+        aActFont.SetCharSet(GetTextEncoding());
+    }
 
     void ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile );
         // reads a pict file from the stream and fills the GDIMetaFile
