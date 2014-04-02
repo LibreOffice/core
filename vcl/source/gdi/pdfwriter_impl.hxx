@@ -840,10 +840,12 @@ i12626
     void drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines );
     void drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines );
 
+    enum Mode { DEFAULT, NOWRITE };
+
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
      */
-    void updateGraphicsState();
+    void updateGraphicsState(Mode mode = DEFAULT);
 
     /* writes a transparency group object */
     bool writeTransparentObject( TransparencyEmit& rObject );
