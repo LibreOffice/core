@@ -1665,15 +1665,15 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_CEIL_MS
     {
-        Text = "CEILING.PRECISE" ;
+        Text [ en-US ] = "CEILING.PRECISE" ;
     };
     String SC_OPCODE_CEIL_ISO
     {
-        Text = "ISO.CEILING" ;
+        Text [ en-US ] = "ISO.CEILING" ;
     };
     String SC_OPCODE_FLOOR_MS
     {
-        Text = "FLOOR.PRECISE" ;
+        Text [ en-US ] = "FLOOR.PRECISE" ;
     };
     String SC_OPCODE_FLOOR
     {
