@@ -327,7 +327,7 @@ def identify(imagefile):
     if process.wait() != 0:
         raise Exception("identify failed")
     if result.partition(b"\n")[0] != b"1":
-        print("identify result: " + result)
+        print("identify result: " + result.decode('utf-8'))
         print("DIFFERENCE in " + imagefile)
 
 def compose(refimagefile, imagefile, diffimagefile):
