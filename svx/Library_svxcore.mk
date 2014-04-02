@@ -297,6 +297,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdomeas \
     svx/source/svdraw/svdomedia \
     svx/source/svdraw/svdoole2 \
+    svx/source/svdraw/svdoopengl \
     svx/source/svdraw/svdopage \
     svx/source/svdraw/svdopath \
     svx/source/svdraw/svdorect \
