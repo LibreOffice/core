@@ -49,6 +49,7 @@ boost_patches += boost.wuninitialized.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 #https://svn.boost.org/trac/boost/ticket/9397
 boost_patches += boost.9397.warnings.patch.0
+boost_patches += boost.jsonparser.warnings.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 

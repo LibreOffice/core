@@ -1,0 +1,58 @@
+--- boost/property_tree/string_path.hpp
++++ boost/property_tree/string_path.hpp
+@@ -88,14 +88,14 @@ namespace boost { namespace property_tree
+         typedef typename String::value_type char_type;
+
+         /// Create an empty path.
+-        explicit string_path(char_type separator = char_type('.'));
++        explicit string_path(char_type separator_ = char_type('.'));
+         /// Create a path by parsing the given string.
+         /// @param value A sequence, possibly with separators, that describes
+         ///              the path, e.g. "one.two.three".
+         /// @param separator The separator used in parsing. Defaults to '.'.
+         /// @param tr The translator used by this path to convert the individual
+         ///           parts to keys.
+-        string_path(const String &value, char_type separator = char_type('.'),
++        string_path(const String &value, char_type separator_ = char_type('.'),
+                     Translator tr = Translator());
+         /// Create a path by parsing the given string.
+         /// @param value A zero-terminated array of values. Only use if zero-
+@@ -106,7 +106,7 @@ namespace boost { namespace property_tree
+         /// @param tr The translator used by this path to convert the individual
+         ///           parts to keys.
+         string_path(const char_type *value,
+-                    char_type separator = char_type('.'),
++                    char_type separator_ = char_type('.'),
+                     Translator tr = Translator());
+
+         // Default copying doesn't do the right thing with the iterator
+@@ -162,23 +162,23 @@ namespace boost { namespace property_tree
+     };
+
+     template <typename String, typename Translator> inline
+-    string_path<String, Translator>::string_path(char_type separator)
+-        : m_separator(separator), m_start(m_value.begin())
++    string_path<String, Translator>::string_path(char_type separator_)
++        : m_separator(separator_), m_start(m_value.begin())
+     {}
+
+     template <typename String, typename Translator> inline
+     string_path<String, Translator>::string_path(const String &value,
+-                                                 char_type separator,
++                                                 char_type separator_,
+                                                  Translator tr)
+-        : m_value(value), m_separator(separator),
++        : m_value(value), m_separator(separator_),
+           m_tr(tr), m_start(m_value.begin())
+     {}
+
+     template <typename String, typename Translator> inline
+     string_path<String, Translator>::string_path(const char_type *value,
+-                                                 char_type separator,
++                                                 char_type separator_,
+                                                  Translator tr)
+-        : m_value(value), m_separator(separator),
++        : m_value(value), m_separator(separator_),
+           m_tr(tr), m_start(m_value.begin())
+     {}
+
