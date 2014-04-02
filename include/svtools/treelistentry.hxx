@@ -53,9 +53,9 @@ class SVT_DLLPUBLIC SvTreeListEntry
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
     ItemsType           maItems;
-    sal_Bool         bIsMarked;
-    void*            pUserData;
-    sal_uInt16       nEntryFlags;
+    bool                bIsMarked;
+    void*               pUserData;
+    sal_uInt16          nEntryFlags;
 
 private:
     void ClearChildren();
@@ -99,8 +99,8 @@ public:
     sal_uInt16 GetFlags() const;
     void SetFlags( sal_uInt16 nFlags );
 
-    sal_Bool GetIsMarked() const { return bIsMarked; }
-    void SetMarked( sal_Bool IsMarked ) { bIsMarked = IsMarked; }
+    bool GetIsMarked() const { return bIsMarked; }
+    void SetMarked( bool IsMarked ) { bIsMarked = IsMarked; }
 };
 
 #endif

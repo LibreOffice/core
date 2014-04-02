@@ -1376,7 +1376,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                         //else the corresponding entry is set false .
                         SdrObject * pObj = GetDrawingObjectsByContent(pCnt);
                         if(pChild)
-                              pChild->SetMarked(sal_False);
+                              pChild->SetMarked(false);
                         if(pObj)
                         {
                             SdrView* pDrawView = pActiveShell->GetDrawView();
@@ -1387,7 +1387,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                 if(Marked)
                                 {
                                     //sEntry += String::CreateFromAscii(" *");
-                                    pChild->SetMarked(sal_True);
+                                    pChild->SetMarked(true);
                                 }
 
                             }

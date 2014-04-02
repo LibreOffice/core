@@ -967,7 +967,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                 {
                                     SvTreeListEntry* pChild=InsertEntry( aName, pParent );
                                     if(pChild)
-                                        pChild->SetMarked( sal_False);
+                                        pChild->SetMarked(false);
                                     Window* pWindow=NULL;
                                     ScTabViewShell* pScTabViewShell=NULL;
                                     ScDrawView* pScDrawView=NULL;

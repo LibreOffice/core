@@ -357,7 +357,7 @@ void  SdPageObjsTLB::MarkCurEntry( const OUString& rName )
                 if( aTmp1 != aTmp2)
                 {
                     // IA2 CWS. MT: Removed in SvTreeListEntry for now - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
-                    pEntry->SetMarked(sal_False);
+                    pEntry->SetMarked(false);
                 }
             }
         }
@@ -368,11 +368,11 @@ void  SdPageObjsTLB::MarkCurEntry( const OUString& rName )
                 aTmp2 = GetEntryText( pEntry );
                 if( aTmp2 == rName)
                 {
-                    pEntry->SetMarked(sal_True);
+                    pEntry->SetMarked(true);
                 }
                 else
                 {
-                    pEntry->SetMarked(sal_False);
+                    pEntry->SetMarked(false);
                 }
             }
         }
@@ -385,7 +385,7 @@ void  SdPageObjsTLB:: FreshCurEntry()
     SvTreeListEntry* pEntry =NULL;
     for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
     {
-                pEntry->SetMarked(sal_False);
+                pEntry->SetMarked(false);
     }
     Invalidate();
 }
@@ -651,9 +651,9 @@ void SdPageObjsTLB::AddShapeList (
         if(pEntry)
         {
             if(bMarked)
-                pEntry->SetMarked(sal_True);
+                pEntry->SetMarked(true);
             else
-                pEntry->SetMarked( sal_False );
+                pEntry->SetMarked(false);
         }
     }
     while( aIter.IsMore() )
@@ -694,9 +694,9 @@ void SdPageObjsTLB::AddShapeList (
                     if(pNewEntry)
                     {
                         if(bMarked)
-                            pNewEntry->SetMarked(sal_True);
+                            pNewEntry->SetMarked(true);
                         else
-                            pNewEntry->SetMarked( sal_False );
+                            pNewEntry->SetMarked(false);
                     }
                 }
             }
@@ -729,11 +729,11 @@ void SdPageObjsTLB::AddShapeList (
                     {
                         if(bMarked)
                         {
-                            pNewEntry->SetMarked(sal_True);
+                            pNewEntry->SetMarked(true);
                         }
                         else
                         {
-                            pNewEntry->SetMarked( sal_False );
+                            pNewEntry->SetMarked(false);
                         }
                     }
                 }
@@ -778,11 +778,11 @@ void SdPageObjsTLB::AddShapeList (
                     {
                         if(bMarked)
                         {
-                            pNewEntry->SetMarked(sal_True);
+                            pNewEntry->SetMarked(true);
                         }
                         else
                         {
-                            pNewEntry->SetMarked( sal_False );
+                            pNewEntry->SetMarked(false);
                         }
                     }
                 }
