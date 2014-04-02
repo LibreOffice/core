@@ -229,9 +229,6 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     // Sequence of Listener, that can be registered
     Sequence< Type > maSupportedListenerSeq;
 
-    // BaseInit (should be done later in the application!)
-    void BaseInit( void );
-
     // Helper-methods for adjusting sizes of Sequences
     void checkPropertyArraysSize
     (
