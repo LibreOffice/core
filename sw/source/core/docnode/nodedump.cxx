@@ -26,6 +26,8 @@
 #include <editeng/rsiditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <tools/datetimeutils.hxx>
@@ -125,7 +127,7 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
             sal_Int32 nObjCount = pPage->GetObjCount();
             for (sal_Int32 i = 0; i < nObjCount; ++i)
             {
-                SdrObject* pObject = pPage->GetObj(i);
+                const SdrObject* pObject = pPage->GetObj(i);
                 writer.startElement("sdrObject");
                 writer.writeFormatAttribute("ptr", "%p", pObject);
                 if (pObject)
@@ -134,6 +136,22 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
                     writer.writeFormatAttribute("name", "%s", BAD_CAST(OUStringToOString(pObject->GetName(), RTL_TEXTENCODING_UTF8).getStr()));
                     writer.writeFormatAttribute("title", "%s", BAD_CAST(OUStringToOString(pObject->GetTitle(), RTL_TEXTENCODING_UTF8).getStr()));
                     writer.writeFormatAttribute("description", "%s", BAD_CAST(OUStringToOString(pObject->GetDescription(), RTL_TEXTENCODING_UTF8).getStr()));
+
+                    const OutlinerParaObject* pOutliner = pObject->GetOutlinerParaObject();
+                    writer.startElement("outliner");
+                    writer.writeFormatAttribute("ptr", "%p", pOutliner);
+                    if (pOutliner)
+                    {
+                        const EditTextObject& rEditObj = pOutliner->GetTextObject();
+                        sal_Int32 nPara = rEditObj.GetParagraphCount();
+                        for (sal_Int32 j = 0; j < nPara; ++j)
+                        {
+                            writer.startElement("paragraph");
+                            xmlTextWriterWriteString(writer, BAD_CAST(OUStringToOString(rEditObj.GetText(j), RTL_TEXTENCODING_UTF8).getStr()));
+                            writer.endElement();
+                        }
+                    }
+                    writer.endElement();
                 }
                 writer.endElement();
             }
