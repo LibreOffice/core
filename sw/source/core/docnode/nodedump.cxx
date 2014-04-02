@@ -16,7 +16,11 @@
 #include "docufld.hxx"
 #include "txatbase.hxx"
 #include "fmtautofmt.hxx"
+#include "fmtcntnt.hxx"
 #include "charfmt.hxx"
+#include "frmfmt.hxx"
+#include "fmtanchr.hxx"
+#include "fmtsrnd.hxx"
 #include "paratr.hxx"
 #include "redline.hxx"
 #include <swmodule.hxx>
@@ -28,8 +32,10 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
+#include <svx/xdef.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/xfillit0.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <libxml/encoding.h>
@@ -171,6 +177,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpFldTypes->dumpAsXml( writer );
     mpTxtFmtCollTbl->dumpAsXml( writer );
     mpCharFmtTbl->dumpAsXml( writer );
+    mpSpzFrmFmtTbl->dumpAsXml( writer );
     mpNumRuleTbl->dumpAsXml( writer );
     mpRedlineTbl->dumpAsXml( writer );
     mpExtraRedlineTbl->dumpAsXml( writer );
@@ -365,8 +372,8 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 css::uno::Any aAny;
                 static_cast<const SvxRsidItem*>(pItem)->QueryValue(aAny);
                 oValue = OString::number(aAny.get<sal_uInt32>());
+                break;
             }
-            break;
             case RES_CHRATR_ROTATE: pWhich = "character rotation"; oValue = OString::number(static_cast<const SvxCharRotateItem*>(pItem)->GetValue()); break;
             case RES_PARATR_OUTLINELEVEL: pWhich = "paragraph outline level"; oValue = OString::number(static_cast<const SfxUInt16Item*>(pItem)->GetValue()); break;
             case RES_PARATR_NUMRULE: pWhich = "paragraph numbering rule"; oValue = OUStringToOString(static_cast<const SwNumRuleItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8); break;
@@ -378,14 +385,129 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 pWhich = "character font size";
                 const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
                 oValue = "nHeight: " + OString::number(pFontHeightItem->GetHeight()) + ", nProp: " + OString::number(pFontHeightItem->GetProp());
+                break;
             }
-            break;
+            case RES_CNTNT:
+            {
+                pWhich = "frame content";
+                const SwFmtCntnt* pCntnt = static_cast<const SwFmtCntnt*>(pItem);
+                oValue = "node index: " + OString::number(pCntnt->GetCntntIdx()->GetNode().GetIndex());
+                break;
+            }
+            case RES_FRM_SIZE:
+            {
+                pWhich = "frame size";
+                break;
+            }
+            case RES_VERT_ORIENT:
+            {
+                pWhich = "frame vertical orientation";
+                break;
+            }
+            case RES_HORI_ORIENT:
+            {
+                pWhich = "frame horizontal orientation";
+                break;
+            }
+            case RES_ANCHOR:
+            {
+                pWhich = "frame anchor";
+                const SwFmtAnchor* pAnchor = static_cast<const SwFmtAnchor*>(pItem);
+                const SwPosition* pPosition = pAnchor->GetCntntAnchor();
+                if (pPosition)
+                    oValue = "node index: " + OString::number(pPosition->nNode.GetNode().GetIndex()) + ", index: " + OString::number(pPosition->nContent.GetIndex());
+                break;
+            }
+            case RES_SURROUND:
+            {
+                pWhich = "frame surround";
+                const SwFmtSurround* pSurround = static_cast<const SwFmtSurround*>(pItem);
+                switch (pSurround->GetSurround())
+                {
+                case SURROUND_NONE:
+                    oValue = "none";
+                    break;
+                case SURROUND_THROUGHT:
+                    oValue = "throught";
+                    break;
+                case SURROUND_PARALLEL:
+                    oValue = "parallel";
+                    break;
+                case SURROUND_IDEAL:
+                    oValue = "ideal";
+                    break;
+                case SURROUND_LEFT:
+                    oValue = "left";
+                    break;
+                case SURROUND_RIGHT:
+                    oValue = "right";
+                    break;
+                case SURROUND_END:
+                    oValue = "end";
+                    break;
+                }
+                break;
+            }
+            case RES_FOLLOW_TEXT_FLOW:
+            {
+                pWhich = "frame follow text flow";
+                break;
+            }
+            case RES_WRAP_INFLUENCE_ON_OBJPOS:
+            {
+                pWhich = "frame wrap influence on object position";
+                break;
+            }
+            case XATTR_FILLSTYLE:
+            {
+                pWhich = "fill style";
+                const XFillStyleItem* pFillStyleItem = static_cast<const XFillStyleItem*>(pItem);
+                switch (pFillStyleItem->GetValue())
+                {
+                case XFILL_NONE:
+                    oValue = "none";
+                    break;
+                case XFILL_SOLID:
+                    oValue = "solid";
+                    break;
+                case XFILL_GRADIENT:
+                    oValue = "gradient";
+                    break;
+                case XFILL_HATCH:
+                    oValue = "hatch";
+                    break;
+                case XFILL_BITMAP:
+                    oValue = "bitmap";
+                    break;
+                }
+                break;
+            }
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
         if (oValue)
             writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
         pItem = aIter.NextItem();
+        writer.endElement();
+    }
+}
+
+void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w)
+{
+    WriterHelper writer(w);
+    if (size())
+    {
+        writer.startElement("swfrmfmts");
+        for (size_t i = 0; i < size(); ++i)
+        {
+            SwFrmFmt* pFmt = static_cast<SwFrmFmt*>(GetFmt(i));
+            writer.startElement("swfrmfmt");
+            OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+
+            lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
+            writer.endElement();
+        }
         writer.endElement();
     }
 }

@@ -81,6 +81,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
     bool Contains(const SwFrmFmt* pFmt) const;
+    void dumpAsXml(xmlTextWriterPtr w);
     /// free's any remaining child objects
     virtual ~SwFrmFmts();
 };
