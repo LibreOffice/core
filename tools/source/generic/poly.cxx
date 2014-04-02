@@ -1567,7 +1567,7 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Polygon::>> - Solar-Version not set on rIStream" );
 
     sal_uInt16          i;
-    sal_uInt16          nPoints;
+    sal_uInt16          nPoints(0);
 
     // read all points and create array
     rIStream >> nPoints;
