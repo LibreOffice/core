@@ -451,7 +451,7 @@ Bootstrap_Impl * get_static_bootstrap_handle() SAL_THROW(())
     return s_handle;
 }
 
-struct FundamentalIniData {
+struct FundamentalIniData: private boost::noncopyable {
     rtlBootstrapHandle ini;
 
     FundamentalIniData() {
@@ -466,10 +466,6 @@ struct FundamentalIniData {
     }
 
     ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
-
-private:
-    FundamentalIniData(FundamentalIniData &); // not defined
-    void operator =(FundamentalIniData &); // not defined
 };
 
 struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
