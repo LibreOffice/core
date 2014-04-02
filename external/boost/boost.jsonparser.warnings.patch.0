@@ -63,7 +63,7 @@
              // handle high unicode characters.
              if (*b == 0x20 || *b == 0x21 || (*b >= 0x23 && *b <= 0x2E) ||
 -                (*b >= 0x30 && *b <= 0x5B) || (*b >= 0x5D && *b <= 0xFF))
-+                (*b >= 0x30 && *b <= 0x5B) || (*b >= 0x5D))
++                (*b >= 0x30 && *b <= 0x5B) || (*b >= 0x5D && static_cast<typename std::basic_string<Ch>::traits_type::int_type>(*b) <= 0xFF))
                  result += *b;
              else if (*b == Ch('\b')) result += Ch('\\'), result += Ch('b');
              else if (*b == Ch('\f')) result += Ch('\\'), result += Ch('f');
