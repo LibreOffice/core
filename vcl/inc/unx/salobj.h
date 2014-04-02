@@ -54,7 +54,6 @@ private:
     sal_uInt16      nClipRegionType;
 };
 
-
 class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject
 {
 public:

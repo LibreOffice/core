@@ -74,7 +74,6 @@ public:
                         { return m_pCapture; }
 };
 
-
 #endif // INCLUDED_VCL_INC_GENERIC_GENDISP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

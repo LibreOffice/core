@@ -43,7 +43,6 @@
  *                           in recognize() routine
  */
 
-
 /* parseAFM.c
  *
  * This file is used in conjuction with the parseAFM.h header file.
@@ -290,7 +289,6 @@ static char *token( FileInputStream* stream, int& rLen )
 
 } /* token */
 
-
 /*************************** linetoken *************************/
 
 /*  "linetoken" will get read all tokens until the EOL character from
@@ -318,7 +316,6 @@ static char *linetoken( FileInputStream* stream )
     return(ident);  /* returns pointer to the token */
 
 } /* linetoken */
-
 
 /*************************** recognize *************************/
 
@@ -348,7 +345,6 @@ static inline enum parseKey recognize( char* ident, int len)
     return pEntry ? pEntry->eKey : NOPE;
 
 } /* recognize */
-
 
 /************************* parseGlobals *****************************/
 
@@ -555,7 +551,6 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
 
 } /* parseGlobals */
 
-
 /************************* parseCharWidths **************************/
 
 /*  This function is called by "parseFile". It will parse the AFM file
@@ -667,7 +662,6 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
     return(error);
 
 } /* parseCharWidths */
-
 
 /*
  * number of char metrics is almost always inaccurate, so be gentle and try to
@@ -871,8 +865,6 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
 
 } /* parseCharMetrics */
 
-
-
 /************************* parseTrackKernData ***********************/
 
 /*  This function is called by "parseFile". It will parse the AFM file
@@ -979,7 +971,6 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
     return(error);
 
 } /* parseTrackKernData */
-
 
 /************************* parsePairKernData ************************/
 
@@ -1106,7 +1097,6 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
     return(error);
 
 } /* parsePairKernData */
-
 
 /************************* parseCompCharData **************************/
 
@@ -1246,11 +1236,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
 
 } /* parseCompCharData */
 
-
-
-
 /*************************** 'PUBLIC' FUNCTION ********************/
-
 
 /*************************** parseFile *****************************/
 
@@ -1282,7 +1268,6 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
     int tokenlen;
 
     char *keyword; /* used to store a token */
-
 
     (*fi) = (FontInfo *) calloc(1, sizeof(FontInfo));
     if ((*fi) == NULL) {error = storageProblem; return(error);}

@@ -81,7 +81,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 
 using namespace vcl_sal;
 
-
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
@@ -146,7 +145,6 @@ static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
                 "sal_GetVisualInfo: could not get correct visual by visualId" );
     return true;
 }
-
 
 extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
@@ -2266,7 +2264,6 @@ void SalDisplay::InitXinerama()
     }
 #endif
 }
-
 
 extern "C"
 {

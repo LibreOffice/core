@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unotools/fontcfg.hxx"
 
 #include "tools/stream.hxx"
@@ -36,7 +35,6 @@
 #include <algorithm>
 
 using namespace vcl;
-
 
 Impl_Font::Impl_Font() :
     maColor( COL_TRANSPARENT ),
@@ -613,7 +611,6 @@ void Font::Merge( const Font& rFont )
         SetItalic( rFont.GetItalic() );
     if ( rFont.mpImplFont->meWidthType != WIDTH_DONTKNOW )
         SetWidthType( rFont.GetWidthType() );
-
 
     if ( rFont.GetSize().Height() )
         SetSize( rFont.GetSize() );

@@ -40,7 +40,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-
 class SystemWindow::ImplData
 {
 public:
@@ -64,8 +63,6 @@ SystemWindow::ImplData::~ImplData()
     if( mpTaskPaneList )
         delete mpTaskPaneList;
 }
-
-
 
 SystemWindow::SystemWindow( WindowType nType ) :
     Window( nType )
@@ -91,8 +88,6 @@ SystemWindow::~SystemWindow()
     mpImplData = NULL;
 }
 
-
-
 bool SystemWindow::Notify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for menu handling
@@ -111,8 +106,6 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
 
     return Window::Notify( rNEvt );
 }
-
-
 
 bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
@@ -156,8 +149,6 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-
-
 TaskPaneList* SystemWindow::GetTaskPaneList()
 {
     if( mpImplData->mpTaskPaneList )
@@ -177,8 +168,6 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
         return mpImplData->mpTaskPaneList;
     }
 }
-
-
 
 bool SystemWindow::Close()
 {
@@ -207,31 +196,21 @@ bool SystemWindow::Close()
     return true;
 }
 
-
-
 void SystemWindow::TitleButtonClick( sal_uInt16 )
 {
 }
-
-
 
 void SystemWindow::Pin()
 {
 }
 
-
-
 void SystemWindow::Roll()
 {
 }
 
-
-
 void SystemWindow::Resizing( Size& )
 {
 }
-
-
 
 void SystemWindow::SetRepresentedURL( const OUString& i_rURL )
 {
@@ -247,8 +226,6 @@ void SystemWindow::SetRepresentedURL( const OUString& i_rURL )
             pWindow->mpWindowImpl->mpFrame->SetRepresentedURL( i_rURL );
     }
 }
-
-
 
 void SystemWindow::SetIcon( sal_uInt16 nIcon )
 {
@@ -268,8 +245,6 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
     }
 }
 
-
-
 void SystemWindow::EnableSaveBackground( bool bSave )
 {
     if( ImplGetSVData()->maWinData.mbNoSaveBackground )
@@ -286,8 +261,6 @@ void SystemWindow::EnableSaveBackground( bool bSave )
     }
 }
 
-
-
 bool SystemWindow::IsSaveBackgroundEnabled() const
 {
     const Window* pWindow = this;
@@ -298,8 +271,6 @@ bool SystemWindow::IsSaveBackgroundEnabled() const
     else
         return false;
 }
-
-
 
 void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
 {
@@ -330,8 +301,6 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
         return;
 }
 
-
-
 bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
 {
     if ( nButton == TITLE_BUTTON_DOCKING )
@@ -339,8 +308,6 @@ bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
     else /* if ( nButton == TITLE_BUTTON_HIDE ) */
         return mbHideBtn;
 }
-
-
 
 void SystemWindow::SetPin( bool bPin )
 {
@@ -351,8 +318,6 @@ void SystemWindow::SetPin( bool bPin )
             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetPin( bPin );
     }
 }
-
-
 
 void SystemWindow::RollUp()
 {
@@ -372,8 +337,6 @@ void SystemWindow::RollUp()
     }
 }
 
-
-
 void SystemWindow::RollDown()
 {
     if ( mbRollUp )
@@ -385,8 +348,6 @@ void SystemWindow::RollDown()
             SetOutputSizePixel( maOrgSize );
     }
 }
-
-
 
 void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
 {
@@ -400,8 +361,6 @@ void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
     else if ( mpWindowImpl->mbFrame )
         mpWindowImpl->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
 }
-
-
 
 void SystemWindow::SetMaxOutputSizePixel( const Size& rSize )
 {
@@ -427,7 +386,6 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
     return mpImplData->maMaxOutSize;
 }
 
-
 Size SystemWindow::GetResizeOutputSizePixel() const
 {
     Size aSize = GetOutputSizePixel();
@@ -437,8 +395,6 @@ Size SystemWindow::GetResizeOutputSizePixel() const
         aSize.Height() = maMinOutSize.Height();
     return aSize;
 }
-
-
 
 static void ImplWindowStateFromStr(WindowStateData& rData,
     const OString& rStr)
@@ -554,8 +510,6 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
     rData.SetMask( nValidMask );
 }
 
-
-
 static OString ImplWindowStateToStr(const WindowStateData& rData)
 {
     sal_uLong nValidMask = rData.GetMask();
@@ -599,8 +553,6 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
 
     return rStrBuf.makeStringAndClear();
 }
-
-
 
 void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin )
 {
@@ -810,8 +762,6 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
     }
 }
 
-
-
 void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 {
     sal_uLong nValidMask = rData.GetMask();
@@ -897,8 +847,6 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
     }
 }
 
-
-
 void SystemWindow::SetWindowState(const OString& rStr)
 {
     if (rStr.isEmpty())
@@ -909,8 +857,6 @@ void SystemWindow::SetWindowState(const OString& rStr)
     SetWindowStateData( aData );
 }
 
-
-
 OString SystemWindow::GetWindowState( sal_uLong nMask ) const
 {
     WindowStateData aData;
@@ -919,8 +865,6 @@ OString SystemWindow::GetWindowState( sal_uLong nMask ) const
 
     return ImplWindowStateToStr(aData);
 }
-
-
 
 void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
 {
@@ -984,8 +928,6 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
     }
 }
 
-
-
 void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
 {
     if ( mnMenuBarMode != nMode )
@@ -1000,8 +942,6 @@ void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
         }
     }
 }
-
-
 
 bool SystemWindow::ImplIsInTaskPaneList( Window* pWin )
 {

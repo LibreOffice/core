@@ -99,7 +99,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     int             m_nWorkArea;
     bool            m_bSetFocusOnMap;
 
-
     int             nScreenSaversTimeout_;
     Rectangle       maPaintRegion;
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unx/salinst.h"
 
 #include <X11_clipboard.hxx>
@@ -34,7 +33,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
-
 
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
@@ -56,8 +54,6 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
     aRet[0] = "com.sun.star.datatransfer.dnd.X11DropTarget";
     return aRet;
 }
-
-
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
@@ -86,19 +82,14 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     return static_cast<OWeakObject*>(pClipboard);
 }
 
-
-
 css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 {
     return css::uno::Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
 
-
-
 css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 {
     return css::uno::Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

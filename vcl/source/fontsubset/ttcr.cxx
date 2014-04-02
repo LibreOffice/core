@@ -35,7 +35,6 @@
 #include "list.h"
 #include "string.h"
 
-
 namespace vcl
 {
 
@@ -169,7 +168,6 @@ static int NameRecordCompareF(const void *l, const void *r)
     return 0;
 }
 
-
 static sal_uInt32 CheckSum(sal_uInt32 *ptr, sal_uInt32 length)
 {
     sal_uInt32 sum = 0;
@@ -259,7 +257,6 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     n = listCount(_this->tables);
     numTables = (sal_uInt16) n;
 
-
     TableEntry* te = (TableEntry*)scalloc(n, sizeof(TableEntry));
 
     listToFirst(_this->tables);
@@ -348,8 +345,6 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
     return r;
 }
 
-
-
 /*
  * TrueTypeTable private methods
  */
@@ -357,8 +352,6 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
 #define TABLESIZE_head 54
 #define TABLESIZE_hhea 36
 #define TABLESIZE_maxp 32
-
-
 
 /*    Table         data points to
  * --------------------------------------------
@@ -372,7 +365,6 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
  *    'post'        tdata_post struct
  *
  */
-
 
 #define CMAP_SUBTABLE_INIT 10
 #define CMAP_SUBTABLE_INCR 10
@@ -412,7 +404,6 @@ typedef struct {
     sal_uInt32 isFixedPitch;
     void   *ptr;                        /* format-specific pointer */
 } tdata_post;
-
 
 /* allocate memory for a TT table */
 static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)
@@ -568,7 +559,6 @@ static int GetRawData_generic(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 
     return TTCR_OK;
 }
 
-
 static int GetRawData_head(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     *len = TABLESIZE_head;
@@ -701,8 +691,6 @@ static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
     return ptr;
 }
 
-
-
 /* XXX it only handles Format 0 encoding tables */
 static sal_uInt8 *PackCmap(CmapSubTable *s, sal_uInt32 *length)
 {
@@ -761,7 +749,6 @@ static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
     return TTCR_OK;
 }
-
 
 static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
@@ -862,10 +849,6 @@ static int GetRawData_post(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     return ret;
 }
 
-
-
-
-
 static struct {
     sal_uInt32 tag;
     int (*f)(TrueTypeTable *, sal_uInt8 **, sal_uInt32 *, sal_uInt32 *);
@@ -880,7 +863,6 @@ static struct {
     {T_cmap, GetRawData_cmap},
     {T_name, GetRawData_name},
     {T_post, GetRawData_post}
-
 
 };
 
@@ -933,7 +915,6 @@ TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
 
     TrueTypeTable* table  = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_head);
-
 
     PutUInt32(0x00010000, ptr, 0, 1);             /* version */
     PutUInt32(fontRevision, ptr, 4, 1);
@@ -1272,7 +1253,6 @@ sal_uInt32 glyfCount(const TrueTypeTable *table)
     return listCount((list) table->data);
 }
 
-
 void nameAdd(TrueTypeTable *table, NameRecord *nr)
 {
     list l;
@@ -1347,7 +1327,6 @@ static void ProcessTables(TrueTypeCreator *tt)
         sal_Int16 z;
         glyfLen += gd->nbytes;
         /* XXX if (gd->nbytes & 1) glyfLen++; */
-
 
         assert(gd->newID == i);
         gid[i++] = gd->glyphID;
@@ -1524,7 +1503,6 @@ extern "C"
         free(_this);
     }
 
-
     /**
      * Destructor for the TrueTypeTable object.
      */
@@ -1546,7 +1524,6 @@ extern "C"
         assert(!"Unknown TrueType table.\n");
     }
 }
-
 
 #ifdef TEST_TTCR
 _inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
@@ -1583,7 +1560,6 @@ int main(void)
     free(t5);
     free(t6);
     free(t7);
-
 
     StreamToFile(ttcr, "ttcrout.ttf");
 

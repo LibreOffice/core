@@ -465,7 +465,6 @@ bool OpenGLContext::initWindow()
     winData.nSize = sizeof(winData);
     m_pChildWindow.reset(new SystemChildWindow(m_pWindow.get(), 0, &winData, sal_False));
 
-
     if( m_pChildWindow )
     {
         m_pChildWindow->SetMouseTransparent( sal_True );

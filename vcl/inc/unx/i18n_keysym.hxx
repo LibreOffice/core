@@ -60,5 +60,4 @@ sal_Unicode KeysymToUnicode (KeySym nKeySym);
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

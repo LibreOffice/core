@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
@@ -34,8 +33,6 @@
 #include <brdwin.hxx>
 #include <window.h>
 
-
-
 void WorkWindow::ImplInitWorkWindowData()
 {
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
@@ -46,8 +43,6 @@ void WorkWindow::ImplInitWorkWindowData()
     mbPresentationFull      = false;
     mbFullScreenMode        = false;
 }
-
-
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
@@ -73,8 +68,6 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
-
-
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
 {
     if( aSystemWorkWindowToken.hasValue() )
@@ -90,15 +83,11 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::st
         ImplInit( pParent, nStyle, NULL );
 }
 
-
-
 WorkWindow::WorkWindow( WindowType nType ) :
     SystemWindow( nType )
 {
     ImplInitWorkWindowData();
 }
-
-
 
 WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -106,8 +95,6 @@ WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :
     ImplInitWorkWindowData();
     ImplInit( pParent, nStyle, NULL );
 }
-
-
 
 WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
     SystemWindow( WINDOW_WORKWINDOW )
@@ -117,8 +104,6 @@ WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSyst
     ImplInit( pParent, nStyle, aSystemWorkWindowToken );
 }
 
-
-
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
@@ -126,8 +111,6 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
     mbSysChild = true;
     ImplInit( NULL, 0, pParent );
 }
-
-
 
 WorkWindow::~WorkWindow()
 {
@@ -138,8 +121,6 @@ WorkWindow::~WorkWindow()
         Application::Quit();
     }
 }
-
-
 
 void WorkWindow::ShowFullScreenMode( bool bFullScreenMode )
 {
@@ -170,8 +151,6 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
         ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
     }
 }
-
-
 
 void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags )
 {
@@ -222,8 +201,6 @@ void WorkWindow::StartPresentationMode( bool bPresentation, sal_uInt16 nFlags, s
     }
 }
 
-
-
 bool WorkWindow::IsMinimized() const
 {
     //return mpWindowImpl->mpFrameData->mbMinimized;
@@ -231,8 +208,6 @@ bool WorkWindow::IsMinimized() const
     mpWindowImpl->mpFrame->GetWindowState(&aState);
     return (( aState.mnState & WINDOWSTATE_STATE_MINIMIZED ) != 0);
 }
-
-
 
 bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 {
@@ -258,7 +233,6 @@ void WorkWindow::ImplSetFrameState( sal_uLong aFrameState )
     aState.mnState  = aFrameState;
     mpWindowImpl->mpFrame->SetWindowState( &aState );
 }
-
 
 void WorkWindow::Minimize()
 {

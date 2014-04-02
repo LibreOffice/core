@@ -87,7 +87,6 @@ public:
     virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL rejectDrag(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
        /*
      * XDropTargetDropContext
      */
@@ -107,11 +106,6 @@ public:
     virtual sal_Int8 SAL_CALL getDefaultActions(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-
-
-
-
 
 #endif
 

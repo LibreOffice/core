@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 
 #include <svids.hrc>
 #include <svdata.hxx>
-
 
 OUString GetStandardText( sal_uInt16 nStdText )
 {

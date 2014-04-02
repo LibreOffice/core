@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cstdio>
 #include <unotools/configitem.hxx>
 
@@ -47,7 +46,6 @@ public:
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace x11;
-
 
 sal_Int32 SelectionManager::getSelectionTimeout()
 {
@@ -127,6 +125,5 @@ void DtransX11ConfigItem::Commit()
 void DtransX11ConfigItem::Notify( const Sequence< OUString >& /*rPropertyNames*/ )
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

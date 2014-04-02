@@ -29,9 +29,7 @@
 #include <vcl/fntstyle.hxx>
 #include <outfont.hxx>
 
-
 // - Impl_Font -
-
 
 typedef sal_uInt32 FontRefCount;
 
@@ -86,9 +84,7 @@ private:
     friend SvStream&    WriteImpl_Font( SvStream& rOStm, const Impl_Font& );
 };
 
-
 // - ImplFontMetric -
-
 
 class ImplFontMetric
 {
@@ -127,9 +123,7 @@ public:
     bool    operator==( const ImplFontMetric& ) const;
 };
 
-
 // - ImplFontOptions -
-
 
 class ImplFontOptions
 {
@@ -163,9 +157,7 @@ public:
         { return NULL; }
 };
 
-
 // - ImplFontCharMap -
-
 
 class CmapResult;
 

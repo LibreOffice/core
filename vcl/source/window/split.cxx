@@ -49,8 +49,6 @@ namespace
     };
 }
 
-
-
 void Splitter::ImplInitSplitterData()
 {
     ImplGetWindowImpl()->mbSplitter        = true;
@@ -63,8 +61,6 @@ void Splitter::ImplInitSplitterData()
     mbInKeyEvent      = 0;
     mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
 }
-
-
 
 // Should only be called from a ImplInit method for initialization or
 // after checking bNew is different from the current mbHorzSplit value.
@@ -90,8 +86,6 @@ void Splitter::ImplInitHorVer(bool bNew)
     SetPointer( Pointer( ePointerStyle ) );
 }
 
-
-
 void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
 {
     Window::ImplInit( pParent, nWinStyle, NULL );
@@ -108,8 +102,6 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->AddWindow( this );
 }
-
-
 
 void Splitter::ImplSplitMousePos( Point& rPos )
 {
@@ -129,8 +121,6 @@ void Splitter::ImplSplitMousePos( Point& rPos )
     }
 }
 
-
-
 void Splitter::ImplDrawSplitter()
 {
     Rectangle aInvRect( maDragRect );
@@ -149,8 +139,6 @@ void Splitter::ImplDrawSplitter()
     mpRefWin->InvertTracking( mpRefWin->PixelToLogic(aInvRect), SHOWTRACK_SPLIT );
 }
 
-
-
 Splitter::Splitter( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SPLITTER )
 {
@@ -160,8 +148,6 @@ Splitter::Splitter( Window* pParent, WinBits nStyle ) :
     SetLineColor();
     SetFillColor();
 }
-
-
 
 Splitter::Splitter( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_SPLITTER )
@@ -179,15 +165,11 @@ Splitter::Splitter( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-
-
 Splitter::~Splitter()
 {
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->RemoveWindow( this );
 }
-
-
 
 void Splitter::SetHorizontal(bool bNew)
 {
@@ -197,14 +179,10 @@ void Splitter::SetHorizontal(bool bNew)
     }
 }
 
-
-
 void Splitter::SetKeyboardStepSize( long nStepSize )
 {
     mnKeyboardStepSize = nStepSize;
 }
-
-
 
 Splitter* Splitter::ImplFindSibling()
 {
@@ -223,8 +201,6 @@ Splitter* Splitter::ImplFindSibling()
     }
     return NULL;
 }
-
-
 
 bool Splitter::ImplSplitterActive()
 {
@@ -248,8 +224,6 @@ bool Splitter::ImplSplitterActive()
     }
     return bActive;
 }
-
-
 
 void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -279,8 +253,6 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
     else
         StartDrag();
 }
-
-
 
 void Splitter::Tracking( const TrackingEvent& rTEvt )
 {
@@ -355,8 +327,6 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
         }
     }
 }
-
-
 
 void Splitter::ImplKbdTracking( KeyCode aKeyCode )
 {
@@ -473,21 +443,15 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
     }
 }
 
-
-
 void Splitter::StartSplit()
 {
     maStartSplitHdl.Call( this );
 }
 
-
-
 void Splitter::Split()
 {
     maSplitHdl.Call( this );
 }
-
-
 
 void Splitter::EndSplit()
 {
@@ -495,13 +459,9 @@ void Splitter::EndSplit()
         maEndSplitHdl.Call( this );
 }
 
-
-
 void Splitter::Splitting( Point& /* rSplitPos */ )
 {
 }
-
-
 
 void Splitter::SetDragRectPixel( const Rectangle& rDragRect, Window* _pRefWin )
 {
@@ -512,14 +472,10 @@ void Splitter::SetDragRectPixel( const Rectangle& rDragRect, Window* _pRefWin )
         mpRefWin = _pRefWin;
 }
 
-
-
 void Splitter::SetSplitPosPixel( long nNewPos )
 {
     mnSplitPos = nNewPos;
 }
-
-
 
 void Splitter::StartDrag()
 {
@@ -545,9 +501,6 @@ void Splitter::StartDrag()
     if ( !mbDragFull )
         ImplDrawSplitter();
 }
-
-
-
 
 void Splitter::ImplStartKbdSplitting()
 {
@@ -577,8 +530,6 @@ void Splitter::ImplStartKbdSplitting()
         mnStartSplitPos = maDragPos.Y();
 }
 
-
-
 void Splitter::ImplRestoreSplitter()
 {
     // set splitter in the center of the ref window
@@ -607,9 +558,6 @@ void Splitter::ImplRestoreSplitter()
     EndSplit();
 }
 
-
-
-
 void Splitter::GetFocus()
 {
     if( !ImplSplitterActive() )
@@ -617,8 +565,6 @@ void Splitter::GetFocus()
 
     Invalidate();
 }
-
-
 
 void Splitter::LoseFocus()
 {
@@ -630,8 +576,6 @@ void Splitter::LoseFocus()
     }
     Invalidate();
 }
-
-
 
 void Splitter::KeyInput( const KeyEvent& rKEvt )
 {
@@ -732,14 +676,10 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
     mbInKeyEvent = 0;
 }
 
-
-
 bool Splitter::Notify( NotifyEvent& rNEvt )
 {
     return Window::Notify( rNEvt );
 }
-
-
 
 void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -761,8 +701,6 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
         }
     }
 }
-
-
 
 void Splitter::Paint( const Rectangle& rPaintRect )
 {

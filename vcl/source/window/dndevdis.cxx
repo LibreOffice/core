@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <dndevdis.hxx>
 #include <dndlcon.hxx>
 #include <window.h>
@@ -33,9 +32,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-
 // DNDEventDispatcher::DNDEventDispatcher
-
 
 DNDEventDispatcher::DNDEventDispatcher( Window * pTopWindow ):
     m_pTopWindow( pTopWindow ),
@@ -43,9 +40,7 @@ DNDEventDispatcher::DNDEventDispatcher( Window * pTopWindow ):
 {
 }
 
-
 // DNDEventDispatcher::~DNDEventDispatcher
-
 
 DNDEventDispatcher::~DNDEventDispatcher()
 {
@@ -76,9 +71,7 @@ Window* DNDEventDispatcher::findTopLevelWindow(Point location)
     return pChildWindow;
 }
 
-
 // DNDEventDispatcher::drop
-
 
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     throw(RuntimeException, std::exception)
@@ -116,9 +109,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     m_aDataFlavorList.realloc( 0 );
 }
 
-
 // DNDEventDispatcher::dragEnter
-
 
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
     throw(RuntimeException, std::exception)
@@ -144,9 +135,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
 }
 
-
 // DNDEventDispatcher::dragExit
-
 
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     throw(RuntimeException, std::exception)
@@ -160,9 +149,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     m_aDataFlavorList.realloc( 0 );
 }
 
-
 // DNDEventDispatcher::dragOver
-
 
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     throw(RuntimeException, std::exception)
@@ -201,9 +188,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     }
 }
 
-
 // DNDEventDispatcher::dropActionChanged
-
 
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
     throw(RuntimeException, std::exception)
@@ -242,10 +227,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
     }
 }
 
-
-
 // DNDEventDispatcher::dragGestureRecognized
-
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
     throw(RuntimeException, std::exception)
@@ -259,34 +241,26 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
     fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
 }
 
-
 // DNDEventDispatcher::disposing
-
 
 void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
     throw(RuntimeException, std::exception)
 {
 }
 
-
 // DNDEventDispatcher::acceptDrag
-
 
 void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ ) throw(RuntimeException, std::exception)
 {
 }
 
-
 // DNDEventDispatcher::rejectDrag
-
 
 void SAL_CALL DNDEventDispatcher::rejectDrag() throw(RuntimeException, std::exception)
 {
 }
 
-
 // DNDEventDispatcher::fireDragEnterEvent
-
 
 sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
@@ -320,9 +294,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
     return n;
 }
 
-
 // DNDEventDispatcher::fireDragOverEvent
-
 
 sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
@@ -353,9 +325,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
     return n;
 }
 
-
 // DNDEventDispatcher::fireDragExitEvent
-
 
 sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(RuntimeException)
 {
@@ -380,9 +350,7 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
     return n;
 }
 
-
 // DNDEventDispatcher::fireDropActionChangedEvent
-
 
 sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
@@ -413,9 +381,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
     return n;
 }
 
-
 // DNDEventDispatcher::fireDropEvent
-
 
 sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
     const Reference< XDropTargetDropContext >& xContext, const sal_Int8 nDropAction, const Point& rLocation,
@@ -458,9 +424,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
     return n;
 }
 
-
 // DNDEventDispatcher::fireDragGestureRecognized
-
 
 sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
     const Reference< XDragSource >& xSource, const Any event,

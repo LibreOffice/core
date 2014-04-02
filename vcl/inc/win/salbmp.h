@@ -25,9 +25,7 @@
 #include <salbmp.hxx>
 #include <boost/shared_ptr.hpp>
 
-
 // - SalBitmap  -
-
 
 struct  BitmapBuffer;
 class   BitmapColor;

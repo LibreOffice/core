@@ -176,5 +176,4 @@ inline void ScriptRun::reset(const UChar chars[], int32_t start, int32_t length)
     reset(start, length);
 }
 
-
 #endif

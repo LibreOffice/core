@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/time.hxx>
 #include <tools/rc.h>
 #include <vcl/event.hxx>
@@ -32,7 +31,6 @@
 #include <window.h>
 #include <brdwin.hxx>
 #include <salframe.hxx>
-
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
 
@@ -85,7 +83,6 @@ public:
 
     sal_uLong GetLastTicks() const { return mnLastTicks; }
 };
-
 
 ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
                                     DockingWindow* pDockingWin ) :
@@ -183,7 +180,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
     mbInMove = false;
     return 0;
 }
-
 
 void ImplDockFloatWin::Move()
 {

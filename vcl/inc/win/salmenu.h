@@ -54,7 +54,6 @@ public:
     WinSalMenuItem();
     virtual ~WinSalMenuItem();
 
-
     MENUITEMINFOW mInfo;
     void*     mpMenu;       // pointer to corresponding VCL menu
     OUString  mText;        // the item text

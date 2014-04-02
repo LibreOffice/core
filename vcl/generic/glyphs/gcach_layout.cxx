@@ -38,9 +38,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <comphelper/processfactory.hxx>
 
-
 // layout implementation for ServerFont
-
 
 ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 :   mrServerFont( rFont )
@@ -51,13 +49,10 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
     rSalGraphics.DrawServerFontLayout( *this );
 }
 
-
-
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     return mrServerFont.GetLayoutEngine()->layout(*this, rArgs);
 }
-
 
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -114,8 +109,6 @@ void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
 
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
-
-
 
 std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
 {
@@ -553,8 +546,6 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     return true;
 }
 
-
-
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
@@ -563,7 +554,5 @@ ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
     }
     return mpLayoutEngine;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

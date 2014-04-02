@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <X11_dndcontext.hxx>
 #include <X11_selection.hxx>
 
@@ -57,7 +56,6 @@ void DropTargetDropContext::dropComplete( sal_Bool success ) throw(std::exceptio
 {
     m_rManager.dropComplete( success, m_aDropWindow, m_nTimestamp );
 }
-
 
 /*
  *  DropTargetDragContext

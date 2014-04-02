@@ -337,7 +337,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings( style );
 }
 
-
 void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     for( int i = 0; i < nMaxGraphics; i++ )

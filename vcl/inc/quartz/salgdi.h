@@ -122,7 +122,6 @@ private:
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 };
 
-
 // - SystemFontList -
 // TODO: move into cross-platform headers
 
@@ -147,7 +146,6 @@ private:
 };
 
 #ifdef MACOSX
-
 
 // - AquaSalGraphics -
 

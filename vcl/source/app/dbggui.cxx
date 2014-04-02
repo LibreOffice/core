@@ -225,7 +225,6 @@ private:
     void            GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& nFirst, sal_uInt16& nLast );
 };
 
-
 class DbgInfoDialog : public ModalDialog
 {
 private:
@@ -238,7 +237,6 @@ public:
 
     void            SetInfoText( const OUString& rStr );
 };
-
 
 class DbgDialog : public ModalDialog
 {

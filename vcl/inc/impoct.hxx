@@ -22,9 +22,7 @@
 
 #include "octree.hxx"
 
-
 // - ImpErrorQuad -
-
 
 class ImpErrorQuad
 {
@@ -59,16 +57,12 @@ public:
     inline BitmapColor      ImplGetColor();
 };
 
-
-
 inline void ImpErrorQuad::operator=( const BitmapColor& rColor )
 {
     nRed = (long) rColor.GetRed() << 5L;
     nGreen = (long) rColor.GetGreen() << 5L;
     nBlue = (long) rColor.GetBlue() << 5L;
 }
-
-
 
 inline ImpErrorQuad& ImpErrorQuad::operator-=( const BitmapColor& rColor )
 {
@@ -79,16 +73,12 @@ inline ImpErrorQuad& ImpErrorQuad::operator-=( const BitmapColor& rColor )
     return *this;
 }
 
-
-
 inline void ImpErrorQuad::ImplAddColorError1( const ImpErrorQuad& rErrQuad )
 {
     nRed += ( rErrQuad.nRed >> 4L );
     nGreen += ( rErrQuad.nGreen >> 4L );
     nBlue += ( rErrQuad.nBlue >> 4L );
 }
-
-
 
 inline void ImpErrorQuad::ImplAddColorError3( const ImpErrorQuad& rErrQuad )
 {
@@ -97,16 +87,12 @@ inline void ImpErrorQuad::ImplAddColorError3( const ImpErrorQuad& rErrQuad )
     nBlue += ( rErrQuad.nBlue * 3L >> 4L );
 }
 
-
-
 inline void ImpErrorQuad::ImplAddColorError5( const ImpErrorQuad& rErrQuad )
 {
     nRed += ( rErrQuad.nRed * 5L >> 4L );
     nGreen += ( rErrQuad.nGreen * 5L >> 4L );
     nBlue += ( rErrQuad.nBlue * 5L >> 4L );
 }
-
-
 
 inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
 {
@@ -115,8 +101,6 @@ inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
     nBlue += ( rErrQuad.nBlue *7L >> 4L );
 }
 
-
-
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
     return BitmapColor( (sal_uInt8) ( ( nRed < 0L ? 0L : nRed > 8160L ? 8160L : nRed ) >> 5L ),
@@ -124,9 +108,7 @@ inline BitmapColor ImpErrorQuad::ImplGetColor()
                         (sal_uInt8) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5L ) );
 }
 
-
 // - NodeCache -
-
 
 class ImpNodeCache
 {
@@ -140,8 +122,6 @@ public:
     inline OctreeNode*  ImplGetFreeNode();
     inline void         ImplReleaseNode( OctreeNode* pNode );
 };
-
-
 
 inline OctreeNode* ImpNodeCache::ImplGetFreeNode()
 {
@@ -159,8 +139,6 @@ inline OctreeNode* ImpNodeCache::ImplGetFreeNode()
 
     return pNode;
 }
-
-
 
 inline void ImpNodeCache::ImplReleaseNode( OctreeNode* pNode )
 {

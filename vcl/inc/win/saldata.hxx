@@ -285,7 +285,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 // POSTFOCUS-Message; wParam == bFocus; lParam == 0
 #define SALOBJ_MSG_POSTFOCUS        (WM_USER+161)
 
-
 // A/W-Wrapper
 BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
 BOOL    ImplSendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );

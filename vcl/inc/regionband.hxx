@@ -27,8 +27,6 @@
 const char* ImplDbgTestRegionBand(const void*);
 #endif
 
-
-
 class RegionBand
 {
 private:

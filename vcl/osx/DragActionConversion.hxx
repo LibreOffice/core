@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/types.h>
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
-
 
 /* Convert office drag actions as defined in
    <type>com::sun::star::datatransfer::dnd::DNDConstants</type>

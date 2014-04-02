@@ -487,7 +487,6 @@ public:
                          std::vector< sal_Int32 >& rWidths,
                          std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
 
-
     // font administration functions
 
     /*  system dependendent font matching

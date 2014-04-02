@@ -48,7 +48,6 @@
  *
  */
 
-
 #ifndef INCLUDED_VCL_INC_SFT_HXX
 #define INCLUDED_VCL_INC_SFT_HXX
 
@@ -159,16 +158,11 @@ namespace vcl
     };
 #endif
 
-
-
-
 /** Structure used by GetTTSimpleGlyphMetrics() and GetTTSimpleCharMetrics() functions */
     typedef struct {
         sal_uInt16 adv;                         /**< advance width or height            */
         sal_Int16 sb;                           /**< left or top sidebearing            */
     } TTSimpleGlyphMetrics;
-
-
 
 /** Structure used by the TrueType Creator and GetRawGlyphData() */
 
@@ -194,8 +188,6 @@ namespace vcl
         sal_uInt16 slen;                        /**< String length in bytes                                 */
         sal_uInt8  *sptr;                        /**< Pointer to string data (not zero-terminated!)          */
     } NameRecord;
-
-
 
 /** Return value of GetTTGlobalFontInfo() */
 
@@ -245,7 +237,6 @@ namespace vcl
         int y;                    /**< positive: up, negative: down                           */
     } KernData;
 
-
 /** ControlPoint structure used by GetTTGlyphPoints() */
     typedef struct {
         sal_uInt32 flags;             /**< 00000000 00000000 e0000000 bbbbbbbb */
@@ -262,7 +253,6 @@ namespace vcl
  * @defgroup sft Sun Font Tools Exported Functions
  */
 
-
 /**
  * Get the number of fonts contained in a TrueType collection
  * @param  fname - file name
@@ -270,7 +260,6 @@ namespace vcl
  * @ingroup sft
  */
     int CountTTCFonts(const char* fname);
-
 
 /**
  * TrueTypeFont constructor.
@@ -375,7 +364,6 @@ namespace vcl
  */
     void DisposeNameRecords(NameRecord* nr, int n);
 
-
 #ifndef NO_TYPE3
 /**
  * Generates a new PostScript Type 3 font and dumps it to <b>outf</b> file.
@@ -456,7 +444,6 @@ namespace vcl
                                sal_uInt8          *encoding,
                                int            nGlyphs);
 #endif
-
 
 /**
  * Queries glyph metrics. Allocates an array of TTSimpleGlyphMetrics structs and returns it.

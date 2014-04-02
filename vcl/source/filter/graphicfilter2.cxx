@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdio.h>
 #include <tools/stream.hxx>
@@ -456,7 +455,6 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
             sal_uInt16  nYmax;
             sal_uInt16  nDPIx;
             sal_uInt16  nDPIy;
-
 
             rStm.SeekRel( 1 );
 

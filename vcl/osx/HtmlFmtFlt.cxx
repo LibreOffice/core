@@ -29,7 +29,6 @@
 
 using namespace com::sun::star::uno;
 
-
 // converts the openoffice text/html clipboard format to the HTML Format
 // well known under MS Windows
 // the MS HTML Format has a header before the real html data
@@ -53,7 +52,6 @@ using namespace com::sun::star::uno;
 // <!--StartFragment--> and <!--EndFragment--> (no space between !-- and the
 // text
 
-
 namespace // private
 {
 std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFragment, size_t endFragment)
@@ -68,7 +66,6 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
 }
 
 } // namespace private
-
 
 // the office always writes the start and end html tag in upper cases and
 // without spaces both tags don't allow parameters

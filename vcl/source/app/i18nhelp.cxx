@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "comphelper/processfactory.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/transliterationwrapper.hxx"
@@ -124,7 +123,6 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-
     OUString aStr1( filterFormattingChars(rStr1) );
     OUString aStr2( filterFormattingChars(rStr2) );
     return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );
@@ -161,7 +159,6 @@ bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemo
     }
     return bEqual;
 }
-
 
 OUString vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep, bool bTrailingZeros ) const
 {

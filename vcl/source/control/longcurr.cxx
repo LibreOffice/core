@@ -470,11 +470,9 @@ LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-
 LongCurrencyField::~LongCurrencyField()
 {
 }
-
 
 bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -485,7 +483,6 @@ bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
     }
     return SpinField::PreNotify( rNEvt );
 }
-
 
 bool LongCurrencyField::Notify( NotifyEvent& rNEvt )
 {
@@ -504,13 +501,11 @@ bool LongCurrencyField::Notify( NotifyEvent& rNEvt )
     return SpinField::Notify( rNEvt );
 }
 
-
 void LongCurrencyField::Modify()
 {
     MarkToBeReformatted( true );
     SpinField::Modify();
 }
-
 
 void LongCurrencyField::Up()
 {
@@ -534,13 +529,11 @@ void LongCurrencyField::Down()
     SpinField::Down();
 }
 
-
 void LongCurrencyField::First()
 {
     ImplNewLongCurrencyFieldValue( this, mnFirst );
     SpinField::First();
 }
-
 
 void LongCurrencyField::Last()
 {
@@ -568,7 +561,6 @@ bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
     }
     return ComboBox::PreNotify( rNEvt );
 }
-
 
 bool LongCurrencyBox::Notify( NotifyEvent& rNEvt )
 {

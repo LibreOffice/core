@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <sal/alloca.h>
@@ -56,12 +55,8 @@ static void sendEmptyCommit( SalFrame* pFrame )
         pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
 }
 
-
-
 // Constructor / Destructor, the InputContext is bound to the SalFrame, as it
 // needs the shell window as a focus window
-
-
 
 SalI18N_InputContext::~SalI18N_InputContext()
 {
@@ -80,9 +75,7 @@ SalI18N_InputContext::~SalI18N_InputContext()
         free(maClientData.aText.pCharStyle);
 }
 
-
 // convenience routine to add items to a XVaNestedList
-
 
 static XVaNestedList
 XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
@@ -111,9 +104,7 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
     return a_dstlist != NULL ? a_dstlist : a_srclist ;
 }
 
-
 // convenience routine to create a fontset
-
 
 static XFontSet
 get_font_set( Display *p_display )
@@ -133,11 +124,7 @@ get_font_set( Display *p_display )
     return p_font_set;
 }
 
-
-
 // Constructor for a InputContext (IC)
-
-
 
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mbUseable( True ),
@@ -196,9 +183,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.aText.nCursorPos       = 0;
         maClientData.aText.nLength          = 0;
 
-
         // Status attributes
-
 
         switch ( mnStatusStyle )
         {
@@ -236,9 +221,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 break;
         }
 
-
         // set preedit attributes
-
 
         switch ( mnPreeditStyle )
         {
@@ -373,12 +356,8 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     }
 }
 
-
-
 // In Solaris 8 the status window does not unmap if the frame unmapps, so
 // unmap it the hard way
-
-
 
 void
 SalI18N_InputContext::Unmap( SalFrame* pFrame )
@@ -419,12 +398,8 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
     }
 }
 
-
-
 // Handle DestroyCallbacks
 // in fact this is a callback called from the XNDestroyCallback
-
-
 
 void
 SalI18N_InputContext::HandleDestroyIM()
@@ -433,12 +408,8 @@ SalI18N_InputContext::HandleDestroyIM()
     mbUseable = False;
 }
 
-
-
 //  make sure, the input method gets all the X-Events it needs, this is only
 //  called once on each frame, it relys on a valid maContext
-
-
 
 void
 SalI18N_InputContext::ExtendEventMask( XLIB_Window aFocusWindow )
@@ -460,11 +431,7 @@ SalI18N_InputContext::ExtendEventMask( XLIB_Window aFocusWindow )
     }
 }
 
-
-
 // tune the styles provided by the input method with the supported one
-
-
 
 unsigned int
 SalI18N_InputContext::GetWeightingOfIMStyle( XIMStyle nStyle ) const
@@ -547,11 +514,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
     return (mnPreeditStyle != 0) && (mnStatusStyle != 0) ;
 }
 
-
-
 // handle extended and normal key input
-
-
 
 int
 SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
@@ -603,13 +566,9 @@ SalI18N_InputContext::UpdateSpotLocation()
     return 0;
 }
 
-
-
 // set and unset the focus for the Input Context
 // the context may be NULL despite it is useable if the framewindow is
 // in unmapped state
-
-
 
 void
 SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
@@ -655,11 +614,7 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
     }
 }
 
-
-
 // multi byte input method only
-
-
 
 void
 SalI18N_InputContext::SetLanguage(LanguageType)
@@ -688,6 +643,5 @@ SalI18N_InputContext::EndExtTextInput( sal_uInt16 /*nFlags*/ )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <tools/debug.hxx>
@@ -63,9 +62,6 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
 
     return aClone;
 }
-
-
-
 
 const Point&   HelpEvent::GetMousePosPixel() const
 {

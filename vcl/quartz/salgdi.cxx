@@ -57,10 +57,7 @@
 #include "sallayout.hxx"
 #include "sft.hxx"
 
-
 using namespace vcl;
-
-
 
 CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
 :   PhysicalFontFace( rSrc )
@@ -74,8 +71,6 @@ CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
         mpCharMap->AddReference();
 }
 
-
-
 CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
 :   PhysicalFontFace( rDFA, 0 )
 ,   mnFontId( nFontId )
@@ -87,22 +82,16 @@ CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPt
 {
 }
 
-
-
 CoreTextFontData::~CoreTextFontData()
 {
     if( mpCharMap )
         mpCharMap->DeReference();
 }
 
-
-
 sal_IntPtr CoreTextFontData::GetFontId() const
 {
     return (sal_IntPtr)mnFontId;
 }
-
-
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
@@ -188,8 +177,6 @@ bool CoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapab
     rFontCapabilities = maFontCapabilities;
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
-
-
 
 void CoreTextFontData::ReadOs2Table( void ) const
 {
@@ -337,14 +324,10 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
         mpTextStyle->SetTextColor( maTextColor );
 }
 
-
-
 void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int /*nFallbackLevel*/ )
 {
     mpTextStyle->GetFontMetric( *pMetric );
 }
-
-
 
 static bool AddTempDevFont(const OUString& rFontFileURL)
 {
@@ -444,15 +427,11 @@ void AquaSalGraphics::ClearDevFontCache()
     pSalData->mpFontList = NULL;
 }
 
-
-
 bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
     const OUString& rFontFileURL, const OUString& /*rFontName*/ )
 {
     return ::AddTempDevFont(rFontFileURL);
 }
-
-
 
 bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
@@ -460,21 +439,15 @@ bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPol
     return bRC;
 }
 
-
-
 bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
     const bool bRC = mpTextStyle->GetGlyphBoundRect( aGlyphId, rRect );
     return bRC;
 }
 
-
-
 void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {
 }
-
-
 
 sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
@@ -510,15 +483,11 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     return 0;
 }
 
-
-
 SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFallbackLevel*/ )
 {
     SalLayout* pSalLayout = mpTextStyle->GetTextLayout();
     return pSalLayout;
 }
-
-
 
 const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
@@ -535,8 +504,6 @@ bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
 
     return mpFontData->GetImplFontCapabilities(rFontCapabilities);
 }
-
-
 
 // fake a SFNT font directory entry for a font table
 // see http://developer.apple.com/fonts/TTRefMan/RM06/Chap6.html#Directory
@@ -720,8 +687,6 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     return true;
 }
 
-
-
 void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
     Int32Vector& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
 {
@@ -791,15 +756,11 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     }
 }
 
-
-
 const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
     const PhysicalFontFace*, const Ucs2OStrMap** /*ppNonEncoded*/ )
 {
     return NULL;
 }
-
-
 
 const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                               const sal_Ucs* /*pUnicodes*/,
@@ -810,8 +771,6 @@ const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
     return NULL;
 }
 
-
-
 void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
 {
     // TODO: implementing this only makes sense when the implementation of
@@ -819,8 +778,6 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
     (void)pData;
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
-
-
 
 SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {

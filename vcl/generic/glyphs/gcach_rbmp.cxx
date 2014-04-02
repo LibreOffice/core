@@ -17,19 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "generic/glyphcache.hxx"
 #include <string.h>
-
 
 RawBitmap::RawBitmap()
 : mnAllocated(0)
 {}
 
-
 RawBitmap::~RawBitmap()
 {}
-
 
 // used by 90 and 270 degree rotations on 8 bit deep bitmaps
 static void ImplRotate8_90( unsigned char* p1, const unsigned char* p2,
@@ -43,7 +39,6 @@ static void ImplRotate8_90( unsigned char* p1, const unsigned char* p2,
             *(p1++) = 0;
     }
 }
-
 
 // used by inplace 180 degree rotation on 8 bit deep bitmaps
 static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
@@ -70,7 +65,6 @@ static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
         *(p1++) = cTmp;
     }
 }
-
 
 // used by 90 or 270 degree rotations on 1 bit deep bitmaps
 static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
@@ -110,7 +104,6 @@ static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
     }
 }
 
-
 // used by 180 degrees rotations on 1 bit deep bitmaps
 static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
     int xmax, int ymax, int nPad )
@@ -146,7 +139,6 @@ static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
         p1 += nPad;
     }
 }
-
 
 bool RawBitmap::Rotate( int nAngle )
 {

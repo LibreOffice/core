@@ -102,7 +102,6 @@ static unsigned lcl_IsCJKFont( const OUString& rFontName )
     return 0;
 }
 
-
 PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
     , mbMapNames( false )

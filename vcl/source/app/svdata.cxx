@@ -303,8 +303,6 @@ bool ImplInitAccessBridge()
     return true;
 }
 
-
-
 Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {
     ImplSVData* pSVData = ImplGetSVData();

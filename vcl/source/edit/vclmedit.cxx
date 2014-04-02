@@ -34,7 +34,6 @@
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
-
 class TextWindow : public Window
 {
 private:
@@ -78,7 +77,6 @@ public:
 
     void            SetTextSelectable( bool bTextSelectable ) { mbTextSelectable = bTextSelectable; }
 };
-
 
 class ImpVclMEdit : public SfxListener
 {
@@ -712,7 +710,6 @@ bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
     return bDone;
 }
 
-
 TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 {
     mbInMBDown = false;
@@ -1000,7 +997,6 @@ WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )
 
     return nStyle;
 }
-
 
 void VclMultiLineEdit::ImplInitSettings( bool /*bFont*/, bool /*bForeground*/, bool bBackground )
 {
@@ -1521,7 +1517,6 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 
     return nDone || Edit::PreNotify( rNEvt );
 }
-
 
 // Internals for derived classes, e.g. TextComponent
 

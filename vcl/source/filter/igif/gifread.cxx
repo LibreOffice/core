@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define _GIFPRIVATE
 
 #include "decode.hxx"
@@ -50,7 +49,6 @@ GIFReader::GIFReader( SvStream& rStm ) :
     pSrcBuf = new sal_uInt8[ 256 ];
     ClearImageExtensions();
 }
-
 
 GIFReader::~GIFReader()
 {
@@ -635,7 +633,6 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-
         // read extension
         case( EXTENSION_READING ):
         {
@@ -643,7 +640,6 @@ bool GIFReader::ProcessGIF()
                 eActAction = MARKER_READING;
         }
         break;
-
 
         // read Image-Descriptor
         case( LOCAL_HEADER_READING ):
@@ -655,7 +651,6 @@ bool GIFReader::ProcessGIF()
             }
         }
         break;
-
 
         // read first data block
         case( FIRST_BLOCK_READING ):

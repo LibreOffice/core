@@ -41,7 +41,6 @@ void SvpSalInstance::DestroyPrinter( SalPrinter* pPrinter )
     delete pPrinter;
 }
 
-
 void SvpSalInstance::PostPrintersChanged()
 {
 }

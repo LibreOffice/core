@@ -30,7 +30,6 @@
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
-
 // translate control ids to resource ids
 
 static const struct

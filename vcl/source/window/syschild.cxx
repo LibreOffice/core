@@ -52,8 +52,6 @@
 
 using namespace ::com::sun::star;
 
-
-
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        sal_uInt16 nEvent, const void* /* pEvent */ )
 {
@@ -109,8 +107,6 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     return nRet;
 }
 
-
-
 void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
 {
     mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
@@ -126,23 +122,17 @@ void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, Syste
     }
 }
 
-
-
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, NULL );
 }
 
-
-
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, pData, bShow );
 }
-
-
 
 SystemChildWindow::~SystemChildWindow()
 {
@@ -154,8 +144,6 @@ SystemChildWindow::~SystemChildWindow()
     }
 }
 
-
-
 const SystemEnvData* SystemChildWindow::GetSystemData() const
 {
     if ( mpWindowImpl->mpSysObj )
@@ -164,15 +152,11 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
         return NULL;
 }
 
-
-
 void SystemChildWindow::EnableEraseBackground( bool bEnable )
 {
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
 }
-
-
 
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
@@ -211,8 +195,6 @@ void SystemChildWindow::SetForwardKey( bool bEnable )
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
-
-
 
 sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
 {

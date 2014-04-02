@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cstdio>
 #include <cstring>
 #include <assert.h>
@@ -256,7 +255,6 @@ struct TYPE2OP
     };
 };
 
-
 struct CffGlobal
 {
     explicit CffGlobal();
@@ -284,7 +282,6 @@ struct CffGlobal
     int     mnFullNameSID;
     int     mnFamilyNameSID;
 };
-
 
 struct CffLocal
 {
@@ -317,7 +314,6 @@ struct CffLocal
     bool        mbForceBold;
 };
 
-
 class SubsetterContext
 {
 public:
@@ -327,11 +323,8 @@ public:
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) = 0;
 };
 
-
-
 SubsetterContext::~SubsetterContext( void)
 {}
-
 
 class CffSubsetterContext
 :   public SubsetterContext
@@ -439,8 +432,6 @@ private:
     ValType maCharWidth;
 };
 
-
-
 CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
 :   mpBasePtr( pBasePtr)
 ,   mpBaseEnd( pBasePtr+nBaseLen)
@@ -454,14 +445,10 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     mpCffLocal = &maCffLocal[0];
 }
 
-
-
 CffSubsetterContext::~CffSubsetterContext( void)
 {
     // TODO: delete[] maCffLocal;
 }
-
-
 
 inline int CffSubsetterContext::popInt( void)
 {
@@ -471,8 +458,6 @@ inline int CffSubsetterContext::popInt( void)
     return nInt;
 }
 
-
-
 inline int CffSubsetterContext::peekInt( void) const
 {
     const ValType aVal = peekVal();
@@ -481,8 +466,6 @@ inline int CffSubsetterContext::peekInt( void) const
     return nInt;
 }
 
-
-
 inline int CffSubsetterContext::getInt( int nIndex) const
 {
     const ValType aVal = getVal( nIndex);
@@ -490,8 +473,6 @@ inline int CffSubsetterContext::getInt( int nIndex) const
     assert( nInt == aVal);
     return nInt;
 }
-
-
 
 inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
 {
@@ -510,8 +491,6 @@ inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
         maCharWidth = mpCffLocal->maDefaultWidth;
     }
 }
-
-
 
 void CffSubsetterContext::addHints( bool bVerticalHints)
 {
@@ -1455,7 +1434,6 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     assert( nEndOfs >= 0);
     assert( mpReadEnd <= mpBaseEnd);
 }
-
 
 // initialize FONTDICT specific values
 CffLocal::CffLocal( void)

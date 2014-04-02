@@ -27,9 +27,7 @@
 
 struct SystemEnvData;
 
-
 // - SalObject-Types -
-
 
 #define SAL_OBJECT_CLIP_INCLUDERECTS            ((sal_uInt16)0x0001)
 #define SAL_OBJECT_CLIP_EXCLUDERECTS            ((sal_uInt16)0x0002)

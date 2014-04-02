@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/time.hxx>
 #include <tools/rc.h>
 
@@ -35,7 +34,6 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
-
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_PINABLE | WB_ROLLABLE )
 
@@ -154,7 +152,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
 {
     // called during move of a floating window
@@ -227,7 +224,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
     mbInMove = false;
     return 0;
 }
-
 
 void ImplDockFloatWin2::Move()
 {
@@ -461,10 +457,8 @@ Rectangle DockingManager::GetPosSizePixel( const Window *pWindow )
     return aRect;
 }
 
-
 // special floating window for popup mode
 // main purpose: provides tear-off area for undocking
-
 
 // if TEAROFF_DASHED defined a single dashed line is used
 // otherwise multiple smaller lines will be painted
@@ -554,7 +548,6 @@ Window* ImplPopupFloatWin::GetPreferredKeyInputWindow()
     else
         return FloatingWindow::GetPreferredKeyInputWindow();
 }
-
 
 void ImplPopupFloatWin::ImplSetBorder()
 {
@@ -802,7 +795,6 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
         }
     }
 }
-
 
 ImplDockingWindowWrapper::ImplDockingWindowWrapper( const Window *pWindow )
 {
@@ -1220,7 +1212,6 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     return 0;
 }
 
-
 bool ImplDockingWindowWrapper::IsInPopupMode() const
 {
     if( GetFloatingWindow() )
@@ -1377,9 +1368,7 @@ Size ImplDockingWindowWrapper::GetSizePixel() const
         return mpDockingWindow->GetSizePixel();
 }
 
-
 // old inlines from DockingWindow
-
 
 void ImplDockingWindowWrapper::SetMinOutputSizePixel( const Size& rSize )
 {
@@ -1399,7 +1388,6 @@ bool ImplDockingWindowWrapper::IsFloatingMode() const
 {
     return (mpFloatWin != NULL);
 }
-
 
 void    ImplDockingWindowWrapper::SetDragArea( const Rectangle& rRect )
 {

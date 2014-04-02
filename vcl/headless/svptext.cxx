@@ -111,7 +111,6 @@ SvpGlyphCache& SvpGlyphCache::GetInstance()
     return theGlyphCacheHolder::get().getGlyphCache();
 }
 
-
 BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
     sal_GlyphId aGlyphId, basebmp::Format nBmpFormat, B2IPoint& rTargetPos )
 {
@@ -172,12 +171,10 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
     return pGcpHelper->maBitmapDev;
 }
 
-
 void SvpGlyphPeer::RemovingFont( ServerFont& )
 {
     // nothing to do: no font resources held in SvpGlyphPeer
 }
-
 
 void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
 {
@@ -222,7 +219,6 @@ sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel
     return SAL_SETFONT_USEDRAWTEXTARRAY;
 }
 
-
 void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
@@ -234,7 +230,6 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
         m_pServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
     }
 }
-
 
 const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
@@ -252,7 +247,6 @@ bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabil
 
     return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
-
 
 void SvpSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
@@ -293,13 +287,11 @@ void SvpSalGraphics::ClearDevFontCache()
     rGC.ClearFontCache();
 }
 
-
 bool SvpSalGraphics::AddTempDevFont( PhysicalFontCollection*,
     const OUString&, const OUString& )
 {
     return false;
 }
-
 
 bool SvpSalGraphics::CreateFontSubset(
     const OUString& rToFile,
@@ -329,7 +321,6 @@ bool SvpSalGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-
 const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
     // in this context the pFont->GetFontId() is a valid PSP
@@ -340,7 +331,6 @@ const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
-
 
 const void* SvpSalGraphics::GetEmbedFontData(
     const PhysicalFontFace* pFont,
@@ -358,7 +348,6 @@ const void* SvpSalGraphics::GetEmbedFontData(
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
-
 
 void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
@@ -379,7 +368,6 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
-
 bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
     const int nLevel = aGlyphId >> GF_FONTSHIFT;
@@ -395,7 +383,6 @@ bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return true;
 }
-
 
 bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, B2DPolyPolygon& rPolyPoly )
 {
@@ -414,7 +401,6 @@ bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, B2DPolyPolygon& rPol
     return false;
 }
 
-
 SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs&, int nFallbackLevel )
 {
     GenericSalLayout* pLayout = NULL;
@@ -424,7 +410,6 @@ SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs&, int nFallbackLevel )
 
     return pLayout;
 }
-
 
 void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
 {

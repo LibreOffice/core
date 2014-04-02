@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/color.hxx"
 
@@ -47,14 +46,10 @@ static const unsigned long k32BitRedColorMask   = 0x00ff0000;
 static const unsigned long k32BitGreenColorMask = 0x0000ff00;
 static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-
-
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
-
-
 
 QuartzSalBitmap::QuartzSalBitmap()
 : mxGraphicContext( NULL )
@@ -66,14 +61,10 @@ QuartzSalBitmap::QuartzSalBitmap()
 {
 }
 
-
-
 QuartzSalBitmap::~QuartzSalBitmap()
 {
     Destroy();
 }
-
-
 
 bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     int nX, int nY, int nWidth, int nHeight )
@@ -123,21 +114,15 @@ bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
     return AllocateUserData();
 }
 
-
-
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
 {
     return Create( rSalBmp, rSalBmp.GetBitCount() );
 }
 
-
-
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
     return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
 }
-
-
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
@@ -159,22 +144,16 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
     return false;
 }
 
-
-
 bool QuartzSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }
-
-
 
 void QuartzSalBitmap::Destroy()
 {
     DestroyContext();
     maUserBuffer.reset();
 }
-
-
 
 void QuartzSalBitmap::DestroyContext()
 {
@@ -193,8 +172,6 @@ void QuartzSalBitmap::DestroyContext()
         maContextBuffer.reset();
     }
 }
-
-
 
 bool QuartzSalBitmap::CreateContext()
 {
@@ -259,8 +236,6 @@ bool QuartzSalBitmap::CreateContext()
     return mxGraphicContext != NULL;
 }
 
-
-
 bool QuartzSalBitmap::AllocateUserData()
 {
     Destroy();
@@ -296,8 +271,6 @@ bool QuartzSalBitmap::AllocateUserData()
 
     return maUserBuffer.get() != 0;
 }
-
-
 
 class ImplPixelFormat
 {
@@ -573,21 +546,15 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     }
 }
 
-
-
 Size QuartzSalBitmap::GetSize() const
 {
     return Size( mnWidth, mnHeight );
 }
 
-
-
 sal_uInt16 QuartzSalBitmap::GetBitCount() const
 {
     return mnBits;
 }
-
-
 
 static struct pal_entry
 {
@@ -716,8 +683,6 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     return pBuffer;
 }
 
-
-
 void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
     // invalidate graphic context if we have different data
@@ -730,8 +695,6 @@ void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 
     delete pBuffer;
 }
-
-
 
 CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int nNewHeight ) const
 {
@@ -762,8 +725,6 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
 
     return xCroppedImage;
 }
-
-
 
 static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
 {
@@ -821,8 +782,6 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
     return xMaskedImage;
 }
 
-
-
 /** creates an image from the given rectangle, replacing all black pixels with nMaskColor and make all other full transparent */
 CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
 {
@@ -874,8 +833,6 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHe
     }
     return xMask;
 }
-
-
 
 /** QuartzSalBitmap::GetSystemData Get platform native image data from existing image
  *

@@ -46,7 +46,6 @@ class Size;
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
-
 // - ImplFontAttributes -
 
 // device independent font properties
@@ -86,7 +85,6 @@ private:
     FontWidth       meWidthType;    // Width Type
     bool            mbSymbolFlag;
 };
-
 
 // - ImplDevFontAttributes -
 
@@ -160,9 +158,7 @@ public: // TODO: change to private
     void copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };
 
-
 // - ImplFontMetricData -
-
 
 class ImplFontMetricData : public ImplFontAttributes
 {
@@ -218,7 +214,6 @@ public: // TODO: hide members behind accessor methods
     long                mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
 };
 
-
 // - ImplFontEntry -
 
 // TODO: rename ImplFontEntry to LogicalFontInstance
@@ -254,7 +249,6 @@ private:
     typedef ::boost::unordered_map<GFBCacheKey,OUString,GFBCacheKey_Hash> UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
-
 
 class ImplTextLineInfo
 {

@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 
@@ -16,7 +15,6 @@
 #include <boost/scoped_ptr.hpp>
 
 struct GtkSalPrinter_Impl;
-
 
 class VCL_DLLPUBLIC GtkSalPrinter : public PspSalPrinter
 {
@@ -40,13 +38,11 @@ private:
     boost::scoped_ptr<GtkSalPrinter_Impl> m_pImpl;
 };
 
-
 class VCL_DLLPUBLIC GtkSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
     sal_uLong GetCapabilities(const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType) SAL_OVERRIDE;
 };
-
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 

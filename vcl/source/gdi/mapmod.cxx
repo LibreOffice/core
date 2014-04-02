@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <vcl/mapmod.hxx>
 
-
 ImplMapMode::ImplMapMode() :
     maOrigin( 0, 0 ),
     maScaleX( 1, 1 ),

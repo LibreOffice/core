@@ -169,7 +169,6 @@ void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-
 void SpinButton::Paint( const Rectangle& )
 {
     HideFocus();

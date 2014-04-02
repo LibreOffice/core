@@ -25,7 +25,6 @@
 
 #include "PhysicalFontFace.hxx"
 
-
 PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagic )
     : ImplDevFontAttributes( rDFA )
     , mnWidth(0)

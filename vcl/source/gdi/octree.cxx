@@ -25,15 +25,11 @@
 
 #include "octree.hxx"
 
-
 // - pMask -
-
 
 static const sal_uInt8 pImplMask[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
 
-
 // - NodeCache -
-
 
 ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
             pActNode( NULL )
@@ -49,8 +45,6 @@ ImpNodeCache::ImpNodeCache( const sal_uLong nInitSize ) :
     }
 }
 
-
-
 ImpNodeCache::~ImpNodeCache()
 {
     while( pActNode )
@@ -62,9 +56,7 @@ ImpNodeCache::~ImpNodeCache()
     }
 }
 
-
 // - Octree -
-
 
 Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
             nMax        ( nColors ),
@@ -77,15 +69,11 @@ Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
     ImplCreateOctree();
 }
 
-
-
 Octree::~Octree()
 {
     ImplDeleteOctree( &pTree );
     delete pNodeCache;
 }
-
-
 
 void Octree::ImplCreateOctree()
 {
@@ -131,8 +119,6 @@ void Octree::ImplCreateOctree()
     }
 }
 
-
-
 void Octree::ImplDeleteOctree( PPNODE ppNode )
 {
     for ( sal_uLong i = 0UL; i < 8UL; i++ )
@@ -144,8 +130,6 @@ void Octree::ImplDeleteOctree( PPNODE ppNode )
     pNodeCache->ImplReleaseNode( *ppNode );
     *ppNode = NULL;
 }
-
-
 
 void Octree::ImplAdd( PPNODE ppNode )
 {
@@ -183,8 +167,6 @@ void Octree::ImplAdd( PPNODE ppNode )
         ImplAdd( &(*ppNode)->pChild[ nIndex ] );
     }
 }
-
-
 
 void Octree::ImplReduce()
 {
@@ -224,8 +206,6 @@ void Octree::ImplReduce()
     nLeafCount -= --nChildren;
 }
 
-
-
 void Octree::CreatePalette( PNODE pNode )
 {
     if( pNode->bLeaf )
@@ -240,8 +220,6 @@ void Octree::CreatePalette( PNODE pNode )
             CreatePalette( pNode->pChild[ i ] );
 
 }
-
-
 
 void Octree::GetPalIndex( PNODE pNode )
 {
@@ -259,9 +237,7 @@ void Octree::GetPalIndex( PNODE pNode )
     }
 }
 
-
 // - InverseColorMap -
-
 
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
@@ -315,15 +291,11 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
     }
 }
 
-
-
 InverseColorMap::~InverseColorMap()
 {
     rtl_freeMemory( pBuffer );
     rtl_freeMemory( pMap );
 }
-
-
 
 void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
 {

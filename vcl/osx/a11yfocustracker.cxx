@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
 #include "vcl/toolbox.hxx"
@@ -36,16 +35,11 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-
-
 static inline Window *
 getWindow(const ::VclSimpleEvent *pEvent)
 {
     return static_cast< const ::VclWindowEvent *> (pEvent)->GetWindow();
 }
-
-
-
 
 // callback function for Application::addEventListener
 
@@ -94,8 +88,6 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
     return 0;
 }
 
-
-
 AquaA11yFocusTracker::AquaA11yFocusTracker() :
     m_aWindowEventLink(this, (PSTUB) WindowEventHandler),
     m_xDocumentFocusListener(new DocumentFocusListener(*this))
@@ -103,8 +95,6 @@ AquaA11yFocusTracker::AquaA11yFocusTracker() :
     Application::AddEventListener(m_aWindowEventLink);
     window_got_focus(Application::GetFocusWindow());
 }
-
-
 
 void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAccessible)
 {
@@ -116,8 +106,6 @@ void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAcc
             m_aFocusListener->focusedObjectChanged(xAccessible);
     }
 }
-
-
 
 void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
 {
@@ -135,8 +123,6 @@ void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
         }
     }
 }
-
-
 
 void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
 {
@@ -171,8 +157,6 @@ void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
     }
 }
 
-
-
 void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
 {
     // Make sure either the toolbox or its parent toolbox has the focus
@@ -186,8 +170,6 @@ void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
     notify_toolbox_item_focus(static_cast <ToolBox *> (pWindow));
 }
 
-
-
 void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
 {
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox * >( pWindow->GetParent() );
@@ -196,8 +178,6 @@ void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
     if( pToolBoxParent && pToolBoxParent->HasFocus() )
         notify_toolbox_item_focus( pToolBoxParent );
 }
-
-
 
 void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
 {
@@ -212,8 +192,6 @@ void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
     }
 }
 
-
-
 void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
 {
     Menu * pMenu = pEvent->GetMenu();
@@ -226,8 +204,6 @@ void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
             setFocusedObject( xAccessible );
     }
 }
-
-
 
 void AquaA11yFocusTracker::window_got_focus(Window *pWindow)
 {

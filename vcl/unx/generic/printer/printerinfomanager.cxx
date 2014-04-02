@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
@@ -53,7 +52,6 @@
 using namespace psp;
 using namespace osl;
 
-
 namespace psp
 {
     class SystemQueueInfo : public Thread
@@ -82,8 +80,6 @@ namespace psp
 *  class PrinterInfoManager
 */
 
-
-
 PrinterInfoManager& PrinterInfoManager::get()
 {
     SalData* pSalData = GetSalData();
@@ -109,8 +105,6 @@ void PrinterInfoManager::release()
     delete pSalData->m_pPIManager;
     pSalData->m_pPIManager = NULL;
 }
-
-
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( NULL ),
@@ -138,8 +132,6 @@ void PrinterInfoManager::initSystemDefaultPaper()
         PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
         RTL_TEXTENCODING_UTF8);
 }
-
-
 
 bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 {
@@ -188,8 +180,6 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 
     return bChanged;
 }
-
-
 
 void PrinterInfoManager::initialize()
 {
@@ -302,7 +292,6 @@ void PrinterInfoManager::initialize()
         if( aDirectory.open() )
             continue;
         aDirectory.close();
-
 
         FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aUniPath );
         FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
@@ -550,8 +539,6 @@ void PrinterInfoManager::initialize()
     }
 }
 
-
-
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
     ::boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator it;
@@ -559,8 +546,6 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
         rList.push_back( it->first );
 }
-
-
 
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
@@ -571,8 +556,6 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
-
-
 
 void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {
@@ -587,8 +570,6 @@ void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const Prin
         writePrinterConfig();
     }
 }
-
-
 
 // need to check writeability / creatability of config files
 static bool checkWriteability( const OUString& rUniPath )
@@ -737,8 +718,6 @@ bool PrinterInfoManager::writePrinterConfig()
     return true;
 }
 
-
-
 bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUString& rDriverName )
 {
     bool bSuccess = false;
@@ -793,8 +772,6 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
     return bSuccess;
 }
 
-
-
 bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bCheckOnly )
 {
     bool bSuccess = true;
@@ -805,7 +782,6 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
         if( !it->second.m_aFile.isEmpty() )
         {
             // this printer already exists in a config file
-
 
             // check writeability of config file(s)
             if( ! checkWriteability( it->second.m_aFile ) )
@@ -846,8 +822,6 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
     }
     return bSuccess;
 }
-
-
 
 bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
@@ -984,8 +958,6 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
         #endif
     }
 }
-
-
 
 SystemQueueInfo::SystemQueueInfo() :
     m_bChanged( false )

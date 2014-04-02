@@ -20,7 +20,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
-
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -40,7 +39,6 @@
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
 #endif
-
 
 using namespace ::com::sun::star;
 
@@ -293,7 +291,6 @@ ImageList::ImageList( const ResId& rResId ) :
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList( const ResId& rResId )" );
 
-
     rResId.SetRT( RSC_IMAGELIST );
 
     ResMgr* pResMgr = rResId.GetResMgr();
@@ -341,7 +338,6 @@ ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
     mnGrowSize( 4 )
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
-
 
     ImplInit( sal::static_int_cast< sal_uInt16 >( rNameVector.size() ), Size() );
 
@@ -641,7 +637,6 @@ OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
 {
     SAL_INFO( "vcl.gdi", "vcl: ImageList::GetImageNames" );
-
 
     rNames = ::std::vector< OUString >();
 

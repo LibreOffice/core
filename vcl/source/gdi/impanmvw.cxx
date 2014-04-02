@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "impanmvw.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>

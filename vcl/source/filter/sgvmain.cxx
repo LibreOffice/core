@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/math.hxx>
 #include <osl/endian.h>
 #include <vcl/graph.hxx>
@@ -599,7 +598,6 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
     }
 }
 
-
 void CircType::Draw(OutputDevice& rOut)
 {
     Rectangle aRect(Center.x-Radius.x,Center.y-Radius.y,Center.x+Radius.x,Center.y+Radius.y);
@@ -695,7 +693,6 @@ void BmapType::Draw(OutputDevice& rOut)
         delete pInp;
     }
 }
-
 
 sal_uInt32 GrupType::GetSubPtr()
 {

@@ -17,25 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 
 #include <accel.h>
 #include <vcl/accel.hxx>
 #include <accmgr.hxx>
 
-
-
-
-
-
 ImplAccelManager::~ImplAccelManager()
 {
     delete mpAccelList;
     delete mpSequenceList;
 }
-
-
 
 bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
@@ -52,8 +44,6 @@ bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
     mpAccelList->insert( mpAccelList->begin(), pAccel );
     return true;
 }
-
-
 
 void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
 {
@@ -90,8 +80,6 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     }
 }
 
-
-
 void ImplAccelManager::EndSequence( bool bCancel )
 {
     // are we in a list ?
@@ -117,8 +105,6 @@ void ImplAccelManager::EndSequence( bool bCancel )
     delete mpSequenceList;
     mpSequenceList = NULL;
 }
-
-
 
 bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <pdfwriter_impl.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>

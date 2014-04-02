@@ -68,7 +68,6 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
 
     // End of test suite definition
 
-
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -188,7 +187,6 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);
 }
-
 
 // Put the test suite in the registry
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeSelectorTest);

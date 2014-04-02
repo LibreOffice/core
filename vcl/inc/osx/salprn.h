@@ -26,10 +26,7 @@
 
 #include <boost/shared_array.hpp>
 
-
-
 // - AquaSalInfoPrinter -
-
 
 class AquaSalGraphics;
 
@@ -116,9 +113,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     AquaSalInfoPrinter& operator=(const AquaSalInfoPrinter&);
 };
 
-
 // - AquaSalPrinter -
-
 
 class AquaSalPrinter : public SalPrinter
 {
@@ -157,8 +152,6 @@ const double fPtTo100thMM = 35.27777778;
 inline int PtTo10Mu( double nPoints ) { return (int)(((nPoints)*fPtTo100thMM)+0.5); }
 
 inline double TenMuToPt( double nUnits ) { return floor(((nUnits)/fPtTo100thMM)+0.5); }
-
-
 
 #endif // INCLUDED_VCL_INC_OSX_SALPRN_H
 

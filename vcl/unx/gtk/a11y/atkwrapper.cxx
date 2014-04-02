@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -120,7 +119,6 @@ static AtkRelationType mapRelationType( sal_Int16 nRelation )
 
     return type;
 }
-
 
 AtkStateType mapAtkState( sal_Int16 nState )
 {
@@ -320,7 +318,6 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
 
     return role;
 }
-
 
 /*****************************************************************************/
 
@@ -558,7 +555,6 @@ wrapper_ref_state_set( AtkObject *atk_obj )
 
 /*****************************************************************************/
 
-
 static void
 atk_object_wrapper_finalize (GObject *obj)
 {
@@ -777,7 +773,6 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
     return NULL;
 }
 
-
 AtkObject *
 atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
                         AtkObject* parent )
@@ -846,7 +841,6 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         return NULL;
     }
 }
-
 
 /*****************************************************************************/
 

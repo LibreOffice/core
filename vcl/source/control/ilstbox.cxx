@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
@@ -75,8 +74,6 @@ void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBa
             pWin->SetBackground( rStyleSettings.GetFieldColor() );
     }
 }
-
-
 
 void ImplInitDropDownButton( PushButton* pButton )
 {
@@ -490,7 +487,6 @@ sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* =
 
     return LISTBOX_ENTRY_NOTFOUND;
 }
-
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, 0 ),
@@ -1634,7 +1630,6 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
     return bDone;
 }
-
 
 namespace
 {

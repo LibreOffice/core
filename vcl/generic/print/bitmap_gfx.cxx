@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "psputil.hxx"
 
 #include "generic/printergfx.hxx"

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <poll.h>
 
@@ -236,7 +235,6 @@ extern "C"
     }
 }
 
-
 void X11SalGraphics::YieldGraphicsExpose()
 {
     // get frame if necessary
@@ -421,8 +419,6 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
         stderr0( "X11SalGraphics::CopyBits from Printer not yet implemented\n" );
     }
 }
-
-
 
 void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                 long nSrcX,     long nSrcY,

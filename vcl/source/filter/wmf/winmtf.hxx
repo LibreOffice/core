@@ -71,7 +71,6 @@
 #define DEFAULT_PALETTE         15
 #define SYSTEM_FIXED_FONT       16
 
-
 #define R2_BLACK                1
 #define R2_NOTMERGEPEN          2
 #define R2_MASKNOTPEN           3
@@ -98,7 +97,6 @@
 #define MM_TWIPS                6
 #define MM_ISOTROPIC            7
 #define MM_ANISOTROPIC          8
-
 
 /* Graphics modes */
 #define GM_COMPATIBLE           1
@@ -219,7 +217,6 @@ struct WMF_EXTERNALHEADER;
 #define ETO_IGNORELANGUAGE      0x1000
 /*_WIN32_WINNT >= 0x0500*/
 #define ETO_PDY                 0x2000
-
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
@@ -394,7 +391,6 @@ struct WinMtfFillStyle
         }
 };
 
-
 struct WinMtfLineStyle
 {
     Color       aLineColor;
@@ -445,7 +441,6 @@ struct WinMtfLineStyle
     }
 };
 
-
 struct XForm
 {
     float   eM11;
@@ -460,7 +455,6 @@ struct XForm
         eDx = eDy = eM12 = eM21 = 0.0f;
     }
 };
-
 
 struct SaveStruct
 {
@@ -488,7 +482,6 @@ struct SaveStruct
 
 typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
 
-
 struct BSaveStruct
 {
     Bitmap          aBmp;
@@ -510,7 +503,6 @@ struct BSaveStruct
 };
 
 typedef ::std::vector< BSaveStruct* > BSaveStructList_impl;
-
 
 enum GDIObjectType {
     GDI_DUMMY = 0,
@@ -564,7 +556,6 @@ struct GDIObj
         Delete();
     }
 };
-
 
 class WinMtfOutput
 {
@@ -752,7 +743,6 @@ public:
     virtual             ~WinMtfOutput();
 };
 
-
 class WinMtf
 {
 protected:
@@ -780,13 +770,11 @@ protected:
                         ~WinMtf();
 };
 
-
 class EnhWMFReader : public WinMtf
 {
     bool        bRecordPath;
     sal_Int32       nRecordCount;
     bool        bEMFPlus;
-
 
     bool        ReadHeader();
                     // reads and converts the rectangle
@@ -814,7 +802,6 @@ private:
     template <class T> Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
     template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
 };
-
 
 class WMFReader : public WinMtf
 {

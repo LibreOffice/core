@@ -619,7 +619,6 @@ bool AquaSalGraphics::drawTransformedBitmap(
     return true;
 }
 
-
 bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                      long nHeight, sal_uInt8 nTransparency )
 {
@@ -1585,7 +1584,6 @@ void AquaSalGraphics::Pattern50Fill()
     CGContextFillPath( mrContext );
 }
 
-
 void AquaSalGraphics::ResetClipRegion()
 {
     // release old path and indicate no clipping
@@ -1809,8 +1807,6 @@ void AquaSalGraphics::updateResolution()
 }
 
 #endif
-
-
 
 XorEmulation::XorEmulation()
 :   m_xTargetLayer( NULL )

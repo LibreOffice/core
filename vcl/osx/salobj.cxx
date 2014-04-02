@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 
 #include "osx/saldata.hxx"
 #include "osx/salobj.h"
 #include "osx/salframe.h"
-
-
 
 AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     mpFrame( pFrame ),
@@ -55,8 +52,6 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
             [mpClipView setDocumentView: maSysData.mpNSView];
     }
 }
-
-
 
 AquaSalObject::~AquaSalObject()
 {
@@ -93,29 +88,21 @@ AquaSalObject::~AquaSalObject()
    This is gives us an 80% solution only, though.
 */
 
-
-
 void AquaSalObject::ResetClipRegion()
 {
     mbClip = false;
     setClippedPosSize();
 }
 
-
-
 sal_uInt16 AquaSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-
-
 void AquaSalObject::BeginSetClipRegion( sal_uLong )
 {
     mbClip = false;
 }
-
-
 
 void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -146,14 +133,10 @@ void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight
     }
 }
 
-
-
 void AquaSalObject::EndSetClipRegion()
 {
     setClippedPosSize();
 }
-
-
 
 void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
@@ -163,8 +146,6 @@ void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
     mnHeight = nHeight;
     setClippedPosSize();
 }
-
-
 
 void AquaSalObject::setClippedPosSize()
 {
@@ -194,15 +175,11 @@ void AquaSalObject::setClippedPosSize()
     [mpClipView scrollToPoint: aClipPt];
 }
 
-
-
 void AquaSalObject::Show( bool bVisible )
 {
     if( mpClipView )
         [mpClipView setHidden: (bVisible ? NO : YES)];
 }
-
-
 
 const SystemEnvData* AquaSalObject::GetSystemData() const
 {

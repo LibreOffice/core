@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
@@ -26,15 +25,12 @@ FunctionSet::~FunctionSet()
 {
 }
 
-
 inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 {
     return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
 }
 
-
 // TODO: throw out FunctionSet::SelectAtPoint
-
 
 SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
                                   sal_uLong nAutoRepeatInterval ) :
@@ -50,12 +46,10 @@ SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
     aWTimer.SetTimeout( nUpdateInterval );
 }
 
-
 SelectionEngine::~SelectionEngine()
 {
     aWTimer.Stop();
 }
-
 
 IMPL_LINK_NOARG(SelectionEngine, ImpWatchDog)
 {
@@ -64,12 +58,10 @@ IMPL_LINK_NOARG(SelectionEngine, ImpWatchDog)
     return 0;
 }
 
-
 void SelectionEngine::SetSelectionMode( SelectionMode eMode )
 {
     eSelMode = eMode;
 }
-
 
 void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
 {
@@ -118,7 +110,6 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
         }
     }
 }
-
 
 bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -242,7 +233,6 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     return false;
 }
 
-
 bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
@@ -286,7 +276,6 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     return true;
 }
 
-
 bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 {
 
@@ -319,7 +308,6 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-
 void SelectionEngine::SetWindow( Window* pNewWin )
 {
     if( pNewWin != pWin )
@@ -332,7 +320,6 @@ void SelectionEngine::SetWindow( Window* pNewWin )
     }
 }
 
-
 void SelectionEngine::Reset()
 {
     aWTimer.Stop();
@@ -341,7 +328,6 @@ void SelectionEngine::Reset()
     nFlags &= ~(SELENG_HAS_ANCH | SELENG_IN_SEL);
     nLockedMods = 0;
 }
-
 
 void SelectionEngine::Command( const CommandEvent& rCEvt )
 {

@@ -25,7 +25,6 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 
-
 #include <boost/shared_ptr.hpp>
 #include <set>
 #include <map>

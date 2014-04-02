@@ -267,7 +267,6 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         aOrigSize.Height() = aLogicSize.Height();
     double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
-
     maPageVDev.Erase();
     maPageVDev.Push();
     maPageVDev.SetMapMode( MAP_100TH_MM );
@@ -1249,7 +1248,6 @@ void PrintDialog::checkOptionalControlDependencies()
             }
         }
 
-
         bool bIsEnabled = it->first->IsEnabled();
         // Enable does not do a change check first, so can be less cheap than expected
         if( bShouldbeEnabled != bIsEnabled )
@@ -1861,11 +1859,7 @@ void PrintDialog::previewBackward()
     mpPageEdit->Down();
 }
 
-
-
 // PrintProgressDialog
-
-
 
 PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)
     : ModelessDialog(i_pParent, "PrintProgressDialog",

@@ -101,8 +101,6 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
     }
 }
 
-
-
 AquaSalVirtualDevice::~AquaSalVirtualDevice()
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::~AquaSalVirtualDevice() this=" << this );
@@ -114,8 +112,6 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
     }
     Destroy();
 }
-
-
 
 void AquaSalVirtualDevice::Destroy()
 {
@@ -146,8 +142,6 @@ void AquaSalVirtualDevice::Destroy()
     }
 }
 
-
-
 SalGraphics* AquaSalVirtualDevice::AcquireGraphics()
 {
     if( mbGraphicsUsed || !mpGraphics )
@@ -157,14 +151,10 @@ SalGraphics* AquaSalVirtualDevice::AcquireGraphics()
     return mpGraphics;
 }
 
-
-
 void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphicsUsed = false;
 }
-
-
 
 bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
@@ -279,8 +269,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     return (mxLayer != NULL);
 }
-
-
 
 void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
 {

@@ -227,7 +227,6 @@ SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
     return new IosSalFrame( this, pParent, nStyle, NULL );
 }
 
-
 // All the interesting stuff is slaved from the IosSalInstance
 void InitSalData()   {}
 void DeInitSalData() {}

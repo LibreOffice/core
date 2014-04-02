@@ -50,9 +50,7 @@
 
 #include "gtk/fpicker/SalGtkFilePicker.hxx"
 
-
 // namespace directives
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -312,9 +310,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_file_chooser_set_preview_widget_active( GTK_FILE_CHOOSER( m_pDialog ), true);
 }
 
-
 // XFilePickerNotifier
-
 
 void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
     throw( uno::RuntimeException, std::exception )
@@ -334,9 +330,7 @@ void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<X
     m_xListener.clear();
 }
 
-
 // XEventListener
-
 
 void SAL_CALL SalGtkFilePicker::disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException )
 {
@@ -348,9 +342,7 @@ void SAL_CALL SalGtkFilePicker::disposing( const lang::EventObject& aEvent ) thr
         removeFilePickerListener( xFilePickerListener );
 }
 
-
 // FilePicker Event functions
-
 
 void SalGtkFilePicker::impl_fileSelectionChanged( FilePickerEvent aEvent )
 {
@@ -369,8 +361,6 @@ void SalGtkFilePicker::impl_controlStateChanged( FilePickerEvent aEvent )
     OSL_TRACE("control state changed");
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
 }
-
-
 
 struct FilterEntry
 {
@@ -406,21 +396,16 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-
-
-
 FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
     :m_sTitle( _rTitle )
     ,m_aSubFilters( _rSubFilters )
 {
 }
 
-
 bool FilterEntry::hasSubFilters() const
 {
     return( 0 < m_aSubFilters.getLength() );
 }
-
 
 sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 {
@@ -504,7 +489,6 @@ dialog_remove_buttons( GtkDialog *pDialog )
     g_list_free( pChildren );
 }
 
-
 namespace {
 
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
@@ -514,7 +498,6 @@ namespace {
 
     public:
         FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
-
 
         bool operator () ( const FilterEntry& _rEntry )
         {
@@ -542,8 +525,6 @@ namespace {
     };
 }
 
-
-
 bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
 {
     bool bRet = false;
@@ -558,7 +539,6 @@ bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
 
     return bRet;
 }
-
 
 bool SalGtkFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 {
@@ -581,7 +561,6 @@ bool SalGtkFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
     return bRet;
 }
 
-
 void SalGtkFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 {
     if( !m_pFilterList )
@@ -593,11 +572,6 @@ void SalGtkFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter 
             m_aCurrentFilter = _rInitialCurrentFilter;
     }
 }
-
-
-
-
-
 
 void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
@@ -615,10 +589,6 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUSt
     // append the filter
     m_pFilterList->insert( m_pFilterList->end(), FilterEntry( aTitle, aFilter ) );
 }
-
-
-
-
 
 void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
@@ -641,10 +611,6 @@ void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
 
     // TODO m_pImpl->setCurrentFilter( aTitle );
 }
-
-
-
-
 
 void SalGtkFilePicker::updateCurrentFilterFromName(const gchar* filtername)
 {
@@ -703,9 +669,7 @@ OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeExcept
     return m_aCurrentFilter;
 }
 
-
 // XFilterGroupManager functions
-
 
 void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const uno::Sequence<beans::StringPair>& aFilters )
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
@@ -735,9 +699,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
 
 }
 
-
 // XFilePicker functions
-
 
 void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( uno::RuntimeException, std::exception )
 {
@@ -956,9 +918,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
     return aSelectedFiles;
 }
 
-
 // XExecutableDialog functions
-
 
 void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle ) throw( uno::RuntimeException, std::exception )
 {
@@ -1128,8 +1088,6 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
     return retVal;
 }
 
-
-
 // cf. offapi/com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.idl
 GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
 {
@@ -1180,9 +1138,6 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
         *pType = tType;
     return pWidget;
 }
-
-
-
 
 // XFilePickerControlAccess functions
 
@@ -1469,9 +1424,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
     return OStringToOUString( aTxt, RTL_TEXTENCODING_UTF8 );
 }
 
-
 // XFilePreview functions
-
 
 uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() throw( uno::RuntimeException, std::exception )
 {
@@ -1655,9 +1608,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::getShowState() throw( uno::RuntimeException,
     return mbPreviewState;
 }
 
-
 // XInitialization
-
 
 void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArguments )
     throw( uno::Exception, uno::RuntimeException, std::exception )
@@ -1820,9 +1771,7 @@ void SalGtkFilePicker::preview_toggled_cb( GObject *cb, SalGtkFilePicker* pobjFP
         pobjFP->setShowState( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( cb ) ) );
 }
 
-
 // XCancellable
-
 
 void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException, std::exception )
 {
@@ -1832,7 +1781,6 @@ void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException, std::exce
 
     // TODO m_pImpl->cancel();
 }
-
 
 // Misc
 

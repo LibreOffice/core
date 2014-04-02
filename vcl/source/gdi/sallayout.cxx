@@ -71,7 +71,6 @@ FILE * mslLog()
 }
 #endif
 
-
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
 {
 #ifndef SAL_LOG_INFO
@@ -185,8 +184,6 @@ bool IsDiacritic( sal_UCS4 nChar )
     return false;
 }
 
-
-
 int GetVerticalFlags( sal_UCS4 nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)    // Hangul Jamo
@@ -215,22 +212,16 @@ int GetVerticalFlags( sal_UCS4 nChar )
     return GF_NONE; // not rotated as default
 }
 
-
-
 sal_UCS4 GetVerticalChar( sal_UCS4 )
 {
     return 0; // #i14788# input method is responsible vertical char changes
 }
-
-
 
 VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
     nChar = u_charMirror( nChar );
     return nChar;
 }
-
-
 
 VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
@@ -324,8 +315,6 @@ VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
     return nChar;
 }
 
-
-
 inline bool IsControlChar( sal_UCS4 cChar )
 {
     // C0 control characters
@@ -346,8 +335,6 @@ inline bool IsControlChar( sal_UCS4 cChar )
         return true;
     return false;
 }
-
-
 
 bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
 {
@@ -376,8 +363,6 @@ bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
     return true;
 }
 
-
-
 bool ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 {
     if( nCharPos0 == nCharPos1 )
@@ -396,8 +381,6 @@ bool ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     maRuns.push_back( nCharPos1 );
     return true;
 }
-
-
 
 bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
 {
@@ -439,9 +422,6 @@ bool ImplLayoutRuns::PosIsInAnyRun( int nCharPos ) const
     pThis->mnRunIndex = nRunIndex;
     return bRet;
 }
-
-
-
 
 bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
 {
@@ -487,8 +467,6 @@ bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
     return true;
 }
 
-
-
 bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLeft ) const
 {
     if( mnRunIndex >= (int)maRuns.size() )
@@ -509,8 +487,6 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
     }
     return true;
 }
-
-
 
 ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag )
@@ -583,8 +559,6 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     maRuns.ResetPos();
 }
 
-
-
 // add a run after splitting it up to get rid of control chars
 void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 {
@@ -615,8 +589,6 @@ void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
     // add remainder of run
     maRuns.AddRun( nCharPos0, nCharPos1, bRTL );
 }
-
-
 
 bool ImplLayoutArgs::PrepareFallback()
 {
@@ -665,16 +637,12 @@ bool ImplLayoutArgs::PrepareFallback()
     return true;
 }
 
-
-
 bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL )
 {
     bool bValid = maRuns.GetRun( nMinRunPos, nEndRunPos, bRTL );
     maRuns.NextRun();
     return bValid;
 }
-
-
 
 SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
@@ -686,12 +654,8 @@ SalLayout::SalLayout()
     maDrawOffset( 0, 0 )
 {}
 
-
-
 SalLayout::~SalLayout()
 {}
-
-
 
 void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -701,8 +665,6 @@ void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     mnOrientation = rArgs.mnOrientation;
 }
 
-
-
 void SalLayout::Release() const
 {
     // TODO: protect when multiple threads can access this
@@ -711,8 +673,6 @@ void SalLayout::Release() const
     // const_cast because some compilers violate ANSI C++ spec
     delete const_cast<SalLayout*>(this);
 }
-
-
 
 Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 {
@@ -743,8 +703,6 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 
     return aPos;
 }
-
-
 
 // returns asian kerning values in quarter of character width units
 // to enable automatic halfwidth substitution for fullwidth punctuation
@@ -787,8 +745,6 @@ int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical
     return nResult;
 }
 
-
-
 bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     ::basegfx::B2DPolyPolygonVector& rVector ) const
 {
@@ -823,8 +779,6 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
     return (bAllOk && bOneOk);
 }
 
-
-
 bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) const
 {
     bool bRet = false;
@@ -854,8 +808,6 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     return bRet;
 }
 
-
-
 bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
 {
     bool bRet = false;
@@ -872,24 +824,16 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
     return bRet;
 }
 
-
-
 GenericSalLayout::GenericSalLayout()
 {}
 
-
-
 GenericSalLayout::~GenericSalLayout()
 {}
-
-
 
 void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
 {
     m_GlyphItems.push_back(rGlyphItem);
 }
-
-
 
 bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
 {
@@ -965,8 +909,6 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
     return true;
 }
 
-
-
 long GenericSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
 {
     if( pCharWidths )
@@ -976,8 +918,6 @@ long GenericSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
     long nWidth = GetTextWidth();
     return nWidth;
 }
-
-
 
 // the text width is the maximum logical extent of all glyphs
 long GenericSalLayout::GetTextWidth() const
@@ -1004,8 +944,6 @@ long GenericSalLayout::GetTextWidth() const
     return nWidth;
 }
 
-
-
 void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
@@ -1015,8 +953,6 @@ void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
 }
-
-
 
 // This DXArray thing is one of the stupidest ideas I have ever seen (I've been
 // told that it probably a one-to-one mapping of some Windows 3.1 API, which is
@@ -1144,8 +1080,6 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 }
 
-
-
 void GenericSalLayout::Justify( long nNewWidth )
 {
     nNewWidth *= mnUnitsPerPixel;
@@ -1222,8 +1156,6 @@ void GenericSalLayout::Justify( long nNewWidth )
     }
 }
 
-
-
 void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
 {
     long nOffset = 0;
@@ -1263,8 +1195,6 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
             pG->maLinearPos.X() += nOffset;
     }
 }
-
-
 
 void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
 {
@@ -1317,8 +1247,6 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
     }
 }
 
-
-
 void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     // initialize result array
@@ -1349,8 +1277,6 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray
     }
 }
 
-
-
 sal_Int32 GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
@@ -1369,8 +1295,6 @@ sal_Int32 GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int n
 
     return -1;
 }
-
-
 
 int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
@@ -1458,8 +1382,6 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
     return nCount;
 }
 
-
-
 void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
 {
     if( nStart >= (int)m_GlyphItems.size() )
@@ -1485,8 +1407,6 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
     }
 }
 
-
-
 void GenericSalLayout::DropGlyph( int nStart )
 {
     if( nStart >= (int)m_GlyphItems.size())
@@ -1497,8 +1417,6 @@ void GenericSalLayout::DropGlyph( int nStart )
     pG->maGlyphId = GF_DROPPED;
     pG->mnCharPos = -1;
 }
-
-
 
 void GenericSalLayout::Simplify( bool bIsBase )
 {
@@ -1519,8 +1437,6 @@ void GenericSalLayout::Simplify( bool bIsBase )
     }
     m_GlyphItems.erase(m_GlyphItems.begin() + j, m_GlyphItems.end());
 }
-
-
 
 // make sure GlyphItems are sorted left to right
 void GenericSalLayout::SortGlyphItems()
@@ -1557,8 +1473,6 @@ void GenericSalLayout::SortGlyphItems()
     }
 }
 
-
-
 MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const PhysicalFontFace* pBaseFont )
 :   SalLayout()
 ,   mnLevel( 1 )
@@ -1576,15 +1490,11 @@ void MultiSalLayout::SetInComplete(bool bInComplete)
     maFallbackRuns[mnLevel-1] = ImplLayoutRuns();
 }
 
-
-
 MultiSalLayout::~MultiSalLayout()
 {
     for( int i = 0; i < mnLevel; ++i )
         mpLayouts[ i ]->Release();
 }
-
-
 
 bool MultiSalLayout::AddFallback( SalLayout& rFallback,
     ImplLayoutRuns& rFallbackRuns, const PhysicalFontFace* pFallbackFont )
@@ -1599,8 +1509,6 @@ bool MultiSalLayout::AddFallback( SalLayout& rFallback,
     return true;
 }
 
-
-
 bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     if( mnLevel <= 1 )
@@ -1609,8 +1517,6 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
         maFallbackRuns[ mnLevel-1 ] = rArgs.maRuns;
     return true;
 }
-
-
 
 void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -1979,15 +1885,11 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         mpLayouts[n]->DisableGlyphInjection( false );
 }
 
-
-
 void MultiSalLayout::InitFont() const
 {
     if( mnLevel > 0 )
         mpLayouts[0]->InitFont();
 }
-
-
 
 void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 {
@@ -2003,8 +1905,6 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
     }
     // NOTE: now the baselevel font is active again
 }
-
-
 
 sal_Int32 MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
@@ -2042,8 +1942,6 @@ sal_Int32 MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFa
 
     return -1;
 }
-
-
 
 long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
 {
@@ -2091,8 +1989,6 @@ long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
     return nMaxWidth;
 }
 
-
-
 void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
@@ -2116,8 +2012,6 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
         }
     }
 }
-
-
 
 int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
     int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
@@ -2166,8 +2060,6 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& r
     mpLayouts[0]->InitFont();
     return 0;
 }
-
-
 
 bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
     ::basegfx::B2DPolyPolygonVector& rPPV ) const

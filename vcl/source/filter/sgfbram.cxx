@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <osl/endian.h>
 #include <tools/stream.hxx>
@@ -453,7 +452,6 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
     rMtf.SetPrefSize( Size( (short)rHead.Xsize, (short)rHead.Ysize ) );
     return true;
 }
-
 
 bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/time.hxx>
 
 #include <vcl/svapp.hxx>
@@ -26,7 +25,6 @@
 #include <saltimer.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
-
 
 #define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
 

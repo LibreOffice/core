@@ -21,7 +21,6 @@
 #include <generic/gendisp.hxx>
 #include <generic/geninst.h>
 
-
 SalGenericDisplay::SalGenericDisplay()
 {
     m_pCapture = NULL;
@@ -144,7 +143,5 @@ bool SalGenericDisplay::HasUserEvents() const
     }
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

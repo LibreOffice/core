@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -78,7 +77,6 @@ namespace psp
         public:
         PPDTranslator() {}
         ~PPDTranslator() {}
-
 
         void insertValue(
             const OUString& i_rKey,
@@ -263,7 +261,6 @@ namespace psp
 }
 
 using namespace psp;
-
 
 namespace
 {
@@ -1482,28 +1479,20 @@ PPDKey::PPDKey( const OUString& rKey ) :
 {
 }
 
-
-
 PPDKey::~PPDKey()
 {
 }
-
-
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
     return ((unsigned int)n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : NULL;
 }
 
-
-
 const PPDValue* PPDKey::getValue( const OUString& rOption ) const
 {
     PPDKey::hash_type::const_iterator it = m_aValues.find( rOption );
     return it != m_aValues.end() ? &it->second : NULL;
 }
-
-
 
 const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
 {
@@ -1517,8 +1506,6 @@ const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
 
     return pValue;
 }
-
-
 
 void PPDKey::eraseValue( const OUString& rOption )
 {
@@ -1561,8 +1548,6 @@ PPDContext::PPDContext( const PPDParser* pParser ) :
 {
 }
 
-
-
 PPDContext& PPDContext::operator=( const PPDContext& rCopy )
 {
     m_pParser           = rCopy.m_pParser;
@@ -1570,13 +1555,9 @@ PPDContext& PPDContext::operator=( const PPDContext& rCopy )
     return *this;
 }
 
-
-
 PPDContext::~PPDContext()
 {
 }
-
-
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
@@ -1586,8 +1567,6 @@ const PPDKey* PPDContext::getModifiedKey( int n ) const
     return it != m_aCurrentValues.end() ? it->first : NULL;
 }
 
-
-
 void PPDContext::setParser( const PPDParser* pParser )
 {
     if( pParser != m_pParser )
@@ -1596,8 +1575,6 @@ void PPDContext::setParser( const PPDParser* pParser )
         m_pParser = pParser;
     }
 }
-
-
 
 const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
 {
@@ -1618,8 +1595,6 @@ const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
 
     return pValue;
 }
-
-
 
 const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue, bool bDontCareForConstraints )
 {
@@ -1669,8 +1644,6 @@ const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue
     return pValue;
 }
 
-
-
 bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pValue )
 {
     if( ! m_pParser || ! pKey || ! pValue )
@@ -1693,8 +1666,6 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pValue )
     return bRet;
 }
 
-
-
 bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
 {
     if( ! pKey || ! m_pParser || ! m_pParser->hasKey( pKey ) )
@@ -1710,8 +1681,6 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
 
     return bRet;
 }
-
-
 
 bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue, bool bDoReset )
 {
@@ -1799,8 +1768,6 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
     return true;
 }
 
-
-
 char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
 {
     rBytes = 0;
@@ -1845,8 +1812,6 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     return pBuffer;
 }
 
-
-
 void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
 {
     if( ! m_pParser )
@@ -1881,8 +1846,6 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
     }
 }
 
-
-
 int PPDContext::getRenderResolution() const
 {
     // initialize to reasonable default, if parser is not set
@@ -1906,8 +1869,6 @@ int PPDContext::getRenderResolution() const
     }
     return  nDPI;
 }
-
-
 
 void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) const
 {

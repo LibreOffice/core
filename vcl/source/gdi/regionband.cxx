@@ -21,11 +21,6 @@
 #include <tools/debug.hxx>
 #include <regionband.hxx>
 
-
-
-
-
-
 RegionBand::RegionBand()
 :   mpFirstBand(0),
     mpLastCheckedBand(0)
@@ -61,7 +56,6 @@ RegionBand& RegionBand::operator=(const RegionBand& rRef)
         pPrevBand = pNewBand;
         pBand = pBand->mpNextBand;
     }
-
 
     return *this;
 }

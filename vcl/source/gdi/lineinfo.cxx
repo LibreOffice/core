@@ -26,10 +26,7 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <numeric>
 
-
-
 // - ImplLineInfo -
-
 
 ImplLineInfo::ImplLineInfo() :
     mnRefCount  ( 1 ),
@@ -45,8 +42,6 @@ ImplLineInfo::ImplLineInfo() :
 {
 }
 
-
-
 ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
     mnRefCount  ( 1 ),
     meStyle     ( rImplLineInfo.meStyle ),
@@ -61,8 +56,6 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
 {
 }
 
-
-
 inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 {
     return(meStyle == rB.meStyle
@@ -76,9 +69,7 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
         && meLineCap == rB.meLineCap);
 }
 
-
 // - LineInfo -
-
 
 LineInfo::LineInfo( LineStyle eStyle, long nWidth )
 {
@@ -87,23 +78,17 @@ LineInfo::LineInfo( LineStyle eStyle, long nWidth )
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-
-
 LineInfo::LineInfo( const LineInfo& rLineInfo )
 {
     mpImplLineInfo = rLineInfo.mpImplLineInfo;
     mpImplLineInfo->mnRefCount++;
 }
 
-
-
 LineInfo::~LineInfo()
 {
     if( !( --mpImplLineInfo->mnRefCount ) )
         delete mpImplLineInfo;
 }
-
-
 
 LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 {
@@ -117,16 +102,12 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
     return *this;
 }
 
-
-
 bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
 
     return( mpImplLineInfo == rLineInfo.mpImplLineInfo ||
            *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
 }
-
-
 
 void LineInfo::ImplMakeUnique()
 {
@@ -139,15 +120,11 @@ void LineInfo::ImplMakeUnique()
     }
 }
 
-
-
 void LineInfo::SetStyle( LineStyle eStyle )
 {
     ImplMakeUnique();
     mpImplLineInfo->meStyle = eStyle;
 }
-
-
 
 void LineInfo::SetWidth( long nWidth )
 {
@@ -155,15 +132,11 @@ void LineInfo::SetWidth( long nWidth )
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-
-
 void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 {
     ImplMakeUnique();
     mpImplLineInfo->mnDashCount = nDashCount;
 }
-
-
 
 void LineInfo::SetDashLen( long nDashLen )
 {
@@ -171,15 +144,11 @@ void LineInfo::SetDashLen( long nDashLen )
     mpImplLineInfo->mnDashLen = nDashLen;
 }
 
-
-
 void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 {
     ImplMakeUnique();
     mpImplLineInfo->mnDotCount = nDotCount;
 }
-
-
 
 void LineInfo::SetDotLen( long nDotLen )
 {
@@ -187,15 +156,11 @@ void LineInfo::SetDotLen( long nDotLen )
     mpImplLineInfo->mnDotLen = nDotLen;
 }
 
-
-
 void LineInfo::SetDistance( long nDistance )
 {
     ImplMakeUnique();
     mpImplLineInfo->mnDistance = nDistance;
 }
-
-
 
 void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 {
@@ -207,8 +172,6 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
     }
 }
 
-
-
 void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
 {
     if(eLineCap != mpImplLineInfo->meLineCap)
@@ -218,16 +181,12 @@ void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
     }
 }
 
-
-
 bool LineInfo::IsDefault() const
 {
     return( !mpImplLineInfo->mnWidth
         && ( LINE_SOLID == mpImplLineInfo->meStyle )
         && ( com::sun::star::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
-
-
 
 SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
@@ -266,8 +225,6 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
     return rIStm;
 }
 
-
-
 SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
@@ -290,22 +247,16 @@ SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo 
     return rOStm;
 }
 
-
-
 SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
 {
     rLineInfo.ImplMakeUnique();
     return ReadImplLineInfo( rIStm, *rLineInfo.mpImplLineInfo );
 }
 
-
-
 SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
 {
     return WriteImplLineInfo( rOStm, *rLineInfo.mpImplLineInfo );
 }
-
-
 
 void LineInfo::applyToB2DPolyPolygon(
     basegfx::B2DPolyPolygon& io_rLinePolyPolygon,

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
 #include <sys/timer.h>
@@ -39,7 +38,6 @@
 #include <stdio.h>
 
 using namespace com::sun::star;
-
 
 AtkListener::AtkListener( AtkObjectWrapper* pWrapper ) : mpWrapper( pWrapper )
 {

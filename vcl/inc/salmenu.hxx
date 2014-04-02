@@ -40,7 +40,6 @@ struct SalItemParams
     Image           aImage;                 // Image
 };
 
-
 struct SalMenuButtonItem
 {
     sal_uInt16          mnId;
@@ -90,7 +89,6 @@ public:
     // but rectangle cannot be determined
     virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
 };
-
 
 #endif // INCLUDED_VCL_INC_SALMENU_HXX
 

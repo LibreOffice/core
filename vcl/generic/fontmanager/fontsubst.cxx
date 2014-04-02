@@ -35,9 +35,7 @@
 #include <unotools/fontdefs.hxx>
 #include <list>
 
-
 // platform specific font substitution hooks
-
 
 struct FontSelectPatternAttributesHash
 {
@@ -115,8 +113,6 @@ void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFont
     }
 }
 
-
-
 static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, OUString& rMissingCodes )
 {
     FontSelectPattern aSubstituted(rFontSelData);
@@ -152,8 +148,6 @@ namespace
             { return rOther.first == mrAttributes; }
     };
 }
-
-
 
 bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {
@@ -220,8 +214,6 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     return bHaveSubstitute;
 }
 
-
-
 bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData,
     OUString& rMissingCodes ) const
 {
@@ -262,8 +254,5 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
 
     return bHaveSubstitute;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

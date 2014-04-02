@@ -15,7 +15,6 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
 
-
 /*
  * GLOAction
  */
@@ -157,7 +156,6 @@ g_lo_action_group_query_action (GActionGroup        *group,
 
     if (action == NULL)
         return FALSE;
-
 
     if (enabled)
     {

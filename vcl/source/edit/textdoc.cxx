@@ -63,7 +63,6 @@ void TextCharAttribList::Clear( bool bDestroyAttribs )
     TextCharAttribs::clear();
 }
 
-
 void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
 {
     if ( pAttrib->IsEmpty() )
@@ -484,7 +483,6 @@ OUString TextDoc::GetText( sal_uLong nPara ) const
 
     return aText;
 }
-
 
 sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const
 {

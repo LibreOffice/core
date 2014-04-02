@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/xtextedt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -26,7 +25,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 
 using namespace ::com::sun::star;
-
 
 ExtTextEngine::ExtTextEngine() : maGroupChars(OUString("(){}[]"))
 {
@@ -221,8 +219,6 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
 
     return bFound;
 }
-
-
 
 // class ExtTextView
 

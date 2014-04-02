@@ -26,10 +26,7 @@
 class AquaSalFrame;
 class AquaSalObject;
 
-
-
 // - SalObjectData -
-
 
 struct SalObjectData
 {
@@ -53,9 +50,7 @@ public:
     long                        mnWidth;
     long                        mnHeight;
 
-
     void setClippedPosSize();
-
 
     AquaSalObject( AquaSalFrame* pFrame );
     virtual ~AquaSalObject();

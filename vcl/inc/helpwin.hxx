@@ -23,9 +23,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
 
-
 // - HelpTextWindow -
-
 
 class HelpTextWindow : public FloatingWindow
 {

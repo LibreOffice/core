@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/popupmenuwindow.hxx"
 
 #include <limits>
@@ -38,8 +37,6 @@ PopupMenuFloatingWindow::ImplData::ImplData() :
 PopupMenuFloatingWindow::ImplData::~ImplData()
 {
 }
-
-
 
 PopupMenuFloatingWindow::PopupMenuFloatingWindow( Window* pParent, WinBits nStyle ) :
     FloatingWindow(pParent, nStyle),

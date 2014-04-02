@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -29,15 +28,10 @@
 
 using namespace ::com::sun::star;
 
-
-
-
 MnemonicGenerator::MnemonicGenerator()
 {
     memset( maMnemonics, 1, sizeof( maMnemonics ) );
 }
-
-
 
 sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 {
@@ -62,8 +56,6 @@ sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
     return MNEMONIC_INDEX_NOTFOUND;
 }
 
-
-
 sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 {
     sal_Int32 nIndex = 0;
@@ -77,8 +69,6 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 
     return 0;
 }
-
-
 
 void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
 {
@@ -120,8 +110,6 @@ void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
         }
     }
 }
-
-
 
 OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 {
@@ -345,16 +333,12 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     return rKey;
 }
 
-
-
 uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass()
 {
     if ( !mxCharClass.is() )
         mxCharClass = vcl::unohelper::CreateCharacterClassification();
     return mxCharClass;
 }
-
-
 
 OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
 {

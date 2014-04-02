@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svdata.hxx>
 #include <brdwin.hxx>
 #include <window.h>
@@ -32,7 +31,6 @@
 
 #include <tools/rc.h>
 #include <tools/debug.hxx>
-
 
 class FloatingWindow::ImplData
 {
@@ -247,7 +245,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     if( Application::GetScreenCount() > 1 && Application::IsUnifiedDisplay() )
         aScreenRect = Application::GetScreenPosSizePixel(
             Application::GetBestScreen( bRTL ? devRectRTL : devRect ) );
-
 
     sal_uInt16      nArrangeAry[5];
     sal_uInt16      nArrangeIndex;
@@ -746,7 +743,6 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     // stop the PopupMode also for all following PopupMode windows
     while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
         pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
-
 
     // delete window from the list
     pSVData->maWinData.mpFirstFloat = mpNextFloat;

@@ -21,7 +21,6 @@
 
 #include "DragSourceContext.hxx"
 
-
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace com::sun::star::uno;
@@ -56,6 +55,5 @@ void SAL_CALL DragSourceContext::transferablesFlavorsChanged(  )
     throw( RuntimeException, std::exception)
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

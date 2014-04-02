@@ -66,7 +66,6 @@ public:
     bool            HasBoundingAttrib( sal_uInt16 nBound );
 };
 
-
 class TextNode
 {
 private:
@@ -80,7 +79,6 @@ protected:
 
 public:
                         TextNode( const OUString& rText );
-
 
     const OUString&     GetText() const         { return maText; }
 

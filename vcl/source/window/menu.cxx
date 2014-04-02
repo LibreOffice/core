@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
 #include "tools/rc.h"
@@ -50,7 +49,6 @@
 #include "salmenu.hxx"
 #include "salframe.hxx"
 
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -80,7 +78,6 @@ struct MenuLayoutData : public ControlLayoutData
 
 using namespace ::com::sun::star;
 using namespace vcl;
-
 
 #define ITEMPOS_INVALID     0xFFFF
 
@@ -213,7 +210,6 @@ public:
     void            InsertSeparator(const OString &rIdent, size_t nPos);
     void            Remove( size_t nPos );
 
-
     MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const
                     {
@@ -239,8 +235,6 @@ public:
                         return maItemList.size();
                     }
 };
-
-
 
 MenuItemList::~MenuItemList()
 {
@@ -477,10 +471,7 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
     return nItems;
 }
 
-
-
 // - MenuFloatingWindow -
-
 
 class MenuFloatingWindow : public FloatingWindow
 {
@@ -671,12 +662,10 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
                                 (lastSize - maImage.GetSizePixel().Height())/2 ),
                             maImage.GetSizePixel() );
 
-
         aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
         SetItemImage( IID_DOCUMENTCLOSE, Image( aBmpExDst ) );
     }
 }
-
 
 // a basic class for both (due to pActivePopup, Timer,...) would be nice,
 // but a container class should have been created then, as they
@@ -1555,7 +1544,6 @@ sal_uInt16 Menu::GetItemId(const OString &rIdent) const
     return MENU_ITEM_NOTFOUND;
 }
 
-
 sal_uInt16 Menu::GetItemPos( sal_uInt16 nItemId ) const
 {
     size_t          nPos;
@@ -2336,8 +2324,6 @@ bool Menu::ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& 
     return false;
 }
 
-
-
 void Menu::ImplAddDel( ImplMenuDelData& rDel )
 {
     DBG_ASSERT( !rDel.mpMenu, "Menu::ImplAddDel(): cannot add ImplMenuDelData twice !" );
@@ -2348,8 +2334,6 @@ void Menu::ImplAddDel( ImplMenuDelData& rDel )
         mpFirstDel = &rDel;
     }
 }
-
-
 
 void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
 {
@@ -2369,8 +2353,6 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
             pData->mpNext = rDel.mpNext;
     }
 }
-
-
 
 Size Menu::ImplCalcSize( const Window* pWin )
 {
@@ -3137,7 +3119,6 @@ Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
     return (mpLayoutData && nItemIndex != -1) ? mpLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : Rectangle();
 }
 
-
 long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
 {
     long nIndex = -1;
@@ -3250,10 +3231,7 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
-
-
 // - MenuBar -
-
 
 MenuBar::MenuBar() : Menu( true )
 {
@@ -3355,8 +3333,6 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-
-
 void MenuBar::SelectEntry( sal_uInt16 nId )
 {
     MenuBarWindow* pMenuWin = (MenuBarWindow*) ImplGetWindow();
@@ -3377,8 +3353,6 @@ void MenuBar::SelectEntry( sal_uInt16 nId )
             pMenuWin->ChangeHighlightItem( nId, false );
     }
 }
-
-
 
 // handler for native menu selection and command events
 
@@ -3478,8 +3452,6 @@ bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId ) const
 {
     return static_cast<MenuBarWindow*>(pWindow)->HandleMenuButtonEvent( i_nButtonId );
 }
-
-
 
 // bool PopupMenu::bAnyPopupInExecute = false;
 
@@ -3661,7 +3633,6 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
     else
         // #102790# context menus shall never show disabled entries
         nMenuFlags |= MENU_FLAG_HIDEDISABLEDENTRIES;
-
 
     sal_uInt16 nVisibleEntries = ImplGetVisibleItemCount();
     if ( !nVisibleEntries )
@@ -3894,7 +3865,6 @@ long PopupMenu::ImplCalcHeight( sal_uInt16 nEntries ) const
 
     return nHeight;
 }
-
 
 static void ImplInitMenuWindow( Window* pWin, bool bFont, bool bMenuBar )
 {
@@ -4537,7 +4507,6 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         nFirstEntry = pMenu->ImplGetNextVisible( nFirstEntry );
         DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
 
-
         if ( !bScrollUp )
         {
             bScrollUp = true;
@@ -4790,7 +4759,6 @@ Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
     }
     return aRect;
 }
-
 
 void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
 {
@@ -5373,7 +5341,6 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
         }
     }
 }
-
 
 void MenuBarWindow::KillActivePopup()
 {

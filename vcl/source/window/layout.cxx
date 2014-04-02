@@ -2047,7 +2047,6 @@ void MessageDialog::SetMessagesWidths(Window *pParent,
         pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
 }
 
-
 short MessageDialog::Execute()
 {
     setDeferredProperties();

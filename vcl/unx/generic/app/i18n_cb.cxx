@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <string.h>
 
@@ -38,11 +37,7 @@
 #include "unx/i18n_im.hxx"
 #include "salframe.hxx"
 
-
-
 // i. preedit start callback
-
-
 
 int
 PreeditStartCallback ( XIC, XPointer client_data, XPointer )
@@ -58,11 +53,7 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
     return -1;
 }
 
-
-
 // ii. preedit done callback
-
-
 
 void
 PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
@@ -76,16 +67,10 @@ PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
     pPreeditData->eState = ePreeditStatusStartPending;
 }
 
-
-
 // iii. preedit draw callback
-
-
-
 
 // Handle deletion of text in a preedit_draw_callback
 // from and howmuch are guaranteed to be nonnegative
-
 
 void
 Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
@@ -148,10 +133,8 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
             nnewsize * sizeof(XIMFeedback));
 }
 
-
 // Handle insertion of text in a preedit_draw_callback
 // string field of XIMText struct is guaranteed to be != NULL
-
 
 void
 Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
@@ -240,7 +223,6 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     // NULL-terminate the string
     pText->pUnicodeBuffer[pText->nLength] = (sal_Unicode)0;
 }
-
 
 // Handle the change of attributes in a preedit_draw_callback
 
@@ -376,7 +358,6 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
         }
     }
 
-
     // build the SalExtTextInputEvent and send it up
 
     pPreeditData->aInputEv.mnTime = 0;
@@ -423,11 +404,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     return;
 }
 
-
-
 // iv. preedit caret callback
-
-
 
 #if OSL_DEBUG_LEVEL > 1
 void
@@ -472,12 +449,8 @@ PreeditCaretCallback ( XIC, XPointer,XIMPreeditCaretCallbackStruct* )
     #endif
 }
 
-
-
 // v. commit string callback: convert an extended text input (iiimp ... )
 //     into an ordinary key-event
-
-
 
 Bool
 IsControlCode(sal_Unicode nChar)
@@ -488,11 +461,7 @@ IsControlCode(sal_Unicode nChar)
         return False;
 }
 
-
-
 // vi. status callbacks: for now these are empty, they are just needed for turbo linux
-
-
 
 void
 StatusStartCallback (XIC, XPointer, XPointer)
@@ -557,11 +526,7 @@ SwitchIMCallback (XIC, XPointer, XPointer call_data)
     ::vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
-
-
 // vii. destroy callbacks: internally disable all IC/IM calls
-
-
 
 void
 IC_IMDestroyCallback (XIM, XPointer client_data, XPointer)

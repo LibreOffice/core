@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "atktextattributes.hxx"
 
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -49,7 +48,6 @@ typedef gchar* (* AtkTextAttrFunc)       ( const uno::Any& rAny );
 typedef bool   (* TextPropertyValueFunc) ( uno::Any& rAny, const gchar * value );
 
 #define STRNCMP_PARAM( s )  s,sizeof( s )-1
-
 
 /*****************************************************************************/
 
@@ -147,7 +145,6 @@ static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
     "WritingMode"           // TEXT_ATTRIBUTE_WRITING_MODE
 };
 
-
 /*****************************************************************************/
 
 static gchar*
@@ -179,7 +176,6 @@ double toPoint(sal_Int16 n)
     // 100th mm -> pt
     return (double) (n * 72) / 2540;
 }
-
 
 /*****************************************************************************/
 
@@ -379,7 +375,6 @@ String2Weight( uno::Any& rAny, const gchar * value )
     rAny = uno::makeAny( weight / 4 );
     return true;
 }
-
 
 /*****************************************************************************/
 
@@ -770,7 +765,6 @@ get_font_effect(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
 // @see http://www.w3.org/TR/REC-CSS2/text.html#lining-striking-props
 
-
 enum
 {
     DECORATION_NONE = 0,
@@ -778,7 +772,6 @@ enum
     DECORATION_UNDERLINE,
     DECORATION_LINE_THROUGH
 };
-
 
 static const gchar * decorations[] = { "none", "blink", "underline", "line-through" };
 
@@ -817,7 +810,6 @@ get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
     return g_strjoinv(" ", value_list);
 }
-
 
 /*****************************************************************************/
 
@@ -1218,7 +1210,6 @@ attribute_set_new_from_property_values(
 
     return attribute_set;
 }
-
 
 AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set )
 {

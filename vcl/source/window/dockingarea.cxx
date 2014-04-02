@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/dockingarea.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
@@ -26,8 +25,6 @@
 #include <svdata.hxx>
 
 #include <map>
-
-
 
 class DockingAreaWindow::ImplData
 {
@@ -46,8 +43,6 @@ DockingAreaWindow::ImplData::ImplData()
 DockingAreaWindow::ImplData::~ImplData()
 {
 }
-
-
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
@@ -96,8 +91,6 @@ DockingAreaWindow::~DockingAreaWindow()
     delete mpImplData;
 }
 
-
-
 void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -108,8 +101,6 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
 
 static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
 {
@@ -138,8 +129,6 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
         ImplInvalidateMenubar( this );
 }
 
-
-
 bool DockingAreaWindow::IsHorizontal() const
 {
     return ( mpImplData->meAlign == WINDOWALIGN_TOP || mpImplData->meAlign == WINDOWALIGN_BOTTOM );
@@ -159,8 +148,6 @@ WindowAlign DockingAreaWindow::GetAlign() const
 {
     return mpImplData->meAlign;
 }
-
-
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
@@ -229,7 +216,6 @@ void DockingAreaWindow::Paint( const Rectangle& )
                     ranges[ aPos.X() ] = aSize.Width();
             }
 
-
             // draw multiple toolbar backgrounds, i.e., one for each toolbar line
             for( std::map<int,int>::const_iterator it = ranges.begin(); it != ranges.end(); ++it )
             {
@@ -262,7 +248,5 @@ void DockingAreaWindow::Resize()
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
         Invalidate();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

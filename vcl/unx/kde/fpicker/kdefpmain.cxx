@@ -56,9 +56,7 @@
 #define KLocale TDELocale
 #endif // ENABLE_TDE
 
-
 // Main
-
 
 static const KCmdLineOptions sOptions[] =
 {

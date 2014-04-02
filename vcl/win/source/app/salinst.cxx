@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <svsys.h>
 #include <process.h>
@@ -82,8 +81,6 @@
 #include <sehandler.hxx>
 #endif
 
-
-
 void SalAbort( const OUString& rErrorText, bool )
 {
     ImplFreeSalGDI();
@@ -102,12 +99,8 @@ void SalAbort( const OUString& rErrorText, bool )
     }
 }
 
-
-
 LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-
-
 
 class SalYieldMutex : public comphelper::SolarMutex
 {
@@ -128,8 +121,6 @@ public:
     sal_uLong                       GetAcquireCount( sal_uLong nThreadId );
 };
 
-
-
 SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
 {
     mpInstData  = pInstData;
@@ -137,16 +128,12 @@ SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
     mnThreadId  = 0;
 }
 
-
-
 void SalYieldMutex::acquire()
 {
     m_mutex.acquire();
     mnCount++;
     mnThreadId = GetCurrentThreadId();
 }
-
-
 
 void SalYieldMutex::release()
 {
@@ -188,8 +175,6 @@ void SalYieldMutex::release()
     }
 }
 
-
-
 bool SalYieldMutex::tryToAcquire()
 {
     if( m_mutex.tryToAcquire() )
@@ -202,8 +187,6 @@ bool SalYieldMutex::tryToAcquire()
         return false;
 }
 
-
-
 sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
 {
     if ( nThreadId == mnThreadId )
@@ -211,8 +194,6 @@ sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
     else
         return 0;
 }
-
-
 
 void ImplSalYieldMutexAcquireWithWait()
 {
@@ -260,8 +241,6 @@ void ImplSalYieldMutexAcquireWithWait()
         pInst->mpSalYieldMutex->acquire();
 }
 
-
-
 bool ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
@@ -271,16 +250,12 @@ bool ImplSalYieldMutexTryToAcquire()
         return FALSE;
 }
 
-
-
 void ImplSalYieldMutexAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
         pInst->mpSalYieldMutex->acquire();
 }
-
-
 
 void ImplSalYieldMutexRelease()
 {
@@ -291,8 +266,6 @@ void ImplSalYieldMutexRelease()
         pInst->mpSalYieldMutex->release();
     }
 }
-
-
 
 sal_uLong ImplSalReleaseYieldMutex()
 {
@@ -312,8 +285,6 @@ sal_uLong ImplSalReleaseYieldMutex()
     return nCount;
 }
 
-
-
 void ImplSalAcquireYieldMutex( sal_uLong nCount )
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
@@ -328,8 +299,6 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-
-
 bool WinSalInstance::CheckYieldMutex()
 {
     SalData*    pSalData = GetSalData();
@@ -340,8 +309,6 @@ bool WinSalInstance::CheckYieldMutex()
     }
     return true;
 }
-
-
 
 void SalData::initKeyCodeMap()
 {
@@ -367,10 +334,7 @@ void SalData::initKeyCodeMap()
     initKey( ';', KEY_SEMICOLON );
 }
 
-
-
 // SalData
-
 
 SalData::SalData()
 {
@@ -454,7 +418,6 @@ void InitSalData()
     Gdiplus::GdiplusStartup(&pSalData->gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
-
 void DeInitSalData()
 {
     CoUninitialize();
@@ -468,8 +431,6 @@ void DeInitSalData()
 
     delete pSalData;
 }
-
-
 
 void InitSalMain()
 {
@@ -485,8 +446,6 @@ void InitSalMain()
         pData->mnCmdShow                = aSI.wShowWindow;
     }
 }
-
-
 
 SalInstance* CreateSalInstance()
 {
@@ -570,8 +529,6 @@ SalInstance* CreateSalInstance()
     return pInst;
 }
 
-
-
 void DestroySalInstance( SalInstance* pInst )
 {
     SalData* pSalData = GetSalData();
@@ -587,8 +544,6 @@ void DestroySalInstance( SalInstance* pInst )
     delete pInst;
 }
 
-
-
 WinSalInstance::WinSalInstance()
 {
     mhComWnd                 = 0;
@@ -599,8 +554,6 @@ WinSalInstance::WinSalInstance()
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
 }
 
-
-
 WinSalInstance::~WinSalInstance()
 {
     ::tools::SolarMutex::SetSolarMutex( 0 );
@@ -610,28 +563,20 @@ WinSalInstance::~WinSalInstance()
     DestroyWindow( mhComWnd );
 }
 
-
-
 comphelper::SolarMutex* WinSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
-
-
 
 sal_uLong WinSalInstance::ReleaseYieldMutex()
 {
     return ImplSalReleaseYieldMutex();
 }
 
-
-
 void WinSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     ImplSalAcquireYieldMutex( nCount );
 }
-
-
 
 static void ImplSalDispatchMessage( MSG* pMsg )
 {
@@ -645,8 +590,6 @@ static void ImplSalDispatchMessage( MSG* pMsg )
     if ( pSalData->mpFirstObject )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
-
-
 
 void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
@@ -676,8 +619,6 @@ void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         }
     }
 }
-
-
 
 void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
@@ -728,12 +669,9 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-
-
 LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
-
 
     switch ( nMsg )
     {
@@ -874,8 +812,6 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return nRet;
 }
 
-
-
 bool WinSalInstance::AnyInput( sal_uInt16 nType )
 {
     MSG aMsg;
@@ -956,8 +892,6 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
     return FALSE;
 }
 
-
-
 void SalTimer::Start( sal_uLong nMS )
 {
     // to switch to Main-Thread
@@ -973,15 +907,11 @@ void SalTimer::Start( sal_uLong nMS )
         ImplSalStartTimer( nMS, FALSE );
 }
 
-
-
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
     // to switch to Main-Thread
     return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
 }
-
-
 
 SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
@@ -994,14 +924,10 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSty
     return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
 }
 
-
-
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 {
     ImplSendMessage( mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
 }
-
-
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
@@ -1011,14 +937,10 @@ SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
     return (SalObject*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
 }
 
-
-
 void WinSalInstance::DestroyObject( SalObject* pObject )
 {
     ImplSendMessage( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, (LPARAM)pObject );
 }
-
-
 
 void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
@@ -1026,8 +948,6 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     rReturnedType   = AsciiCString;
     return const_cast<char *>("");
 }
-
-
 
 /** Add a file to the system shells recent document list if there is any.
       This function may have no effect under Unix because there is no
@@ -1109,14 +1029,10 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
     }
 }
 
-
-
 SalTimer* WinSalInstance::CreateSalTimer()
 {
     return new WinSalTimer();
 }
-
-
 
 SalBitmap* WinSalInstance::CreateSalBitmap()
 {
@@ -1139,8 +1055,6 @@ SalI18NImeStatus* WinSalInstance::CreateI18NImeStatus()
 {
     return new WinImeStatus();
 }
-
-
 
 const OUString& SalGetDesktopEnvironment()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 
 #include <vcl/settings.hxx>
@@ -368,8 +367,6 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     return bRet;
 }
 
-
-
 // #i32109#: Fill opaque areas correctly (without relying on
 // fill/linecolor state)
 void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
@@ -383,8 +380,6 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
     DrawRect( rRect );
     Pop();
 }
-
-
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {

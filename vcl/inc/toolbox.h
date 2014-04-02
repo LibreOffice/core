@@ -117,9 +117,7 @@ struct ToolBoxLayoutData : public ControlLayoutData
     std::vector< sal_uInt16 >               m_aLineItemPositions;
 };
 
-
 } /* namespace vcl */
-
 
 struct ImplToolBoxPrivateData
 {
@@ -168,7 +166,6 @@ struct ImplToolBoxPrivateData
             mbWillUsePopupMode:1,   // this toolbox will be opened in popup mode
             mbDropDownByKeyboard:1; // tells whether a dropdown was started by key input
 };
-
 
 #endif // INCLUDED_VCL_INC_TOOLBOX_H
 

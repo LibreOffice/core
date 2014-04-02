@@ -47,12 +47,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-
 using namespace cppu;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-
 
 // Forward declaration
 void Main();
@@ -256,42 +254,35 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
     return 0;
 }
 
-
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
-
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
 
-
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
-
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-
 void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }
-
 
 void MyWin::Resize()
 {

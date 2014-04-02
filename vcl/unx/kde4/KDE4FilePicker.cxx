@@ -80,9 +80,7 @@ using namespace ::com::sun::star::uno;
 #define ALLOW_REMOTE_URLS 0
 #endif
 
-
 // helper functions
-
 
 #include <QDebug>
 
@@ -109,9 +107,7 @@ QString toQString(const OUString& s)
     return QString::fromUtf16(s.getStr(), s.getLength());
 }
 
-
 // KDE4FilePicker
-
 
 KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     : KDE4FilePicker_Base(_helperMutex)

@@ -379,7 +379,6 @@ void GtkSalMenu::UpdateFull()
     ImplUpdate( TRUE );
 }
 
-
 /*
  * GtkSalMenu
  */
@@ -712,7 +711,6 @@ void GtkSalMenu::Activate()
     ActivateAllSubmenus(static_cast<MenuBar*>(mpVCLMenu));
 }
 
-
 void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 {
     if ( !mbMenuBar )
@@ -765,7 +763,6 @@ void GtkSalMenu::ShowItem( unsigned nPos, bool bShow )
         ( ( GtkSalMenuItem* ) maItems[ nPos ] )->mbVisible = bShow;
 }
 
-
 void GtkSalMenu::SetItemText( unsigned, SalMenuItem*, const OUString& )
 {
 }
@@ -781,8 +778,6 @@ void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const KeyCode&, const O
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
-
-
 
 /*
  * GtkSalMenuItem

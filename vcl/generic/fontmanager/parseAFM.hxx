@@ -98,8 +98,6 @@ namespace psp {
 #define MAX_NAME 4096           /* max length for identifiers */
 #define FLAGS int
 
-
-
 /* Flags that can be AND'ed together to specify exactly what
  * information from the AFM file should be saved.
  */
@@ -110,7 +108,6 @@ namespace psp {
 #define P_T 0x10    /* 0001 0000 */   /* Track Kerning Info    */
 #define P_C 0x20    /* 0010 0000 */   /* Composite Char Info   */
 
-
 /* Commonly used flags
  */
 #define P_GW    (P_G | P_W)
@@ -118,8 +115,6 @@ namespace psp {
 #define P_GMP   (P_G | P_M | P_P)
 #define P_GMK   (P_G | P_M | P_P | P_T)
 #define P_ALL   (P_G | P_M | P_P | P_T | P_C)
-
-
 
 /* Possible return codes from the parseFile procedure.
  *
@@ -140,13 +135,11 @@ namespace psp {
 
 enum afmError { ok = 0, parseError = -1, earlyEOF = -2, storageProblem = -3 };
 
-
 /************************* TYPES *********************************/
 /* Below are all of the data structure definitions. These structures
  * try to map as closely as possible to grouping and naming of data
  * in the AFM Files.
  */
-
 
 /* Bounding box definition. Used for the Font BBox as well as the
  * Character BBox.
@@ -158,7 +151,6 @@ typedef struct
     int urx;    /* upper right x-position */
     int ury;    /* upper right y-position */
 } BBox;
-
 
 /* Global Font information.
  * The key that each field is associated with is in comments. For an
@@ -187,7 +179,6 @@ typedef struct
     int charwidth;      /* key: CharWidth */
 } GlobalFontInfo;
 
-
 /* Ligature definition is a linked list since any character can have
  * any number of ligatures.
  */
@@ -196,7 +187,6 @@ typedef struct _t_ligature
     char *succ, *lig;
     struct _t_ligature *next;
 } Ligature;
-
 
 /* Character Metric Information. This structure is used only if ALL
  * character metric information is requested. If only the character
@@ -219,7 +209,6 @@ typedef struct
     Ligature *ligs; /* key: L (linked list; not a fixed number of Ls */
 } CharMetricInfo;
 
-
 /* Track kerning data structure.
  * The fields of this record are the five values associated with every
  * TrackKern entry.
@@ -237,7 +226,6 @@ typedef struct
         maxKernAmt;
 } TrackKernData;
 
-
 /* Pair Kerning data structure.
  * The fields of this record are the four values associated with every
  * KP entry. For KPX entries, the yamt will be zero.
@@ -254,7 +242,6 @@ typedef struct
         yamt;
 } PairKernData;
 
-
 /* PCC is a piece of a composite character. This is a sub structure of a
  * compCharData described below.
  * These fields will be filled in with the values from the key PCC.
@@ -269,7 +256,6 @@ typedef struct
     int deltax,
         deltay;
 } Pcc;
-
 
 /* Composite Character Information data structure.
  * The fields ccName and numOfPieces are filled with the values associated
@@ -287,7 +273,6 @@ typedef struct
     int numOfPieces;
     Pcc *pieces;
 } CompCharData;
-
 
 /*  FontInfo
  *  Record type containing pointers to all of the other data
@@ -308,8 +293,6 @@ typedef struct
     int numOfComps;     /* number to entries in comp char array */
     CompCharData *ccd;      /* ptr to comp char array */
 } FontInfo;
-
-
 
 /************************* PROCEDURES ****************************/
 

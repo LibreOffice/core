@@ -84,7 +84,6 @@ extern "C"
 }
 #endif
 
-
 #endif // INCLUDED_VCL_INC_LIST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

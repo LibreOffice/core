@@ -43,5 +43,4 @@ void JpegTransform::setRotate(sal_uInt16 aRotate)
     maRotate = aRotate;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

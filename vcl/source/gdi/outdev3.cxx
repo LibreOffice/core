@@ -95,8 +95,6 @@
 #include <memory>
 #include <algorithm>
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -645,7 +643,6 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     return aFont;
 }
 
-
 ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
     : maFontSelData( rFontSelData )
     , maMetric( rFontSelData )
@@ -703,7 +700,6 @@ void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight
     if( (*it).second == rFontName )
         mpUnicodeFallbackList->erase( it );
 }
-
 
 FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight )
@@ -1119,7 +1115,6 @@ ImplMultiTextLineInfo::ImplMultiTextLineInfo()
     mnLines = 0;
     mnSize  = MULTITEXTLINEINFO_RESIZE;
 }
-
 
 ImplMultiTextLineInfo::~ImplMultiTextLineInfo()
 {
@@ -3749,7 +3744,6 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
     }
 
-
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "   OutputDevice::DrawText(\"%s\")\n",
          OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -4606,7 +4600,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                 aPos.X() = rRect.Left();
             }
 
-
             // If there still is a last line, we output it left-aligned as the line would be clipped
             if ( !aLastLine.isEmpty() )
                 _rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
@@ -4743,7 +4736,6 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
     }
-
 
     bool bDecomposeTextRectAction = ( _pTextLayout != NULL ) && _pTextLayout->DecomposeTextRectAction();
     if ( mpMetaFile && !bDecomposeTextRectAction )
@@ -5962,7 +5954,6 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
                         rPt.Y() = ImplDevicePixelToLogicHeight( nPixelY );
                     }
                 }
-
 
                 // ignore "empty" glyphs:
                 if( aPolyPoly.Count() > 0 )

@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <vcl/hatch.hxx>
 
-
 ImplHatch::ImplHatch() :
     mnRefCount  ( 1 ),
     maColor     ( COL_BLACK ),

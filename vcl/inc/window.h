@@ -47,7 +47,6 @@ class VCLXWindow;
 class SalFrame;
 class SalObject;
 
-
 namespace com {
 namespace sun {
 namespace star {

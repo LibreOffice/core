@@ -44,7 +44,6 @@ public:
     void testScaling();
     void testExportImport();
 
-
     CPPUNIT_TEST_SUITE(VclFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testScaling);

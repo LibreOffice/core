@@ -111,7 +111,6 @@ public:
 
     bool                        IsInside( long nX );
 
-
     bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 
     bool                        operator==( const ImplRegionBand& rRegionBand ) const;

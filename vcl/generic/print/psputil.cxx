@@ -89,7 +89,6 @@ getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
     return nRet;
 }
 
-
 sal_Int32
 getValueOf (sal_Int32 nValue, sal_Char* pBuffer)
 {
@@ -244,7 +243,6 @@ ConverterFactory& GetConverterFactory()
 {
     return theConverterFactory::get();
 }
-
 
 } /* namespace psp */
 

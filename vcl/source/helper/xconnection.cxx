@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/svapp.hxx"
 
 #include "xconnection.hxx"
@@ -28,7 +27,6 @@ using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
-
 
 DisplayConnection::DisplayConnection()
 {

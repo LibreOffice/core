@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/txtattr.hxx>
 #include <vcl/font.hxx>
-
-
-
 
 TextAttrib::~TextAttrib()
 {
@@ -32,7 +28,6 @@ bool TextAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return mnWhich == rAttr.mnWhich;
 }
-
 
 TextAttribFontColor::TextAttribFontColor( const Color& rColor )
     : TextAttrib( TEXTATTR_FONTCOLOR ), maColor( rColor )
@@ -93,7 +88,6 @@ bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
     return ( ( TextAttrib::operator==(rAttr ) ) &&
                 ( meWeight == ((const TextAttribFontWeight&)rAttr).meWeight ) );
 }
-
 
 TextAttribHyperLink::TextAttribHyperLink( const TextAttribHyperLink& rAttr )
     : TextAttrib( rAttr ), maURL( rAttr.maURL ), maDescription( rAttr.maDescription )

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 
 #include <vcl/cmdevt.hxx>
@@ -39,8 +38,6 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
     mbOnlyCursor    = bOnlyCursor;
 }
 
-
-
 CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData& rData ) :
     maText( rData.maText )
 {
@@ -55,8 +52,6 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
     mnCursorFlags   = rData.mnCursorFlags;
     mbOnlyCursor    = rData.mbOnlyCursor;
 }
-
-
 
 CommandExtTextInputData::~CommandExtTextInputData()
 {

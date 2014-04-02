@@ -382,5 +382,4 @@ void psp::splitPath( OString& rPath, OString& rDir, OString& rBase )
         rBase = rPath.copy( nIndex+1 );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

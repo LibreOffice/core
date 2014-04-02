@@ -29,7 +29,6 @@
 #include <rtl/tencinfo.h>
 #include <vcl/virdev.hxx>
 
-
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x
 #else
@@ -88,7 +87,6 @@ basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
     return maClip.getClipPoly();
 }
 
-
 void WinMtfPathObj::AddPoint( const Point& rPoint )
 {
     if ( bClosed )
@@ -135,7 +133,6 @@ void WinMtfPathObj::ClosePath()
     }
     bClosed = true;
 }
-
 
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
@@ -405,7 +402,6 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         return Point();
 };
 
-
 Size WinMtfOutput::ImplMap( const Size& rSz )
 {
     if ( mnWinExtX && mnWinExtY )
@@ -465,12 +461,10 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
         return Size();
 }
 
-
 Rectangle WinMtfOutput::ImplMap( const Rectangle& rRect )
 {
     return Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) );
 }
-
 
 void WinMtfOutput::ImplMap( Font& rFont )
 {
@@ -497,7 +491,6 @@ Polygon& WinMtfOutput::ImplMap( Polygon& rPolygon )
     return rPolygon;
 }
 
-
 Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
@@ -507,7 +500,6 @@ Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
     }
     return rPolygon;
 }
-
 
 PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
 {
@@ -519,14 +511,12 @@ PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
     return rPolyPolygon;
 }
 
-
 PolyPolygon& WinMtfOutput::ImplMap( PolyPolygon& rPolyPolygon )
 {
     sal_uInt16 nPolys = rPolyPolygon.Count();
     for ( sal_uInt16 i = 0; i < nPolys; ImplMap( rPolyPolygon[ i++ ] ) ) ;
     return rPolyPolygon;
 }
-
 
 void WinMtfOutput::SelectObject( sal_Int32 nIndex )
 {
@@ -619,42 +609,35 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
         delete pGDIObj;
 }
 
-
 const Font& WinMtfOutput::GetFont() const
 {
     return maFont;
 }
-
 
 void WinMtfOutput::SetTextLayoutMode( const sal_uInt32 nTextLayoutMode )
 {
     mnTextLayoutMode = nTextLayoutMode;
 }
 
-
 void WinMtfOutput::SetBkMode( sal_uInt32 nMode )
 {
     mnBkMode = nMode;
 }
-
 
 void WinMtfOutput::SetBkColor( const Color& rColor )
 {
     maBkColor = rColor;
 }
 
-
 void WinMtfOutput::SetTextColor( const Color& rColor )
 {
     maTextColor = rColor;
 }
 
-
 void WinMtfOutput::SetTextAlign( sal_uInt32 nAlign )
 {
     mnTextAlign = nAlign;
 }
-
 
 void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
 {
@@ -663,7 +646,6 @@ void WinMtfOutput::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
     for ( ; i < nNewEntrys ; i++ )
         vGDIObj[ i ] = NULL;
 }
-
 
 void WinMtfOutput::ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly )
 {
@@ -814,7 +796,6 @@ void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClip
         aClipPath.setClipPath( ImplMap( aPP ), nClippingMode );
     }
 }
-
 
 WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnLatestTextAlign   ( 0 ),

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -35,8 +34,6 @@ using namespace osl;
 
 using namespace x11;
 
-
-
 X11Transferable::X11Transferable(
     SelectionManager& rManager,
     Atom selection
@@ -46,13 +43,9 @@ X11Transferable::X11Transferable(
 {
 }
 
-
-
 X11Transferable::~X11Transferable()
 {
 }
-
-
 
 Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     throw(UnsupportedFlavorException, IOException, RuntimeException, std::exception)
@@ -85,8 +78,6 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     return aRet;
 }
 
-
-
 Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     throw(RuntimeException, std::exception)
 {
@@ -97,8 +88,6 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
 
     return aFlavorList;
 }
-
-
 
 sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException, std::exception)

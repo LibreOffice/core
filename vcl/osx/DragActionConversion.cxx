@@ -20,9 +20,7 @@
 #include "DragActionConversion.hxx"
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
-
 using namespace com::sun::star::datatransfer::dnd;
-
 
 /* Convert office drag actions as defined in
    <type>com::sun::star::datatransfer::dnd::DNDConstants</type>

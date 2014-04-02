@@ -31,7 +31,6 @@ namespace psp {
 // forward declarations
 class PrinterGfx;
 
-
 class PrinterJob
 {
 private:            // private data

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cups/cups.h>
 #include <cups/http.h>
 #include <cups/ipp.h>
@@ -43,7 +42,6 @@
 
 using namespace psp;
 using namespace osl;
-
 
 struct GetPPDAttribs
 {
@@ -321,7 +319,6 @@ void CUPSManager::initialize()
             if(!strcmp(pDest->options[k].name, "printer-location"))
                 aPrinter.m_aInfo.m_aLocation=OStringToOUString(pDest->options[k].value, aEncoding);
         }
-
 
         OUStringBuffer aBuf( 256 );
         aBuf.appendAscii( "CUPS:" );
@@ -685,7 +682,6 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
 
     return nJobID != 0;
 }
-
 
 void CUPSManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {

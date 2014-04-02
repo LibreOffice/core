@@ -93,7 +93,6 @@ public:
         OString getNameObject() const;
     };
 
-
     enum ResourceKind { ResXObject, ResExtGState, ResShading, ResPattern };
     typedef std::map< OString, sal_Int32 > ResourceMap;
     struct ResourceDict
@@ -550,7 +549,6 @@ public:
         PDFAddStream() : m_pStream( NULL ), m_nStreamObject( 0 ), m_bCompress( true ) {}
     };
 
-
     // helper structure for drawLayout and friends
     struct PDFGlyph
     {
@@ -569,7 +567,6 @@ public:
           m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId )
         {}
     };
-
 
     static const sal_Char* getStructureTag( PDFWriter::StructElement );
     static const sal_Char* getAttributeTag( PDFWriter::StructAttribute eAtr );
@@ -678,7 +675,6 @@ private:
     PDFWriter::PDFWriterContext         m_aContext;
     oslFileHandle                       m_aFile;
     bool                                m_bOpen;
-
 
     /* output redirection; e.g. to accumulate content streams for
        XObjects
@@ -1097,7 +1093,6 @@ public:
     void setDocumentLocale( const com::sun::star::lang::Locale& rLoc )
     { m_aContext.DocumentLocale = rLoc; }
 
-
     /* graphics state */
     void push( sal_uInt16 nFlags );
     void pop();
@@ -1105,7 +1100,6 @@ public:
     void setFont( const Font& rFont );
 
     void setMapMode( const MapMode& rMapMode );
-
 
     const MapMode& getMapMode() { return m_aGraphicsStack.front().m_aMapMode; }
 
@@ -1301,6 +1295,5 @@ public:
 }
 
 #endif //_VCL_PDFEXPORT_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

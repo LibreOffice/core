@@ -48,7 +48,6 @@ public:
     void            ImplReleaseCachedBitmap();
 };
 
-
 #endif // INCLUDED_VCL_INC_WALL2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

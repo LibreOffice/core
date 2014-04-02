@@ -24,9 +24,7 @@
 
 #include <rtl/ref.hxx>
 
-
 // - KeyboardFocusListener -
-
 
 class KeyboardFocusListener : public rtl::IReference
 {

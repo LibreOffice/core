@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
 #include <sys/timer.h>
@@ -494,7 +493,6 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
     }
 }
 
-
 /*****************************************************************************/
 
 static std::set< Window * > g_aWindowList;
@@ -757,6 +755,5 @@ ooo_atk_util_get_type (void)
 
   return type;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

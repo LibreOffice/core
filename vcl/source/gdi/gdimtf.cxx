@@ -2765,7 +2765,6 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             {
                 pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
 
-
                 if( pAction )
                 {
                     if (pAction->GetType() == META_COMMENT_ACTION)

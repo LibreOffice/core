@@ -183,7 +183,6 @@ IconThemeScanner::GetIconThemeInfo(const OUString& themeId)
     return *info;
 }
 
-
 } // end namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

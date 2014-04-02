@@ -56,7 +56,6 @@ public:
 void ImplDeletePrnQueueList();
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
 
-
 #endif // INCLUDED_VCL_INC_PRINT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

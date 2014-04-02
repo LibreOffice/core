@@ -181,7 +181,6 @@ sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nCom
     return NULL;
 }
 
-
 inline OUString ImpGetExtension( const OUString &rPath )
 {
     OUString        aExt;
@@ -226,7 +225,6 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
     }
     return false;
 }
-
 
 /*************************************************************************
  *
@@ -774,8 +772,6 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     return bTest && !bSomethingTested;
 }
 
-
-
 sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
     // determine or check the filter/format by reading into it
@@ -820,8 +816,6 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& 
     return GRFILTER_OK;
 }
 
-
-
 #ifndef DISABLE_EXPORT
 
 static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
@@ -843,7 +837,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if ( nLogicalWidth || nLogicalHeight )
                 nMode = 2;
         }
-
 
         Size aOriginalSize;
         Size aPrefSize( rGraphic.GetPrefSize() );
@@ -1330,8 +1323,6 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 {
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL, pExtHeader );
 }
-
-
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags,
@@ -1867,7 +1858,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
         INetURLObject aURL( rPath );
         OUString aExt( aURL.GetFileExtension().toAsciiUpperCase() );
 
-
         for( sal_uInt16 i = 0; i < nFormatCount; i++ )
         {
             if ( pConfig->GetExportFormatExtension( i ).equalsIgnoreAsciiCase( aExt ) )
@@ -1949,7 +1939,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", true );
                 // save RLE encoded?
                 WriteDIB(aBmp, rOStm, bRleCoding, true);
-
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
@@ -37,7 +36,6 @@
 #include <cassert>
 #include <memory>
 
-
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star;
@@ -52,14 +50,12 @@ using namespace com::sun::star::lang;
 using namespace comphelper;
 using namespace std;
 
-
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
 uno::Reference<XTransferable> DragSource::g_XTransferable;
 NSView* DragSource::g_DragSourceView = nil;
 bool DragSource::g_DropSuccessSet = false;
 bool DragSource::g_DropSuccess = false;
-
 
 OUString dragSource_getImplementationName()
 {

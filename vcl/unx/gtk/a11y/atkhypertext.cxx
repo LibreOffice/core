@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
@@ -25,7 +24,6 @@
 #include <stdio.h>
 
 using namespace ::com::sun::star;
-
 
 // ---------------------- AtkHyperlink ----------------------
 
@@ -211,7 +209,6 @@ static accessibility::XAccessibleHypertext*
 
     return NULL;
 }
-
 
 static AtkHyperlink *
 hypertext_get_link( AtkHypertext *hypertext,

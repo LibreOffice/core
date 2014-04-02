@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cstdlib>
 #include <cstring>
 
@@ -44,7 +43,6 @@
 using namespace std;
 using namespace psp;
 using namespace utl;
-
 
 /*
  *  FontCache constructor
@@ -246,7 +244,6 @@ void FontCache::read()
 #endif
         return;
     }
-
 
     OString aLine;
     aStream.ReadLine( aLine );

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "rtl/ustrbuf.hxx"
 
 #include "vcl/button.hxx"
@@ -28,9 +27,6 @@
 #include "quartz/utils.h"
 
 #include "svids.hrc"
-
-
-
 
 AquaSalSystem::~AquaSalSystem()
 {
@@ -153,7 +149,6 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
             }
         }
     }
-
 
     int nResult = NSRunAlertPanel( pTitle, @"%@", pDefText, pAltText, pOthText, pMessage );
 

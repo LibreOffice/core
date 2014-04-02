@@ -354,7 +354,6 @@ public:
     static void releaseGlyphPeer();
 };
 
-
 inline const SalDisplay *X11SalGraphics::GetDisplay() const
 { return GetColormap().GetDisplay(); }
 
@@ -366,7 +365,6 @@ inline Display *X11SalGraphics::GetXDisplay() const
 
 inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 { return GetColormap().GetPixel( nSalColor ); }
-
 
 #ifdef DBG_UTIL
 #define stderr0( s )            fprintf( stderr, s )

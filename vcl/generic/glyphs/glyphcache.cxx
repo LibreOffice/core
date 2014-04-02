@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -51,13 +50,11 @@ GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
     mpFtManager = new FreetypeManager;
 }
 
-
 GlyphCache::~GlyphCache()
 {
     InvalidateAllGlyphs();
     delete mpFtManager;
 }
-
 
 void GlyphCache::InvalidateAllGlyphs()
 {
@@ -71,7 +68,6 @@ void GlyphCache::InvalidateAllGlyphs()
     maFontList.clear();
     mpCurrentGCFont = NULL;
 }
-
 
 inline
 size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData ) const
@@ -97,7 +93,6 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
 #endif
     return nHash;
 }
-
 
 bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const FontSelectPattern& rB) const
 {
@@ -146,12 +141,10 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     return true;
 }
 
-
 GlyphCache& GlyphCache::GetInstance()
 {
     return *pInstance;
 }
-
 
 void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
     sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA)
@@ -159,7 +152,6 @@ void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
     if( mpFtManager )
         mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA);
 }
-
 
 void GlyphCache::AnnounceFonts( PhysicalFontCollection* pFontCollection ) const
 {
@@ -173,7 +165,6 @@ void GlyphCache::ClearFontCache()
     if (mpFtManager)
         mpFtManager->ClearFontList();
 }
-
 
 ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 {
@@ -226,7 +217,6 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
     return pNew;
 }
 
-
 void GlyphCache::UncacheFont( ServerFont& rServerFont )
 {
     // the interface for rServerFont must be const because a
@@ -240,7 +230,6 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
         GarbageCollect();
     }
 }
-
 
 void GlyphCache::GarbageCollect()
 {
@@ -292,12 +281,10 @@ void GlyphCache::GarbageCollect()
     }
 }
 
-
 inline void GlyphCache::UsingGlyph( ServerFont&, GlyphData& rGlyphData )
 {
     rGlyphData.SetLruValue( mnLruIndex++ );
 }
-
 
 inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphData )
 {
@@ -307,13 +294,11 @@ inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphDa
     GrowNotify();
 }
 
-
 void GlyphCache::GrowNotify()
 {
     if( (mnBytesUsed + mrPeer.GetByteCount()) > mnMaxSize )
         GarbageCollect();
 }
-
 
 inline void GlyphCache::RemovingGlyph( GlyphData& rGD )
 {
@@ -321,7 +306,6 @@ inline void GlyphCache::RemovingGlyph( GlyphData& rGD )
     mnBytesUsed -= sizeof( GlyphData );
     --mnGlyphCount;
 }
-
 
 void ServerFont::ReleaseFromGarbageCollect()
 {
@@ -334,13 +318,11 @@ void ServerFont::ReleaseFromGarbageCollect()
     mpNextGCFont = NULL;
 }
 
-
 long ServerFont::Release() const
 {
     DBG_ASSERT( mnRefCount > 0, "ServerFont: RefCount underflow" );
     return --mnRefCount;
 }
-
 
 GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
 {
@@ -360,7 +342,6 @@ GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
     return rGlyphData;
 }
 
-
 void ServerFont::GarbageCollect( long nMinLruIndex )
 {
     GlyphList::iterator it = maGlyphList.begin();
@@ -379,13 +360,11 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-
 ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
 ,   mpServerFont( NULL )
 ,   mbGotFontOptions( false )
 {}
-
 
 void ImplServerFontEntry::SetServerFont(ServerFont* p)
 {

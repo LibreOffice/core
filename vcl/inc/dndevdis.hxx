@@ -90,17 +90,12 @@ public:
 
     virtual void SAL_CALL dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
     /*
      * XEventListener
      */
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& eo ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-
-
-
 
 #endif
 

@@ -990,5 +990,4 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     return FALSE;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

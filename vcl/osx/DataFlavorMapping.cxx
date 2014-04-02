@@ -45,7 +45,6 @@ using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace std;
 
-
 namespace // private
 {
   /* Determine whether or not a DataFlavor is valid.
@@ -99,7 +98,6 @@ namespace // private
 
   const char* FLAVOR_DUMMY_INTERNAL = "application/x-openoffice-internal";
 
-
   struct FlavorMap
   {
     const NSString* SystemFlavor;
@@ -130,9 +128,7 @@ namespace // private
       { PBTYPE_DUMMY_INTERNAL, FLAVOR_DUMMY_INTERNAL, "internal data",false }
     };
 
-
   #define SIZE_FLAVOR_MAP (sizeof(flavorMap)/sizeof(FlavorMap))
-
 
   inline bool isByteSequenceType(const Type& theType)
   {
@@ -145,9 +141,6 @@ namespace // private
   }
 
 } // namespace private
-
-
-
 
 /* A base class for other data provider.
  */
@@ -176,7 +169,6 @@ DataProviderBaseImpl::DataProviderBaseImpl(id data) :
   [mSystemData retain];
 }
 
-
 DataProviderBaseImpl::~DataProviderBaseImpl()
 {
   if (mSystemData)
@@ -184,8 +176,6 @@ DataProviderBaseImpl::~DataProviderBaseImpl()
       [mSystemData release];
     }
 }
-
-
 
 class UniDataProvider : public DataProviderBaseImpl
 {
@@ -238,8 +228,6 @@ Any UniDataProvider::getOOoData()
   return oOOData;
 }
 
-
-
 class ByteSequenceDataProvider : public DataProviderBaseImpl
 {
 public:
@@ -261,7 +249,6 @@ ByteSequenceDataProvider::ByteSequenceDataProvider(NSData* data) :
   DataProviderBaseImpl(data)
 {
 }
-
 
 NSData* ByteSequenceDataProvider::getSystemData()
 {
@@ -290,9 +277,6 @@ Any ByteSequenceDataProvider::getOOoData()
 
   return oOOData;
 }
-
-
-
 
 class HTMLFormatDataProvider : public DataProviderBaseImpl
 {
@@ -356,8 +340,6 @@ Any HTMLFormatDataProvider::getOOoData()
 
   return oOOData;
 }
-
-
 
 class PNGDataProvider : public DataProviderBaseImpl
 {
@@ -423,8 +405,6 @@ Any PNGDataProvider::getOOoData()
   return oOOData;
 }
 
-
-
 class FileListDataProvider : public DataProviderBaseImpl
 {
 public:
@@ -486,8 +466,6 @@ Any FileListDataProvider::getOOoData()
 
   return oOOData;
 }
-
-
 
 DataFlavorMapper::DataFlavorMapper()
 {
@@ -726,7 +704,6 @@ com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor> DataFlav
 
   return flavors;
 }
-
 
 NSArray* DataFlavorMapper::getAllSupportedPboardTypes() const
 {

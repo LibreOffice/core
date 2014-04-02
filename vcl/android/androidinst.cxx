@@ -293,7 +293,6 @@ SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
     return new AndroidSalFrame( this, pParent, nStyle, NULL );
 }
 
-
 // All the interesting stuff is slaved from the AndroidSalInstance
 void InitSalData()   {}
 void DeInitSalData() {}

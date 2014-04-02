@@ -32,7 +32,6 @@
 #define DIBINFOHEADERSIZE       ( sizeof(DIBInfoHeader) )
 #define DIBV5HEADERSIZE         ( sizeof(DIBV5Header) )
 
-
 // - Compression defines
 
 #define COMPRESS_OWN                ('S'|('D'<<8UL))
@@ -41,7 +40,6 @@
 #define RLE_4                       ( 2UL )
 #define BITFIELDS                   ( 3UL )
 #define ZCOMPRESS                   ( COMPRESS_OWN | 0x01000000UL ) /* == 'SD01' (binary) */
-
 
 // - DIBInfoHeader and DIBV5Header
 
@@ -148,8 +146,6 @@ struct DIBV5Header : public DIBInfoHeader
     {}
 };
 
-
-
 namespace
 {
     inline sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
@@ -164,8 +160,6 @@ namespace
         return (BMP_FORMAT_16BIT_TC_LSB_MASK == nScanlineFormat) || (BMP_FORMAT_32BIT_TC_MASK == nScanlineFormat);
     }
 }
-
-
 
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown)
 {
@@ -1329,8 +1323,6 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     return( rOStm.GetError() == 0UL );
 }
 
-
-
 bool ImplReadDIB(
     Bitmap& rTarget, Bitmap*
     pTargetAlpha,
@@ -1438,8 +1430,6 @@ bool ImplWriteDIB(
     return bRet;
 }
 
-
-
 bool ReadDIB(
     Bitmap& rTarget,
     SvStream& rIStm,
@@ -1535,8 +1525,6 @@ bool ReadDIBV5(
 {
     return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
 }
-
-
 
 bool WriteDIB(
     const Bitmap& rSource,

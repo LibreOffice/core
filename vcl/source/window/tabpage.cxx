@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/rc.h>
 
 #include <vcl/event.hxx>
@@ -31,8 +30,6 @@
 #include <svdata.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
-
 
 void TabPage::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -48,8 +45,6 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
         EnableChildTransparentMode( true );
 }
-
-
 
 void TabPage::ImplInitSettings()
 {
@@ -74,15 +69,11 @@ void TabPage::ImplInitSettings()
     }
 }
 
-
-
 TabPage::TabPage( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_TABPAGE )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 TabPage::TabPage( Window* pParent, const ResId& rResId ) :
     Window( WINDOW_TABPAGE )
@@ -103,8 +94,6 @@ TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDesc
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
-
-
 void TabPage::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
@@ -123,8 +112,6 @@ void TabPage::StateChanged( StateChangedType nType )
     }
 }
 
-
-
 void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -136,8 +123,6 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
 
 void TabPage::Paint( const Rectangle& )
 {
@@ -160,7 +145,6 @@ void TabPage::Paint( const Rectangle& )
                 aControlValue, OUString() );
     }
 }
-
 
 void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
@@ -189,13 +173,9 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     pDev->Pop();
 }
 
-
-
 void TabPage::ActivatePage()
 {
 }
-
-
 
 void TabPage::DeactivatePage()
 {

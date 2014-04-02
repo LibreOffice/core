@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/animate.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -26,7 +25,6 @@
 #include <vcl/window.hxx>
 #include <impanmvw.hxx>
 #include <vcl/dibtools.hxx>
-
 
 #define MIN_TIMEOUT 2L
 #define INC_TIMEOUT 0L
@@ -300,7 +298,6 @@ void Animation::Stop( OutputDevice* pOut, long nExtraData )
 {
     for( size_t i = 0; i < maViewList.size(); )
     {
-
 
         ImplAnimView* pView = maViewList[ i ];
         if( pView->ImplMatches( pOut, nExtraData ) )

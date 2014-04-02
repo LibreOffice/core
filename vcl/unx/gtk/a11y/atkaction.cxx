@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -208,7 +207,6 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
         }
     }
 }
-
 
 static G_CONST_RETURN gchar *
 action_wrapper_get_keybinding (AtkAction *action,

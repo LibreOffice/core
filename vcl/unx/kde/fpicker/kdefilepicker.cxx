@@ -89,9 +89,7 @@
 #include <algorithm>
 #include <iostream>
 
-
 // KDEFileDialog
-
 
 KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
         QWidget *parent, const char *name )
@@ -749,7 +747,6 @@ QString KDEFileDialog::escapeString( const QString &rString )
 
     return qString;
 }
-
 
 void KDEFileFilterComboHack::setCurrentFilter( const QString& filter )
 {

@@ -139,7 +139,6 @@ class GtkSalFrame : public SalFrame
             }
         };
 
-
         GtkSalFrame*                    m_pFrame;
         std::list< PreviousKeyPress >   m_aPrevKeyPresses;
         int                             m_nPrevKeyPresses; // avoid using size()
@@ -266,7 +265,6 @@ class GtkSalFrame : public SalFrame
                                    bool bDown,
                                    bool bSendRelease
                                    );
-
 
     GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
 
@@ -417,7 +415,6 @@ public:
 
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
-
 
     // get current modifier and button mask
     virtual SalPointerState     GetPointerState() SAL_OVERRIDE;

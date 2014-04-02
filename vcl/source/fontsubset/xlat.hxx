@@ -19,7 +19,6 @@
 
 /*|     Author: Alexander Gelfenbain                    |*/
 
-
 #ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 #define INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 

@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/window.hxx"
 #include "vcl/waitobj.hxx"
 #include "vcl/button.hxx"
-
-
 
 WaitObject::~WaitObject()
 {
@@ -30,14 +27,10 @@ WaitObject::~WaitObject()
         mpWindow->LeaveWait();
 }
 
-
-
 Size Window::GetOptimalSize() const
 {
     return Size();
 }
-
-
 
 void Window::ImplAdjustNWFSizes()
 {

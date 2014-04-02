@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "svsys.h"
 #include "rtl/ustrbuf.hxx"
 
@@ -42,8 +41,6 @@ SalSystem* WinSalInstance::CreateSalSystem()
 WinSalSystem::~WinSalSystem()
 {
 }
-
-
 
 static BOOL CALLBACK ImplEnumMonitorProc( HMONITOR hMonitor,
                                           HDC hDC,
@@ -177,7 +174,6 @@ OUString WinSalSystem::GetDisplayScreenName( unsigned int nScreen )
     initMonitors();
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aName : OUString();
 }
-
 
 /* We have to map the button identifier to the identifier used by the Win32
    Platform SDK to specify the default button for the MessageBox API.

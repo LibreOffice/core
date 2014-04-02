@@ -36,7 +36,6 @@ extern SgfFontLst* pSgfFonts;
 #define abs(x) ((x)<0 ? -(x) : (x))
 #endif
 
-
 //  Limitations:  only grey shadows, 2D and with fixed distance.
 // Start of AbsBase.Pas
 
@@ -124,7 +123,6 @@ extern SgfFontLst* pSgfFonts;
 #define  MinChar 32
 #define  MaxChar 255
 
-
 #define  CharTopToBase     100 /* due to quotes more as 75%         */
 #define  CharTopToBtm      120 /* line height larger as text angle  */
                                // for Avanti-Bold 'ue' actually even 130%
@@ -206,7 +204,6 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 // On top GetTextCharConv() converts HardSpace and AbsatzEnde
 // in spaces, including HardTrenner in minus signs. TextEnde is
 // always returned as Char(0).
-
 
 UCHAR ConvertTextChar(UCHAR c)
 {
@@ -356,7 +353,6 @@ UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
     return c;
 } // end of ProcessOne
 
-
 UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
                   ObjTextType& Atr0, ObjTextType& AktAtr,
                   sal_uInt16 Rest, bool ScanEsc)
@@ -406,7 +402,6 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
     }
     return c;
 }
-
 
 // Function GetLineFeed()
 //
@@ -1011,7 +1006,6 @@ void ObjTextType::SetFont(sal_uInt32 FontID)
     FontLo=sal_uInt16(FontID & 0x0000FFFF);
     FontHi=sal_uInt16((FontID & 0xFFFF0000)>>16);
 }
-
 
 // SGF.Ini lesen
 SgfFontOne::SgfFontOne()

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**
   this file implements the sal printer interface ( SalPrinter, SalInfoPrinter
   and some printer relevant methods of SalInstance and SalGraphicsData )
@@ -63,7 +62,6 @@
 
 using namespace psp;
 using namespace com::sun::star;
-
 
 /*
  *  static helpers
@@ -717,7 +715,6 @@ void PspSalInfoPrinter::GetPageInfo(
         int left = 0, top = 0, right = 0, bottom = 0;
         int nDPI = aData.m_aContext.getRenderResolution();
 
-
         if( aData.m_eOrientation == psp::orientation::Portrait )
         {
             aData.m_aContext.getPageSize( aPaper, width, height );
@@ -1268,7 +1265,6 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     return true;
 }
 
-
 class PrinterUpdate
 {
     static Timer* pPrinterUpdateTimer;
@@ -1292,8 +1288,6 @@ void PrinterUpdate::doUpdate()
     if( pInst && rManager.checkPrintersChanged( false ) )
         pInst->PostPrintersChanged();
 }
-
-
 
 IMPL_STATIC_LINK_NOINSTANCE( PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
 {

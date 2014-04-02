@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -46,7 +45,6 @@
 #include <vector>
 
 using namespace psp;
-
 
 // forward declaration
 
@@ -579,7 +577,6 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     mfXScale        = (double)72.0 / (double)mnResolution;
     mfYScale        = -1.0 * (double)72.0 / (double)mnResolution;
 }
-
 
 bool
 PrinterJob::StartPage (const JobData& rJobSetup)

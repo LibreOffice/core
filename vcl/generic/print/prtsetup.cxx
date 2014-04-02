@@ -67,8 +67,6 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         rBox.SelectEntry( m_aInvalidString );
 }
 
-
-
 /*
  * RTSDialog
  */
@@ -128,8 +126,6 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     return 0;
 }
 
-
-
 IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
 {
     if( pButton == m_pOKButton )
@@ -155,8 +151,6 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
 
     return 0;
 }
-
-
 
 /*
  * RTSPaperPage
@@ -194,13 +188,9 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     update();
 }
 
-
-
 RTSPaperPage::~RTSPaperPage()
 {
 }
-
-
 
 void RTSPaperPage::update()
 {
@@ -247,8 +237,6 @@ void RTSPaperPage::update()
     }
 }
 
-
-
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
 {
     const PPDKey* pKey = NULL;
@@ -280,8 +268,6 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     }
     return 0;
 }
-
-
 
 /*
  * RTSDevicePage
@@ -371,13 +357,9 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     }
 }
 
-
-
 RTSDevicePage::~RTSDevicePage()
 {
 }
-
-
 
 void RTSDevicePage::update()
 {
@@ -407,8 +389,6 @@ sal_uLong RTSDevicePage::getColorDevice()
     return 0;
 }
 
-
-
 sal_uLong RTSDevicePage::getLevel()
 {
     sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
@@ -416,8 +396,6 @@ sal_uLong RTSDevicePage::getLevel()
         return 0;   //automatic
     return nLevel < 10 ? nLevel-1 : 0;
 }
-
-
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {

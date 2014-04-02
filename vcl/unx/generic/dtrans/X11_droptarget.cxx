@@ -26,7 +26,6 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 
-
 DropTarget::DropTarget() :
         ::cppu::WeakComponentImplHelper3<
             XDropTarget,
@@ -45,8 +44,6 @@ DropTarget::~DropTarget()
     if( m_pSelectionManager )
         m_pSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
-
-
 
 void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception )
 {
@@ -76,16 +73,12 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
     }
 }
 
-
-
 void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw(std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_aListeners.push_back( xListener );
 }
-
-
 
 void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw(std::exception)
 {
@@ -94,14 +87,10 @@ void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener 
     m_aListeners.remove( xListener );
 }
 
-
-
 sal_Bool DropTarget::isActive() throw(std::exception)
 {
     return m_bActive;
 }
-
-
 
 void DropTarget::setActive( sal_Bool active ) throw(std::exception)
 {
@@ -110,14 +99,10 @@ void DropTarget::setActive( sal_Bool active ) throw(std::exception)
     m_bActive = active;
 }
 
-
-
 sal_Int8 DropTarget::getDefaultActions() throw(std::exception)
 {
     return m_nDefaultActions;
 }
-
-
 
 void DropTarget::setDefaultActions( sal_Int8 actions ) throw(std::exception)
 {
@@ -125,8 +110,6 @@ void DropTarget::setDefaultActions( sal_Int8 actions ) throw(std::exception)
 
     m_nDefaultActions = actions;
 }
-
-
 
 void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 {
@@ -140,8 +123,6 @@ void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
     }
 }
 
-
-
 void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
@@ -154,8 +135,6 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
     }
 }
 
-
-
 void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
@@ -167,8 +146,6 @@ void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
         (*it)->dragExit( dte );
     }
 }
-
-
 
 void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 {

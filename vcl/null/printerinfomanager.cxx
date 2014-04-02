@@ -24,7 +24,6 @@
 using namespace psp;
 using namespace osl;
 
-
 PrinterInfoManager& PrinterInfoManager::get()
 {
     SalData* pSalData = GetSalData();

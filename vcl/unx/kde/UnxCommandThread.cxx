@@ -29,9 +29,7 @@
 
 using namespace ::com::sun::star;
 
-
 // UnxFilePickerCommandThread
-
 
 UnxFilePickerCommandThread::UnxFilePickerCommandThread( UnxFilePickerNotifyThread *pNotifyThread, int nReadFD )
     : m_pNotifyThread( pNotifyThread ),

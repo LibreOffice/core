@@ -36,7 +36,6 @@ using namespace osl;
 using namespace std;
 using namespace comphelper;
 
-
 @implementation EventListener;
 
 -(EventListener*)initWithAquaClipboard: (AquaClipboard*) pcb
@@ -130,7 +129,6 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
     mPasteboardChangeCount = [mPasteboard changeCount];
 }
-
 
 AquaClipboard::~AquaClipboard()
 {

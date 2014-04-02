@@ -72,7 +72,6 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
     maMenubuttonItem.meState = TRISTATE_FALSE;
     mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
 
-
     mbIsLocked = false;
     mbNativeButtons = false;
     mbIsPaintLocked = false;
@@ -92,7 +91,6 @@ ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
         delete m_pLayoutData;
     delete mpMenu;
 }
-
 
 void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
                         bool bEmptyBtn)
@@ -658,7 +656,6 @@ static OUString getCommandLabel(const OUString& rCommand, const uno::Reference<u
     return OUString();
 }
 
-
 // Get label of the command (like of .uno:Save) from the description service
 static Image getCommandImage(const OUString& rCommand, bool bLarge,
         const uno::Reference<uno::XComponentContext>& rContext, const uno::Reference<frame::XFrame>& rFrame,
@@ -1114,7 +1111,6 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
     return aPos;
 }
 
-
 Point ToolBox::GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const
 {
     return ImplGetPopupPosition( GetItemRect( nItemId ), rSize );
@@ -1165,7 +1161,6 @@ bool ToolBox::ImplHasExternalMenubutton()
     }
     return bRet;
 }
-
 
 void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
 {

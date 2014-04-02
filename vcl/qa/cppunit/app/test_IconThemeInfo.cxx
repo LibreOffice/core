@@ -94,7 +94,6 @@ IconThemeInfoTest::DefaultZipIsValid()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("default.zip is a valid theme name", true, valid);
 }
 
-
 void
 IconThemeInfoTest::ThemeIdIsDetectedFromFileNameWithUnderscore()
 {

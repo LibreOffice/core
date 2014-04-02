@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
@@ -638,14 +637,12 @@ table_wrapper_set_column_description( AtkTable *, gint, const gchar * )
 { // meaningless helper
 }
 
-
 /*****************************************************************************/
 
 static void
 table_wrapper_set_column_header( AtkTable *, gint, AtkObject * )
 { // meaningless helper
 }
-
 
 /*****************************************************************************/
 

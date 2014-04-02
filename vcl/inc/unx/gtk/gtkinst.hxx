@@ -49,8 +49,6 @@ public:
     void ThreadsLeave();
 };
 
-
-
 class GtkSalTimer;
 #if GTK_CHECK_VERSION(3,0,0)
 class GtkInstance : public SvpSalInstance

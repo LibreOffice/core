@@ -22,9 +22,7 @@
 
 using namespace ::com::sun::star;
 
-
 // UnxFilePickerNotifyThread
-
 
 UnxFilePickerNotifyThread::UnxFilePickerNotifyThread( UnxFilePicker *pUnxFilePicker )
     : m_pUnxFilePicker( pUnxFilePicker ),

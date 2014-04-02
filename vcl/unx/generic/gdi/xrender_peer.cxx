@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <rtl/ustring.hxx>
@@ -29,8 +28,6 @@
 
 using namespace rtl;
 
-
-
 XRenderPeer::XRenderPeer()
     : mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
     , mpStandardFormatA8( NULL )
@@ -38,15 +35,11 @@ XRenderPeer::XRenderPeer()
     InitRenderLib();
 }
 
-
-
 XRenderPeer& XRenderPeer::GetInstance()
 {
     static XRenderPeer aPeer;
     return aPeer;
 }
-
-
 
 void XRenderPeer::InitRenderLib()
 {

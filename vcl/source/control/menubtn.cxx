@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/rc.h>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
@@ -74,7 +73,6 @@ OString MenuButton::GetCurItemIdent() const
         mpMenu->GetItemIdent(mnCurItemId) : OString();
 }
 
-
 MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
     : PushButton( WINDOW_MENUBUTTON )
 {
@@ -128,7 +126,6 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
     return 0;
 }
 
-
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bExecute = true;
@@ -162,7 +159,6 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-
 void MenuButton::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -177,18 +173,15 @@ void MenuButton::KeyInput( const KeyEvent& rKEvt )
         PushButton::KeyInput( rKEvt );
 }
 
-
 void MenuButton::Activate()
 {
     maActivateHdl.Call( this );
 }
 
-
 void MenuButton::Select()
 {
     maSelectHdl.Call( this );
 }
-
 
 void MenuButton::SetMenuMode( sal_uInt16 nMode )
 {

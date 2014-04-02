@@ -2879,7 +2879,6 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
     set_response(sID, sResponse.toInt32());
 }
 
-
 void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap)
 {
     xmlreader::Span name;

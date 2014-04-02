@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -115,7 +114,6 @@ WMSupportsFWS (Display *display, int screen)
     fprintf (stderr, "Using fwsCommWindow = 0x%lx.\n", fwsCommWindow);
     #endif
     XFree (propData);
-
 
     if (XGetWindowProperty (display, DefaultRootWindow (display),
             FWS_PROTOCOLS, 0, 10,

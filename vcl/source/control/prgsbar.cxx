@@ -126,7 +126,6 @@ void ProgressBar::ImplInitSettings( bool bFont,
     }
 }
 
-
 void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
 {
     if ( mbCalcNew )
@@ -160,7 +159,6 @@ void ProgressBar::Paint( const Rectangle& )
 {
     ImplDrawProgress( 0, mnPercent );
 }
-
 
 void ProgressBar::Resize()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/color.hxx"
 
@@ -32,8 +31,6 @@
 #include "quartz/salgdi.h"
 #include "osx/salframe.h"
 #include "osx/saldata.hxx"
-
-
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
@@ -75,8 +72,6 @@ void AquaSalGraphics::InvalidateContext()
     UnsetState();
     mrContext = 0;
 }
-
-
 
 void AquaSalGraphics::UnsetState()
 {
@@ -204,7 +199,5 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     else
         DBG_ASSERT( mpFrame->mbInitShow, "UpdateWindow called on uneligible graphics" );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "rtl/ustring.hxx"
 #include "osl/module.h"
 #include "osl/thread.h"
@@ -29,13 +28,9 @@
 #include "gcach_xpeer.hxx"
 #include "xrender_peer.hxx"
 
-
-
 X11GlyphPeer::X11GlyphPeer()
 {
 }
-
-
 
 X11GlyphPeer::~X11GlyphPeer()
 {
@@ -62,14 +57,10 @@ X11GlyphPeer::~X11GlyphPeer()
     }
 }
 
-
-
 X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
 :   GlyphCache( rPeer )
 {
 }
-
-
 
 namespace
 {
@@ -111,20 +102,14 @@ X11GlyphCache& X11GlyphCache::GetInstance()
     return theGlyphCacheHolder::get().getGlyphCache();
 }
 
-
-
 void X11GlyphCache::KillInstance()
 {
     return theGlyphCacheHolder::get().release();
 }
 
-
-
 void X11SalGraphics::releaseGlyphPeer()
 {
     X11GlyphCache::KillInstance();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

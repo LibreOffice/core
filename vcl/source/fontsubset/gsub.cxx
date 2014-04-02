@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sft.hxx"
 
 #include "gsub.h"
@@ -35,7 +34,6 @@ typedef sal_uIntPtr sal_uLong;
 typedef sal_uInt8 FT_Byte;
 
 typedef std::map<sal_uInt16,sal_uInt16> GlyphSubstitution;
-
 
 inline sal_uInt32 NEXT_Long( const unsigned char* &p )
 {

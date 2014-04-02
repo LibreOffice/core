@@ -37,7 +37,6 @@
 #define SgfVectGray 5 /* use greyscale for lines only for                */
 #define SgfVectWdth 6 /* use line widths for lines          SimpVector   */
 
-
 #define SgfHeaderSize 42
 class SgfHeader
 {

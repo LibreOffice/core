@@ -23,8 +23,6 @@
 
 #include "win/saldata.hxx"
 
-
-
 rtl_TextEncoding ImplSalGetSystemEncoding()
 {
     static UINT nOldAnsiCodePage = 0;
@@ -42,8 +40,6 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
     return eEncoding;
 }
 
-
-
 OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
 {
     return OUString( pStr, (-1 == nLen) ? strlen(pStr) : nLen,
@@ -52,8 +48,6 @@ OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
                       RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                       RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
 }
-
-
 
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 {
@@ -81,35 +75,25 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     return nRet;
 }
 
-
-
 BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return PostMessageW( hWnd, nMsg, wParam, lParam );
 }
-
-
 
 BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return SendMessageW( hWnd, nMsg, wParam, lParam );
 }
 
-
-
 BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
     return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
 }
 
-
-
 BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
     return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }
-
-
 
 LONG ImplDispatchMessage( CONST MSG *lpMsg )
 {

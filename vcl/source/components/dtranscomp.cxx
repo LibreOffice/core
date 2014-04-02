@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "osl/mutex.hxx"
 
 #include "vcl/svapp.hxx"
@@ -207,8 +206,6 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
     m_aListeners.remove( listener );
 }
 
-
-
 class ClipboardFactory : public ::cppu::WeakComponentImplHelper1<
     com::sun::star::lang::XSingleServiceFactory
 >
@@ -225,8 +222,6 @@ public:
     virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw(std::exception) SAL_OVERRIDE;
 };
 
-
-
 ClipboardFactory::ClipboardFactory() :
         cppu::WeakComponentImplHelper1<
     com::sun::star::lang::XSingleServiceFactory
@@ -234,20 +229,14 @@ ClipboardFactory::ClipboardFactory() :
 {
 }
 
-
-
 ClipboardFactory::~ClipboardFactory()
 {
 }
-
-
 
 Reference< XInterface > ClipboardFactory::createInstance() throw(std::exception)
 {
     return createInstanceWithArguments( Sequence< Any >() );
 }
-
-
 
 Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw(std::exception)
 {
@@ -344,7 +333,6 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
 void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception, std::exception )
 {
 }
-
 
 Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
@@ -497,7 +485,6 @@ Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMu
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDropTarget();
     return xResult;
 }
-
 
 } // namespace vcl
 

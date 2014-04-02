@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -76,8 +75,6 @@ X11SalInstance::~X11SalInstance()
     // a little late
     GetGenericData()->Dispose();
 }
-
-
 
 // AnyInput from sv/mow/source/app/svapp.cxx
 
@@ -234,8 +231,6 @@ static void getServerDirectories( std::list< OString >& o_rFontPaths )
     (void)o_rFontPaths;
 #endif
 }
-
-
 
 void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
 {

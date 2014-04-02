@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
@@ -89,8 +88,6 @@ static void InitGammaTable()
     }
 }
 
-
-
 static FT_Library aLibFT = 0;
 
 // enable linking with old FT versions
@@ -99,8 +96,6 @@ static int nFTVERSION = 0;
 typedef ::boost::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
-
-
 
 // TODO: remove when the priorities are selected by UI
 // if (AH==0) => disable autohinting
@@ -113,9 +108,7 @@ static int nDefaultPrioEmbedded    = 2;
 static int nDefaultPrioAutoHint    = 1;
 static int nDefaultPrioAntiAlias   = 1;
 
-
 // FreetypeManager
-
 
 FtFontFile::FtFontFile( const OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
@@ -143,8 +136,6 @@ FtFontFile::FtFontFile( const OString& rNativeFileName )
     }
 }
 
-
-
 FtFontFile* FtFontFile::FindFontFile( const OString& rNativeFileName )
 {
     // font file already known? (e.g. for ttc, synthetic, aliased fonts)
@@ -160,8 +151,6 @@ FtFontFile* FtFontFile::FindFontFile( const OString& rNativeFileName )
     rFontFileList[pFileName].reset(pFontFile);
     return pFontFile;
 }
-
-
 
 bool FtFontFile::Map()
 {
@@ -189,8 +178,6 @@ bool FtFontFile::Map()
 
     return (mpFileMap != NULL);
 }
-
-
 
 void FtFontFile::Unmap()
 {
@@ -228,8 +215,6 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 }
 #endif
 
-
-
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic)
 :
@@ -254,8 +239,6 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     maDevFontAttributes.mnQuality += mpFontFile->GetLangBoost();
 }
 
-
-
 FtFontInfo::~FtFontInfo()
 {
     if( mpFontCharMap )
@@ -273,8 +256,6 @@ void FtFontInfo::InitHashes() const
     mpChar2Glyph = new Int2IntMap();
     mpGlyph2Char = new Int2IntMap();
 }
-
-
 
 FT_FaceRec_* FtFontInfo::GetFaceFT()
 {
@@ -314,8 +295,6 @@ GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
 }
 #endif
 
-
-
 void FtFontInfo::ReleaseFaceFT()
 {
     if (--mnRefCount <= 0)
@@ -325,8 +304,6 @@ void FtFontInfo::ReleaseFaceFT()
         mpFontFile->Unmap();
     }
 }
-
-
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
@@ -372,15 +349,11 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
     return NULL;
 }
 
-
-
 void FtFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
 {
     ImplFTSFontData* pFD = new ImplFTSFontData( this, maDevFontAttributes );
     pFontCollection->Add( pFD );
 }
-
-
 
 FreetypeManager::FreetypeManager()
 :   mnMaxFontId( 0 )
@@ -407,8 +380,6 @@ FreetypeManager::FreetypeManager()
     vclFontFileList::get();
 }
 
-
-
 FT_Face ServerFont::GetFtFace() const
 {
     FT_Activate_Size( maSizeFT );
@@ -416,14 +387,10 @@ FT_Face ServerFont::GetFtFace() const
     return maFaceFT;
 }
 
-
-
 FreetypeManager::~FreetypeManager()
 {
     ClearFontList();
 }
-
-
 
 void FreetypeManager::AddFontFile( const OString& rNormalizedName,
     int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr)
@@ -441,8 +408,6 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
         mnMaxFontId = nFontId;
 }
 
-
-
 void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
     for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
@@ -451,8 +416,6 @@ void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
         pFtFontInfo->AnnounceFont( pToAdd );
     }
 }
-
-
 
 void FreetypeManager::ClearFontList( )
 {
@@ -463,8 +426,6 @@ void FreetypeManager::ClearFontList( )
     }
     maFontList.clear();
 }
-
-
 
 ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 {
@@ -484,8 +445,6 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
     return pNew;
 }
 
-
-
 ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& rDFA )
 :   PhysicalFontFace( rDFA, IFTSFONT_MAGIC ),
     mpFtFontInfo( pFI )
@@ -494,17 +453,13 @@ ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& 
     mbOrientation   = true;
 }
 
-
-
 ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
     return pEntry;
 }
 
-
 // ServerFont
-
 
 ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
 :   maGlyphList( 0),
@@ -668,8 +623,6 @@ bool ServerFont::TestFont() const
     return mbFaceOk;
 }
 
-
-
 ServerFont::~ServerFont()
 {
     if( mpLayoutEngine )
@@ -683,14 +636,10 @@ ServerFont::~ServerFont()
     ReleaseFromGarbageCollect();
 }
 
-
-
 int ServerFont::GetEmUnits() const
 {
     return maFaceFT->units_per_EM;
 }
-
-
 
 void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
@@ -814,8 +763,6 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     }
 }
 
-
-
 static inline void SplitGlyphFlags( const ServerFont& rFont, sal_GlyphId& rGlyphId, int& nGlyphFlags )
 {
     nGlyphFlags = rGlyphId & GF_FLAGMASK;
@@ -824,8 +771,6 @@ static inline void SplitGlyphFlags( const ServerFont& rFont, sal_GlyphId& rGlyph
     if( rGlyphId & GF_ISCHAR )
         rGlyphId = rFont.GetRawGlyphIndex( rGlyphId );
 }
-
-
 
 int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
     FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
@@ -900,8 +845,6 @@ int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
     return nAngle;
 }
 
-
-
 sal_GlyphId ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
 {
     if( mpFontInfo->IsSymbolFont() )
@@ -945,8 +888,6 @@ sal_GlyphId ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
     return sal_GlyphId( nGlyphIndex);
 }
 
-
-
 sal_GlyphId ServerFont::FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 aChar ) const
 {
     int nGlyphFlags = GF_NONE;
@@ -981,17 +922,12 @@ sal_GlyphId ServerFont::FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 aChar ) 
     return aGlyphId;
 }
 
-
-
-
 sal_GlyphId ServerFont::GetGlyphIndex( sal_UCS4 aChar ) const
 {
     sal_GlyphId aGlyphId = GetRawGlyphIndex( aChar );
     aGlyphId = FixupGlyphIndex( aGlyphId, aChar );
     return aGlyphId;
 }
-
-
 
 static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFlags )
 {
@@ -1005,8 +941,6 @@ static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFl
 
     return (nCharWidth + 32) >> 6;
 }
-
-
 
 void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
 {
@@ -1058,8 +992,6 @@ void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
     FT_Done_Glyph( pGlyphFT );
 }
 
-
-
 bool ServerFont::GetAntialiasAdvice( void ) const
 {
     if( GetFontSelData().mbNonAntialiased || (mnPrioAntiAlias<=0) )
@@ -1068,8 +1000,6 @@ bool ServerFont::GetAntialiasAdvice( void ) const
     // TODO: also use GASP info
     return bAdviseAA;
 }
-
-
 
 bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) const
 {
@@ -1210,8 +1140,6 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     return true;
 }
 
-
-
 bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) const
 {
     FT_Activate_Size( maSizeFT );
@@ -1342,9 +1270,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     return true;
 }
 
-
 // determine unicode ranges in font
-
 
 const ImplFontCharMap* ServerFont::GetImplFontCharMap( void ) const
 {
@@ -1442,9 +1368,7 @@ bool ServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) c
     return bRet;
 }
 
-
 // outline stuff
-
 
 class PolyArgs
 {
@@ -1471,8 +1395,6 @@ private:
     bool        bHasOffline;
 };
 
-
-
 PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
 :   mrPolyPoly(rPolyPoly),
     mnMaxPoints(nMaxPoints),
@@ -1485,16 +1407,11 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
     maPosition.x = maPosition.y = 0;
 }
 
-
-
-
 PolyArgs::~PolyArgs()
 {
     delete[] mpFlagAry;
     delete[] mpPointAry;
 }
-
-
 
 void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
 {
@@ -1508,8 +1425,6 @@ void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
     mpFlagAry[ mnPoints++ ]= aFlag;
     bHasOffline |= (aFlag != POLY_NORMAL);
 }
-
-
 
 void PolyArgs::ClosePolygon()
 {
@@ -1554,8 +1469,6 @@ void PolyArgs::ClosePolygon()
     mnPoints = 0;
     bHasOffline = false;
 }
-
-
 
 extern "C" {
 
@@ -1607,8 +1520,6 @@ static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3,
 }
 
 } // extern "C"
-
-
 
 bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
@@ -1685,8 +1596,6 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
 
     return true;
 }
-
-
 
 bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
 {
@@ -1942,7 +1851,5 @@ GraphiteFaceWrapper* ServerFont::GetGraphiteFace() const
     return mpFontInfo->GetGraphiteFace();
 }
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 
-
 OUString dropTarget_getImplementationName()
 {
     return OUString("com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1");
@@ -69,9 +68,7 @@ namespace /* private */
     }
 }
 
-
 @implementation DropTargetHelper
-
 
 -(DropTargetHelper*)initWithDropTarget:(DropTarget*)pdt
 {
@@ -84,7 +81,6 @@ namespace /* private */
 
     return self;
 }
-
 
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {

@@ -22,11 +22,8 @@
 
 #include <vcl/controllayout.hxx>
 
-
 namespace vcl
 {
-
-
 
     //= ImplControlData
 
@@ -47,9 +44,7 @@ namespace vcl
         }
     };
 
-
 } // namespace vcl
-
 
 #endif // INCLUDED_VCL_INC_CONTROLDATA_HXX
 

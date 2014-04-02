@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <signal.h>
 #include <string.h>
 #include <stdio.h>
@@ -892,7 +891,6 @@ X11SalFrame::~X11SalFrame()
         pFreeGraphics_->DeInit();
         delete pFreeGraphics_;
     }
-
 
     XDestroyWindow( GetXDisplay(), mhWindow );
 
@@ -1807,7 +1805,6 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
 
     pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
-
     if (! maRestorePosSize.IsEmpty() )
     {
         GetPosSize( aPosSize );
@@ -2287,7 +2284,6 @@ void X11SalFrame::StartPresentation( bool bStart )
         doReparentPresentationDialogues( GetDisplay() );
     hPresentationWindow = (bStart && IsOverrideRedirect() ) ? GetWindow() : None;
 
-
     // needs static here to save DPMS settings
     int dummy;
     static bool DPMSExtensionAvailable =
@@ -2303,7 +2299,6 @@ void X11SalFrame::StartPresentation( bool bStart )
     static CARD16 dpms_standby_timeout=0;
     static CARD16 dpms_suspend_timeout=0;
     static CARD16 dpms_off_timeout=0;
-
 
     if( bStart || nScreenSaversTimeout_ || DPMSEnabled)
     {
@@ -2321,7 +2316,6 @@ void X11SalFrame::StartPresentation( bool bStart )
                          &interval,
                          &prefer_blanking,
                          &allow_exposures );
-
 
         // get the DPMS state right before the start
         if (DPMSExtensionAvailable)
@@ -2460,14 +2454,10 @@ void X11SalFrame::SetTitle( const OUString& rTitle )
     }
 }
 
-
-
 void X11SalFrame::Flush()
 {
     XFlush( GetDisplay()->GetDisplay() );
 }
-
-
 
 void X11SalFrame::Sync()
 {
@@ -2513,15 +2503,11 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
       return;
 }
 
-
-
 void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )
 {
     if (mpInputContext != NULL)
           mpInputContext->EndExtTextInput( nFlags );
 }
-
-
 
 OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
@@ -2778,7 +2764,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                 break;
         }
     }
-
 
     if( LeaveNotify == pEvent->type || EnterNotify == pEvent->type )
     {
@@ -3386,7 +3371,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         }
     }
 
-
       // update the spot location for PreeditPosition IME style
 
     if (! aDeleteWatch.isDeleted())
@@ -3430,7 +3414,6 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         }
     }
 
-
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
          ( ( nStyle_ & SAL_FRAME_STYLE_PLUG ) && pEvent->window == GetShellWindow() )
          )
@@ -3443,8 +3426,6 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             GetSalData()->m_pInstance->updatePrinterUpdate();
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
-
-
 
             long nRet = CallCallback( SALEVENT_GETFOCUS,  0 );
             if ((mpParent != NULL && nStyle_ == 0)
@@ -3612,7 +3593,6 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
         // could be as well a sys-child window (aka SalObject)
         return 1;
     }
-
 
     if( ( nStyle_ & SAL_FRAME_STYLE_PLUG ) && pEvent->window == GetShellWindow() )
     {
@@ -4132,7 +4112,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                                         RevertToParent,
                                         CurrentTime );
                     }
-
 
                     RestackChildren();
                     mbInShow = false;

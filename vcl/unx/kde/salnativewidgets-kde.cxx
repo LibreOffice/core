@@ -1263,7 +1263,6 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ;
 }
 
-
 /** Test whether the position is in the native widget.
 
     If the return value is true, bIsInside contains information whether
@@ -1364,7 +1363,6 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 
     return false;
 }
-
 
 /** Draw the requested control described by nPart/nState.
 
@@ -1715,9 +1713,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     return bReturn;
 }
 
-
 // KDESalFrame implementation
-
 
 KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nStyle ) :
     X11SalFrame( pParent, nStyle )
@@ -2089,9 +2085,7 @@ KDESalFrame::GraphicsHolder::~GraphicsHolder()
     delete pGraphics;
 }
 
-
 // KDESalInstance implementation
-
 
 SalFrame *
 KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nStyle )
@@ -2106,9 +2100,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
                 new UnxFilePicker( xMSF ) );
 }
 
-
 // KDESalData pieces
-
 
 // Create the widget painter so we have some control over
 // the destruction sequence, so Qt doesn't die in action.

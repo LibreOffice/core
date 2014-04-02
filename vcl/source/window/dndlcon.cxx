@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <dndlcon.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
-
-
-
-
 
 DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
     : WeakComponentImplHelper4< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(GetMutex())
@@ -36,17 +31,11 @@ DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
     m_nDefaultActions = nDefaultActions;
 }
 
-
-
-
-
 DNDListenerContainer::~DNDListenerContainer()
 {
 }
 
-
 // DNDListenerContainer::addDragGestureListener
-
 
 void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDragGestureListener >& dgl )
     throw(RuntimeException, std::exception)
@@ -54,9 +43,7 @@ void SAL_CALL DNDListenerContainer::addDragGestureListener( const Reference< XDr
     rBHelper.addListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
 }
 
-
 // DNDListenerContainer::removeDragGestureListener
-
 
 void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< XDragGestureListener >& dgl )
     throw(RuntimeException, std::exception)
@@ -64,18 +51,14 @@ void SAL_CALL DNDListenerContainer::removeDragGestureListener( const Reference< 
     rBHelper.removeListener( getCppuType( ( const Reference< XDragGestureListener > * ) 0 ), dgl );
 }
 
-
 // DNDListenerContainer::resetRecognizer
-
 
 void SAL_CALL DNDListenerContainer::resetRecognizer(  )
     throw(RuntimeException, std::exception)
 {
 }
 
-
 // DNDListenerContainer::addDropTargetListener
-
 
 void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
     throw(RuntimeException, std::exception)
@@ -83,9 +66,7 @@ void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDro
     rBHelper.addListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
 }
 
-
 // DNDListenerContainer::removeDropTargetListener
-
 
 void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
     throw(RuntimeException, std::exception)
@@ -93,9 +74,7 @@ void SAL_CALL DNDListenerContainer::removeDropTargetListener( const Reference< X
     rBHelper.removeListener( getCppuType( ( const Reference< XDropTargetListener > * ) 0 ), dtl );
 }
 
-
 // DNDListenerContainer::isActive
-
 
 sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
     throw(RuntimeException, std::exception)
@@ -103,9 +82,7 @@ sal_Bool SAL_CALL DNDListenerContainer::isActive(  )
     return m_bActive;
 }
 
-
 // DNDListenerContainer::setActive
-
 
 void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
     throw(RuntimeException, std::exception)
@@ -113,9 +90,7 @@ void SAL_CALL DNDListenerContainer::setActive( sal_Bool active )
     m_bActive = active;
 }
 
-
 // DNDListenerContainer::getDefaultActions
-
 
 sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
     throw(RuntimeException, std::exception)
@@ -123,9 +98,7 @@ sal_Int8 SAL_CALL DNDListenerContainer::getDefaultActions(  )
     return m_nDefaultActions;
 }
 
-
 // DNDListenerContainer::setDefaultActions
-
 
 void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
     throw(RuntimeException, std::exception)
@@ -133,9 +106,7 @@ void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
     m_nDefaultActions = actions;
 }
 
-
 // DNDListenerContainer::fireDropEvent
-
 
 sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDropContext >& context,
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
@@ -206,9 +177,7 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
     return nRet;
 }
 
-
 // DNDListenerContainer::fireDragExitEvent
-
 
 sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 {
@@ -250,9 +219,7 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
     return nRet;
 }
 
-
 // DNDListenerContainer::fireDragOverEvent
-
 
 sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTargetDragContext >& context,
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
@@ -315,9 +282,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
     return nRet;
 }
 
-
 // DNDListenerContainer::fireDragEnterEvent
-
 
 sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTargetDragContext >& context,
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
@@ -381,9 +346,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
     return nRet;
 }
 
-
 // DNDListenerContainer::fireDropActionChangedEvent
-
 
 sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XDropTargetDragContext >& context,
     sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
@@ -446,9 +409,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
     return nRet;
 }
 
-
 // DNDListenerContainer::fireDragGestureEvent
-
 
 sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_Int32 dragOriginX,
     sal_Int32 dragOriginY, const Reference< XDragSource >& dragSource, const Any& triggerEvent )
@@ -492,9 +453,7 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
     return nRet;
 }
 
-
 // DNDListenerContainer::acceptDrag
-
 
 void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation ) throw (RuntimeException, std::exception)
 {
@@ -505,18 +464,14 @@ void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation ) throw (
     }
 }
 
-
 // DNDListenerContainer::rejectDrag
-
 
 void SAL_CALL DNDListenerContainer::rejectDrag(  ) throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }
 
-
 // DNDListenerContainer::acceptDrop
-
 
 void SAL_CALL DNDListenerContainer::acceptDrop( sal_Int8 dropOperation ) throw (RuntimeException, std::exception)
 {
@@ -524,18 +479,14 @@ void SAL_CALL DNDListenerContainer::acceptDrop( sal_Int8 dropOperation ) throw (
         m_xDropTargetDropContext->acceptDrop( dropOperation );
 }
 
-
 // DNDListenerContainer::rejectDrop
-
 
 void SAL_CALL DNDListenerContainer::rejectDrop(  ) throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }
 
-
 // DNDListenerContainer::dropComplete
-
 
 void SAL_CALL DNDListenerContainer::dropComplete( sal_Bool success ) throw (RuntimeException, std::exception)
 {

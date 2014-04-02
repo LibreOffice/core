@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/svapp.hxx"
 #include "vcl/font.hxx"
 
@@ -41,8 +40,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::awt;
 
-
-
 namespace vcl
 {
 
@@ -52,7 +49,6 @@ class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XI
 public:
 FontIdentificator() {}
     virtual ~FontIdentificator();
-
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -66,8 +62,6 @@ FontIdentificator() {}
     virtual Any SAL_CALL getMaterial() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
-
-
 
 FontIdentificator::~FontIdentificator()
 {

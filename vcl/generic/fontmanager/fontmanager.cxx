@@ -50,7 +50,6 @@
 
 #include "i18nlangtag/mslangid.hxx"
 
-
 #include "parseAFM.hxx"
 #include "sft.hxx"
 
@@ -107,8 +106,6 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
     pBuffer += 4;
     return nRet;
 }
-
-
 
 static FontWeight parseWeight( const OString& rWeight )
 {
@@ -173,20 +170,14 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
 {
 }
 
-
-
 PrintFontManager::PrintFont::~PrintFont()
 {
     delete m_pMetrics;
 }
 
-
-
 PrintFontManager::Type1FontFile::~Type1FontFile()
 {
 }
-
-
 
 PrintFontManager::TrueTypeFontFile::TrueTypeFontFile()
 :   PrintFont( fonttype::TrueType )
@@ -195,20 +186,14 @@ PrintFontManager::TrueTypeFontFile::TrueTypeFontFile()
 ,   m_nTypeFlags( TYPEFLAG_INVALID )
 {}
 
-
-
 PrintFontManager::TrueTypeFontFile::~TrueTypeFontFile()
 {
 }
-
-
 
 bool PrintFontManager::Type1FontFile::queryMetricPage( int /*nPage*/, MultiAtomProvider* pProvider )
 {
     return readAfmMetrics( pProvider, false, false );
 }
-
-
 
 bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomProvider* /*pProvider*/ )
 {
@@ -274,8 +259,6 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
     }
     return bSuccess;
 }
-
-
 
 /* #i73387# There seem to be fonts with a rather unwell chosen family name
 *  consider e.g. "Helvetica Narrow" which defines its family as "Helvetica"
@@ -664,8 +647,6 @@ PrintFontManager& PrintFontManager::get()
     return *pManager;
 }
 
-
-
 /*
  *  the PrintFontManager
  */
@@ -691,8 +672,6 @@ PrintFontManager::PrintFontManager()
     m_aFontInstallerTimer.SetTimeout(5000);
 }
 
-
-
 PrintFontManager::~PrintFontManager()
 {
     m_aFontInstallerTimer.Stop();
@@ -703,15 +682,11 @@ PrintFontManager::~PrintFontManager()
     delete m_pFontCache;
 }
 
-
-
 OString PrintFontManager::getDirectory( int nAtom ) const
 {
     ::boost::unordered_map< int, OString >::const_iterator it( m_aAtomToDir.find( nAtom ) );
     return it != m_aAtomToDir.end() ? it->second : OString();
 }
-
-
 
 int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate )
 {
@@ -728,8 +703,6 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate 
     }
     return nAtom;
 }
-
-
 
 std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
 {
@@ -919,8 +892,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
     return ! rNewFonts.empty();
 }
 
-
-
 fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, int nFaceIndex ) const
 {
     fontID nID = 0;
@@ -998,8 +969,6 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
 
     return aIds;
 }
-
-
 
 OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
 {
@@ -1085,8 +1054,6 @@ namespace
     }
 }
 
-
-
 void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OUString >& rNames ) const
 {
     OUString aFamily;
@@ -1139,8 +1106,6 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
     }
     return;
 }
-
-
 
 bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 {
@@ -1436,7 +1401,6 @@ void PrintFontManager::initialize()
     aStep1 = times( &tms );
 #endif
 
-
     // part three - fill in family styles
     ::boost::unordered_map< fontID, PrintFont* >::iterator font_it;
     for (font_it = m_aFonts.begin(); font_it != m_aFonts.end(); ++font_it)
@@ -1467,8 +1431,6 @@ void PrintFontManager::initialize()
     #endif
 }
 
-
-
 void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs )
 {
     rFontIDs.clear();
@@ -1477,8 +1439,6 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs )
     for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         rFontIDs.push_back( it->first );
 }
-
-
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const
 {
@@ -1502,8 +1462,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
         rInfo.m_aAliases.push_back( m_pAtoms->getString( ATOM_FAMILYNAME, *it ) );
 }
 
-
-
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const
 {
     if( ( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 ) ||
@@ -1525,8 +1483,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
     rInfo.m_nWidth          = pFont->m_aGlobalMetricX.width < pFont->m_aGlobalMetricY.width ? pFont->m_aGlobalMetricY.width : pFont->m_aGlobalMetricX.width;
 }
 
-
-
 bool PrintFontManager::getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const
 {
     PrintFont* pFont = getFont( nFontID );
@@ -1538,8 +1494,6 @@ bool PrintFontManager::getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const
     return pFont ? true : false;
 }
 
-
-
 bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const
 {
     PrintFont* pFont = getFont( nFontID );
@@ -1550,8 +1504,6 @@ bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo
     }
     return pFont ? true : false;
 }
-
-
 
 bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin, int& xMax, int& yMax )
 {
@@ -1576,8 +1528,6 @@ bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin,
     return bSuccess;
 }
 
-
-
 int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
 {
     int nRet = 0;
@@ -1588,9 +1538,6 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
         nRet = 0;
     return nRet;
 }
-
-
-
 
 FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily ) const
 {
@@ -1657,8 +1604,6 @@ FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily ) const
     return FAMILY_DONTKNOW;
 }
 
-
-
 OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
 {
     OString aMetricPath;
@@ -1679,8 +1624,6 @@ OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
     }
     return aMetricPath;
 }
-
-
 
 OString PrintFontManager::getFontFile( PrintFont* pFont ) const
 {
@@ -1704,8 +1647,6 @@ OString PrintFontManager::getFontFile( PrintFont* pFont ) const
     }
     return aPath;
 }
-
-
 
 const OUString& PrintFontManager::getPSName( fontID nFontID ) const
 {
@@ -1774,8 +1715,6 @@ void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
     }
 }
 
-
-
 bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
 {
     static const char* pEnable = getenv( "PSPRINT_ENABLE_TTF_COPYRIGHTAWARENESS" );
@@ -1811,8 +1750,6 @@ bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
     }
     return bRet;
 }
-
-
 
 bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray, bool bVertical ) const
 {
@@ -1854,8 +1791,6 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
 
     return true;
 }
-
-
 
 bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical ) const
 {
@@ -1903,8 +1838,6 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
 
     return true;
 }
-
-
 
 // TODO: move most of this stuff into the central font-subsetting code
 bool PrintFontManager::createFontSubset(
@@ -2137,8 +2070,6 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     }
 }
 
-
-
 const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, OString >** pNonEncoded ) const
 {
     PrintFont* pFont = getFont( nFont );
@@ -2153,8 +2084,6 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
 
     return pFont->m_aEncodingVector.size() ? &pFont->m_aEncodingVector : NULL;
 }
-
-
 
 std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const
 {
@@ -2175,7 +2104,6 @@ std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aCha
 
     return aRet;
 }
-
 
 std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OString& rName ) const
 {

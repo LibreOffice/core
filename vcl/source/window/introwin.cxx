@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/introwin.hxx>
@@ -26,17 +25,11 @@
 #include <svdata.hxx>
 #include <salframe.hxx>
 
-
-
-
-
 void IntroWindow::ImplInitIntroWindowData()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpIntroWindow = this;
 }
-
-
 
 IntroWindow::IntroWindow( ) :
     WorkWindow( WINDOW_INTROWINDOW )
@@ -44,8 +37,6 @@ IntroWindow::IntroWindow( ) :
     ImplInitIntroWindowData();
     WorkWindow::ImplInit( 0, WB_INTROWIN, NULL );
 }
-
-
 
 IntroWindow::~IntroWindow()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <tools/line.hxx>
 #include <tools/poly.hxx>
@@ -58,7 +57,6 @@ extern "C" int SAL_CALL ImplHatchCmpFnc( const void* p1, const void* p2 )
 
     return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
 }
-
 
 void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
 {

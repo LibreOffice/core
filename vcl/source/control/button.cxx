@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <tools/lineend.hxx>
 #include <tools/poly.hxx>
@@ -42,8 +41,6 @@
 #include <window.h>
 #include <controldata.hxx>
 
-
-
 #define PUSHBUTTON_VIEW_STYLE       (WB_3DLOOK |                        \
                                      WB_LEFT | WB_CENTER | WB_RIGHT |   \
                                      WB_TOP | WB_VCENTER | WB_BOTTOM |  \
@@ -59,8 +56,6 @@
                                      WB_LEFT | WB_CENTER | WB_RIGHT |   \
                                      WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                      WB_WORDBREAK | WB_NOLABEL)
-
-
 
 class ImplCommonButtonData
 {
@@ -79,7 +74,6 @@ public:
                    ~ImplCommonButtonData();
 };
 
-
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(0),
 mbSmallSymbol(false), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SYMBOLALIGN_LEFT)
 {
@@ -94,7 +88,6 @@ Button::Button( WindowType nType ) :
 {
     mpButtonData = new ImplCommonButtonData;
 }
-
 
 Button::~Button()
 {
@@ -149,7 +142,6 @@ OUString Button::GetStandardText( StandardButtonType eButton )
     return ResId(nResId, *pResMgr).toString();
 }
 
-
 bool Button::SetModeImage( const Image& rImage )
 {
     if ( rImage != mpButtonData->maImage )
@@ -161,12 +153,10 @@ bool Button::SetModeImage( const Image& rImage )
     return true;
 }
 
-
 const Image Button::GetModeImage( ) const
 {
     return mpButtonData->maImage;
 }
-
 
 bool Button::HasImage() const
 {
@@ -1079,8 +1069,6 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         }
     }
 }
-
-
 
 void PushButton::ImplSetDefButton( bool bSet )
 {

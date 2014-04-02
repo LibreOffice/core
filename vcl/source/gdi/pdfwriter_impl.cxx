@@ -66,7 +66,6 @@
 
 #include "pdfwriter_impl.hxx"
 
-
 #if !defined(ANDROID) && !defined(IOS)
 // NSS header files for PDF signing support
 #include "nss.h"
@@ -293,7 +292,6 @@ void doTestCode()
     aImageBmp.ReleaseAccess( pAcc );
     BitmapEx aBmpEx( aImageBmp, AlphaMask( aTransMask ) );
     aWriter.DrawBitmapEx( Point( 1500, 19500 ), Size( 4800, 3000 ), aBmpEx );
-
 
     aWriter.EndStructureElement();
     aWriter.EndStructureElement();
@@ -3430,7 +3428,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     endCompression();
                     disableStreamEncryption();
 
-
                     sal_uInt64 nEndStreamPos = 0;
                     osl_getFilePos( m_aFile, &nEndStreamPos );
 
@@ -4284,7 +4281,6 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
 #endif
         return false;
     }
-
 
     const PDFDest& rDest        = m_aDests[ nDestID ];
     const PDFPage& rDestPage    = m_aPages[ rDest.m_nPage ];
@@ -7960,7 +7956,6 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
                 aPos.X() = rRect.Left();
             }
 
-
             // output last line left adjusted since it was shortened
             if (!aLastLine.isEmpty())
                 drawText( aPos, aLastLine, 0, aLastLine.getLength(), bTextLines );
@@ -10700,7 +10695,6 @@ bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
     return intersectClipRegion( aRect );
 }
 
-
 bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
     basegfx::B2DPolyPolygon aRegion( getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
@@ -11648,7 +11642,6 @@ void PDFWriterImpl::setStructureBoundingBox( const Rectangle& rRect )
     sal_Int32 nPageNr = m_nCurrentPage;
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() || !m_aContext.Tagged )
         return;
-
 
     if( m_nCurrentStructElement > 0 && m_bEmitStructure )
     {

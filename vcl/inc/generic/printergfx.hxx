@@ -272,7 +272,6 @@ public:
     void            PSGSave ();
     void            PSGRestore ();
 
-
     /* PS helpers */
     enum pspath_t { moveto = 0, lineto = 1 };
     void            PSBinLineTo (const Point& rCurrent, Point& rOld,
@@ -411,7 +410,6 @@ public:
 };
 
 } /* namespace psp */
-
 
 #endif // INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 

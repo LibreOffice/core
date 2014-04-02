@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // bootstrap stuff
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
@@ -51,7 +50,6 @@
 #include <unistd.h>
 
 using namespace ::com::sun::star;
-
 
 namespace
 {
@@ -779,7 +777,6 @@ void setupMethodStubs( functor_vector_type& res )
 
 }
 
-
 void grindFunc( OutputDevice&                       rTarget,
                 functor_vector_type::const_iterator iter,
                 sal_Int32                           nTurns,
@@ -800,7 +797,6 @@ void grindFunc( OutputDevice&                       rTarget,
              iter->first,
              pMsg );
 }
-
 
 /** Call OutputDevice render methods repeatedly, and output elapsed
     time to stdout
@@ -863,7 +859,6 @@ void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
         ++iter;
     }
 }
-
 
 void TestWindow::Paint( const Rectangle& )
 {

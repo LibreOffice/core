@@ -35,7 +35,6 @@
 #define XPMEXTENSIONS       0x00000006
 #define XPMENDEXT           0x00000007
 
-
 #define XPMREMARK           0x00000001          // defines used by mnStatus
 #define XPMDOUBLE           0x00000002
 #define XPMSTRING           0x00000004

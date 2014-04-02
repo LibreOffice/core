@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 
 #include <svsys.h>
@@ -30,8 +29,6 @@
 #include <win/salinst.h>
 #include <win/salframe.h>
 #include <win/salobj.h>
-
-
 
 static bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
@@ -52,8 +49,6 @@ static bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
     return FALSE;
 }
 
-
-
 WinSalObject* ImplFindSalObject( HWND hWndChild )
 {
     SalData*        pSalData = GetSalData();
@@ -68,8 +63,6 @@ WinSalObject* ImplFindSalObject( HWND hWndChild )
 
     return NULL;
 }
-
-
 
 WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 {
@@ -91,8 +84,6 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 
     return pFrame;
 }
-
-
 
 LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
@@ -148,8 +139,6 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 
     return CallNextHookEx( pSalData->mhSalObjMsgHook, nCode, wParam, lParam );
 }
-
-
 
 bool ImplSalPreDispatchMsg( MSG* pMsg )
 {
@@ -234,8 +223,6 @@ bool ImplSalPreDispatchMsg( MSG* pMsg )
     return FALSE;
 }
 
-
-
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 {
     // Used for Unicode and none Unicode
@@ -259,8 +246,6 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 
     pSalData->mnSalObjWantKeyEvt = 0;
 }
-
-
 
 LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -388,8 +373,6 @@ LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
     return nRet;
 }
 
-
-
 LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
@@ -469,8 +452,6 @@ LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LP
         nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
     return nRet;
 }
-
-
 
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 {
@@ -567,8 +548,6 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     return NULL;
 }
 
-
-
 WinSalObject::WinSalObject()
 {
     SalData* pSalData = GetSalData();
@@ -583,8 +562,6 @@ WinSalObject::WinSalObject()
     mpNextObject = pSalData->mpFirstObject;
     pSalData->mpFirstObject = this;
 }
-
-
 
 WinSalObject::~WinSalObject()
 {
@@ -626,21 +603,15 @@ WinSalObject::~WinSalObject()
         ImplSendMessage( hWndParent, SAL_MSG_FORCEPALETTE, 0, 0 );
 }
 
-
-
 void WinSalObject::ResetClipRegion()
 {
     SetWindowRgn( mhWnd, 0, TRUE );
 }
 
-
-
 sal_uInt16 WinSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
-
-
 
 void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
@@ -661,8 +632,6 @@ void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
     mpNextClipRect        = (RECT*)(&(mpClipRgnData->Buffer));
     mbFirstClipRect       = TRUE;
 }
-
-
 
 void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -701,8 +670,6 @@ void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
     mpNextClipRect++;
 }
 
-
-
 void WinSalObject::EndSetClipRegion()
 {
     HRGN hRegion;
@@ -726,8 +693,6 @@ void WinSalObject::EndSetClipRegion()
     SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 
-
-
 void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
     sal_uLong nStyle = 0;
@@ -742,8 +707,6 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
                   SWP_NOZORDER | SWP_NOACTIVATE | nStyle );
 }
 
-
-
 void WinSalObject::Show( bool bVisible )
 {
     if ( bVisible )
@@ -752,14 +715,10 @@ void WinSalObject::Show( bool bVisible )
         ShowWindow( mhWnd, SW_HIDE );
 }
 
-
-
 void WinSalObject::Enable( bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }
-
-
 
 void WinSalObject::GrabFocus()
 {

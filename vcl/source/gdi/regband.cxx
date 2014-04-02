@@ -25,8 +25,6 @@
 
 #include "regband.hxx"
 
-
-
 // ImplRegionBand
 
 // Each band contains all rectangles between upper and lower border.
@@ -41,9 +39,6 @@
 // points in a list). After registration of these points they are
 // converted to rectangles and the points in the list are deleted.
 
-
-
-
 ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
 {
     // save boundaries
@@ -57,8 +52,6 @@ ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
     mpFirstBandPoint    = NULL;
     mbTouched           = false;
 }
-
-
 
 ImplRegionBand::ImplRegionBand(
     const ImplRegionBand& rRegionBand,
@@ -120,8 +113,6 @@ ImplRegionBand::ImplRegionBand(
     }
 }
 
-
-
 ImplRegionBand::~ImplRegionBand()
 {
     DBG_ASSERT( mpFirstBandPoint == NULL, "ImplRegionBand::~ImplRegionBand -> pointlist not empty" );
@@ -144,8 +135,6 @@ ImplRegionBand::~ImplRegionBand()
         pPoint = pTempPoint;
     }
 }
-
-
 
 // generate separations from lines and process union with existing
 // separations
@@ -197,8 +186,6 @@ void ImplRegionBand::ProcessPoints()
     // list is now empty
     mpFirstBandPoint = NULL;
 }
-
-
 
 // generate separations from lines and process union with existing
 // separations
@@ -311,8 +298,6 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     return true;
 }
 
-
-
 void ImplRegionBand::MoveX( long nHorzMove )
 {
     // move all x-separations
@@ -325,8 +310,6 @@ void ImplRegionBand::MoveX( long nHorzMove )
     }
 }
 
-
-
 void ImplRegionBand::ScaleX( double fHorzScale )
 {
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -337,8 +320,6 @@ void ImplRegionBand::ScaleX( double fHorzScale )
         pSep = pSep->mpNextSep;
     }
 }
-
-
 
 // combine overlapping separations
 
@@ -382,8 +363,6 @@ bool ImplRegionBand::OptimizeBand()
 
     return true;
 }
-
-
 
 void ImplRegionBand::Union( long nXLeft, long nXRight )
 {
@@ -457,8 +436,6 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-
-
 void ImplRegionBand::Intersect( long nXLeft, long nXRight )
 {
     DBG_ASSERT( nXLeft <= nXRight, "ImplRegionBand::Intersect(): nxLeft > nXRight" );
@@ -503,8 +480,6 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
 
     OptimizeBand();
 }
-
-
 
 void ImplRegionBand::Exclude( long nXLeft, long nXRight )
 {
@@ -584,8 +559,6 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-
-
 void ImplRegionBand::XOr( long nXLeft, long nXRight )
 {
     DBG_ASSERT( nXLeft <= nXRight, "ImplRegionBand::XOr(): nxLeft > nXRight" );
@@ -623,7 +596,6 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
     // #9 inside-left      ==        <      The new is fully inside the old, coincides on the left  intersect       Yes
 
-
     // Then, to correctly perform XOr, the segment that's switched off
     // (i.e. the overlapping part of the old and the new segment) must
     // be extended by one pixel value at each border:
@@ -634,7 +606,6 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     // Clearly, the leading band sep now goes from 0 to 3, and the
     // trailing band sep from 11 to 14. This mimicks the xor look of a
     // bitmap operation.
-
 
     // band empty? -> add element
     if ( !mpFirstSep )
@@ -831,8 +802,6 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-
-
 bool ImplRegionBand::IsInside( long nX )
 {
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -847,16 +816,12 @@ bool ImplRegionBand::IsInside( long nX )
     return false;
 }
 
-
-
 long ImplRegionBand::GetXLeftBoundary() const
 {
     DBG_ASSERT( mpFirstSep != NULL, "ImplRegionBand::XLeftBoundary -> no separation in band!" );
 
     return mpFirstSep->mnXLeft;
 }
-
-
 
 long ImplRegionBand::GetXRightBoundary() const
 {
@@ -868,8 +833,6 @@ long ImplRegionBand::GetXRightBoundary() const
         pSep = pSep->mpNextSep;
     return pSep->mnXRight;
 }
-
-
 
 bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
 {
@@ -901,8 +864,6 @@ bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
 
     return true;
 }
-
-
 
 ImplRegionBand* ImplRegionBand::SplitBand (const sal_Int32 nY)
 {

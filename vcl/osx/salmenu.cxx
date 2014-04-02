@@ -89,7 +89,6 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 }
 @end
 
-
 // FIXME: currently this is leaked
 static MainMenuSelector* pMainMenuSelector = nil;
 
@@ -203,8 +202,6 @@ static void initAppMenu()
     }
 }
 
-
-
 SalMenu* AquaSalInstance::CreateMenu( bool bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
@@ -234,10 +231,6 @@ void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 {
     delete pSalMenuItem;
 }
-
-
-
-
 
 /*
  * AquaSalMenu
@@ -904,8 +897,6 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
             );
 }
 
-
-
 /*
  * SalMenuItem
  */
@@ -953,7 +944,5 @@ AquaSalMenuItem::~AquaSalMenuItem()
     if( mpMenuItem )
         [mpMenuItem autorelease];
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

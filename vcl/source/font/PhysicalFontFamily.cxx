@@ -89,7 +89,6 @@ static unsigned lcl_IsCJKFont( const OUString& rFontName )
     return 0;
 }
 
-
 PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
 :   mpFirst( NULL ),
     maSearchName( rSearchName ),
@@ -293,6 +292,5 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
         rFontCollection.Add( pClonedFace );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,9 +60,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
-
 // helper functions
-
 
 namespace
 {
@@ -80,9 +78,7 @@ namespace
     }
 }
 
-
 // UnxFilePicker
-
 
 UnxFilePicker::UnxFilePicker( const uno::Reference<uno::XComponentContext>& )
     : UnxFilePicker_Base( m_rbHelperMtx ),

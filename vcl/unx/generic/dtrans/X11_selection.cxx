@@ -87,7 +87,6 @@ using namespace cppu;
 
 using namespace x11;
 
-
 // stubs to satisfy solaris compiler's rather rigid linking warning
 extern "C"
 {
@@ -101,7 +100,6 @@ extern "C"
         SelectionManager::runDragExecute( pMgr );
     }
 }
-
 
 static const long nXdndProtocolRevision = 5;
 
@@ -202,15 +200,11 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
     return aEncoding;
 }
 
-
-
 ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
 {
     static ::boost::unordered_map< OUString, SelectionManager*, OUStringHash > aInstances;
     return aInstances;
 }
-
-
 
 SelectionManager::SelectionManager() :
         m_nIncrementalThreshold( 15*1024 ),
@@ -436,9 +430,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
                                               nodrop_curs_x_hot,
                                               nodrop_curs_y_hot );
 
-
-
-
                 // just interested in SelectionClear/Notify/Request and PropertyChange
                 XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );
                 // create the transferable for Drag operations
@@ -463,8 +454,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
         }
     }
 }
-
-
 
 SelectionManager::~SelectionManager()
 {
@@ -529,16 +518,12 @@ SelectionManager::~SelectionManager()
     }
 }
 
-
-
 SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 {
     ::boost::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
     return it != m_aSelections.end() ? it->second->m_pAdaptor : NULL;
 }
-
-
 
 OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
 {
@@ -568,8 +553,6 @@ OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
 
     return aRet;
 }
-
-
 
 OString SelectionManager::convertToCompound( const OUString& rText )
 {
@@ -608,8 +591,6 @@ OString SelectionManager::convertToCompound( const OUString& rText )
 
     return aRet;
 }
-
-
 
 bool SelectionManager::convertData(
                                    const css::uno::Reference< XTransferable >& xTransferable,
@@ -689,8 +670,6 @@ bool SelectionManager::convertData(
     return bSuccess;
 }
 
-
-
 SelectionManager& SelectionManager::get( const OUString& rDisplayName )
 {
     osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
@@ -707,8 +686,6 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
 
     return *pInstance;
 }
-
-
 
 const OUString& SelectionManager::getString( Atom aAtom )
 {
@@ -729,8 +706,6 @@ const OUString& SelectionManager::getString( Atom aAtom )
     return m_aAtomToString[ aAtom ];
 }
 
-
-
 Atom SelectionManager::getAtom( const OUString& rString )
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -745,8 +720,6 @@ Atom SelectionManager::getAtom( const OUString& rString )
     }
     return m_aStringToAtom[ rString ];
 }
-
-
 
 bool SelectionManager::requestOwnership( Atom selection )
 {
@@ -790,8 +763,6 @@ bool SelectionManager::requestOwnership( Atom selection )
     return bSuccess;
 }
 
-
-
 void SelectionManager::convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront )
 {
     NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
@@ -833,8 +804,6 @@ void SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
         rConversions.push_back( getAtom( rType ) );
 };
 
-
-
 void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection )
 {
     rOutTypeList.clear();
@@ -864,8 +833,6 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
         rOutTypeList.push_back( m_nMULTIPLEAtom );
 }
 
-
-
 OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, int& rFormat )
 {
     NativeTypeEntry* pTab = (selection == m_nXdndSelection) ? aXdndConversionTab : aNativeConversionTab;
@@ -884,8 +851,6 @@ OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, in
     rFormat = 8;
     return getString( nType );
 }
-
-
 
 bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData )
 {
@@ -1022,8 +987,6 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 #endif
     return bSuccess;
 }
-
-
 
 bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequence< sal_Int8 >& rData )
 {
@@ -1238,8 +1201,6 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
     return bSuccess;
 }
 
-
-
 bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >& rTypes )
 {
     ::boost::unordered_map< Atom, Selection* >::iterator it;
@@ -1443,8 +1404,6 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     return bSuccess;
 }
 
-
-
 PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
 {
     boost::unordered_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
@@ -1602,8 +1561,6 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 #endif
     return bConverted;
 }
-
-
 
 bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
 {
@@ -1812,8 +1769,6 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     return true;
 }
 
-
-
 bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -1931,8 +1886,6 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
     return bHandled;
 }
 
-
-
 bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -2031,8 +1984,6 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
     return bHandled;
 }
 
-
-
 bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -2123,8 +2074,6 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
 #endif
     return bHandled;
 }
-
-
 
 bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 {
@@ -2374,8 +2323,6 @@ void SelectionManager::dropComplete( bool bSuccess, XLIB_Window aDropWindow, XLI
  *  methods for XDropTargetDragContext
  */
 
-
-
 void SelectionManager::sendDragStatus( Atom nDropAction )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -2443,14 +2390,10 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
     }
 }
 
-
-
 sal_Int8 SelectionManager::getUserDragAction() const
 {
     return (m_nTargetAcceptAction != DNDConstants::ACTION_DEFAULT) ? m_nTargetAcceptAction : m_nUserDragAction;
 }
-
-
 
 bool SelectionManager::updateDragAction( int modifierState )
 {
@@ -2502,8 +2445,6 @@ bool SelectionManager::updateDragAction( int modifierState )
     }
     return bRet;
 }
-
-
 
 void SelectionManager::sendDropPosition( bool bForce, XLIB_Time eventTime )
 {
@@ -2562,8 +2503,6 @@ void SelectionManager::sendDropPosition( bool bForce, XLIB_Time eventTime )
         m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
     }
 }
-
-
 
 bool SelectionManager::handleDragEvent( XEvent& rMessage )
 {
@@ -2884,8 +2823,6 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     return bHandled;
 }
 
-
-
 void SelectionManager::accept( sal_Int8 dragOperation, XLIB_Window aDropWindow, XLIB_Time )
 {
     if( aDropWindow == m_aCurrentDropWindow )
@@ -2905,8 +2842,6 @@ void SelectionManager::accept( sal_Int8 dragOperation, XLIB_Window aDropWindow, 
         sendDragStatus( nAction );
     }
 }
-
-
 
 void SelectionManager::reject( XLIB_Window aDropWindow, XLIB_Time )
 {
@@ -2940,8 +2875,6 @@ sal_Bool SelectionManager::isDragImageSupported() throw(std::exception)
     return false;
 }
 
-
-
 sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw(std::exception)
 {
     XLIB_Cursor aCursor = m_aNoneCursor;
@@ -2953,8 +2886,6 @@ sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw(std::e
         aCursor = m_aLinkCursor;
     return aCursor;
 }
-
-
 
 int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
 {
@@ -3025,8 +2956,6 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
     return nVersion;
 }
 
-
-
 void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
 {
     osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -3070,7 +2999,6 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
             nNewProtocolVersion = nXdndProtocolRevision;
         }
     }
-
 
     DragSourceDragEvent dsde;
     dsde.Source             = static_cast< OWeakObject* >(this);
@@ -3184,8 +3112,6 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
     }
 }
 
-
-
 void SelectionManager::startDrag(
                                  const DragGestureEvent& trigger,
                                  sal_Int8 sourceActions,
@@ -3279,7 +3205,6 @@ void SelectionManager::startDrag(
             }
             aParent = aChild;
         } while( aChild != None );
-
 
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "try to grab pointer ... " );
@@ -3534,8 +3459,6 @@ sal_Int32 SelectionManager::getCurrentCursor()
     return m_aCurrentCursor;
 }
 
-
-
 void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLIB_Time )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -3550,13 +3473,9 @@ void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLI
     }
 }
 
-
-
 void SelectionManager::setImage( sal_Int32, XLIB_Window, XLIB_Time )
 {
 }
-
-
 
 void SelectionManager::transferablesFlavorsChanged()
 {
@@ -3608,8 +3527,6 @@ void SelectionManager::transferablesFlavorsChanged()
 /*
  *  dispatch loop
  */
-
-
 
 bool SelectionManager::handleXEvent( XEvent& rEvent )
 {
@@ -3695,8 +3612,6 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
     return bHandled;
 }
 
-
-
 void SelectionManager::dispatchEvent( int millisec )
 {
     // acquire the mutex to prevent other threads
@@ -3736,8 +3651,6 @@ void SelectionManager::dispatchEvent( int millisec )
         aGuard.reset();
     }
 }
-
-
 
 void SelectionManager::run( void* pThis )
 {
@@ -3862,8 +3775,6 @@ void SelectionManager::shutdown() throw()
     m_xDropTransferable.clear();
 }
 
-
-
 sal_Bool SelectionManager::handleEvent( const Any& event ) throw(std::exception)
 {
     Sequence< sal_Int8 > aSeq;
@@ -3922,8 +3833,6 @@ void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang:
     disposing(rEvent);
 }
 
-
-
 void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdaptor )
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -3933,8 +3842,6 @@ void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdapt
     pNewSelection->m_aAtom      = selection;
     m_aSelections[ selection ]  = pNewSelection;
 }
-
-
 
 void SelectionManager::deregisterHandler( Atom selection )
 {
@@ -3949,8 +3856,6 @@ void SelectionManager::deregisterHandler( Atom selection )
         m_aSelections.erase( it );
     }
 }
-
-
 
 static bool bWasError = false;
 
@@ -4006,8 +3911,6 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
         OSL_FAIL( "attempt to register None as drop target" );
 }
 
-
-
 void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -4062,27 +3965,19 @@ css::uno::Reference< XTransferable > SelectionManager::getTransferable() throw()
     return m_xDragSourceTransferable;
 }
 
-
-
 void SelectionManager::clearTransferable() throw()
 {
     m_xDragSourceTransferable.clear();
 }
 
-
-
 void SelectionManager::fireContentsChanged() throw()
 {
 }
-
-
 
 css::uno::Reference< XInterface > SelectionManager::getReference() throw()
 {
     return css::uno::Reference< XInterface >( static_cast<OWeakObject*>(this) );
 }
-
-
 
 /*
  *  SelectionManagerHolder
@@ -4096,13 +3991,9 @@ SelectionManagerHolder::SelectionManagerHolder() :
 {
 }
 
-
-
 SelectionManagerHolder::~SelectionManagerHolder()
 {
 }
-
-
 
 void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception )
 {
@@ -4133,14 +4024,10 @@ sal_Bool SelectionManagerHolder::isDragImageSupported() throw(std::exception)
     return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : false;
 }
 
-
-
 sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(std::exception)
 {
     return m_xRealDragSource.is() ? m_xRealDragSource->getDefaultCursor( dragAction ) : 0;
 }
-
-
 
 void SelectionManagerHolder::startDrag(
                                        const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
@@ -4153,13 +4040,9 @@ void SelectionManagerHolder::startDrag(
         m_xRealDragSource->startDrag( trigger, sourceActions, cursor, image, transferable, listener );
 }
 
-
-
 /*
  *  XServiceInfo
  */
-
-
 
 OUString SelectionManagerHolder::getImplementationName() throw(std::exception)
 {

@@ -34,9 +34,7 @@ class Window;
 class ToolBox;
 class DocumentFocusListener;
 
-
 // - AquaA11yFocusTracker -
-
 
 class AquaA11yFocusTracker : public rtl::Static< AquaA11yFocusTracker, AquaA11yFocusTracker>
 {

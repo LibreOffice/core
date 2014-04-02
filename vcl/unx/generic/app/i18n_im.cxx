@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <string.h>
 
@@ -48,12 +47,8 @@ using namespace vcl;
 extern "C" char * XSetIMValues(XIM im, ...);
 #endif
 
-
-
 // kinput2 IME needs special key handling since key release events are filtered in
 // preeditmode and XmbResetIC does not work
-
-
 
 bool
 IMServerKinput2 ()
@@ -143,11 +138,7 @@ XKeyEventOp::match (const XKeyEvent &rEvent) const
             && same_screen == rEvent.same_screen;
 }
 
-
-
 // locale handling
-
-
 
 //  Locale handling of the operating system layer
 
@@ -262,11 +253,7 @@ SalI18N_InputMethod::PosixLocale()
     return False;
 }
 
-
-
 // Constructor / Destructor / Initialisation
-
-
 
 SalI18N_InputMethod::SalI18N_InputMethod( ) : mbUseable( bUseInputMethodDefault ),
                                               maMethod( (XIM)NULL ),
@@ -286,10 +273,8 @@ SalI18N_InputMethod::~SalI18N_InputMethod()
         XCloseIM ( maMethod );
 }
 
-
 // XXX
 // debug routine: lets have a look at the provided method styles
-
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -352,10 +337,8 @@ PrintInputStyle( XIMStyles *pStyle )
 
 #endif
 
-
 // this is the real constructing routine, since locale setting has to be done
 // prior to xopendisplay, the xopenim call has to be delayed
-
 
 bool
 SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
@@ -401,9 +384,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
     return mbUseable;
 }
 
-
 // give IM the opportunity to look at the event, and possibly hide it
-
 
 bool
 SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
@@ -446,16 +427,12 @@ SalI18N_InputMethod::HandleDestroyIM()
     maMethod        = NULL;
 }
 
-
-
 // add a connection watch into the SalXLib yieldTable to allow iiimp
 // connection processing: soffice waits in select() not in XNextEvent(), so
 // there may be requests pending on the iiimp internal connection that will
 // not be processed until XNextEvent is called the next time. If we do not
 // have the focus because the atok12 lookup choice aux window has it we stay
 // deaf and dump otherwise.
-
-
 
 int
 InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)

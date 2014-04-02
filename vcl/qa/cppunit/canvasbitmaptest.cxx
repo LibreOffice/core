@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // bootstrap stuff
 #include <test/bootstrapfixture.hxx>
 
@@ -46,7 +45,6 @@
 using namespace ::com::sun::star;
 using namespace ::vcl::unotools;
 
-
 namespace com { namespace sun { namespace star { namespace rendering
 {
 
@@ -60,7 +58,6 @@ bool operator==( const ARGBColor& rLHS, const RGBColor& rRHS )
 }
 
 } } } }
-
 
 namespace
 {
@@ -683,14 +680,11 @@ public:
     }
 };
 
-
-
 void CanvasBitmapTest::runTest()
 {
     static const sal_Int8 lcl_depths[]={1,4,8,16,24};
 
     // Testing VclCanvasBitmap wrapper
-
 
     for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
     {

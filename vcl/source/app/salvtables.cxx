@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
@@ -36,8 +35,6 @@ SalFrame::~SalFrame()
 {
 }
 
-
-
 // default to full-frame flushes
 // on ports where partial-flushes are much cheaper this method should be overridden
 void SalFrame::Flush( const Rectangle& )
@@ -45,14 +42,10 @@ void SalFrame::Flush( const Rectangle& )
     Flush();
 }
 
-
-
 void SalFrame::SetRepresentedURL( const OUString& )
 {
     // currently this is Mac only functionality
 }
-
-
 
 SalInstance::~SalInstance()
 {

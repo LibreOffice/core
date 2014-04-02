@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <list>
 
 #include <tools/debug.hxx>
@@ -78,7 +77,6 @@ namespace
     }
 }
 
-
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 {
     const ImplJobSetup* pConstData = rJobSetup.ImplGetConstData();
@@ -116,7 +114,6 @@ PrinterOptions::PrinterOptions() :
     mbPDFAsStandardPrintJobFormat( false )
 {
 }
-
 
 PrinterOptions::~PrinterOptions()
 {
@@ -250,7 +247,6 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
-
 void Printer::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
                                        sal_uInt16 nTransparencePercent )
 {
@@ -328,7 +324,6 @@ void Printer::EmulateDrawTransparent ( const PolyPolygon& rPolyPoly,
     mpAlphaVDev = pOldAlphaVDev;
 }
 
-
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
@@ -367,7 +362,6 @@ QueueInfo::QueueInfo()
     mnJobs      = 0;
 }
 
-
 QueueInfo::QueueInfo( const QueueInfo& rInfo ) :
     maPrinterName( rInfo.maPrinterName ),
     maDriver( rInfo.maDriver ),
@@ -378,11 +372,9 @@ QueueInfo::QueueInfo( const QueueInfo& rInfo ) :
 {
 }
 
-
 QueueInfo::~QueueInfo()
 {
 }
-
 
 bool QueueInfo::operator==( const QueueInfo& rInfo ) const
 {
@@ -394,7 +386,6 @@ bool QueueInfo::operator==( const QueueInfo& rInfo ) const
         mnStatus        == rInfo.mnStatus       &&
         mnJobs          == rInfo.mnJobs;
 }
-
 
 SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
 {
@@ -410,7 +401,6 @@ SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
     return rOStream;
 }
 
-
 SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
 {
     VersionCompat aCompat( rIStream, STREAM_READ );
@@ -425,7 +415,6 @@ SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
     return rIStream;
 }
 
-
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
     mnStatus    = 0;
@@ -433,11 +422,9 @@ SalPrinterQueueInfo::SalPrinterQueueInfo()
     mpSysData   = NULL;
 }
 
-
 SalPrinterQueueInfo::~SalPrinterQueueInfo()
 {
 }
-
 
 ImplPrnQueueList::~ImplPrnQueueList()
 {
@@ -448,7 +435,6 @@ ImplPrnQueueList::~ImplPrnQueueList()
         pSVData->mpDefInst->DeletePrinterQueueInfo( m_aQueueInfos[i].mpSalQueueInfo );
     }
 }
-
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
@@ -472,7 +458,6 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
     }
 }
 
-
 ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
 {
     ImplPrnQueueData* pData = NULL;
@@ -482,7 +467,6 @@ ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
         pData = &m_aQueueInfos[it->second];
     return pData;
 }
-
 
 static void ImplInitPrnQueueList()
 {
@@ -495,7 +479,6 @@ static void ImplInitPrnQueueList()
         pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList );
 }
 
-
 void ImplDeletePrnQueueList()
 {
     ImplSVData*         pSVData = ImplGetSVData();
@@ -507,7 +490,6 @@ void ImplDeletePrnQueueList()
         pSVData->maGDIData.mpPrinterQueueList = NULL;
     }
 }
-
 
 const std::vector<OUString>& Printer::GetPrinterQueues()
 {
@@ -547,7 +529,6 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
     return NULL;
 }
 
-
 OUString Printer::GetDefaultPrinterName()
 {
     static const char* pEnv = getenv( "SAL_DISABLE_DEFAULTPRINTER" );
@@ -559,7 +540,6 @@ OUString Printer::GetDefaultPrinterName()
     }
     return OUString();
 }
-
 
 void Printer::ImplInitData()
 {
@@ -803,7 +783,6 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     mpGraphics->GetDevFontList( mpFontCollection );
 }
 
-
 void Printer::ImplInitDisplay( const Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -955,7 +934,6 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
     return NULL;
 }
 
-
 void Printer::ImplUpdatePageData()
 {
     // we need a graphics
@@ -968,7 +946,6 @@ void Printer::ImplUpdatePageData()
                                 maPageOffset.X(), maPageOffset.Y(),
                                 maPaperSize.Width(), maPaperSize.Height() );
 }
-
 
 void Printer::ImplUpdateFontList()
 {
@@ -997,7 +974,6 @@ Printer::Printer()
         ImplInitDisplay( NULL );
 }
 
-
 Printer::Printer( const JobSetup& rJobSetup ) :
     maJobSetup( rJobSetup )
 {
@@ -1016,7 +992,6 @@ Printer::Printer( const JobSetup& rJobSetup ) :
     }
 }
 
-
 Printer::Printer( const QueueInfo& rQueueInfo )
 {
     ImplInitData();
@@ -1028,7 +1003,6 @@ Printer::Printer( const QueueInfo& rQueueInfo )
         ImplInitDisplay( NULL );
 }
 
-
 Printer::Printer( const OUString& rPrinterName )
 {
     ImplInitData();
@@ -1038,7 +1012,6 @@ Printer::Printer( const OUString& rPrinterName )
     else
         ImplInitDisplay( NULL );
 }
-
 
 Printer::~Printer()
 {
@@ -1100,7 +1073,6 @@ sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
         return 0;
 }
 
-
 bool Printer::HasSupport( PrinterSupport eFeature ) const
 {
     switch ( eFeature )
@@ -1128,7 +1100,6 @@ bool Printer::HasSupport( PrinterSupport eFeature ) const
     return true;
 }
 
-
 bool Printer::SetJobSetup( const JobSetup& rSetup )
 {
     if ( IsDisplayPrinter() || mbInPrintPage )
@@ -1149,8 +1120,6 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
 
     return false;
 }
-
-
 
 bool Printer::Setup( Window* pWindow )
 {
@@ -1186,7 +1155,6 @@ bool Printer::Setup( Window* pWindow )
     }
     return false;
 }
-
 
 bool Printer::SetPrinterProps( const Printer* pPrinter )
 {
@@ -1295,7 +1263,6 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
     return false;
 }
 
-
 bool Printer::SetOrientation( Orientation eOrientation )
 {
     if ( mbInPrintPage )
@@ -1331,12 +1298,10 @@ bool Printer::SetOrientation( Orientation eOrientation )
     return true;
 }
 
-
 Orientation Printer::GetOrientation() const
 {
     return maJobSetup.ImplGetConstData()->meOrientation;
 }
-
 
 bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
 {
@@ -1374,12 +1339,10 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
     return true;
 }
 
-
 sal_uInt16 Printer::GetPaperBin() const
 {
     return maJobSetup.ImplGetConstData()->mnPaperBin;
 }
-
 
 // Map user paper format to a available printer paper formats
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
@@ -1470,7 +1433,6 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     }
 }
 
-
 bool Printer::SetPaper( Paper ePaper )
 {
     if ( mbInPrintPage )
@@ -1513,7 +1475,6 @@ bool Printer::SetPaper( Paper ePaper )
 
     return true;
 }
-
 
 bool Printer::SetPaperSizeUser( const Size& rSize )
 {
@@ -1578,7 +1539,6 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
     return true;
 }
 
-
 int Printer::GetPaperInfoCount() const
 {
     if( ! mpInfoPrinter )
@@ -1587,7 +1547,6 @@ int Printer::GetPaperInfoCount() const
         mpInfoPrinter->InitPaperFormats( maJobSetup.ImplGetConstData() );
     return mpInfoPrinter->m_aPaperFormats.size();
 }
-
 
 OUString Printer::GetPaperName( Paper ePaper )
 {
@@ -1619,7 +1578,6 @@ OUString Printer::GetPaperName( Paper ePaper )
     return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
 }
 
-
 OUString Printer::GetPaperName( bool i_bPaperUser ) const
 {
     Size  aPageSize = PixelToLogic( GetPaperSizePixel(), MAP_100TH_MM );
@@ -1628,7 +1586,6 @@ OUString Printer::GetPaperName( bool i_bPaperUser ) const
         ePaper = ImplGetPaperFormat( aPageSize.Height(), aPageSize.Width() );
     return (ePaper != PAPER_USER || i_bPaperUser ) ? GetPaperName( ePaper ) : OUString();
 }
-
 
 const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
 {
@@ -1640,7 +1597,6 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
         return ImplGetEmptyPaper();
     return mpInfoPrinter->m_aPaperFormats[nPaper];
 }
-
 
 bool Printer::SetDuplexMode( DuplexMode eDuplex )
 {
@@ -1677,18 +1633,15 @@ bool Printer::SetDuplexMode( DuplexMode eDuplex )
     return true;
 }
 
-
 int Printer::GetLandscapeAngle() const
 {
     return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( maJobSetup.ImplGetConstData() ) : 900;
 }
 
-
 Paper Printer::GetPaper() const
 {
     return maJobSetup.ImplGetConstData()->mePaperFormat;
 }
-
 
 sal_uInt16 Printer::GetPaperBinCount() const
 {
@@ -1697,7 +1650,6 @@ sal_uInt16 Printer::GetPaperBinCount() const
 
     return (sal_uInt16)mpInfoPrinter->GetPaperBinCount( maJobSetup.ImplGetConstData() );
 }
-
 
 OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
 {
@@ -1710,7 +1662,6 @@ OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
         return OUString();
 }
 
-
 bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
 {
     mnCopyCount = nCopy;
@@ -1718,13 +1669,10 @@ bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
     return true;
 }
 
-
 void Printer::Error()
 {
     maErrorHdl.Call( this );
 }
-
-
 
 sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 {
@@ -1744,7 +1692,6 @@ sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 
     return nVCLError;
 }
-
 
 bool Printer::EndJob()
 {
@@ -1778,7 +1725,6 @@ bool Printer::EndJob()
     return bRet;
 }
 
-
 void Printer::ImplStartPage()
 {
     if ( !IsJobActive() )
@@ -1804,7 +1750,6 @@ void Printer::ImplStartPage()
     }
 }
 
-
 void Printer::ImplEndPage()
 {
     if ( !IsJobActive() )
@@ -1822,7 +1767,6 @@ void Printer::ImplEndPage()
         mbNewJobSetup = false;
     }
 }
-
 
 void Printer::updatePrinters()
 {

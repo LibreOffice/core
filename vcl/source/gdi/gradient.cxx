@@ -23,7 +23,6 @@
 #include <tools/gen.hxx>
 #include <vcl/gradient.hxx>
 
-
 Impl_Gradient::Impl_Gradient() :
     maStartColor( COL_BLACK ),
     maEndColor( COL_WHITE )

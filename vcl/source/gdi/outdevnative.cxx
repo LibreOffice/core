@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/outdev.hxx"
 #include "vcl/window.hxx"
 #include "vcl/salnativewidgets.hxx"
 #include "vcl/pdfextoutdevdata.hxx"
 
 #include "salgdi.hxx"
-
-
 
 static bool lcl_enableNativeWidget( const OutputDevice& i_rDevice )
 {
@@ -140,12 +137,8 @@ PushButtonValue* PushButtonValue::clone() const
     return new PushButtonValue( *this );
 }
 
-
 // These functions are mainly passthrough functions that allow access to
 // the SalFrame behind a Window object for native widget rendering purposes.
-
-
-
 
 bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
@@ -158,9 +151,6 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
 
     return( mpGraphics->IsNativeControlSupported(nType, nPart) );
 }
-
-
-
 
 bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
@@ -182,8 +172,6 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
     return( mpGraphics->HitTestNativeControl(nType, nPart, screenRegion, Point( aPos.X() + mnOutOffX, aPos.Y() + mnOutOffY ),
         rIsInside, this ) );
 }
-
-
 
 static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
@@ -303,8 +291,6 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     return bRet;
 }
 
-
-
 bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,
@@ -338,6 +324,5 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

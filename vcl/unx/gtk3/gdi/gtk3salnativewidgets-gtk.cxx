@@ -1436,7 +1436,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
     #endif
 
-
 }
 
 bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )

@@ -77,7 +77,6 @@ public:
     bool    PosIsInAnyRun( int nCharPos ) const;
 };
 
-
 class ImplLayoutArgs
 {
 public:
@@ -309,7 +308,6 @@ public:
                 mnXOffset(nXOffset),
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
-
 
     enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };
 

@@ -36,7 +36,6 @@ TYPEINIT1( TextUndoSplitPara, TextUndo );
 TYPEINIT1( TextUndoInsertChars, TextUndo );
 TYPEINIT1( TextUndoRemoveChars, TextUndo );
 
-
 namespace
 {
 
@@ -64,7 +63,6 @@ void Shorten (OUString& rString)
 }
 
 } // namespace
-
 
 TextUndoManager::TextUndoManager( TextEngine* p )
 {
@@ -95,7 +93,6 @@ bool TextUndoManager::Redo()
 {
     if ( GetRedoActionCount() == 0 )
         return false;
-
 
     UndoRedoStart();
 

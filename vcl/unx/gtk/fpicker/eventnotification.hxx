@@ -23,14 +23,12 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-
 // encapsulate a filepicker event
 // notification, because there are
 // two types of filepicker notifications
 // with and without parameter
 // this is an application of the
 // "command" pattern see GoF
-
 
 class CEventNotification
 {

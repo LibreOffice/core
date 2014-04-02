@@ -23,14 +23,10 @@
 #include <vcl/window.hxx>
 #include <vcl/ctrl.hxx>
 
-
-
 #define BUTTON_DRAW_FLATTEST    (BUTTON_DRAW_FLAT |             \
                                  BUTTON_DRAW_PRESSED |          \
                                  BUTTON_DRAW_CHECKED |          \
                                  BUTTON_DRAW_HIGHLIGHT)
-
-
 
 namespace {
 
@@ -121,7 +117,6 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             pDev->DrawRect( Rectangle( nRect.Left(), aCenter.Y()-n8,
                                        nRect.Right()-1, aCenter.Y()+n8 ) );
             break;
-
 
         case SYMBOL_SPIN_UP:
             nRect.Top() += n4;
@@ -423,7 +418,6 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
     }
 }
 
-
 void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
                           const Color *const pColor, const bool bRound = false )
 {
@@ -473,7 +467,6 @@ void ImplDrawDPILineRect( OutputDevice *const pDev, Rectangle& rRect,
     rRect.Bottom() -= nLineHeight;
 }
 
-
 void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
                           const Color& rLeftTopColor, const Color& rRightBottomColor )
 {
@@ -490,7 +483,6 @@ void ImplDraw2ColorFrame( OutputDevice *const pDev, Rectangle& rRect,
     --rRect.Right();
     --rRect.Bottom();
 }
-
 
 void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
                      const sal_uInt16 nStyle )
@@ -829,9 +821,6 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
 }
 
-
-
-
 void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                  const Color& rColor, sal_uInt16 nStyle )
 {
@@ -875,8 +864,6 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-
-
 void DecorationView::DrawFrame( const Rectangle& rRect,
                                 const Color& rLeftTopColor,
                                 const Color& rRightBottomColor )
@@ -889,8 +876,6 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
     mpOutDev->SetLineColor( aOldLineColor );
     mpOutDev->EnableMapMode( bOldMapMode );
 }
-
-
 
 void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
                                          sal_uInt16 nStyle )
@@ -940,8 +925,6 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     DrawFrame( rRect, aLightColor, aShadowColor );
 }
 
-
-
 Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 {
     Rectangle   aRect = rRect;
@@ -974,8 +957,6 @@ Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 
     return aRect;
 }
-
-
 
 Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle )
 {
@@ -1055,8 +1036,6 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
 
     return aRect;
 }
-
-
 
 void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical )
 {

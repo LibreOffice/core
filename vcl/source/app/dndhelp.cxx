@@ -89,8 +89,6 @@ void vcl::unohelper::DragAndDropClient::dropActionChanged( const ::com::sun::sta
 {
 }
 
-
-
 vcl::unohelper::DragAndDropWrapper::DragAndDropWrapper( DragAndDropClient* pClient )
 {
     mpClient = pClient;
@@ -118,7 +116,6 @@ void vcl::unohelper::DragAndDropWrapper::disposing( const ::com::sun::star::lang
     if ( !rEvent.Source.is() )
         mpClient = NULL;
 }
-
 
 // ::com::sun::star::datatransfer::dnd::XDragGestureListener
 void vcl::unohelper::DragAndDropWrapper::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException, std::exception)

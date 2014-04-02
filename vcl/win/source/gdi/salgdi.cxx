@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <string.h>
 #include <svsys.h>
@@ -33,12 +32,8 @@
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
-
 // comment out to prevent use of beziers on GDI functions
 #define USE_GDI_BEZIERS
-
-
 
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
@@ -47,28 +42,20 @@
 #define DITHER_EXTRA_COLORS             1
 #define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
-
-
 struct SysColorEntry
 {
     DWORD           nRGB;
     SysColorEntry*  pNext;
 };
 
-
-
 static SysColorEntry* pFirstSysColor = NULL;
 static SysColorEntry* pActSysColor = NULL;
-
-
 
 // Blue7
 static PALETTEENTRY aImplExtraColor1 =
 {
     0, 184, 255, 0
 };
-
-
 
 static PALETTEENTRY aImplSalSysPalEntryAry[ DITHER_MAX_SYSCOLOR ] =
 {
@@ -90,8 +77,6 @@ static PALETTEENTRY aImplSalSysPalEntryAry[ DITHER_MAX_SYSCOLOR ] =
 { 0xFF, 0xFF, 0xFF, 0 }
 };
 
-
-
 static BYTE aOrdDither8Bit[8][8] =
 {
    {  0, 38,  9, 48,  2, 40, 12, 50 },
@@ -103,8 +88,6 @@ static BYTE aOrdDither8Bit[8][8] =
    {  8, 46,  4, 43,  7, 45,  4, 42 },
    { 33, 20, 30, 17, 32, 20, 29, 16 }
 };
-
-
 
 static BYTE aOrdDither16Bit[8][8] =
 {
@@ -118,19 +101,13 @@ static BYTE aOrdDither16Bit[8][8] =
    { 5, 3, 4, 2, 5, 3, 4, 2 }
 };
 
-
-
 // we must create pens with 1-pixel width; otherwise the S3-graphics card
 // map has many paint problems when drawing polygons/polyLines and a
 // complex is set
 #define GSL_PEN_WIDTH                   1
 
-
-
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64
-
-
 
 void ImplInitSalGDI()
 {
@@ -309,8 +286,6 @@ void ImplInitSalGDI()
     ReleaseDC( 0, hDC );
 }
 
-
-
 void ImplFreeSalGDI()
 {
     SalData*    pSalData = GetSalData();
@@ -383,8 +358,6 @@ void ImplFreeSalGDI()
     ImplReleaseTempFonts( *pSalData );
 }
 
-
-
 static int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
 {
     // dither color?
@@ -411,8 +384,6 @@ static int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
     return FALSE;
 }
 
-
-
 int ImplIsSysColorEntry( SalColor nSalColor )
 {
     SysColorEntry*  pEntry = pFirstSysColor;
@@ -429,8 +400,6 @@ int ImplIsSysColorEntry( SalColor nSalColor )
 
     return FALSE;
 }
-
-
 
 static void ImplInsertSysColorEntry( int nSysIndex )
 {
@@ -452,8 +421,6 @@ static void ImplInsertSysColorEntry( int nSysIndex )
         }
     }
 }
-
-
 
 void ImplUpdateSysColorEntries()
 {
@@ -492,8 +459,6 @@ void ImplUpdateSysColorEntries()
     ImplInsertSysColorEntry( COLOR_INACTIVECAPTIONTEXT );
 }
 
-
-
 static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 {
     SalColor nSalColor;
@@ -503,8 +468,6 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
         nSalColor = MAKE_SALCOLOR( 255, 255, 255 );
     return nSalColor;
 }
-
-
 
 void ImplSalInitGraphics( WinSalGraphics* pData )
 {
@@ -523,8 +486,6 @@ void ImplSalInitGraphics( WinSalGraphics* pData )
     ::SetROP2( pData->getHDC(), R2_COPYPEN );
 }
 
-
-
 void ImplSalDeInitGraphics( WinSalGraphics* pData )
 {
     // clear clip region
@@ -537,8 +498,6 @@ void ImplSalDeInitGraphics( WinSalGraphics* pData )
     if ( pData->mhDefFont )
         SelectFont( pData->getHDC(), pData->mhDefFont );
 }
-
-
 
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
 {
@@ -572,8 +531,6 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
     return pC->mhDC;
 }
 
-
-
 void ImplReleaseCachedDC( sal_uLong nID )
 {
     SalData*    pSalData = GetSalData();
@@ -582,8 +539,6 @@ void ImplReleaseCachedDC( sal_uLong nID )
     if ( pC->mhActBmp )
         SelectObject( pC->mhDC, pC->mhSelBmp );
 }
-
-
 
 void ImplClearHDCCache( SalData* pData )
 {
@@ -603,8 +558,6 @@ void ImplClearHDCCache( SalData* pData )
         }
     }
 }
-
-
 
 // #100127# Fill point and flag memory from array of points which
 // might also contain bezier control points for the PolyDraw() GDI method
@@ -677,8 +630,6 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     }
 }
 
-
-
 // #100127# draw an array of points which might also contain bezier control points
 void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
@@ -706,8 +657,6 @@ void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const B
         }
     }
 }
-
-
 
 WinSalGraphics::WinSalGraphics()
 {
@@ -740,8 +689,6 @@ WinSalGraphics::WinSalGraphics()
     mbXORMode           = FALSE;
     mnPenWidth          = GSL_PEN_WIDTH;
 }
-
-
 
 WinSalGraphics::~WinSalGraphics()
 {
@@ -776,8 +723,6 @@ WinSalGraphics::~WinSalGraphics()
     delete mpFontKernPairs;
 }
 
-
-
 void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
@@ -790,14 +735,10 @@ void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
         rDPIX = rDPIY = 600;
 }
 
-
-
 sal_uInt16 WinSalGraphics::GetBitCount() const
 {
     return (sal_uInt16)GetDeviceCaps( getHDC(), BITSPIXEL );
 }
-
-
 
 long WinSalGraphics::GetGraphicsWidth() const
 {
@@ -821,8 +762,6 @@ long WinSalGraphics::GetGraphicsWidth() const
     return 0;
 }
 
-
-
 void WinSalGraphics::ResetClipRegion()
 {
     if ( mhRegion )
@@ -833,8 +772,6 @@ void WinSalGraphics::ResetClipRegion()
 
     SelectClipRgn( getHDC(), 0 );
 }
-
-
 
 bool WinSalGraphics::setClipRegion( const Region& i_rClip )
 {
@@ -1065,8 +1002,6 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
     return true;
 }
 
-
-
 void WinSalGraphics::SetLineColor()
 {
     // create and select new pen
@@ -1087,8 +1022,6 @@ void WinSalGraphics::SetLineColor()
     mbPen       = FALSE;
     mbStockPen  = TRUE;
 }
-
-
 
 void WinSalGraphics::SetLineColor( SalColor nSalColor )
 {
@@ -1147,8 +1080,6 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
     mbStockPen  = bStockPen;
 }
 
-
-
 void WinSalGraphics::SetFillColor()
 {
     // create and select new brush
@@ -1169,8 +1100,6 @@ void WinSalGraphics::SetFillColor()
     mbBrush     = FALSE;
     mbStockBrush = TRUE;
 }
-
-
 
 void WinSalGraphics::SetFillColor( SalColor nSalColor )
 {
@@ -1275,29 +1204,21 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
     mbStockBrush = bStockBrush;
 }
 
-
-
 void WinSalGraphics::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
     ::SetROP2( getHDC(), bSet ? R2_XORPEN : R2_COPYPEN );
 }
 
-
-
 void WinSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     SetLineColor( ImplGetROPSalColor( nROPColor ) );
 }
 
-
-
 void WinSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     SetFillColor( ImplGetROPSalColor( nROPColor ) );
 }
-
-
 
 void WinSalGraphics::drawPixel( long nX, long nY )
 {
@@ -1312,8 +1233,6 @@ void WinSalGraphics::drawPixel( long nX, long nY )
     else
         SetPixel( getHDC(), (int)nX, (int)nY, mnPenColor );
 }
-
-
 
 void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
@@ -1337,8 +1256,6 @@ void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     else
         ::SetPixel( getHDC(), (int)nX, (int)nY, nCol );
 }
-
-
 
 void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
@@ -1380,8 +1297,6 @@ void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     }
 }
 
-
-
 void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     if ( !mbPen )
@@ -1404,8 +1319,6 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     else
         WIN_Rectangle( getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 }
-
-
 
 void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
@@ -1454,8 +1367,6 @@ void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
     }
 }
 
-
-
 void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
@@ -1467,8 +1378,6 @@ void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
     if ( !WIN_Polygon( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
         WIN_Polygon( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 }
-
-
 
 void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                    PCONSTSALPOINT* pPtAry )
@@ -1537,11 +1446,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
         delete [] pWinPointAryAry;
 }
 
-
-
 #define SAL_POLY_STACKBUF       32
-
-
 
 bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
@@ -1557,8 +1462,6 @@ bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPt
     return false;
 #endif
 }
-
-
 
 bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
@@ -1609,8 +1512,6 @@ bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtA
     return false;
 #endif
 }
-
-
 
 bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
@@ -1666,8 +1567,6 @@ bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* 
     return false;
 #endif
 }
-
-
 
 #define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
@@ -1771,7 +1670,6 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
                 // #107797# Write out EPS encapsulation header
 
-
                 // directly taken from the PLRM 3.0, p. 726. Note:
                 // this will definitely cause problems when
                 // recursively creating and embedding PostScript files
@@ -1799,9 +1697,7 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "  } if\n"
                              "} if\n\n" );
 
-
                 // #i10737# Apply clipping manually
-
 
                 // Windows seems to ignore any clipping at the HDC,
                 // when followed by a POSTSCRIPT_PASSTHROUGH
@@ -1847,7 +1743,6 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
 
-
                 // #107797# Write out EPS transformation code
 
                 double  dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
@@ -1866,7 +1761,6 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                              "%%BeginDocument:\n" );
                 *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
                 Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
-
 
                 // #107797# Write out actual EPS content
 
@@ -1887,7 +1781,6 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                     nToDo -= nResult;
                 }
 
-
                 // #107797# Write out EPS encapsulation footer
 
                 // reserve a sal_uInt16 again
@@ -1906,8 +1799,6 @@ bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
     return bRetValue;
 }
 
-
-
 SystemGraphicsData WinSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
@@ -1915,7 +1806,5 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
     aRes.hDC = const_cast< WinSalGraphics* >(this)->getHDC();
     return aRes;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

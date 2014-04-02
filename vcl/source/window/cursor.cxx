@@ -27,9 +27,6 @@
 
 #include <tools/poly.hxx>
 
-
-
-
 struct ImplCursorData
 {
     AutoTimer       maTimer;            // Timer
@@ -43,8 +40,6 @@ struct ImplCursorData
     bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
     Window*         mpWindow;           // Zugeordnetes Windows
 };
-
-
 
 static void ImplCursorInvert( ImplCursorData* pData )
 {
@@ -120,8 +115,6 @@ static void ImplCursorInvert( ImplCursorData* pData )
     pWindow->EnableMapMode( bMapMode );
 }
 
-
-
 void Cursor::ImplDraw()
 {
     if ( mpData && mpData->mpWindow && !mpData->mbCurVisible )
@@ -146,8 +139,6 @@ void Cursor::ImplDraw()
         mpData->mbCurVisible = true;
     }
 }
-
-
 
 void Cursor::ImplRestore()
 {
@@ -257,8 +248,6 @@ void Cursor::ImplNew()
     }
 }
 
-
-
 IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
 {
     if ( mpData->mbCurVisible )
@@ -267,8 +256,6 @@ IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
         ImplDraw();
     return 0;
 }
-
-
 
 Cursor::Cursor()
 {
@@ -280,8 +267,6 @@ Cursor::Cursor()
     mnStyle         = 0;
     mbVisible       = false;
 }
-
-
 
 Cursor::Cursor( const Cursor& rCursor ) :
     maSize( rCursor.maSize ),
@@ -296,8 +281,6 @@ Cursor::Cursor( const Cursor& rCursor ) :
     mbVisible       = rCursor.mbVisible;
 }
 
-
-
 Cursor::~Cursor()
 {
     if ( mpData )
@@ -309,8 +292,6 @@ Cursor::~Cursor()
     }
 }
 
-
-
 void Cursor::SetStyle( sal_uInt16 nStyle )
 {
     if ( mnStyle != nStyle )
@@ -319,8 +300,6 @@ void Cursor::SetStyle( sal_uInt16 nStyle )
         ImplNew();
     }
 }
-
-
 
 void Cursor::Show()
 {
@@ -331,8 +310,6 @@ void Cursor::Show()
     }
 }
 
-
-
 void Cursor::Hide()
 {
     if ( mbVisible )
@@ -341,8 +318,6 @@ void Cursor::Hide()
         ImplHide( true );
     }
 }
-
-
 
 void Cursor::SetWindow( Window* pWindow )
 {
@@ -353,8 +328,6 @@ void Cursor::SetWindow( Window* pWindow )
     }
 }
 
-
-
 void Cursor::SetPos( const Point& rPoint )
 {
     if ( maPos != rPoint )
@@ -363,8 +336,6 @@ void Cursor::SetPos( const Point& rPoint )
         ImplNew();
     }
 }
-
-
 
 void Cursor::SetSize( const Size& rSize )
 {
@@ -375,8 +346,6 @@ void Cursor::SetSize( const Size& rSize )
     }
 }
 
-
-
 void Cursor::SetWidth( long nNewWidth )
 {
     if ( maSize.Width() != nNewWidth )
@@ -385,8 +354,6 @@ void Cursor::SetWidth( long nNewWidth )
         ImplNew();
     }
 }
-
-
 
 void Cursor::SetOrientation( short nNewOrientation )
 {
@@ -397,8 +364,6 @@ void Cursor::SetOrientation( short nNewOrientation )
     }
 }
 
-
-
 void Cursor::SetDirection( unsigned char nNewDirection )
 {
     if ( mnDirection != nNewDirection )
@@ -407,8 +372,6 @@ void Cursor::SetDirection( unsigned char nNewDirection )
         ImplNew();
     }
 }
-
-
 
 Cursor& Cursor::operator=( const Cursor& rCursor )
 {
@@ -422,8 +385,6 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
 
     return *this;
 }
-
-
 
 bool Cursor::operator==( const Cursor& rCursor ) const
 {

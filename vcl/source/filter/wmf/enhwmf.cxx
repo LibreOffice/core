@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "winmtf.hxx"
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -153,7 +152,6 @@ using namespace std;
 #define EMR_GRADIENTFILL               118
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
-
 
 #ifdef OSL_BIGENDIAN
 // little endian <-> big endian switch
@@ -325,7 +323,6 @@ void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const bool skipFirst)
     Polygon aPolygon = ReadPolygon<T>(nStartIndex, nPoints);
     drawer(pOut, aPolygon, skipFirst, bRecordPath);
 }
-
 
 /**
  * Reads polygons from the stream.
@@ -1488,7 +1485,6 @@ bool EnhWMFReader::ReadEnhWMF()
     return bStatus;
 };
 
-
 bool EnhWMFReader::ReadHeader()
 {
     sal_uInt32      nType, nSignature, nVersion;
@@ -1594,7 +1590,6 @@ bool EnhWMFReader::ReadHeader()
     pWMF->Seek( nStartPos + nHeaderSize );
     return true;
 }
-
 
 Rectangle  EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {

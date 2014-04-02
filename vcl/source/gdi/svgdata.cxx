@@ -29,11 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-
-
 using namespace ::com::sun::star;
-
-
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const Primitive2DSequence& rSequence,
@@ -91,8 +87,6 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     return aRetval;
 }
 
-
-
 void SvgData::ensureReplacement()
 {
     ensureSequenceAndRange();
@@ -102,8 +96,6 @@ void SvgData::ensureReplacement()
         maReplacement = convertPrimitive2DSequenceToBitmapEx(maSequence, getRange());
     }
 }
-
-
 
 void SvgData::ensureSequenceAndRange()
 {
@@ -160,8 +152,6 @@ void SvgData::ensureSequenceAndRange()
     }
 }
 
-
-
 SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath)
 :   maSvgDataArray(rSvgDataArray),
     mnSvgDataArrayLength(nSvgDataArrayLength),
@@ -171,7 +161,6 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLeng
     maReplacement()
 {
 }
-
 
 SvgData::SvgData(const OUString& rPath):
     maSvgDataArray(),
@@ -200,8 +189,6 @@ SvgData::SvgData(const OUString& rPath):
     }
 }
 
-
-
 const basegfx::B2DRange& SvgData::getRange() const
 {
     const_cast< SvgData* >(this)->ensureSequenceAndRange();
@@ -209,16 +196,12 @@ const basegfx::B2DRange& SvgData::getRange() const
     return maRange;
 }
 
-
-
 const Primitive2DSequence& SvgData::getPrimitive2DSequence() const
 {
     const_cast< SvgData* >(this)->ensureSequenceAndRange();
 
     return maSequence;
 }
-
-
 
 const BitmapEx& SvgData::getReplacement() const
 {

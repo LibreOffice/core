@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <salinst.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
@@ -26,8 +25,6 @@
 #include <vcl/keycod.hxx>
 
 #include <tools/rc.h>
-
-
 
 static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
 {
@@ -52,8 +49,6 @@ static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
     0, 0, 0, 0                                                     // KEYFUNC_FRONT
 };
 
-
-
 void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
 {
     sal_uInt16 nIndex = (sal_uInt16)eFunc;
@@ -64,16 +59,12 @@ void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, 
         rCode4 = aImplKeyFuncTab[nIndex+3];
 }
 
-
-
 KeyCode::KeyCode( KeyFuncType eFunction )
 {
     sal_uInt16 nDummy;
     ImplGetKeyCode( eFunction, nCode, nDummy, nDummy, nDummy );
     eFunc = eFunction;
 }
-
-
 
 KeyCode::KeyCode( const ResId& rResId )
     : nCode(0)
@@ -101,16 +92,12 @@ KeyCode::KeyCode( const ResId& rResId )
     }
 }
 
-
-
 OUString KeyCode::GetName( Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
     return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : "";
 }
-
-
 
 KeyFuncType KeyCode::GetFunction() const
 {

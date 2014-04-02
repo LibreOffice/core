@@ -50,8 +50,6 @@ using namespace com::sun::star::beans;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
-
-
 void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
@@ -64,8 +62,6 @@ void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gra
     playMetafile( aTmpMtf, NULL, i_rContext, i_pDummyVDev );
     m_rOuterFace.Pop();
 }
-
-
 
 void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
@@ -242,9 +238,6 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         }
     }
 }
-
-
-
 
 void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const vcl::PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )
 {
@@ -867,7 +860,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     m_rOuterFace.DrawStretchText( pA->GetPoint(), pA->GetWidth(), pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 }
                 break;
-
 
                 case( META_TEXTLINE_ACTION ):
                 {
@@ -1937,7 +1929,6 @@ static const PixelCode BlackPixelCodes[] =
     { 2560, 12, 0x1F }  // 0000 0001 1111
 };
 
-
 void PDFWriterImpl::putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState )
 {
     const PixelCode* pTable = i_bWhitePixel ? WhitePixelCodes : BlackPixelCodes;
@@ -2065,6 +2056,5 @@ static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
 
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,10 +50,8 @@
 
 using namespace std;
 
-
 typedef map< wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;
-
 
 /****************************************************
  wrap visual styles API to avoid linking against it
@@ -193,7 +191,6 @@ void SalData::initNWF( void )
     // the menu bar and the top docking area should have a common background (gradient)
     pSVData->maNWFData.mbMenuBarDockingAreaCommonBG = true;
 }
-
 
 // *********************************************************
 // * Release theming handles
@@ -343,7 +340,6 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return (hTheme != NULL);
 }
 
-
 /*
  * HitTestNativeControl()
  *
@@ -376,7 +372,6 @@ bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
     return (hr == S_OK);
 }
 
-
 Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
@@ -388,7 +383,6 @@ Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const
 }
 
 // Helper functions
-
 
 void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, const Rectangle& rRect,
                                  int* pLunaPart, int *pLunaState, RECT *pRect )
@@ -1276,7 +1270,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
 
     // restore alignment
     SetTextAlign( getHDC(), ta );
-
 
     //GdiFlush();
 

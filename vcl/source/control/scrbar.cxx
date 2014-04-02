@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/event.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/scrbar.hxx"
@@ -1367,7 +1366,6 @@ void ScrollBar::SetRangeMin( long nNewRange )
 {
     SetRange( Range( nNewRange, GetRangeMax() ) );
 }
-
 
 void ScrollBar::SetRangeMax( long nNewRange )
 {

@@ -436,7 +436,6 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
     if ( !nPoly || !pPaths || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-
     // setup closed path
     for( unsigned int i = 0; i < nPoly; i++ )
     {
@@ -597,7 +596,6 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     if ( !nPoly || !pPtAry || !pPoints || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-
     for (unsigned int i=0; i<nPoly;i++)
     {
         sal_uInt32 nPoints = pPoints[i];
@@ -653,7 +651,6 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     if( maFillColor.Is() && maLineColor.Is())
         PSGRestore();
 }
-
 
 /*
  * postscript generating routines

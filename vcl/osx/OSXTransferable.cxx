@@ -32,7 +32,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
-
 namespace // private
 {
     bool isValidFlavor( const DataFlavor& aFlavor )
@@ -43,7 +42,6 @@ namespace // private
     }
 
 } // namespace private
-
 
 OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
                                  DataFlavorMapperPtr_t pDataFlavorMapper,
@@ -57,12 +55,10 @@ OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMime
   initClipboardItemList();
 }
 
-
 OSXTransferable::~OSXTransferable()
 {
   [mPasteboard release];
 }
-
 
 Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
   throw( UnsupportedFlavorException, IOException, RuntimeException, std::exception )
@@ -100,19 +96,16 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
   return dp->getOOoData();
 }
 
-
 bool OSXTransferable::isUnicodeText(const DataFlavor& flavor)
 {
   return (flavor.DataType == getCppuType((OUString*)0));
 }
-
 
 Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )
     throw( RuntimeException, std::exception )
 {
   return mFlavorList;
 }
-
 
 sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
     throw( RuntimeException, std::exception )
@@ -123,7 +116,6 @@ sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlav
 
     return false;
 }
-
 
 void OSXTransferable::initClipboardItemList()
 {
@@ -137,7 +129,6 @@ void OSXTransferable::initClipboardItemList()
 
   mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
 }
-
 
 /* Compares two DataFlavors. Returns true if both DataFlavor have the same media type
    and the number of parameter and all parameter values do match otherwise false
@@ -164,7 +155,6 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
 
     return true;
 }
-
 
 bool OSXTransferable::cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
                                                const Reference<XMimeContentType> xRhs) const

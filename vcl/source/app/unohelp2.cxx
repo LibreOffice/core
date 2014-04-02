@@ -25,7 +25,6 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 
-
 using namespace ::com::sun::star;
 
 namespace vcl { namespace unohelper {

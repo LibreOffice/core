@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 #include "rgbtable.hxx"
@@ -50,8 +49,6 @@ XPMReader::~XPMReader()
     if( mpAcc )
         maBmp.ReleaseAccess( mpAcc );
 }
-
-
 
 ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 {
@@ -208,7 +205,6 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     return eReadState;
 }
 
-
 // ImplGetColor returns variouls colour values,
 // returns TRUE if various colours could be assigned
 
@@ -226,7 +222,6 @@ bool XPMReader::ImplGetColor( sal_uLong nNumb )
     }
     return bStatus;
 }
-
 
 // ImpGetScanLine reads the string mpBufSize and writes the pixel in the
 // Bitmap. Parameter nY is the horizontal position.
@@ -292,7 +287,6 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
     }
     return bStatus;
 }
-
 
 // tries to determine a colour value from mpStringBuf
 // if a colour was found the RGB value is written a pDest[1]..pDest[2]
@@ -361,7 +355,6 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
     return bColStatus;
 }
 
-
 // ImplGetColKey searches string mpStringBuf for a parameter 'nKey'
 // and returns a boolean. (if TRUE mpPara and mnParaSize will be set)
 
@@ -405,14 +398,12 @@ bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
     return ( mnParaSize ) ? true : false;
 }
 
-
 // ImplGetRGBHex translates the ASCII-Hexadecimalvalue belonging to mpPara
 // in a RGB value and writes this to pDest
 // below formats should be contained in mpPara:
 // if nAdd = 0 : '#12ab12'                    -> RGB = 0x12, 0xab, 0x12
 //           2 : '#1234abcd1234'                  "      "     "     "
 //           6 : '#12345678abcdefab12345678'      "      "     "     "
-
 
 void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uLong  nAdd )
 {
@@ -435,7 +426,6 @@ void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uLong  nAdd )
     }
 }
 
-
 // ImplGetUlong returns the value of a up to 6-digit long ASCII-decimal number.
 
 sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
@@ -457,8 +447,6 @@ sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
     }
     else return 0;
 }
-
-
 
 bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSize, sal_uLong nMode )
 {
@@ -488,7 +476,6 @@ bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSi
     }
     return bRet;
 }
-
 
 // ImplGetPara tries to retrieve nNumb (0...x) parameters from mpStringBuf.
 // Parameters are separated by spaces or tabs.
@@ -544,7 +531,6 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
     }
     return ( ( nCount == nNumb ) && ( mpPara ) );
 }
-
 
 // The next string is read and stored in mpStringBuf (terminated with 0);
 // mnStringSize contains the size of the string read.
@@ -644,9 +630,7 @@ bool XPMReader::ImplGetString( void )
     return mbStatus;
 }
 
-
 // - ImportXPM -
-
 
 bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {

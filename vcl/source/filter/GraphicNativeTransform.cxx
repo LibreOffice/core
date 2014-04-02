@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 #include "jpeg/Exif.hxx"
 #include "jpeg/JpegTransform.hxx"
 
@@ -188,6 +187,5 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

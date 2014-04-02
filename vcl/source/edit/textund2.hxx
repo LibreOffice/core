@@ -22,7 +22,6 @@
 #include "textundo.hxx"
 #include <vcl/textdata.hxx>
 
-
 class TextUndoDelPara : public TextUndo
 {
 private:
@@ -41,7 +40,6 @@ public:
     virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
-
 class TextUndoConnectParas : public TextUndo
 {
 private:
@@ -59,7 +57,6 @@ public:
     virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
-
 class TextUndoSplitPara : public TextUndo
 {
 private:
@@ -76,7 +73,6 @@ public:
 
     virtual OUString GetComment () const SAL_OVERRIDE;
 };
-
 
 class TextUndoInsertChars : public TextUndo
 {
@@ -96,7 +92,6 @@ public:
     virtual OUString GetComment () const SAL_OVERRIDE;
 };
 
-
 class TextUndoRemoveChars : public TextUndo
 {
 private:
@@ -112,7 +107,6 @@ public:
 
     virtual OUString GetComment () const SAL_OVERRIDE;
 };
-
 
 class TextUndoSetAttribs: public TextUndo
 {

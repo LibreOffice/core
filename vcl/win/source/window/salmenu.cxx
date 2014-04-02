@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svsys.h>
 
 #include <vcl/menu.hxx>
@@ -39,8 +38,6 @@
 
 static DWORD myerr=0;
 
-
-
 bool SalData::IsKnownMenuHandle( HMENU hMenu )
 {
     if( mhMenuSet.find( hMenu ) == mhMenuSet.end() )
@@ -48,8 +45,6 @@ bool SalData::IsKnownMenuHandle( HMENU hMenu )
     else
         return TRUE;
 }
-
-
 
 // WinSalInst factory methods
 
@@ -74,7 +69,6 @@ void WinSalInstance::DestroyMenu( SalMenu* pSalMenu )
 {
     delete pSalMenu;
 }
-
 
 SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
@@ -124,9 +118,6 @@ void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
     delete pSalMenuItem;
 }
 
-
-
-
 static void ImplDrawMenuBar( SalMenu *pMenu )
 {
     if( pMenu->VisibleMenuBar() )
@@ -139,9 +130,6 @@ static void ImplDrawMenuBar( SalMenu *pMenu )
             */
     }
 }
-
-
-
 
 /*
  * WinSalMenu
@@ -377,12 +365,9 @@ void WinSalMenu::GetSystemMenuData( SystemMenuData* pData )
         pData->hMenu = mhMenu;
 }
 
-
-
 /*
  * SalMenuItem
  */
-
 
 WinSalMenuItem::WinSalMenuItem()
 {
@@ -397,7 +382,5 @@ WinSalMenuItem::~WinSalMenuItem()
     if( mpSalMenu )
         ImplRemoveItemById( mpSalMenu, mnId );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

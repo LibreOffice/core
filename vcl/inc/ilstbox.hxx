@@ -153,7 +153,6 @@ public:
     void            SetSelectionAnchor( sal_Int32  nPos )   { mnSelectionAnchor = nPos; }
     sal_Int32       GetSelectionAnchor() const { return mnSelectionAnchor; }
 
-
     void            SetSelectionChangedHdl( const Link& rLnk )  { maSelectionChangedHdl = rLnk; }
     void            SetCallSelectionChangedHdl( bool bCall )    { mbCallSelectionChangedHdl = bCall; }
 
@@ -259,7 +258,6 @@ protected:
 
     void            ImplShowFocusRect();
     void            ImplHideFocusRect();
-
 
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -467,7 +465,6 @@ public:
     void            SetReadOnly( bool b )           { maLBWindow.SetReadOnly( b ); }
     bool            IsReadOnly() const              { return maLBWindow.IsReadOnly(); }
 
-
     Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow.CalcSize( nMaxLines ); }
     long            GetEntryHeight() const          { return maLBWindow.GetEntryHeight(); }
     long            GetMaxEntryWidth() const        { return maLBWindow.GetMaxEntryWidth(); }
@@ -625,7 +622,6 @@ public:
     void            SetMBDownHdl( const Link& rLink ) { maMBDownHdl = rLink; }
     const Link&     GetMBDownHdl() const { return maMBDownHdl; }
 };
-
 
 void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBackground );
 void ImplInitDropDownButton( PushButton* pButton );

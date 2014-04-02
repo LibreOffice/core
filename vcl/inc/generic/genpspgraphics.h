@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 #define INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 
-
 #include <vcl/vclenum.hxx>
 
 #include "fontmanager.hxx"

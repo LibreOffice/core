@@ -17,18 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "osx/saltimer.h"
 #include "osx/salnstimer.h"
 #include "osx/saldata.hxx"
 #include "osx/salframe.h"
 #include "osx/salinst.h"
 
-
-
 NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;
-
 
 void ImplSalStartTimer( sal_uLong nMS )
 {
@@ -120,6 +116,5 @@ void AquaSalTimer::Stop()
 {
     ImplSalStopTimer();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

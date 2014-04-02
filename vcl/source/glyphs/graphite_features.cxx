@@ -22,7 +22,6 @@
 // e.g.
 // 1001=1&2002=2&fav1=0
 
-
 #include <sal/types.h>
 #include <osl/endian.h>
 

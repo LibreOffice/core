@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/rc.h>
 
 #include <svids.hrc>
@@ -35,9 +34,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 
-
-
-
 static void ImplInitMsgBoxImageList()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -54,8 +50,6 @@ static void ImplInitMsgBoxImageList()
     }
 }
 
-
-
 void MessBox::ImplInitMessBoxData()
 {
     mpVCLMultiLineEdit  = NULL;
@@ -64,8 +58,6 @@ void MessBox::ImplInitMessBoxData()
     mpCheckBox          = NULL;
     mbCheck             = false;
 }
-
-
 
 void MessBox::ImplInitButtons()
 {
@@ -144,8 +136,6 @@ void MessBox::ImplInitButtons()
     }
 }
 
-
-
 MessBox::MessBox( Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
     ButtonDialog( WINDOW_MESSBOX ),
@@ -158,8 +148,6 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
     if ( !rTitle.isEmpty() )
         SetText( rTitle );
 }
-
-
 
 MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ButtonDialog( WINDOW_MESSBOX )
@@ -182,8 +170,6 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ImplInitButtons();
 }
 
-
-
 void MessBox::ImplLoadRes( const ResId& )
 {
     SetText(     ReadStringRes() );
@@ -191,16 +177,12 @@ void MessBox::ImplLoadRes( const ResId& )
     SetHelpText( ReadStringRes() );
 }
 
-
-
 MessBox::~MessBox()
 {
     delete mpVCLMultiLineEdit;
     delete mpFixedImage;
     delete mpCheckBox;
 }
-
-
 
 void MessBox::ImplPosControls()
 {
@@ -397,8 +379,6 @@ void MessBox::ImplPosControls()
     SetPageSizePixel( aPageSize );
 }
 
-
-
 void MessBox::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_INITSHOW )
@@ -408,14 +388,10 @@ void MessBox::StateChanged( StateChangedType nType )
     ButtonDialog::StateChanged( nType );
 }
 
-
-
 bool MessBox::GetCheckBoxState() const
 {
     return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
 }
-
-
 
 void MessBox::SetCheckBoxState( bool bCheck )
 {
@@ -423,15 +399,11 @@ void MessBox::SetCheckBoxState( bool bCheck )
     mbCheck = bCheck;
 }
 
-
-
 Size MessBox::GetOptimalSize() const
 {
     // FIXME: base me on the font size ?
     return Size( 250, 100 );
 }
-
-
 
 void InfoBox::ImplInitInfoBoxData()
 {
@@ -442,15 +414,11 @@ void InfoBox::ImplInitInfoBoxData()
     SetImage( InfoBox::GetStandardImage() );
 }
 
-
-
 InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
 {
     ImplInitInfoBoxData();
 }
-
-
 
 InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_INFOBOX ) )
@@ -458,23 +426,17 @@ InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     ImplInitInfoBoxData();
 }
 
-
-
 InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitInfoBoxData();
 }
 
-
-
 Image InfoBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
 }
-
-
 
 void WarningBox::ImplInitWarningBoxData()
 {
@@ -485,8 +447,6 @@ void WarningBox::ImplInitWarningBoxData()
     SetImage( WarningBox::GetStandardImage() );
 }
 
-
-
 WarningBox::WarningBox( Window* pParent, WinBits nStyle,
                         const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
@@ -494,15 +454,11 @@ WarningBox::WarningBox( Window* pParent, WinBits nStyle,
     ImplInitWarningBoxData();
 }
 
-
-
 WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_WARNINGBOX ) )
 {
     ImplInitWarningBoxData();
 }
-
-
 
 void WarningBox::SetDefaultCheckBoxText()
 {
@@ -511,15 +467,11 @@ void WarningBox::SetDefaultCheckBoxText()
         maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
 }
 
-
-
 Image WarningBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
 }
-
-
 
 void ErrorBox::ImplInitErrorBoxData()
 {
@@ -530,8 +482,6 @@ void ErrorBox::ImplInitErrorBoxData()
     SetImage( ErrorBox::GetStandardImage() );
 }
 
-
-
 ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
                     const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
@@ -539,15 +489,11 @@ ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
     ImplInitErrorBoxData();
 }
 
-
-
 ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_ERRORBOX ) )
 {
     ImplInitErrorBoxData();
 }
-
-
 
 Image ErrorBox::GetStandardImage()
 {
@@ -564,8 +510,6 @@ Image ErrorBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
 }
 
-
-
 void QueryBox::ImplInitQueryBoxData()
 {
     // Default Text is the display title from the application
@@ -575,15 +519,11 @@ void QueryBox::ImplInitQueryBoxData()
     SetImage( QueryBox::GetStandardImage() );
 }
 
-
-
 QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitQueryBoxData();
 }
-
-
 
 QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_QUERYBOX ) )
@@ -591,16 +531,12 @@ QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     ImplInitQueryBoxData();
 }
 
-
-
 void QueryBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
         maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
 }
-
-
 
 Image QueryBox::GetStandardImage()
 {

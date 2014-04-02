@@ -36,7 +36,6 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-
 class DragSource;
 class AquaSalFrame;
 
@@ -52,7 +51,6 @@ class AquaSalFrame;
 -(void)registerMouseEventListener:(id)theHandler;
 -(void)unregisterMouseEventListener:(id)theHandler;
 @end
-
 
 @interface DragSourceHelper : NSObject
 {
@@ -70,7 +68,6 @@ class AquaSalFrame;
 -(void)draggedImage:(NSImage *)draggedImage movedTo:(NSPoint)screenPoint;
 
 @end
-
 
 class DragSource : public ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::dnd::XDragSource,

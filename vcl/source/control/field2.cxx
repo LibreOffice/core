@@ -39,7 +39,6 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 
-
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
@@ -1361,7 +1360,6 @@ void DateField::ImplDateSpinArea( bool bUp )
                         nPos++;
                 }
             }
-
 
             switch( eFormat )
             {

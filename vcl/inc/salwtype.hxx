@@ -31,9 +31,7 @@ class Window;
 
 class FontSelectPattern;
 
-
 // - SalEvent -
-
 
 #define SALEVENT_MOUSEMOVE              ((sal_uInt16)1)
 #define SALEVENT_MOUSELEAVE             ((sal_uInt16)2)
@@ -234,32 +232,24 @@ struct SalQueryCharPositionEvent
     long            mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
 };
 
-
 // - SalFrame-Types -
-
 
 typedef bool (*SALFRAMEPROC)( Window* pInst, SalFrame* pFrame,
                               sal_uInt16 nEvent, const void* pEvent );
 
-
 // - SalObject-Events -
-
 
 #define SALOBJ_EVENT_GETFOCUS           ((sal_uInt16)1)
 #define SALOBJ_EVENT_LOSEFOCUS          ((sal_uInt16)2)
 #define SALOBJ_EVENT_TOTOP              ((sal_uInt16)3)
 #define SALOBJ_EVENT_COUNT              ((sal_uInt16)4)
 
-
 // - SalObject-Types -
-
 
 typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
                                sal_uInt16 nEvent, const void* pEvent );
 
-
 // - SalFrameState -
-
 
 struct SalFrameState
 {
@@ -275,9 +265,7 @@ struct SalFrameState
     sal_uLong       mnState;
 };
 
-
 // - SalInputContext -
-
 
 // Have to match DEFINEs in inputctx.hxx, as these are not converted
 #define SAL_INPUTCONTEXT_TEXT               ((sal_uLong)0x00000001)

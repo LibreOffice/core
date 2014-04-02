@@ -56,7 +56,6 @@ class AquaSalFrame;
 -(void)unregisterDraggingDestinationHandler:(id)theHandler;
 @end
 
-
 @interface DropTargetHelper : NSObject
 {
   DropTarget* mDropTarget;
@@ -72,7 +71,6 @@ class AquaSalFrame;
 -(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
 
 @end
-
 
 class DropTarget: public cppu::BaseMutex,
                   public cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,

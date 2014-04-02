@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /*
  * Sun Font Tools
  *
@@ -208,7 +207,6 @@ _inline sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
     sal_uInt32 t;
     assert(ptr != 0);
 
-
     if (bigendian) {
         t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
             (ptr+offset)[2] << 8  | (ptr+offset)[3];
@@ -257,7 +255,6 @@ _inline F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
 
     return sign ? -res : res;
 }
-
 
 _inline F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
 {
@@ -374,8 +371,6 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
     _this->total += size;
 }
 #endif
-
-
 
 /* Outline Extraction functions */
 
@@ -812,7 +807,6 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
             continue;
         }
 
-
         if (cp == EndContour) {
             cp = StartContour;
             ecflag = true;
@@ -1148,7 +1142,6 @@ static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSe
     return (sal_uInt16)lastfound;
 }
 
-
 static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
     sal_uInt16  i;
     int ToReturn;
@@ -1215,7 +1208,6 @@ static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32 cChar) {
 
     return MISSING_GLYPH_INDEX;
 }
-
 
 static void FindCmap(TrueTypeFont *ttf)
 {
@@ -1791,7 +1783,6 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 
     const char *h41 = "(%s) cvn exch definefont pop\n";
 
-
     if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SF_GLYPHNUM;
     if (!glyphArray) return SF_BADARG;
     if (!fname) fname = ttf->psname;
@@ -1967,7 +1958,6 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                                  GetUInt16(p, 46, 1),
                                  GetInt16(p, 48, 1));
 
-
     /**                       glyf                          **/
 
     glyf = TrueTypeTableNew_glyf();
@@ -2033,7 +2023,6 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     return res;
 }
 #endif
-
 
 #ifndef NO_TYPE42
 static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP)
@@ -2234,7 +2223,6 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     return SF_OK;
 }
 #endif
-
 
 #ifndef NO_MAPPERS
 int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical)

@@ -77,8 +77,6 @@ public:
     bool        HasValidSize() const        { return nWidth != (-1); }
 };
 
-
-
 typedef std::vector<TETextPortion*> TextPortionArray;
 
 class TETextPortionList : public TextPortionArray
@@ -186,8 +184,6 @@ inline bool TextLine::operator != ( const TextLine& rLine ) const
     return !( *this == rLine );
 }
 
-
-
 class TEParaPortion
 {
 private:
@@ -197,20 +193,17 @@ private:
     TETextPortionList       maTextPortions;
     std::vector<TEWritingDirectionInfo> maWritingDirectionInfos;
 
-
     sal_uInt16              mnInvalidPosStart;
     short               mnInvalidDiff;
 
     bool                mbInvalid;
     bool                mbSimple;   // nur lineares Tippen
 
-
                         TEParaPortion( const TEParaPortion& ) {;}
 
 public:
                         TEParaPortion( TextNode* pNode );
                         ~TEParaPortion();
-
 
     bool                IsInvalid() const           { return mbInvalid; }
     bool                IsSimpleInvalid() const     { return mbSimple; }
@@ -228,11 +221,9 @@ public:
     TETextPortionList&  GetTextPortions()           { return maTextPortions; }
     std::vector<TEWritingDirectionInfo>& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
-
     sal_uInt16              GetLineNumber( sal_uInt16 nIndex, bool bInclEnd );
     void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 };
-
 
 class TEParaPortions : public ToolsList<TEParaPortion*>
 {
@@ -241,7 +232,6 @@ public:
                     ~TEParaPortions();
     void            Reset();
 };
-
 
 class TextSelFunctionSet: public FunctionSet
 {
@@ -263,7 +253,6 @@ public:
     virtual void    DeselectAtPoint( const Point& ) SAL_OVERRIDE;
     virtual void    DestroyAnchor() SAL_OVERRIDE;
 };
-
 
 class IdleFormatter : public Timer
 {

@@ -179,13 +179,11 @@ void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
     }
 }
 
-
 void WMFWriter::WritePointXY(const Point & rPoint)
 {
     Point aPt( pVirDev->LogicToLogic(rPoint,aSrcMapMode,aTargetMapMode) );
     pWMF->WriteInt16( (short)aPt.X() ).WriteInt16( (short)aPt.Y() );
 }
-
 
 void WMFWriter::WritePointYX(const Point & rPoint)
 {
@@ -193,13 +191,11 @@ void WMFWriter::WritePointYX(const Point & rPoint)
     pWMF->WriteInt16( (short)aPt.Y() ).WriteInt16( (short)aPt.X() );
 }
 
-
 sal_Int32 WMFWriter::ScaleWidth( sal_Int32 nDX )
 {
     Size aSz( pVirDev->LogicToLogic(Size(nDX,0),aSrcMapMode,aTargetMapMode) );
     return aSz.Width();
 }
-
 
 void WMFWriter::WriteSize(const Size & rSize)
 {
@@ -207,13 +203,11 @@ void WMFWriter::WriteSize(const Size & rSize)
     pWMF->WriteInt16( (short)aSz.Width() ).WriteInt16( (short)aSz.Height() );
 }
 
-
 void WMFWriter::WriteHeightWidth(const Size & rSize)
 {
     Size aSz( pVirDev->LogicToLogic(rSize,aSrcMapMode,aTargetMapMode) );
     pWMF->WriteInt16( (short)aSz.Height() ).WriteInt16( (short)aSz.Width() );
 }
-
 
 void WMFWriter::WriteRectangle(const Rectangle & rRect)
 {
@@ -221,12 +215,10 @@ void WMFWriter::WriteRectangle(const Rectangle & rRect)
     WritePointYX(rRect.TopLeft());
 }
 
-
 void WMFWriter::WriteColor(const Color & rColor)
 {
     pWMF->WriteUChar( (sal_uInt8) rColor.GetRed() ).WriteUChar( (sal_uInt8) rColor.GetGreen() ).WriteUChar( (sal_uInt8) rColor.GetBlue() ).WriteUChar( (sal_uInt8) 0 );
 }
-
 
 void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
 {
@@ -234,7 +226,6 @@ void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
     if (nSizeWords>nMaxRecordSize) nMaxRecordSize=nSizeWords;
     pWMF->WriteUInt32( nSizeWords ).WriteUInt16( nType );
 }
-
 
 void WMFWriter::UpdateRecordHeader()
 {
@@ -253,7 +244,6 @@ void WMFWriter::UpdateRecordHeader()
     pWMF->Seek(nPos);
 }
 
-
 void WMFWriter::WMFRecord_Arc(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt)
 {
     WriteRecordHeader(0x0000000b,W_META_ARC);
@@ -269,7 +259,6 @@ void WMFWriter::WMFRecord_Chord(const Rectangle & rRect, const Point & rStartPt,
     WritePointYX(rStartPt);
     WriteRectangle(rRect);
 }
-
 
 void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
 {
@@ -387,7 +376,6 @@ void WMFWriter::WMFRecord_DeleteObject(sal_uInt16 nObjectHandle)
     WriteRecordHeader(0x00000004,W_META_DELETEOBJECT);
     pWMF->WriteUInt16( nObjectHandle );
 }
-
 
 void WMFWriter::WMFRecord_Ellipse(const Rectangle & rRect)
 {
@@ -619,7 +607,6 @@ void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
     for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
 
-
 void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
 {
     const Polygon * pPoly;
@@ -647,20 +634,17 @@ void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
     UpdateRecordHeader();
 }
 
-
 void WMFWriter::WMFRecord_Rectangle(const Rectangle & rRect)
 {
     WriteRecordHeader( 0x00000007,W_META_RECTANGLE );
     WriteRectangle( rRect );
 }
 
-
 void WMFWriter::WMFRecord_RestoreDC()
 {
     WriteRecordHeader(0x00000004,W_META_RESTOREDC);
     pWMF->WriteInt16( (short)-1 );
 }
-
 
 void WMFWriter::WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound)
 {
@@ -669,19 +653,16 @@ void WMFWriter::WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, lo
     WriteRectangle(rRect);
 }
 
-
 void WMFWriter::WMFRecord_SaveDC()
 {
     WriteRecordHeader(0x00000003,W_META_SAVEDC);
 }
-
 
 void WMFWriter::WMFRecord_SelectObject(sal_uInt16 nObjectHandle)
 {
     WriteRecordHeader(0x00000004,W_META_SELECTOBJECT);
     pWMF->WriteUInt16( nObjectHandle );
 }
-
 
 void WMFWriter::WMFRecord_SetBkMode(bool bTransparent)
 {
@@ -744,7 +725,6 @@ void WMFWriter::WMFRecord_SetWindowExt(const Size & rSize)
     WriteHeightWidth(rSize);
 }
 
-
 void WMFWriter::WMFRecord_SetWindowOrg(const Point & rPoint)
 {
     WriteRecordHeader(0x00000005,W_META_SETWINDOWORG);
@@ -773,7 +753,6 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
 
     // write bitmap
     WriteDIB(rBitmap, *pWMF, false, true);
-
 
     // write the parameters:
     nPosEnd=pWMF->Tell();
@@ -825,13 +804,11 @@ void WMFWriter::WMFRecord_EndOfFile()
     WriteRecordHeader(0x00000003,0x0000);
 }
 
-
 void WMFWriter::WMFRecord_IntersectClipRect( const Rectangle& rRect )
 {
     WriteRecordHeader( 0x00000007, W_META_INTERSECTCLIPRECT );
     WriteRectangle(rRect);
 }
-
 
 sal_uInt16 WMFWriter::AllocHandle()
 {
@@ -847,12 +824,10 @@ sal_uInt16 WMFWriter::AllocHandle()
     return 0xffff;
 }
 
-
 void WMFWriter::FreeHandle(sal_uInt16 nObjectHandle)
 {
     if (nObjectHandle<MAXOBJECTHANDLES) bHandleAllocated[nObjectHandle]=false;
 }
-
 
 void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLineInfo )
 {
@@ -868,7 +843,6 @@ void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLin
     }
 }
 
-
 void WMFWriter::CreateSelectDeleteFont(const Font & rFont)
 {
     sal_uInt16 nOldHandle;
@@ -883,7 +857,6 @@ void WMFWriter::CreateSelectDeleteFont(const Font & rFont)
     }
 }
 
-
 void WMFWriter::CreateSelectDeleteBrush(const Color& rColor)
 {
     sal_uInt16 nOldHandle;
@@ -897,7 +870,6 @@ void WMFWriter::CreateSelectDeleteBrush(const Color& rColor)
         FreeHandle(nOldHandle);
     }
 }
-
 
 void WMFWriter::SetLineAndFillAttr()
 {
@@ -956,7 +928,6 @@ void WMFWriter::SetAllAttr()
         CreateSelectDeleteFont(aDstFont);
     }
 }
-
 
 void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
@@ -1102,7 +1073,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     WMFRecord_Pie( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
                 }
                 break;
-
 
                 case META_CHORD_ACTION:
                 {
@@ -1670,7 +1640,6 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
          .WriteUInt16( (sal_uInt16)0x0000 );          // reserved
 }
 
-
 void WMFWriter::UpdateHeader()
 {
     sal_uLong nPos;
@@ -1690,7 +1659,6 @@ void WMFWriter::UpdateHeader()
     pWMF->WriteUInt32( nMaxRecordSize );          // and rectify
     pWMF->Seek(nPos);
 }
-
 
 bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
                             FilterConfigItem* pFConfigItem, bool bPlaceable )
@@ -1815,7 +1783,6 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     return bStatus;
 }
-
 
 sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
                                         const Size& rPrefSize)

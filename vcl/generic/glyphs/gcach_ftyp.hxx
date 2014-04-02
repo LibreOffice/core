@@ -28,8 +28,6 @@
 class GraphiteFaceWrapper;
 #endif
 
-
-
 // FtFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
 // in up to nTTC*nSizes*nOrientation*nSynthetic times
@@ -55,8 +53,6 @@ private:
     int                     mnRefCount;
     int                     mnLangBoost;
 };
-
-
 
 // FtFontInfo corresponds to an unscaled font face
 class FtFontInfo
@@ -133,8 +129,6 @@ inline void FtFontInfo::CacheGlyphIndex( sal_UCS4 cChar, int nIndex ) const
     (*mpGlyph2Char)[ nIndex ] = cChar;
 }
 
-
-
 class FreetypeManager
 {
 public:
@@ -155,8 +149,6 @@ private:
     sal_IntPtr          mnMaxFontId;
 };
 
-
-
 class ImplFTSFontData : public PhysicalFontFace
 {
 private:
@@ -174,8 +166,6 @@ public:
 
     static bool             CheckFontData( const PhysicalFontFace& r ) { return r.CheckMagic( IFTSFONT_MAGIC ); }
 };
-
-
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 

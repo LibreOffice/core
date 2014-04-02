@@ -51,11 +51,9 @@
 
 #include <vcl/edit.hxx>
 
-
 #include <sot/exchange.hxx>
 
 #include <osl/mutex.hxx>
-
 
 using namespace ::com::sun::star;
 
@@ -908,7 +906,6 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
     }
 }
 
-
 void TextView::MouseMove( const MouseEvent& rMouseEvent )
 {
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
@@ -1412,7 +1409,6 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIterato
     return aPaM;
 }
 
-
 TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
 {
     TextPaM aPaM( rPaM );
@@ -1434,7 +1430,6 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
     }
     return aPaM;
 }
-
 
 TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
 {
@@ -1521,8 +1516,6 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
 
     return mpImpl->mpTextEngine->ImpDeleteText( TextSelection( aStartPaM, aEndPaM ) );
 }
-
-
 
 TextPaM TextView::CursorUp( const TextPaM& rPaM )
 {
@@ -1704,7 +1697,6 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
     mpImpl->mpTextEngine->CheckIdleFormatter();
     if ( !mpImpl->mpTextEngine->IsFormatted() )
         mpImpl->mpTextEngine->FormatAndUpdate( this );
-
 
     TextPaM aPaM( mpImpl->maSelection.GetEnd() );
     Rectangle aEditCursor = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM, bSpecial );
@@ -2003,7 +1995,6 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
         if ( mpImpl->mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // then also as HTML
             mpImpl->mpTextEngine->Write( pDataObj->GetHTMLStream(), &mpImpl->maSelection, true );
 
-
         /*
         // D&D of a Hyperlink
         // TODO: Better would be to store MBDownPaM in MBDown,
@@ -2269,8 +2260,6 @@ sal_Int32 TextView::GetLineNumberOfCursorInSelection() const
     }
     return nLineNo;
 }
-
-
 
 // (+) class TextSelFunctionSet
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,7 +96,6 @@ struct WMAdaptorProtocol
     const char* pProtocol;
     int             nProtocol;
 };
-
 
 /*
  *  table must be sorted ascending in strings
@@ -217,7 +215,6 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 #endif
     return pAdaptor;
 }
-
 
 /*
  *  WMAdaptor constructor

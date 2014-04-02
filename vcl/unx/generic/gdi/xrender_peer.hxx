@@ -76,8 +76,6 @@ public:
                     const _XTrap*, int nCount ) const;
 };
 
-
-
 inline XRenderPictFormat* XRenderPeer::GetStandardFormatA8() const
 {
     return mpStandardFormatA8;
@@ -174,7 +172,6 @@ inline void XRenderPeer::FillRectangle( int a, Picture b, const XRenderColor* c,
     XRenderFillRectangle( mpDisplay, a, b, c, d, e, f, g );
 }
 
-
 inline void XRenderPeer::CompositeTrapezoids( int nOp,
     Picture aSrc, Picture aDst, const XRenderPictFormat* pXRPF,
     int nXSrc, int nYSrc, const XTrapezoid* pXT, int nCount ) const
@@ -188,8 +185,6 @@ inline void XRenderPeer::AddTraps( Picture aDst, int nXOfs, int nYOfs,
 {
     XRenderAddTraps( mpDisplay, aDst, nXOfs, nYOfs, pTraps, nCount );
 }
-
-
 
 inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTransparency = 0.0 )
 {
@@ -213,8 +208,6 @@ inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTranspar
 
     return aRetVal;
 }
-
-
 
 #endif // INCLUDED_VCL_UNX_GENERIC_GDI_XRENDER_PEER_HXX
 

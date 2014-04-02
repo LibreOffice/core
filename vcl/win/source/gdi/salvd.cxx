@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svsys.h>
 
 #include <vcl/sysdata.hxx>
@@ -27,8 +26,6 @@
 #include <win/salinst.h>
 #include <win/salgdi.h>
 #include <win/salvd.h>
-
-
 
 static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
                                        sal_uInt16 nBitCount )
@@ -66,8 +63,6 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
 
     return hBitmap;
 }
-
-
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long nDX, long nDY,
@@ -163,8 +158,6 @@ WinSalVirtualDevice::WinSalVirtualDevice()
     mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
 }
 
-
-
 WinSalVirtualDevice::~WinSalVirtualDevice()
 {
     // remove VirDev from list of virtual devices
@@ -188,8 +181,6 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     mpGraphics = NULL;
 }
 
-
-
 SalGraphics* WinSalVirtualDevice::AcquireGraphics()
 {
     if ( mbGraphics )
@@ -201,14 +192,10 @@ SalGraphics* WinSalVirtualDevice::AcquireGraphics()
     return mpGraphics;
 }
 
-
-
 void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = FALSE;
 }
-
-
 
 bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {

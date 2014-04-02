@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -37,7 +36,6 @@ using namespace ::com::sun::star::lang;
 // Forward declaration
 void Main();
 
-
 SAL_IMPLEMENT_MAIN()
 {
     tools::extendApplicationEnvironment();
@@ -54,7 +52,6 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
-
 class MyWin : public WorkWindow
 {
 public:
@@ -69,7 +66,6 @@ public:
     void        Resize();
 };
 
-
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
@@ -79,48 +75,40 @@ void Main()
     Application::Execute();
 }
 
-
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
 }
-
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
-
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
-
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-
 void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }
-
 
 void MyWin::Resize()
 {

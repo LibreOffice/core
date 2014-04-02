@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
@@ -27,14 +26,10 @@
 #include <map>
 #include <vector>
 
-
-
 typedef ::std::map< sal_uLong, ImplAccelEntry* > ImplAccelMap;
 typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
 
 #define ACCELENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
-
-
 
 class ImplAccelData
 {
@@ -42,11 +37,6 @@ public:
     ImplAccelMap  maKeyMap; // for keycodes, generated with a code
     ImplAccelList maIdList; // Id-List
 };
-
-
-
-
-
 
 sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
                                sal_uInt16* pIndex = NULL )
@@ -95,8 +85,6 @@ sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
     return ACCELENTRY_NOTFOUND;
 }
 
-
-
 static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
 {
     sal_uInt16  nInsIndex;
@@ -134,8 +122,6 @@ static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
     }
 }
 
-
-
 static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nId )
 {
     sal_uInt16 nIndex = ImplAccelEntryGetIndex( pList, nId );
@@ -155,8 +141,6 @@ static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nI
     return nIndex;
 }
 
-
-
 void Accelerator::ImplInit()
 {
     mnCurId             = 0;
@@ -164,8 +148,6 @@ void Accelerator::ImplInit()
     mbIsCancel          = false;
     mpDel               = NULL;
 }
-
-
 
 ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
 {
@@ -175,8 +157,6 @@ ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
     else
         return NULL;
 }
-
-
 
 void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 {
@@ -199,8 +179,6 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
     }
 }
 
-
-
 void Accelerator::ImplDeleteData()
 {
     // delete accelerator-entries using the id-table
@@ -213,8 +191,6 @@ void Accelerator::ImplDeleteData()
     }
     mpData->maIdList.clear();
 }
-
-
 
 void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
                                    bool bEnable, Accelerator* pAutoAccel )
@@ -269,16 +245,12 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
         ImplAccelEntryInsert( &(mpData->maIdList), pEntry );
 }
 
-
-
 Accelerator::Accelerator()
 {
 
     ImplInit();
     mpData = new ImplAccelData;
 }
-
-
 
 Accelerator::Accelerator( const Accelerator& rAccel ) :
     Resource(),
@@ -291,8 +263,6 @@ Accelerator::Accelerator( const Accelerator& rAccel ) :
     ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
 }
 
-
-
 Accelerator::Accelerator( const ResId& rResId )
 {
 
@@ -301,8 +271,6 @@ Accelerator::Accelerator( const ResId& rResId )
     rResId.SetRT( RSC_ACCEL );
     ImplLoadRes( rResId );
 }
-
-
 
 void Accelerator::ImplLoadRes( const ResId& rResId )
 {
@@ -318,8 +286,6 @@ void Accelerator::ImplLoadRes( const ResId& rResId )
     }
 }
 
-
-
 Accelerator::~Accelerator()
 {
 
@@ -331,35 +297,25 @@ Accelerator::~Accelerator()
     delete mpData;
 }
 
-
-
 void Accelerator::Activate()
 {
     maActivateHdl.Call( this );
 }
-
-
 
 void Accelerator::Deactivate()
 {
     maDeactivateHdl.Call( this );
 }
 
-
-
 void Accelerator::Select()
 {
     maSelectHdl.Call( this );
 }
 
-
-
 void Accelerator::InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode )
 {
     ImplInsertAccel( nItemId, rKeyCode, true, NULL );
 }
-
-
 
 void Accelerator::InsertItem( const ResId& rResId )
 {
@@ -393,15 +349,11 @@ void Accelerator::InsertItem( const ResId& rResId )
     ImplInsertAccel( nAccelKeyId, aKeyCode, !bDisable, pAutoAccel );
 }
 
-
-
 sal_uInt16 Accelerator::GetItemCount() const
 {
 
     return (sal_uInt16)mpData->maIdList.size();
 }
-
-
 
 KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
 {
@@ -413,8 +365,6 @@ KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
         return KeyCode();
 }
 
-
-
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 {
 
@@ -425,8 +375,6 @@ sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
         return 0;
 }
 
-
-
 Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
 {
 
@@ -436,8 +384,6 @@ Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
     else
         return NULL;
 }
-
-
 
 Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 {

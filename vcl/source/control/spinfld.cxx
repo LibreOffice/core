@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/rc.h"
 
 #include "vcl/event.hxx"
@@ -28,8 +27,6 @@
 
 #include "controldata.hxx"
 #include "svdata.hxx"
-
-
 
 namespace {
 
@@ -73,7 +70,6 @@ void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
     rValue.mnUpperPart = bHorz ? PART_BUTTON_LEFT : PART_BUTTON_UP;
     rValue.mnLowerPart = bHorz ? PART_BUTTON_RIGHT : PART_BUTTON_DOWN;
 }
-
 
 bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonValue )
 {

@@ -62,7 +62,6 @@ class AquaClipboard;
 -(void)disposing;
 @end
 
-
 class AquaClipboard : public ::cppu::BaseMutex,
                       public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::clipboard::XSystemClipboard,
                                                                com::sun::star::datatransfer::clipboard::XFlushableClipboard,
@@ -86,9 +85,7 @@ public:
 
   virtual ~AquaClipboard();
 
-
   // XClipboard
-
 
   virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
     throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -100,16 +97,12 @@ public:
   virtual OUString SAL_CALL getName()
     throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
   // XClipboardEx
-
 
   virtual sal_Int8 SAL_CALL getRenderingCapabilities()
     throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
   // XClipboardNotifier
-
 
   virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
     throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -117,15 +110,11 @@ public:
   virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
     throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
   // XFlushableClipboard
-
 
   virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
   // XServiceInfo
-
 
   virtual OUString SAL_CALL getImplementationName()
     throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

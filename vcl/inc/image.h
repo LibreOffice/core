@@ -24,9 +24,7 @@
 
 #include <boost/unordered_map.hpp>
 
-
 // - ImplImageBmp -
-
 
 class ImplImageBmp
 {
@@ -56,15 +54,11 @@ private:    // prevent assignment and copy construction
     void operator=( const ImplImageBmp& );
 };
 
-
 // - ImageTypes -
-
 
 enum ImageType { IMAGETYPE_BITMAP, IMAGETYPE_IMAGE };
 
-
 // - ImplImageList -
-
 
 struct ImageAryData
 {
@@ -83,8 +77,6 @@ struct ImageAryData
 
     ImageAryData&   operator=( const ImageAryData& rData );
 };
-
-
 
 struct ImplImageList
 {
@@ -107,9 +99,7 @@ struct ImplImageList
     void RemoveImage( sal_uInt16 nPos );
 };
 
-
 // - ImplImageRefData -
-
 
 struct ImplImageRefData
 {
@@ -122,9 +112,7 @@ struct ImplImageRefData
     bool            IsEqual( const ImplImageRefData& rData );
 };
 
-
 // - ImpImageData -
-
 
 struct ImplImageData
 {
@@ -137,9 +125,7 @@ struct ImplImageData
     bool            IsEqual( const ImplImageData& rData );
 };
 
-
 // - ImplImage -
-
 
 struct ImplImage
 {

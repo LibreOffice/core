@@ -27,7 +27,6 @@ struct FontMatchStatus;
 class FontSelectPattern;
 class PhysicalFontFamily;
 
-
 struct FontMatchStatus
 {
 public:
@@ -80,8 +79,6 @@ friend class PhysicalFontFamily;
     const int               mnMagic;    // poor man's RTTI
     PhysicalFontFace*       mpNext;
 };
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

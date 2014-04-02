@@ -78,7 +78,6 @@ struct ImplMouseData
     sal_uInt16                          mnWheelBehavior;
 };
 
-
 struct ImplStyleData
 {
                                     ImplStyleData();
@@ -207,7 +206,6 @@ struct ImplStyleData
     boost::optional<Color>          maPersonaMenuBarTextColor; ///< Cache the menubar color.
 };
 
-
 struct ImplMiscData
 {
                                     ImplMiscData();
@@ -216,7 +214,6 @@ struct ImplMiscData
     bool                            mbEnableLocalizedDecimalSep;
     TriState                        mnDisablePrinting;
 };
-
 
 struct ImplHelpData
 {
@@ -430,7 +427,6 @@ MouseSettings::GetMenuDelay() const
     return mpData->mnMenuDelay;
 }
 
-
 void
 MouseSettings::SetFollow( sal_uLong nFollow )
 {
@@ -443,7 +439,6 @@ MouseSettings::GetFollow() const
 {
     return mpData->mnFollow;
 }
-
 
 void
 MouseSettings::SetMiddleButtonAction( sal_uInt16 nAction )
@@ -481,8 +476,6 @@ MouseSettings::MouseSettings()
 : mpData(boost::make_shared<ImplMouseData>())
 {
 }
-
-
 
 MouseSettings::~MouseSettings()
 {
@@ -1363,7 +1356,6 @@ StyleSettings::GetMonoColor() const
     return mpData->maMonoColor;
 }
 
-
 void
 StyleSettings::SetActiveTabColor( const Color& rColor )
 {
@@ -1501,7 +1493,6 @@ StyleSettings::GetPrimaryButtonWarpsSlider() const
     return mpData->mbPrimaryButtonWarpsSlider;
 }
 
-
 void
 StyleSettings::SetCairoFontOptions( const void *pOptions )
 {
@@ -1514,7 +1505,6 @@ StyleSettings::GetCairoFontOptions() const
 {
     return mpData->mpFontOptions;
 }
-
 
 void
 StyleSettings::SetAppFont( const Font& rFont )
@@ -1794,7 +1784,6 @@ StyleSettings::GetCursorBlinkTime() const
     return (long) mpData->mnCursorBlinkTime;
 }
 
-
 void
 StyleSettings::SetScreenZoom( sal_uInt16 nPercent )
 {
@@ -1847,7 +1836,6 @@ StyleSettings::GetSelectionOptions() const
     return mpData->mnSelectionOptions;
 }
 
-
 void
 StyleSettings::SetDisplayOptions( sal_uLong nOptions )
 {
@@ -1874,7 +1862,6 @@ StyleSettings::GetAntialiasingMinPixelHeight() const
     return mpData->mnAntialiasedMin;
 }
 
-
 void
 StyleSettings::SetOptions( sal_uLong nOptions )
 {
@@ -1895,7 +1882,6 @@ StyleSettings::GetAutoMnemonic() const
     return mpData->mbAutoMnemonic;
 }
 
-
 void
 StyleSettings::SetFontColor( const Color& rColor )
 {
@@ -1908,7 +1894,6 @@ StyleSettings::GetFontColor() const
 {
     return mpData->maFontColor;
 }
-
 
 void
 StyleSettings::SetToolbarIconSize( sal_uLong nSize )
@@ -1935,7 +1920,6 @@ StyleSettings::SetDialogStyle( const DialogStyle& rStyle )
     CopyData();
     mpData->maDialogStyle = rStyle;
 }
-
 
 const FrameStyle&
 StyleSettings::GetFrameStyle() const

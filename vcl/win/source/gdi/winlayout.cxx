@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svsys.h>
 #include "rtl/ustring.hxx"
 
@@ -59,10 +58,7 @@ typedef boost::unordered_map<int,int> IntMap;
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-
 #include <config_mingw.h>
-
-
 
 // win32 specific physical font instance
 class ImplWinFontEntry : public ImplFontEntry
@@ -102,8 +98,6 @@ private:
     mutable int             mnMinKashidaGlyph;
 };
 
-
-
 inline void ImplWinFontEntry::CacheGlyphWidth( int nCharCode, int nCharWidth )
 {
     maWidthMap[ nCharCode ] = nCharWidth;
@@ -116,8 +110,6 @@ inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
         return -1;
     return it->second;
 }
-
-
 
 class WinLayout : public SalLayout
 {
@@ -140,8 +132,6 @@ protected:
     const ImplWinFontData& mrWinFontData;
     ImplWinFontEntry&   mrWinFontEntry;
 };
-
-
 
 class SimpleWinLayout : public WinLayout
 {
@@ -187,8 +177,6 @@ private:
     BYTE            mnCharSet;
 };
 
-
-
 WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
 :   mhDC( hDC ),
     mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
@@ -198,14 +186,10 @@ WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rW
     mrWinFontEntry( rWFE )
 {}
 
-
-
 void WinLayout::InitFont() const
 {
     ::SelectObject( mhDC, mhFont );
 }
-
-
 
 // Using reasonably sized fonts to emulate huge fonts works around
 // a lot of problems in printer and display drivers. Huge fonts are
@@ -229,8 +213,6 @@ HFONT WinLayout::DisableFontScaling() const
     return SelectFont( mhDC, hHugeFont );
 }
 
-
-
 SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
 :   WinLayout( hDC, rWinFontData, rWinFontEntry ),
@@ -251,8 +233,6 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
     mbDisableGlyphs = true;
 }
 
-
-
 SimpleWinLayout::~SimpleWinLayout()
 {
     delete[] mpGlyphRTLFlags;
@@ -264,8 +244,6 @@ SimpleWinLayout::~SimpleWinLayout()
     delete[] mpGlyphAdvances;
     delete[] mpOutGlyphs;
 }
-
-
 
 bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -537,8 +515,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     return true;
 }
 
-
-
 int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes,
     const PhysicalFontFace** /*pFallbackFonts*/ ) const
@@ -606,8 +582,6 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPo
     return nCount;
 }
 
-
-
 void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 {
     if( mnGlyphCount <= 0 )
@@ -654,8 +628,6 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
-
-
 long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 {
     if( !mnWidth )
@@ -673,8 +645,6 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 
     return mnWidth;
 }
-
-
 
 sal_Int32 SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 // NOTE: the nFactor is used to prevent rounding errors for small nCharExtra values
@@ -698,8 +668,6 @@ sal_Int32 SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nF
 
     return -1;
 }
-
-
 
 void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
@@ -743,8 +711,6 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
     }
 }
 
-
-
 void SimpleWinLayout::Justify( long nNewWidth )
 {
     long nOldWidth = mnWidth;
@@ -779,8 +745,6 @@ void SimpleWinLayout::Justify( long nNewWidth )
         nDiffWidth -= nDeltaWidth;
     }
 }
-
-
 
 void SimpleWinLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -818,8 +782,6 @@ void SimpleWinLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
     }
 }
-
-
 
 void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 {
@@ -864,8 +826,6 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     }
 }
 
-
-
 void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 {
    if( nStart > mnGlyphCount )
@@ -892,14 +852,10 @@ void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
         mnBaseAdv += nDelta;
 }
 
-
-
 void SimpleWinLayout::DropGlyph( int nStart )
 {
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
 }
-
-
 
 void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
 {
@@ -981,8 +937,6 @@ void SimpleWinLayout::Simplify( bool /*bIsBase*/ )
         mnWidth = mnBaseAdv = 0;
 }
 
-
-
 struct VisualItem
 {
 public:
@@ -1001,8 +955,6 @@ public:
     bool            IsRTL() const { return mpScriptItem->a.fRTL; }
     bool            HasKashidas() const { return mbHasKashidas; }
 };
-
-
 
 class UniscribeLayout : public WinLayout
 {
@@ -1074,8 +1026,6 @@ static bool bUspInited = false;
 
 static bool bManualCellAlign = true;
 
-
-
 static bool InitUSP()
 {
     // get the usp10.dll version info
@@ -1114,8 +1064,6 @@ static bool InitUSP()
     return true;
 }
 
-
-
 UniscribeLayout::UniscribeLayout( HDC hDC,
     const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
 :   WinLayout( hDC, rWinFontData, rWinFontEntry ),
@@ -1139,8 +1087,6 @@ UniscribeLayout::UniscribeLayout( HDC hDC,
     mbDisableGlyphInjection( false )
 {}
 
-
-
 UniscribeLayout::~UniscribeLayout()
 {
     delete[] mpScriptItems;
@@ -1154,8 +1100,6 @@ UniscribeLayout::~UniscribeLayout()
     delete[] mpVisualAttrs;
     delete[] mpGlyphs2Chars;
 }
-
-
 
 bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -1575,8 +1519,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     return true;
 }
 
-
-
 // calculate the range of relevant glyphs for this visual item
 bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
     int& rMinGlyphPos, int& rEndGlyphPos ) const
@@ -1637,8 +1579,6 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 
     return true;
 }
-
-
 
 int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     int& nStartx8, sal_Int32* pGlyphAdvances, int* pCharPosAry,
@@ -1905,8 +1845,6 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     return nCount;
 }
 
-
-
 void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 {
     DBG_ASSERT( !(nStartx8 & 0xff), "USP::MoveGlyph(): glyph injection not disabled!" );
@@ -1972,8 +1910,6 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
     }
 }
 
-
-
 void UniscribeLayout::DropGlyph( int nStartx8 )
 {
     DBG_ASSERT( !(nStartx8 & 0xff), "USP::DropGlyph(): glyph injection not disabled!" );
@@ -2000,8 +1936,6 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
 
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
 }
-
-
 
 void UniscribeLayout::Simplify( bool /*bIsBase*/ )
 {
@@ -2104,8 +2038,6 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 }
 
-
-
 void UniscribeLayout::DrawText( SalGraphics& ) const
 {
     HFONT hOrigFont = DisableFontScaling();
@@ -2156,8 +2088,6 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         DeleteFont( SelectFont( mhDC, hOrigFont ) );
 }
 
-
-
 long UniscribeLayout::FillDXArray( long* pDXArray ) const
 {
     // calculate width of the complete layout
@@ -2186,8 +2116,6 @@ long UniscribeLayout::FillDXArray( long* pDXArray ) const
 
     return nWidth;
 }
-
-
 
 sal_Int32 UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
@@ -2231,8 +2159,6 @@ sal_Int32 UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nF
     // the whole layout did fit inside the nMaxWidth
     return -1;
 }
-
-
 
 void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
@@ -2301,8 +2227,6 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
     }
 }
 
-
-
 void UniscribeLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
@@ -2313,8 +2237,6 @@ void UniscribeLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
 }
-
-
 
 void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 {
@@ -2452,8 +2374,6 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         }
     }
 }
-
-
 
 void UniscribeLayout::InitKashidaHandling()
 {
@@ -2597,8 +2517,6 @@ bool UniscribeLayout::KashidaWordFix ( int nMinGlyphPos, int nEndGlyphPos, int* 
     return true;
 }
 
-
-
 void UniscribeLayout::Justify( long nNewWidth )
 {
     long nOldWidth = 0;
@@ -2648,8 +2566,6 @@ void UniscribeLayout::Justify( long nNewWidth )
         }
     }
 }
-
-
 
 bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
 {
@@ -2904,7 +2820,6 @@ void GraphiteWinLayout::Simplify( bool is_base )
 }
 #endif // ENABLE_GRAPHITE
 
-
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     DBG_ASSERT( mpWinFontEntry[nFallbackLevel], "WinSalGraphics mpWinFontEntry==NULL");
@@ -2957,8 +2872,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return pWinLayout;
 }
 
-
-
 int    WinSalGraphics::GetMinKashidaWidth()
 {
     if( !mpWinFontEntry[0] )
@@ -2967,8 +2880,6 @@ int    WinSalGraphics::GetMinKashidaWidth()
     int nMinKashida = static_cast<int>(mfFontScale[0] * mpWinFontEntry[0]->GetMinKashidaWidth());
     return nMinKashida;
 }
-
-
 
 ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
@@ -2981,8 +2892,6 @@ ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
     maScriptCache = NULL;
 }
 
-
-
 ImplWinFontEntry::~ImplWinFontEntry()
 {
     if( maScriptCache != NULL )
@@ -2990,14 +2899,10 @@ ImplWinFontEntry::~ImplWinFontEntry()
     delete[] mpKerningPairs;
 }
 
-
-
 bool ImplWinFontEntry::HasKernData() const
 {
     return (mnKerningPairs >= 0);
 }
-
-
 
 void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData )
 {
@@ -3005,8 +2910,6 @@ void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData
     mpKerningPairs = new KERNINGPAIR[ mnKerningPairs ];
     ::memcpy( mpKerningPairs, (const void*)pPairData, nPairCount*sizeof(KERNINGPAIR) );
 }
-
-
 
 int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
 {
@@ -3026,8 +2929,6 @@ int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
 
     return nKernAmount;
 }
-
-
 
 bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
 {
@@ -3052,8 +2953,6 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
     return true;
 }
 
-
-
 PhysicalFontFace* ImplWinFontData::Clone() const
 {
     if( mpUnicodeMap )
@@ -3066,14 +2965,10 @@ PhysicalFontFace* ImplWinFontData::Clone() const
     return pClone;
 }
 
-
-
 ImplFontEntry* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplFontEntry* pEntry = new ImplWinFontEntry( rFSD );
     return pEntry;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

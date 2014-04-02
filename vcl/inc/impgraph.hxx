@@ -27,9 +27,7 @@
 #include <vcl/graph.h>
 #include <vcl/svgdata.hxx>
 
-
 // - ImpSwapInfo -
-
 
 struct ImpSwapInfo
 {
@@ -37,9 +35,7 @@ struct ImpSwapInfo
     Size        maPrefSize;
 };
 
-
 // - ImpGraphic -
-
 
 class   OutputDevice;
 class   GfxLink;
@@ -101,7 +97,6 @@ private:
     BitmapEx                ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
     Animation               ImplGetAnimation() const;
     const GDIMetaFile&      ImplGetGDIMetaFile() const;
-
 
     Size                ImplGetPrefSize() const;
     void                ImplSetPrefSize( const Size& rPrefSize );

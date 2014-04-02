@@ -40,7 +40,6 @@ struct item
     GHashTable*     links;          // Item links.
 };
 
-
 static void
 g_lo_menu_struct_item_init (struct item *menu_item)
 {
@@ -510,7 +509,6 @@ g_lo_menu_new_submenu_in_item_in_section (GLOMenu *menu,
         g_object_unref (model);
     }
 }
-
 
 void
 g_lo_menu_set_submenu_to_item_in_section (GLOMenu    *menu,

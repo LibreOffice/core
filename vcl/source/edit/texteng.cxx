@@ -63,7 +63,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-
 TextEngine::TextEngine()
 {
     mpDoc = 0;
@@ -479,7 +478,6 @@ void TextEngine::SetText( const OUString& rText )
     DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "SetText: Undo!" );
 }
 
-
 void TextEngine::CursorMoved( sal_uLong nNode )
 {
     // delete empty attribute; but only if paragraph is not empty!
@@ -749,7 +747,6 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
         // at this point now we will insert the character 'normally' some lines below...
     }
 
-
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, OUString(c) );
@@ -771,7 +768,6 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
     return aPaM;
 }
-
 
 TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString& rStr )
 {
@@ -1153,7 +1149,6 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
     return nCurIndex;
 }
 
-
 sal_uLong TextEngine::GetTextHeight() const
 {
     DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
@@ -1478,7 +1473,6 @@ void TextEngine::FormatAndUpdate( TextView* pCurView )
         UpdateViews( pCurView );
     }
 }
-
 
 void TextEngine::IdleFormatAndUpdate( TextView* pCurView, sal_uInt16 nMaxTimerRestarts )
 {
@@ -2746,7 +2740,6 @@ void TextEngine::SetTextAlign( TxtAlign eAlign )
     }
 }
 
-
 void TextEngine::ValidateSelection( TextSelection& rSel ) const
 {
     ValidatePaM( rSel.GetStart() );
@@ -2766,7 +2759,6 @@ void TextEngine::ValidatePaM( TextPaM& rPaM ) const
     if ( rPaM.GetIndex() > nMaxIndex )
         rPaM.GetIndex() = nMaxIndex;
 }
-
 
 // adjust State & Selection
 
@@ -2950,7 +2942,6 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
     {
         const UBiDiLevel nBidiLevel = IsRightToLeft() ? 1 /*RTL*/ : 0 /*LTR*/;
         OUString aText( pParaPortion->GetNode()->GetText() );
-
 
         // Bidi functions from icu 2.0
 

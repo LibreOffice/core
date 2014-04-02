@@ -33,7 +33,6 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
-
 /* An interface to get the clipboard data in either
    system or OOo format.
  */
@@ -55,10 +54,6 @@ public:
 
 typedef std::auto_ptr<DataProvider> DataProviderPtr_t;
 
-
-
-
-
 class DataFlavorMapper
 {
 public:
@@ -68,14 +63,12 @@ public:
   DataFlavorMapper();
   ~DataFlavorMapper();
 
-
   /* Map a system data flavor to an OpenOffice data flavor.
      Return an empty string if there is not suiteable
      mapping from a system data flavor to a OpenOffice data
      flavor.
   */
   com::sun::star::datatransfer::DataFlavor systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const;
-
 
   /* Map an OpenOffice data flavor to a system data flavor.
      If there is no suiteable mapping available NULL will
@@ -95,17 +88,13 @@ public:
   DataProviderPtr_t getDataProvider( const NSString* systemFlavor,
                                     const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > rTransferable) const;
 
-
-
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
   DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSArray* systemData) const;
 
-
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
   DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSData* systemData) const;
-
 
   /* Translate a sequence of DataFlavors into a NSArray of system types.
      Only those DataFlavors for which a suitable mapping to a system

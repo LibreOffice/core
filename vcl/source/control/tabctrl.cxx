@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/debug.hxx"
 #include "tools/rc.h"
 
@@ -40,8 +39,6 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-
-
 struct ImplTabItem
 {
     sal_uInt16          mnId;
@@ -63,7 +60,6 @@ struct ImplTabItem
     {}
 };
 
-
 struct ImplTabCtrlData
 {
     boost::unordered_map< int, int >        maLayoutPageIdToLine;
@@ -73,7 +69,6 @@ struct ImplTabCtrlData
     std::vector< ImplTabItem >      maItemList;
     ListBox*                        mpListBox;
 };
-
 
 #define TAB_OFFSET          3
 #define TAB_TABOFFSET_X     3
@@ -136,7 +131,6 @@ const Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetAppFont();
 }
-
 
 const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {

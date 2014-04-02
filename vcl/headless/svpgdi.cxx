@@ -69,7 +69,6 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSou
     return false;
 }
 
-
 bool SvpSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,
     const basegfx::B2DPoint& rX,
@@ -81,7 +80,6 @@ bool SvpSalGraphics::drawTransformedBitmap(
     (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
     return false;
 }
-
 
 bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/, sal_uInt8 /*nTransparency*/ )
 {
@@ -163,7 +161,6 @@ void SvpSalGraphics::ResetClipRegion()
     m_bClipSetup = true;
     m_aClipRegion.SetNull();
 }
-
 
 // verify clip for the whole area is setup
 void SvpSalGraphics::ensureClip()
@@ -374,7 +371,6 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
             break;
     }
 }
-
 
 void SvpSalGraphics::drawPixel( long nX, long nY )
 {

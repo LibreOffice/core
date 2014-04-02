@@ -63,8 +63,6 @@ namespace vcl
     struct FontCapabilities;
 }
 
-
-
 class VCL_DLLPUBLIC GlyphCache
 {
 public:
@@ -112,8 +110,6 @@ private:
     class FreetypeManager*      mpFtManager;
 };
 
-
-
 class GlyphMetric
 {
 public:
@@ -138,8 +134,6 @@ private:
     Size                    maSize;
 };
 
-
-
 // the glyph specific data needed by a GlyphCachePeer is usually trivial,
 // not attaching it to the corresponding GlyphData would be overkill;
 // this is currently only used by the headless (aka svp) plugin, where meInfo is
@@ -151,8 +145,6 @@ struct ExtGlyphData
 
     ExtGlyphData() : meInfo(0), mpData(NULL) {}
 };
-
-
 
 class GlyphData
 {
@@ -180,8 +172,6 @@ private:
     // used by GlyphCache for cache LRU algorithm
     mutable long            mnLruValue;
 };
-
-
 
 class FtFontInfo;
 
@@ -285,8 +275,6 @@ private:
     ServerFontLayoutEngine*     mpLayoutEngine;
 };
 
-
-
 // a class for cache entries for physical font instances that are based on serverfonts
 class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
@@ -301,8 +289,6 @@ public:
     void           SetServerFont(ServerFont* p);
     void           HandleFontOptions();
 };
-
-
 
 class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
 {
@@ -325,16 +311,12 @@ public:
     ServerFont&     GetServerFont() const   { return mrServerFont; }
 };
 
-
-
 class ServerFontLayoutEngine
 {
 public:
     virtual         ~ServerFontLayoutEngine() {}
     virtual bool    layout(ServerFontLayout&, ImplLayoutArgs&) = 0;
 };
-
-
 
 class GlyphCachePeer
 {
@@ -350,8 +332,6 @@ public:
 protected:
     sal_Int32       mnBytesUsed;
 };
-
-
 
 class VCL_DLLPUBLIC RawBitmap
 {

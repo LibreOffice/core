@@ -23,10 +23,6 @@
 #include <vcl/tabdlg.hxx>
 #include <tools/rc.h>
 
-
-
-
-
 void TabDialog::ImplInitTabDialogData()
 {
     mpFixedLine     = NULL;
@@ -34,8 +30,6 @@ void TabDialog::ImplInitTabDialogData()
     meViewAlign     = WINDOWALIGN_LEFT;
     mbPosControls   = true;
 }
-
-
 
 void TabDialog::ImplPosControls()
 {
@@ -212,16 +206,12 @@ void TabDialog::ImplPosControls()
     mbPosControls = false;
 }
 
-
-
 TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_TABDIALOG )
 {
     ImplInitTabDialogData();
     ImplInit( pParent, nStyle );
 }
-
-
 
 TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_TABDIALOG )
@@ -237,14 +227,10 @@ TabDialog::TabDialog( Window* pParent, const OString& rID, const OUString& rUIXM
     ImplInitTabDialogData();
 }
 
-
-
 TabDialog::~TabDialog()
 {
     delete mpFixedLine;
 }
-
-
 
 void TabDialog::StateChanged( StateChangedType nType )
 {
@@ -256,8 +242,6 @@ void TabDialog::StateChanged( StateChangedType nType )
     }
     Dialog::StateChanged( nType );
 }
-
-
 
 void TabDialog::AdjustLayout()
 {

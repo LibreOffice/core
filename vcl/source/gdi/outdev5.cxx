@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 
@@ -30,11 +29,6 @@
 #include <svdata.hxx>
 #include <outdata.hxx>
 #include <outdev.h>
-
-
-
-
-
 
 void OutputDevice::DrawRect( const Rectangle& rRect,
                              sal_uLong nHorzRound, sal_uLong nVertRound )
@@ -92,8 +86,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
         mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
-
-
 void OutputDevice::DrawEllipse( const Rectangle& rRect )
 {
 
@@ -140,8 +132,6 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
         mpAlphaVDev->DrawEllipse( rRect );
 }
 
-
-
 void OutputDevice::DrawArc( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
 {
@@ -184,8 +174,6 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if( mpAlphaVDev )
         mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
 }
-
-
 
 void OutputDevice::DrawPie( const Rectangle& rRect,
                             const Point& rStartPt, const Point& rEndPt )
@@ -236,8 +224,6 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPie( rRect, rStartPt, rEndPt );
 }
-
-
 
 void OutputDevice::DrawChord( const Rectangle& rRect,
                               const Point& rStartPt, const Point& rEndPt )

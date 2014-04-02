@@ -57,7 +57,6 @@ class XBMReader : public GraphicReader
     long                ParseDefine( const sal_Char* pDefine );
     bool            ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat );
 
-
 public:
 
                         XBMReader( SvStream& rStm );

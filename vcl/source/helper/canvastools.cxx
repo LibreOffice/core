@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/compbase1.hxx>
 
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -61,7 +60,6 @@
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <boost/unordered_map.hpp>
-
 
 using namespace ::com::sun::star;
 
@@ -330,7 +328,6 @@ namespace vcl
             return ::BitmapEx();
         }
 
-
         geometry::RealSize2D size2DFromSize( const Size& rSize )
         {
             return geometry::RealSize2D( rSize.Width(),
@@ -574,7 +571,6 @@ namespace vcl
             return new StandardColorSpace();
         }
 
-
         uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
         {
             uno::Sequence< double > aRet(4);
@@ -632,7 +628,6 @@ namespace vcl
                           toByteColor(aARGBColor.Green),
                           toByteColor(aARGBColor.Blue) );
         }
-
 
     } // namespace vcltools
 

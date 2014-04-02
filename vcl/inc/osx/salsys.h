@@ -24,9 +24,7 @@
 
 #include <list>
 
-
 // - SalSystemData -
-
 
 class VCL_DLLPUBLIC AquaSalSystem : public SalSystem
 {
@@ -44,7 +42,6 @@ public:
                                       int nButtonCombination,
                                       int nDefaultButton, bool bUseResources) SAL_OVERRIDE;
 };
-
 
 #endif // INCLUDED_VCL_INC_OSX_SALSYS_H
 

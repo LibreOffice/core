@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/printerinfomanager.hxx"
@@ -179,7 +178,6 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
         pJobSetup->maDriver         = aInfo.m_aDriverName;
         copyJobDataToJobSetup( pJobSetup, aInfo );
     }
-
 
     return pPrinter;
 }

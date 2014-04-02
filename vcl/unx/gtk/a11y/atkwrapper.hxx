@@ -43,7 +43,6 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleValue;
 } } } }
 
-
 struct _AtkObjectWrapper
 {
     AtkObject aParent;

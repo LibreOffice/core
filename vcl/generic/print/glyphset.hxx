@@ -118,7 +118,6 @@ public:
     bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 
-
 } /* namespace psp */
 
 #endif

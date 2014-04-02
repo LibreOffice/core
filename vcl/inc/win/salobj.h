@@ -22,9 +22,7 @@
 
 #include <salobj.hxx>
 
-
 // - SalObjectData -
-
 
 class WinSalObject : public SalObject
 {
@@ -38,7 +36,6 @@ public:
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
     bool                mbFirstClipRect;        // Flag for first cliprect to insert
     WinSalObject*               mpNextObject;           // pointer to next object
-
 
     WinSalObject();
     virtual ~WinSalObject();

@@ -946,8 +946,6 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     return bRetval;
 }
 
-
-
 bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
     const Size aSize( GetSizePixel() );
@@ -965,14 +963,10 @@ bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
     return bRet;
 }
 
-
-
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
 {
     ImplAdaptBitCount(rNew);
 }
-
-
 
 void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
 {
@@ -2076,8 +2070,6 @@ bool Bitmap::ImplScaleSuper(
     return bRet;
 }
 
-
-
 namespace
 {
     void ImplCalculateContributions(
@@ -2433,8 +2425,6 @@ bool Bitmap::ImplScaleConvolution(
 
     return bResult;
 }
-
-
 
 bool Bitmap::Dither( sal_uLong nDitherFlags )
 {

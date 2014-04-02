@@ -48,7 +48,6 @@
 
 using namespace vcl_sal;
 
-
 /***************************************************************
  * class GtkSalDisplay                                         *
  ***************************************************************/
@@ -492,7 +491,6 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     static_cast<GtkSalFrame*>(pFrame)->grabPointer( TRUE );
     return 1;
 }
-
 
 /**********************************************************************
  * class GtkData                                                      *

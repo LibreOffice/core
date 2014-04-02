@@ -27,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
 
-
 // helpers
 
 namespace
@@ -256,7 +255,6 @@ namespace
     }
 } // end of anonymous namespace
 
-
 // #i121267# Tooling to internally clip geometry against internal clip regions
 
 void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
@@ -479,7 +477,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     }
                     break;
                 }
-
 
                 // geometry actions
 
@@ -706,7 +703,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-
                 // bitmap actions, create BitmapEx with alpha channel derived
                 // from clipping
 
@@ -858,7 +854,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-
                 // need to handle all those 'hacks' which hide data in comments
 
                 case META_COMMENT_ACTION :
@@ -964,9 +959,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-
                 // need to handle gradient fills (hopefully only unroated ones)
-
 
                 case META_GRADIENT_ACTION :
                 {
@@ -989,7 +982,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             pA->GetGradient(),
                             aTarget);
                     }
-
 
                     break;
                 }
@@ -1064,8 +1056,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         rSource = aTarget;
     }
 }
-
-
 
 bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource)
 {

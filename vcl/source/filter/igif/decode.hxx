@@ -46,7 +46,6 @@ class GIFLZWDecompressor
     void                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     bool                ProcessOneCode();
 
-
 public:
 
                         GIFLZWDecompressor( sal_uInt8 cDataSize );

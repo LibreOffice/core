@@ -121,7 +121,6 @@ void SvtGraphicStroke::setEndArrow( const PolyPolygon& rPoly )
     maEndArrow = rPoly;
 }
 
-
 void SvtGraphicStroke::scale( double fXScale, double fYScale )
 {
     // Clearly scaling stroke-width for fat lines is rather a problem

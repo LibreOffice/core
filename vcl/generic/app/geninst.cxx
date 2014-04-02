@@ -26,11 +26,7 @@
 
 #include "generic/geninst.h"
 
-
-
 // SalYieldMutex
-
-
 
 SalYieldMutex::SalYieldMutex()
 {

@@ -229,7 +229,6 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
     return bRetValue;
 }
 
-
 // if property is available it returns a pointer,
 // otherwise the result is null
 PropertyValue* FilterConfigItem::GetPropertyValue( Sequence< PropertyValue >& rPropSeq, const OUString& rName )
@@ -400,14 +399,10 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
     }
 }
 
-
-
 Sequence< PropertyValue > FilterConfigItem::GetFilterData() const
 {
     return aFilterData;
 }
-
-
 
 Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
 {

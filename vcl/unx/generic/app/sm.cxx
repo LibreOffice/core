@@ -165,7 +165,6 @@ static SmProp** ppSmProps = NULL;
 static int      nSmProps = 0;
 static unsigned char   *pSmRestartHint = NULL;
 
-
 static void BuildSmPropertyList()
 {
     if( ! pSmProps )
@@ -413,7 +412,6 @@ void SessionManagerClient::saveDone()
     }
 }
 
-
 void SessionManagerClient::open(SalSession * pSession)
 {
     assert(!m_pSession && !m_pICEConnectionObserver && !m_pSmcConnection);
@@ -527,7 +525,6 @@ void SessionManagerClient::interactionDone( bool bCancelShutdown )
     }
 }
 
-
 OUString SessionManagerClient::getExecName()
 {
     OUString aExec, aSysExec;
@@ -538,7 +535,6 @@ OUString SessionManagerClient::getExecName()
         aSysExec = aSysExec.copy( 0, aSysExec.getLength() - RTL_CONSTASCII_LENGTH(".bin") );
     return aSysExec;
 }
-
 
 OString SessionManagerClient::getPreviousSessionID()
 {

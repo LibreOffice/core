@@ -61,8 +61,6 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-
-
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
 {
     sal_uInt32 nCount(rPolygon.count());
@@ -324,8 +322,6 @@ bool WinSalGraphics::drawPolyLine(
     return true;
 }
 
-
-
 void paintToGdiPlus(
     Gdiplus::Graphics& rGraphics,
     const SalTwoRect& rTR,
@@ -359,8 +355,6 @@ void paintToGdiPlus(
         0);
 }
 
-
-
 void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
     const long& rSrcWidth,
@@ -393,7 +387,6 @@ void setInterpolationMode(
         rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeDefault);
     }
 }
-
 
 bool WinSalGraphics::tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap)
 {
@@ -458,8 +451,6 @@ bool WinSalGraphics::drawAlphaBitmap(
 
     return false;
 }
-
-
 
 bool WinSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,

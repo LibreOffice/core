@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <salgdi.hxx>
-
 
 /****************************************************************
  *  Placeholder for no native widgets
  ***************************************************************/
-
 
 /*
  * IsNativeControlSupported()
@@ -36,7 +33,6 @@ bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 {
     return false;
 }
-
 
 /*
  * HitTestNativeControl()
@@ -53,7 +49,6 @@ bool SalGraphics::hitTestNativeControl( ControlType,
 {
     return false;
 }
-
 
 /*
  * DrawNativeControl()

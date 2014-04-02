@@ -154,7 +154,6 @@ struct ImplSVAppData
     DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
 };
 
-
 struct ImplSVGDIData
 {
     OutputDevice*           mpFirstWinGraphics; // First OutputDevice with a Frame Graphics
@@ -180,7 +179,6 @@ struct ImplSVGDIData
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
 
-
 struct ImplSVWinData
 {
     Window*                 mpFirstFrame;       // First FrameWindow
@@ -203,7 +201,6 @@ struct ImplSVWinData
     bool                mbNoSaveFocus;      // true: menus must not save/restore focus
     bool                mbNoSaveBackground; // true: save background is unnecessary or even less performant
 };
-
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
 
@@ -231,7 +228,6 @@ struct ImplSVCtrlData
     FieldUnitStringList*    mpFieldUnitStrings; // list with field units
     FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
 };
-
 
 struct ImplSVHelpData
 {

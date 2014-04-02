@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/processfactory.hxx>
 
 #include <tools/rc.h>
@@ -70,7 +69,6 @@ Control::~Control()
 {
     delete mpControlData, mpControlData = NULL;
 }
-
 
 void Control::EnableRTL( bool bEnable )
 {
@@ -337,7 +335,6 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
     if( HasLayoutData() )
         mpControlData->mpLayoutData->m_pParent = pParent;
 }
-
 
 void Control::ImplClearLayoutData() const
 {

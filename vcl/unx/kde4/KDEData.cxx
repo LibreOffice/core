@@ -29,7 +29,6 @@
 #include "KDEXLib.hxx"
 #include "KDESalDisplay.hxx"
 
-
 KDEData::~KDEData()
 {
 }

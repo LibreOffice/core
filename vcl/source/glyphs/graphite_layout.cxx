@@ -63,7 +63,6 @@
 
 // Module private names.
 
-
 #ifdef GRLAYOUT_DEBUG
 static FILE * grLog()
 {
@@ -488,7 +487,6 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     return cOrigin;
 }
 
-
 // An implementation of the SalLayout interface to enable Graphite enabled fonts to be used.
 
 GraphiteLayout::GraphiteLayout(const gr_face * face, gr_font * font,
@@ -547,7 +545,6 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
     }
     return success;
 }
-
 
 gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
 {

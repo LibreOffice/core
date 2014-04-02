@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tools/rc.h"
 #include "tools/debug.hxx"
 
@@ -48,13 +47,11 @@ ListBox::ListBox( WindowType nType ) : Control( nType )
     ImplInitListBoxData();
 }
 
-
 ListBox::ListBox( Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
 {
     ImplInitListBoxData();
     ImplInit( pParent, nStyle );
 }
-
 
 ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_LISTBOX )
@@ -68,7 +65,6 @@ ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     if ( !(nStyle & WB_HIDE ) )
         Show();
 }
-
 
 ListBox::~ListBox()
 {
@@ -85,7 +81,6 @@ ListBox::~ListBox()
     delete mpBtn;
 }
 
-
 void ListBox::ImplInitListBoxData()
 {
     mpFloatWin      = NULL;
@@ -98,7 +93,6 @@ void ListBox::ImplInitListBoxData()
     mbDDAutoSize    = true;
     mbEdgeBlending  = false;
 }
-
 
 void ListBox::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -252,13 +246,11 @@ IMPL_LINK( ListBox, ImplListItemSelectHdl, void*, EMPTYARG )
     return 1;
 }
 
-
 IMPL_LINK_NOARG(ListBox, ImplScrollHdl)
 {
     ImplCallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
     return 1;
 }
-
 
 IMPL_LINK_NOARG(ListBox, ImplCancelHdl)
 {
@@ -267,7 +259,6 @@ IMPL_LINK_NOARG(ListBox, ImplCancelHdl)
 
     return 1;
 }
-
 
 IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
 {
@@ -300,13 +291,11 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
     return 1;
 }
 
-
 IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl)
 {
     DoubleClick();
     return 1;
 }
-
 
 IMPL_LINK_NOARG(ListBox, ImplClickBtnHdl)
 {
@@ -559,7 +548,6 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
             mpBtn->SetSettings( GetSettings() );
             ImplInitDropDownButton( mpBtn );
         }
-
 
         if ( IsDropDownBox() )
             Invalidate();
@@ -1505,7 +1493,6 @@ MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
     EnableMultiSelection( true );
 }
-
 
 MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
     ListBox( WINDOW_MULTILISTBOX )

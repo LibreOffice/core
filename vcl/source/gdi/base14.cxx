@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "pdfwriter_impl.hxx"
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
 
 using namespace vcl;
-
 
 OString PDFWriterImpl::BuiltinFont::getNameObject() const
 {

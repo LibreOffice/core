@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
 
-
 SalSystem* X11SalInstance::CreateSalSystem()
 {
     return new X11SalSystem();

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/rc.h>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
@@ -35,7 +34,6 @@
 #include <controldata.hxx>
 
 #include <osl/mutex.hxx>
-
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -111,7 +109,6 @@ struct DDInfo
     }
 };
 
-
 struct Impl_IMEInfos
 {
     OUString      aOldTextAfterStartPos;
@@ -127,7 +124,6 @@ struct Impl_IMEInfos
     void        CopyAttribs(const sal_uInt16* pA, sal_Int32 nL);
     void        DestroyAttribs();
 };
-
 
 Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos)
     : aOldTextAfterStartPos(rOldTextAfterStartPos)
@@ -841,7 +837,6 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
                 officecfg::Office::Common::I18N::CTL::CTLSequenceChecking::get() &&
                 aSelection.Min() > 0 && /* first char needs not to be checked */
                 xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rStr, 0 );
-
 
         uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
         if (bIsInputSequenceChecking && (xISC = ImplGetInputSequenceChecker()).is())
@@ -2124,7 +2119,6 @@ void Edit::Command( const CommandEvent& rCEvt )
             }
         }
 
-
         if ( pData->GetTextAttr() )
         {
             mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().getLength() );
@@ -2838,7 +2832,6 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
 
             mpDDInfo->bStarterOfDD = true;
             mpDDInfo->aDndStartSel = aSel;
-
 
             if ( IsTracking() )
                 EndTracking();  // Vor D&D Tracking ausschalten

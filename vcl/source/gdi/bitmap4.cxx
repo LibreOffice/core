@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmap.hxx>
@@ -1174,7 +1173,6 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     ImplAssignWithSize ( aResultBitmap );
     return true;
 }
-
 
 bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColorTwo )
 {

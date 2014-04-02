@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
@@ -33,7 +32,6 @@
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
-
 
 using namespace ::vcl::unotools;
 using namespace ::com::sun::star;

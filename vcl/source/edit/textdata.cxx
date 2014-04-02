@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/textdata.hxx>
 #include <textdat2.hxx>
 
 #include <tools/debug.hxx>
-
 
 TextSelection::TextSelection()
 {
@@ -47,7 +45,6 @@ void TextSelection::Justify()
         maEndPaM = aTemp;
     }
 }
-
 
 TETextPortionList::TETextPortionList()
 {
@@ -94,7 +91,6 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
     OSL_FAIL( "FindPortion: Nicht gefunden!" );
     return ( size() - 1 );
 }
-
 
 TEParaPortion::TEParaPortion( TextNode* pN )
 {
@@ -180,7 +176,6 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, bool bInclEnd )
     OSL_ENSURE(!bInclEnd, "Line not found: FindLine");
     return ( maLines.size() - 1 );
 }
-
 
 void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine )
 {
@@ -314,6 +309,5 @@ void TEIMEInfos::DestroyAttribs()
     pAttribs = NULL;
     nLen = 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

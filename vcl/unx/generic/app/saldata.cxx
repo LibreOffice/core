@@ -316,7 +316,6 @@ bool X11SalData::ErrorTrapPop( bool bIgnoreError )
     return err;
 }
 
-
 void X11SalData::PushXErrorLevel( bool bIgnore )
 {
     m_aXErrorHandlerStack.push_back( XErrorStackEntry() );
@@ -544,7 +543,6 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
                  pEvent->request_code == X_GetProperty
             )
             return;
-
 
         if( pDisplay != GetGenericData()->GetSalDisplay()->GetDisplay() )
             return;

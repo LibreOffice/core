@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/configsettings.hxx>
 
 #include <svdata.hxx>
@@ -32,7 +31,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-
 
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 

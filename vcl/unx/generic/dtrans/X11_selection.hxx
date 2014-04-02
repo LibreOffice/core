@@ -49,7 +49,6 @@ namespace x11 {
 
     class PixmapHolder; // in bmp.hxx
 
-
     rtl_TextEncoding getTextPlainEncoding( const OUString& rMimeType );
 
     class SelectionAdaptor
@@ -145,7 +144,6 @@ namespace x11 {
             ) throw(std::exception) SAL_OVERRIDE;
 
     };
-
 
     class SelectionManager :
         public ::cppu::WeakImplHelper4<
@@ -259,7 +257,6 @@ namespace x11 {
         sal_Int32                   m_nSelectionTimeout;
         XLIB_Time                   m_nSelectionTimestamp;
 
-
         // members used for Xdnd
 
         // drop only
@@ -324,13 +321,11 @@ namespace x11 {
         XLIB_Cursor                 m_aNoneCursor;
         XLIB_Cursor                 m_aCurrentCursor;
 
-
         // drag and drop
 
         int                         m_nCurrentProtocolVersion;
         ::boost::unordered_map< XLIB_Window, DropTargetEntry >
                                     m_aDropTargets;
-
 
         // some special atoms that are needed often
         Atom                        m_nCLIPBOARDAtom;
@@ -435,14 +430,12 @@ namespace x11 {
         Display * getDisplay() { return m_pDisplay; };
         XLIB_Window getWindow() { return m_aWindow; };
 
-
         void registerHandler( Atom selection, SelectionAdaptor& rAdaptor );
         void deregisterHandler( Atom selection );
         bool requestOwnership( Atom selection );
 
         // allow for synchronization over one mutex for XClipboard
         osl::Mutex& getMutex() { return m_aMutex; }
-
 
         Atom getAtom( const OUString& rString );
         const OUString& getString( Atom nAtom );
@@ -507,8 +500,6 @@ namespace x11 {
                 throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     };
 
-
-
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
@@ -516,8 +507,6 @@ namespace x11 {
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
-
-
 
 }
 

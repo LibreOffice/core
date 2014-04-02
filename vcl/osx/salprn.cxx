@@ -45,9 +45,6 @@ using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 
-
-
-
 AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics( 0 ),
     mbGraphics( false ),
@@ -91,8 +88,6 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     }
 }
 
-
-
 AquaSalInfoPrinter::~AquaSalInfoPrinter()
 {
     delete mpGraphics;
@@ -101,8 +96,6 @@ AquaSalInfoPrinter::~AquaSalInfoPrinter()
     if( mrContext )
         CFRelease( mrContext );
 }
-
-
 
 void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 {
@@ -147,8 +140,6 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
     }
 }
 
-
-
 SalGraphics* AquaSalInfoPrinter::AcquireGraphics()
 {
     SalGraphics* pGraphics = mbGraphics ? NULL : mpGraphics;
@@ -156,28 +147,21 @@ SalGraphics* AquaSalInfoPrinter::AcquireGraphics()
     return pGraphics;
 }
 
-
-
 void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = false;
 }
-
-
 
 bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return false;
 }
 
-
-
 bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
     // FIXME: implement driver data
     if( io_pSetupData && io_pSetupData->mpDriverData )
         return SetData( ~0, io_pSetupData );
-
 
     bool bSuccess = true;
 
@@ -214,11 +198,8 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
     else
         bSuccess = false;
 
-
     return bSuccess;
 }
-
-
 
 void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation )
 {
@@ -240,13 +221,10 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
     mePageOrientation = i_eSetOrientation;
 }
 
-
-
 bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
         return false;
-
 
     if( mpPrintInfo )
     {
@@ -280,21 +258,15 @@ bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupDat
     return mpPrintInfo != nil;
 }
 
-
-
 sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 {
     return 0;
 }
 
-
-
 OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
 {
     return OUString();
 }
-
-
 
 sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i_nType )
 {
@@ -327,8 +299,6 @@ sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i
     };
     return 0;
 }
-
-
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& o_rOutWidth, long& o_rOutHeight,
@@ -422,7 +392,6 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     // how do I know when that might be ?
     i_rController.jobStarted();
 
-
     int nCopies = i_rController.getPrinter()->GetCopyCount();
     int nJobs = 1;
     if( bSinglePrintJobs )
@@ -505,7 +474,6 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             // leads do a double free malloc error. Why this value should behave differently from all the others
             // is a mystery.
             [pPrintDict setObject: [NSNumber numberWithInt: mnCurPageRangeCount] forKey: NSPrintLastPage];
-
 
             // create print operation
             NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
@@ -594,27 +562,19 @@ bool AquaSalInfoPrinter::EndPage()
     return true;
 }
 
-
-
 sal_uLong AquaSalInfoPrinter::GetErrorCode() const
 {
     return 0;
 }
-
-
 
 AquaSalPrinter::AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter ) :
     mpInfoPrinter( i_pInfoPrinter )
 {
 }
 
-
-
 AquaSalPrinter::~AquaSalPrinter()
 {
 }
-
-
 
 bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
@@ -624,8 +584,6 @@ bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
 {
     return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController );
 }
-
-
 
 bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                const OUString& /*i_rJobName*/,
@@ -639,35 +597,25 @@ bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
     return false;
 }
 
-
-
 bool AquaSalPrinter::EndJob()
 {
     return mpInfoPrinter->EndJob();
 }
-
-
 
 bool AquaSalPrinter::AbortJob()
 {
     return mpInfoPrinter->AbortJob();
 }
 
-
-
 SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }
 
-
-
 bool AquaSalPrinter::EndPage()
 {
     return mpInfoPrinter->EndPage();
 }
-
-
 
 sal_uLong AquaSalPrinter::GetErrorCode()
 {
@@ -743,6 +691,5 @@ int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

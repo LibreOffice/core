@@ -114,7 +114,6 @@ private:
     boost::shared_ptr<GtkPrintWrapper> m_pWrapper;
 };
 
-
 struct GtkSalPrinter_Impl
 {
     OString m_sSpoolFile;
@@ -126,13 +125,11 @@ struct GtkSalPrinter_Impl
     ~GtkSalPrinter_Impl();
 };
 
-
 GtkSalPrinter_Impl::GtkSalPrinter_Impl()
     : m_pPrinter(0)
     , m_pSettings(0)
 {
 }
-
 
 GtkSalPrinter_Impl::~GtkSalPrinter_Impl()
 {
@@ -173,7 +170,6 @@ GtkSalPrinter::GtkSalPrinter(SalInfoPrinter* const i_pInfoPrinter)
 {
 }
 
-
 bool
 GtkSalPrinter::impl_doJob(
         const OUString* const i_pFileName,
@@ -206,7 +202,6 @@ GtkSalPrinter::impl_doJob(
 
     return bJobStarted;
 }
-
 
 bool
 GtkSalPrinter::StartJob(
@@ -266,7 +261,6 @@ GtkSalPrinter::StartJob(
     return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, nCopies, bCollate, io_rController);
 }
 
-
 bool
 GtkSalPrinter::EndJob()
 {
@@ -316,7 +310,6 @@ GtkSalPrinter::EndJob()
     return bRet;
 }
 
-
 namespace
 {
 
@@ -336,7 +329,6 @@ lcl_setHelpText(
     (void)i_nIndex;
 #endif
 }
-
 
 static GtkWidget*
 lcl_makeFrame(
@@ -415,7 +407,6 @@ GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
     impl_readFromSettings();
 }
 
-
 void
 GtkPrintDialog::impl_initDialog()
 {
@@ -447,7 +438,6 @@ GtkPrintDialog::impl_initDialog()
 #endif
        ));
 }
-
 
 void
 GtkPrintDialog::impl_initCustomTab()
@@ -761,7 +751,6 @@ GtkPrintDialog::impl_initCustomTab()
     }
 }
 
-
 void
 GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled)
 {
@@ -815,7 +804,6 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     }
 }
 
-
 void
 GtkPrintDialog::impl_checkOptionalControlDependencies()
 {
@@ -825,7 +813,6 @@ GtkPrintDialog::impl_checkOptionalControlDependencies()
         gtk_widget_set_sensitive(it->first, m_rController.isUIOptionEnabled(it->second));
     }
 }
-
 
 beans::PropertyValue*
 GtkPrintDialog::impl_queryPropertyValue(GtkWidget* const i_pWidget) const
@@ -844,7 +831,6 @@ GtkPrintDialog::impl_queryPropertyValue(GtkWidget* const i_pWidget) const
     return pVal;
 }
 
-
 void
 GtkPrintDialog::impl_UIOption_CheckHdl(GtkWidget* const i_pWidget)
 {
@@ -857,7 +843,6 @@ GtkPrintDialog::impl_UIOption_CheckHdl(GtkWidget* const i_pWidget)
         impl_checkOptionalControlDependencies();
     }
 }
-
 
 void
 GtkPrintDialog::impl_UIOption_RadioHdl(GtkWidget* const i_pWidget)
@@ -877,7 +862,6 @@ GtkPrintDialog::impl_UIOption_RadioHdl(GtkWidget* const i_pWidget)
     }
 }
 
-
 void
 GtkPrintDialog::impl_UIOption_SelectHdl(GtkWidget* const i_pWidget)
 {
@@ -890,7 +874,6 @@ GtkPrintDialog::impl_UIOption_SelectHdl(GtkWidget* const i_pWidget)
         impl_checkOptionalControlDependencies();
     }
 }
-
 
 bool
 GtkPrintDialog::run()
@@ -950,7 +933,6 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
         aFilterData[0].Value <<= sal_Int32(0);
         aFilterData[1].Name = "FirstPageOnLeft";
         aFilterData[1].Value <<= sal_False;
-
 
         const gchar *pStr = gtk_print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES);
         if (pStr && !strcmp(pStr, "ranges"))
@@ -1052,7 +1034,6 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
 }
 #endif
 
-
 void
 GtkPrintDialog::updateControllerPrintRange()
 {
@@ -1104,12 +1085,10 @@ GtkPrintDialog::updateControllerPrintRange()
     g_object_unref(G_OBJECT(pSettings));
 }
 
-
 GtkPrintDialog::~GtkPrintDialog()
 {
     gtk_widget_destroy(m_pDialog);
 }
-
 
 void
 GtkPrintDialog::impl_readFromSettings()
@@ -1147,7 +1126,6 @@ GtkPrintDialog::impl_readFromSettings()
     g_object_unref(G_OBJECT(pSettings));
 }
 
-
 void
 GtkPrintDialog::impl_storeToSettings()
 const
@@ -1169,7 +1147,6 @@ const
     g_object_unref(G_OBJECT(pSettings));
     pItem->Commit();
 }
-
 
 sal_uLong
 GtkSalInfoPrinter::GetCapabilities(

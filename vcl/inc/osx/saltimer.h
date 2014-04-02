@@ -38,7 +38,6 @@ class AquaSalTimer : public SalTimer
 
     static void handleStartTimerEvent( NSEvent* pEvent );
 
-
     static NSTimer* pRunningTimer;
     static bool bDispatchTimer;
 };

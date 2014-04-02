@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <set>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
@@ -1362,7 +1361,6 @@ Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
     return aRect;
 }
 
-
 void ComboBox::SetBorderStyle( sal_uInt16 nBorderStyle )
 {
     Window::SetBorderStyle( nBorderStyle );
@@ -1372,7 +1370,6 @@ void ComboBox::SetBorderStyle( sal_uInt16 nBorderStyle )
         mpImplLB->SetBorderStyle( nBorderStyle );
     }
 }
-
 
 long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 {

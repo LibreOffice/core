@@ -32,11 +32,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
-
-
-
-
 namespace
 {
     /** Return <TRUE/> when the given polygon is rectiliner and oriented so that
@@ -225,8 +220,6 @@ namespace
         return pRegionBand;
     }
 } // end of anonymous namespace
-
-
 
 bool Region::IsEmpty() const
 {
@@ -1418,8 +1411,6 @@ bool Region::IsInside( const Rectangle& rRect ) const
     // rectangle is inside if exclusion is empty
     return aRegion.IsEmpty();
 }
-
-
 
 bool Region::IsOver( const Rectangle& rRect ) const
 {

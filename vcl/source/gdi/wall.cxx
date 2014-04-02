@@ -28,8 +28,6 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 
-
-
 ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT )
 {
@@ -40,8 +38,6 @@ ImplWallpaper::ImplWallpaper() :
     mpRect          = NULL;
     meStyle         = WALLPAPER_NULL;
 }
-
-
 
 ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
     maColor( rImplWallpaper.maColor )
@@ -67,8 +63,6 @@ ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
         mpRect = NULL;
 }
 
-
-
 ImplWallpaper::~ImplWallpaper()
 {
     delete mpBitmap;
@@ -76,8 +70,6 @@ ImplWallpaper::~ImplWallpaper()
     delete mpGradient;
     delete mpRect;
 }
-
-
 
 void ImplWallpaper::ImplSetCachedBitmap( BitmapEx& rBmp )
 {
@@ -87,15 +79,11 @@ void ImplWallpaper::ImplSetCachedBitmap( BitmapEx& rBmp )
         *mpCache = rBmp;
 }
 
-
-
 void ImplWallpaper::ImplReleaseCachedBitmap()
 {
     delete mpCache;
     mpCache = NULL;
 }
-
-
 
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
@@ -150,8 +138,6 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     return rIStm;
 }
 
-
-
 SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 3 );
@@ -182,8 +168,6 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     return rOStm;
 }
 
-
-
 inline void Wallpaper::ImplMakeUnique( bool bReleaseCache )
 {
     // copy them if other references exist
@@ -198,8 +182,6 @@ inline void Wallpaper::ImplMakeUnique( bool bReleaseCache )
         mpImplWallpaper->ImplReleaseCachedBitmap();
 }
 
-
-
 Wallpaper::Wallpaper()
 {
 
@@ -208,8 +190,6 @@ Wallpaper::Wallpaper()
     aStaticImplWallpaper.mnRefCount = 0;
     mpImplWallpaper = &aStaticImplWallpaper;
 }
-
-
 
 Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 {
@@ -222,8 +202,6 @@ Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
         mpImplWallpaper->mnRefCount++;
 }
 
-
-
 Wallpaper::Wallpaper( const Color& rColor )
 {
 
@@ -231,8 +209,6 @@ Wallpaper::Wallpaper( const Color& rColor )
     mpImplWallpaper->maColor    = rColor;
     mpImplWallpaper->meStyle    = WALLPAPER_TILE;
 }
-
-
 
 Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 {
@@ -242,8 +218,6 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
     mpImplWallpaper->meStyle    = WALLPAPER_TILE;
 }
 
-
-
 Wallpaper::Wallpaper( const Gradient& rGradient )
 {
 
@@ -251,8 +225,6 @@ Wallpaper::Wallpaper( const Gradient& rGradient )
     mpImplWallpaper->mpGradient = new Gradient( rGradient );
     mpImplWallpaper->meStyle    = WALLPAPER_TILE;
 }
-
-
 
 Wallpaper::~Wallpaper()
 {
@@ -267,8 +239,6 @@ Wallpaper::~Wallpaper()
     }
 }
 
-
-
 void Wallpaper::SetColor( const Color& rColor )
 {
 
@@ -279,15 +249,11 @@ void Wallpaper::SetColor( const Color& rColor )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
-
-
 const Color& Wallpaper::GetColor() const
 {
 
     return mpImplWallpaper->maColor;
 }
-
-
 
 void Wallpaper::SetStyle( WallpaperStyle eStyle )
 {
@@ -302,15 +268,11 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
     mpImplWallpaper->meStyle = eStyle;
 }
 
-
-
 WallpaperStyle Wallpaper::GetStyle() const
 {
 
     return mpImplWallpaper->meStyle;
 }
-
-
 
 void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
 {
@@ -337,8 +299,6 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
-
-
 BitmapEx Wallpaper::GetBitmap() const
 {
 
@@ -351,16 +311,11 @@ BitmapEx Wallpaper::GetBitmap() const
     }
 }
 
-
-
 bool Wallpaper::IsBitmap() const
 {
 
     return (mpImplWallpaper->mpBitmap != 0);
 }
-
-
-
 
 void Wallpaper::SetGradient( const Gradient& rGradient )
 {
@@ -376,8 +331,6 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
-
-
 Gradient Wallpaper::GetGradient() const
 {
 
@@ -392,16 +345,11 @@ Gradient Wallpaper::GetGradient() const
     }
 }
 
-
-
 bool Wallpaper::IsGradient() const
 {
 
     return (mpImplWallpaper->mpGradient != 0);
 }
-
-
-
 
 Gradient Wallpaper::ImplGetApplicationGradient() const
 {
@@ -416,8 +364,6 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
         g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceGradientColor() );
     return g;
 }
-
-
 
 void Wallpaper::SetRect( const Rectangle& rRect )
 {
@@ -441,8 +387,6 @@ void Wallpaper::SetRect( const Rectangle& rRect )
     }
 }
 
-
-
 Rectangle Wallpaper::GetRect() const
 {
 
@@ -455,16 +399,11 @@ Rectangle Wallpaper::GetRect() const
     }
 }
 
-
-
 bool Wallpaper::IsRect() const
 {
 
     return (mpImplWallpaper->mpRect != 0);
 }
-
-
-
 
 bool Wallpaper::IsFixed() const
 {
@@ -473,8 +412,6 @@ bool Wallpaper::IsFixed() const
     else
         return (!mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient);
 }
-
-
 
 bool Wallpaper::IsScrollable() const
 {
@@ -487,8 +424,6 @@ bool Wallpaper::IsScrollable() const
     else
         return false;
 }
-
-
 
 Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 {
@@ -512,8 +447,6 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 
     return *this;
 }
-
-
 
 bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 {
@@ -546,15 +479,11 @@ bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
     return true;
 }
 
-
-
 SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper )
 {
     rWallpaper.ImplMakeUnique();
     return ReadImplWallpaper( rIStm, *rWallpaper.mpImplWallpaper );
 }
-
-
 
 SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper )
 {

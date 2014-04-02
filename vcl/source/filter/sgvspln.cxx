@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <math.h>
-
 
 #include <tools/poly.hxx>
 #include <boost/scoped_array.hpp>
@@ -31,7 +29,6 @@ extern "C" {
 /*.hrConstants- and macrodefinitions*/
 /*.fe The include file u_const.h should be stored in the directory,   */
 /*.fe where the compiler searches for include files.                  */
-
 
 /*-----------------------  FILE u_const.h  ---------------------------*/
 
@@ -98,7 +95,6 @@ short basis()              /* calculate BASE machine independence     */
 #define MAXEXPON  1023.0                    /* largest exponent       */
 #define MINEXPON -1024.0                    /* smallest exponent      */
 
-
 #define MACH_EPS  masch()
 
 #define POSMAX    pow ((double) BASIS, MAXEXPON)
@@ -114,15 +110,10 @@ short basis()              /* calculate BASE machine independence     */
 
 /*--------------------  END of FILE u_const.h  -----------------------*/
 
-
-
-
-
 /*.HL appendix: C - programs*/
 /*.HR Systems of equations for tridiagonal matrices*/
 
 /*.FE  P 3.7 tridiagonal systems of equations */
-
 
 /*----------------------   MODULE tridiagonal  -----------------------*/
 
@@ -243,22 +234,12 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 
 /*-----------------------  END OF TRIDIAGONAL  ------------------------*/
 
-
-
-
-
-
-
-
-
 /*.HL Appendix: C - Programs*/
 /*.HRSystems of equations with cyclic tridiagonal matrices*/
 
 /*.FE  P 3.8  Systems with cyclic tridiagonal matrices    */
 
-
 /*----------------  Module cyclic tridiagonal  -----------------------*/
-
 
 sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
                      double* upper, double* lowrow, double* ricol, double* b)
@@ -400,9 +381,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
 /*------------------  END of CYCLIC TRIDIAGONAL  ---------------------*/
 
-
 } // extern "C"
-
 
 /*************************************************************************
 |*
@@ -507,7 +486,6 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
     return 0;
 }
 
-
 /*************************************************************************
 |*
 |*    PeriodicSpline()
@@ -516,7 +494,6 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
 |*                      cubic splines with n intervals.
 |*
 *************************************************************************/
-
 
 sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
                       double* b, double* c, double* d)
@@ -575,8 +552,6 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
     }
     return 0;
 }
-
-
 
 /*************************************************************************
 |*
@@ -651,8 +626,6 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
     }
     return 0;
 }
-
-
 
 /*************************************************************************
 |*
@@ -736,7 +709,6 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
     }
     return bRet;
 }
-
 
 /*************************************************************************
 |*

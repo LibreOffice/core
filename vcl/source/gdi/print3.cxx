@@ -553,7 +553,6 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
     else
         bCollateCopy = false;
 
-
     ImplSVData* pSVData = ImplGetSVData();
     mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
 
@@ -1201,7 +1200,6 @@ sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFi
 
     static const sal_Int32 OPTIMAL_BMP_RESOLUTION = 300;
     static const sal_Int32 NORMAL_BMP_RESOLUTION  = 200;
-
 
     if( rPrinterOptions.IsReduceBitmaps() )
     {

@@ -36,9 +36,7 @@
 #include "salvd.hxx"
 #include "salbmp.hxx"
 
-
 // - SalBitmap  -
-
 
 struct  BitmapBuffer;
 class   BitmapPalette;

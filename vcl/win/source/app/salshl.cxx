@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svsys.h>
 #include <tools/debug.hxx>
 #include <win/saldata.hxx>
 
-
-
 SalShlData aSalShlData;
-
-
 
 extern "C"
 {
@@ -54,8 +49,6 @@ BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 
 }
 
-
-
 HCURSOR ImplLoadSalCursor( int nId )
 {
     DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
@@ -67,8 +60,6 @@ HCURSOR ImplLoadSalCursor( int nId )
     return hCursor;
 }
 
-
-
 HBITMAP ImplLoadSalBitmap( int nId )
 {
     DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
@@ -79,8 +70,6 @@ HBITMAP ImplLoadSalBitmap( int nId )
 
     return hBitmap;
 }
-
-
 
 bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {

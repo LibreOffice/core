@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "glyphset.hxx"
 #include "psputil.hxx"
 
@@ -42,7 +41,6 @@
 
 using namespace vcl;
 using namespace psp;
-
 
 GlyphSet::GlyphSet (sal_Int32 nFontID, bool bVertical)
         : mnFontID (nFontID),

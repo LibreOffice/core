@@ -351,7 +351,6 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
           .WriteUInt32( (sal_uInt32)0x14 );    // nSizeLast
     ImplEndRecord();
 
-
     // write header
     const sal_uLong nEndPos = m_rStm.Tell(); m_rStm.Seek( nHeaderPos );
 

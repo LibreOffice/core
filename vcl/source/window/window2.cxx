@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <limits.h>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
@@ -48,19 +47,13 @@
 
 using namespace com::sun::star;
 
-
-
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
-
-
 
 struct ImplFocusDelData : public ImplDelData
 {
     Window*         mpFocusWin;
 };
-
-
 
 bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
 {
@@ -148,8 +141,6 @@ bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
     return false;
 }
 
-
-
 void Window::ImplSaveOverlapBackground()
 {
     DBG_ASSERT( !mpWindowImpl->mpOverlapData->mpSaveBackDev, "Window::ImplSaveOverlapBackground() - Background already saved" );
@@ -191,8 +182,6 @@ void Window::ImplSaveOverlapBackground()
     }
 }
 
-
-
 bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
 {
     if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
@@ -232,8 +221,6 @@ bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
     return false;
 }
 
-
-
 void Window::ImplDeleteOverlapBackground()
 {
     if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
@@ -260,8 +247,6 @@ void Window::ImplDeleteOverlapBackground()
         mpWindowImpl->mpOverlapData->mpNextBackWin = NULL;
     }
 }
-
-
 
 void Window::ImplInvalidateAllOverlapBackgrounds()
 {
@@ -293,8 +278,6 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
         pWindow = pNext;
     }
 }
-
-
 
 void Window::ShowFocus( const Rectangle& rRect )
 {
@@ -341,8 +324,6 @@ void Window::ShowFocus( const Rectangle& rRect )
     mpWindowImpl->mbInShowFocus = false;
 }
 
-
-
 void Window::HideFocus()
 {
 
@@ -376,8 +357,6 @@ void Window::HideFocus()
     mpWindowImpl->mbInHideFocus = false;
 }
 
-
-
 void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
 {
     if ( !IsDeviceOutputNecessary() )
@@ -410,8 +389,6 @@ void Window::Invert( const Rectangle& rRect, sal_uInt16 nFlags )
         nSalFlags |= SAL_INVERT_50;
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
-
-
 
 void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
 {
@@ -448,8 +425,6 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }
 
-
-
 void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
     ImplWinData* pWinData = ImplGetWinData();
@@ -476,8 +451,6 @@ void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     mpWindowImpl->mbTrackVisible              = true;
 }
 
-
-
 void Window::HideTracking()
 {
     if ( mpWindowImpl->mbTrackVisible )
@@ -488,8 +461,6 @@ void Window::HideTracking()
         mpWindowImpl->mbTrackVisible = false;
     }
 }
-
-
 
 void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
@@ -553,8 +524,6 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     }
 }
 
-
-
 void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
@@ -606,8 +575,6 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 }
 
-
-
 IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -632,8 +599,6 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 
     return 0;
 }
-
-
 
 void Window::StartTracking( sal_uInt16 nFlags )
 {
@@ -661,8 +626,6 @@ void Window::StartTracking( sal_uInt16 nFlags )
     pSVData->maWinData.mnTrackFlags = nFlags;
     CaptureMouse();
 }
-
-
 
 void Window::EndTracking( sal_uInt16 nFlags )
 {
@@ -705,14 +668,10 @@ void Window::EndTracking( sal_uInt16 nFlags )
     }
 }
 
-
-
 bool Window::IsTracking() const
 {
     return (ImplGetSVData()->maWinData.mpTrackWin == this);
 }
-
-
 
 void Window::StartAutoScroll( sal_uInt16 nFlags )
 {
@@ -729,8 +688,6 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
     pSVData->maAppData.mpWheelWindow = new ImplWheelWindow( this );
 }
 
-
-
 void Window::EndAutoScroll()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -744,8 +701,6 @@ void Window::EndAutoScroll()
         pSVData->maAppData.mpWheelWindow = NULL;
     }
 }
-
-
 
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
                              const Point& rDestOff, VirtualDevice& rSaveDevice )
@@ -779,8 +734,6 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
 }
 
-
-
 sal_uIntPtr Window::SaveFocus()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -794,8 +747,6 @@ sal_uIntPtr Window::SaveFocus()
     else
         return 0;
 }
-
-
 
 bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
 {
@@ -818,8 +769,6 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
     }
 }
 
-
-
 void Window::SetZoom( const Fraction& rZoom )
 {
     if ( mpWindowImpl->maZoom != rZoom )
@@ -829,14 +778,10 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-
-
 inline long WinFloatRound( double fVal )
 {
     return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
 }
-
-
 
 void Window::SetZoomedPointFont( const Font& rFont )
 {
@@ -876,8 +821,6 @@ void Window::SetZoomedPointFont( const Font& rFont )
         SetPointFont( rFont );
 }
 
-
-
 long Window::CalcZoom( long nCalc ) const
 {
 
@@ -892,8 +835,6 @@ long Window::CalcZoom( long nCalc ) const
     return nCalc;
 }
 
-
-
 void Window::SetControlFont()
 {
     if ( mpWindowImpl->mpControlFont )
@@ -903,8 +844,6 @@ void Window::SetControlFont()
         StateChanged( STATE_CHANGE_CONTROLFONT );
     }
 }
-
-
 
 void Window::SetControlFont( const Font& rFont )
 {
@@ -926,8 +865,6 @@ void Window::SetControlFont( const Font& rFont )
     StateChanged( STATE_CHANGE_CONTROLFONT );
 }
 
-
-
 Font Window::GetControlFont() const
 {
     if ( mpWindowImpl->mpControlFont )
@@ -939,8 +876,6 @@ Font Window::GetControlFont() const
     }
 }
 
-
-
 void Window::SetControlForeground()
 {
     if ( mpWindowImpl->mbControlForeground )
@@ -950,8 +885,6 @@ void Window::SetControlForeground()
         StateChanged( STATE_CHANGE_CONTROLFOREGROUND );
     }
 }
-
-
 
 void Window::SetControlForeground( const Color& rColor )
 {
@@ -975,8 +908,6 @@ void Window::SetControlForeground( const Color& rColor )
     }
 }
 
-
-
 void Window::SetControlBackground()
 {
     if ( mpWindowImpl->mbControlBackground )
@@ -986,8 +917,6 @@ void Window::SetControlBackground()
         StateChanged( STATE_CHANGE_CONTROLBACKGROUND );
     }
 }
-
-
 
 void Window::SetControlBackground( const Color& rColor )
 {
@@ -1011,8 +940,6 @@ void Window::SetControlBackground( const Color& rColor )
     }
 }
 
-
-
 Size Window::CalcWindowSize( const Size& rOutSz ) const
 {
     Size aSz = rOutSz;
@@ -1021,8 +948,6 @@ Size Window::CalcWindowSize( const Size& rOutSz ) const
     return aSz;
 }
 
-
-
 Size Window::CalcOutputSize( const Size& rWinSz ) const
 {
     Size aSz = rWinSz;
@@ -1030,8 +955,6 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
     aSz.Height() -= mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder;
     return aSz;
 }
-
-
 
 Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
 {
@@ -1042,8 +965,6 @@ Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
     aFont.SetSize( aFontSize );
     return aFont;
 }
-
-
 
 long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
 {
@@ -1058,8 +979,6 @@ long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
     }
     return nP;
 }
-
-
 
 static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyByLineSize )
 {
@@ -1251,10 +1170,6 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
     return bRet;
 }
 
-
-
-
-
 // Note that when called for COMMAND_WHEEL above, despite its name,
 // pVScrl isn't necessarily the vertical scroll bar. Depending on
 // whether the scroll is horizontal or vertical, it is either the
@@ -1281,7 +1196,6 @@ void Window::EnableDocking( bool bEnable )
     else
         ImplGetDockingManager()->RemoveWindow( this );
 }
-
 
 // retrieves the list of owner draw decorated windows for this window hiearchy
 ::std::vector<Window *>& Window::ImplGetOwnerDrawList()
@@ -1878,7 +1792,6 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
     }
     return true;
 }
-
 
 bool Window::set_property(const OString &rKey, const OString &rValue)
 {

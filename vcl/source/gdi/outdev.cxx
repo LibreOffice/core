@@ -955,7 +955,6 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
     return aColor;
 }
 
-
 void OutputDevice::SetLineColor( const Color& rColor )
 {
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <prex.h>
 #include <X11/Xatom.h>
 #include <postx.h>
@@ -35,7 +34,6 @@
 
 #include <unistd.h>
 #include <string.h>
-
 
 static bool is_gnome_desktop( Display* pDisplay )
 {

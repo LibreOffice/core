@@ -1669,7 +1669,6 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
         ImpBitmap *pIconImpBitmap = aIcon.ImplGetBitmapImpBitmap();
         ImpBitmap *pIconImpMask   = aIcon.ImplGetMaskImpBitmap();
 
-
         if( pIconImpBitmap && pIconImpMask )
         {
             SalBitmap *pIconBitmap =
@@ -3524,7 +3523,6 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 }
 #endif // GTK_CHECK_VERSION(3,0,0)
 
-
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
@@ -3947,9 +3945,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     }
 }
 
-
 // GtkSalFrame::IMHandler
-
 
 GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 : m_pFrame(pFrame),

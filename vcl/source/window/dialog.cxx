@@ -367,7 +367,6 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     // Now, all Dialogs are per default system windows !!!
     nStyle |= WB_SYSTEMWINDOW;
 
-
     // parent is NULL: get the default Dialog parent
     if ( !pParent )
     {
@@ -399,7 +398,6 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     // DIALOG_NO_PARENT: explicitly don't have a parent for this Dialog
     else if( pParent == DIALOG_NO_PARENT )
         pParent = NULL;
-
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
          (pParent->mpWindowImpl->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||
@@ -1082,7 +1080,6 @@ void Dialog::SetModalInputMode( bool bModal )
             mpPrevExecuteDlg->EnableInput( true, true, true, this );
             // ensure continued modality of prev dialog
             // do not change modality counter
-
 
             // #i119994# need find the last modal dialog before reactive it
             Dialog * pPrevModalDlg = mpPrevExecuteDlg;

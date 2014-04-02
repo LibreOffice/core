@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "osl/diagnose.h"
 
 #include "vcl/svapp.hxx"
@@ -36,7 +35,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
-
 
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {

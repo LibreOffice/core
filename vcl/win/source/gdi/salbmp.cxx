@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svsys.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
@@ -63,8 +62,6 @@
 #pragma warning(pop)
 #endif
 
-
-
 // - Inlines -
 
 inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
@@ -74,7 +71,6 @@ inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
     ( nX & 1 ) ? ( rByte &= 0xf0, rByte |= ( cIndex & 0x0f ) ) :
                  ( rByte &= 0x0f, rByte |= ( cIndex << 4 ) );
 }
-
 
 // Helper class to manage Gdiplus::Bitmap instances inside of
 // WinSalBitmap
@@ -194,12 +190,10 @@ public:
     }
 };
 
-
 // Global instance of GdiPlusBuffer which manages Gdiplus::Bitmap
 // instances
 
 static GdiPlusBuffer aGdiPlusBuffer;
-
 
 // - WinSalBitmap -
 
@@ -213,14 +207,10 @@ WinSalBitmap::WinSalBitmap()
 {
 }
 
-
-
 WinSalBitmap::~WinSalBitmap()
 {
     Destroy();
 }
-
-
 
 void WinSalBitmap::Destroy()
 {
@@ -237,8 +227,6 @@ void WinSalBitmap::Destroy()
     maSize = Size();
     mnBitCount = 0;
 }
-
-
 
 GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
 {
@@ -280,8 +268,6 @@ GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSourc
 
     return maGdiPlusBitmap;
 }
-
-
 
 Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
 {
@@ -371,8 +357,6 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
 
     return pRetval;
 }
-
-
 
 Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource)
 {
@@ -530,8 +514,6 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     return pRetval;
 }
 
-
-
 bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
 {
     bool bRet = TRUE;
@@ -581,8 +563,6 @@ bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
     return bRet;
 }
 
-
-
 bool WinSalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
 {
     bool bRet = FALSE;
@@ -598,8 +578,6 @@ bool WinSalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const Bitmap
 
     return bRet;
 }
-
-
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 {
@@ -627,8 +605,6 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 
     return bRet;
 }
-
-
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 {
@@ -673,8 +649,6 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
     return bRet;
 }
-
-
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
 {
@@ -726,8 +700,6 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
     return bRet;
 }
 
-
-
 bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas, Size& /*rSize*/, bool bMask )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
@@ -774,8 +746,6 @@ sal_uInt16 WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 
     return nColors;
 }
-
-
 
 HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rPal )
 {
@@ -832,8 +802,6 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
     return hDIB;
 }
 
-
-
 HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 {
     HANDLE  hCopy = 0;
@@ -877,8 +845,6 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 
     return hCopy;
 }
-
-
 
 BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 {
@@ -977,8 +943,6 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     return pBuffer;
 }
 
-
-
 void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
     if( pBuffer )
@@ -1000,8 +964,6 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         delete pBuffer;
     }
 }
-
-
 
 void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                                      const Size& rSizePixel, bool bRLE4 )

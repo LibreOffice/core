@@ -34,7 +34,6 @@ class X11SalVirtualDevice : public SalVirtualDevice
     SalDisplay      *pDisplay_;
     X11SalGraphics  *pGraphics_;
 
-
     Pixmap          hDrawable_;
     SalX11Screen    m_nXScreen;
 
@@ -83,7 +82,6 @@ public:
     virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
     virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 };
-
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H
 

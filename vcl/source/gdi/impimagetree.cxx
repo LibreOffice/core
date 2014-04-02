@@ -145,7 +145,6 @@ bool ImplImageTree::loadDefaultImage(
         style, bitmap, false);
 }
 
-
 bool ImplImageTree::doLoadImage(
     OUString const & name, OUString const & style, BitmapEx & bitmap,
     bool localized)

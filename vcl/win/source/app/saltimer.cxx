@@ -26,13 +26,8 @@
 #include <sehandler.hxx>
 #endif
 
-
-
-
 // maximum period
 #define MAX_SYSPERIOD     65533
-
-
 
 void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
 {
@@ -55,8 +50,6 @@ void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
     pSalData->mnTimerId = SetTimer( 0, 0, (UINT)nMS, SalTimerProc );
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
-
-
 
 WinSalTimer::~WinSalTimer()
 {
@@ -89,8 +82,6 @@ void WinSalTimer::Stop()
         pSalData->mnNextTimerTime = 0;
     }
 }
-
-
 
 void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 {

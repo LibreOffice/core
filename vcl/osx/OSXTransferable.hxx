@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _TRANSFERABLE_HXX_
 #define _TRANSFERABLE_HXX_
 
@@ -36,7 +35,6 @@
 #include <boost/utility.hpp>
 #include <vector>
 
-
 class OSXTransferable : public ::cppu::WeakImplHelper1<com::sun::star::datatransfer::XTransferable>,
                         private ::boost::noncopyable
 {
@@ -49,9 +47,7 @@ public:
 
   virtual ~OSXTransferable();
 
-
   // XTransferable
-
 
   virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
     throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

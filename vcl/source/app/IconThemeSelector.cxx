@@ -22,7 +22,6 @@ IconThemeSelector::HIGH_CONTRAST_ICON_THEME_ID("hicontrast");
 /*static*/ const OUString
 IconThemeSelector::FALLBACK_ICON_THEME_ID("tango");
 
-
 namespace {
 
     class SameTheme :

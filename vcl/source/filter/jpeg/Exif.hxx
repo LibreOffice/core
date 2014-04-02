@@ -87,7 +87,6 @@ public :
 
 };
 
-
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

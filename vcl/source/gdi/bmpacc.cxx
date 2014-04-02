@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
@@ -413,7 +412,6 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
         for( long nX = 0L, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
-
 
 void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                                       sal_uLong nSrcScanlineFormat, sal_uLong nSrcScanlineSize )

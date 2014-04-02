@@ -104,7 +104,6 @@ private:
     sal_uInt8*              pMap;
     const sal_uLong         nBits;
 
-
     SAL_DLLPRIVATE void ImplCreateBuffers( const sal_uLong nMax );
 
 public:

@@ -62,7 +62,6 @@ namespace vcl_sal { class WMAdaptor; }
 
 #define PROPERTY_DEFAULT                        0x00000FCB
 
-
 // server vendor
 
 typedef enum  {
@@ -405,14 +404,12 @@ public:
     void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };
 
-
 // get foreign key names
 namespace vcl_sal {
     OUString getKeysymReplacementName(
         const OUString& pLang,
         KeySym nSymbol );
 }
-
 
 #endif // INCLUDED_VCL_INC_UNX_SALDISP_HXX
 

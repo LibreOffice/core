@@ -26,7 +26,6 @@
 #include <jobset.h>
 #include <boost/scoped_array.hpp>
 
-
 #define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
 #define JOBSET_FILE605_SYSTEM   ((sal_uInt16)0xFFFE)
 

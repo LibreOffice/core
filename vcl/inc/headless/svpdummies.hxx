@@ -75,7 +75,6 @@ public:
                                   int nDefButton ) SAL_OVERRIDE;
 };
 
-
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

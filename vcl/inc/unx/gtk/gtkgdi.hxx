@@ -128,7 +128,6 @@ public:
     inline GtkSalFrame* GetGtkFrame() const { return static_cast<GtkSalFrame*>(m_pFrame); }
     void SetWindow( GtkWidget* window ) { m_pWindow = window; }
 
-
     // will be set when UI theme was changed
     static  bool        bThemeChanged;
     static  bool        bNeedPixmapPaint;

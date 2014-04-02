@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stack>
 #include <string.h>
 #include <osl/module.h>
@@ -292,7 +291,6 @@ SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
     return Superclass_t::CreatePrinter( pInfoPrinter );
 #endif
 }
-
 
 GtkYieldMutex::GtkYieldMutex()
 {
