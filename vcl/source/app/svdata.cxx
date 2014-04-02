@@ -442,7 +442,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 {
     rCancelled = sal_False;
 
-    bool bErrorMessage = true;
+    sal_Bool bErrorMessage = sal_True;
 
     // Note:
     // if bAllowCancel is sal_True we were called from application startup
@@ -452,13 +452,13 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
     try
     {
-        bool bSuccess = true;
+        sal_Bool bSuccess = sal_True;
 
         // No error messages when env var is set ..
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( pEnv && *pEnv )
         {
-            bErrorMessage = false;
+            bErrorMessage = sal_False;
         }
 
         ImplSVData* pSVData = ImplGetSVData();
@@ -479,7 +479,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 }
 
                 if( !pSVData->mxAccessBridge.is() )
-                    bSuccess = false;
+                    bSuccess = sal_False;
                 return bSuccess;
 #endif
                 css::uno::Reference< XExtendedToolkit > xToolkit =
@@ -512,7 +512,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 }
 
                 if( !pSVData->mxAccessBridge.is() )
-                    bSuccess = false;
+                    bSuccess = sal_False;
             }
         }
 
@@ -541,7 +541,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 rCancelled = sal_True;
         }
 
-        return false;
+        return sal_False;
     }
 
     catch(::com::sun::star::java::JavaVMCreationFailureException&)
@@ -566,7 +566,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 rCancelled = sal_True;
         }
 
-        return false;
+        return sal_False;
     }
 
     catch(::com::sun::star::java::MissingJavaRuntimeException&)
@@ -591,7 +591,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 rCancelled = sal_True;
         }
 
-        return false;
+        return sal_False;
     }
 
     catch(::com::sun::star::java::JavaDisabledException&)
@@ -616,7 +616,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 rCancelled = sal_True;
         }
 
-        return false;
+        return sal_False;
     }
 
 
@@ -670,12 +670,12 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
             }
         }
 
-        return false;
+        return sal_False;
     }
 
     catch (...)
     {
-        return false;
+        return sal_False;
     }
 }
 

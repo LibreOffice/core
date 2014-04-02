@@ -6211,7 +6211,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                         // Make sure to launch Accessibiliity only the following criterias are satisfied to avoid RFT interrupts regular acc processing
                         if (g_acc_manager1 == NULL)
                         {
-                            sal_Bool bCancelled;
+                            sal_Bool bCancelled(sal_False);
                             InitAccessBridge(sal_False,bCancelled);
                             if( bCancelled )
                                 break;

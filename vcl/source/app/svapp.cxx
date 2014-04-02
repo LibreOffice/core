@@ -2058,12 +2058,13 @@ sal_Bool Application::IsAccessibilityEnabled()
 
 sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
 {
-    sal_Bool bRet = true;
+    sal_Bool bRet = sal_True;
+
+    rCancelled = sal_False;
 
 // Disable Java bridge on UNIX and OS/2
 #ifndef WNT
     (void) bShowCancel; // unsued
-    (void) rCancelled; // unused
 #else
     // Checking HasAtHook() was introduced with IBM's IA2 CWS.
     if( HasAtHook() )
