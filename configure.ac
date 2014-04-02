@@ -5402,23 +5402,23 @@ if test "$GXX" = "yes"; then
 
     dnl see https://code.google.com/p/android/issues/detail?id=41770
     if test "$_gpp_majmin" -ge "401"; then
-            glibcxx_threads=no
-            AC_LANG_PUSH([C++])
-            AC_REQUIRE_CPP
-            AC_MSG_CHECKING([whether $CXX is broken with boost.thread])
-            AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[
-                #include <bits/c++config.h>]],[[
-                #if !defined(_GLIBCXX_HAVE_GTHR_DEFAULT) \
-                && !defined(_GLIBCXX__PTHREADS) \
-                && !defined(_GLIBCXX_HAS_GTHREADS)
-                choke me
-                #endif
-            ]])],[AC_MSG_RESULT([yes])
-            glibcxx_threads=yes],[AC_MSG_RESULT([no])])
-            AC_LANG_POP([C++])
-            if test $glibcxx_threads = yes; then
-                  BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
-            fi
+        glibcxx_threads=no
+        AC_LANG_PUSH([C++])
+        AC_REQUIRE_CPP
+        AC_MSG_CHECKING([whether $CXX is broken with boost.thread])
+        AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[
+            #include <bits/c++config.h>]],[[
+            #if !defined(_GLIBCXX_HAVE_GTHR_DEFAULT) \
+            && !defined(_GLIBCXX__PTHREADS) \
+            && !defined(_GLIBCXX_HAS_GTHREADS)
+            choke me
+            #endif
+        ]])],[AC_MSG_RESULT([yes])
+        glibcxx_threads=yes],[AC_MSG_RESULT([no])])
+        AC_LANG_POP([C++])
+        if test $glibcxx_threads = yes; then
+              BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
+        fi
      fi
 fi
 AC_SUBST(BOOST_CXXFLAGS)
