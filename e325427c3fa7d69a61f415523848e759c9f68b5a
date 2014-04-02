@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_7881ed49",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 5397,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-04-02T11:24:15Z",
+      "side": 1,
+      "message": "currently TDF release builds for Linux are done with GCC 4.1, so this is going a little too far",
+      "revId": "e325427c3fa7d69a61f415523848e759c9f68b5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
