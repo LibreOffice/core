@@ -978,6 +978,7 @@ inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
     m_nExtraSpaces(0),
     m_pEncodingList(INetMIME::createPreferredCharsetList(ePreferredEncoding)),
     m_ePrevCoding(CODING_NONE),
+    m_ePrevMIMEEncoding(RTL_TEXTENCODING_DONTKNOW),
     m_eCoding(CODING_NONE),
     m_nQuotedEscaped(0),
     m_eEncodedWordState(STATE_INITIAL)
