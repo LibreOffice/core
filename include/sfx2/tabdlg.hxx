@@ -91,7 +91,6 @@ friend class SfxTabDialogController;
     SfxItemSet*         pOutSet;
     TabDlg_Impl*        pImpl;
     sal_uInt16*         pRanges;
-    sal_uInt32          nResId;
     sal_uInt16          nAppPageId;
     bool                bItemsReset;
     sal_Bool            bFmt; // sal_True, sal_False or 2(some kind of hack)

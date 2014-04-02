@@ -405,7 +405,6 @@ SfxTabDialog::SfxTabDialog
     , pSet(pItemSet)
     , pOutSet(0)
     , pRanges(0)
-    , nResId(0)
     , nAppPageId(USHRT_MAX)
     , bItemsReset(false)
     , bFmt(bEditFmt)
@@ -436,7 +435,6 @@ SfxTabDialog::SfxTabDialog
     , pSet(pItemSet)
     , pOutSet(0)
     , pRanges(0)
-    , nResId(0)
     , nAppPageId(USHRT_MAX)
     , bItemsReset(false)
     , bFmt(bEditFmt)
@@ -464,7 +462,15 @@ SfxTabDialog::~SfxTabDialog()
             if ( !aPageData.isEmpty() )
             {
                 // save settings of all pages (user data)
-                SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
+                OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(),
+                    RTL_TEXTENCODING_UTF8);
+                if (sConfigId.isEmpty())
+                {
+                    SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+                    sConfigId = OUString::number(pDataObject->nId);
+                }
+
+                SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
@@ -685,7 +691,7 @@ void SfxTabDialog::Start_Impl()
     sal_uInt16 nActPage = m_pTabCtrl->GetPageId( 0 );
 
     // load old settings, when exists
-    SvtViewOptions aDlgOpt( E_TABDIALOG, OUString::number( nResId ) );
+    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
     if ( aDlgOpt.Exists() )
     {
         SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
@@ -806,7 +812,15 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
             if ( !aPageData.isEmpty() )
             {
                 // save settings of this page (user data)
-                SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
+                OUString sConfigId = OStringToOUString(pDataObject->pTabPage->GetConfigId(),
+                    RTL_TEXTENCODING_UTF8);
+                if (sConfigId.isEmpty())
+                {
+                    SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+                    sConfigId = OUString::number(pDataObject->nId);
+                }
+
+                SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
                 aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
@@ -882,8 +896,9 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
 void SfxTabDialog::SavePosAndId()
 {
     // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt( E_TABDIALOG, OUString::number( nResId ) );
+    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
     aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WINDOWSTATE_MASK_POS),RTL_TEXTENCODING_ASCII_US));
+    // to-do replace with name of page when all pages are converted to .ui
     aDlgOpt.SetPageID( m_pTabCtrl->GetCurPageId() );
 }
 
@@ -1252,7 +1267,13 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
 
-        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
+        OUString sConfigId = OStringToOUString(pTabPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
+        if (sConfigId.isEmpty())
+        {
+            SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+            sConfigId = OUString::number(pDataObject->nId);
+        }
+        SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
         OUString sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
