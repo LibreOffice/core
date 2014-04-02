@@ -13,7 +13,8 @@
 
 using namespace com::sun::star;
 
-OpenGLContext::OpenGLContext()
+OpenGLContext::OpenGLContext():
+    mbInitialized(false)
 {
 }
 
@@ -319,6 +320,9 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 bool OpenGLContext::init( Window* pParent )
 {
     m_pWindow.reset(pParent ? pParent : new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
+    if(mbInitialized)
+        return true;
+
     SAL_INFO("vcl.opengl", "OpenGLContext::OpenGLContext----start");
     initWindow();
     m_pWindow->setPosSizePixel(0,0,0,0);
@@ -441,6 +445,7 @@ bool OpenGLContext::init( Window* pParent )
 #endif
 
     SAL_INFO("vcl.opengl", "OpenGLContext::init----end");
+    mbInitialized = true;
     return true;
 }
 

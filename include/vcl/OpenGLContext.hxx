@@ -109,6 +109,7 @@ private:
     GLWindow m_aGLWin;
     boost::scoped_ptr<Window> m_pWindow;
     boost::scoped_ptr<SystemChildWindow> m_pChildWindow;
+    bool mbInitialized;
 };
 
 #endif
