@@ -73,7 +73,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
     const SwSectionFmt* pFmt;
     if( !pNewFmt )
     {
-        sal_uInt16 nCount = rSh.GetSectionFmtCount();
+        const sal_uInt16 nCount = rSh.GetSectionFmtCount();
         for(sal_uInt16 i=0;i<nCount;i++)
         {
             SectionType eTmpType;
@@ -93,7 +93,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
     else
     {
         SwSections aTmpArr;
-        sal_uInt16 nCnt = pNewFmt->GetChildSections(aTmpArr,SORTSECT_POS);
+        const sal_uInt16 nCnt = pNewFmt->GetChildSections(aTmpArr,SORTSECT_POS);
         if( nCnt )
         {
             SectionType eTmpType;
@@ -452,7 +452,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
 
     if (!pFmt)
     {
-        sal_uInt16 nCount=rSh.GetSectionFmtCount();
+        const sal_uInt16 nCount=rSh.GetSectionFmtCount();
         for ( sal_uInt16 n=0; n < nCount; n++ )
         {
             SectionType eTmpType;
@@ -478,7 +478,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
     {
         SwSections aTmpArr;
         SvTreeListEntry* pNEntry;
-        sal_uInt16 nCnt = pFmt->GetChildSections(aTmpArr,SORTSECT_POS);
+        const sal_uInt16 nCnt = pFmt->GetChildSections(aTmpArr,SORTSECT_POS);
         if( nCnt )
         {
             for( sal_uInt16 n = 0; n < nCnt; ++n )
@@ -515,7 +515,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
 
 sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 {
-    sal_uInt16 nCount=rSh.GetSectionFmtCount();
+    const sal_uInt16 nCount=rSh.GetSectionFmtCount();
     for (sal_uInt16 i=0;i<nCount;i++)
         if (pFmt==&rSh.GetSectionFmt(i))
             return i;
@@ -808,7 +808,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
     for (SectReprArr::reverse_iterator aI = aSectReprArr.rbegin(), aEnd = aSectReprArr.rend(); aI != aEnd; ++aI)
     {
         SwSectionFmt* pFmt = aOrigArray[ aI->GetArrPos() ];
-        sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
+        const sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
             rSh.DelSectionFmt( nNewPos );
     }
@@ -1979,7 +1979,7 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
         pOffsetFld = pEndOffsetFld;
     }
 
-    sal_uInt16 eState = rAttr.GetValue();
+    const sal_uInt16 eState = rAttr.GetValue();
     switch( eState )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
