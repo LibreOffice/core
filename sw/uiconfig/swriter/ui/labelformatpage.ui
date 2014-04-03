@@ -380,7 +380,6 @@
             <property name="xalign">0</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">top:0.00cm</property>
-            <property name="ellipsize">middle</property>
             <property name="max_width_chars">32</property>
           </object>
           <packing>
@@ -397,7 +396,6 @@
             <property name="xalign">0</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">top:0.00cm</property>
-            <property name="ellipsize">middle</property>
             <property name="max_width_chars">32</property>
           </object>
           <packing>

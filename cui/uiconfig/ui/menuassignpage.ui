@@ -93,7 +93,6 @@
                         <property name="label" translatable="yes">Menu</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">toplevellist</property>
-                        <property name="ellipsize">middle</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

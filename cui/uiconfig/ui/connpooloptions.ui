@@ -68,7 +68,6 @@
                         <property name="label" translatable="yes">Drivers known in %PRODUCTNAME</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">driverlist</property>
-                        <property name="ellipsize">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

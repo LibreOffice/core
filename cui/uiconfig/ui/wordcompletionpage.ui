@@ -93,7 +93,6 @@
                     <property name="label" translatable="yes">_Max. entries</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">maxentries</property>
-                    <property name="ellipsize">middle</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -139,7 +138,6 @@
                     <property name="label" translatable="yes">Mi_n. word length</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">maxentries</property>
-                    <property name="ellipsize">middle</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -337,7 +335,6 @@
                     <property name="label" translatable="yes">Acc_ept with</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">acceptwith</property>
-                    <property name="ellipsize">middle</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
