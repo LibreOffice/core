@@ -259,9 +259,10 @@ void SectRepr::SetFilter( const OUString& rFilter )
 void SectRepr::SetSubRegion(const OUString& rSubRegion)
 {
     OUString sNewFile;
-    OUString sOldFileName( m_SectionData.GetLinkFileName() );
-    const OUString sFilter( sOldFileName.getToken( 1, sfx2::cTokenSeparator ) );
-    sOldFileName = sOldFileName.getToken( 0, sfx2::cTokenSeparator );
+    sal_Int32 n;
+    const OUString sLinkFileName(m_SectionData.GetLinkFileName());
+    const OUString sOldFileName( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
+    const OUString sFilter( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
 
     if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
         sNewFile = sOldFileName + OUString(sfx2::cTokenSeparator) +
@@ -1517,9 +1518,10 @@ short   SwInsertSectionTabDialog::Ok()
                     m_pSectionData->IsEditInReadonlyFlag()));
 
         const OUString sLinkFileName( m_pSectionData->GetLinkFileName() );
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.getToken( 0, sfx2::cTokenSeparator )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.getToken( 1, sfx2::cTokenSeparator )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.getToken( 2, sfx2::cTokenSeparator )));
+        sal_Int32 n = 0;
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n )));
         aRequest.Done();
     }
     return nRet;
