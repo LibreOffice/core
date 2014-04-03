@@ -588,7 +588,8 @@ public:
     bool InsertRow( sal_uInt16 nCnt, bool bBehind );
     bool InsertCol( sal_uInt16 nCnt, bool bBehind );  // 0 == at the end.
     sal_Bool DeleteCol();
-    sal_Bool DeleteRow();
+    sal_Bool DeleteTable();
+    sal_Bool DeleteRow(bool bCompleteTable = false);
 
     sal_Bool DeleteTblSel();        ///< Current selection, may be whole table.
 

@@ -334,7 +334,12 @@ sal_Bool SwFEShell::DeleteCol()
     return bRet;
 }
 
-sal_Bool SwFEShell::DeleteRow()
+sal_Bool SwFEShell::DeleteTable()
+{
+    return DeleteRow(true);
+}
+
+sal_Bool SwFEShell::DeleteRow(bool bCompleteTable)
 {
     // check if Point/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
@@ -441,9 +446,9 @@ sal_Bool SwFEShell::DeleteRow()
         }
 
         // now delete the lines
-        StartUndo(UNDO_ROW_DELETE);
+        StartUndo(bCompleteTable ? UNDO_UI_TABLE_DELETE : UNDO_ROW_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes );
-        EndUndo(UNDO_ROW_DELETE);
+        EndUndo(bCompleteTable ? UNDO_UI_TABLE_DELETE : UNDO_ROW_DELETE);
     }
     else
         bRet = sal_False;

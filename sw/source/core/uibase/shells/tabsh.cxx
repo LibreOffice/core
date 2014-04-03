@@ -1039,7 +1039,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rSh.StartAction();
             rSh.StartUndo();
             rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
-            rSh.DeleteRow();
+            rSh.DeleteTable();
             rSh.EndUndo();
             rSh.EndAction();
         }

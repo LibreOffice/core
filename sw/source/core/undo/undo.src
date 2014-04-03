@@ -651,5 +651,8 @@ String STR_UNDO_FLYFRMFMT_DESCRITPTION
 {
     Text[ en-US ] = "Change object description of $1";
 };
-
+String STR_UNDO_TABLE_DELETE
+{
+    Text [ en-US ] = "Delete table" ;
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
