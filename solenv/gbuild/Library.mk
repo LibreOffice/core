@@ -49,7 +49,7 @@ gb_Library_get_ilib_target = $(if $(filter $(1),$(gb_Library_RTVERLIBS) $(gb_Lib
 
 define gb_Library_Library
 $(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
-ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
+ifeq (,$$(filter $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk or RepositoryExternal.mk))
 endif
