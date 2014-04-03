@@ -276,11 +276,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
             if( -1 != nEnd )
                 GetExtraData() = GetExtraData().replaceAt( nStt, nEnd - nStt + 1, "" );
         }
-        OUString sTmp(GetExtraData());
-        sTmp += sFindNm;
-        sTmp += sData;
-        sTmp += OUString(cDialogExtraDataClose);
-        GetExtraData() = sTmp;
+        GetExtraData() += sFindNm + sData + OUString(cDialogExtraDataClose);
     }
 }
 
