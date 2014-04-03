@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -41,7 +44,7 @@ inline static Mutex & getWeakMutex() SAL_THROW(())
 
 //-- OWeakConnectionPoint ----------------------------------------------------
 
-class OWeakConnectionPoint : public XAdapter
+class OWeakConnectionPoint: public XAdapter, private boost::noncopyable
 {
 public:
     /**
@@ -67,9 +70,6 @@ public:
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    OWeakConnectionPoint(OWeakConnectionPoint &); // not defined
-    void operator =(OWeakConnectionPoint &); // not defined
-
     virtual ~OWeakConnectionPoint() {}
 
     /// The reference counter.
@@ -316,10 +316,9 @@ namespace uno
 
 //-- OWeakRefListener -----------------------------------------------------
 
-class OWeakRefListener : public XReference
+class OWeakRefListener: public XReference, private boost::noncopyable
 {
 public:
-    OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW(());
     OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW(());
     virtual ~OWeakRefListener() SAL_THROW(());
 
@@ -335,27 +334,7 @@ public:
     oslInterlockedCount         m_aRefCount;
     /// The connection point of the weak object
     Reference< XAdapter >       m_XWeakConnectionPoint;
-
-private:
-    OWeakRefListener& SAL_CALL operator=(const OWeakRefListener& rRef) SAL_THROW(());
 };
-
-OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW(())
-    : com::sun::star::uno::XReference()
-    , m_aRefCount( 1 )
-{
-    try
-    {
-    m_XWeakConnectionPoint = rRef.m_XWeakConnectionPoint;
-
-    if (m_XWeakConnectionPoint.is())
-    {
-        m_XWeakConnectionPoint->addReference((XReference*)this);
-    }
-    }
-    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
-    osl_atomic_decrement( &m_aRefCount );
-}
 
 OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW(())
     : m_aRefCount( 1 )
