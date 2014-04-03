@@ -98,7 +98,16 @@ void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 void SfxModalDialog::SetDialogData_Impl()
 {
     // save settings (position and user data)
-    SvtViewOptions aDlgOpt( E_DIALOG, OUString::number( nUniqId ) );
+    OUString sConfigId;
+    if (isLayoutEnabled())
+        sConfigId = OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8);
+    else
+    {
+        SAL_WARN("sfx.config", "Dialog needs to be converted to .ui format");
+        sConfigId = OUString::number(nUniqId);
+    }
+
+    SvtViewOptions aDlgOpt(E_DIALOG, sConfigId);
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
     if ( !aExtraData.isEmpty() )
@@ -116,7 +125,16 @@ void SfxModalDialog::GetDialogData_Impl()
 */
 
 {
-    SvtViewOptions aDlgOpt( E_DIALOG, OUString::number( nUniqId ) );
+    OUString sConfigId;
+    if (isLayoutEnabled())
+        sConfigId = OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8);
+    else
+    {
+        SAL_WARN("sfx.config", "Dialog needs to be converted to .ui format");
+        sConfigId = OUString::number(nUniqId);
+    }
+
+    SvtViewOptions aDlgOpt(E_DIALOG, sConfigId);
     if ( aDlgOpt.Exists() )
     {
         // load settings
@@ -155,7 +173,7 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 
 SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
-    nUniqId(0), //todo
+    nUniqId(0), //todo: remove this member when the ResId using ctor is removed
     pInputSet(0),
     pOutputSet(0)
 {
@@ -669,7 +687,16 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
         // Save user data in IniManager.
         pImpl->m_pSfxPage->FillUserData();
         OUString sData( pImpl->m_pSfxPage->GetUserData() );
-        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
+
+        OUString sConfigId = OStringToOUString(pImpl->m_pSfxPage->GetConfigId(),
+            RTL_TEXTENCODING_UTF8);
+        if (sConfigId.isEmpty())
+        {
+            SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+            sConfigId = OUString::number(GetUniqId());
+        }
+
+        SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
         aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
         EndDialog( RET_OK );
     }
@@ -731,7 +758,15 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
     if ( pImpl->m_pSfxPage )
     {
         // First obtain the user data, only then Reset()
-        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
+        OUString sConfigId = OStringToOUString(pImpl->m_pSfxPage->GetConfigId(),
+            RTL_TEXTENCODING_UTF8);
+        if (sConfigId.isEmpty())
+        {
+            SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
+            sConfigId = OUString::number(GetUniqId());
+        }
+
+        SvtViewOptions aPageOpt(E_TABPAGE, sConfigId);
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString sUserData;
         aUserItem >>= sUserData;
