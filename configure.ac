@@ -9303,6 +9303,7 @@ neon)
         libo_MINGW_TRY_DLL([libtasn1])
         libo_MINGW_TRY_DLL([libgnutls])
     else
+        SCPDEFS="$SCPDEFS -DNEED_NEON"
         NEON_VERSION=0295
     fi
     AC_SUBST(NEON_VERSION)

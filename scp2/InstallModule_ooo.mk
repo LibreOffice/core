@@ -22,7 +22,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	DISABLE_ATL \
-	DISABLE_NEON \
 	ENABLE_CAIRO_CANVAS \
 	ENABLE_DIRECTX \
 	ENABLE_EVOAB2 \
@@ -61,7 +60,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_LIBXSLT \
 	SYSTEM_LUCENE \
 	SYSTEM_MYTHES \
-	SYSTEM_NEON \
 	SYSTEM_NSS \
 	SYSTEM_OPENSSL \
 	SYSTEM_PANGO \
