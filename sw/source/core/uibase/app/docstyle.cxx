@@ -509,7 +509,7 @@ void SwDocStyleSheet::GetGrabBagItem(uno::Any& rVal) const
     }
 }
 // virtual methods
-void SwDocStyleSheet::SetHidden( sal_Bool bValue )
+void SwDocStyleSheet::SetHidden( bool bValue )
 {
     bool bChg = false;
     if(!bPhysical)

@@ -98,8 +98,8 @@ public:
     sal_Bool                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(sal_Bool bPhys);
 
-    virtual void            SetHidden( sal_Bool bHidden ) SAL_OVERRIDE;
-    virtual bool        IsHidden( ) const SAL_OVERRIDE;
+    virtual void            SetHidden( bool bHidden ) SAL_OVERRIDE;
+    virtual bool            IsHidden( ) const SAL_OVERRIDE;
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
 

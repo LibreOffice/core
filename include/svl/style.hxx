@@ -136,7 +136,7 @@ public:
            { return ( nMask & SFXSTYLEBIT_USERDEF) != 0; }
 
     virtual bool IsHidden() const { return bHidden; }
-    virtual void SetHidden( sal_Bool bValue );
+    virtual void SetHidden( bool bValue );
 
     virtual sal_uLong GetHelpId( OUString& rFile );
     virtual void   SetHelpId( const OUString& r, sal_uLong nId );
@@ -316,8 +316,6 @@ protected:
 
 public:
     SfxStyleSheetPool( SfxItemPool const& );
-
-//  virtual sal_Bool CopyTo(SfxStyleSheetPool &rDest, const String &rSourceName);
 };
 
 

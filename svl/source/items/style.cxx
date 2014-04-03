@@ -238,7 +238,7 @@ bool SfxStyleSheetBase::SetParent( const OUString& rName )
     return true;
 }
 
-void SfxStyleSheetBase::SetHidden( sal_Bool hidden )
+void SfxStyleSheetBase::SetHidden( bool hidden )
 {
     bHidden = hidden;
     pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
