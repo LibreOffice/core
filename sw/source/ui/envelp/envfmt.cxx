@@ -185,15 +185,11 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
             if (aPaperName.isEmpty())
                 continue;
 
-            sal_Int32 nPos   = 0;
-            bool bFound = false;
-            while (nPos < m_pSizeFormatBox->GetEntryCount() && !bFound)
+            sal_Int32 nPos = 0;
+            while (nPos < m_pSizeFormatBox->GetEntryCount() &&
+                   m_pSizeFormatBox->GetEntry(nPos) < aPaperName)
             {
-                OUString aEntryName = m_pSizeFormatBox->GetEntry(nPos);
-                if (aEntryName < aPaperName)
-                    nPos++;
-                else
-                    bFound = true;
+                ++nPos;
             }
             m_pSizeFormatBox->InsertEntry(aPaperName, nPos);
             aIDs.insert( aIDs.begin() + nPos, i);
