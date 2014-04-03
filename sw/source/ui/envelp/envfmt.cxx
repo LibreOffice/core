@@ -180,7 +180,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
     {
         if (i != PAPER_USER)
         {
-            OUString aPaperName = SvxPaperInfo::GetName((Paper) i);
+            const OUString aPaperName = SvxPaperInfo::GetName((Paper) i);
 
             if (aPaperName.isEmpty())
                 continue;
