@@ -2703,10 +2703,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FSEND );
 
     // Look for the table style property in the table grab bag
-    const SfxPoolItem *pI = NULL;
-    std::map<OUString, com::sun::star::uno::Any> aGrabBag;
-    if ( SFX_ITEM_ON == pTblFmt->GetAttrSet().GetItemState( RES_FRMATR_GRABBAG, false, &pI ) )
-        aGrabBag = dynamic_cast<const SfxGrabBagItem *>(pI)->GetGrabBag();
+    std::map<OUString, com::sun::star::uno::Any> aGrabBag =
+            sw::util::HasItem<SfxGrabBagItem>( pTblFmt->GetAttrSet(), RES_FRMATR_GRABBAG )->GetGrabBag();
 
     // Extract properties from grab bag
     std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement;
@@ -2829,19 +2827,13 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
 {
     const SwTableBox *pTblBox = pTableTextNodeInfoInner->getTableBox( );
     const SwFrmFmt *pFmt = pTblBox->GetFrmFmt( );
-    const SfxPoolItem *pI = NULL;
 
-    Color aColor;
-    if ( SFX_ITEM_ON == pFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
-        aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
-    else
-        aColor = COL_AUTO;
-
+    const SvxBrushItem *aColorProp = sw::util::HasItem<SvxBrushItem>( pFmt->GetAttrSet(), RES_BACKGROUND );
+    Color aColor = aColorProp ? aColorProp->GetColor() : COL_AUTO;
     OString sColor = msfilter::util::ConvertColor( aColor );
 
-    std::map<OUString, com::sun::star::uno::Any> aGrabBag;
-    if ( SFX_ITEM_ON == pFmt->GetAttrSet().GetItemState( RES_FRMATR_GRABBAG, false, &pI ) )
-        aGrabBag = dynamic_cast<const SfxGrabBagItem *>(pI)->GetGrabBag();
+    std::map<OUString, com::sun::star::uno::Any> aGrabBag =
+            sw::util::HasItem<SfxGrabBagItem>( pFmt->GetAttrSet(), RES_FRMATR_GRABBAG )->GetGrabBag();
 
     OString sOriginalColor;
     std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("fill");
