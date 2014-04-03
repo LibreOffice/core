@@ -211,6 +211,10 @@ bool QuartzSalBitmap::CreateContext()
         try
         {
             maContextBuffer.reset( new sal_uInt8[ mnHeight * nContextBytesPerRow ] );
+#ifdef DBG_UTIL
+            for (size_t i = 0; i < mnHeight * nContextBytesPerRow; i++)
+                maContextBuffer.get()[i] = (i & 0xFF);
+#endif
 
             if( !bSkipConversion )
                 ConvertBitmapData( mnWidth, mnHeight,
@@ -261,6 +265,10 @@ bool QuartzSalBitmap::AllocateUserData()
     {
         if( mnBytesPerRow )
             maUserBuffer.reset( new sal_uInt8[mnBytesPerRow * mnHeight] );
+#ifdef DBG_UTIL
+        for (size_t i = 0; i < mnBytesPerRow * mnHeight; i++)
+            maUserBuffer.get()[i] = (i & 0xFF);
+#endif
     }
     catch( const std::bad_alloc& )
     {
