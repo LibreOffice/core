@@ -103,12 +103,6 @@ namespace svt
         /// the command to use for the address book
         virtual OUString getCommand() const = 0;
 
-        /** the command type to use for the address book
-            @return
-                a <type scope="com.sun.star.sdb">CommandType</type> value
-        */
-        virtual sal_Int32       getCommandType() const = 0;
-
         /// checks whether or not there is an assignment for a given logical field
         virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) = 0;
         /// retrieves the assignment for a given logical field
@@ -148,7 +142,6 @@ public:
         // IAssigmentData overridables
         virtual OUString getDatasourceName() const SAL_OVERRIDE;
         virtual OUString getCommand() const SAL_OVERRIDE;
-        virtual sal_Int32       getCommandType() const SAL_OVERRIDE;
 
         virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
@@ -210,12 +203,6 @@ public:
     OUString AssigmentTransientData::getCommand() const
     {
         return m_sTableName;
-    }
-
-
-    sal_Int32 AssigmentTransientData::getCommandType() const
-    {
-        return CommandType::TABLE;
     }
 
 
@@ -285,7 +272,6 @@ public:
         // IAssigmentData overridables
         virtual OUString getDatasourceName() const SAL_OVERRIDE;
         virtual OUString getCommand() const SAL_OVERRIDE;
-        virtual sal_Int32       getCommandType() const SAL_OVERRIDE;
 
         virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
@@ -465,12 +451,6 @@ void AssignmentPersistentData::Commit()
     void AssignmentPersistentData::setCommand(const OUString& _rCommand)
     {
         setStringProperty( "Command", _rCommand );
-    }
-
-
-    sal_Int32 AssignmentPersistentData::getCommandType() const
-    {
-        return getInt32Property( "CommandType" );
     }
 
 
