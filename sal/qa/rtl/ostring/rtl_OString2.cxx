@@ -173,7 +173,6 @@ public:
             valueOf_double_test(nValue);
         }
 
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -198,7 +197,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class valueOf
 
-
 // - toDouble (tests)
 
 class toDouble : public CppUnit::TestFixture
@@ -210,8 +208,6 @@ public:
         {
             // testPrecision a;
         }
-
-
 
     // initialise your test code values here.
     void setUp()
@@ -351,7 +347,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class toDouble
 
-
 // - getToken (tests)
 
 class getToken : public CppUnit::TestFixture
@@ -367,8 +362,6 @@ public:
     void tearDown()
         {
         }
-
-
 
     void getToken_000()
         {
@@ -453,7 +446,6 @@ public:
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
-
     CPPUNIT_TEST_SUITE(getToken);
     CPPUNIT_TEST(getToken_000);
     CPPUNIT_TEST(getToken_001);
@@ -463,10 +455,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 
-
 // testing the method replaceAt( sal_Int32 index, sal_Int32 count,
 // const OString& newStr )
-
 
 // Developer note: Mindy Liu, 2004-04-23
 // stollen from sal/qa/rtl_strings/rtl_OString.cxx
@@ -494,7 +484,6 @@ public:
         sal_Bool bRes = ( expVal->compareTo(aStr1) == 0 );
         return bRes;
     }
-
 
    void replaceAt_001()
         {
@@ -532,7 +521,6 @@ public:
             CPPUNIT_ASSERT_MESSAGE("replace with null string", bRes == sal_True);
         }
 
-
     CPPUNIT_TEST_SUITE(replaceAt);
     CPPUNIT_TEST(replaceAt_001);
     CPPUNIT_TEST(replaceAt_002);
@@ -542,17 +530,12 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class replaceAt
 
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::valueOf);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::toDouble);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::getToken);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::replaceAt);
 
 } // namespace rtl_OString
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

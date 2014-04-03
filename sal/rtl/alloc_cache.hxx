@@ -36,7 +36,6 @@ struct rtl_cache_stat_type
     sal_Size   m_mem_alloc;
 };
 
-
 /** rtl_cache_bufctl_type
  *  @internal
  */
@@ -47,7 +46,6 @@ struct rtl_cache_bufctl_type
     sal_uIntPtr             m_addr; /* buffer address  */
     sal_uIntPtr             m_slab; /* parent slab address */
 };
-
 
 /** rtl_cache_slab_type
  *  @internal
@@ -64,7 +62,6 @@ struct rtl_cache_slab_type
     rtl_cache_bufctl_type * m_sp;        /* free buffer linkage 'stack pointer' */
 };
 
-
 /** rtl_cache_magazine_type
  *  @internal
  */
@@ -80,7 +77,6 @@ struct rtl_cache_magazine_type
     void *                    m_objects[RTL_CACHE_MAGAZINE_SIZE];
 };
 
-
 /** rtl_cache_depot_type
  *  @internal
  */
@@ -94,7 +90,6 @@ struct rtl_cache_depot_type
     sal_Size                  m_curr_min;
     sal_Size                  m_prev_min;
 };
-
 
 /** rtl_cache_type
  *  @internal

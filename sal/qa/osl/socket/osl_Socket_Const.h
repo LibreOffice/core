@@ -64,25 +64,19 @@ extern "C"
 #   include <string.h>
 #endif
 
-
-
 // macro definition for the ASCII array/OUString declarations,
 // we use p### for the ASCII array,
 //        a### for the OUString,
 //        n###Len for its length
-
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
     static const sal_Char  p##str_name[]        = str_value;  \
     static const sal_Int32 n##str_name##Len     = sizeof( p##str_name ) -1; \
     ::rtl::OUString a##str_name                 = rtl::OUString::createFromAscii( p##str_name )
 
-
-
 // Ip version definition
 
 #define IP_VER     4                   /// currently only IPv4 is considered.
-
 
 // Hostnames.
 
@@ -102,7 +96,6 @@ OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );    //this is valid ip number,bu
 // OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );   //this is real invalid ip number --mindy
 OSLTEST_DECLARE( HostNameInval,  "www.the_hostname_that_can_not_resolvable_to_an_IP_Address.com" );
 OSLTEST_DECLARE( HostIpZero,  "0.0.0.0" );
-
 
 // OS independent file definition
 

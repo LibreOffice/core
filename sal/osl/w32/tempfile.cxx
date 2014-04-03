@@ -32,7 +32,6 @@
 #include <malloc.h>
 #include <tchar.h>
 
-
 // Allocate n number of t's on the stack return a pointer to it in p
 #ifdef __MINGW32__
 #define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));
@@ -43,9 +42,7 @@
 
 extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle(HANDLE hFile, sal_uInt32 uFlags);
 
-
 // Temp file functions
-
 
 static oslFileError osl_setup_base_directory_impl_(
     rtl_uString*  pustrDirectoryURL,
@@ -75,7 +72,6 @@ static oslFileError osl_setup_base_directory_impl_(
     return error;
 }
 
-
 static oslFileError osl_setup_createTempFile_impl_(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
@@ -102,7 +98,6 @@ static oslFileError osl_setup_createTempFile_impl_(
     return osl_error;
 }
 
-
 static oslFileError osl_win32_GetTempFileName_impl_(
     rtl_uString* base_directory, LPWSTR temp_file_name)
 {
@@ -119,7 +114,6 @@ static oslFileError osl_win32_GetTempFileName_impl_(
 
     return osl_error;
 }
-
 
 static sal_Bool osl_win32_CreateFile_impl_(
     LPCWSTR file_name, sal_Bool b_delete_on_close, oslFileHandle* p_handle)
@@ -147,7 +141,6 @@ static sal_Bool osl_win32_CreateFile_impl_(
 
     return (sal_Bool)IsValidHandle(hFile);
 }
-
 
 static oslFileError osl_createTempFile_impl_(
     rtl_uString*   base_directory,
@@ -180,7 +173,6 @@ static oslFileError osl_createTempFile_impl_(
 
     return osl_error;
 }
-
 
 oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
@@ -224,7 +216,6 @@ oslFileError SAL_CALL osl_createTempFile(
 
     return osl_error;
 }
-
 
 oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 {

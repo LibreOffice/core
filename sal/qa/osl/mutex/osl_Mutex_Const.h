@@ -32,7 +32,6 @@
 
 #define BUFFER_SIZE 16
 
-
 #endif /* _OSL_MUTEX_CONST_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

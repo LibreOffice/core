@@ -36,7 +36,6 @@ typedef struct _oslMutexImpl
     pthread_mutex_t mutex;
 } oslMutexImpl;
 
-
 /*****************************************************************************/
 /* osl_createMutex */
 /*****************************************************************************/
@@ -154,7 +153,6 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
     /* not initialized */
     return sal_False;
 }
-
 
 static oslMutexImpl globalMutexImpl;
 

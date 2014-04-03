@@ -54,7 +54,6 @@ extern "C"
 
 oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno);
 
-
 #ifdef __cplusplus
 }
 #endif

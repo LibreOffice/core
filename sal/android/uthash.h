@@ -225,7 +225,6 @@ do {                                                                            
     HASH_FSCK(hh,head);                                                          \
 } while (0)
 
-
 /* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
 #define HASH_FIND_STR(head,findstr,out)                                          \
     HASH_FIND(hh,head,findstr,strlen(findstr),out)
@@ -332,7 +331,6 @@ do {                                                                            
   while (_hb_keylen--)  { (hashv) = ((hashv) * 33) + *_hb_key++; }               \
   bkt = (hashv) & (num_bkts-1);                                                  \
 } while (0)
-
 
 /* SAX/FNV/OAT/JEN hash functions are macro variants of those listed at
  * http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx */
@@ -750,7 +748,6 @@ do {                                                                            
     }                                                                            \
     uthash_expand_fyi(tbl);                                                      \
 } while(0)
-
 
 /* This is an adaptation of Simon Tatham's O(n log(n)) mergesort */
 /* Note that HASH_SORT assumes the hash handle name to be hh.

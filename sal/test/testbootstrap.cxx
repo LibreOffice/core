@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <rtl/process.h>
@@ -28,7 +27,6 @@
 #include <osl/process.h>
 
 using namespace ::rtl;
-
 
 int main( int argc, char *argv[] )
 {
@@ -54,7 +52,6 @@ int main( int argc, char *argv[] )
           exit( 1 );
     }
 
-
     OUString iniName;
     Bootstrap::get(OUString("iniName"), iniName, OUString());
 
@@ -67,7 +64,6 @@ int main( int argc, char *argv[] )
 #endif
 
     Bootstrap bootstrap(iniName);
-
 
     OUString name( "MYBOOTSTRAPTESTVALUE" );
     OUString myDefault("$Default");

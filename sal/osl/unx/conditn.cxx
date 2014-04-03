@@ -28,14 +28,12 @@
 #include <osl/conditn.h>
 #include <osl/time.h>
 
-
 typedef struct _oslConditionImpl
 {
     pthread_cond_t  m_Condition;
     pthread_mutex_t m_Lock;
     bool            m_State;
 } oslConditionImpl;
-
 
 oslCondition SAL_CALL osl_createCondition()
 {
@@ -330,6 +328,5 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 
     return State;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

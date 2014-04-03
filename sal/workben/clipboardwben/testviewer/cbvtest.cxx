@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // TestWin32.cpp : Defines the entry point for the application.
-
 
 #define _WIN32_DCOM
 
@@ -65,9 +63,7 @@ void    CALLBACK OnClipboardContentChange( void );
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 LRESULT CALLBACK About( HWND, UINT, WPARAM, LPARAM );
 
-
 // WinMain
-
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -115,8 +111,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     return msg.wParam;
 }
-
-
 
 //
 //  FUNCTION: MyRegisterClass()
@@ -193,7 +187,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     PAINTSTRUCT ps;
     HDC         hdc;
     WCHAR       szHello[MAX_LOADSTRING];
-
 
     LoadStringW(g_hInst, IDS_HELLO, szHello, MAX_LOADSTRING);
 

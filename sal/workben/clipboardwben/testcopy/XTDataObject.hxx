@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _XTDATAOBJECT_HXX_
 #define _XTDATAOBJECT_HXX_
 
@@ -39,9 +38,7 @@ public:
     CXTDataObject( LONG nRefCntInitVal = 0);
     ~CXTDataObject( );
 
-
     // ole interface implementation
-
 
     //IUnknown
     STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
@@ -103,7 +100,6 @@ private:
     ULONG       m_nCurrentPos;
     CLIPFORMAT  m_cfFormats[2];
 };
-
 
 typedef CEnumFormatEtc *PCEnumFormatEtc;
 

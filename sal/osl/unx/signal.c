@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /* system headers */
 #include "system.h"
 
@@ -609,7 +608,6 @@ static int ReportCrash( int Signal )
                 pStackTempName = szStackTempNameBuffer;
                 pChecksumTempName = szChecksumTempNameBuffer;
 
-
                 if ( xmlout && stackout && checksumout )
                 {
                     fprintf( xmlout, "<errormail:Stack type=\"%s\">\n", STACKTYPE );
@@ -986,7 +984,6 @@ void SignalHandlerFunction(int Signal)
     if (bDoHardKill && (Info.Signal == osl_Signal_AccessViolation))
         _exit(255);
     /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 
     switch (CallSignalHandler(&Info))
     {

@@ -48,7 +48,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-
 #include "sockethelper.hxx"
 
 using namespace osl;
@@ -69,7 +68,6 @@ using ::rtl::OString;
 #define IP_PORT_INVAL  99999
 #define IP_PORT_MYPORT4  8885   //8892
 #define IP_PORT_NETBIOS_DGM  138
-
 
 namespace osl_SocketAddr
 {
@@ -215,7 +213,6 @@ namespace osl_SocketAddr
 
     }; // class ctors
 
-
     /** testing the method:
         inline sal_Bool is() const;
     */
@@ -254,7 +251,6 @@ namespace osl_SocketAddr
         CPPUNIT_TEST_SUITE_END();
 
     }; // class is
-
 
     /** testing the method:
         inline ::rtl::OUString SAL_CALL getHostname( oslSocketResult *pResult = 0 ) const;
@@ -330,14 +326,12 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
         }
 
-
         CPPUNIT_TEST_SUITE( getHostname );
         CPPUNIT_TEST( getHostname_001 );
         CPPUNIT_TEST( getHostname_002 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class getHostname
-
 
     /** testing the method:
         inline sal_Int32 SAL_CALL getPort() const;
@@ -381,7 +375,6 @@ namespace osl_SocketAddr
         CPPUNIT_TEST_SUITE_END( );
 
     }; // class getPort
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL setPort( sal_Int32 nPort );
@@ -451,7 +444,6 @@ namespace osl_SocketAddr
                                      bOK == sal_False);
         }
 
-
         CPPUNIT_TEST_SUITE( setPort );
         CPPUNIT_TEST( setPort_001 );
         CPPUNIT_TEST( setPort_002 );
@@ -461,7 +453,6 @@ namespace osl_SocketAddr
 
     }; // class setPort
 
-
     /**  tester comment:
 
         In the following two functions, it use ::rtl::ByteSequence as an intermediate storage for address,
@@ -470,7 +461,6 @@ namespace osl_SocketAddr
         in the range of sal_Int8, but lack of readability.
         so may be a sal_uInt8 array is better.
     */
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL setAddr( const ::rtl::ByteSequence & address );
@@ -494,13 +484,11 @@ namespace osl_SocketAddr
                                       sal_True == bOK );
         }
 
-
         CPPUNIT_TEST_SUITE( setAddr );
         CPPUNIT_TEST( setAddr_001 );
         CPPUNIT_TEST_SUITE_END( );
 
     }; // class setAddr
-
 
     /** testing the method:
         inline ::rtl::ByteSequence  SAL_CALL getAddr( oslSocketResult *pResult = 0 ) const;
@@ -531,7 +519,6 @@ namespace osl_SocketAddr
 
     }; // class getAddr
 
-
     /** testing the methods:
         inline SocketAddr & SAL_CALL operator= (oslSocketAddr Addr);
         inline SocketAddr & SAL_CALL operator= (const SocketAddr& Addr);
@@ -559,7 +546,6 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE( "test for operator_equal() function: use operator= to assign Ip1 to Ip2, check its modification.",
                                       sal_True == bOK );
         }
-
 
         void operator_equal_002()
         {
@@ -650,8 +636,6 @@ namespace osl_SocketAddr
 
     }; // class operator_equal
 
-
-
     /** testing the method:
         inline oslSocketAddr SAL_CALL getHandle() const;
     */
@@ -690,7 +674,6 @@ namespace osl_SocketAddr
         CPPUNIT_TEST_SUITE_END( );
 
     }; // class getSocketAddrHandle
-
 
     /** testing the method:
         static inline ::rtl::OUString SAL_CALL getLocalHostname( oslSocketResult *pResult = 0);
@@ -745,7 +728,6 @@ namespace osl_SocketAddr
 
     }; // class getLocalHostname
 
-
     /** testing the method:
         static inline void SAL_CALL resolveHostname( const ::rtl::OUString & strHostName , SocketAddr & Addr );
     */
@@ -772,7 +754,6 @@ namespace osl_SocketAddr
         CPPUNIT_TEST_SUITE_END( );
 
     }; // class resolveHostname
-
 
     /** testing the method:
         static inline sal_Int32 SAL_CALL getServicePort(
@@ -850,9 +831,6 @@ namespace osl_SocketAddr
 
     }; // class getFamilyOfSocketAddr
 
-
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::is);
 //TODO: enable Test with valid host names
@@ -869,8 +847,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::gettheServicePort);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr);
 
 } // namespace osl_SocketAddr
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

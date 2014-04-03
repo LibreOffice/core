@@ -151,7 +151,6 @@ public:
             rtl_digest_destroy( handle );
         }
 
-
         handle = rtl_digest_create( rtl_Digest_AlgorithmInvalid );
         nAlgoLength = rtl_digest_queryLength(handle);
         CPPUNIT_ASSERT_MESSAGE("query length", 0 == nAlgoLength);

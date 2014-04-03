@@ -38,11 +38,9 @@
 
 #   define FILE_PREFIX          "file:///"
 
-
 // function pointer type.
 
 typedef sal_Bool (* FuncPtr )( sal_Bool );
-
 
 #endif /* _OSL_MODULE_CONST_H_ */
 

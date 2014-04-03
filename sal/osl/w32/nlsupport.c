@@ -33,7 +33,6 @@
 #include <osl/process.h>
 #include <rtl/tencinfo.h>
 
-
 /* XXX NOTE:
  * http://msdn.microsoft.com/en-us/library/windows/desktop/dd373848.aspx
  * (retrieved 2013-02-13) has some weird description for the LOCALE_SISO*
@@ -128,7 +127,6 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     return TRUE;
 }
 
-
 /*****************************************************************************
  * GetTextEncodingFromLCID
  *****************************************************************************/
@@ -159,7 +157,6 @@ rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 
     return Encoding;
 }
-
 
 /*****************************************************************************
  * osl_getTextEncodingFromLocale
@@ -234,6 +231,5 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
         *ppLocale = rtl_locale_register( L"C", L"", L"" );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

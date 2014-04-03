@@ -39,16 +39,11 @@ bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 );
 
 sal_Char* createName( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
 
-
 sal_uInt32 AStringLen( const sal_Char *pAStr );
-
-
 
 bool AStringNIsValid( const sal_Char   *pAStr,
                           const sal_uInt32  nStrLen
                         );
-
-
 
 sal_Int32 AStringToUStringCompare( const sal_Unicode *pUStr,
                                    const sal_Char    *pAStr
@@ -62,11 +57,6 @@ sal_Int32 AStringToUStringNCompare( const sal_Unicode  *pUStr,
 #endif /* __cplusplus */
 
 #endif /* _RTL_STRING_UTILS_HXX */
-
-
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

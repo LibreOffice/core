@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <stdlib.h>
 
@@ -89,7 +88,6 @@ static  void write_v3( sal_uInt8 *pUuid  )
     memcpy( pUuid , &uuid , 16 );
 }
 
-
 extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
                                          SAL_UNUSED_PARAMETER const sal_uInt8 *,
                                          SAL_UNUSED_PARAMETER sal_Bool )
@@ -118,7 +116,6 @@ extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
     pTargetUUID[8] |= 0x80;
 }
 
-
 extern "C" void SAL_CALL rtl_createNamedUuid( sal_uInt8  *pTargetUUID,
                                               const sal_uInt8  *pNameSpaceUUID,
                                               const rtl_String *pName )
@@ -133,8 +130,6 @@ extern "C" void SAL_CALL rtl_createNamedUuid( sal_uInt8  *pTargetUUID,
 
     write_v3(pTargetUUID);
 }
-
-
 
 extern "C" sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 )
 {

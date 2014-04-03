@@ -188,7 +188,6 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
 
     OSL_ASSERT(pThreadImpl);        /* valid ptr? */
 
-
     /*  map enum to WIN32 levels
         it would be faster and more elegant to preset
         the enums, but that would require an #ifdef in
@@ -250,7 +249,6 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
 
     winPriority=
         GetThreadPriority(pThreadImpl->m_hThread);
-
 
     if(winPriority == THREAD_PRIORITY_ERROR_RETURN)
     {
@@ -355,7 +353,6 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     osl_atomic_increment(&(pThreadImpl->m_nTerminationRequested));
 }
 
-
 /*****************************************************************************/
 /* osl_scheduleThread */
 /*****************************************************************************/
@@ -459,7 +456,6 @@ void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 
-
     EnterCriticalSection( &g_ThreadKeyListCS );
     pTls = g_pThreadKeyList;
     while ( pTls )
@@ -554,13 +550,11 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return (sal_False);
 }
 
-
 /*****************************************************************************/
 /* osl_getThreadTextEncoding */
 /*****************************************************************************/
 
 DWORD   g_dwTLSTextEncodingIndex = (DWORD)-1;
-
 
 rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
 {
@@ -595,7 +589,5 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
 
     return oldEncoding;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

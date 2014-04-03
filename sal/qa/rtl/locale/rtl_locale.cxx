@@ -63,7 +63,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getDefault
 
-
 class setDefault : public CppUnit::TestFixture
 {
 public:
@@ -97,7 +96,6 @@ public:
     CPPUNIT_TEST(setDefault_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class setDefault
-
 
 class getLanguage : public CppUnit::TestFixture
 {
@@ -137,7 +135,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getLanguage
 
-
 class getCountry : public CppUnit::TestFixture
 {
 public:
@@ -175,7 +172,6 @@ public:
     CPPUNIT_TEST(getCountry_002);
     CPPUNIT_TEST_SUITE_END();
 }; // class getCountry
-
 
 class getVariant : public CppUnit::TestFixture
 {
@@ -215,7 +211,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getVariant
 
-
 class hashCode : public CppUnit::TestFixture
 {
 public:
@@ -253,7 +248,6 @@ public:
     CPPUNIT_TEST(hashCode_002);
     CPPUNIT_TEST_SUITE_END();
 }; // class hashCode
-
 
 class equals : public CppUnit::TestFixture
 {
@@ -300,7 +294,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class equals
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getDefault);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::setDefault);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getLanguage);
@@ -309,9 +302,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getVariant);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::hashCode);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::equals);
 } // namespace rtl_locale
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

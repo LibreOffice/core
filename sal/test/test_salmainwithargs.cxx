@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 
-
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     fprintf(stderr, "argc: %i argv: %p - success!\n", argc, argv);

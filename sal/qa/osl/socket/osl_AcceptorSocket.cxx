@@ -43,9 +43,7 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-
 // include files
-
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
@@ -63,9 +61,7 @@ using ::rtl::OUString;
 #define IP_PORT_MYPORT4 8885
 #define IP_PORT_MYPORT3 8884
 
-
 // helper functions
-
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
@@ -162,7 +158,6 @@ namespace osl_AcceptorSocket
         ::osl::AcceptorSocket asAcceptorSocket;
         ::osl::ConnectorSocket csConnectorSocket;
 
-
         // initialization
         void setUp( )
         {
@@ -180,7 +175,6 @@ namespace osl_AcceptorSocket
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
-
 
         void listen_accept_001()
         {
@@ -229,7 +223,6 @@ namespace osl_AcceptorSocket
                                     ( sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr ) ) );
         }
 
-
         CPPUNIT_TEST_SUITE( listen_accept );
         CPPUNIT_TEST( listen_accept_001 );
         CPPUNIT_TEST( listen_accept_002 );
@@ -237,16 +230,11 @@ namespace osl_AcceptorSocket
 
     }; // class listen_accept
 
-
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::ctors);
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::listen_accept);
 
 } // namespace osl_AcceptorSocket
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

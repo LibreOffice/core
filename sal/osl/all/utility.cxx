@@ -19,7 +19,6 @@
 
 #include "osl/time.h"
 
-
 /*
  *   mfe : maybe it would be wishful to include initialization
  *         of the global timer in dllmain or _init directly.
@@ -41,7 +40,6 @@ public:
     {
         return osl_getGlobalTimer();
     }
-
 
 };
 

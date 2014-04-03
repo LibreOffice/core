@@ -53,12 +53,10 @@
 #define POLLPRI 0x0004
 #endif /* HAVE_POLL_H */
 
-
 /* defines for shutdown */
 #define SD_RECEIVE 0
 #define SD_SEND 1
 #define SD_BOTH 2
-
 
 /*
     oslSocketAddr is a pointer to a Berkeley struct sockaddr.
@@ -84,10 +82,8 @@
 /* are the same! I don't like it very much but see no other easy way to  */
 /* conceal the struct sockaddr from the eyes of the user. */
 
-
 #define OSL_INVALID_SOCKET      -1
 #define OSL_SOCKET_ERROR        -1
-
 
 /* Buffer size for gethostbyname */
 #define MAX_HOSTBUFFER_SIZE 2048
@@ -155,7 +151,6 @@ static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 /* macros */
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
 
-
 /*****************************************************************************/
 /* enum oslSocketType */
 /*****************************************************************************/
@@ -188,7 +183,6 @@ static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
 /* macros */
 #define TYPE_TO_NATIVE(x)       TypeMap[x]
 #define TYPE_FROM_NATIVE(y)     osl_SocketTypeFromNative(y)
-
 
 /*****************************************************************************/
 /* enum oslSocketOption */
@@ -448,7 +442,6 @@ static sal_uInt32 g_nSocketAddr = 0;
 
 #endif /* OSL_DEBUG_LEVEL */
 
-
 oslSocket __osl_createSocketImpl(int Socket)
 {
     oslSocket pSocket;
@@ -668,7 +661,6 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
         pszDottedAddr = rtl_string_getStr(strDottedAddr);
     }
 
-
     Addr = osl_psz_createInetSocketAddr(pszDottedAddr, Port);
 
     if ( strDottedAddr != 0 )
@@ -729,7 +721,6 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
     }
     return res;
 }
-
 
 /** try to figure out a full-qualified hostname, by adding the current domain
     as given by the domainname program to the given hostname.
@@ -1125,7 +1116,6 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
         pszHostName = rtl_string_getStr(strHostname);
     }
 
-
     Addr = osl_psz_resolveHostname(pszHostName);
 
     if ( strHostname != 0 )
@@ -1133,10 +1123,8 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
         rtl_string_release(strHostname);
     }
 
-
     return Addr;
 }
-
 
 oslSocketAddr SAL_CALL osl_psz_resolveHostname(const sal_Char* pszHostname)
 {
@@ -1194,10 +1182,8 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString 
         rtl_string_release(strProtocol);
     }
 
-
     return nPort;
 }
-
 
 sal_Int32 SAL_CALL osl_psz_getServicePort(const sal_Char* pszServicename,
                         const sal_Char* pszProtocol)
@@ -1270,7 +1256,6 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
 
     return Result;
 }
-
 
 oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
                                             sal_Char *pBuffer, sal_uInt32 BufferSize)
@@ -1598,7 +1583,6 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
                 return osl_Socket_InProgress;
             }
 
-
         pSocket->m_nLastError=errno;
         OSL_TRACE("can't connect : '%s'",strerror(errno));
         return osl_Socket_Error;
@@ -1631,7 +1615,6 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
             return osl_Socket_Error;
         }
     }
-
 
     /* prepare select set for socket  */
     FD_ZERO(&WriteSet);
@@ -1700,7 +1683,6 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     return Result;
 }
 
-
 oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
                         oslSocketAddr* ppAddr)
 {
@@ -1732,7 +1714,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         Connection = accept(pSocket->m_Socket, &Addr, &AddrLen);
     } while (Connection == -1 && errno == EINTR);
 
-
     /* accept failed? */
     if( Connection == OSL_SOCKET_ERROR )
     {
@@ -1747,7 +1728,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
 
     OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
 
-
 #if defined(LINUX)
     if ( pSocket->m_bIsInShutdown == sal_True )
     {
@@ -1756,7 +1736,6 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         return 0;
     }
 #endif /* LINUX */
-
 
     if(ppAddr)
     {
@@ -1827,7 +1806,6 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket pSocket,
     return nRead;
 }
 
-
 sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
                               oslSocketAddr pSenderAddr,
                               void* pBuffer,
@@ -1895,7 +1873,6 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket pSocket,
                         BytesToSend,
                         MSG_FLAG_TO_NATIVE(Flag));
     } while ( nWritten < 0 && errno == EINTR );
-
 
     if ( nWritten < 0 )
     {
@@ -2179,7 +2156,6 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
     return (nRet==0);
 }
 
-
 sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
                             oslSocketOptionLevel    Level,
                             oslSocketOption         Option,
@@ -2332,7 +2308,6 @@ void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **
 
     return;
 }
-
 
 void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char* pBuffer, sal_uInt32 BufferSize)
 {

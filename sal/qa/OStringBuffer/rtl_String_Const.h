@@ -294,8 +294,6 @@ static const sal_Int32 kSInt32Max = INT_MAX;
 static const sal_Int64 kUInt32Max = UINT_MAX;
 static const sal_Int64 kSInt64Max = SAL_CONST_INT64(9223372036854775807);
 
-
-
 static const sal_Int32 kInt32MaxNumsCount = 5;
 
 static const sal_Int32 kInt32MaxNums[kInt32MaxNumsCount] =
@@ -319,25 +317,17 @@ static const sal_Int32 kBinaryNumsCount = 16;
 
 static const sal_Int32 kBinaryMaxNumsCount = 7;
 
-
-
 static const sal_Int32 kOctolNumsCount = 16;
 
 static const sal_Int32 kOctolMaxNumsCount = 7;
-
-
 
 static const sal_Int32 kDecimalNumsCount = 16;
 
 static const sal_Int32 kDecimalMaxNumsCount = 7;
 
-
-
 static const sal_Int32 kHexDecimalNumsCount = 16;
 
 static const sal_Int32 kHexDecimalMaxNumsCount = 7;
-
-
 
 static const sal_Int32 kBase36NumsCount = 36;
 

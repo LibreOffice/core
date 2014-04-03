@@ -60,8 +60,6 @@ namespace rtl_string
         CPPUNIT_TEST_SUITE_END();
     }; // class getLength
 
-
-
     class newFromString : public CppUnit::TestFixture
     {
     public:
@@ -93,8 +91,6 @@ namespace rtl_string
         CPPUNIT_TEST(newFromString_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class newFromString
-
-
 
     class convertUStringToString : public CppUnit::TestFixture
     {
@@ -148,8 +144,6 @@ namespace rtl_string
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", bRet == sal_True && sString.equals(rtl::OString("Tsch\xFC\xDF")) == sal_True);
             }
 
-
-
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -162,16 +156,11 @@ namespace rtl_string
         CPPUNIT_TEST_SUITE_END();
     }; // class convertUStringToString
 
-
-
 } // namespace rtl_string
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::getLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::newFromString);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::convertUStringToString);
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

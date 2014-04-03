@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <rtl/ustring.hxx>
@@ -36,6 +35,5 @@ int _cdecl main( int argc, char * argv[] )
 
     return(0);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

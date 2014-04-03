@@ -39,7 +39,6 @@ public:
     {
     }
 
-
     // insert your test code here.
     void rtl_crc32_001()
     {
@@ -143,8 +142,6 @@ public:
         CPPUNIT_ASSERT_MESSAGE("checksum should differ", nCRC1 != nCRC2);
     }
 
-
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -159,12 +156,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class test
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_CRC32::test);
 } // namespace rtl_CRC32
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

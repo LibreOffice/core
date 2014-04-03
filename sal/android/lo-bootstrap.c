@@ -348,7 +348,6 @@ get_jni_string_array(JNIEnv *env,
     return JNI_TRUE;
 }
 
-
 // public static native int getpid();
 
 __attribute__ ((visibility("default")))
@@ -361,7 +360,6 @@ Java_org_libreoffice_android_Bootstrap_getpid(JNIEnv* env,
 
     return getpid();
 }
-
 
 // public static native void system(String cmdline);
 

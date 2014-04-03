@@ -40,7 +40,6 @@ extern "C"
 {
 #endif
 
-
 // OS dependent declaration and includes
 
 #if ( defined UNX )  //Unix

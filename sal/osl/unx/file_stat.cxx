@@ -109,7 +109,6 @@ namespace
             pStat->uAttributes |= osl_File_Attribute_Executable;
     }
 
-
     inline void set_file_hidden_status(const rtl::OUString& file_path, oslFileStatus* pStat)
     {
         pStat->uAttributes   = osl::systemPathIsHiddenFileOrDirectoryEntry(file_path) ? osl_File_Attribute_Hidden : 0;

@@ -82,7 +82,6 @@ static const char *digest_bigout_SHA_0=
 static const char *digest_bigout_SHA_1=
     "34aa973cd4c4daa4f61eeb2bdbad27316534016f";
 
-
 static const char digest_key_HMAC_MD5_1[] =
 {
     0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
@@ -143,7 +142,6 @@ static const char *digest_out_HMAC_SHA1[] =
     "d730594d167e35d5956fd8003d0db3d3f46dc7bb",
     NULL
 };
-
 
 static char *pt (unsigned char *md, int length)
 {
@@ -291,7 +289,6 @@ int SAL_CALL main (void)
     else
         printf("test (SHA-1) n ok\n");
 
-
     P=digest_in_HMAC_MD5;
     Q=digest_key_HMAC_MD5;
     R=digest_out_HMAC_MD5;
@@ -319,7 +316,6 @@ int SAL_CALL main (void)
     }
     rtl_digest_destroyHMAC_MD5 (Digest);
 
-
     P=digest_in_HMAC_MD5;
     Q=digest_key_HMAC_MD5;
     R=digest_out_HMAC_SHA1;
@@ -346,7 +342,6 @@ int SAL_CALL main (void)
         R++;
     }
     rtl_digest_destroyHMAC_SHA1 (Digest);
-
 
     P=digest_in_HMAC_MD5;
     Q=digest_key_HMAC_MD5;

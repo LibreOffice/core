@@ -35,14 +35,11 @@
 #   define t_print printf
 #endif
 
-
 // Ip version definition
 
 #define IP_VER     4               /// currently only IPv4 is considered.
 
-
 // helper functions
-
 
 /** compare two OUString.
 */

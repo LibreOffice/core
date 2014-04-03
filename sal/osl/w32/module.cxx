@@ -208,8 +208,6 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
     return fncAddr;
 }
 
-
-
 /*****************************************************************************/
 /* osl_addressGetModuleURL */
 /*****************************************************************************/
@@ -280,11 +278,9 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
         SymInitialize_PROC      lpfnSymInitialize;
         SymCleanup_PROC         lpfnSymCleanup;
 
-
         lpfnSymInitialize = (SymInitialize_PROC)GetProcAddress( hModImageHelp, "SymInitialize" );
         lpfnSymCleanup = (SymCleanup_PROC)GetProcAddress( hModImageHelp, "SymCleanup" );
         lpfnSymGetModuleInfo = (SymGetModuleInfo_PROC)GetProcAddress( hModImageHelp, "SymGetModuleInfo" );
-
 
         if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
         {
@@ -343,7 +339,6 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
 
     return bSuccess;
 }
-
 
 typedef struct _MODULEINFO {
     LPVOID lpBaseOfDll;
@@ -448,6 +443,5 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, 
 #pragma warning(pop)
 #endif
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

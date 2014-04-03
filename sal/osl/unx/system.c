@@ -390,5 +390,4 @@ extern int _end[] __attribute__((weak));
 static void *dummy[] __attribute__((used)) = {__data_start, data_start, _end};
 #endif
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

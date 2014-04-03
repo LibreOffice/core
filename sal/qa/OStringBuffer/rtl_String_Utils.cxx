@@ -77,7 +77,6 @@ sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt )
     return ( dst );
 }
 
-
 bool cmpstr( const sal_Char* str1, const sal_Char* str2, sal_uInt32 len )
 {
     const sal_Char* pBuf1 = str1;
@@ -125,7 +124,6 @@ bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 len )
     }
     return( i == len );
 }
-
 
 bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 )
 {

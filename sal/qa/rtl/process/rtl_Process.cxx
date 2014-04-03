@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -146,7 +145,6 @@ public:
     CPPUNIT_ASSERT_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", pInfo->Code == 2);
     delete pInfo;
     }
-
 
     CPPUNIT_TEST_SUITE(getAppCommandArg);
     CPPUNIT_TEST(getAppCommandArg_001);
@@ -280,7 +278,6 @@ public:
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getAppCommandArg, "rtl_Process");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getGlobalProcessId, "rtl_Process");
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

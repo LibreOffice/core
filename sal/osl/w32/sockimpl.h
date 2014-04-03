@@ -86,5 +86,4 @@ typedef struct osl_socket_dialup_impl_st
 
 #endif
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

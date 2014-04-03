@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifdef SOLARIS
 
 #include <dlfcn.h>
@@ -54,7 +53,6 @@
 #error Unknown Solaris target platform.
 
 #endif /* defined SPARC or INTEL */
-
 
 int backtrace( void **buffer, int max_frames )
 {
@@ -129,7 +127,6 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 }
 
 #endif /* defined SOLARIS */
-
 
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
 #include <dlfcn.h>
@@ -232,7 +229,6 @@ int backtrace( void **buffer, int max_frames )
 
     return i;
 }
-
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {

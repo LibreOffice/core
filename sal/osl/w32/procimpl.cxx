@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define UNICODE
 #define _UNICODE
 
@@ -46,9 +45,7 @@
 #include <string>
 #include <string.h>
 
-
 extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile, sal_uInt32 uFlags );
-
 
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
 const sal_Char* SPACE = " ";
@@ -63,7 +60,6 @@ namespace /* private */
     typedef string_container_t::const_iterator string_container_const_iterator_t;
     typedef std::pair<string_container_iterator_t, string_container_iterator_t> iterator_pair_t;
     typedef std::vector<sal_Unicode> environment_container_t;
-
 
     /* Function object that compares two strings that are
        expected to be environment variables in the form
@@ -90,7 +86,6 @@ namespace /* private */
         }
     };
 
-
     /* Function object used by for_each algorithm to
        calculate the sum of the length of all strings
        in a string container. */
@@ -99,7 +94,6 @@ namespace /* private */
     public:
 
         sum_of_string_lengths() : sum_(0) {}
-
 
         void operator() (const rtl::OUString& string)
         {
@@ -110,7 +104,6 @@ namespace /* private */
                 sum_ += string.getLength() + 1;
         }
 
-
         operator size_t () const
         {
             return sum_;
@@ -119,13 +112,11 @@ namespace /* private */
         size_t sum_;
     };
 
-
     inline size_t calc_sum_of_string_lengths(const string_container_t& string_cont)
     {
         return std::for_each(
             string_cont.begin(), string_cont.end(), sum_of_string_lengths());
     }
-
 
     void read_environment(/*out*/ string_container_t* environment)
     {
@@ -141,7 +132,6 @@ namespace /* private */
         }
         FreeEnvironmentStrings(env);
     }
-
 
     /* the environment list must be sorted, new values
     should either replace existing ones or should be
@@ -184,7 +174,6 @@ namespace /* private */
         return true;
     }
 
-
     /* Create a merged environment */
     bool setup_process_environment(
         rtl_uString* environment_vars[],
@@ -220,7 +209,6 @@ namespace /* private */
 
         return true;
     }
-
 
     /*  In contrast to the Win32 API function CreatePipe with
         this function the caller is able to determine separately
@@ -273,7 +261,6 @@ namespace /* private */
         }
         return bRet;
     }
-
 
     // Add a quote sign to the start and the end of a string
     // if not already present
@@ -358,7 +345,6 @@ namespace /* private */
         return exe_path;
     }
 
-
     rtl::OUString get_file_extension(const rtl::OUString& file_name)
     {
         sal_Int32 index = file_name.lastIndexOf('.');
@@ -368,7 +354,6 @@ namespace /* private */
         return rtl::OUString();
     }
 
-
     bool is_batch_file(const rtl::OUString& file_name)
     {
         rtl::OUString ext = get_file_extension(file_name);
@@ -376,7 +361,6 @@ namespace /* private */
                 ext.equalsIgnoreAsciiCase("cmd") ||
                 ext.equalsIgnoreAsciiCase("btm"));
     }
-
 
     rtl::OUString get_batch_processor()
     {
@@ -393,8 +377,6 @@ namespace /* private */
     }
 
 } // namespace private
-
-
 
 oslProcessError SAL_CALL osl_executeProcess(
     rtl_uString *strImageName,
@@ -420,7 +402,6 @@ oslProcessError SAL_CALL osl_executeProcess(
         pProcess,
         NULL, NULL, NULL );
 }
-
 
 oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     rtl_uString *ustrImageName,

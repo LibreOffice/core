@@ -41,7 +41,6 @@ typedef struct {
     const rtl_TextEncoding   value;
 } _pair;
 
-
 /*****************************************************************************
  compare function for binary search
  *****************************************************************************/
@@ -84,7 +83,6 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
 
     return NULL;
 }
-
 
 /*****************************************************************************
  convert rtl_Locale to locale string

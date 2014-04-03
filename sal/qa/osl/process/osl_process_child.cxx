@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-
-
 #if ( defined WNT )                     // Windows
 #   define UNICODE
 #   define _UNICODE
@@ -48,22 +44,16 @@
 # endif
 #endif
 
-
-
-
 #ifdef WNT
 #   define SLEEP(t) (Sleep((t)*1000))
 #else
 #   define SLEEP(t) (sleep((t)))
 #endif
 
-
 void wait_for_seconds(char* time)
 {
     SLEEP(atoi(time));
 }
-
-
 
 #ifdef WNT
 
@@ -98,7 +88,6 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
             file << environ[i] << '\0';
     }
 #endif
-
 
 int main(int argc, char* argv[])
 {

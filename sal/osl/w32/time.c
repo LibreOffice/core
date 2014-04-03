@@ -27,9 +27,7 @@ extern sal_Bool TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime
 
 extern BOOL FileTimeToTimeValue( const FILETIME *cpFTime, TimeValue *pTimeVal );
 
-
 // osl_getSystemTime
-
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 {
@@ -61,9 +59,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     return (sal_True);
 }
 
-
 // osl_getDateTimeFromTimeValue
-
 
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
@@ -91,9 +87,7 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
     return sal_False;
 }
 
-
 // osl_getTimeValueFromDateTime
-
 
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
@@ -121,10 +115,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
     return sal_False;
 }
 
-
-
 // osl_getLocalTimeFromSystemTime
-
 
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
@@ -153,9 +144,7 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
     return sal_False;
 }
 
-
 // osl_getSystemTimeFromLocalTime
-
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {

@@ -34,20 +34,15 @@ extern "C"
 {
 #endif
 
-
-
-
 // common used string resource
 // these common used string will be used as assist resource in test
 // they are mostly OS independent, some of the resource can be reused
 // so, acommon test data repository will be better since it can be
 // shared among all test code
 
-
 const sal_Char pBuffer_Char[]   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const sal_Char pBuffer_Number[] = "1234567890";
 const sal_Char pBuffer_Blank[]  = "";
-
 
 // OS dependent/independent definitions/includes
 // we use FILE_PREFIX for URL prefix,
@@ -58,13 +53,10 @@ const sal_Char pBuffer_Blank[]  = "";
 //        PATH_SEPARATOR for separator in URL or system path in comrresponding platform,
 //        PATH_MAX/MAX_PATH for max path length in comrresponding platform,
 
-
-
 // OS independent const definition
 
 #   define FILE_PREFIX          "file:///"
 #   define TEST_FILE_SIZE       1024
-
 
 // OS dependent declaration and includes
 
@@ -105,20 +97,16 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_SEPARATOR       "/"
 #endif
 
-
-
 // macro definition for the ASCII array/OUString declarations,
 // we use p### for the ASCII array,
 //        a### for the OUString,
 //        n###Len for its length
-
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( ( str_value ) )
 
 #define OSLTEST_DECLARE_UTF8(str_name, str_value ) \
     ::rtl::OUString a##str_name = ::rtl::Uri::decode( ::rtl::OUString::createFromAscii( ( str_value ) ), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
-
 
 // OS independent file definition
 
@@ -131,7 +119,6 @@ OSLTEST_DECLARE( TempDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP
 OSLTEST_DECLARE( TempDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( UserDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "" );
 OSLTEST_DECLARE( UserDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
-
 
 // common used URL:temp, canonical, root, relative, link,etc
 
@@ -158,7 +145,6 @@ OSLTEST_DECLARE( RelURL5,  TEST_PLATFORM_TEMP "/./../" TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( LnkURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/link.file" );
 OSLTEST_DECLARE( HidURL1,  ".hiddenfile" );
 
-
 // common used System Path:temp, root,etc
 
 OSLTEST_DECLARE( RootSys,  TEST_PLATFORM_ROOT );
@@ -169,7 +155,6 @@ OSLTEST_DECLARE( SysPath4, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
 OSLTEST_DECLARE_UTF8( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" );
 OSLTEST_DECLARE( SysPathLnk, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/link.file" );
 OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
-
 
 // FileType URL, we pick some canonical file in corresponding system for test:
 // socket, link, etc.
@@ -184,7 +169,6 @@ OSLTEST_DECLARE( TypeURL1,  FILE_PREFIX "" );
 OSLTEST_DECLARE( TypeURL2,  FILE_PREFIX "" );
 OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "" );
 #endif
-
 
 // Volume device URL, we pick some canonical volume device for test:
 // UNIX file system, Floppy Disk, Proc file system, Temp file system, Compact Disk.

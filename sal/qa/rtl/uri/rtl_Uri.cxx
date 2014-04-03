@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
@@ -28,11 +27,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-
-
 namespace Stringtest
 {
-
 
     class Convert : public CppUnit::TestFixture
     {
@@ -170,7 +166,6 @@ namespace Stringtest
                 return sType;
             }
 
-
         void test_UTF8_files()
             {
 #ifdef UNX
@@ -239,7 +234,6 @@ namespace Stringtest
     };
 
 }
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Stringtest::Convert );
 

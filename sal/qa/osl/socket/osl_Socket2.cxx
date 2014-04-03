@@ -67,9 +67,7 @@ using ::rtl::OUString;
 #define IP_PORT_MYPORT8 8896
 #define IP_PORT_MYPORT9 8897
 
-
 // helper functions
-
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
@@ -145,7 +143,6 @@ namespace osl_Socket
         the use of C method lost some of the transparent of tester using C++ wrapper.
     */
 
-
     class ctors : public CppUnit::TestFixture
     {
     public:
@@ -160,7 +157,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void ctors_none()
         {
@@ -222,8 +218,6 @@ namespace osl_Socket
                                     osl_Socket_TypeStream == sSocket.getType( ) );
         }
 
-
-
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );
         CPPUNIT_TEST( ctors_acquire );
@@ -235,7 +229,6 @@ namespace osl_Socket
         CPPUNIT_TEST_SUITE_END();
 
     }; // class ctors
-
 
     /** testing the methods:
         inline Socket& SAL_CALL operator= ( oslSocket socketHandle);
@@ -258,7 +251,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
     /**  test writer's comment:
 
@@ -333,7 +325,6 @@ namespace osl_Socket
 
     }; // class operators
 
-
     /** testing the methods:
         inline void SAL_CALL shutdown( oslSocketDirection Direction = osl_Socket_DirReadWrite );
         inline void SAL_CALL close();
@@ -353,7 +344,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void close_001()
         {
@@ -446,13 +436,11 @@ namespace osl_Socket
                                     sal_True == bOK );
         }
 
-
         CPPUNIT_TEST_SUITE( getLocalAddr );
         CPPUNIT_TEST( getLocalAddr_001 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class getLocalAddr
-
 
     /** testing the method:
         inline sal_Int32    SAL_CALL getLocalPort() const;
@@ -472,7 +460,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void getLocalPort_001()
         {
@@ -546,7 +533,6 @@ namespace osl_Socket
 
     }; // class getLocalPort
 
-
     /** testing the method:
         inline ::rtl::OUString SAL_CALL getLocalHost() const;
 
@@ -569,7 +555,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void getLocalHost_001()
         {
@@ -621,7 +606,6 @@ namespace osl_Socket
 
     }; // class getLocalHost
 
-
     /** testing the methods:
         inline void SAL_CALL getPeerAddr( SocketAddr & Addr) const;
         inline sal_Int32    SAL_CALL getPeerPort() const;
@@ -634,7 +618,6 @@ namespace osl_Socket
         TimeValue *pTimeout;
         ::osl::AcceptorSocket asAcceptorSocket;
         ::osl::ConnectorSocket csConnectorSocket;
-
 
         // initialization
         void setUp( )
@@ -652,7 +635,6 @@ namespace osl_Socket
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
-
 
         void getPeer_001()
         {
@@ -684,18 +666,15 @@ namespace osl_Socket
                                     ( peerPort == saLocalSocketAddr.getPort( ) ));
         }
 
-
         CPPUNIT_TEST_SUITE( getPeer );
         CPPUNIT_TEST( getPeer_001 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class getPeer
 
-
     /** testing the methods:
         inline sal_Bool SAL_CALL bind(const SocketAddr& LocalInterface);
     */
-
 
     class bind : public CppUnit::TestFixture
     {
@@ -711,7 +690,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void bind_001()
         {
@@ -750,7 +728,6 @@ namespace osl_Socket
 
     }; // class bind
 
-
     /** testing the methods:
         inline sal_Bool SAL_CALL isRecvReady(const TimeValue *pTimeout = 0) const;
 
@@ -762,7 +739,6 @@ namespace osl_Socket
         TimeValue *pTimeout;
         ::osl::AcceptorSocket asAcceptorSocket;
         ::osl::ConnectorSocket csConnectorSocket;
-
 
         // initialization
         void setUp( )
@@ -780,7 +756,6 @@ namespace osl_Socket
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
-
 
         void isRecvReady_001()
         {
@@ -807,13 +782,11 @@ namespace osl_Socket
                                       ( sal_True == bOK3 ) );
         }
 
-
         CPPUNIT_TEST_SUITE( isRecvReady );
         CPPUNIT_TEST( isRecvReady_001 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class isRecvReady
-
 
     /** testing the methods:
         inline sal_Bool SAL_CALL isSendReady(const TimeValue *pTimeout = 0) const;
@@ -825,7 +798,6 @@ namespace osl_Socket
         TimeValue *pTimeout;
         ::osl::AcceptorSocket asAcceptorSocket;
         ::osl::ConnectorSocket csConnectorSocket;
-
 
         // initialization
         void setUp( )
@@ -843,7 +815,6 @@ namespace osl_Socket
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
-
 
         void isSendReady_001()
         {
@@ -871,13 +842,11 @@ namespace osl_Socket
                                       ( sal_True == bOK3 ) );
         }
 
-
         CPPUNIT_TEST_SUITE( isSendReady );
         CPPUNIT_TEST( isSendReady_001 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class isSendReady
-
 
     /** testing the methods:
         inline oslSocketType    SAL_CALL getType() const;
@@ -898,7 +867,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void getType_001()
         {
@@ -944,8 +912,6 @@ namespace osl_Socket
         CPPUNIT_TEST_SUITE_END();
 
     }; // class getType
-
-
 
     /** testing the methods:
         inline sal_Int32 SAL_CALL getOption(
@@ -1041,7 +1007,6 @@ namespace osl_Socket
 
     }; // class getOption
 
-
     /** testing the methods:
         inline sal_Bool SAL_CALL setOption( oslSocketOption Option,
                                             void* pBuffer,
@@ -1067,7 +1032,6 @@ namespace osl_Socket
         {
             asAcceptorSocket.close( );
         }
-
 
         // LLA:
         // getSocketOption returns BufferLen, or -1 if something failed
@@ -1188,8 +1152,6 @@ namespace osl_Socket
 
     }; // class setOption
 
-
-
     /** testing the method:
         inline sal_Bool SAL_CALL enableNonBlockingMode( sal_Bool bNonBlockingMode);
     */
@@ -1220,13 +1182,11 @@ namespace osl_Socket
                                       ( sal_True == bOK  ) );
         }
 
-
         CPPUNIT_TEST_SUITE( enableNonBlockingMode );
         CPPUNIT_TEST( enableNonBlockingMode_001 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class enableNonBlockingMode
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL isNonBlockingMode() const;
@@ -1260,7 +1220,6 @@ namespace osl_Socket
                                       ( sal_False == bOK3 ) && ( sal_True == bOK4 ) );
         }
 
-
         CPPUNIT_TEST_SUITE( isNonBlockingMode );
         CPPUNIT_TEST( isNonBlockingMode_001 );
         CPPUNIT_TEST_SUITE_END();
@@ -1285,7 +1244,6 @@ namespace osl_Socket
             sHandle = NULL;
         }
 
-
         void clearError_001()
         {
             ::osl::Socket sSocket(sHandle);
@@ -1300,13 +1258,11 @@ namespace osl_Socket
                                     osl_Socket_E_None == sSocket.getError( ) && seBind != osl_Socket_E_None  );
         }
 
-
         CPPUNIT_TEST_SUITE( clearError );
         CPPUNIT_TEST( clearError_001 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class clearError
-
 
     /** testing the methods:
         inline oslSocketError getError() const;
@@ -1326,7 +1282,6 @@ namespace osl_Socket
         {
             sHandle = NULL;
         }
-
 
         void getError_001()
         {
@@ -1363,8 +1318,6 @@ namespace osl_Socket
         CPPUNIT_TEST_SUITE_END();
 
     }; // class getError
-
-
 
     /** testing the methods:
         inline oslSocket getHandle() const;
@@ -1410,10 +1363,6 @@ namespace osl_Socket
 
     }; // class getHandle
 
-
-
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::operators);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::close);
@@ -1434,8 +1383,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::getError);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::getHandle);
 
 } // namespace osl_Socket
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

@@ -38,8 +38,6 @@
 namespace osl_test_file
 {
 
-
-
 class oldtestfile : public CppUnit::TestFixture
 {
 public:
@@ -144,9 +142,7 @@ void oldtestfile::test_file_004()
 
 } // namespace osl_test_file
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_test_file::oldtestfile);
-
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

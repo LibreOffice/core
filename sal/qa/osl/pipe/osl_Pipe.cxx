@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // include files
-
 
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
@@ -47,9 +45,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-
 // helper functions
-
 
 /** print Boolean value.
  */
@@ -116,9 +112,6 @@ inline void printPipeError( ::osl::Pipe aPipe )
     }
 }
 
-
-
-
 // pipe name and transfer contents
 
 const rtl::OUString aTestPipeName("testpipe2");
@@ -128,13 +121,10 @@ const rtl::OUString aTestString("Sun Microsystems");
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");
 
-
 // test code start here
-
 
 namespace osl_Pipe
 {
-
 
 // most return value -1 denote a fail of operation.
 
@@ -228,7 +218,6 @@ namespace osl_Pipe
                 ///aPipe.clear( );
                 ///bRes1 = aNoAcquirePipe.is( );
 
-
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle, only validation test, do not know how to test no acquire.",
                                         sal_True == bRes );
             }
@@ -257,7 +246,6 @@ namespace osl_Pipe
         CPPUNIT_TEST( ctors_acquire );
         CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL is() const;
@@ -301,7 +289,6 @@ namespace osl_Pipe
         CPPUNIT_TEST( is_004 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class is
-
 
     /** testing the methods:
         inline sal_Bool create( const ::rtl::OUString & strName,
@@ -385,7 +372,6 @@ namespace osl_Pipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class create
 
-
     /** testing the method:
         inline void SAL_CALL clear();
     */
@@ -409,7 +395,6 @@ namespace osl_Pipe
         CPPUNIT_TEST( clear_001 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class clear
-
 
     /** testing the methods:
         inline Pipe& SAL_CALL operator= (const Pipe& pipe);
@@ -453,7 +438,6 @@ namespace osl_Pipe
         CPPUNIT_TEST( assign_handle );
         CPPUNIT_TEST_SUITE_END( );
     }; // class assign
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL isValid() const;
@@ -503,7 +487,6 @@ namespace osl_Pipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class isEqual
 
-
     /** testing the method:
         inline void SAL_CALL close();
     */
@@ -540,7 +523,6 @@ namespace osl_Pipe
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class close
-
 
     /** testing the method:
         inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
@@ -585,7 +567,6 @@ namespace osl_Pipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class getError
 
-
     /** testing the method:
         inline oslPipe SAL_CALL getHandle() const;
     */
@@ -622,8 +603,6 @@ namespace osl_Pipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class getHandle
 
-
-
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::is);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::create);
@@ -634,9 +613,7 @@ namespace osl_Pipe
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getError);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getHandle);
 
-
 } // namespace osl_Pipe
-
 
 namespace osl_StreamPipe
 {
@@ -761,7 +738,6 @@ namespace osl_StreamPipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
-
     /** testing the methods:
         inline StreamPipe & SAL_CALL operator=(oslPipe Pipe);
         inline StreamPipe& SAL_CALL operator=(const Pipe& pipe);
@@ -781,7 +757,6 @@ namespace osl_StreamPipe
         osl_waitThread(&nTV);
     }
     // test read/write & send/recv data to pipe
-
 
     class Pipe_DataSink_Thread : public Thread
     {
@@ -922,11 +897,9 @@ namespace osl_StreamPipe
         CPPUNIT_TEST_SUITE_END( );
     }; // class recv
 
-
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::ctors);
 //CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::assign);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::recv);
-
 
 } // namespace osl_StreamPipe
 

@@ -57,7 +57,6 @@ struct rtl_cache_list_st
 
 static rtl_cache_list_st g_cache_list;
 
-
 /** gp_cache_arena
  *  provided for cache_type allocations, and hash_table resizing.
  *
@@ -65,24 +64,20 @@ static rtl_cache_list_st g_cache_list;
  */
 static rtl_arena_type * gp_cache_arena = 0;
 
-
 /** gp_cache_magazine_cache
  *  @internal
  */
 static rtl_cache_type * gp_cache_magazine_cache = 0;
-
 
 /** gp_cache_slab_cache
  *  @internal
  */
 static rtl_cache_type * gp_cache_slab_cache = 0;
 
-
 /** gp_cache_bufctl_cache
  *  @internal
  */
 static rtl_cache_type * gp_cache_bufctl_cache = 0;
-
 
 /* ================================================================= */
 
@@ -234,7 +229,6 @@ rtl_cache_hash_remove (
 #define RTL_CACHE_SLAB(addr, size) \
     (((rtl_cache_slab_type*)(RTL_MEMORY_P2END((sal_uIntPtr)(addr), (size)))) - 1)
 
-
 /** rtl_cache_slab_constructor()
  */
 int
@@ -248,7 +242,6 @@ rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
     return (1);
 }
 
-
 /** rtl_cache_slab_destructor()
  */
 void
@@ -259,7 +252,6 @@ rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
     assert(slab->m_ntypes == 0); // assure no longer referenced
     (void) slab; // avoid warnings
 }
-
 
 /** rtl_cache_slab_create()
  *
@@ -308,7 +300,6 @@ rtl_cache_slab_create (
     return (slab);
 }
 
-
 /** rtl_cache_slab_destroy()
  *
  *  @precond cache->m_slab_lock released.
@@ -353,7 +344,6 @@ rtl_cache_slab_destroy (
         rtl_arena_free (cache->m_source, addr, cache->m_slab_size);
     }
 }
-
 
 /** rtl_cache_slab_populate()
  *
@@ -474,7 +464,6 @@ rtl_cache_slab_alloc (
     return (addr);
 }
 
-
 /** rtl_cache_slab_free()
  *
  *  Return a buffer to slab layer; used by magazine layer.
@@ -559,7 +548,6 @@ rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
     return (1);
 }
 
-
 /** rtl_cache_magazine_destructor()
  */
 void
@@ -571,7 +559,6 @@ rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
     assert(mag->m_mag_used == 0); // assure no longer referenced
     (void) mag; // avoid warnings
 }
-
 
 /** rtl_cache_magazine_clear()
  */
@@ -1303,7 +1290,6 @@ SAL_CALL rtl_cache_free (
  */
 static void
 rtl_cache_wsupdate_init();
-
 
 /** rtl_cache_wsupdate_wait()
  *

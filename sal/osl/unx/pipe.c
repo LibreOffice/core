@@ -38,7 +38,6 @@
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
-
 static struct
 {
     int            errcode;
@@ -61,7 +60,6 @@ static struct
     { ECONNREFUSED,    osl_Pipe_E_ConnectionRefused },  /* Connection refused */
     { -1,              osl_Pipe_E_invalidError      }
 };
-
 
 /* map */
 /* mfe: NOT USED
@@ -88,10 +86,8 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
     return PipeError[i].error;
 }
 
-
 /* macros */
 #define ERROR_FROM_NATIVE(y)    osl_PipeErrorFromNative(y)
-
 
 oslPipe __osl_createPipeImpl()
 {
@@ -114,7 +110,6 @@ void __osl_destroyPipeImpl(oslPipe pImpl)
     if (pImpl != NULL)
         free(pImpl);
 }
-
 
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
 {
@@ -307,7 +302,6 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         if ( !Security )
             chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
 
-
         strncpy(pPipe->m_Name, name, sizeof(pPipe->m_Name) - 1);
 
         if ( listen(pPipe->m_Socket, 5) < 0 )
@@ -413,7 +407,6 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     }
 #endif /* LINUX */
 
-
     nRet = shutdown(ConnFD, 2);
     if ( nRet < 0 )
     {
@@ -434,7 +427,6 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 
 /*      OSL_TRACE("Out osl_destroyPipe");     */
 }
-
 
 oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
@@ -547,7 +539,6 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                   (sal_Char*)pBuffer,
                   BytesToSend, 0);
 
-
     if ( nRet <= 0 )
     {
         OSL_TRACE("osl_sendPipe failed : %i '%s'",nRet,strerror(errno));
@@ -561,7 +552,6 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
     (void) pPipe; /* unused */
     return ERROR_FROM_NATIVE(errno);
 }
-
 
 sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
 {

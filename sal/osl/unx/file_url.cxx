@@ -251,7 +251,6 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         return osl_File_E_INVAL;
     }
 
-
     /* check if system path starts with ~ or ~user and replace it with the appropriate home dir */
     if( '~' == ustrSystemPath->buffer[0] )
     {

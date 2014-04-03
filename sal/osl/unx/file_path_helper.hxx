@@ -20,11 +20,9 @@
 #ifndef _OSL_FILE_PATH_HELPER_HXX_
 #define _OSL_FILE_PATH_HELPER_HXX_
 
-
 #include "file_path_helper.h"
 
 #include <rtl/ustring.hxx>
-
 
 namespace osl
 {
@@ -173,11 +171,8 @@ namespace osl
         &ustrPathFound.pData);
  }
 
-
  } // namespace osl
 
-
  #endif /* #ifndef _OSL_PATH_HELPER_HXX_ */
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

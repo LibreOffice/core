@@ -53,7 +53,6 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     if (TerminateProcess(((oslProcessImpl*)Process)->m_hProcess, 0))
         return osl_Process_E_None;
 
-
     return osl_Process_E_Unknown;
 }
 
@@ -452,7 +451,6 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
     DWORD   dwLen = 0;
 
-
     osl_acquireMutex( g_CurrentDirectoryMutex );
     dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer) );
     osl_releaseMutex( g_CurrentDirectoryMutex );
@@ -600,7 +598,6 @@ sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
     OSL_TRACE("osl_sendResourcePipe: exit... %d", bRet);
     return(bRet);
 }
-
 
 oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
 {

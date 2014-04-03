@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // header file
 
 #ifdef WNT
@@ -32,10 +31,7 @@
 using namespace osl;
 using namespace rtl;
 
-
-
 // helper functions and classes
-
 
 /** print Boolean value.
 */
@@ -56,10 +52,7 @@ inline void printUString( const ::rtl::OUString & str )
     t_print("%s\n", aString.getStr( ) );
 }
 
-
-
 // test code start here
-
 
 namespace osl_Security
 {
@@ -84,7 +77,6 @@ namespace osl_Security
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
-
 
     /** testing the methods:
         inline sal_Bool SAL_CALL logonUser(const ::rtl::OUString& strName,
@@ -116,7 +108,6 @@ namespace osl_Security
                                     bRes );
         }
 
-
         CPPUNIT_TEST_SUITE( logonUser );
         if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd are forwarded
@@ -130,7 +121,6 @@ namespace osl_Security
         }
         CPPUNIT_TEST_SUITE_END( );
     }; // class logonUser
-
 
     /** testing the method:
         inline sal_Bool Security::getUserIdent( rtl::OUString& strIdent) const
@@ -161,7 +151,6 @@ namespace osl_Security
         CPPUNIT_TEST( getUserIdent_001 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class getUserIdent
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL getUserName( ::rtl::OUString& strName) const;
@@ -194,7 +183,6 @@ namespace osl_Security
         CPPUNIT_TEST( getUserName_001 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class getUserName
-
 
     /** testing the method:
         inline sal_Bool Security::getConfigDir( rtl::OUString& strDirectory ) const
@@ -262,7 +250,6 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE_END( );
     }; // class getHandle
 
-
     class UserProfile : public CppUnit::TestFixture
     {
     public:
@@ -310,7 +297,6 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE_END( );
     }; // class loginUserOnFileServer
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::logonUser);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserIdent);
@@ -321,10 +307,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::UserProfile);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 
-
-
 } // namespace osl_Security
-
 
 /* This defines an own TestPlugIn implementation with an own initialize()
     method that will be called after loading the PlugIn
@@ -338,7 +321,6 @@ class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
     void initialize( CPPUNIT_NS::TestFactoryRegistry *registry,
                    const CPPUNIT_NS::PlugInParameters &parameters ) SAL_OVERRIDE;
 };
-
 
 void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                    const CPPUNIT_NS::PlugInParameters & )
@@ -354,7 +336,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /// get system information
 #if ( defined UNX )
     /// some initialization work for UNIX OS
-
 
     struct passwd* pw;
     CPPUNIT_ASSERT_MESSAGE( "getpwuid: no password entry\n",( pw = getpwuid( getuid() ) ) != NULL );
@@ -382,7 +363,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 #endif
 #if defined ( WNT )
     /// some initialization work for Windows OS
-
 
     /// Get the user name, computer name, user home directory.
     LPTSTR lpszSystemInfo;      // pointer to system information string
@@ -422,7 +402,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
         RegCloseKey(hRegKey);
     }
-
 
     /// Get user Security ID:
 
@@ -555,7 +534,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     delete [] reinterpret_cast<BYTE*>(pSid);
     delete [] wszDomainName;
 
-
     /// check if logged in user is administrator:
 
     BOOL b;
@@ -678,6 +656,5 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
 CPPUNIT_PLUGIN_EXPORTED_FUNCTION_IMPL( MyTestPlugInImpl );
 CPPUNIT_PLUGIN_IMPLEMENT_MAIN();
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

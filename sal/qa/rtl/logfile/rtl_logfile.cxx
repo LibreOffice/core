@@ -92,8 +92,6 @@ inline ::rtl::OUString getCurrentPID(  )
         return ( ::rtl::OUString::valueOf( ( long )nPID ) );
 }
 
-
-
 /*
  * LLA:
  * check if logfile is create
@@ -186,7 +184,6 @@ namespace rtl_logfile
 // TODO: assertion test!
             }
 
-
         CPPUNIT_TEST_SUITE( logfile );
         CPPUNIT_TEST( logfile_001 );
         CPPUNIT_TEST( logfile_002 );
@@ -196,9 +193,7 @@ namespace rtl_logfile
 
 } // namespace rtl_logfile
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION( rtl_logfile::logfile);
-
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
@@ -234,7 +229,5 @@ public:
 };
 
 GlobalObject theGlobalObject;
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

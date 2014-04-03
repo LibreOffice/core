@@ -60,9 +60,7 @@ using ::rtl::OUString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-
 // helper functions
-
 
 class CloseSocketThread : public Thread
 {
@@ -88,9 +86,7 @@ public:
     }
 };
 
-
 // tests cases begins here
-
 
 namespace osl_DatagramSocket
 {
@@ -113,7 +109,6 @@ namespace osl_DatagramSocket
             CPPUNIT_ASSERT_MESSAGE( "test for ctors_001 constructor function: check if the datagram socket was created successfully.",
                                     osl_Socket_TypeDgram ==  dsSocket.getType( ) );
         }
-
 
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
@@ -293,14 +288,10 @@ public:
 
     }; // class sendTo_recvFrom
 
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
 } // namespace osl_DatagramSocket
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

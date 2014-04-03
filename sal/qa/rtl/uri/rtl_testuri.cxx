@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "rtl/strbuf.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/ustrbuf.hxx"

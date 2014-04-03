@@ -50,8 +50,6 @@ void fail( const char * pszText, int retval )
     exit( retval );
 }
 
-
-
 /*
  * Test the Pipe-Implementation in osl
  */
@@ -61,7 +59,6 @@ int main (int argc, const char *argv[])
     // create the Pipe
     rtl_uString* ustrPipeName=0;
     rtl_uString* ustrExeName=0;
-
 
     rtl_uString_newFromAscii(&ustrPipeName,pszPipeName);
     rtl_uString_newFromAscii(&ustrExeName, "//./tmp/testpip2.exe");
@@ -92,7 +89,6 @@ int main (int argc, const char *argv[])
     if( !C1Pipe )
         fail( "unable to connect to client.\n",
             osl_getLastPipeError( Pipe ));
-
 
     if( argc > 1 )
     {
@@ -150,7 +146,5 @@ int main (int argc, const char *argv[])
     printf( "TestPipe Server: test passed.\n" );
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

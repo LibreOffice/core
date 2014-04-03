@@ -155,7 +155,6 @@ oslSecurityError SAL_CALL osl_loginUser(
         pszUserName = rtl_string_getStr(strUserName);
     }
 
-
     if ( ustrPassword != 0 )
     {
         rtl_uString2String( &strPassword,
@@ -165,7 +164,6 @@ oslSecurityError SAL_CALL osl_loginUser(
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszPassword = rtl_string_getStr(strPassword);
     }
-
 
     Error=osl_psz_loginUser(pszUserName,pszPassword,pSecurity);
 
@@ -179,10 +177,8 @@ oslSecurityError SAL_CALL osl_loginUser(
         rtl_string_release(strPassword);
     }
 
-
     return Error;
 }
-
 
 static oslSecurityError SAL_CALL
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
@@ -209,7 +205,6 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     return osl_Security_E_UserUnknown;
 }
 
-
 sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
 {
     sal_Bool bRet=sal_False;
@@ -224,7 +219,6 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
 
     return bRet;
 }
-
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
 {
@@ -259,8 +253,6 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 
     return bRet;
 }
-
-
 
 static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
 {
@@ -498,7 +490,6 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 {
     deleteSecurityImpl(static_cast<oslSecurityImpl *>(Security));
 }
-
 
 sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 {

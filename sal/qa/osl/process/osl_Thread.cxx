@@ -24,7 +24,6 @@
 #include <time.h>
 #endif
 
-
 // include files
 
 #include <sal/types.h>
@@ -49,7 +48,6 @@
 using namespace osl;
 
 using ::rtl::OString;
-
 
 // Small stopwatch
 class StopWatch {
@@ -155,7 +153,6 @@ double StopWatch::getTenthSec() const
     return nValue ;
 }
 
-
 template <class T>
 class ThreadSafeValue
 {
@@ -178,7 +175,6 @@ public:
     void acquire() {m_aMutex.acquire();}
     void release() {m_aMutex.release();}
 };
-
 
 namespace ThreadHelper
 {
@@ -265,7 +261,6 @@ public:
         }
 
 };
-
 
 /** Thread which has a flag add 1 every second until 20
  */
@@ -563,8 +558,6 @@ namespace osl_Thread
         CPPUNIT_TEST(create_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class create
-
-
 
     /** Test of the osl::Thread::createSuspended method
     */
@@ -1064,7 +1057,6 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class isRunning
 
-
     /// check osl::Thread::setPriority
     class setPriority : public CppUnit::TestFixture
     {
@@ -1108,7 +1100,6 @@ namespace osl_Thread
                 }
                 return sPrioStr;
             }
-
 
         /** check 2 threads.
 
@@ -1508,7 +1499,6 @@ namespace osl_Thread
 #endif
             }
 
-
         CPPUNIT_TEST_SUITE(setPriority);
 #ifndef SOLARIS
         CPPUNIT_TEST(setPriority_002);
@@ -1579,7 +1569,6 @@ namespace osl_Thread
         CPPUNIT_TEST(getPriority_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class getPriority
-
 
     class getIdentifier : public CppUnit::TestFixture
     {
@@ -1737,7 +1726,6 @@ namespace osl_Thread
             {
             }
 
-
         CPPUNIT_TEST_SUITE(yield);
         CPPUNIT_TEST(yield_001);
         CPPUNIT_TEST_SUITE_END();
@@ -1867,7 +1855,6 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class schedule
 
-
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::create, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::createSuspended, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::suspend, "osl_Thread");
@@ -1883,8 +1870,6 @@ namespace osl_Thread
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::yield, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::schedule, "osl_Thread");
 } // namespace osl_Thread
-
-
 
 // destroy function when the binding thread terminate
 void SAL_CALL destroyCallback(void * data)
@@ -1986,7 +1971,6 @@ namespace osl_ThreadData
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class ctors
-
 
     class setData : public CppUnit::TestFixture
     {
@@ -2184,7 +2168,6 @@ namespace osl_ThreadData
         CPPUNIT_TEST(getData_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class getData
-
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::setData);

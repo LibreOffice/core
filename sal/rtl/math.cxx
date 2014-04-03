@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "rtl/math.h"
 
 #include "osl/diagnose.h"
@@ -36,7 +35,6 @@
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
-
 
 static int const n10Count = 16;
 static double const n10s[2][n10Count] = {
@@ -271,7 +269,6 @@ struct UStringTraits
         *pOffset += nLen;
     }
 };
-
 
 // Solaris C++ 5.2 compiler has problems when "StringT ** pResult" is
 // "typename T::String ** pResult" instead:
@@ -661,7 +658,6 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
         cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
 
-
 namespace {
 
 // if nExp * 10 + nAdd would result in overflow
@@ -1050,12 +1046,10 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     return bSign ? -fValue : fValue;
 }
 
-
 double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 {
     return fValue * getN10Exp( nExp );
 }
-
 
 double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 {
@@ -1088,7 +1082,6 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
     return bSign ? -fValue : fValue;
 }
 
-
 double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
 {
     double fe = exp( fValue );
@@ -1098,7 +1091,6 @@ double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
         return -1.0;
     return (fe-1.0) * fValue / log(fe);
 }
-
 
 double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
 {
@@ -1114,12 +1106,10 @@ double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
         return log(fp) * fValue / (fp-1.0);
 }
 
-
 double SAL_CALL rtl_math_atanh( double fValue ) SAL_THROW_EXTERN_C()
 {
    return 0.5 * rtl_math_log1p( 2.0 * fValue / (1.0-fValue) );
 }
-
 
 /** Parent error function (erf) that calls different algorithms based on the
     value of x.  It takes care of cases where x is negative as erf is an odd
@@ -1159,7 +1149,6 @@ double SAL_CALL rtl_math_erf( double x ) SAL_THROW_EXTERN_C()
 
     return fErf;
 }
-
 
 /** Parent complementary error function (erfc) that calls different algorithms
     based on the value of x.  It takes care of cases where x is negative as erfc

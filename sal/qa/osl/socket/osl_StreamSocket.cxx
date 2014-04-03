@@ -62,9 +62,7 @@ using ::rtl::OString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-
 // helper functions
-
 
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
@@ -256,7 +254,6 @@ public:
 
 };
 
-
 // Helper functions, to create buffers, check buffers
 class ValueCheckProvider
 {
@@ -308,7 +305,6 @@ public:
         }
 
 };
-
 
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
@@ -487,8 +483,6 @@ public:
         }
 };
 
-
-
 namespace osl_StreamSocket
 {
 
@@ -518,7 +512,6 @@ namespace osl_StreamSocket
             {
                 sHandle = NULL;
             }
-
 
         void ctors_none()
             {
@@ -691,8 +684,6 @@ namespace osl_StreamSocket
 //      CPPUNIT_TEST( write_read );
         CPPUNIT_TEST_SUITE_END();
     }; // class send_recv
-
-
 
     class SendClientThread : public Thread
     {
@@ -891,12 +882,10 @@ namespace osl_StreamSocket
 
         /**tester's comments: lack of a case that return sal_True, do not know when it will return sal_True*/
 
-
         CPPUNIT_TEST_SUITE( isExceptionPending );
         CPPUNIT_TEST( isExPending_001 );
         CPPUNIT_TEST_SUITE_END();
     }; // class isExceptionPending
-
 
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
@@ -943,11 +932,9 @@ namespace osl_StreamSocket
                 pTimeout->Seconds = 20;
                 pTimeout->Nanosec = 0;
 
-
                 // blocking mode, if read/recv failed, block until success
                 t_print("enableNonBlockingMode(false)\n");
                 aSocket.enableNonBlockingMode( sal_False );
-
 
                 t_print("connect()\n");
                 oslSocketResult eResult = aSocket.connect( aSocketAddr, pTimeout );
@@ -1017,8 +1004,6 @@ namespace osl_StreamSocket
 
     };
 
-
-
     class justtest : public CppUnit::TestFixture
     {
         void send_Acceptor(rtl::OString const& _sAddr, osl::Condition &)
@@ -1038,7 +1023,6 @@ namespace osl_StreamSocket
 
                 rtl::OUString aHostname = aSocketAddr.getHostname();
                 aSocketAddr.getPort();
-
 
                 //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
                 aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
@@ -1074,8 +1058,6 @@ namespace osl_StreamSocket
                 // ssStreamConnection.close();
                 aSocket.close();
             }
-
-
 
         void send_Connector(rtl::OString const& _sAddr, osl::Condition &/*_aCondition*/ )
             {
@@ -1129,7 +1111,6 @@ namespace osl_StreamSocket
                 aSocket.close();
             }
 
-
     public:
         // LLA: send_Connector_2_margritte works, it send strings to echo server on margritte
         //      but can not receive anything
@@ -1177,8 +1158,6 @@ namespace osl_StreamSocket
                 }
                 send_Connector_2_margritte(sAddr);
             }
-
-
 
         void send_recv()
             {
@@ -1263,7 +1242,6 @@ namespace osl_StreamSocket
                 }
             }
 
-
         void getPage(rtl::OString const& _sAddr);
         void test_getPage()
             {
@@ -1279,7 +1257,6 @@ namespace osl_StreamSocket
         CPPUNIT_TEST( test_getPage );
         CPPUNIT_TEST_SUITE_END();
     }; // class isExceptionPending
-
 
     void justtest::getPage(rtl::OString const& _sAddr)
             {
@@ -1349,7 +1326,6 @@ namespace osl_StreamSocket
                     sal_Int32 nBufferSize = strlen(pBuffer);
                     ssStreamConnection.write( pBuffer, nBufferSize );
 
-
                     char *pBufferPeek = (char*) malloc(1024);
                     sal_Int32 nReadNumber = 1;
                     while ( nReadNumber != 0)
@@ -1372,8 +1348,6 @@ namespace osl_StreamSocket
                 aSocket.close();
             }
 
-
-
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::send_recv);
 //    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::shutdown);
@@ -1382,8 +1356,6 @@ namespace osl_StreamSocket
 //    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::justtest);
 
 } // namespace osl_StreamSocket
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

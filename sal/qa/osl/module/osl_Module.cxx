@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // include files
 
 #include <osl_Module_Const.h>
@@ -30,7 +28,6 @@ using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
 // helper functions and classes
-
 
 /** print Boolean value.
 */
@@ -142,10 +139,7 @@ inline void deleteTestFile( const ::rtl::OUString& filename )
     CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
 }
 
-
-
 // test code start here
-
 
 namespace osl_Module
 {
@@ -161,7 +155,6 @@ namespace osl_Module
             printf("#Sun Microsystem\n");
         };
     };
-
 
     /** testing the methods:
         Module();
@@ -204,7 +197,6 @@ namespace osl_Module
         CPPUNIT_TEST( ctors_name_mode );
         CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
-
 
     /** testing the methods:
         static sal_Bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl)
@@ -255,7 +247,6 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE_END( );
     }; // class getUrlFromAddress
 
-
     /** testing the method:
         sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
                                                  sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
@@ -284,7 +275,6 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE_END( );
     }; // class load
 
-
     /** testing the method:
         void SAL_CALL unload()
     */
@@ -308,7 +298,6 @@ namespace osl_Module
         CPPUNIT_TEST( unload_001 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class unload
-
 
     /** testing the methods:
         sal_Bool SAL_CALL is() const
@@ -341,7 +330,6 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE_END( );
     }; // class is
 
-
     /** testing the methods:
         void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
     */
@@ -370,7 +358,6 @@ namespace osl_Module
         CPPUNIT_TEST( getSymbol_001 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class getSymbol
-
 
     /** testing the methods:
         operator oslModule() const
@@ -449,7 +436,6 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE_END( );
     }; // class getFunctionSymbol
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getUrlFromAddress);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::load);
@@ -459,10 +445,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getSymbol);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::optr_oslModule);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getFunctionSymbol);
 
-
 } // namespace osl_Module
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

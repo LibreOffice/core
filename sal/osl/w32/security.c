@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "system.h"
 
 #include <osl/security.h>
@@ -31,7 +30,6 @@
 /*****************************************************************************/
 /* Data Type Definition */
 /*****************************************************************************/
-
 
 /* Data for use in (un)LoadProfile Functions */
 /* Declarations based on USERENV.H for Windows 2000 Beta 2 */
@@ -201,7 +199,6 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     return ret;
 }
 
-
 static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember )
 {
     typedef BOOL (WINAPI *CheckTokenMembership_PROC)( HANDLE, PSID, PBOOL );
@@ -228,7 +225,6 @@ static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToChec
 
 }
 
-
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (Security != NULL)
@@ -237,7 +233,6 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         PSID                        psidAdministrators;
         SID_IDENTIFIER_AUTHORITY    siaNtAuthority = { SECURITY_NT_AUTHORITY };
         sal_Bool                    bSuccess = sal_False;
-
 
         /* If Security contains an access token we need to duplicate it to an impersonation
            access token. NULL works with CheckTokenMembership() as the current effective
@@ -280,7 +275,6 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         return (sal_False);
 }
 
-
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 {
     if (Security)
@@ -305,7 +299,6 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
     }
 }
 
-
 sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 {
     if (Security != NULL)
@@ -322,7 +315,6 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
             sal_Char        *Ident;
             DWORD  nInfoBuffer = 512;
             UCHAR* pInfoBuffer = malloc(nInfoBuffer);
-
 
             while (!GetTokenInformation(hAccessToken, TokenUser,
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
@@ -429,13 +421,10 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
     return sal_False;
 }
 
-
-
 sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName)
 {
     return getUserNameImpl(Security, strName, sal_True);
 }
-
 
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
@@ -513,7 +502,6 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     return bSuccess;
 }
 
-
 sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 {
     /*  CreateProcessAsUser does not load the specified user's profile
@@ -587,7 +575,6 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
     return (sal_Bool)bOk;
 }
 
-
 void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 {
     if ( ((oslSecurityImpl*)Security)->m_hProfile != NULL )
@@ -641,7 +628,6 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 /* Static Module Functions */
 /*****************************************************************************/
 
-
 static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 {
     sal_Bool bRet = sal_False;
@@ -680,7 +666,6 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
             BOOL (WINAPI *pSHGetPathFromIDListA)(LPCITEMIDLIST, LPSTR) = (BOOL (WINAPI *)(LPCITEMIDLIST, LPSTR))GetProcAddress(hLibrary, "SHGetPathFromIDListA");
             BOOL (WINAPI *pSHGetPathFromIDListW)(LPCITEMIDLIST, LPWSTR) = (BOOL (WINAPI *)(LPCITEMIDLIST, LPWSTR))GetProcAddress(hLibrary, "SHGetPathFromIDListW");
              HRESULT (WINAPI *pSHGetMalloc)(LPMALLOC *) = (HRESULT (WINAPI *)(LPMALLOC *))GetProcAddress(hLibrary, "SHGetMalloc");
-
 
             if (pSHGetSpecialFolderLocation && (pSHGetPathFromIDListA || pSHGetPathFromIDListW ) && pSHGetMalloc )
             {
@@ -766,7 +751,6 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 
     return (bRet);
 }
-
 
 static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
 {

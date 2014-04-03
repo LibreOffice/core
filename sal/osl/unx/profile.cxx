@@ -84,7 +84,6 @@ typedef struct _osl_TProfileSection
     osl_TProfileEntry*  m_Entries;
 } osl_TProfileSection;
 
-
 /* Profile-data structure hidden behind oslProfile: */
 typedef struct _osl_TProfileImpl
 {
@@ -184,7 +183,6 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
     }
 #endif
 
-
     if ( ( pFile = openFileImpl(pszProfileName, Flags ) ) == NULL )
     {
 #ifdef TRACE_OSL_PROFILE
@@ -192,7 +190,6 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 #endif
         return (NULL);
     }
-
 
     pProfile = (osl_TProfileImpl*)calloc(1, sizeof(osl_TProfileImpl));
 
@@ -273,7 +270,6 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         pTmpProfile = acquireProfile(Profile,sal_False);
     }
 
-
     if ( pTmpProfile == 0 )
     {
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
@@ -335,7 +331,6 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 #endif
     return (sal_True);
 }
-
 
 sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 {
@@ -432,7 +427,6 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
     return sal_True;
 }
 
-
 sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
                                         const sal_Char* pszSection,
                                         const sal_Char* pszEntry,
@@ -508,7 +502,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     }
     else
     { /* not implemented */ }
-
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
@@ -830,7 +823,6 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
         return sal_False;
     }
 
-
     pProfile = acquireProfile(Profile, sal_True);
 
     if (pProfile == NULL)
@@ -841,7 +833,6 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 #endif
         return (sal_False);
     }
-
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
@@ -866,7 +857,6 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     }
     else
     { /* not implemented */ }
-
 
     bRet = releaseProfile(pProfile);
     OSL_ASSERT(bRet);
@@ -933,7 +923,6 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
         return (0);
     }
-
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
@@ -1065,7 +1054,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
     else
     { /* not implemented */ }
 
-
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
     (void)bRet;
@@ -1087,7 +1075,6 @@ static osl_TStamp OslProfile_getFileStamp(osl_TFile* pFile)
     {
         return (0);
     }
-
 
     return (status.st_mtime);
 }
@@ -1129,7 +1116,6 @@ static sal_Bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
         return (sal_False);
     }
 
-
     if ( bLockingDisabled )
     {
 #ifdef TRACE_OSL_PROFILE
@@ -1137,7 +1123,6 @@ static sal_Bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 #endif
         return (sal_True);
     }
-
 
     lock.l_start  = 0;
     lock.l_whence = SEEK_SET;
@@ -1275,7 +1260,6 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
         pFile->m_Handle = -1;
     }
 
-
     if ( pFile->m_pWriteBuf )
     {
         free(pFile->m_pWriteBuf);
@@ -1321,7 +1305,6 @@ static sal_Bool OslProfile_rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 #endif
     return bRet;
 }
-
 
 static sal_Char* OslProfile_getLine(osl_TFile* pFile)
 {
@@ -1448,8 +1431,6 @@ static sal_Bool OslProfile_putLine(osl_TFile* pFile, const sal_Char *pszLine)
         }
     }
 
-
-
     memcpy(pFile->m_pWriteBuf + ( pFile->m_nWriteBufLen - pFile->m_nWriteBufFree ),pszLine,Len+1);
 #ifdef DEBUG_OSL_PROFILE
     strLen = strlen(pFile->m_pWriteBuf);
@@ -1560,7 +1541,6 @@ static sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sa
 
         memmove(&pProfile->m_Lines[LineNo + 1], &pProfile->m_Lines[LineNo],
                 (pProfile->m_NoLines - LineNo) * sizeof(sal_Char *));
-
 
         /* adjust line references */
         for (i = 0; i < pProfile->m_NoSections; i++)
@@ -1839,7 +1819,6 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     sal_Char* pLine;
     sal_Char* bWasAdded = NULL;
 
-
     if ( !pFile )
     {
         return sal_False;
@@ -2013,7 +1992,6 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
     /* open this file */
     pFile = openFileImpl(pszTmpName,pProfile->m_Flags | PFlags);
 
-
     /* return new pFile */
     return pFile;
 }
@@ -2081,7 +2059,6 @@ static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_
     return;
 }
 
-
 static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 {
     osl_TProfileImpl* pProfile = (osl_TProfileImpl*)Profile;
@@ -2095,7 +2072,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
     {
         PFlags = osl_Profile_DEFAULT;
     }
-
 
     if (pProfile == NULL)
     {

@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // TestWin32.cpp : Defines the entry point for the application
-
 
 #define _WIN32_DCOM
 
@@ -55,9 +53,7 @@ LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
 
-
 // a thread function
-
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
@@ -119,9 +115,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-
 // WinMain
-
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -168,8 +162,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     return msg.wParam;
 }
-
-
 
 //
 //  FUNCTION: MyRegisterClass()
@@ -248,7 +240,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     PAINTSTRUCT ps;
     HDC         hdc;
     TCHAR       szHello[MAX_LOADSTRING];
-
 
     LoadString(hInst, IDS_HELLO, szHello, MAX_LOADSTRING);
 
@@ -348,9 +339,7 @@ void PasteClipboardData2(HWND hwndParent)
     }
 }
 
-
 // clipboard handling
-
 
 /*
 void PasteClipboardData(HWND hwndParent)

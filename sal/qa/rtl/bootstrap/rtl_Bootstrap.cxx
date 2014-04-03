@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // Documentation about bootstraping can be found at:
 // http://udk.openoffice.org/common/man/concept/micro_deployment.html
 
@@ -92,7 +91,6 @@ inline ::rtl::OUString getModulePath( void )
 #define TESTSHL2_INI "testshl2"
 #define PSEUDO_INI   "pseudo"
 
-
 static rtl::OUString getExecutableDirectory()
 {
     rtl::OUString fileName;
@@ -105,7 +103,6 @@ static rtl::OUString getExecutableDirectory()
     rtl::OUString aDirURL = fileName.copy(0, nDirEnd);
     return aDirURL;
 }
-
 
 // get the URL of testshl2rc/rtlrc/pseudorc
 inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
@@ -134,8 +131,6 @@ void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
     osl_waitThread(&nTV);
 #endif
 }
-
-
 
 namespace rtl_Bootstrap
 {
@@ -767,8 +762,6 @@ namespace rtl_Bootstrap
 
 } // namespace rtl_Bootstrap
 
-
-
 static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString const& _sContent)
 {
     osl::File::remove(_suFileURL);
@@ -800,7 +793,6 @@ static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString co
     OSL_ASSERT(t_fileExist(_suFileURL) == true);
 }
 
-
 static void create_rtlrc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
@@ -822,7 +814,6 @@ static void create_rtlrc()
 
     removeAndCreateFile(aFileURL, sLines);
 }
-
 
 static void create_testshl2rc()
 {
@@ -862,8 +853,6 @@ static void create_testshl2rc()
         SAL_CONFIGFILE("rtl"));
 }
 
-
-
 static void create_pseudorc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
@@ -880,7 +869,6 @@ static void create_pseudorc()
     removeAndCreateFile(aFileURL, sLines);
 }
 
-
 void create_bootstrap_processrc()
 {
     rtl::OUString aDirURL(getModulePath());
@@ -896,7 +884,6 @@ void create_bootstrap_processrc()
 
     removeAndCreateFile(aDirURL, sLines);
 }
-
 
 void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 {

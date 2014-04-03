@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // include files
 
 #include <sal/types.h>
@@ -30,9 +29,7 @@
 using namespace osl;
 using namespace rtl;
 
-
 // helper functions
-
 
 /** print a UNI_CODE String.
 */
@@ -75,11 +72,7 @@ namespace ThreadHelper
     }
 }
 
-
-
 // Beginning of the test cases for osl_Mutex class
-
-
 
 /** mutually exclusive data
 */
@@ -144,7 +137,6 @@ protected:
         pResource->lock.release();
     }
 };
-
 
 /** chain structure used in Threads as critical resource
 */
@@ -262,8 +254,6 @@ protected:
     }
 };
 
-
-
 namespace osl_Mutex
 {
 
@@ -361,7 +351,6 @@ namespace osl_Mutex
         CPPUNIT_TEST_SUITE_END( );
     }; // class ctor
 
-
     /** Test of the osl::Mutex::acquire method
      */
     class acquire : public CppUnit::TestFixture
@@ -415,7 +404,6 @@ namespace osl_Mutex
         CPPUNIT_TEST( acquire_002 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class acquire
-
 
     /** Test of the osl::Mutex::tryToAcquire method
      */
@@ -497,8 +485,6 @@ namespace osl_Mutex
         CPPUNIT_TEST_SUITE_END( );
     }; // class release
 
-
-
     /** Test of the osl::Mutex::getGlobalMutex method
      */
     class getGlobalMutex : public CppUnit::TestFixture
@@ -548,7 +534,6 @@ namespace osl_Mutex
         CPPUNIT_TEST_SUITE_END();
     }; // class getGlobalMutex
 
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::ctor, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::acquire, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::tryToAcquire, "osl_Mutex");
@@ -556,10 +541,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::release, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::getGlobalMutex, "osl_Mutex");
 } // namespace osl_Mutex
 
-
-
 // Beginning of the test cases for osl_Guard class
-
 
 class GuardThread : public Thread
 {
@@ -581,7 +563,6 @@ protected:
         ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
-
 
 namespace osl_Guard
 {
@@ -636,14 +617,10 @@ namespace osl_Guard
         CPPUNIT_TEST_SUITE_END();
     }; // class ctor
 
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Guard::ctor, "osl_Guard");
 } // namespace osl_Guard
 
-
-
 // Beginning of the test cases for osl_ClearableGuard class
-
 
 /** Thread for test ClearableGuard
  */
@@ -672,7 +649,6 @@ protected:
         ThreadHelper::thread_sleep( 2 );
     }
 };
-
 
 namespace osl_ClearableGuard
 {
@@ -777,15 +753,11 @@ namespace osl_ClearableGuard
         CPPUNIT_TEST_SUITE_END( );
     }; // class clear
 
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::ctor, "osl_ClearableGuard" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::clear, "osl_ClearableGuard" );
 } // namespace osl_ClearableGuard
 
-
-
 // Beginning of the test cases for osl_ResettableGuard class
-
 
 /** Thread for test ResettableGuard
  */
@@ -812,7 +784,6 @@ protected:
         ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
-
 
 namespace osl_ResettableGuard
 {
@@ -846,7 +817,6 @@ namespace osl_ResettableGuard
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
                 bRes);
         }
-
 
         CPPUNIT_TEST_SUITE(ctor);
         CPPUNIT_TEST(ctor_001);
@@ -902,7 +872,6 @@ namespace osl_ResettableGuard
 #endif
         CPPUNIT_TEST_SUITE_END();
     }; // class reset
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::ctor);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::reset);

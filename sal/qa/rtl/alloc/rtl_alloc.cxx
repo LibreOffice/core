@@ -134,11 +134,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::Memory);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::TestZeroMemory);
 } // namespace rtl_alloc
-
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -122,8 +122,6 @@ void sal_detail_deinitialize()
     }
 }
 
-
-
 #ifdef __cplusplus
 }   // extern "C"
 #endif

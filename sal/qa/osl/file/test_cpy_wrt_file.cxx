@@ -72,7 +72,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-
 // register test suites
 CPPUNIT_TEST_SUITE_REGISTRATION(test_osl_writeFile);
 

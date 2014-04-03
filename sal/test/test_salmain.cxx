@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 
-
 SAL_IMPLEMENT_MAIN()
 {
     fprintf(stderr, "success!\n");

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define UNICODE
 #define _UNICODE
 #include "systools/win32/uwinapi.h"
@@ -49,7 +48,6 @@
 #ifdef min
 #undef min
 #endif
-
 
 // File handle implementation
 
@@ -651,9 +649,7 @@ oslFileError FileHandle_Impl::syncFile()
     return (result);
 }
 
-
 // File I/O functions
-
 
 extern "C" oslFileHandle
 SAL_CALL osl_createFileHandleFromOSHandle (
@@ -693,7 +689,6 @@ SAL_CALL osl_createFileHandleFromOSHandle (
         "osl_createFileHandleFromOSHandle(): missing read/write access flags");
     return (oslFileHandle)(pImpl);
 }
-
 
 oslFileError
 SAL_CALL osl_openFile(
@@ -735,7 +730,6 @@ SAL_CALL osl_openFile(
     return (result);
 }
 
-
 oslFileError
 SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
@@ -755,7 +749,6 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
     return osl_File_E_None;
 }
 
-
 oslFileError
 SAL_CALL osl_getFileOSHandle(
     oslFileHandle  Handle,
@@ -770,7 +763,6 @@ SAL_CALL osl_getFileOSHandle(
 
     return osl_File_E_None;
 }
-
 
 oslFileError
 SAL_CALL osl_closeFile(oslFileHandle Handle)
@@ -797,7 +789,6 @@ SAL_CALL osl_closeFile(oslFileHandle Handle)
     delete pImpl;
     return (result);
 }
-
 
 oslFileError
 SAL_CALL osl_mapFile(
@@ -871,7 +862,6 @@ SAL_CALL osl_mapFile(
     return osl_File_E_None;
 }
 
-
 oslFileError
 SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
 {
@@ -884,13 +874,11 @@ SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
     return osl_File_E_None;
 }
 
-
 oslFileError
 SAL_CALL osl_unmapMappedFile(oslFileHandle /* Handle */, void* pAddr, sal_uInt64 uLength)
 {
     return osl_unmapFile( pAddr, uLength );
 }
-
 
 oslFileError
 SAL_CALL osl_readLine(
@@ -910,7 +898,6 @@ SAL_CALL osl_readLine(
         pImpl->m_filepos += uBytesRead;
     return (result);
 }
-
 
 oslFileError
 SAL_CALL osl_readFile(
@@ -932,7 +919,6 @@ SAL_CALL osl_readFile(
     return (result);
 }
 
-
 oslFileError
 SAL_CALL osl_writeFile(
     oslFileHandle Handle,
@@ -953,7 +939,6 @@ SAL_CALL osl_writeFile(
         pImpl->m_filepos += *pBytesWritten;
     return (result);
 }
-
 
 oslFileError
 SAL_CALL osl_readFileAt(
@@ -980,7 +965,6 @@ SAL_CALL osl_readFileAt(
     return pImpl->readFileAt (nOffset, pBuffer, uBytesRequested, pBytesRead);
 }
 
-
 oslFileError
 SAL_CALL osl_writeFileAt(
     oslFileHandle Handle,
@@ -1006,7 +990,6 @@ SAL_CALL osl_writeFileAt(
     return pImpl->writeFileAt (nOffset, pBuffer, uBytesToWrite, pBytesWritten);
 }
 
-
 oslFileError
 SAL_CALL osl_isEndOfFile (oslFileHandle Handle, sal_Bool *pIsEOF)
 {
@@ -1020,7 +1003,6 @@ SAL_CALL osl_isEndOfFile (oslFileHandle Handle, sal_Bool *pIsEOF)
     return osl_File_E_None;
 }
 
-
 oslFileError
 SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
 {
@@ -1032,7 +1014,6 @@ SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
     *pPos = pImpl->getPos();
     return osl_File_E_None;
 }
-
 
 oslFileError
 SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset)
@@ -1077,7 +1058,6 @@ SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset
     return pImpl->setPos (nPos + nOffset);
 }
 
-
 oslFileError
 SAL_CALL osl_getFileSize (oslFileHandle Handle, sal_uInt64 *pSize)
 {
@@ -1090,7 +1070,6 @@ SAL_CALL osl_getFileSize (oslFileHandle Handle, sal_uInt64 *pSize)
     *pSize = pImpl->getSize();
     return osl_File_E_None;
 }
-
 
 oslFileError
 SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
@@ -1115,10 +1094,7 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
     return pImpl->setSize (uSize);
 }
 
-
 // File handling functions
-
-
 
 oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 {
@@ -1136,7 +1112,6 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
     }
     return error;
 }
-
 
 oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
@@ -1164,7 +1139,6 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPa
 
     return error;
 }
-
 
 oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {

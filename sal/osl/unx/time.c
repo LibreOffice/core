@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "system.h"
 
 #include <osl/diagnose.h>
@@ -51,7 +50,6 @@ typedef struct timeval osl_time_t;
 #endif
 #endif
 static osl_time_t startTime;
-
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
@@ -89,7 +87,6 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     return sal_True;
 }
 
-
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     struct tm *pSystemTime;
@@ -100,7 +97,6 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
 
     /* Convert time from type time_t to struct tm */
     pSystemTime = gmtime_r( &atime, &tmBuf );
-
 
     /* Convert struct tm to struct oslDateTime */
     if ( pSystemTime != NULL )
@@ -185,7 +181,6 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
 
     return sal_False;
 }
-
 
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {

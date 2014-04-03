@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // TestWin32.cpp : Defines the entry point for the application.
-
 
 #define _WIN32_DCOM
 #undef _UNICODE
@@ -58,7 +56,6 @@ void                FlushClipboard( );
 void                PasteData( HWND hWnd );
 void                SetLocale();
 
-
 LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
@@ -67,9 +64,7 @@ HWND                g_hWnd;
 HANDLE              g_hEvent;
 BOOL                g_bEnd;
 
-
 // a thread function
-
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
@@ -82,9 +77,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-
 // WinMain
-
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -103,7 +96,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #else
     hr = OleInitialize( NULL );
 #endif
-
 
     // Initialize global strings
     LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -140,9 +132,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     return msg.wParam;
 }
 
-
-
-
 //  FUNCTION: MyRegisterClass()
 //
 //  PURPOSE: Registers the window class.
@@ -152,7 +141,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 //    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
 //    function, which was added to Windows 95. If it important to call
 //    this function to allow the use of small icons in the correct proportions.
-
 
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
@@ -175,7 +163,6 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
     return RegisterClassEx(&wcex);
 }
 
-
 //   FUNCTION: InitInstance(HANDLE, int)
 //
 //   PURPOSE: Saves instance access number and creates main window
@@ -183,7 +170,6 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 //   Comments:
 //        In this function, the instance access number is stored in a global variable
 //        and the main program window is displayed.
-
 
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
@@ -203,7 +189,6 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
    return TRUE;
 }
 
-
 //  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
 //
 //  PURPOSE: Processes messages for the main window.
@@ -212,14 +197,12 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 //  WM_PAINT    - Display main windows
 //  WM_DESTROY  - Output completion message and return
 
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int         wmId;
     PAINTSTRUCT ps;
     HDC         hdc;
     TCHAR       szHello[MAX_LOADSTRING];
-
 
     LoadString(hInst, IDS_HELLO, szHello, MAX_LOADSTRING);
 
@@ -279,9 +262,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    return 0;
 }
 
-
 // copy data into the clipboard
-
 
 void CopyClipboardData( HWND hWnd )
 {
@@ -293,9 +274,7 @@ void CopyClipboardData( HWND hWnd )
 #endif
 }
 
-
 // flush the content into the clipboard
-
 
 void FlushClipboard( )
 {
@@ -314,7 +293,6 @@ void FlushClipboard( )
         static_cast< IDataObject* >( g_xtDo )->Release( );
     }
 }
-
 
 void PasteData(HWND hWnd)
 {
@@ -361,7 +339,6 @@ void PasteData(HWND hWnd)
         }
     }
 }
-
 
 void SetLocale()
 {

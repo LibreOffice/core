@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // include files
 
 #include <sal/types.h>
@@ -30,10 +29,7 @@
 
 // helper functions
 
-
-
 // tests cases begins here
-
 
 namespace osl_Socket
 {
@@ -57,9 +53,6 @@ namespace osl_Socket
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::tests);
 }
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

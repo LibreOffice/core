@@ -306,7 +306,6 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     if (NULL == pEntry)
         return osl_File_E_NOENT;
 
-
 #if defined(MACOSX)
 
     // convert decomposed filename to precomposed unicode

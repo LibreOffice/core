@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // include files
 
 #include <osl_Condition_Const.h>
@@ -27,10 +25,7 @@
 using namespace osl;
 using namespace rtl;
 
-
-
 // helper functions and classes
-
 
 /** print Boolean value.
 */
@@ -92,10 +87,7 @@ protected:
     }
 };
 
-
-
 // test code start here
-
 
 namespace osl_Condition
 {
@@ -132,7 +124,6 @@ namespace osl_Condition
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
-
 
     /** testing the method:
         void set()
@@ -171,13 +162,11 @@ namespace osl_Condition
                                     bRes && !bRes1 && bRes2 );
         }
 
-
         CPPUNIT_TEST_SUITE( set );
         CPPUNIT_TEST( set_001 );
         CPPUNIT_TEST( set_002 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class set
-
 
     /** testing the method:
         void reset()
@@ -223,7 +212,6 @@ namespace osl_Condition
         CPPUNIT_TEST_SUITE_END( );
     }; // class reset
 
-
     /** testing the method:
         Result wait(const TimeValue *pTimeout = 0)
     */
@@ -245,7 +233,6 @@ namespace osl_Condition
         {
             delete tv1;
         }
-
 
         void wait_001( )
         {
@@ -290,7 +277,6 @@ namespace osl_Condition
         CPPUNIT_TEST( wait_002 );
         CPPUNIT_TEST_SUITE_END( );
     }; // class wait
-
 
     /** testing the method:
         sal_Bool check()
@@ -338,21 +324,14 @@ namespace osl_Condition
         CPPUNIT_TEST_SUITE_END( );
     }; // class check
 
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::set);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
 
-
 } // namespace osl_Condition
 
-
-
-
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,6 @@
 #include <osl/process.h>
 #include <stdio.h>
 
-
 #if defined WNT
     #define MAIN _cdecl main
 #else
@@ -52,6 +51,5 @@ int MAIN (void)
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

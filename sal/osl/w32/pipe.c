@@ -60,7 +60,6 @@ struct oslPipeImpl {
     sal_Bool             m_bClosed;
 };
 
-
 /*****************************************************************************/
 /* osl_create/destroy-PipeImpl */
 /*****************************************************************************/
@@ -107,8 +106,6 @@ void __osl_destroyPipeImpl(oslPipe pPipe)
         rtl_freeMemory(pPipe);
     }
 }
-
-
 
 /*****************************************************************************/
 /* osl_createPipe  */
@@ -489,7 +486,6 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     }
     return BytesRead;
 }
-
 
 /*****************************************************************************/
 /* osl_getLastPipeError  */

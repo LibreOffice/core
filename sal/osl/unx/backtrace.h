@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD) || \
     defined (OPENBSD) || defined (DRAGONFLY) || defined (MACOSX)
 
@@ -41,7 +40,6 @@ struct frame {
     long    fr_savpc;
 };
 #endif
-
 
 #ifdef __cplusplus
 } /* extern "C" */

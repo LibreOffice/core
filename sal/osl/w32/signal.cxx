@@ -177,7 +177,6 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
         ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
         StartupInfo.cb = sizeof(StartupInfo.cb);
 
-
         sntprintf( szBuffer, SAL_N_ELEMENTS(szBuffer),
             _T("%s -p %lu -excp 0x%p -t %lu%s"),
             static_cast<sal_Char*>( aPath ),
@@ -276,7 +275,6 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
     }
     else
         Action = osl_Signal_ActKillApp;
-
 
     switch ( Action )
     {

@@ -36,7 +36,6 @@ struct rtl_arena_stat_type
     sal_Size   m_mem_alloc;
 };
 
-
 /** rtl_arena_segment_type
  *  @internal
  */
@@ -60,7 +59,6 @@ struct rtl_arena_segment_type
     sal_Size            m_size;
     sal_Size            m_type;
 };
-
 
 /** rtl_arena_type
  *  @internal
@@ -106,7 +104,6 @@ struct rtl_arena_st
     sal_Size                  m_qcache_max;
     rtl_cache_type **         m_qcache_ptr;
 };
-
 
 /** gp_default_arena
  *  default arena with pagesize quantum

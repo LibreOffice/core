@@ -57,9 +57,7 @@ void oldtests::test_profile(void)
 
 } // namespace osl_Profile
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
-
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

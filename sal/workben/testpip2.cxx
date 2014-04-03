@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,15 +27,12 @@ const char pszPipeName[] = "TestPipe";
 
 oslPipe Pipe;
 
-
 void fail( const char * pszText, int retval )
 {
     fprintf( stderr, "TestPipe Client: %s", pszText );
     fprintf( stderr, "TestPipe Client: test failed, ErrNo: %d.\n", retval );
     exit( retval );
 }
-
-
 
 /*
  * Teste die Pipe-Implementation in osl
@@ -56,7 +52,6 @@ int main (void)
     if( !Pipe )
         fail( "unable to open pipe.\n",
               osl_getLastPipeError(NULL));
-
 
     // empfange Daten vom Server
     nChars = osl_receivePipe( Pipe, szBuffer, 256 );
@@ -80,7 +75,5 @@ int main (void)
     printf( "TestPipe Client: test passed.\n" );
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

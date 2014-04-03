@@ -35,9 +35,7 @@
 
 #include "internal/rtllifecycle.h"
 
-
 // externals
-
 
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
@@ -290,7 +288,6 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
             // if the parent process had set the environment variable.
             // The corresponding code (setting the environment variable)
             // is is desktop/win32/source/officeloader.cxx
-
 
             DWORD   dwResult = GetEnvironmentVariable( "ATTACHED_PARENT_PROCESSID", szBuffer, sizeof(szBuffer) );
 

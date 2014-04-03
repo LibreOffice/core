@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -35,14 +34,12 @@ inline void printOUString( ::rtl::OUString const & _suStr )
 }
 */
 
-
 namespace rtl_ustr
 {
 
     class compare : public CppUnit::TestFixture
     {
     public:
-
 
         void compare_000()
             {
@@ -95,7 +92,6 @@ namespace rtl_ustr
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
 }; // class compare
-
 
     class compareIgnoreAsciiCase : public CppUnit::TestFixture
     {
@@ -160,8 +156,6 @@ namespace rtl_ustr
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
     }; // class compareIgnoreAsciiCase
-
-
 
     class shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
@@ -245,7 +239,6 @@ namespace rtl_ustr
     CPPUNIT_TEST_SUITE_END();
 }; // class compare
 
-
 //
 //
 //     class hashCode : public CppUnit::TestFixture
@@ -300,9 +293,6 @@ namespace rtl_ustr
 //         CPPUNIT_TEST_SUITE_END();
 //     }; // class compare
 
-
-
-
     class indexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -348,7 +338,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class indexOfChar
 
-
     class lastIndexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -393,9 +382,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(lastIndexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class lastIndexOfChar
-
-
-
 
     class indexOfStr : public CppUnit::TestFixture
     {
@@ -452,8 +438,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class compare
-
-
 
     class lastIndexOfStr : public CppUnit::TestFixture
     {
@@ -517,8 +501,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class lastIndexOfStr
 
-
-
     class replaceChar : public CppUnit::TestFixture
     {
     public:
@@ -555,8 +537,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(replaceChar_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
-
-
 
     class replaceChar_WithLength : public CppUnit::TestFixture
     {
@@ -617,9 +597,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-
-
-
     class toAsciiLowerCase : public CppUnit::TestFixture
     {
     public:
@@ -656,7 +633,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(toAsciiLowerCase_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
-
 
     class toAsciiLowerCase_WithLength : public CppUnit::TestFixture
     {
@@ -700,8 +676,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-
-
     class toAsciiUpperCase : public CppUnit::TestFixture
     {
     public:
@@ -738,7 +712,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(toAsciiUpperCase_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
-
 
     class toAsciiUpperCase_WithLength : public CppUnit::TestFixture
     {
@@ -777,9 +750,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-
-
-
     class trim_WithLength : public CppUnit::TestFixture
     {
       public:
@@ -814,7 +784,6 @@ namespace rtl_ustr
             free(pStr);
         }
 
-
         void trim_WithLength_002()
         {
             rtl::OUString suStr("trim this");
@@ -828,7 +797,6 @@ namespace rtl_ustr
             CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", rtl::OUString(pStr).getLength() == 4);
             free(pStr);
         }
-
 
         void trim_WithLength_003()
         {
@@ -887,8 +855,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     };
 
-
-
     class valueOfChar : public CppUnit::TestFixture
     {
       public:
@@ -918,9 +884,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(valueOfChar_001);
         CPPUNIT_TEST_SUITE_END();
     };
-
-
-
 
     class ascii_compare_WithLength : public CppUnit::TestFixture
     {
@@ -1000,9 +963,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     };
 
-
-
-
     class ascii_shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
     public:
@@ -1066,8 +1026,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_shortenedCompareIgnoreAsciiCase_WithLength_003);
         CPPUNIT_TEST_SUITE_END();
     }; // class ascii_shortenedCompareIgnoreAsciiCase_WithLength
-
-
 
     class ascii_compareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
@@ -1133,8 +1091,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class ascii_compareIgnoreAsciiCase_WithLength
 
-
-
     class ascii_compare : public CppUnit::TestFixture
     {
     public:
@@ -1190,8 +1146,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_compare_003);
         CPPUNIT_TEST_SUITE_END();
     }; // class ascii_compare
-
-
 
     class ascii_compareIgnoreAsciiCase : public CppUnit::TestFixture
     {
@@ -1278,7 +1232,6 @@ namespace rtl_ustr
         CPPUNIT_TEST(ascii_compareIgnoreAsciiCase_003);
         CPPUNIT_TEST_SUITE_END();
     }; // class ascii_compareIgnoreAsciiCase
-
 
     // sample out of inc/rtl/ustring.hxx
     // rtl_uString * pToken = NULL;
@@ -1377,7 +1330,6 @@ namespace rtl_ustr
         CPPUNIT_TEST_SUITE_END();
     }; // class ascii_compareIgnoreAsciiCase
 
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compare);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compareIgnoreAsciiCase);
 
@@ -1409,11 +1361,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_shortenedCompareIgnoreAsciiCase_
 
 } // namespace rtl_ustr
 
-
-
 // this macro creates an empty function, which will called by the RegisterAllFunctions("")
 // to let the user the possibility to also register some functions by hand.
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

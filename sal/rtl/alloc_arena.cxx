@@ -47,14 +47,12 @@ struct rtl_arena_list_st
 
 static rtl_arena_list_st g_arena_list;
 
-
 /** gp_arena_arena
  *  provided for arena_type allocations, and hash_table resizing.
  *
  *  @internal
  */
 static rtl_arena_type * gp_arena_arena = 0;
-
 
 /** gp_machdep_arena
  *
@@ -88,7 +86,6 @@ SAL_CALL rtl_machdep_free (
 sal_Size
 rtl_machdep_pagesize();
 
-
 /* ================================================================= */
 
 /** rtl_arena_segment_constructor()
@@ -103,7 +100,6 @@ rtl_arena_segment_constructor (void * obj)
 
     return (1);
 }
-
 
 /** rtl_arena_segment_destructor()
  */
@@ -159,7 +155,6 @@ rtl_arena_segment_populate (
     return (span != 0);
 }
 
-
 /** rtl_arena_segment_get()
  *
  *  @precond  arena->m_lock acquired.
@@ -212,7 +207,6 @@ rtl_arena_segment_put (
     /* clear */
     (*ppSegment) = 0;
 }
-
 
 /** rtl_arena_freelist_insert()
  *
@@ -331,7 +325,6 @@ rtl_arena_hash_rescale (
         }
     }
 }
-
 
 /** rtl_arena_hash_insert()
  *  ...and update stats.
@@ -475,7 +468,6 @@ dequeue_and_leave:
     return (*ppSegment != 0);
 }
 
-
 /** rtl_arena_segment_create()
  *  import new (span) segment from source arena
  *
@@ -529,7 +521,6 @@ rtl_arena_segment_create (
     }
     return (0);
 }
-
 
 /** rtl_arena_segment_coalesce()
  *  mark as free and join with adjacent free segment(s)
@@ -627,7 +618,6 @@ rtl_arena_constructor (void * obj)
     arena->m_hash_size  = RTL_ARENA_HASH_SIZE;
     arena->m_hash_shift = highbit(arena->m_hash_size) - 1;
 }
-
 
 /** rtl_arena_destructor()
  */
@@ -1193,7 +1183,6 @@ SAL_CALL rtl_machdep_free (
     (void) VirtualFree ((LPVOID)(pAddr), (SIZE_T)(0), MEM_RELEASE);
 #endif /* (SAL_UNX || SAL_W32) */
 }
-
 
 sal_Size
 rtl_machdep_pagesize()

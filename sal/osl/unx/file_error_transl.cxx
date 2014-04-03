@@ -227,5 +227,4 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
     return osl_error;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,11 +39,9 @@
 #include <ctype.h>
 #endif
 
-
 static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';
 static const wchar_t SLASH = '/';
-
 
 extern "C" BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime)
 {
@@ -77,7 +75,6 @@ extern "C" BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime
     return fSuccess;
 }
 
-
 extern "C" BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
 {
     SYSTEMTIME  BaseSysTime;
@@ -108,7 +105,6 @@ extern "C" BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal
     return fSuccess;
 }
 
-
 namespace /* private */
 {
 
@@ -125,7 +121,6 @@ namespace /* private */
         const sal_Unicode* end_;
     };
 
-
     struct UNCComponents
     {
         Component server_;
@@ -133,14 +128,11 @@ namespace /* private */
         Component resource_;
     };
 
-
     inline bool is_UNC_path(const sal_Unicode* path)
     { return (0 == wcsncmp(UNC_PREFIX, reinterpret_cast<LPCWSTR>(path), SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
 
-
     inline bool is_UNC_path(const rtl::OUString& path)
     { return is_UNC_path(path.getStr()); }
-
 
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
     {
@@ -178,11 +170,8 @@ namespace /* private */
         "Postcondition violated: Invalid UNC path detected");
     }
 
-
     void parse_UNC_path(const rtl::OUString& path, UNCComponents* puncc)
     { parse_UNC_path(path.getStr(), puncc); }
-
-
 
     bool has_path_parent(const sal_Unicode* path)
     {
@@ -203,16 +192,12 @@ namespace /* private */
         return has_parent;
     }
 
-
     inline bool has_path_parent(const rtl::OUString& path)
     { return has_path_parent(path.getStr()); }
 
 } // end namespace private
 
-
 // volume handling functions
-
-
 
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
@@ -225,7 +210,6 @@ oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handl
         return osl_File_E_INVAL;
 }
 
-
 oslFileError SAL_CALL osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
     if ( Handle )
@@ -236,7 +220,6 @@ oslFileError SAL_CALL osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handl
     else
         return osl_File_E_INVAL;
 }
-
 
 oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath )
 {
@@ -249,9 +232,7 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
         return osl_File_E_INVAL;
 }
 
-
 // directory handling functions
-
 
 #define DIRECTORYITEM_DRIVE     0
 #define DIRECTORYITEM_FILE      1
@@ -269,8 +250,6 @@ struct DirectoryItem_Impl
     int             nRefCount;
 };
 
-
-
 #define DIRECTORYTYPE_LOCALROOT     0
 #define DIRECTORYTYPE_NETROOT       1
 #define DIRECTORYTYPE_FILESYSTEM    3
@@ -285,16 +264,12 @@ struct Directory_Impl
     rtl_uString*    m_pDirectoryPath;
 };
 
-
-
 typedef struct tagDRIVEENUM
 {
     LPCTSTR lpIdent;
     TCHAR   cBuffer[/*('Z' - 'A' + 1) * sizeof("A:\\") + 1*/256];
     LPCTSTR lpCurrent;
 } DRIVEENUM, * PDRIVEENUM, FAR * LPDRIVEENUM;
-
-
 
 static HANDLE WINAPI OpenLogicalDrivesEnum(void)
 {
@@ -316,7 +291,6 @@ static HANDLE WINAPI OpenLogicalDrivesEnum(void)
     }
     return pEnum ? (HANDLE)pEnum : INVALID_HANDLE_VALUE;
 }
-
 
 static BOOL WINAPI EnumLogicalDrives(HANDLE hEnum, LPTSTR lpBuffer)
 {
@@ -342,7 +316,6 @@ static BOOL WINAPI EnumLogicalDrives(HANDLE hEnum, LPTSTR lpBuffer)
     return fSuccess;
 }
 
-
 static BOOL WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
 {
     BOOL        fSuccess = FALSE;
@@ -359,13 +332,11 @@ static BOOL WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
     return fSuccess;
 }
 
-
 typedef struct tagDIRECTORY
 {
     HANDLE          hFind;
     WIN32_FIND_DATA aFirstData;
 } DIRECTORY, *PDIRECTORY, FAR *LPDIRECTORY;
-
 
 static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
 {
@@ -413,7 +384,6 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
     return (HANDLE)pDirectory;
 }
 
-
 BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATA pFindData)
 {
     BOOL        fSuccess = FALSE;
@@ -449,7 +419,6 @@ BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATA pFindData)
     return fSuccess;
 }
 
-
 static BOOL WINAPI CloseDirectory(HANDLE hDirectory)
 {
     BOOL        fSuccess = FALSE;
@@ -467,7 +436,6 @@ static BOOL WINAPI CloseDirectory(HANDLE hDirectory)
 
     return fSuccess;
 }
-
 
 static oslFileError osl_openLocalRoot(
     rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
@@ -540,7 +508,6 @@ static oslFileError osl_openLocalRoot(
     return error;
 }
 
-
 static oslFileError SAL_CALL osl_openFileDirectory(
     rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
 {
@@ -572,7 +539,6 @@ static oslFileError SAL_CALL osl_openFileDirectory(
         rtl_uString_release( pCurDir );
     }
 
-
     pDirImpl->uType = DIRECTORYTYPE_FILESYSTEM;
     pDirImpl->hDirectory = OpenDirectory( pDirImpl->m_pDirectoryPath );
 
@@ -592,7 +558,6 @@ static oslFileError SAL_CALL osl_openFileDirectory(
     *pDirectory = (oslDirectory)(pDirImpl);
     return error;
 }
-
 
 static oslFileError SAL_CALL osl_openNetworkServer(
     rtl_uString *strSysDirPath, oslDirectory *pDirectory)
@@ -625,7 +590,6 @@ static oslFileError SAL_CALL osl_openNetworkServer(
     return oslTranslateFileError( dwError );
 }
 
-
 static DWORD create_dir_with_callback(
     rtl_uString * dir_path,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
@@ -652,7 +616,6 @@ static DWORD create_dir_with_callback(
     return GetLastError();
 }
 
-
 static int path_make_parent(sal_Unicode* path)
 {
     /*  Cut off the last part of the given path to
@@ -670,7 +633,6 @@ static int path_make_parent(sal_Unicode* path)
     *pos_last_backslash = 0;
     return (pos_last_backslash - path);
 }
-
 
 static DWORD create_dir_recursively_(
     rtl_uString * dir_path,
@@ -702,7 +664,6 @@ static DWORD create_dir_recursively_(
     return create_dir_recursively_(dir_path, aDirectoryCreationCallbackFunc, pData);
 }
 
-
 oslFileError SAL_CALL osl_createDirectoryPath(
     rtl_uString* aDirectoryUrl,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
@@ -726,7 +687,6 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     return oslTranslateFileError(create_dir_recursively_(
         sys_path.pData, aDirectoryCreationCallbackFunc, pData));
 }
-
 
 oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
 {
@@ -765,7 +725,6 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
     return error;
 }
 
-
 oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
 {
     rtl_uString *strSysPath = NULL;
@@ -782,7 +741,6 @@ oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
     }
     return error;
 }
-
 
 oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
 {
@@ -813,7 +771,6 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
     }
     return error;
 }
-
 
 static oslFileError SAL_CALL osl_getNextNetResource(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
@@ -860,7 +817,6 @@ static oslFileError SAL_CALL osl_getNextNetResource(
     }
 }
 
-
 static oslFileError SAL_CALL osl_getNextDrive(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
@@ -901,7 +857,6 @@ static oslFileError SAL_CALL osl_getNextDrive(
         return oslTranslateFileError( GetLastError() );
     }
 }
-
 
 static oslFileError SAL_CALL osl_getNextFileItem(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/)
@@ -951,7 +906,6 @@ static oslFileError SAL_CALL osl_getNextFileItem(
     }
 }
 
-
 oslFileError SAL_CALL osl_getNextDirectoryItem(
     oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint)
 {
@@ -978,7 +932,6 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(
         return osl_File_E_INVAL;
     }
 }
-
 
 oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
 {
@@ -1017,7 +970,6 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
     return eError;
 }
 
-
 /* Different types of paths */
 typedef enum _PATHTYPE
 {
@@ -1041,7 +993,6 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
         return osl_File_E_INVAL;
 
     *pItem = NULL;
-
 
     error = _osl_getSystemPathFromFileURL( strFilePath, &strSysFilePath, sal_False );
 
@@ -1157,7 +1108,6 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     return error;
 }
 
-
 oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl  *pItemImpl = (DirectoryItem_Impl *)Item;
@@ -1168,7 +1118,6 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
     pItemImpl->nRefCount++;
     return osl_File_E_None;
 }
-
 
 oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
@@ -1191,7 +1140,6 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
-
 sal_Bool
 SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 {
@@ -1211,18 +1159,13 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     return sal_False;
 }
 
-
 // volume / file info handling functions
-
-
 
 static inline bool is_floppy_A_present()
 { return (GetLogicalDrives() & 1); }
 
-
 static inline bool is_floppy_B_present()
 { return (GetLogicalDrives() & 2); }
-
 
 bool is_floppy_volume_mount_point(const rtl::OUString& path)
 {
@@ -1251,7 +1194,6 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
     return false;
 }
 
-
 static bool is_floppy_drive(const rtl::OUString& path)
 {
     static const LPCWSTR FLOPPY_DRV_LETTERS = TEXT("AaBb");
@@ -1265,7 +1207,6 @@ static bool is_floppy_drive(const rtl::OUString& path)
     const sal_Unicode* pszPath = path.getStr();
     return ((wcschr(FLOPPY_DRV_LETTERS, pszPath[0]) && (L':' == pszPath[1])) || is_floppy_volume_mount_point(path));
 }
-
 
 static bool is_volume_mount_point(const rtl::OUString& path)
 {
@@ -1297,7 +1238,6 @@ static bool is_volume_mount_point(const rtl::OUString& path)
     return is_volume_root;
 }
 
-
 static UINT get_volume_mount_point_drive_type(const rtl::OUString& path)
 {
     if (0 == path.getLength())
@@ -1313,12 +1253,10 @@ static UINT get_volume_mount_point_drive_type(const rtl::OUString& path)
     return DRIVE_NO_ROOT_DIR;
 }
 
-
 static inline bool is_drivetype_request(sal_uInt32 field_mask)
 {
     return (field_mask & osl_VolumeInfo_Mask_Attributes);
 }
-
 
 static oslFileError osl_get_drive_type(
     const rtl::OUString& path, oslVolumeInfo* pInfo)
@@ -1366,7 +1304,6 @@ static oslFileError osl_get_drive_type(
     return osl_File_E_None;
 }
 
-
 static inline bool is_volume_space_info_request(sal_uInt32 field_mask)
 {
     return (field_mask &
@@ -1374,7 +1311,6 @@ static inline bool is_volume_space_info_request(sal_uInt32 field_mask)
              osl_VolumeInfo_Mask_UsedSpace  |
              osl_VolumeInfo_Mask_FreeSpace));
 }
-
 
 static void get_volume_space_information(
     const rtl::OUString& path, oslVolumeInfo *pInfo)
@@ -1394,7 +1330,6 @@ static void get_volume_space_information(
     }
 }
 
-
 static inline bool is_filesystem_attributes_request(sal_uInt32 field_mask)
 {
     return (field_mask &
@@ -1403,7 +1338,6 @@ static inline bool is_filesystem_attributes_request(sal_uInt32 field_mask)
              osl_VolumeInfo_Mask_FileSystemName |
              osl_VolumeInfo_Mask_FileSystemCaseHandling));
 }
-
 
 static oslFileError get_filesystem_attributes(
     const rtl::OUString& path, sal_uInt32 field_mask, oslVolumeInfo* pInfo)
@@ -1458,7 +1392,6 @@ static oslFileError get_filesystem_attributes(
     return osl_File_E_None;
 }
 
-
 static bool path_get_parent(rtl::OUString& path)
 {
     OSL_PRECOND(path.lastIndexOf(SLASH) == -1, "Path must not have slashes");
@@ -1475,7 +1408,6 @@ static bool path_get_parent(rtl::OUString& path)
     return false;
 }
 
-
 static void path_travel_to_volume_root(const rtl::OUString& system_path, rtl::OUString& volume_root)
 {
     rtl::OUString sys_path(system_path);
@@ -1486,7 +1418,6 @@ static void path_travel_to_volume_root(const rtl::OUString& system_path, rtl::OU
     volume_root = sys_path;
     osl::systemPathEnsureSeparator(volume_root);
 }
-
 
 oslFileError SAL_CALL osl_getVolumeInformation(
     rtl_uString *ustrURL, oslVolumeInfo *pInfo, sal_uInt32 uFieldMask )
@@ -1521,7 +1452,6 @@ oslFileError SAL_CALL osl_getVolumeInformation(
 
     return osl_File_E_None;
 }
-
 
 static oslFileError SAL_CALL osl_getDriveInfo(
     oslDirectoryItem Item, oslFileStatus *pStatus, sal_uInt32 uFieldMask)
@@ -1621,7 +1551,6 @@ static oslFileError SAL_CALL osl_getDriveInfo(
     return osl_File_E_None;
 }
 
-
 static oslFileError SAL_CALL osl_getServerInfo(
     oslDirectoryItem Item, oslFileStatus *pStatus, sal_uInt32 uFieldMask )
 {
@@ -1650,7 +1579,6 @@ static oslFileError SAL_CALL osl_getServerInfo(
     }
     return osl_File_E_None;
 }
-
 
 oslFileError SAL_CALL osl_getFileStatus(
     oslDirectoryItem Item,
@@ -1767,10 +1695,7 @@ oslFileError SAL_CALL osl_getFileStatus(
     return osl_File_E_None;
 }
 
-
 // file attributes handling functions
-
-
 
 oslFileError SAL_CALL osl_setFileAttributes(
     rtl_uString *ustrFileURL,
@@ -1812,7 +1737,6 @@ oslFileError SAL_CALL osl_setFileAttributes(
     return error;
 }
 
-
 oslFileError SAL_CALL osl_setFileTime(
     rtl_uString *filePath,
     const TimeValue *aCreationTime,
@@ -1829,7 +1753,6 @@ oslFileError SAL_CALL osl_setFileTime(
     FILETIME ftLastWriteTime;
     HANDLE hFile;
     BOOL fSuccess;
-
 
     error=_osl_getSystemPathFromFileURL(filePath, &sysPath, sal_False);
 

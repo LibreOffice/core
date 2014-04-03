@@ -44,7 +44,6 @@
 #define FREEBSD 1
 #endif
 
-
 #if defined(SOLARIS)
 
 #include <sys/mnttab.h>
@@ -219,7 +218,6 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (true)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (true)
 #endif /* HAVE_STATFS_H */
-
 
 static oslFileError osl_psz_getVolumeInformation (
     const sal_Char* pszDirectory, oslVolumeInfo* pInfo, sal_uInt32 uFieldMask)

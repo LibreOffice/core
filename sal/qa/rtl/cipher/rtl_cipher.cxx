@@ -27,7 +27,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/cipher.h>
 
-
 namespace rtl_cipher
 {
 
@@ -102,7 +101,6 @@ public:
     CPPUNIT_TEST(create_008);
     CPPUNIT_TEST_SUITE_END();
 }; // class create
-
 
 class createBF : public CppUnit::TestFixture
 {
@@ -605,8 +603,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class initBF
 
-
-
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::create);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::createBF);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::decode);
@@ -619,9 +615,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::init);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::initBF);
 
 } // namespace rtl_cipher
-
-
-
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

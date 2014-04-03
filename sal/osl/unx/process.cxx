@@ -36,7 +36,6 @@
 # endif
 #endif
 
-
 #if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
 #include <machine/param.h>
 #endif
@@ -167,7 +166,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
  *
  *****************************************************************************/
 
-
 sal_Bool osl_sendResourcePipe(oslPipe /*pPipe*/, oslSocket /*pSocket*/)
 {
     return osl_Process_E_InvalidError;
@@ -178,8 +176,6 @@ oslSocket osl_receiveResourcePipe(oslPipe /*pPipe*/)
     oslSocket pSocket = 0;
     return pSocket;
 }
-
-
 
 /******************************************************************************
  *
@@ -389,7 +385,6 @@ static void ChildStatusProc(void *pData)
                 child_pid = pid;
             }
 
-
             if ( child_pid > 0 )
             {
                 oslProcessImpl* pChild;
@@ -499,11 +494,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         pArguments = (sal_Char**) malloc( ( nArguments + 2 ) * sizeof(sal_Char*) );
     }
 
-
     for ( idx = 0 ; idx < nArguments ; ++idx )
     {
         rtl_String* strArg =0;
-
 
         rtl_uString2String( &strArg,
                             rtl_uString_getStr(ustrArguments[idx]),
@@ -535,7 +528,6 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         rtl_string_release(strEnv);
         pEnvironment[idx+1]=0;
     }
-
 
     Error = osl_psz_executeProcess(szImagePath,
                                    pArguments,
@@ -727,7 +719,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
  *                  Functions for processes
  *
  *****************************************************************************/
-
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
@@ -981,7 +972,6 @@ bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
                 );
         }
 
-
         tmp = strstr(prstatusbuf,"Gid:");
         if(tmp)
         {
@@ -1149,7 +1139,6 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
-
 
 /***********************************************
  helper function for osl_joinProcessWithTimeout

@@ -52,7 +52,6 @@ extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     rtl_uString ** ppFileURL
 ) SAL_THROW_EXTERN_C();
 
-
 #if defined(MACOSX) || defined(IOS)
 #include <mach-o/dyld.h>
 
@@ -411,7 +410,6 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
 
     return (result);
 }
-
 
 /***************************************
  osl_getProcessWorkingDir().

@@ -106,7 +106,6 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
     return result;
 }
 
-
 #ifndef DISABLE_DYNLOADING
 
 /*****************************************************************************/
@@ -243,7 +242,6 @@ osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 {
     return (void *) osl_getFunctionSymbol(Module, pSymbolName);
 }
-
 
 /*****************************************************************************/
 /* osl_getAsciiFunctionSymbol */

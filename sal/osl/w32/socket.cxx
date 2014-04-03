@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "system.h"
 
 #include <osl/socket.h>
@@ -1338,7 +1337,6 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
         else    /* timeout */
             Result= osl_Socket_TimedOut;
 
-
         /* clean up */
         Param= 0;
         ioctlsocket(pSocket->m_Socket, FIONBIO, &Param);
@@ -1570,7 +1568,6 @@ sal_Int32 SAL_CALL osl_writeSocket( oslSocket pSocket, const void *pBuffer, sal_
     }
     return BytesSend;
 }
-
 
 /*****************************************************************************/
 /* osl_isReceiveReady  */

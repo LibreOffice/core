@@ -153,7 +153,6 @@ lowbit(sal_Size n)
   (entry)->m_##name##prev->m_##name##next = (entry); \
 }
 
-
 /** rtl_memory_lock_type
  *  (platform dependent)
  */
@@ -192,7 +191,6 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #else
 #error Unknown platform
 #endif /* SAL_UNX | SAL_W32 */
-
 
 /** Cache creation flags.
  *  @internal

@@ -68,7 +68,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class createPool
 
-
 class destroyPool : public CppUnit::TestFixture
 {
 public:
@@ -106,7 +105,6 @@ public:
     CPPUNIT_TEST(destroyPool_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class destroyPool
-
 
 class addBytes : public CppUnit::TestFixture
 {
@@ -161,7 +159,6 @@ public:
             delete [] pBuffer;
         }
 
-
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -171,7 +168,6 @@ public:
     CPPUNIT_TEST(addBytes_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class addBytes
-
 
 class Statistics
 {
@@ -393,7 +389,6 @@ public:
     CPPUNIT_TEST(getBytes_003_1);
     CPPUNIT_TEST_SUITE_END();
 }; // class getBytes
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::createPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::destroyPool);

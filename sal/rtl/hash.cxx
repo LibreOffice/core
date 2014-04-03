@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hash.hxx"
 #include "strimp.hxx"
 #include <osl/diagnose.h>
@@ -145,7 +144,6 @@ compareEqual (rtl_uString *pStringA, rtl_uString *pStringB)
     return !rtl_ustr_compare_WithLength( pStringA->buffer, pStringA->length,
                                          pStringB->buffer, pStringB->length);
 }
-
 
 rtl_uString *
 rtl_str_hash_intern (rtl_uString       *pString,

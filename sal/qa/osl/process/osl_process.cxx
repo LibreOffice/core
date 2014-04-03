@@ -70,7 +70,6 @@
     const rtl::OUString EXECUTABLE_NAME ("osl_process_child");
 #endif
 
-
 using namespace osl;
 
 using ::rtl::OUString;
@@ -101,7 +100,6 @@ inline ::rtl::OUString getExecutablePath( void )
 }
 
 //rtl::OUString CWD = getExecutablePath();
-
 
 class Test_osl_joinProcess : public CppUnit::TestFixture
 {
@@ -308,12 +306,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-
-
 typedef std::vector<std::string, rtl::Allocator<std::string> >  string_container_t;
 typedef string_container_t::const_iterator string_container_const_iter_t;
 typedef string_container_t::iterator       string_container_iter_t;
-
 
 class exclude : public std::unary_function<std::string, bool>
 {
@@ -326,7 +321,6 @@ public:
         for (/**/; iter != iter_end; ++iter)
             exclude_list_.push_back(env_var_name(*iter));
     }
-
 
     bool operator() (const std::string& env_var) const
     {
@@ -405,7 +399,6 @@ namespace
     }
 #endif
 
-
 class Test_osl_executeProcess : public CppUnit::TestFixture
 {
     const OUString env_param_;
@@ -419,7 +412,6 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
 
 public:
 
-
     // ctor
     Test_osl_executeProcess() :
         env_param_(OUString("-env")),
@@ -432,7 +424,6 @@ public:
         suExecutableFileURL += EXECUTABLE_NAME;
     }
 
-
     virtual void setUp() SAL_OVERRIDE
     {
         temp_file_path_ = create_temp_file(temp_file_url_);
@@ -443,7 +434,6 @@ public:
     {
         osl::File::remove(temp_file_url_);
     }
-
 
     OUString create_temp_file(OUString &temp_file_url)
     {
@@ -456,7 +446,6 @@ public:
 
         return temp_file_path;
     }
-
 
     void read_child_environment(string_container_t* env_container)
     {
@@ -477,7 +466,6 @@ public:
         tidy_container(*env_container);
     }
 
-
     // environment of the child process that was
     // started. The child process writes his
     // environment into a file
@@ -492,7 +480,6 @@ public:
         return ((parent_env.size() == child_env.size()) &&
                 (std::equal(child_env.begin(), child_env.end(), parent_env.begin())));
     }
-
 
     // compare the equal environment parts and the
     // different part of the child environment
@@ -549,7 +536,6 @@ public:
             std::cerr << "different should be: " << *iter << std::endl;
 #endif
 
-
 #if OSL_DEBUG_LEVEL > 1
         for (string_container_t::const_iterator iter = different_child_env_vars.begin(), end = different_child_env_vars.end(); iter != end; ++iter)
             std::cerr << "different are: " << *iter << std::endl;
@@ -562,7 +548,6 @@ public:
         return (common_env_size_equals && common_env_content_equals &&
                 different_env_size_equals && different_env_content_equals);
     }
-
 
     // test that parent and child process have the
     // same environment when osl_executeProcess will
@@ -604,7 +589,6 @@ public:
             compare_environments()
         );
     }
-
 
     #define ENV1 "PAT=a:\\"
     #define ENV2 "PATHb=b:\\"
@@ -747,7 +731,6 @@ public:
     // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
     CPPUNIT_TEST_SUITE_END();
 };
-
 
 // register test suites
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_joinProcess,    "Test_osl_joinProcess");

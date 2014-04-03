@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // include files
 
 #include <sal/types.h>
@@ -39,7 +38,6 @@
 #include <time.h>
 #endif
 
-
 #define CONST_TEST_STRING "gregorian"
 
 namespace {
@@ -49,7 +47,6 @@ struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
     }
 };
 }
-
 
 namespace ThreadHelper
 {
@@ -80,8 +77,6 @@ namespace ThreadHelper
         // }
     }
 }
-
-
 
 /** Simple thread for testing Thread-create.
  * Just add 1 of value 0, and after running, result is 1.
@@ -142,7 +137,6 @@ public:
         }
 };
 
-
 namespace rtl_DoubleLocking
 {
 
@@ -161,7 +155,6 @@ namespace rtl_DoubleLocking
         void tearDown() SAL_OVERRIDE
             {
             }
-
 
         void getValue_001()
             {
