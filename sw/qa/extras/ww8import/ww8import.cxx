@@ -274,6 +274,9 @@ void Test::testBnc821208()
     beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharFontName");
     // This was beans::PropertyState_DIRECT_VALUE.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
+
+    // Background of the numbering itself should have been the default, was yellow (0xffff00).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPropertyState, "CharBackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
