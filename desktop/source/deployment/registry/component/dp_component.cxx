@@ -1606,7 +1606,7 @@ BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
         xRegistry.set(0);
     }
 
-    OSL_POSTCOND(xRegistry.is(), "could not create registry for the package's platform");
+    SAL_WARN_IF( !xRegistry.is(), "desktop.deployment", "could not create registry for the package's platform");
     return xRegistry;
 }
 

@@ -193,7 +193,7 @@ namespace frm
             OSL_ENSURE( aHandler.is(), "RichTextControlImpl::enableAttributeNotification: no handler available for this attribute!" );
             if ( !aHandler.is() )
                 return;
-            OSL_POSTCOND( _nAttributeId == aHandler->getAttributeId(), "RichTextControlImpl::enableAttributeNotification: suspicious handler!" );
+            SAL_WARN_IF( _nAttributeId != aHandler->getAttributeId(), "forms.richtext", "RichTextControlImpl::enableAttributeNotification: suspicious handler!" );
 
             aHandlerPos = m_aAttributeHandlers.insert( AttributeHandlerPool::value_type( _nAttributeId , aHandler ) ).first;
         }

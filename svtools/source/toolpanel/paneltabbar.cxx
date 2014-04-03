@@ -818,7 +818,7 @@ namespace svt
             return;
         }
         impl_calcItemRects();
-        OSL_POSTCOND( m_bItemsDirty == false, "PanelTabBar_Impl::EnsureItemsCache: cache still dirty!" );
+        SAL_WARN_IF( m_bItemsDirty , "svtools", "PanelTabBar_Impl::EnsureItemsCache: cache still dirty!" );
         DBG_CHECK( *this );
     }
 
@@ -1331,7 +1331,7 @@ namespace svt
             GrabFocus();
 
         m_pImpl->FocusItem( i_nItemPos );
-        OSL_POSTCOND( !!m_pImpl->m_aFocusedItem, "PanelTabBar::FocusPanelItem: have the focus, but no focused item?" );
+        SAL_WARN_IF( !m_pImpl->m_aFocusedItem, "svtools", "PanelTabBar::FocusPanelItem: have the focus, but no focused item?" );
         if ( !!m_pImpl->m_aFocusedItem )
             m_pImpl->InvalidateItem( *m_pImpl->m_aFocusedItem );
         m_pImpl->m_aFocusedItem.reset( i_nItemPos );

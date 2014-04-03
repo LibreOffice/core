@@ -444,7 +444,7 @@ ScDocument::~ScDocument()
     delete pRecursionHelper;
 
     delete pPreviewFont;
-    OSL_POSTCOND( !pAutoNameCache, "AutoNameCache still set in dtor" );
+    SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
 
     mpFormulaGroupCxt.reset();
     mpCellStringPool.reset();

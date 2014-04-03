@@ -1747,7 +1747,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
     m_xActiveControl  = xControl;
 
     implSetCurrentControl( xControl );
-    OSL_POSTCOND( m_xCurrentControl.is(), "implSetCurrentControl did nonsense!" );
+    SAL_WARN_IF( !m_xCurrentControl.is(), "svx.form", "implSetCurrentControl did nonsense!" );
 
     if ( bActivated )
     {

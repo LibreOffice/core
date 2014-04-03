@@ -265,7 +265,7 @@ namespace connectivity { namespace hsqldb
             throw WrappedTargetException( sError ,*this, ::cppu::getCaughtException() );
         }
 
-        OSL_POSTCOND( xTables.is(), "OHsqlConnection::impl_getTableContainer_throw: post condition not met!" );
+        SAL_WARN_IF( !xTables.is(), "connectivity.hsqldb", "OHsqlConnection::impl_getTableContainer_throw: post condition not met!" );
         return xTables;
     }
 

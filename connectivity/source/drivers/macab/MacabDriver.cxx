@@ -247,7 +247,7 @@ Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, con
 
     // create a new connection with the given properties and append it to our vector
     MacabConnection* pConnection = m_aImplModule.createConnection( this );
-    OSL_POSTCOND( pConnection, "MacabDriver::connect: no connection has been created by the factory!" );
+    SAL_WARN_IF( !pConnection, "connectivity.macab", "MacabDriver::connect: no connection has been created by the factory!" );
 
     // by definition, the factory function returned an object which was acquired once
     Reference< XConnection > xConnection = pConnection;

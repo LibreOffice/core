@@ -366,9 +366,11 @@ namespace canvas
         ::basegfx::B2DRectangle aTotalBounds( o_rMoveStart );
         aTotalBounds.expand( o_rMoveEnd );
 
-        OSL_POSTCOND(impIsEqualB2DRange(rUpdateArea.maTotalBounds, basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange(aTotalBounds), 0.5),
+        SAL_WARN_IF(!impIsEqualB2DRange(rUpdateArea.maTotalBounds, basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange(aTotalBounds), 0.5),
+            "canvas",
             "SpriteRedrawManager::isAreaUpdateScroll(): sprite area and total area mismatch");
-        OSL_POSTCOND(impIsEqualB2DVector(o_rMoveStart.getRange(), o_rMoveEnd.getRange(), 0.5),
+        SAL_WARN_IF(!impIsEqualB2DVector(o_rMoveStart.getRange(), o_rMoveEnd.getRange(), 0.5),
+            "canvas",
             "SpriteRedrawManager::isAreaUpdateScroll(): scroll start and end area have mismatching size");
 #endif
 

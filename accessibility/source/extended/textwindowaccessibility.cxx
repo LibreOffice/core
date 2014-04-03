@@ -1856,9 +1856,10 @@ void Document::determineVisibleRange()
         }
     }
 
-    OSL_POSTCOND(
-            (m_aVisibleBegin == m_xParagraphs->end() && m_aVisibleEnd == m_xParagraphs->end() && m_nVisibleBeginOffset == 0)
-            || (m_aVisibleBegin < m_aVisibleEnd && m_nVisibleBeginOffset >= 0),
+    SAL_WARN_IF(
+            !((m_aVisibleBegin == m_xParagraphs->end() && m_aVisibleEnd == m_xParagraphs->end() && m_nVisibleBeginOffset == 0)
+                || (m_aVisibleBegin < m_aVisibleEnd && m_nVisibleBeginOffset >= 0)),
+            "accessibility",
             "invalid visible range");
 }
 
