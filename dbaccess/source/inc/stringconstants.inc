@@ -197,7 +197,7 @@
 #define SERVICE_SDB_RESULTSET "com.sun.star.sdb.ResultSet"
 #define SERVICE_SDB_ROWSET "com.sun.star.sdb.RowSet"
 #define SERVICE_SDB_PREPAREDSTATMENT "com.sun.star.sdb.PreparedStatement"
-#define SERVICE_SDB_CALLABLESTATEMENT "com.sun.star.sdbc.CallableStatement"
+#define SERVICE_SDB_CALLABLESTATEMENT "com.sun.star.sdb.CallableStatement"
 #define SERVICE_SDB_SQLQUERYCOMPOSER "com.sun.star.sdb.SQLQueryComposer"
 #define SERVICE_SDB_DATASETTINGS "com.sun.star.sdb.DefinitionSettings"
 #define SERVICE_SDB_QUERYDESCRIPTOR "com.sun.star.sdb.QueryDescriptor"
