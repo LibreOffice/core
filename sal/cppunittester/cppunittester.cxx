@@ -73,6 +73,7 @@ std::string convertLazy(rtl::OUString const & s16) {
         s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));
 }
 
+#if defined TIMETESTS
 //Output how long each test took
 class TimingListener
     : public CppUnit::TestListener
@@ -94,6 +95,7 @@ public:
 private:
     sal_uInt32 m_nStartTime;
 };
+#endif
 
 #ifdef UNX
 #include <stdlib.h>
