@@ -56,7 +56,6 @@ public:
 
     virtual void setPosition( SalFrame* );
     virtual void setText( const OUString & ) = 0;
-    virtual OUString getText() const = 0;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) = 0;
     virtual void toggle( bool bOn ) = 0;
 };
@@ -103,7 +102,6 @@ public:
 
     virtual void setPosition( SalFrame* ) SAL_OVERRIDE;
     virtual void setText( const OUString & ) SAL_OVERRIDE;
-    virtual OUString getText() const SAL_OVERRIDE;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
 
@@ -293,11 +291,6 @@ void XIMStatusWindow::setText( const OUString& rText )
     m_aWindowSize.Width() = m_aStatusText.GetTextWidth( rText )+8;
 }
 
-OUString XIMStatusWindow::getText() const
-{
-    return m_aStatusText.GetText();
-}
-
 namespace vcl {
 
 class IIIMPStatusWindow : public StatusWindow
@@ -317,7 +310,6 @@ public:
     virtual ~IIIMPStatusWindow();
 
     virtual void setText( const OUString & ) SAL_OVERRIDE;
-    virtual OUString getText() const SAL_OVERRIDE;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
     void layout();
@@ -396,11 +388,6 @@ void IIIMPStatusWindow::DataChanged( const DataChangedEvent& )
 void IIIMPStatusWindow::setText( const OUString& rText )
 {
     m_aStatusBtn.SetText( rText );
-}
-
-OUString IIIMPStatusWindow::getText() const
-{
-    return m_aStatusBtn.GetText();
 }
 
 void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
