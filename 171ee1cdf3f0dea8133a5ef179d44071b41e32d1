@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_580fc9e1",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4957,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-03T09:08:39Z",
+      "side": 1,
+      "message": "Why don\u0027t you compare to nNumberingType, which is a number?",
+      "revId": "171ee1cdf3f0dea8133a5ef179d44071b41e32d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
