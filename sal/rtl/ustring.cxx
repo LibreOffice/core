@@ -551,12 +551,13 @@ void SAL_CALL rtl_uString_newFromCodePoints(
 
 /* ======================================================================= */
 
-static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen )
+static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen, bool * ascii )
 {
     int             n;
     unsigned char       c;
     const sal_Char* pEndStr;
 
+    *ascii = true;
     n = 0;
     pEndStr  = pStr+nLen;
     while ( pStr < pEndStr )
@@ -565,18 +566,22 @@ static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen )
 
         if ( !(c & 0x80) )
             pStr++;
-        else if ( (c & 0xE0) == 0xC0 )
-            pStr += 2;
-        else if ( (c & 0xF0) == 0xE0 )
-            pStr += 3;
-        else if ( (c & 0xF8) == 0xF0 )
-            pStr += 4;
-        else if ( (c & 0xFC) == 0xF8 )
-            pStr += 5;
-        else if ( (c & 0xFE) == 0xFC )
-            pStr += 6;
         else
-            pStr++;
+        {
+            if ( (c & 0xE0) == 0xC0 )
+                pStr += 2;
+            else if ( (c & 0xF0) == 0xE0 )
+                pStr += 3;
+            else if ( (c & 0xF8) == 0xF0 )
+                pStr += 4;
+            else if ( (c & 0xFC) == 0xF8 )
+                pStr += 5;
+            else if ( (c & 0xFE) == 0xFC )
+                pStr += 6;
+            else
+                pStr++;
+            *ascii = false;
+        }
 
         n++;
     }
@@ -652,10 +657,11 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                the buffer if needed */
             if ( eTextEncoding == RTL_TEXTENCODING_UTF8 )
             {
-                nNewLen = rtl_ImplGetFastUTF8UnicodeLen( pStr, nLen );
+                bool ascii;
+                nNewLen = rtl_ImplGetFastUTF8UnicodeLen( pStr, nLen, &ascii );
                 /* Includes the string only ASCII, then we could copy
                    the buffer faster */
-                if ( nNewLen == (sal_Size)nLen )
+                if ( ascii )
                 {
                     sal_Unicode* pBuffer;
                     *ppThis = rtl_uString_ImplAlloc( nLen );
