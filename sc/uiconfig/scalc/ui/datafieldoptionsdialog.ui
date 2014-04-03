@@ -25,8 +25,8 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="add">
-                <property name="label">gtk-add</property>
+              <object class="GtkButton" id="ok">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -552,7 +552,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">add</action-widget>
+      <action-widget response="0">ok</action-widget>
       <action-widget response="0">close</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
