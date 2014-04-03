@@ -1773,8 +1773,10 @@ void Test::testNamedRange()
 
     m_pDoc->SetValue (0, 0, 0, 101);
 
-    bool bSuccess = insertRangeNames(m_pDoc, aNames, aNames + SAL_N_ELEMENTS(aNames));
+    ScRangeName* pNames = new ScRangeName;
+    bool bSuccess = insertRangeNames(m_pDoc, pNames, aNames, aNames + SAL_N_ELEMENTS(aNames));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
+    m_pDoc->SetRangeName(pNames);
 
     ScRangeName* pNewRanges = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT(pNewRanges);
@@ -1822,8 +1824,10 @@ void Test::testInsertNameList()
         { "MyRange3", "$Test.$C$1:$C$100", 3 }
     };
 
-    bool bSuccess = insertRangeNames(m_pDoc, aNames, aNames + SAL_N_ELEMENTS(aNames));
+    ScRangeName* pNames = new ScRangeName;
+    bool bSuccess = insertRangeNames(m_pDoc, pNames, aNames, aNames + SAL_N_ELEMENTS(aNames));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
+    m_pDoc->SetRangeName(pNames);
 
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScAddress aPos(1,1,0);
@@ -5696,10 +5700,10 @@ ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)
     return NULL;
 }
 
-bool Test::insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const RangeNameDef* pEnd)
+bool Test::insertRangeNames(
+    ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd)
 {
     ScAddress aA1(0, 0, 0);
-    ScRangeName* pNewRanges = new ScRangeName();
     for (; p != pEnd; ++p)
     {
         ScRangeData* pNew = new ScRangeData(
@@ -5708,7 +5712,7 @@ bool Test::insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const Range
             OUString::createFromAscii(p->mpExpr),
             aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
         pNew->SetIndex(p->mnIndex);
-        bool bSuccess = pNewRanges->insert(pNew);
+        bool bSuccess = pNames->insert(pNew);
         if (!bSuccess)
         {
             cerr << "Insertion failed." << endl;
@@ -5716,7 +5720,6 @@ bool Test::insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const Range
         }
     }
 
-    pDoc->SetRangeName(pNewRanges);
     return true;
 }
 

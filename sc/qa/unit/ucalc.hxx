@@ -39,7 +39,7 @@ public:
     };
 
     static ScDocShell* findLoadedDocShellByName(const OUString& rName);
-    static bool insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const RangeNameDef* pEnd);
+    static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd);
     static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
     static void clearSheet(ScDocument* pDoc, SCTAB nTab);
@@ -277,6 +277,7 @@ public:
     void testSharedFormulasCopyPaste();
     void testSharedFormulaInsertColumn();
     void testSharedFormulaMoveBlock();
+    void testSharedFormulaUpdateOnNamedRangeChange();
     void testFormulaPosition();
 
     void testMixData();
@@ -457,7 +458,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasRefUpdateDeleteSheets);
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testSharedFormulaInsertColumn);
-    CPPUNIT_TEST(testSharedFormulaMoveBlock);
+    CPPUNIT_TEST(testSharedFormulaUpdateOnNamedRangeChange);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testMixData);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);

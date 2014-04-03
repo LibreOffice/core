@@ -18,6 +18,8 @@
 #include <docfunc.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
+#include <globalnames.hxx>
+
 #include "svl/sharedstring.hxx"
 
 #include "formula/grammar.hxx"
@@ -1185,6 +1187,87 @@ void Test::testSharedFormulaMoveBlock()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSharedFormulaUpdateOnNamedRangeChange()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    const char* pName = "MyRange";
+    const char* pExpr1 = "$Test.$A$1:$A$3";
+    const char* pExpr2 = "$Test.$A$1:$A$4";
+
+    RangeNameDef aName;
+    aName.mpName = pName;
+    aName.mpExpr = pExpr1;
+    aName.mnIndex = 1;
+    ScRangeName* pNames = new ScRangeName;
+    bool bSuccess = insertRangeNames(m_pDoc, pNames, &aName, &aName + 1);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pNames->size());
+    m_pDoc->SetRangeName(pNames);
+
+    // Set values to A1:A4.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 3.0);
+    m_pDoc->SetValue(ScAddress(0,3,0), 4.0);
+
+    // Set formula to B1:B3.
+    m_pDoc->SetString(ScAddress(1,0,0), "=SUM(MyRange)");
+    m_pDoc->SetString(ScAddress(1,1,0), "=SUM(MyRange)");
+    m_pDoc->SetString(ScAddress(1,2,0), "=SUM(MyRange)");
+
+    // B1:B3 should be grouped.
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // Set a single formula to C1.
+    m_pDoc->SetString(ScAddress(2,0,0), "=AVERAGE(MyRange)");
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("C1 should not be shared.", !pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+
+    // Update the range of MyRange.
+    pNames = new ScRangeName;
+    aName.mpExpr = pExpr2;
+    bSuccess = insertRangeNames(m_pDoc, pNames, &aName, &aName + 1);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pNames->size());
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+
+    typedef boost::ptr_map<OUString, ScRangeName> NameMapType;
+    NameMapType aNewNames;
+    OUString aScope(STR_GLOBAL_RANGE_NAME);
+    aNewNames.insert(aScope, pNames);
+    rFunc.ModifyAllRangeNames(aNewNames);
+
+    // Check to make sure all displayed formulas are still good.
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "SUM(MyRange)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "SUM(MyRange)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM(MyRange)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(2,0,0), "AVERAGE(MyRange)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Check the calculation results as well.
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(2.5, m_pDoc->GetValue(ScAddress(2,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
