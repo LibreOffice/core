@@ -31,6 +31,8 @@ protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) SAL_OVERRIDE;
     virtual void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition) SAL_OVERRIDE;
 
+    void AdjustDuplicateCount(ScItemValue* pInputItemValue);
+
     virtual void KeyInput(const KeyEvent& rKeyEvent) SAL_OVERRIDE;
 };
 
