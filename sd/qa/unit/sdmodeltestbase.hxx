@@ -110,12 +110,13 @@ protected:
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
         SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
         pSrcMed->SetFilter(aFilter);
-        if ( !xDocShRef->DoLoad(pSrcMed) )
+        if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.Is() )
         {
             if (xDocShRef.Is())
                 xDocShRef->DoClose();
             CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "failed to load " + rURL, RTL_TEXTENCODING_UTF8 ).getStr(), false );
         }
+        CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
         return xDocShRef;
     }

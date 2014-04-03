@@ -156,8 +156,6 @@ void SdFiltersTest::testDocumentLayout()
 void SdFiltersTest::testSmoketest()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -186,8 +184,6 @@ void SdFiltersTest::testSmoketest()
 void SdFiltersTest::testN759180()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/n759180.pptx"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -227,11 +223,8 @@ void SdFiltersTest::testN821567()
 {
     OUString bgImage;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
 
     xDocShRef = saveAndReload( xDocShRef, ODP );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "not exactly one page", xDoc->getDrawPages()->getCount() == 1 );
@@ -255,8 +248,6 @@ void SdFiltersTest::testN821567()
 void SdFiltersTest::testN862510_1()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -282,8 +273,6 @@ void SdFiltersTest::testN862510_1()
 void SdFiltersTest::testN862510_2()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_2.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -303,8 +292,6 @@ void SdFiltersTest::testN862510_2()
 void SdFiltersTest::testN862510_3()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_3.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -324,8 +311,6 @@ void SdFiltersTest::testN862510_3()
 void SdFiltersTest::testN862510_4()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_4.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -352,11 +337,8 @@ void SdFiltersTest::testN828390()
 {
     bool bPassed = false;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -391,9 +373,6 @@ void SdFiltersTest::testN828390()
 void SdFiltersTest::testN828390_2()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -414,9 +393,6 @@ void SdFiltersTest::testN828390_3()
 {
     bool bPassed = true;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -450,11 +426,8 @@ void SdFiltersTest::testN828390_4()
 {
     bool bPassed = false;
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_4.odp") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -491,11 +464,8 @@ void SdFiltersTest::testN828390_4()
 void SdFiltersTest::testN828390_5()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_5.odp") );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -517,8 +487,6 @@ void SdFiltersTest::testN828390_5()
 void SdFiltersTest::testN778859()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -538,8 +506,6 @@ void SdFiltersTest::testN778859()
 void SdFiltersTest::testFdo68594()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/fdo68594.ppt"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -559,8 +525,6 @@ void SdFiltersTest::testFdo68594()
 void SdFiltersTest::testFdo72998()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -585,8 +549,6 @@ void SdFiltersTest::testFdo72998()
 void SdFiltersTest::testFdo64512()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
@@ -632,8 +594,6 @@ void SdFiltersTest::testFdo71075()
     double values[] = { 12.0, 13.0, 14.0 };
     ::com::sun::star::uno::Any aAny;
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -676,8 +636,6 @@ void SdFiltersTest::testFdo71075()
 void SdFiltersTest::testStrictOOXML()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -692,12 +650,8 @@ void SdFiltersTest::testStrictOOXML()
 void SdFiltersTest::testFdo71961()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71961.odp"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
