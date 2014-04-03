@@ -21,7 +21,6 @@
 #include <boost/shared_ptr.hpp>
 #ifdef DEBUG_ELEMENT
 #include "ooxmlLoggers.hxx"
-#include <resourcemodel/Protocol.hxx>
 #endif
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
@@ -49,13 +48,6 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
     , mnXNoteId( nXNoteId )
     , mpContextHandler()
 {
-#ifdef DEBUG_PROTOCOL
-    if ( pStream )
-    {
-        mpTmpStream.reset( new StreamProtocol( pStream, debug_logger ) );
-        mpStream = mpTmpStream.get();
-    }
-#endif
 }
 
 // ::com::sun::star::xml::sax::XFastContextHandler:

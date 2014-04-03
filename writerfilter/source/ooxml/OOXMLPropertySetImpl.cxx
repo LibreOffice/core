@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
-#include <resourcemodel/Protocol.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include "ooxmlLoggers.hxx"
@@ -152,13 +151,7 @@ Sprm * OOXMLPropertyImpl::clone()
 void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
 {
     writerfilter::Properties * pProperties = NULL;
-#ifdef DEBUG_PROTOCOL
-    writerfilter::PropertiesProtocol::Pointer_t pProtocol
-        (new writerfilter::PropertiesProtocol(&rProperties, debug_logger));
-    pProperties = pProtocol.get();
-#else
     pProperties = &rProperties;
-#endif
 
     switch (meType)
     {
@@ -759,11 +752,7 @@ OOXMLTableImpl::~OOXMLTableImpl()
 
 void OOXMLTableImpl::resolve(Table & rTable)
 {
-#ifdef DEBUG_PROTOCOL
-    Table::Pointer_t pTable(new TableProtocol(&rTable, debug_logger));
-#else
     Table * pTable = &rTable;
-#endif
 
     int nPos = 0;
 
