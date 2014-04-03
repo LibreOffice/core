@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 const sal_Unicode cDialogExtraDataClose = '}';
 const char sDialogImpExtraData[] = "EncImpDlg:{";
 const char sDialogExpExtraData[] = "EncExpDlg:{";
-const sal_uInt16 nDialogExtraDataLen = 11;      // 12345678901
+const sal_Int32 nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
@@ -88,8 +88,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     if( pStream )
     {
         char aBuffer[ 4098 ];
-        sal_uLong nOldPos = pStream->Tell();
-        sal_uLong nBytesRead = pStream->Read( aBuffer, 4096 );
+        const sal_uLong nOldPos = pStream->Tell();
+        const sal_uLong nBytesRead = pStream->Read( aBuffer, 4096 );
         pStream->Seek( nOldPos );
 
         if( nBytesRead <= 4096 )
@@ -99,7 +99,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         }
 
         bool bCR = false, bLF = false, bNullChar = false;
-        for( sal_uInt16 nCnt = 0; nCnt < nBytesRead; ++nCnt )
+        for( sal_uLong nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
                 case 0x0:   bNullChar = true; break;
@@ -130,7 +130,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             }
         }
 
-        sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+        const sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
         SwDoc* pDoc = rDocSh.GetDoc();
 
         // initialize language
@@ -139,7 +139,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             {
                 if(pDoc)
                 {
-                    sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
+                    const sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
                     aOpt.SetLanguage( ((SvxLanguageItem&)pDoc->
                                 GetDefault( nWhich )).GetLanguage());
                 }
@@ -242,11 +242,11 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
     sal_uLong nCCode = m_pCharSetLB->GetSelectTextEncoding();
     OUString sFont;
-    sal_uLong nLng = 0;
+    LanguageType nLng = 0;
     if( m_pFontLB->IsVisible() )
     {
         sFont = m_pFontLB->GetSelectEntry();
-        nLng = (sal_uLong)m_pLanguageLB->GetSelectLanguage();
+        nLng = m_pLanguageLB->GetSelectLanguage();
     }
 
     rOptions.SetFontName( sFont );
