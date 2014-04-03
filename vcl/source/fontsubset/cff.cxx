@@ -314,21 +314,8 @@ struct CffLocal
     bool        mbForceBold;
 };
 
-class SubsetterContext
-{
-public:
-    virtual ~SubsetterContext( void);
-    virtual bool emitAsType1( class Type1Emitter&,
-                const sal_GlyphId* pGlyphIds, const U8* pEncoding,
-                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) = 0;
-};
-
-SubsetterContext::~SubsetterContext( void)
-{}
-
 class CffSubsetterContext
-:   public SubsetterContext
-,   private CffGlobal
+:   private CffGlobal
 {
 public:
     static const int NMAXSTACK = 48;    // see CFF.appendixB
@@ -336,12 +323,12 @@ public:
     static const int NMAXTRANS = 32;    // see CFF.appendixB
 public:
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
-    virtual ~CffSubsetterContext( void);
+    ~CffSubsetterContext( void);
 
     void    initialCffRead( void);
     bool    emitAsType1( class Type1Emitter&,
                 const sal_GlyphId* pGlyphIds, const U8* pEncoding,
-                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) SAL_OVERRIDE;
+                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
 
     // used by charstring converter
     void    setCharStringType( int);
