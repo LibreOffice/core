@@ -400,7 +400,7 @@ void ScFiltersTest::testFunctionsODS()
     testFile(aCSVFileName, pDoc, 3);
     // text functions
     createCSVPath(OUString("text-functions."), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 4);
+    testFile(aCSVFileName, pDoc, 4, PureString);
     // statistical functions
     createCSVPath(OUString("statistical-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 5);
@@ -559,7 +559,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         testFile(aCSVFileName, pDoc, 3);
         // text functions
         createCSVPath(OUString("text-functions."), aCSVFileName);
-        testFile(aCSVFileName, pDoc, 4);
+        testFile(aCSVFileName, pDoc, 4, PureString);
 
         xDocSh->DoClose();
     }
