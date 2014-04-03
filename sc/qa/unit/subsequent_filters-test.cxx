@@ -409,6 +409,14 @@ void ScFiltersTest::testFunctionsODS()
     testFile(aCSVFileName, pDoc, 6);
 
     xDocSh->DoClose();
+
+    xDocSh = loadDoc("database-functions.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    xDocSh->DoHardRecalc(true);
+    pDoc = xDocSh->GetDocument();
+
+    createCSVPath("database-functions.", aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
 }
 
 void ScFiltersTest::testFunctionsExcel2010()
