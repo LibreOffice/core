@@ -743,7 +743,7 @@ public:
         @param  eObjType
             The type to ask for
         @param  _nPosition
-            The position of a tablecell (index position), header bar  colum/row cell
+            The position of a tablecell (index position), header bar  column/row cell
         @return
             The name of the specified object.
     */
