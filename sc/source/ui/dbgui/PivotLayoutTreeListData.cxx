@@ -88,14 +88,14 @@ bool ScPivotLayoutTreeListData::DoubleClickHdl()
 
     if (pDialog->Execute() == RET_OK)
     {
-        if (rCurrentFunctionData.mnFuncMask != pDialog->GetFuncMask())
-        {
-            rCurrentFunctionData.mnDupCount = rCurrentFunctionData.mnDupCount + 1;
-        }
-        rCurrentFunctionData.mnFuncMask = pCurrentLabelData->mnFuncMask = pDialog->GetFuncMask();
+        rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
+        pCurrentLabelData->mnFuncMask = pDialog->GetFuncMask();
+
         rCurrentFunctionData.maFieldRef = pDialog->GetFieldRef();
 
         ScDPLabelData* pDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
+
+        AdjustDuplicateCount(pCurrentItemValue);
 
         OUString sDataItemName = lclCreateDataItemName(
                                     rCurrentFunctionData.mnFuncMask,
@@ -132,15 +132,15 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
 
         pItemValue->mpOriginalItemValue = pOriginalItemValue;
         pItemValue->maFunctionData.mnOriginalDim = rField.mnOriginalDim;
-        pItemValue->maFunctionData.mnDupCount = rField.mnDupCount;
         pItemValue->maFunctionData.maFieldRef = rField.maFieldRef;
 
+        AdjustDuplicateCount(pItemValue);
+        OUString sDataItemName = lclCreateDataItemName(pItemValue->maFunctionData.mnFuncMask,
+                                                       pItemValue->maName,
+                                                       pItemValue->maFunctionData.mnDupCount);
+
         maDataItemValues.push_back(pItemValue);
-
-        OUString sDataItemName = lclCreateDataItemName(rField.nFuncMask, pItemValue->maName, rField.mnDupCount);
-
-        SvTreeListEntry* pEntry = InsertEntry(sDataItemName);
-        pEntry->SetUserData(pItemValue);
+        InsertEntry(sDataItemName, NULL, false, TREELIST_APPEND, pItemValue);
     }
 }
 
@@ -205,12 +205,47 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, sal_
         rFunctionData.mnFuncMask = PIVOT_FUNC_SUM;
     }
 
+    AdjustDuplicateCount(pDataItemValue);
+
     OUString sDataName = lclCreateDataItemName(
                             rFunctionData.mnFuncMask,
                             pDataItemValue->maName,
                             rFunctionData.mnDupCount);
 
     InsertEntry(sDataName, NULL, false, nPosition, pDataItemValue);
+}
+
+void ScPivotLayoutTreeListData::AdjustDuplicateCount(ScItemValue* pInputItemValue)
+{
+    ScPivotFuncData& rInputFunctionData = pInputItemValue->maFunctionData;
+
+    bool bFoundDuplicate = false;
+
+    rInputFunctionData.mnDupCount = 0;
+    sal_uInt8 nMaxDuplicateCount = 0;
+
+    SvTreeListEntry* pEachEntry;
+    for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
+    {
+        ScItemValue* pItemValue = (ScItemValue*) pEachEntry->GetUserData();
+        if (pItemValue == pInputItemValue)
+            continue;
+
+        ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
+
+        if (rFunctionData.mnCol      == rInputFunctionData.mnCol &&
+            rFunctionData.mnFuncMask == rInputFunctionData.mnFuncMask)
+        {
+            bFoundDuplicate = true;
+            if(rFunctionData.mnDupCount > nMaxDuplicateCount)
+                nMaxDuplicateCount = rFunctionData.mnDupCount;
+        }
+    }
+
+    if(bFoundDuplicate)
+    {
+        rInputFunctionData.mnDupCount = nMaxDuplicateCount + 1;
+    }
 }
 
 void ScPivotLayoutTreeListData::KeyInput(const KeyEvent& rKeyEvent)
