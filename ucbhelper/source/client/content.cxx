@@ -255,11 +255,9 @@ static Reference< XContentIdentifier > getContentIdentifierNoThrow(
     return rBroker->createContentIdentifier(rURL);
 }
 
-
-static Reference< XContent > getContent(
+static Reference< XContent > getContentThrow(
                                     const Reference< XUniversalContentBroker > & rBroker,
-                                    const Reference< XContentIdentifier > & xId,
-                                    bool bThrow )
+                                    const Reference< XContentIdentifier > & xId)
     throw ( ContentCreationException, RuntimeException )
 {
     Reference< XContent > xContent;
@@ -274,10 +272,7 @@ static Reference< XContent > getContent(
         // handled below.
     }
 
-    if ( xContent.is() )
-        return xContent;
-
-    if ( bThrow )
+    if ( !xContent.is() )
     {
         ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
 
@@ -287,7 +282,25 @@ static Reference< XContent > getContent(
             ContentCreationError_CONTENT_CREATION_FAILED );
     }
 
-    return Reference< XContent >();
+    return xContent;
+}
+
+
+static Reference< XContent > getContentNoThrow(
+                                    const Reference< XUniversalContentBroker > & rBroker,
+                                    const Reference< XContentIdentifier > & xId)
+    throw ( RuntimeException )
+{
+    Reference< XContent > xContent;
+    try
+    {
+        xContent = rBroker->queryContent( xId );
+    }
+    catch ( IllegalIdentifierException const & e )
+    {
+    }
+
+    return xContent;
 }
 
 
@@ -315,7 +328,7 @@ Content::Content( const OUString& rURL,
     Reference< XContentIdentifier > xId
         = getContentIdentifierThrow(pBroker, rURL);
 
-    Reference< XContent > xContent = getContent( pBroker, xId, true );
+    Reference< XContent > xContent = getContentThrow(pBroker, xId);
 
     m_xImpl = new Content_Impl( rCtx, xContent, rEnv );
 }
@@ -350,7 +363,7 @@ bool Content::create( const OUString& rURL,
     if ( !xId.is() )
         return false;
 
-    Reference< XContent > xContent = getContent( pBroker, xId, false );
+    Reference< XContent > xContent = getContentNoThrow(pBroker, xId);
     if ( !xContent.is() )
         return false;
 
