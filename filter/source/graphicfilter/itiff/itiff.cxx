@@ -176,7 +176,7 @@ public:
         delete pAlphaMask;
     }
 
-    sal_Bool ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
+    bool ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
 };
 
 //=================== Methods of TIFFReader ==============================
@@ -1154,7 +1154,7 @@ bool TIFFReader::HasAlphaChannel() const
 
 
 
-sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
+bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 {
     sal_uInt16  i, nNumTags, nTagType;
     sal_uInt64  nMaxPos;
@@ -1394,10 +1394,10 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
         else
             rGraphic = aAnimation;  //aBitmap;
 
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -1410,15 +1410,12 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 #define GraphicImport itiGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     TIFFReader aTIFFReader;
 
-    if ( aTIFFReader.ReadTIFF( rStream, rGraphic ) == sal_False )
-        return sal_False;
-
-    return sal_True;
+    return aTIFFReader.ReadTIFF( rStream, rGraphic );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

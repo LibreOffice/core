@@ -261,7 +261,7 @@ void GDIMetaFile::Clear()
     aList.clear();
 }
 
-void GDIMetaFile::Linker( OutputDevice* pOut, sal_Bool bLink )
+void GDIMetaFile::Linker( OutputDevice* pOut, bool bLink )
 {
     if( bLink )
     {

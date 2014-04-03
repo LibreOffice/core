@@ -145,7 +145,7 @@ namespace toolkit
         }
 
         aSettings.SetStyleSettings( aStyleSettings );
-        _pWindow->SetSettings( aSettings, sal_True );
+        _pWindow->SetSettings( aSettings, true );
     }
 
     Any getButtonLikeFaceColor( const Window* _pWindow )

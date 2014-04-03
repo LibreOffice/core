@@ -423,7 +423,7 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& r
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
     aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
     aSettings.SetMouseSettings(aMouseSettings);
-    rTbx.SetSettings(aSettings, sal_True);
+    rTbx.SetSettings(aSettings, true);
 }
 
 

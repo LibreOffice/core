@@ -276,8 +276,8 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 #define GraphicExport eraGraphicExport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     RASWriter aRASWriter(rStream);
 

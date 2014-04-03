@@ -403,8 +403,8 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 #define GraphicImport ipxGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PCXReader aPCXReader(rStream);
     sal_Bool nRetValue = aPCXReader.ReadPCX(rGraphic);

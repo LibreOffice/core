@@ -117,7 +117,7 @@ private:
 
 protected:
 
-    virtual void    Linker( OutputDevice* pOut, sal_Bool bLink );
+    virtual void    Linker( OutputDevice* pOut, bool bLink );
     virtual long    Hook();
 
 public:

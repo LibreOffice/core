@@ -840,7 +840,7 @@ namespace svt { namespace table
             aMouseSettings.SetButtonRepeat( _nDelay );
             aSettings.SetMouseSettings( aMouseSettings );
 
-            _rWindow.SetSettings( aSettings, sal_True );
+            _rWindow.SetSettings( aSettings, true );
         }
 
 

@@ -699,7 +699,7 @@ public:
 
     using               OutputDevice::SetSettings;
     virtual void        SetSettings( const AllSettings& rSettings ) SAL_OVERRIDE;
-    virtual void        SetSettings( const AllSettings& rSettings, sal_Bool bChild );
+    virtual void        SetSettings( const AllSettings& rSettings, bool bChild );
     void                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                NotifyAllChildren( DataChangedEvent& rDCEvt );
 

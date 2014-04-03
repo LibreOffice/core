@@ -18,9 +18,9 @@
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
+    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
         GraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*, sal_Bool);
+        FilterConfigItem*);
 }
 
 using namespace ::com::sun::star;
@@ -54,7 +54,7 @@ bool TgaFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
     Graphic aGraphic;
-    return GraphicImport(aFileStream, aGraphic, NULL, 0);
+    return GraphicImport(aFileStream, aGraphic, NULL);
 }
 
 void TgaFilterTest::testCVEs()

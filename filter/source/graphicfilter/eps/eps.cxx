@@ -2866,8 +2866,8 @@ sal_Bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uL
 #define GraphicExport epsGraphicExport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     PSWriter aPSWriter;
     return aPSWriter.WritePS( rGraphic, rStream, pFilterConfigItem );

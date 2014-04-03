@@ -480,11 +480,11 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 #define GraphicImport ipsGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     if ( rStream.GetError() )
-        return sal_False;
+        return false;
 
     Graphic     aGraphic;
     sal_Bool    bRetValue = sal_False;

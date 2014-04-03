@@ -907,7 +907,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
                 MouseSettings aMouseSettings = aSettings.GetMouseSettings();
                 aMouseSettings.SetWheelBehavior( nVclSetting );
                 aSettings.SetMouseSettings( aMouseSettings );
-                m_pWindow->SetSettings( aSettings, sal_True );
+                m_pWindow->SetSettings( aSettings, true );
             }
         }
         catch( const Exception& )
@@ -2522,7 +2522,7 @@ void DbComboBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
     aStyleSettings.SetSelectionOptions(
         aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
     aSettings.SetStyleSettings(aStyleSettings);
-    m_pWindow->SetSettings(aSettings, sal_True);
+    m_pWindow->SetSettings(aSettings, true);
 
     // some initial properties
     Reference< XPropertySet >   xModel(m_rColumn.getModel());
@@ -2835,7 +2835,7 @@ void DbFilterField::CreateControl(Window* pParent, const Reference< ::com::sun::
             aStyleSettings.SetSelectionOptions(
                            aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
             aSettings.SetStyleSettings(aStyleSettings);
-            m_pWindow->SetSettings(aSettings, sal_True);
+            m_pWindow->SetSettings(aSettings, true);
 
             if (!m_bFilterList)
             {
@@ -2856,7 +2856,7 @@ void DbFilterField::CreateControl(Window* pParent, const Reference< ::com::sun::
             aStyleSettings.SetSelectionOptions(
                            aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
             aSettings.SetStyleSettings(aStyleSettings);
-            m_pWindow->SetSettings(aSettings, sal_True);
+            m_pWindow->SetSettings(aSettings, true);
         }
     }
 }

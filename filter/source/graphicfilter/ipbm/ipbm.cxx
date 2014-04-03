@@ -527,8 +527,8 @@ sal_Bool PBMReader::ImplReadBody()
 #define GraphicImport ipbGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PBMReader aPBMReader(rStream);
 

@@ -36,20 +36,20 @@ class FilterConfigItem;
 #define GraphicImport idxGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;
     GDIMetaFile aMTF;
 
     if ( aDXF.Read( rStream, 0, 60 ) == sal_False )
-        return sal_False;
+        return false;
     if ( aConverter.Convert( aDXF, aMTF, 60, 100 ) == sal_False )
-        return sal_False;
-    rGraphic=Graphic(aMTF);
+        return false;
+    rGraphic = Graphic(aMTF);
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

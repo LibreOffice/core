@@ -383,8 +383,8 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
     aMouseSettings.SetButtonRepeat(aMouseSettings.GetButtonRepeat() / 4);
     aSettings.SetMouseSettings(aMouseSettings);
-    m_aNextBtn.SetSettings(aSettings, sal_True);
-    m_aPrevBtn.SetSettings(aSettings, sal_True);
+    m_aNextBtn.SetSettings(aSettings, true);
+    m_aPrevBtn.SetSettings(aSettings, true);
 
     m_aFirstBtn.Show();
     m_aPrevBtn.Show();

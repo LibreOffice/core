@@ -229,8 +229,8 @@ void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 #define GraphicExport eppGraphicExport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     PPMWriter aPPMWriter(rStream);
     return aPPMWriter.WritePPM( rGraphic, pFilterConfigItem );

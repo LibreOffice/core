@@ -374,8 +374,8 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 #define GraphicImport icdGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     PCDReader aPCDReader(rStream);
     return aPCDReader.ReadPCD(rGraphic, pConfigItem);

@@ -1880,8 +1880,8 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 #define GraphicImport iptGraphicImport
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
+GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
 {
     GDIMetaFile aMTF;
     PictReader  aPictReader;

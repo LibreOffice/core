@@ -941,7 +941,6 @@ struct ImpFilterLibCacheEntry
 #endif
     OUString                maFiltername;
     PFilterCall             mpfnImport;
-    PFilterDlgCall          mpfnImportDlg;
 
                             ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername );
     bool                    operator==( const OUString& rFiltername ) const { return maFiltername == rFiltername; }
@@ -955,8 +954,7 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const
         maLibrary       ( rPathname ),
 #endif
         maFiltername    ( rFiltername ),
-        mpfnImport      ( NULL ),
-        mpfnImportDlg   ( NULL )
+        mpfnImport      ( NULL )
 {
 #ifdef DISABLE_DYNLOADING
     (void) rPathname;
@@ -965,17 +963,17 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_Bool icdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool imeGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool ipdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool ipsGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool iptGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool ipxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool iraGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool itgGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool itiGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" bool icdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool imeGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool ipdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool ipsGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool iptGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool ipxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool iraGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool itgGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool itiGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -1717,7 +1715,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                         pFilterConfigItem = new FilterConfigItem( aFilterConfigPath );
                     }
                 }
-                if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem, sal_False ) )
+                if( !(*pFunc)( rIStream, rGraphic, pFilterConfigItem ) )
                     nStatus = GRFILTER_FORMATERROR;
                 else
                 {
@@ -1820,16 +1818,16 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 
 #ifndef DISABLE_EXPORT
 
-extern "C" sal_Bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool emeGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool epbGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool epgGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool eppGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool eptGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool eraGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
-extern "C" sal_Bool expGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool emeGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool epbGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool epgGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool eppGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool eptGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool eraGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
+extern "C" bool expGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -2140,7 +2138,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 #endif
                 if( pFunc )
                 {
-                    if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem, false ) )
+                    if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem ) )
                         nStatus = GRFILTER_FORMATERROR;
                     break;
                 }

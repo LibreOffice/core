@@ -5530,18 +5530,18 @@ void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLe
 
 void Window::SetSettings( const AllSettings& rSettings )
 {
-    SetSettings( rSettings, sal_False );
+    SetSettings( rSettings, false );
 }
 
-void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
+void Window::SetSettings( const AllSettings& rSettings, bool bChild )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        mpWindowImpl->mpBorderWindow->SetSettings( rSettings, sal_False );
+        mpWindowImpl->mpBorderWindow->SetSettings( rSettings, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->SetSettings( rSettings, sal_True );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->SetSettings( rSettings, true );
     }
 
     AllSettings aOldSettings(*mxSettings);
