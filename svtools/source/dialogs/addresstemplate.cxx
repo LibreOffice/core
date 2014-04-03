@@ -116,8 +116,6 @@ namespace svt
 
         /// set the assignment for a given logical field
         virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) = 0;
-        /// clear the assignment for a given logical field
-        virtual void            clearFieldAssignment(const OUString& _rLogicalName) = 0;
 
         virtual void    setDatasourceName(const OUString& _rName) = 0;
         virtual void    setCommand(const OUString& _rCommand) = 0;
@@ -155,7 +153,6 @@ public:
         virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
-        virtual void            clearFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
 
         virtual void    setDatasourceName(const OUString& _rName) SAL_OVERRIDE;
         virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
@@ -247,14 +244,6 @@ public:
     }
 
 
-    void AssigmentTransientData::clearFieldAssignment(const OUString& _rLogicalName)
-    {
-        MapString2String::iterator aPos = m_aAliases.find( _rLogicalName );
-        if ( m_aAliases.end() != aPos )
-            m_aAliases.erase( aPos );
-    }
-
-
     void AssigmentTransientData::setDatasourceName(const OUString&)
     {
         OSL_FAIL( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
@@ -301,13 +290,15 @@ public:
         virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual OUString getFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
         virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) SAL_OVERRIDE;
-        virtual void            clearFieldAssignment(const OUString& _rLogicalName) SAL_OVERRIDE;
 
         virtual void    setDatasourceName(const OUString& _rName) SAL_OVERRIDE;
         virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
 
         virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
         virtual void    Commit() SAL_OVERRIDE;
+
+    private:
+        virtual void            clearFieldAssignment(const OUString& _rLogicalName);
     };
 
 
