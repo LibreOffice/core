@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTPAGE_HXX
 #include <svtools/wizardmachine.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
@@ -44,44 +45,42 @@ namespace com{ namespace sun{ namespace star{
 
 class SwMailMergeOutputPage : public svt::OWizardPage
 {
-    SwBoldFixedInfo m_aHeaderFI;
-    FixedInfo       m_aOptionsFI;
-    RadioButton     m_aSaveStartDocRB;
-    RadioButton     m_aSaveMergedDocRB;
-    RadioButton     m_aPrintRB;
-    RadioButton     m_aSendMailRB;
+    RadioButton*    m_pSaveStartDocRB;
+    RadioButton*    m_pSaveMergedDocRB;
+    RadioButton*    m_pPrintRB;
+    RadioButton*    m_pSendMailRB;
 
-    FixedLine       m_aSeparatorFL;
+    VclFrame*       m_pSeparator;
 
-    PushButton      m_aSaveStartDocPB;
+    PushButton*     m_pSaveStartDocPB;
 
-    RadioButton     m_aSaveAsOneRB;
-    RadioButton     m_aSaveIndividualRB;
-    RadioButton     m_aPrintAllRB; //has to be here for tab control reasons
-    RadioButton     m_aSendAllRB;  //has to be here for tab control reasons
+    RadioButton*    m_pSaveAsOneRB;
+    RadioButton*    m_pSaveIndividualRB;
+    RadioButton*    m_pPrintAllRB; //has to be here for tab control reasons
+    RadioButton*    m_pSendAllRB;  //has to be here for tab control reasons
     //this group is used in save and print
-    RadioButton     m_aFromRB;
-    NumericField    m_aFromNF;
-    FixedText       m_aToFT;
-    NumericField    m_aToNF;
-    PushButton      m_aSaveNowPB;
+    RadioButton*    m_pFromRB;
+    NumericField*   m_pFromNF;
+    FixedText*      m_pToFT;
+    NumericField*   m_pToNF;
+    PushButton*     m_pSaveNowPB;
 
-    FixedText       m_aPrinterFT;
-    ListBox         m_aPrinterLB;
-    PushButton      m_aPrinterSettingsPB;
-    PushButton      m_aPrintNowPB;
+    FixedText*      m_pPrinterFT;
+    ListBox*        m_pPrinterLB;
+    PushButton*     m_pPrinterSettingsPB;
+    PushButton*     m_pPrintNowPB;
 
-    FixedText       m_aMailToFT;
-    ListBox         m_aMailToLB;
-    PushButton      m_aCopyToPB;
-    FixedText       m_aSubjectFT;
-    Edit            m_aSubjectED;
-    FixedText       m_aSendAsFT;
-    ListBox         m_aSendAsLB;
-    FixedText       m_aAttachmentFT;
-    Edit            m_aAttachmentED;
-    PushButton      m_aSendAsPB;
-    PushButton      m_aSendDocumentsPB;
+    FixedText*      m_pMailToFT;
+    ListBox*        m_pMailToLB;
+    PushButton*     m_pCopyToPB;
+    FixedText*      m_pSubjectFT;
+    Edit*           m_pSubjectED;
+    FixedText*      m_pSendAsFT;
+    ListBox*        m_pSendAsLB;
+    VclContainer*   m_pAttachmentGroup;
+    Edit*           m_pAttachmentED;
+    PushButton*     m_pSendAsPB;
+    PushButton*     m_pSendDocumentsPB;
 
     //some FixedLine labels
     OUString        m_sSaveStartST;
@@ -95,11 +94,6 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     OUString        m_sConfigureMail;
 
     OUString        m_sBody;
-
-    long            m_nFromToRBPos;
-    long            m_nFromToFTPos;
-    long            m_nFromToNFPos;
-    long            m_nRBOffset;
 
     bool            m_bCancelSaving;
 

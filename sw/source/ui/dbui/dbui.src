@@ -85,4 +85,39 @@ String STR_FILTER_ACCDB
     Text [ en-US ] = "Microsoft Access 2007 (*.accdb)" ;
 };
 
+String      ST_SAVESTART
+{
+    Text[ en-US ] = "Save ~starting document";
+};
+
+String      ST_SAVEMERGED
+{
+    Text[ en-US ] = "Save merged document";
+};
+
+String      ST_PRINT
+{
+    Text[ en-US ] = "Print settings";
+};
+
+String      ST_SENDMAIL
+{
+    Text[ en-US ] = "E-Mail settings";
+};
+
+String ST_DEFAULTATTACHMENT
+{
+    Text[ en-US ] = "Untitled";
+};
+
+String ST_NOSUBJECT
+{
+    Text[ en-US ] = "No subject";
+};
+
+String ST_CONFIGUREMAIL
+{
+    Text[ en-US ] = "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\nDo you want to enter e-mail account information now?";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

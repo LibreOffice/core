@@ -27,7 +27,6 @@
 #define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
 #define DLG_MM_DOCSELECT_PAGE       (RC_DBUI_BEGIN + 4)
 #define DLG_MM_OUTPUTTYPE_PAGE      (RC_DBUI_BEGIN + 5)
-#define DLG_MM_OUTPUT_PAGE          (RC_DBUI_BEGIN + 10)
 #define DLG_MM_ADDRESSLISTDIALOG    (RC_DBUI_BEGIN + 11)
 #define DLG_MM_SELECTDBTABLEDDIALOG (RC_DBUI_BEGIN + 12)
 #define DLG_MM_DBTABLEPREVIEWDIALOG (RC_DBUI_BEGIN + 13)
@@ -66,6 +65,13 @@
 #define ST_REMOVESALUTATIONFIELD (RC_DBUI_BEGIN + 23)
 #define ST_DRAGSALUTATION       (RC_DBUI_BEGIN + 24)
 #define ST_TITLE_EDIT           (RC_DBUI_BEGIN + 25)
+#define ST_SAVESTART            (RC_DBUI_BEGIN + 26)
+#define ST_SAVEMERGED           (RC_DBUI_BEGIN + 27)
+#define ST_PRINT                (RC_DBUI_BEGIN + 28)
+#define ST_SENDMAIL             (RC_DBUI_BEGIN + 29)
+#define ST_DEFAULTATTACHMENT    (RC_DBUI_BEGIN + 30)
+#define ST_NOSUBJECT            (RC_DBUI_BEGIN + 31)
+#define ST_CONFIGUREMAIL        (RC_DBUI_BEGIN + 32)
 
 // Elements -----------------------------------------------------------------
 
