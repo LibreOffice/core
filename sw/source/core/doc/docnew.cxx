@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <DocumentSettingManager.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>

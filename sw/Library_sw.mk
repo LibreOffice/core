@@ -182,6 +182,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/docnum \
     sw/source/core/doc/docredln \
     sw/source/core/doc/docruby \
+	sw/source/core/doc/DocumentSettingManager \
     sw/source/core/doc/docsort \
     sw/source/core/doc/docstat \
     sw/source/core/doc/doctxm \
