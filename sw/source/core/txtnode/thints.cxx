@@ -1612,7 +1612,7 @@ void SwTxtNode::DelSoftHyph( const xub_StrLen nStt, const xub_StrLen nEnd )
 //In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
 bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 {
-    return (nWhich ==  RES_CHRATR_UNDERLINE);
+    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_BACKGROUND);
 }
 
 //In MS Word, following properties of the paragraph end position wont affect the formatting of bullets, so we ignore them:
