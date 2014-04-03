@@ -69,9 +69,9 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
-    virtual sal_uInt16 GetValueCount() const;
+    sal_uInt16 GetValueCount() const;
 
-    virtual OUString GetValueTextByVal(bool bTheValue) const;
+    OUString GetValueTextByVal(bool bTheValue) const;
 
     bool GetValue() const { return m_nValue.bVisible; }
 
