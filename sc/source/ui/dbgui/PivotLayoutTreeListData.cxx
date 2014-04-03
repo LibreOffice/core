@@ -144,11 +144,37 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
     }
 }
 
+void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldNames)
+{
+    SvTreeListEntry* pLoopEntry;
+    for (pLoopEntry = First(); pLoopEntry != NULL; pLoopEntry = Next(pLoopEntry))
+    {
+        ScItemValue* pEachItemValue = (ScItemValue*) pLoopEntry->GetUserData();
+        SCCOL nColumn = pEachItemValue->maFunctionData.mnCol;
+
+        ScDPLabelData* pLabelData = mpParent->GetLabelData(nColumn);
+
+        if (pLabelData == NULL && pLabelData->maName.isEmpty())
+            continue;
+
+        OUString sLayoutName = pLabelData->maLayoutName;
+        if (sLayoutName.isEmpty())
+        {
+            sLayoutName = lclCreateDataItemName(
+                            pEachItemValue->maFunctionData.mnFuncMask,
+                            pEachItemValue->maName,
+                            pEachItemValue->maFunctionData.mnDupCount);
+        }
+
+        rDataFieldNames.push_back(ScDPName(pLabelData->maName, sLayoutName, pLabelData->mnDupCount));
+    }
+}
+
 void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget)
 {
     ScItemValue* pItemValue = (ScItemValue*) pSource->GetUserData();
 
-    if(mpParent->IsDataItem(pItemValue->maFunctionData.mnCol))
+    if(mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
 
     if (HasEntry(pSource))

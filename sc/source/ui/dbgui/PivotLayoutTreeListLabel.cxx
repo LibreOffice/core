@@ -61,7 +61,7 @@ void ScPivotLayoutTreeListLabel::InsertEntryForSourceTarget(SvTreeListEntry* /*p
         mpParent->mpPreviouslyFocusedListBox->RemoveSelection();
 }
 
-bool ScPivotLayoutTreeListLabel::IsDataItem(SCCOL nColumn)
+bool ScPivotLayoutTreeListLabel::IsDataElement(SCCOL nColumn)
 {
     return (nColumn == PIVOT_DATA_FIELD || nColumn == maDataItem);
 }

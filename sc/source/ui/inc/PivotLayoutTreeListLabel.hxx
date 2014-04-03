@@ -25,7 +25,7 @@ public:
     virtual ~ScPivotLayoutTreeListLabel();
     void FillLabelFields(ScDPLabelDataVector& rLabelVector);
     ScItemValue* GetItem(SCCOL nColumn);
-    bool IsDataItem(SCCOL nColumn);
+    bool IsDataElement(SCCOL nColumn);
 
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) SAL_OVERRIDE;
