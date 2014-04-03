@@ -25,6 +25,7 @@
 #include <tools/rcid.h>
 
 Resource::Resource( const ResId& rResId )
+    : m_pResMgr(NULL)
 {
     GetRes( rResId.SetRT( RSC_RESOURCE ) );
 }
