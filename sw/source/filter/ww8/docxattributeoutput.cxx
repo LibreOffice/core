@@ -6528,7 +6528,7 @@ boost::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 
 void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
-    OString sColor = msfilter::util::ConvertColor( rBrush.GetColor( ) );
+    OString sColor = msfilter::util::ConvertColor( rBrush.GetColor().GetRGBColor() );
     boost::optional<sal_Int32> oAlpha = lcl_getDmlAlpha(rBrush);
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {

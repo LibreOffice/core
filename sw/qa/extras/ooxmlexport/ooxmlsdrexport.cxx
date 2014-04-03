@@ -1000,6 +1000,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76249, "fdo76249.docx")
     assertXPath(pXmlDoc, "//mc:Choice/w:drawing//w:txbxContent//w:drawing//lc:lockedCanvas", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo76979, "fdo76979.docx")
+{
+    // The problem was that black was exported as "auto" fill color, resulting in well-formed, but invalid XML.
+    xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
+    if (!pXmlDoc)
+       return;
+    // This was "auto", not "FFFFFF".
+    assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", "FFFFFF");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
