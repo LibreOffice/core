@@ -43,10 +43,15 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+
 const sal_Unicode cDialogExtraDataClose = '}';
 const char sDialogImpExtraData[] = "EncImpDlg:{";
 const char sDialogExpExtraData[] = "EncExpDlg:{";
 const sal_Int32 nDialogExtraDataLen = 11;      // 12345678901
+
+}
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
