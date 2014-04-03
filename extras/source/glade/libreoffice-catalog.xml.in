@@ -39,6 +39,9 @@
     <glade-widget-class title="Thesaurus Edit" name="cuilo-ReplaceEdit"
                         generic-name="ReplaceEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="TableName Edit" name="swlo-TableNameEdit"
+                        generic-name="TableNameEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Thesaurus Lookup" name="cuilo-LookUpComboBox"
                         generic-name="LookUpComboBox" parent="GtkEntry"
                         icon-name="widget-gtk-comboboxtext"/>
