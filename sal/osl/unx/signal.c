@@ -158,7 +158,6 @@ static sal_Bool               bErrorReportingEnabled = sal_True;
 static sal_Bool               bInitSignal = sal_False;
 static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
-static sal_Bool               bDoHardKill = sal_False;
 static sal_Bool               bSetSEGVHandler = sal_False;
 static sal_Bool               bSetWINCHHandler = sal_False;
 static sal_Bool               bSetILLHandler = sal_False;
@@ -209,28 +208,6 @@ static sal_Bool InitSignal()
 
     if (is_soffice_Impl())
     {
-        sal_uInt32  argi;
-        sal_uInt32  argc;
-        rtl_uString *ustrCommandArg = 0;
-
-        argc = osl_getCommandArgCount();
-        for ( argi = 0; argi < argc; argi++ )
-        {
-            if (osl_Process_E_None == osl_getCommandArg (argi, &ustrCommandArg))
-            {
-                if (0 == rtl_ustr_ascii_compare (rtl_uString_getStr (ustrCommandArg), "-bean"))
-                {
-                    bDoHardKill = sal_True;
-                    break;
-                }
-            }
-        }
-        if (ustrCommandArg)
-        {
-            rtl_uString_release (ustrCommandArg);
-            ustrCommandArg = 0;
-        }
-
         // WORKAROUND FOR SEGV HANDLER CONFLICT
         //
         // the java jit needs SIGSEGV for proper work
@@ -249,7 +226,7 @@ static sal_Bool InitSignal()
     }
 
 #ifdef DBG_UTIL
-    bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = bDoHardKill = sal_False;
+    bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = sal_False;
 #endif
 
     SignalListMutex = osl_createMutex();
@@ -979,11 +956,6 @@ void SignalHandlerFunction(int Signal)
     }
 
     ReportCrash( Signal );
-
-    /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    if (bDoHardKill && (Info.Signal == osl_Signal_AccessViolation))
-        _exit(255);
-    /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
     switch (CallSignalHandler(&Info))
     {
