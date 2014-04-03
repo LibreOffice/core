@@ -86,23 +86,11 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
         ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
 
         ScPivotField aField;
-
         aField.nCol          = rFunctionData.mnCol;
         aField.mnOriginalDim = rFunctionData.mnOriginalDim;
-
-        if (rFunctionData.mnFuncMask == PIVOT_FUNC_NONE ||
-            rFunctionData.mnFuncMask == PIVOT_FUNC_AUTO)
-        {
-            aField.nFuncMask = PIVOT_FUNC_SUM;
-        }
-        else
-        {
-            aField.nFuncMask = rFunctionData.mnFuncMask;
-        }
-
-        aField.mnDupCount = rFunctionData.mnDupCount;
-        aField.maFieldRef = rFunctionData.maFieldRef;
-
+        aField.nFuncMask     = rFunctionData.mnFuncMask;
+        aField.mnDupCount    = rFunctionData.mnDupCount;
+        aField.maFieldRef    = rFunctionData.maFieldRef;
         rVector.push_back(aField);
     }
 }

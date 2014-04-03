@@ -16,8 +16,12 @@
 
 #include "rangeutl.hxx"
 #include "uiitems.hxx"
+#include "dputil.hxx"
+
+#include <vector>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 
 using namespace css::uno;
 using namespace css::sheet;
@@ -156,6 +160,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
 
     FillValuesToListBoxes();
 
+    // Initialize Options
     const ScDPSaveData* pSaveData = maPivotTableObject.GetSaveData();
     if (pSaveData == NULL)
     {
@@ -446,36 +451,8 @@ void ScPivotLayoutDialog::UpdateSourceRange()
 bool ScPivotLayoutDialog::ApplyChanges()
 {
     ScDPSaveData aSaveData;
-    aSaveData.SetIgnoreEmptyRows(mpCheckIgnoreEmptyRows->IsChecked());
-    aSaveData.SetRepeatIfEmpty(mpCheckIdentifyCategories->IsChecked());
-    aSaveData.SetColumnGrand(mpCheckTotalColumns->IsChecked());
-    aSaveData.SetRowGrand(mpCheckTotalRows->IsChecked());
-    aSaveData.SetFilterButton(mpCheckAddFilter->IsChecked());
-    aSaveData.SetDrillDown(mpCheckDrillToDetail->IsChecked());
-
-    Reference<XDimensionsSupplier> xSource = maPivotTableObject.GetSource();
-
-    ScPivotFieldVector aPageFieldVector;
-    mpListBoxPage->PushEntriesToPivotFieldVector(aPageFieldVector);
-    ScDPObject::ConvertOrientation(aSaveData, aPageFieldVector, DataPilotFieldOrientation_PAGE,
-                                   xSource, maPivotParameters.maLabelArray);
-
-    ScPivotFieldVector aColFieldVector;
-    mpListBoxColumn->PushEntriesToPivotFieldVector(aColFieldVector);
-    ScDPObject::ConvertOrientation(aSaveData, aColFieldVector, DataPilotFieldOrientation_COLUMN,
-                                   xSource, maPivotParameters.maLabelArray);
-
-    ScPivotFieldVector aRowFieldVector;
-    mpListBoxRow->PushEntriesToPivotFieldVector(aRowFieldVector);
-    ScDPObject::ConvertOrientation(aSaveData, aRowFieldVector, DataPilotFieldOrientation_ROW,
-                                   xSource, maPivotParameters.maLabelArray);
-
-    ScPivotFieldVector aDataFieldVector;
-    mpListBoxData->PushEntriesToPivotFieldVector(aDataFieldVector);
-    ScDPObject::ConvertOrientation(aSaveData, aDataFieldVector, DataPilotFieldOrientation_DATA,
-                                   xSource, maPivotParameters.maLabelArray,
-                                   &aColFieldVector, &aRowFieldVector, &aPageFieldVector);
-
+    ApplySaveData(aSaveData);
+    ApplyLabelData(aSaveData);
 
     ScRange aDestinationRange;
     bool bToNewSheet = false;
@@ -488,7 +465,7 @@ bool ScPivotLayoutDialog::ApplyChanges()
 
     sal_uInt16 nWhichPivot = SC_MOD()->GetPool().GetWhich(SID_PIVOT_TABLE);
     ScPivotItem aPivotItem(nWhichPivot, &aSaveData, &aDestinationRange, bToNewSheet);
-    mpViewData->GetViewShell()->SetDialogDPObject(new ScDPObject(maPivotTableObject));
+    mpViewData->GetViewShell()->SetDialogDPObject(&maPivotTableObject);
 
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     SfxCallMode nCallMode = SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD;
@@ -505,6 +482,77 @@ bool ScPivotLayoutDialog::ApplyChanges()
 
     SetDispatcherLock(true);
     return true;
+}
+
+void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
+{
+    rSaveData.SetIgnoreEmptyRows(mpCheckIgnoreEmptyRows->IsChecked());
+    rSaveData.SetRepeatIfEmpty(mpCheckIdentifyCategories->IsChecked());
+    rSaveData.SetColumnGrand(mpCheckTotalColumns->IsChecked());
+    rSaveData.SetRowGrand(mpCheckTotalRows->IsChecked());
+    rSaveData.SetFilterButton(mpCheckAddFilter->IsChecked());
+    rSaveData.SetDrillDown(mpCheckDrillToDetail->IsChecked());
+
+    Reference<XDimensionsSupplier> xSource = maPivotTableObject.GetSource();
+
+    ScPivotFieldVector aPageFieldVector;
+    mpListBoxPage->PushEntriesToPivotFieldVector(aPageFieldVector);
+    ScDPObject::ConvertOrientation(rSaveData, aPageFieldVector, DataPilotFieldOrientation_PAGE,
+                                   xSource, maPivotParameters.maLabelArray);
+
+    ScPivotFieldVector aColFieldVector;
+    mpListBoxColumn->PushEntriesToPivotFieldVector(aColFieldVector);
+    ScDPObject::ConvertOrientation(rSaveData, aColFieldVector, DataPilotFieldOrientation_COLUMN,
+                                   xSource, maPivotParameters.maLabelArray);
+
+    ScPivotFieldVector aRowFieldVector;
+    mpListBoxRow->PushEntriesToPivotFieldVector(aRowFieldVector);
+    ScDPObject::ConvertOrientation(rSaveData, aRowFieldVector, DataPilotFieldOrientation_ROW,
+                                   xSource, maPivotParameters.maLabelArray);
+
+    ScPivotFieldVector aDataFieldVector;
+    mpListBoxData->PushEntriesToPivotFieldVector(aDataFieldVector);
+    ScDPObject::ConvertOrientation(rSaveData, aDataFieldVector, DataPilotFieldOrientation_DATA,
+                                   xSource, maPivotParameters.maLabelArray,
+                                   &aColFieldVector, &aRowFieldVector, &aPageFieldVector);
+}
+
+void ScPivotLayoutDialog::ApplyLabelData(ScDPSaveData& rSaveData)
+{
+    ScDPLabelDataVector::const_iterator it;
+    ScDPLabelDataVector& rLabelDataVector = GetLabelDataVector();
+
+    for (it = rLabelDataVector.begin(); it != rLabelDataVector.end(); ++it)
+    {
+        const ScDPLabelData& pLabelData = *it;
+
+        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(pLabelData.maName, pLabelData.mnDupCount);
+        ScDPSaveDimension* pSaveDimensions = rSaveData.GetExistingDimensionByName(aUnoName);
+
+        if (pSaveDimensions == NULL)
+            continue;
+
+        pSaveDimensions->SetUsedHierarchy(pLabelData.mnUsedHier);
+        pSaveDimensions->SetShowEmpty(pLabelData.mbShowAll);
+        pSaveDimensions->SetSortInfo(&pLabelData.maSortInfo);
+        pSaveDimensions->SetLayoutInfo(&pLabelData.maLayoutInfo);
+        pSaveDimensions->SetAutoShowInfo(&pLabelData.maShowInfo);
+
+        bool bManualSort = (pLabelData.maSortInfo.Mode == DataPilotFieldSortMode::MANUAL);
+
+        std::vector<ScDPLabelData::Member>::const_iterator itMember;
+        for (itMember = pLabelData.maMembers.begin(); itMember != pLabelData.maMembers.end(); ++itMember)
+        {
+            const ScDPLabelData::Member& rLabelMember = *itMember;
+            ScDPSaveMember* pMember = pSaveDimensions->GetMemberByName(rLabelMember.maName);
+
+            if (bManualSort || !rLabelMember.mbVisible || !rLabelMember.mbShowDetails)
+            {
+                pMember->SetIsVisible(rLabelMember.mbVisible);
+                pMember->SetShowDetails(rLabelMember.mbShowDetails);
+            }
+        }
+    }
 }
 
 bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNewSheet)
@@ -537,9 +585,9 @@ ScItemValue* ScPivotLayoutDialog::GetItem(SCCOL nColumn)
     return mpListBoxField->GetItem(nColumn);
 }
 
-bool ScPivotLayoutDialog::IsDataItem(SCCOL nColumn)
+bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
 {
-    return mpListBoxField->IsDataItem(nColumn);
+    return mpListBoxField->IsDataElement(nColumn);
 }
 
 ScDPLabelData* ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
@@ -550,6 +598,11 @@ ScDPLabelData* ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
 ScDPLabelDataVector& ScPivotLayoutDialog::GetLabelDataVector()
 {
     return maPivotParameters.maLabelArray;
+}
+
+void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)
+{
+    return mpListBoxData->PushDataFieldNames(rDataFieldNames);
 }
 
 IMPL_LINK( ScPivotLayoutDialog, OkClicked, PushButton*, /*pButton*/ )

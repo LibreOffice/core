@@ -122,12 +122,15 @@ public:
     void UpdateSourceRange();
 
     bool ApplyChanges();
+    void ApplySaveData(ScDPSaveData& rSaveData);
+    void ApplyLabelData(ScDPSaveData& rSaveData);
 
     ScItemValue* GetItem(SCCOL nColumn);
-    bool IsDataItem(SCCOL nColumn);
+    bool IsDataElement(SCCOL nColumn);
 
     ScDPLabelData* GetLabelData(SCCOL nColumn);
     ScDPLabelDataVector& GetLabelDataVector();
+    void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
 };
 
 
