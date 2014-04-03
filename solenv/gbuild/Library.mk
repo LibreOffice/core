@@ -125,9 +125,6 @@ endef
 # gb_Library_get_exports_target for that purpose, since it is already
 # the "final" target of the Library...
 define gb_Library_set_componentfile
-$(call gb_Library_get_target,$(gb_Library__get_name)) : \
-	COMPONENT := $$(if $$(and $$(COMPONENT),$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(1))),\
-	  $$(call gb_Output_error,$(1) already has a component file $$(COMPONENT)))$(2)
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
 	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
