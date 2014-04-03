@@ -37,8 +37,8 @@ $(call gb_ExternalProject_get_state_target,serf,build):
 		./configure SERF_LIBS= \
 			--enable-option-checking=fatal \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
-			$(if $(SYSTEM_APR),,--with-apr=$(call gb_UnpackedTarball_get_dir,apr)/apr-1-config) \
-			$(if $(SYSTEM_APR),,--with-apr-util=$(call gb_UnpackedTarball_get_dir,apr_util)/apu-1-config) \
+			$(if $(filter YES,$(SYSTEM_APR)),,--with-apr=$(call gb_UnpackedTarball_get_dir,apr)/apr-1-config) \
+			$(if $(filter YES,$(SYSTEM_APR)),,--with-apr-util=$(call gb_UnpackedTarball_get_dir,apr_util)/apu-1-config) \
 			$(if $(SYSTEM_OPENSSL),,--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl)) \
 		&& $(MAKE) libserf-1.la \
 	)
