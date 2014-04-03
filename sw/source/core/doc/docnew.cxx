@@ -106,8 +106,8 @@ using namespace ::com::sun::star::document;
 const sal_Char sFrmFmtStr[] = "Frameformat";
 const sal_Char sEmptyPageStr[] = "Empty Page";
 const sal_Char sColumnCntStr[] = "Columncontainer";
-const sal_Char sCharFmtStr[] = "Zeichenformat";
-const sal_Char sTxtCollStr[] = "Textformatvorlage";
+const sal_Char sCharFmtStr[] = "Character style";
+const sal_Char sTxtCollStr[] = "Paragraph style";
 const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
 /*
