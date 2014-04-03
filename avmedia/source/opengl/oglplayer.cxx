@@ -140,13 +140,13 @@ OUString SAL_CALL OGLPlayer::getImplementationName()
 }
 
 sal_Bool SAL_CALL OGLPlayer::supportsService( const OUString& rServiceName )
-     throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+     throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OGLPlayer::getSupportedServiceNames()
-     throw ( com::sun::star::uno::RuntimeException, std::exception )
+     throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
     aRet[0] = OUString("com.sun.star.media.Player_OpenGL");
