@@ -75,7 +75,9 @@ public:
     // Methods XStorageBasedLibraryContainer
     virtual void SAL_CALL storeLibrariesToStorage(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException,
+                   css::lang::WrappedTargetException,
+                   std::exception) SAL_OVERRIDE;
 
     // Resource handling
     ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >

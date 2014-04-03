@@ -186,7 +186,7 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
     xInput->closeInput();
 }
 
-void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException, std::exception )
+void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException, WrappedTargetException, std::exception )
 {
     LibraryContainerMethodGuard aGuard( *this );
     mbOasis2OOoFormat = false;
