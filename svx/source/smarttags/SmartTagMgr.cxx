@@ -345,7 +345,7 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( Run
 */
 void SmartTagMgr::LoadLibraries()
 {
-    Reference< container::XContentEnumerationAccess > rContent( mxContext , UNO_QUERY );
+    Reference< container::XContentEnumerationAccess > rContent( mxContext->getServiceManager(), UNO_QUERY );
     if ( !rContent.is() )
         return;
 
