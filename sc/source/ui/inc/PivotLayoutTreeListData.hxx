@@ -25,6 +25,8 @@ public:
     virtual bool DoubleClickHdl() SAL_OVERRIDE;
 
     void FillDataField(ScPivotFieldVector& rDataFields);
+    void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
+
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) SAL_OVERRIDE;
     virtual void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition) SAL_OVERRIDE;

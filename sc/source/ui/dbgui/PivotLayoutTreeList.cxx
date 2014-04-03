@@ -36,10 +36,34 @@ void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListT
     meType = eType;
 }
 
+OUString lclFunctName(const sal_uInt16 nFunctionMask)
+{
+    switch (nFunctionMask)
+    {
+        case PIVOT_FUNC_SUM:       return OUString("Sum");
+        case PIVOT_FUNC_COUNT:     return OUString("Count");
+        case PIVOT_FUNC_AVERAGE:   return OUString("Mean");
+        case PIVOT_FUNC_MAX:       return OUString("Max");
+        case PIVOT_FUNC_MIN:       return OUString("Min");
+        case PIVOT_FUNC_PRODUCT:   return OUString("Product");
+        case PIVOT_FUNC_COUNT_NUM: return OUString("Count");
+        case PIVOT_FUNC_STD_DEV:   return OUString("StDev");
+        case PIVOT_FUNC_STD_DEVP:  return OUString("StDevP");
+        case PIVOT_FUNC_STD_VAR:   return OUString("Var");
+        case PIVOT_FUNC_STD_VARP:  return OUString("VarP");
+        default:
+            break;
+    }
+    return OUString();
+}
+
 bool ScPivotLayoutTreeList::DoubleClickHdl()
 {
     ScItemValue* pCurrentItemValue = (ScItemValue*) GetCurEntry()->GetUserData();
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
+
+    if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
+        return false;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
     ScDPLabelData* pCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
@@ -49,18 +73,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
     vector<ScDPName> aDataFieldNames;
-    SvTreeListEntry* pLoopEntry;
-    for (pLoopEntry = First(); pLoopEntry != NULL; pLoopEntry = Next(pLoopEntry))
-    {
-        ScItemValue* pEachItemValue = (ScItemValue*) pLoopEntry->GetUserData();
-        SCCOL nColumn = pEachItemValue->maFunctionData.mnCol;
-
-        ScDPLabelData* pDFData = mpParent->GetLabelData(nColumn);
-        if (pDFData == NULL && pDFData->maName.isEmpty())
-            continue;
-
-        aDataFieldNames.push_back(ScDPName(pDFData->maName, pDFData->maLayoutName, pDFData->mnDupCount));
-    }
+    mpParent->PushDataFieldNames(aDataFieldNames);
 
     boost::scoped_ptr<AbstractScDPSubtotalDlg> pDialog(
         pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, *pCurrentLabelData, rCurrentFunctionData, aDataFieldNames, true));
@@ -68,7 +81,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     if (pDialog->Execute() == RET_OK)
     {
         pDialog->FillLabelData(*pCurrentLabelData);
-        rCurrentFunctionData.mnFuncMask = pCurrentLabelData->mnFuncMask;
+        rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
     }
 
     return true;
@@ -93,7 +106,7 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(SvTreeListEntry* pSource,
     ScItemValue* pOriginalItemValue = pItemValue->mpOriginalItemValue;
 
     // Don't allow to add "Data" element to page fields
-    if(meType == PAGE_LIST && mpParent->IsDataItem(pItemValue->maFunctionData.mnCol))
+    if(meType == PAGE_LIST && mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
 
     mpParent->ItemInserted(pOriginalItemValue, meType);
