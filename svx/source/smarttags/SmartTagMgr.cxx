@@ -69,18 +69,14 @@ SmartTagMgr::~SmartTagMgr()
 
 void SmartTagMgr::Init( const OUString& rConfigurationGroupName )
 {
-    // get component context to pass to components:
-    if ( mxContext.is() )
-    {
-        PrepareConfiguration( rConfigurationGroupName );
-        ReadConfiguration( true, true );
-        RegisterListener();
-        LoadLibraries();
-    }
+    PrepareConfiguration( rConfigurationGroupName );
+    ReadConfiguration( true, true );
+    RegisterListener();
+    LoadLibraries();
 }
 void SmartTagMgr::CreateBreakIterator() const
 {
-    if ( !mxBreakIter.is() && mxContext.is() )
+    if ( !mxBreakIter.is() )
     {
         // get the break iterator
         mxBreakIter.set( BreakIterator::create(mxContext) );
@@ -345,9 +341,7 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( Run
 */
 void SmartTagMgr::LoadLibraries()
 {
-    Reference< container::XContentEnumerationAccess > rContent( mxContext->getServiceManager(), UNO_QUERY );
-    if ( !rContent.is() )
-        return;
+    Reference< container::XContentEnumerationAccess > rContent( mxContext->getServiceManager(), UNO_QUERY_THROW );
 
     // load recognizers: No recognizers -> nothing to do.
     Reference < container::XEnumeration > rEnum = rContent->createContentEnumeration( "com.sun.star.smarttags.SmartTagRecognizer");
