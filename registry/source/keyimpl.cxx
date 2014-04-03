@@ -47,7 +47,7 @@ ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
 
 ORegKey::~ORegKey()
 {
-    OSL_POSTCOND(m_refCount == 0, "registry::ORegKey::dtor(): refcount not zero.");
+    SAL_WARN_IF(m_refCount != 0, "registry", "registry::ORegKey::dtor(): refcount not zero.");
 }
 
 

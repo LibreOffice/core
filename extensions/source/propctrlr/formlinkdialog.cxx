@@ -609,7 +609,9 @@ namespace pcr
             if ( bEnable )
             {
                 bEnable = getExistingRelation( xDetailTable, xMasterTable, m_aRelationDetailColumns, m_aRelationMasterColumns );
-                OSL_POSTCOND( m_aRelationMasterColumns.getLength() == m_aRelationDetailColumns.getLength(), "FormLinkDialog::initializeSuggest: nonsense!" );
+                SAL_WARN_IF( m_aRelationMasterColumns.getLength() != m_aRelationDetailColumns.getLength(),
+                    "extensions.propctrlr",
+                    "FormLinkDialog::initializeSuggest: nonsense!" );
                 if ( m_aRelationMasterColumns.getLength() == 0 )
                 {   // okay, there is no relation "pointing" (via a foreign key) from the detail table to the master table
                     // but perhaps the other way round (would make less sense, but who knows ...)

@@ -878,7 +878,7 @@ void Parser::parseLine( const OString& rLine )
     }
 
     // all consumed?
-    OSL_POSTCOND(m_nCharIndex==-1,"leftover scanner input");
+    SAL_WARN_IF(m_nCharIndex!=-1, "sdext.pdfimport", "leftover scanner input");
 }
 
 oslFileError readLine( oslFileHandle pFile, OStringBuffer& line )

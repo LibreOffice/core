@@ -379,7 +379,7 @@ Reference< XConnection > SAL_CALL KabDriver::connect( const OUString& url, const
 
     // create a new connection with the given properties and append it to our vector
     KabConnection* pConnection = m_aImplModule.createConnection( this );
-    OSL_POSTCOND( pConnection, "KabDriver::connect: no connection has been created by the factory!" );
+    SAL_WARN_IF( !pConnection, "connectivity.kab", "KabDriver::connect: no connection has been created by the factory!" );
 
     // by definition, the factory function returned an object which was acquired once
     Reference< XConnection > xConnection = pConnection;

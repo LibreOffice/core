@@ -72,6 +72,8 @@ certain functionality.
 @li @c connectivity.flat
 @li @c connectivity.hsqldb
 @li @c connectivity.jdbc
+@li @c connectivity.kab
+@li @c connectivity.macab
 @li @c connectivity.mork
 @li @c connectivity.parse
 @li @c connectivity.postgresql
@@ -156,6 +158,7 @@ certain functionality.
 @li @c extensions.biblio
 @li @c extensions.dbpilots
 @li @c extensions.plugin
+@li @c extensions.propctrlr
 @li @c extensions.scanner
 @li @c extensions.update
 @li @c extensions.olebridge - OLE automation bridge
@@ -178,6 +181,7 @@ certain functionality.
 
 @li @c forms.component
 @li @c forms.misc
+@li @c forms.richtext
 @li @c forms.runtime
 
 @section formula
@@ -461,8 +465,10 @@ certain functionality.
 @li @c drawinglayer
 @li @c helpcompiler
 @li @c linguistic
+@li @c mysqlc
 @li @c oox
 @li @c postprocess.cppunit
+@li @c registry
 @li @c reportdesign
 @li @c rsc
 @li @c sax

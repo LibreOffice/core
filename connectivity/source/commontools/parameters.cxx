@@ -322,7 +322,8 @@ namespace dbtools
             if ( bValidLink )
                 aStrippedMasterFields.push_back( *pMasterFields );
         }
-        OSL_POSTCOND( aStrippedMasterFields.size() == aStrippedDetailFields.size(),
+        SAL_WARN_IF( aStrippedMasterFields.size() != aStrippedDetailFields.size(),
+            "connectivity.commontools",
             "ParameterManager::classifyLinks: inconsistency in new link pairs!" );
 
         if ( bNeedExchangeLinks )
@@ -502,7 +503,9 @@ namespace dbtools
                 return;
             } // if ( !initializeComposerByComponent( m_xComponent ) )
         }
-        OSL_POSTCOND( m_xInnerParamColumns.is(), "ParameterManager::updateParameterInfo: initializeComposerByComponent did nonsense (1)!" );
+        SAL_WARN_IF( !m_xInnerParamColumns.is(),
+            "connectivity.commontools",
+            "ParameterManager::updateParameterInfo: initializeComposerByComponent did nonsense (1)!" );
 
         // collect all parameters which are defined by the "inner parameters"
         collectInnerParameters( false );
