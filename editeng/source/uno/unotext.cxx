@@ -1891,8 +1891,8 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
                 }
                 else
                 {
+                    aRange.nStartPara = aRange.nEndPara;
                     aRange.nStartPos = aRange.nEndPos;
-                    aRange.nStartPara = aRange.nStartPara;
                 }
 
                 pForwarder->QuickInsertLineBreak( aRange );
