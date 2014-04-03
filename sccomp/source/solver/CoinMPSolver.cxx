@@ -35,7 +35,7 @@ class CoinMPSolver : public SolverComponent
 {
 public:
     CoinMPSolver() {}
-    virtual ~CoinMPSolver() SAL_OVERRIDE {}
+    virtual ~CoinMPSolver() {}
 
 private:
     virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

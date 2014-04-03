@@ -68,7 +68,7 @@ class LpsolveSolver : public SolverComponent
 {
 public:
     LpsolveSolver() {}
-    virtual ~LpsolveSolver() SAL_OVERRIDE {}
+    virtual ~LpsolveSolver() {}
 
 private:
     virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
