@@ -2075,7 +2075,8 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist, bool bWriteShadow = false )
+static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist,
+                             bool bWriteShadow = false, const table::BorderLine2* rStyleProps = NULL )
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
 
@@ -2141,6 +2142,19 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
                 break;
         }
     }
+    else if( rStyleProps == NULL )
+        // no line, and no line set by the style either:
+        // there is no need to write the property
+        return;
+
+    // compare the properties with the theme properties before writing them:
+    // if they are equal, it means that they were style-defined and there is
+    // no need to write them.
+    if( rStyleProps != NULL && pBorderLine && !pBorderLine->isEmpty() &&
+            pBorderLine->GetBorderLineStyle() == rStyleProps->LineStyle &&
+            pBorderLine->GetColor() == rStyleProps->Color &&
+            pBorderLine->GetWidth() == MM100_TO_TWIP_UNSIGNED( rStyleProps->LineWidth ) )
+        return;
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
 
@@ -2235,7 +2249,8 @@ static bool boxHasLineLargerThan31(const SvxBoxItem& rBox)
             );
 }
 
-static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins)
+static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins,
+                          std::map<sal_uInt16, css::table::BorderLine2> &rTableStyleConf )
 {
     static const sal_uInt16 aBorders[] =
     {
@@ -2267,6 +2282,9 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
+        const table::BorderLine2 *aStyleProps = NULL;
+        if( rTableStyleConf.find( *pBrd ) != rTableStyleConf.end() )
+            aStyleProps = &rTableStyleConf[ *pBrd ];
 
         if (!tagWritten && rOptions.bWriteTag)
         {
@@ -2326,7 +2344,7 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
             }
         }
 
-        impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist, bWriteShadow );
+        impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist, bWriteShadow, aStyleProps );
 
         // When exporting default borders, we need to export these 2 attr
         if ( rOptions.bWriteInsideHV) {
@@ -2337,9 +2355,19 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
         }
     }
     if (bWriteInsideH)
-        impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(BOX_LINE_BOTTOM), 0 );
+    {
+        const table::BorderLine2 *aStyleProps = NULL;
+        if( rTableStyleConf.find( BOX_LINE_BOTTOM ) != rTableStyleConf.end() )
+            aStyleProps = &rTableStyleConf[ BOX_LINE_BOTTOM ];
+        impl_borderLine( pSerializer, XML_insideH, rBox.GetLine(BOX_LINE_BOTTOM), 0, false, aStyleProps );
+    }
     if (bWriteInsideV)
-        impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(BOX_LINE_RIGHT), 0 );
+    {
+        const table::BorderLine2 *aStyleProps = NULL;
+        if( rTableStyleConf.find( BOX_LINE_RIGHT ) != rTableStyleConf.end() )
+            aStyleProps = &rTableStyleConf[ BOX_LINE_RIGHT ];
+        impl_borderLine( pSerializer, XML_insideV, rBox.GetLine(BOX_LINE_RIGHT), 0, false, aStyleProps );
+    }
     if (tagWritten && rOptions.bWriteTag) {
         pSerializer->endElementNS( XML_w, rOptions.tag );
     }
@@ -2450,7 +2478,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
     {
         // The cell borders
-        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), NULL );
+        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), NULL, m_aTableStyleConf );
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
@@ -2549,6 +2577,8 @@ void DocxAttributeOutput::EndTable()
 
     // Cleans the table helper
     delete m_pTableWrt, m_pTableWrt = NULL;
+
+    m_aTableStyleConf.clear();
 }
 
 void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -2678,14 +2708,25 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     if ( SFX_ITEM_ON == pTblFmt->GetAttrSet().GetItemState( RES_FRMATR_GRABBAG, false, &pI ) )
         aGrabBag = dynamic_cast<const SfxGrabBagItem *>(pI)->GetGrabBag();
 
-    // Write table style property if it exists
-    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("TableStyleName");
-    if( aGrabBagElement != aGrabBag.end() )
+    // Extract properties from grab bag
+    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement;
+    for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
     {
-        OString sStyleName = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
-        m_pSerializer->singleElementNS( XML_w, XML_tblStyle,
-                FSNS( XML_w, XML_val ), sStyleName.getStr(),
-                FSEND );
+        if( aGrabBagElement->first == "TableStyleName")
+        {
+            OString sStyleName = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
+            m_pSerializer->singleElementNS( XML_w, XML_tblStyle,
+                    FSNS( XML_w, XML_val ), sStyleName.getStr(),
+                    FSEND );
+        }
+        else if( aGrabBagElement->first == "TableStyleTopBorder" )
+            m_aTableStyleConf[ BOX_LINE_TOP ] = aGrabBagElement->second.get<table::BorderLine2>();
+        else if( aGrabBagElement->first == "TableStyleBottomBorder" )
+            m_aTableStyleConf[ BOX_LINE_BOTTOM ] = aGrabBagElement->second.get<table::BorderLine2>();
+        else if( aGrabBagElement->first == "TableStyleLeftBorder" )
+            m_aTableStyleConf[ BOX_LINE_LEFT ] = aGrabBagElement->second.get<table::BorderLine2>();
+        else if( aGrabBagElement->first == "TableStyleRightBorder" )
+            m_aTableStyleConf[ BOX_LINE_RIGHT ] = aGrabBagElement->second.get<table::BorderLine2>();
     }
 
     // Output the table alignement
@@ -2771,7 +2812,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // the defaults of the table are taken from the top-left cell
-    impl_borders( m_pSerializer, pFrmFmt->GetBox( ), lcl_getTableDefaultBorderOptions(bEcma), NULL );
+    impl_borders( m_pSerializer, pFrmFmt->GetBox( ), lcl_getTableDefaultBorderOptions(bEcma), NULL, m_aTableStyleConf );
 }
 
 void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -4623,7 +4664,9 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
             aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
         }
 
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
+        std::map<sal_uInt16, css::table::BorderLine2> aEmptyMap; // empty styles map
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins,
+                      aEmptyMap );
 
         m_pSerializer->endElementNS( XML_w, XML_pgBorders );
     }
@@ -6804,7 +6847,9 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         // Open the paragraph's borders tag
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
 
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
+        std::map<sal_uInt16, css::table::BorderLine2> aEmptyMap; // empty styles map
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins,
+                      aEmptyMap );
 
         // Close the paragraph's borders tag
         m_pSerializer->endElementNS( XML_w, XML_pBdr );

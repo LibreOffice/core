@@ -39,6 +39,8 @@
 #include <oox/export/drawingml.hxx>
 #include <docxtablestyleexport.hxx>
 
+#include <com/sun/star/table/BorderLine2.hpp>
+
 #include <boost/scoped_ptr.hpp>
 
 class SwGrfNode;
@@ -867,6 +869,8 @@ private:
     sal_Int32 m_nRunSdtPrToken;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrTokenChildren;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrDataBindingAttrs;
+
+    std::map<sal_uInt16, css::table::BorderLine2> m_aTableStyleConf;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );

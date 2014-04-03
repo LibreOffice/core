@@ -340,7 +340,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         PropertyMap::iterator aTableStyleIter =
         m_aTableProperties->find(META_PROP_TABLE_STYLE_NAME);
-        uno::Sequence< beans::PropertyValue > aGrabBag( 1 );
+        uno::Sequence< beans::PropertyValue > aGrabBag( 5 );
         sal_Int32 nGrabBagSize = 0;
         if(aTableStyleIter != m_aTableProperties->end())
         {
@@ -365,6 +365,33 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 m_aTableProperties = pEmptyProps;
 
                 PropertyMapPtr pMergedProperties = lcl_SearchParentStyleSheetAndMergeProperties(pStyleSheet, pStyleSheetTable);
+
+                table::BorderLine2 aBorderLine;
+                TableInfo rStyleInfo;
+                if (lcl_extractTableBorderProperty(pMergedProperties, PROP_TOP_BORDER, rStyleInfo, aBorderLine))
+                {
+                    aGrabBag[1].Name = "TableStyleTopBorder";
+                    aGrabBag[1].Value = uno::makeAny( aBorderLine );
+                    nGrabBagSize++;
+                }
+                if (lcl_extractTableBorderProperty(pMergedProperties, PROP_BOTTOM_BORDER, rStyleInfo, aBorderLine))
+                {
+                    aGrabBag[2].Name = "TableStyleBottomBorder";
+                    aGrabBag[2].Value = uno::makeAny( aBorderLine );
+                    nGrabBagSize++;
+                }
+                if (lcl_extractTableBorderProperty(pMergedProperties, PROP_LEFT_BORDER, rStyleInfo, aBorderLine))
+                {
+                    aGrabBag[3].Name = "TableStyleLeftBorder";
+                    aGrabBag[3].Value = uno::makeAny( aBorderLine );
+                    nGrabBagSize++;
+                }
+                if (lcl_extractTableBorderProperty(pMergedProperties, PROP_RIGHT_BORDER, rStyleInfo, aBorderLine))
+                {
+                    aGrabBag[4].Name = "TableStyleRightBorder";
+                    aGrabBag[4].Value = uno::makeAny( aBorderLine );
+                    nGrabBagSize++;
+                }
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("mergedProps");
@@ -402,6 +429,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         if( nGrabBagSize > 0 )
         {
+            aGrabBag.realloc( nGrabBagSize );
             m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::makeAny( aGrabBag ) );
         }
 

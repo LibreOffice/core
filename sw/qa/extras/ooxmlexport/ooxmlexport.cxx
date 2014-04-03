@@ -1956,6 +1956,11 @@ DECLARE_OOXMLEXPORT_TEST(testTableThemePreservation, "table-theme-preservation.d
 
     // check table style has been preserved
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tblPr/w:tblStyle", "val", "Sombreadoclaro-nfasis1");
+    // check table style is not overwritten by other properties
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:tcPr/w:tcBorders/*", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[3]/w:tcPr/w:tcBorders/*", 0);
+    // check that one cell attribute present in the original document has been preserved
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/*", 1);
 
 }
 
