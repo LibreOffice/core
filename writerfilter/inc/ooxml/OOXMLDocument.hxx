@@ -73,7 +73,7 @@ namespace ooxml
 
 using namespace com::sun::star;
 
-class WRITERFILTER_OOXML_DLLPUBLIC OOXMLStream
+class OOXMLStream
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
@@ -117,7 +117,7 @@ public:
 
 };
 
-class WRITERFILTER_OOXML_DLLPUBLIC OOXMLDocument : public writerfilter::Reference<Stream>
+class OOXMLDocument : public writerfilter::Reference<Stream>
 {
 public:
     /**
@@ -253,7 +253,7 @@ public:
 };
 
 
-class WRITERFILTER_OOXML_DLLPUBLIC OOXMLDocumentFactory
+class OOXMLDocumentFactory
 {
 public:
     static OOXMLStream::Pointer_t

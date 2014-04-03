@@ -71,7 +71,7 @@ enum SourceDocumentType
     DOCUMENT_OOXML,
     DOCUMENT_RTF
 };
-class WRITERFILTER_OOXML_DLLPUBLIC DomainMapper : public LoggedProperties, public LoggedTable,
+class DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream
 {
     DomainMapper_Impl   *m_pImpl;
