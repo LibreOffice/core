@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_b891a554",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2014-04-03T18:03:02Z",
+      "side": 1,
+      "message": "This tag is not needed, since you don\u0027t introduce an icon.",
+      "revId": "158085be7abcf082ae679d64e1747f7e6eae23ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
