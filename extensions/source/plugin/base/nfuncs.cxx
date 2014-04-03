@@ -44,6 +44,7 @@
 
 #include <plugin/impl.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/scoped_array.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <osl/thread.h>
@@ -425,20 +426,19 @@ extern "C" {
             return NPERR_FILE_NOT_FOUND;
 
         PluginInputStream* pInputStream = (PluginInputStream*)pStream;
-        sal_Int8* pBytes = NULL;
+        boost::scoped_array<sal_Int8> pBytes;
         int   nBytes = 0;
         pPlugin->enterPluginCallback();
         while( rangeList )
         {
             if( pBytes && nBytes < (int)rangeList->length )
-            {
-                delete [] pBytes;
-                pBytes = NULL;
+                pBytes.reset();
+            if( ! pBytes ) {
+                nBytes = rangeList->length;
+                pBytes.reset(new sal_Int8[ nBytes ]);
             }
-            if( ! pBytes )
-                pBytes = new sal_Int8[ nBytes = rangeList->length ];
             int nRead =
-                pInputStream->read( rangeList->offset, pBytes, rangeList->length );
+                pInputStream->read( rangeList->offset, pBytes.get(), rangeList->length );
             int nPos = 0;
             int nNow;
             do
@@ -451,7 +451,7 @@ extern "C" {
                                stream,
                                rangeList->offset + nPos,
                                nNow,
-                               pBytes+nPos );
+                               pBytes.get()+nPos );
                 nPos += nNow;
                 nRead -= nNow;
             } while( nRead > 0 && nNow );
