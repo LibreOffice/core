@@ -1380,7 +1380,7 @@ void FmGridControl::DeleteSelectedRows()
 // XCurrentRecordListener
 void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEvent*/)
 {
-    SAL_INFO("svx.fmcmop", "FmGridControl::positioned");
+    SAL_INFO("svx.fmcomp", "FmGridControl::positioned");
     // position on the data source (force it to be done in the main thread)
     implAdjustInSolarThread(false);
 }
