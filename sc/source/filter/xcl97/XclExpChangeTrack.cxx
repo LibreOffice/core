@@ -1326,7 +1326,6 @@ public:
     virtual sal_Size    GetLen() const SAL_OVERRIDE;
     virtual sal_uInt16  GetNum() const SAL_OVERRIDE;
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE = 0;
 };
 
 sal_Size ExcXmlRecord::GetLen() const
