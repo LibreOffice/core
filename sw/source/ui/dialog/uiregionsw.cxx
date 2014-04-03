@@ -82,7 +82,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
             {
-                    OUString sString(pFmt->GetSection()->GetSectionName());
+                    const OUString sString(pFmt->GetSection()->GetSectionName());
                     if(pAvailNames)
                         pAvailNames->InsertEntry(sString);
                     rSubRegions.InsertEntry(sString);
@@ -102,7 +102,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
                 {
-                    OUString sString(pFmt->GetSection()->GetSectionName());
+                    const OUString sString(pFmt->GetSection()->GetSectionName());
                     if(pAvailNames)
                         pAvailNames->InsertEntry(sString);
                     rSubRegions.InsertEntry(sString);
@@ -211,8 +211,8 @@ void SectRepr::SetFile( const OUString& rFile )
     OUString sNewFile( INetURLObject::decode( rFile, '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-    OUString sOldFileName( m_SectionData.GetLinkFileName() );
-    OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
+    const OUString sOldFileName( m_SectionData.GetLinkFileName() );
+    const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
     if( !rFile.isEmpty() || !sSub.isEmpty() )
     {
@@ -220,8 +220,7 @@ void SectRepr::SetFile( const OUString& rFile )
         if( !rFile.isEmpty() ) // Filter only with FileName
             sNewFile += sOldFileName.getToken( 1, sfx2::cTokenSeparator );
 
-        sNewFile += OUString(sfx2::cTokenSeparator);
-        sNewFile += sSub;
+        sNewFile += OUString(sfx2::cTokenSeparator) + sSub;
     }
 
     m_SectionData.SetLinkFileName( sNewFile );
@@ -239,9 +238,9 @@ void SectRepr::SetFile( const OUString& rFile )
 void SectRepr::SetFilter( const OUString& rFilter )
 {
     OUString sNewFile;
-    OUString sOldFileName( m_SectionData.GetLinkFileName() );
-    OUString sFile( sOldFileName.getToken( 0, sfx2::cTokenSeparator ) );
-    OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
+    const OUString sOldFileName( m_SectionData.GetLinkFileName() );
+    const OUString sFile( sOldFileName.getToken( 0, sfx2::cTokenSeparator ) );
+    const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
     if( !sFile.isEmpty() )
         sNewFile = sFile + OUString(sfx2::cTokenSeparator) +
@@ -261,7 +260,7 @@ void SectRepr::SetSubRegion(const OUString& rSubRegion)
 {
     OUString sNewFile;
     OUString sOldFileName( m_SectionData.GetLinkFileName() );
-    OUString sFilter( sOldFileName.getToken( 1, sfx2::cTokenSeparator ) );
+    const OUString sFilter( sOldFileName.getToken( 1, sfx2::cTokenSeparator ) );
     sOldFileName = sOldFileName.getToken( 0, sfx2::cTokenSeparator );
 
     if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
@@ -282,29 +281,29 @@ void SectRepr::SetSubRegion(const OUString& rSubRegion)
 
 OUString SectRepr::GetFile() const
 {
-    OUString sLinkFile( m_SectionData.GetLinkFileName() );
-    if( !sLinkFile.isEmpty() )
+    const OUString sLinkFile( m_SectionData.GetLinkFileName() );
+
+    if( sLinkFile.isEmpty() )
     {
-        if (DDE_LINK_SECTION == m_SectionData.GetType())
-        {
-            sal_Int32 n = 0;
-            sLinkFile = sLinkFile.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
-            sLinkFile = sLinkFile.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
-        }
-        else
-            sLinkFile = INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
-                                        '%',
-                                        INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 );
+        return sLinkFile;
     }
-    return sLinkFile;
+    if (DDE_LINK_SECTION == m_SectionData.GetType())
+    {
+        sal_Int32 n = 0;
+        return sLinkFile.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n )
+                        .replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
+    }
+    return INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
+                                  '%',
+                                  INetURLObject::DECODE_UNAMBIGUOUS,
+                                  RTL_TEXTENCODING_UTF8 );
 }
 
 OUString SectRepr::GetSubRegion() const
 {
-    OUString sLinkFile( m_SectionData.GetLinkFileName() );
+    const OUString sLinkFile( m_SectionData.GetLinkFileName() );
     if( !sLinkFile.isEmpty() )
-        sLinkFile = sLinkFile.getToken( 2, sfx2::cTokenSeparator );
+        return sLinkFile.getToken( 2, sfx2::cTokenSeparator );
     return sLinkFile;
 }
 
@@ -413,7 +412,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
             bRet = sal_False;
             if (aPasswdDlg.Execute())
             {
-                OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                const OUString sNewPasswd( aPasswdDlg.GetPassword() );
                 ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
@@ -611,8 +610,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             }
             else
             {
-                OUString sTemp(rData.GetCondition());
-                if(sCondition != sTemp)
+                if(sCondition != rData.GetCondition())
                     bConditionValid = false;
                 bHiddenValid      = (bHidden == rData.IsHidden());
                 bProtectValid     = (bProtect == rData.IsProtectFlag());
@@ -684,8 +682,8 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         m_pCurName->SetText(pBox->GetEntryText(pEntry));
         m_pCurName->Enable();
         m_pDismiss->Enable();
-        OUString aFile = pRepr->GetFile();
-        OUString sSub = pRepr->GetSubRegion();
+        const OUString aFile = pRepr->GetFile();
+        const OUString sSub = pRepr->GetSubRegion();
         m_bSubRegionsFilled = false;
         m_pSubRegionED->Clear();
         if( !aFile.isEmpty() || !sSub.isEmpty() )
@@ -1039,7 +1037,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl)
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter =
-        new ::sfx2::DocumentInserter( OUString("swriter") );
+        new ::sfx2::DocumentInserter( "swriter" );
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
     return 0;
 }
@@ -1269,7 +1267,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
                 if(RET_OK == aPasswdDlg.Execute())
                 {
-                    OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                    const OUString sNewPasswd( aPasswdDlg.GetPassword() );
                     if( aPasswdDlg.GetConfirm() == sNewPasswd )
                     {
                         SvPasswordHelper::GetHashPassword( pRepr->GetTempPasswd(), sNewPasswd );
@@ -1312,7 +1310,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
     OSL_ENSURE(pEntry,"no entry found");
     if (pEntry)
     {
-        OUString aName = m_pCurName->GetText();
+        const OUString aName = m_pCurName->GetText();
         m_pTree->SetEntryText(pEntry,aName);
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetSectionName(aName);
@@ -1518,7 +1516,7 @@ short   SwInsertSectionTabDialog::Ok()
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
                     m_pSectionData->IsEditInReadonlyFlag()));
 
-        OUString sLinkFileName( m_pSectionData->GetLinkFileName() );
+        const OUString sLinkFileName( m_pSectionData->GetLinkFileName() );
         aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.getToken( 0, sfx2::cTokenSeparator )));
         aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.getToken( 1, sfx2::cTokenSeparator )));
         aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.getToken( 2, sfx2::cTokenSeparator )));
@@ -1625,8 +1623,8 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     {
         aSection.SetPassword(m_aNewPasswd);
     }
-    OUString sFileName = m_pFileNameED->GetText();
-    OUString sSubRegion = m_pSubRegionED->GetText();
+    const OUString sFileName = m_pFileNameED->GetText();
+    const OUString sSubRegion = m_pSubRegionED->GetText();
     sal_Bool bDDe = m_pDDECB->IsChecked();
     if(m_pFileCB->IsChecked() && (!sFileName.isEmpty() || !sSubRegion.isEmpty() || bDDe))
     {
@@ -1713,7 +1711,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
             aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if(RET_OK == aPasswdDlg.Execute())
             {
-                OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                const OUString sNewPasswd( aPasswdDlg.GetPassword() );
                 if( aPasswdDlg.GetConfirm() == sNewPasswd )
                 {
                     SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
@@ -1734,7 +1732,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 
 IMPL_LINK_NOARG_INLINE_START(SwInsertSectionTabPage, NameEditHdl)
 {
-    OUString aName = m_pCurName->GetText();
+    const OUString aName = m_pCurName->GetText();
     GetTabDialog()->GetOKButton().Enable(!aName.isEmpty() && m_pCurName->GetEntryPos( aName ) == USHRT_MAX);
     return 0;
 }
@@ -1775,8 +1773,7 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter(
-            OUString("swriter") );
+    m_pDocInserter = new ::sfx2::DocumentInserter( "swriter" );
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
 }
