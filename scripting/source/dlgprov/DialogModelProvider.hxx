@@ -42,12 +42,12 @@ private:
 
     // ::com::sun::star::container::XElementAccess:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XNameAccess:
     virtual ::com::sun::star::uno::Any SAL_CALL getByName(const OUString & aName) throw (css::uno::RuntimeException, css::container::NoSuchElementException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasByName(const OUString & aName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName(const OUString & aName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::container::XNameReplace:
     virtual void SAL_CALL replaceByName(const OUString & aName, const ::com::sun::star::uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
@@ -58,7 +58,7 @@ private:
 
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

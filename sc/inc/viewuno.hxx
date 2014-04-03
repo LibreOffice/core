@@ -98,10 +98,10 @@ public:
                             getFormController( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XForm >& Form )
                                     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL
+    virtual sal_Bool SAL_CALL
                             isFormDesignMode(  )
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   setFormDesignMode( ::sal_Bool DesignMode )
+    virtual void SAL_CALL   setFormDesignMode( sal_Bool DesignMode )
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XControlAccess

@@ -75,7 +75,7 @@ namespace canvas
             return BaseType::maCanvasHelper.getSize();
         }
 
-        virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

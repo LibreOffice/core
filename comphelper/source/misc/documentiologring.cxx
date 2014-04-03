@@ -144,7 +144,7 @@ OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeExc
     return getImplementationName_static();
 }
 
-::sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, aServiceName);
 }

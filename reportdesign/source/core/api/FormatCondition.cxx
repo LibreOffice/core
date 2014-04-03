@@ -124,13 +124,13 @@ void SAL_CALL OFormatCondition::removeVetoableChangeListener( const OUString& Pr
 }
 
 // XFormatCondition
-::sal_Bool SAL_CALL OFormatCondition::getEnabled() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFormatCondition::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bEnabled;
 }
 
-void SAL_CALL OFormatCondition::setEnabled( ::sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_ENABLED,_enabled,m_bEnabled);
 }

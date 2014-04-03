@@ -115,15 +115,15 @@ namespace {
         virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, sal_Bool Enable ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL travelNext(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL travelPrevious(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, ::sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL travelNext(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL travelPrevious(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL updateTravelUI(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ui::dialogs::XExecutableDialog
         virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -354,7 +354,7 @@ namespace {
     }
 
 
-    void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, ::sal_Bool i_Enable ) throw (RuntimeException, std::exception)
+    void SAL_CALL Wizard::enableButton( ::sal_Int16 i_WizardButton, sal_Bool i_Enable ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -402,7 +402,7 @@ namespace {
     }
 
 
-    void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, ::sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException, std::exception)
+    void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -432,7 +432,7 @@ namespace {
     }
 
 
-    ::sal_Bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL Wizard::advanceTo( ::sal_Int16 i_PageId ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -444,7 +444,7 @@ namespace {
     }
 
 
-    ::sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId ) throw (RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -468,7 +468,7 @@ namespace {
     }
 
 
-    void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, ::sal_Bool i_Final ) throw (NoSuchElementException, InvalidStateException, RuntimeException, std::exception)
+    void SAL_CALL Wizard::activatePath( ::sal_Int16 i_PathIndex, sal_Bool i_Final ) throw (NoSuchElementException, InvalidStateException, RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );

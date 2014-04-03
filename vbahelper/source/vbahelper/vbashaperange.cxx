@@ -34,7 +34,7 @@ class VbShapeRangeEnumHelper : public EnumerationHelper_BASE
         sal_Int32 nIndex;
 public:
     VbShapeRangeEnumHelper( const uno::Reference< XCollection >& xParent,  const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xParent( xParent ), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
-        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
@@ -244,7 +244,7 @@ uno::Reference< ov::msforms::XFillFormat > SAL_CALL ScVbaShapeRange::getFill() t
     throw uno::RuntimeException();
 }
 
-::sal_Bool SAL_CALL ScVbaShapeRange::getLockAspectRatio() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaShapeRange::getLockAspectRatio() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; /* ++index unreachable */ )
@@ -255,7 +255,7 @@ uno::Reference< ov::msforms::XFillFormat > SAL_CALL ScVbaShapeRange::getFill() t
     throw uno::RuntimeException();
 }
 
-void SAL_CALL ScVbaShapeRange::setLockAspectRatio( ::sal_Bool _lockaspectratio ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaShapeRange::setLockAspectRatio( sal_Bool _lockaspectratio ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; ++index )
@@ -265,7 +265,7 @@ void SAL_CALL ScVbaShapeRange::setLockAspectRatio( ::sal_Bool _lockaspectratio )
     }
 }
 
-::sal_Bool SAL_CALL ScVbaShapeRange::getLockAnchor() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaShapeRange::getLockAnchor() throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; /* ++index unreachable */ )
@@ -276,7 +276,7 @@ void SAL_CALL ScVbaShapeRange::setLockAspectRatio( ::sal_Bool _lockaspectratio )
     throw uno::RuntimeException();
 }
 
-void SAL_CALL ScVbaShapeRange::setLockAnchor( ::sal_Bool _lockanchor ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaShapeRange::setLockAnchor( sal_Bool _lockanchor ) throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = getCount();
     for ( sal_Int32 index = 1; index <= nLen; ++index )

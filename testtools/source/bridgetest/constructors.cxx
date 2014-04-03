@@ -67,7 +67,7 @@ private:
 void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     throw (css::uno::Exception, std::exception)
 {
-    ::sal_Bool arg0 = sal_Bool();
+    sal_Bool arg0 = sal_Bool();
     ::sal_Int8 arg1 = sal_Int8();
     ::sal_Int16 arg2 = sal_Int16();
     ::sal_uInt16 arg3 = sal_uInt16();
@@ -79,8 +79,8 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     double arg9 = double();
     OUString arg11;
     css::uno::Type arg12;
-    ::sal_Bool arg13 = sal_Bool();
-    css::uno::Sequence< ::sal_Bool > arg14;
+    sal_Bool arg13 = sal_Bool();
+    css::uno::Sequence< sal_Bool > arg14;
     css::uno::Sequence< ::sal_Int8 > arg15;
     css::uno::Sequence< ::sal_Int16 > arg16;
     css::uno::Sequence< ::sal_uInt16 > arg17;
@@ -93,23 +93,23 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     css::uno::Sequence< OUString > arg25;
     css::uno::Sequence< css::uno::Type > arg26;
     css::uno::Sequence< css::uno::Any > arg27;
-    ::sal_Bool arg27b = sal_Bool();
-    css::uno::Sequence< css::uno::Sequence< ::sal_Bool > > arg28;
+    sal_Bool arg27b = sal_Bool();
+    css::uno::Sequence< css::uno::Sequence< sal_Bool > > arg28;
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > > arg29;
-    ::sal_Bool arg29b = sal_Bool();
+    sal_Bool arg29b = sal_Bool();
     css::uno::Sequence< ::test::testtools::bridgetest::TestEnum > arg30;
     css::uno::Sequence< ::test::testtools::bridgetest::TestStruct > arg31;
     css::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< sal_Bool > > arg32;
     css::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > > arg33;
-    ::sal_Bool arg33b = sal_Bool();
+    sal_Bool arg33b = sal_Bool();
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > arg34;
     ::test::testtools::bridgetest::TestEnum arg35;
     ::test::testtools::bridgetest::TestStruct arg36;
-    ::test::testtools::bridgetest::TestPolyStruct< ::sal_Bool > arg37;
+    ::test::testtools::bridgetest::TestPolyStruct< sal_Bool > arg37;
     ::test::testtools::bridgetest::TestPolyStruct< css::uno::Any > arg38;
-    ::sal_Bool arg38b = sal_Bool();
+    sal_Bool arg38b = sal_Bool();
     css::uno::Reference< css::uno::XInterface > arg39;
     if (!(arguments.getLength() == 40
           && (arguments[0] >>= arg0) && arg0
@@ -230,7 +230,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ttb::TestPolyStruct< css::uno::Type > arg0;
     ttb::TestPolyStruct< css::uno::Any > arg1;
     css::uno::Any arg1b(sal_True);
-    ttb::TestPolyStruct< ::sal_Bool > arg2;
+    ttb::TestPolyStruct< sal_Bool > arg2;
     ttb::TestPolyStruct< ::sal_Int8 > arg3;
     ttb::TestPolyStruct< ::sal_Int16 > arg4;
     ttb::TestPolyStruct< ::sal_Int32 > arg5;
@@ -253,7 +253,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
         ttb::TestPolyStruct<sal_Unicode> > arg17;
     ttb::TestPolyStruct<css::uno::Sequence< css::uno::Type > > arg18;
     ttb::TestPolyStruct<css::uno::Sequence<css::uno::Any> > arg19;
-    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Bool > > arg20;
+    ttb::TestPolyStruct<css::uno::Sequence< sal_Bool > > arg20;
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int8 > > arg21;
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int16 > > arg22;
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int32 > > arg23;

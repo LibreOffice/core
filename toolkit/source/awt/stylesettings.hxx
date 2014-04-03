@@ -135,8 +135,8 @@ namespace toolkit
         virtual void SAL_CALL setWindowTextColor( ::sal_Int32 _windowtextcolor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::sal_Int32 SAL_CALL getWorkspaceColor() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setWorkspaceColor( ::sal_Int32 _workspacecolor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL getHighContrastMode() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setHighContrastMode( ::sal_Bool _highcontrastmode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL getHighContrastMode() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setHighContrastMode( sal_Bool _highcontrastmode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::FontDescriptor SAL_CALL getApplicationFont() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setApplicationFont( const ::com::sun::star::awt::FontDescriptor& _applicationfont ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::FontDescriptor SAL_CALL getHelpFont() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

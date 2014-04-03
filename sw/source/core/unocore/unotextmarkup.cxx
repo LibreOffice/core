@@ -477,7 +477,7 @@ uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString & aKey) throw (uno::R
     return (*aIter).second;
 }
 
-::sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const OUString & aKey) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const OUString & aKey) throw (uno::RuntimeException, std::exception)
 {
     return maMap.find( aKey ) != maMap.end();
 }

@@ -309,7 +309,7 @@ namespace pcr
     }
 
 
-    ::sal_Bool SAL_CALL PropertyComposer::isComposable( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL PropertyComposer::isComposable( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->isComposable( _rPropertyName );

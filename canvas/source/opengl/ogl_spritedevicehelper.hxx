@@ -75,8 +75,8 @@ namespace oglcanvas
 
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
         void        destroyBuffers(  );
-        ::sal_Bool  showBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
-        ::sal_Bool  switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
+        sal_Bool  showBuffer( bool bIsVisible, sal_Bool bUpdateAll );
+        sal_Bool  switchBuffer( bool bIsVisible, sal_Bool bUpdateAll );
 
         ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;

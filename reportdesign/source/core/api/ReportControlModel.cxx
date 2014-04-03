@@ -56,7 +56,7 @@ void OReportControlModel::removeContainerListener( const uno::Reference< contain
     aContainerListeners.removeInterface(xListener);
 }
 
-::sal_Bool OReportControlModel::hasElements(  ) throw (uno::RuntimeException)
+sal_Bool OReportControlModel::hasElements(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return !m_aFormatConditions.empty();

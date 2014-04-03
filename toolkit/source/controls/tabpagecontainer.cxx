@@ -198,7 +198,7 @@ uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  ) throw (un
     return ::getCppuType(static_cast<  Reference< com::sun::star::awt::XControlModel>* >(NULL));
 }
 
-::sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return !m_aTabPageVector.empty();
@@ -266,7 +266,7 @@ void SAL_CALL UnoControlTabPageContainer::setActiveTabPageID( ::sal_Int16 _activ
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageCount();
 }
-::sal_Bool SAL_CALL UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );

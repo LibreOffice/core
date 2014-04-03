@@ -79,8 +79,8 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStyle
-    virtual ::sal_Bool SAL_CALL isUserDefined() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isInUse() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isUserDefined() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isInUse() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getParentStyle() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (NoSuchElementException, RuntimeException, std::exception) SAL_OVERRIDE;
 

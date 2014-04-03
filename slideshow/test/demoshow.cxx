@@ -234,7 +234,7 @@ private:
         return uno::Type();
     }
 
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
         return false;
     }

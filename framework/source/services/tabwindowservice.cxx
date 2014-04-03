@@ -68,7 +68,7 @@ struct TTabPageInfo
     public:
 
         ::sal_Int32                                   m_nIndex;
-        ::sal_Bool                                    m_bCreated;
+        sal_Bool                                    m_bCreated;
         FwkTabPage*                                   m_pPage;
         css::uno::Sequence< css::beans::NamedValue >  m_lProperties;
 };

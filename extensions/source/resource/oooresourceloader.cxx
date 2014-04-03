@@ -123,11 +123,11 @@ namespace extensions { namespace resource
         // XNameAccess (base of XResourceBundle)
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XElementAccess (base of XNameAccess)
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         /** retrievs the element with the given key, without asking our parent bundle
@@ -299,7 +299,7 @@ namespace extensions { namespace resource
         return Sequence< OUString >( );
     }
 
-    ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasByName( const OUString& _key ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OpenOfficeResourceBundle::hasByName( const OUString& _key ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -319,12 +319,12 @@ namespace extensions { namespace resource
         return ::cppu::UnoType< Any >::get();
     }
 
-    ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasElements(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OpenOfficeResourceBundle::hasElements(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_FAIL( "OpenOfficeResourceBundle::hasElements: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
-        return ::sal_Bool( );
+        return sal_Bool( );
     }
 
 }}

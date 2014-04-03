@@ -400,12 +400,12 @@ uno::Sequence< OUString > SAL_CALL DataProviderHandler::getActuatingProperties()
     return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
 
-::sal_Bool SAL_CALL DataProviderHandler::isComposable( const OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
+sal_Bool SAL_CALL DataProviderHandler::isComposable( const OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_pInfoService->isComposable( _rPropertyName, m_xFormComponentHandler );
 }
 
-inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteractivePropertySelection(const OUString & PropertyName, ::sal_Bool Primary, uno::Any & out_Data, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
+inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteractivePropertySelection(const OUString & PropertyName, sal_Bool Primary, uno::Any & out_Data, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
 {
     if ( !_rxInspectorUI.is() )
         throw lang::NullPointerException();
@@ -432,7 +432,7 @@ inspection::InteractiveSelectionResult SAL_CALL DataProviderHandler::onInteracti
     return eResult;
 }
 
-void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI, ::sal_Bool FirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
+void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & InspectorUI, sal_Bool FirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -480,7 +480,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
     }
 }
 
-::sal_Bool SAL_CALL DataProviderHandler::suspend(::sal_Bool Suspend) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DataProviderHandler::suspend(sal_Bool Suspend) throw (uno::RuntimeException, std::exception)
 {
     return m_xFormComponentHandler->suspend(Suspend);
 }

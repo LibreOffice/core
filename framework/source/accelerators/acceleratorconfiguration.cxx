@@ -325,7 +325,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 }
 
 
-::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
+sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
@@ -333,7 +333,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 }
 
 
-::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
+sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::io::XStream > xStream;
@@ -356,7 +356,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 }
 
 
-::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
+sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
@@ -962,14 +962,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 }
 
 
-::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
+sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 
-::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
+sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
     throw(css::uno::RuntimeException, std::exception)
 {
     return sal_False;
@@ -983,7 +983,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 }
 
 
-::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
+sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");

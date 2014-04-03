@@ -75,7 +75,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction ) throw (uno::Run
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bVisible = sal_True;
@@ -85,7 +85,7 @@ ScVbaCommandBarControl::getVisible() throw (uno::RuntimeException, std::exceptio
     return bVisible;
 }
 void SAL_CALL
-ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
+ScVbaCommandBarControl::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
     if( aValue.hasValue() )
@@ -95,7 +95,7 @@ ScVbaCommandBarControl::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeExc
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bEnabled = sal_True;
@@ -129,7 +129,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: need to check if the item before this item is of type 'separator'
@@ -138,7 +138,7 @@ ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException, std::
 }
 
 void SAL_CALL
-ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::RuntimeException, std::exception)
+ScVbaCommandBarControl::setBeginGroup( sal_Bool _begin ) throw (css::uno::RuntimeException, std::exception)
 {
     if( getBeginGroup() != _begin )
     {

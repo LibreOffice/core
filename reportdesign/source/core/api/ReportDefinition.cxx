@@ -256,8 +256,8 @@ public:
     ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
     // XStyle
-    ::sal_Bool SAL_CALL isUserDefined(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL isUserDefined(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     OUString SAL_CALL getParentStyle(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (container::NoSuchElementException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -413,12 +413,12 @@ void OStyle::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, uno::Any& /*_rD
 }
 
 // XStyle
-::sal_Bool SAL_CALL OStyle::isUserDefined(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStyle::isUserDefined(  ) throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-::sal_Bool SAL_CALL OStyle::isInUse(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStyle::isInUse(  ) throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
@@ -984,24 +984,24 @@ void SAL_CALL OReportDefinition::setFilter( const OUString& _filter ) throw (uno
     set(PROPERTY_FILTER,_filter,m_pImpl->m_sFilter);
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getEscapeProcessing() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::getEscapeProcessing() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_bEscapeProcessing;
 }
 
-void SAL_CALL OReportDefinition::setEscapeProcessing( ::sal_Bool _escapeprocessing ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::setEscapeProcessing( sal_Bool _escapeprocessing ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_ESCAPEPROCESSING,_escapeprocessing,m_pImpl->m_bEscapeProcessing);
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getReportHeaderOn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::getReportHeaderOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xReportHeader.is();
 }
 
-void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::setReportHeaderOn( sal_Bool _reportheaderon ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_reportheaderon) != m_pImpl->m_xReportHeader.is() )
     {
@@ -1009,13 +1009,13 @@ void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon )
     }
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getReportFooterOn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::getReportFooterOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xReportFooter.is();
 }
 
-void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::setReportFooterOn( sal_Bool _reportfooteron ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_reportfooteron) != m_pImpl->m_xReportFooter.is() )
     {
@@ -1023,13 +1023,13 @@ void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron )
     }
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getPageHeaderOn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::getPageHeaderOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xPageHeader.is();
 }
 
-void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::setPageHeaderOn( sal_Bool _pageheaderon ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_pageheaderon) != m_pImpl->m_xPageHeader.is() )
     {
@@ -1037,13 +1037,13 @@ void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) thr
     }
 }
 
-::sal_Bool SAL_CALL OReportDefinition::getPageFooterOn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::getPageFooterOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_pImpl->m_xPageFooter.is();
 }
 
-void SAL_CALL OReportDefinition::setPageFooterOn( ::sal_Bool _pagefooteron ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::setPageFooterOn( sal_Bool _pagefooteron ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_pagefooteron) != m_pImpl->m_xPageFooter.is() )
     {
@@ -1203,7 +1203,7 @@ void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util
 }
 
 // XCloseable
-void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::close( sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1246,7 +1246,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
 }
 
 // XModel
-::sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, const uno::Sequence< beans::PropertyValue >& _aArguments ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::attachResource( const OUString& /*_rURL*/, const uno::Sequence< beans::PropertyValue >& _aArguments ) throw (uno::RuntimeException, std::exception)
 {
     // LLA: we had a deadlock problem in our context, so we get the SolarMutex earlier.
     SolarMutexGuard aSolarGuard;
@@ -1339,7 +1339,7 @@ void SAL_CALL OReportDefinition::unlockControllers(  ) throw (uno::RuntimeExcept
     m_pImpl->m_bControllersLocked = sal_False;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::hasControllersLocked(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::hasControllersLocked(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -1888,7 +1888,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
 }
 
 // XModifiable
-::sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
@@ -1898,7 +1898,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     return bWasEnabled;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
@@ -1908,7 +1908,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     return bWasEnabled;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::isSetModifiedEnabled(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::isSetModifiedEnabled(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
@@ -1917,14 +1917,14 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
 }
 
 // XModifiable
-::sal_Bool SAL_CALL OReportDefinition::isModified(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::isModified(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_bModified;
 }
 
-void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::setModified( sal_Bool _bModified ) throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
@@ -2841,7 +2841,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
     return aRet;
 }
 
-::sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor ) throw (uno::RuntimeException, std::exception)
 {
     return aFlavor.MimeType == "image/png";
 }

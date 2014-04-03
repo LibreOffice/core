@@ -84,7 +84,7 @@ public:
 
     // ::com::sun::star::container::XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::awt::XControlContainer
     void SAL_CALL setStatusText( const OUString& StatusText ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

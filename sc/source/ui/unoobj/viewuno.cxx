@@ -339,7 +339,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     return xController;
 }
 
-::sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScViewPaneBase::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -352,7 +352,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFor
     return bIsFormDesignMode;
 }
 
-void SAL_CALL ScViewPaneBase::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScViewPaneBase::setFormDesignMode( sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

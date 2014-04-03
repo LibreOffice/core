@@ -82,7 +82,7 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 // XSubToolbarController
 
 
-::sal_Bool SAL_CALL SvxTbxCtlAlign::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvxTbxCtlAlign::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // We control a sub-toolbar therefor, we have to return true.
     return sal_True;

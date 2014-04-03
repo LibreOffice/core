@@ -176,12 +176,12 @@ void SAL_CALL OShape::setControlBackground( ::sal_Int32 /*_backgroundcolor*/ ) t
     throw beans::UnknownPropertyException();
 }
 
-::sal_Bool SAL_CALL OShape::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OShape::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OShape::setControlBackgroundTransparent( ::sal_Bool /*_controlbackgroundtransparent*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OShape::setControlBackgroundTransparent( sal_Bool /*_controlbackgroundtransparent*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
@@ -278,13 +278,13 @@ void SAL_CALL OShape::setDataField( const OUString& /*_datafield*/ ) throw (lang
     throw beans::UnknownPropertyException();
 }
 
-::sal_Bool SAL_CALL OShape::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OShape::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.bPrintWhenGroupChange;
 }
 
-void SAL_CALL OShape::setPrintWhenGroupChange( ::sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OShape::setPrintWhenGroupChange( sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
@@ -362,7 +362,7 @@ uno::Type SAL_CALL OShape::getElementType(  ) throw (uno::RuntimeException, std:
     return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OShape::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OShape::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aProps.hasElements();
 }
@@ -440,13 +440,13 @@ void SAL_CALL OShape::setZOrder( ::sal_Int32 _zorder ) throw (uno::RuntimeExcept
     set(PROPERTY_ZORDER,_zorder,m_nZOrder);
 }
 
-::sal_Bool SAL_CALL OShape::getOpaque() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OShape::getOpaque() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bOpaque;
 }
 
-void SAL_CALL OShape::setOpaque( ::sal_Bool _opaque ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OShape::setOpaque( sal_Bool _opaque ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     set(PROPERTY_OPAQUE,_opaque,m_bOpaque);

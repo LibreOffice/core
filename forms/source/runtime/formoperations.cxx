@@ -189,7 +189,7 @@ namespace frm
         return getImplementationName_Static();
     }
 
-    ::sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _ServiceName);
     }
@@ -416,7 +416,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -886,7 +886,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::commitCurrentRecord( ::sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException, std::exception)
+    sal_Bool SAL_CALL FormOperations::commitCurrentRecord( sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException, std::exception)
     {
         MethodGuard aGuard( *this );
         _out_rRecordInserted = sal_False;
@@ -895,7 +895,7 @@ namespace frm
     }
 
 
-    bool FormOperations::impl_commitCurrentRecord_throw( ::sal_Bool* _pRecordInserted ) const
+    bool FormOperations::impl_commitCurrentRecord_throw( sal_Bool* _pRecordInserted ) const
     {
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
 
@@ -921,7 +921,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::commitCurrentControl() throw (RuntimeException, SQLException, std::exception)
+    sal_Bool SAL_CALL FormOperations::commitCurrentControl() throw (RuntimeException, SQLException, std::exception)
     {
         MethodGuard aGuard( *this );
         return impl_commitCurrentControl_throw();
@@ -970,7 +970,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException, std::exception)
+    sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException, std::exception)
     {
         sal_Bool bIs = sal_False;
         try
@@ -986,7 +986,7 @@ namespace frm
     }
 
 
-    ::sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException, std::exception)
+    sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException, std::exception)
     {
         sal_Bool bIs = sal_False;
         try

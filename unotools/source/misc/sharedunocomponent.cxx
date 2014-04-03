@@ -86,7 +86,7 @@ namespace utl
         virtual ~CloseableComponentImpl();
 
         // XCloseListener overridables
-        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener overridables
@@ -171,7 +171,7 @@ namespace utl
     #ifdef DBG_UTIL
     Source
     #endif
-    , ::sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException, std::exception)
+    , sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException, std::exception)
     {
         // as long as we live, somebody wants to keep the object alive. So, veto the
         // closing

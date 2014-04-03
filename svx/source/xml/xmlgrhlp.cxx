@@ -946,7 +946,7 @@ protected:
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1023,7 +1023,7 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
     return OUString("com.sun.star.comp.Svx.GraphicExportHelper");
 }
 
-::sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);

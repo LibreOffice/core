@@ -146,7 +146,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
     return lDispatcher;
 }
 
-::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
+sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
     return aURL.Complete == CMD_UNO_SHOWSTARTMODULE;
 }

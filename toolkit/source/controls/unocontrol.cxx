@@ -716,22 +716,22 @@ awt::Size SAL_CALL UnoControl::getOutputSize(  ) throw (RuntimeException, std::e
     return lcl_askPeer( getPeer(), &XWindow2::getOutputSize, awt::Size() );
 }
 
-::sal_Bool SAL_CALL UnoControl::isVisible(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControl::isVisible(  ) throw (RuntimeException, std::exception)
 {
     return lcl_askPeer( getPeer(), &XWindow2::isVisible, maComponentInfos.bVisible );
 }
 
-::sal_Bool SAL_CALL UnoControl::isActive(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControl::isActive(  ) throw (RuntimeException, std::exception)
 {
     return lcl_askPeer( getPeer(), &XWindow2::isActive, sal_False );
 }
 
-::sal_Bool SAL_CALL UnoControl::isEnabled(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControl::isEnabled(  ) throw (RuntimeException, std::exception)
 {
     return lcl_askPeer( getPeer(), &XWindow2::isEnabled, maComponentInfos.bEnable );
 }
 
-::sal_Bool SAL_CALL UnoControl::hasFocus(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControl::hasFocus(  ) throw (RuntimeException, std::exception)
 {
     return lcl_askPeer( getPeer(), &XWindow2::hasFocus, sal_False );
 }

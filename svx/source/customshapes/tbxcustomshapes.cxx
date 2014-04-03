@@ -138,7 +138,7 @@ void SvxTbxCtlCustomShapes::Select(sal_uInt16 /*nSelectModifier*/)
 }
 
 
-::sal_Bool SAL_CALL SvxTbxCtlCustomShapes::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvxTbxCtlCustomShapes::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // We control a sub-toolbar therefore we have to return true.
     return sal_True;

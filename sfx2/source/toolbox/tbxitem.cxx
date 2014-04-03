@@ -599,7 +599,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 }
 
 // XSubToolbarController
-::sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }

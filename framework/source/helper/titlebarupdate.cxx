@@ -200,7 +200,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
 
 
-::sal_Bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
+sal_Bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                                       TModuleInfo&                               rInfo )
 {
     if ( ! xFrame.is ())
@@ -219,7 +219,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
         // Note: If we could retrieve a module id ... everything is OK.
         // UIName and Icon ID are optional values !
-        ::sal_Bool bSuccess = !rInfo.sID.isEmpty();
+        sal_Bool bSuccess = !rInfo.sID.isEmpty();
         return bSuccess;
     }
     catch(const css::uno::Exception&)

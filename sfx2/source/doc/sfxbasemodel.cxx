@@ -2345,7 +2345,7 @@ Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getDia
     return xDialogLibraries;
 }
 
-::sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException, std::exception)
 {
     SfxModelGuard aGuard( *this );
 

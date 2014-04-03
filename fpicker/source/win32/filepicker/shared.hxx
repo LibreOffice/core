@@ -25,7 +25,7 @@
 const OUString BACKSLASH( "\\" );
 const OUString FILTER_SEPARATOR( "------------------------------------------" );
 const OUString ALL_FILES_WILDCARD( "*.*" );
-const ::sal_Bool      ALLOW_DUPLICATES   = sal_True;
+const sal_Bool      ALLOW_DUPLICATES   = sal_True;
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

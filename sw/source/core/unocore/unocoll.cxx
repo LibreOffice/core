@@ -179,7 +179,7 @@ public:
     SwVbaProjectNameProvider()
     {
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
     }
@@ -227,7 +227,7 @@ public:
     {
         return ::getCppuType((const OUString*)0);
     }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
 
         return ( mTemplateToProject.size() > 0 );
@@ -244,7 +244,7 @@ public:
         // #FIXME #TODO is the code name for ThisDocument read anywhere?
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         // #FIXME #TODO we really need to be checking against the codename for
         // ThisDocument
@@ -271,7 +271,7 @@ public:
     }
     // XElemenAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return uno::Type(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE { return sal_True; }
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE { return sal_True; }
 
 };
 

@@ -129,7 +129,7 @@ namespace xmloff
             // XPropertySetInfo
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
 
         OMergedPropertySetInfo::OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo )
@@ -168,7 +168,7 @@ namespace xmloff
             return m_xMasterInfo->getPropertyByName( aName );
         }
 
-        ::sal_Bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name ) throw (RuntimeException, std::exception)
+        sal_Bool SAL_CALL OMergedPropertySetInfo::hasPropertyByName( const OUString& Name ) throw (RuntimeException, std::exception)
         {
             if ( Name == getParaAlignProperty() )
                 return sal_True;

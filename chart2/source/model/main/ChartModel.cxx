@@ -1149,7 +1149,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
     return aRet;
 }
 
-::sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw (uno::RuntimeException, std::exception)
 {
     return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);

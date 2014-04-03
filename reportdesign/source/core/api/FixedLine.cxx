@@ -320,22 +320,22 @@ void SAL_CALL OFixedLine::setControlBackground( ::sal_Int32 /*_backgroundcolor*/
     throw beans::UnknownPropertyException();
 }
 
-::sal_Bool SAL_CALL OFixedLine::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFixedLine::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setControlBackgroundTransparent( ::sal_Bool /*_controlbackgroundtransparent*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFixedLine::setControlBackgroundTransparent( sal_Bool /*_controlbackgroundtransparent*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-::sal_Bool SAL_CALL OFixedLine::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFixedLine::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
 
-void SAL_CALL OFixedLine::setPrintWhenGroupChange( ::sal_Bool /*_printwhengroupchange*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFixedLine::setPrintWhenGroupChange( sal_Bool /*_printwhengroupchange*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
@@ -461,7 +461,7 @@ uno::Type SAL_CALL OFixedLine::getElementType(  ) throw (uno::RuntimeException, 
     return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OFixedLine::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFixedLine::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aProps.hasElements();
 }
@@ -557,11 +557,11 @@ void SAL_CALL OFixedLine::setHyperLinkName(const OUString & /*the_value*/) throw
 
 NO_REPORTCONTROLFORMAT_IMPL(OFixedLine)
 
-::sal_Bool SAL_CALL OFixedLine::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFixedLine::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setPrintRepeatedValues( ::sal_Bool /*_printrepeatedvalues*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFixedLine::setPrintRepeatedValues( sal_Bool /*_printrepeatedvalues*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException();
 }

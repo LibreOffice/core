@@ -584,7 +584,7 @@ void InternalDataProvider::createDefaultData()
 }
 
 // ____ XDataProvider ____
-::sal_Bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
+sal_Bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
     throw (uno::RuntimeException, std::exception)
 {
     return true;
@@ -725,7 +725,7 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     return aArguments;
 }
 
-::sal_Bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
+sal_Bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
     throw (uno::RuntimeException, std::exception)
 {
     return true;
@@ -773,7 +773,7 @@ Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelec
 }
 
 // ____ XInternalDataProvider ____
-::sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
+sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUString& aRange )
     throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bResult = false;
@@ -1439,7 +1439,7 @@ double SAL_CALL InternalDataProvider::getNotANumber()
     return fNan;
 }
 
-::sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
+sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
     throw (uno::RuntimeException, std::exception)
 {
     return ::rtl::math::isNan( nNumber )

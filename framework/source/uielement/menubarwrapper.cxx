@@ -256,7 +256,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return ::getCppuType(( Reference< XDispatchProvider >*)0);
 }
 
-::sal_Bool SAL_CALL MenuBarWrapper::hasElements()
+sal_Bool SAL_CALL MenuBarWrapper::hasElements()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
@@ -316,7 +316,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return aSeq;
 }
 
-::sal_Bool SAL_CALL MenuBarWrapper::hasByName(
+sal_Bool SAL_CALL MenuBarWrapper::hasByName(
     const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

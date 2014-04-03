@@ -205,7 +205,7 @@ namespace pcr
     }
 
 
-    ::sal_Bool SAL_CALL ImplInspectorModel::getHasHelpSection() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::getHasHelpSection() throw (RuntimeException, std::exception)
     {
         return m_pProperties->hasHelpSection();
     }
@@ -223,18 +223,18 @@ namespace pcr
     }
 
 
-    ::sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         return m_pProperties->isReadOnly();
     }
 
 
-    void SAL_CALL ImplInspectorModel::setIsReadOnly( ::sal_Bool _IsReadOnly ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool _IsReadOnly ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( _IsReadOnly ) );
     }
 
-    ::sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }

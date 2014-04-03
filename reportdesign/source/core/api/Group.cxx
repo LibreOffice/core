@@ -115,24 +115,24 @@ void SAL_CALL OGroup::disposing()
 }
 
 // XGroup
-::sal_Bool SAL_CALL OGroup::getSortAscending() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroup::getSortAscending() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.m_eSortAscending;
 }
 
-void SAL_CALL OGroup::setSortAscending( ::sal_Bool _sortascending ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroup::setSortAscending( sal_Bool _sortascending ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_SORTASCENDING,_sortascending,m_aProps.m_eSortAscending);
 }
 
-::sal_Bool SAL_CALL OGroup::getHeaderOn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroup::getHeaderOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xHeader.is();
 }
 
-void SAL_CALL OGroup::setHeaderOn( ::sal_Bool _headeron ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroup::setHeaderOn( sal_Bool _headeron ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_headeron) != m_xHeader.is() )
     {
@@ -141,13 +141,13 @@ void SAL_CALL OGroup::setHeaderOn( ::sal_Bool _headeron ) throw (uno::RuntimeExc
     }
 }
 
-::sal_Bool SAL_CALL OGroup::getFooterOn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroup::getFooterOn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xFooter.is();
 }
 
-void SAL_CALL OGroup::setFooterOn( ::sal_Bool _footeron ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroup::setFooterOn( sal_Bool _footeron ) throw (uno::RuntimeException, std::exception)
 {
     if ( bool(_footeron) != m_xFooter.is() )
     {
@@ -241,25 +241,25 @@ void SAL_CALL OGroup::setExpression( const OUString& _expression ) throw (uno::R
     set(PROPERTY_EXPRESSION,_expression,m_aProps.m_sExpression);
 }
 
-::sal_Bool SAL_CALL OGroup::getStartNewColumn() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroup::getStartNewColumn() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.m_bStartNewColumn;
 }
 
-void SAL_CALL OGroup::setStartNewColumn( ::sal_Bool _startnewcolumn ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroup::setStartNewColumn( sal_Bool _startnewcolumn ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_STARTNEWCOLUMN,_startnewcolumn,m_aProps.m_bStartNewColumn);
 }
 
 
-::sal_Bool SAL_CALL OGroup::getResetPageNumber() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroup::getResetPageNumber() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.m_bResetPageNumber;
 }
 
-void SAL_CALL OGroup::setResetPageNumber( ::sal_Bool _resetpagenumber ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroup::setResetPageNumber( sal_Bool _resetpagenumber ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_RESETPAGENUMBER,_resetpagenumber,m_aProps.m_bResetPageNumber);
 }

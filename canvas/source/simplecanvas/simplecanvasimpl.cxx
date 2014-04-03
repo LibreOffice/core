@@ -184,8 +184,8 @@ namespace
         // Ifc XSimpleCanvas
         virtual void SAL_CALL selectFont( const OUString& sFontName,
                                           double                 size,
-                                          ::sal_Bool             bold,
-                                          ::sal_Bool             italic ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+                                          sal_Bool             bold,
+                                          sal_Bool             italic ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 

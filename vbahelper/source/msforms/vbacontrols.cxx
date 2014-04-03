@@ -118,7 +118,7 @@ public:
         return cppu::UnoType<awt::XControl>::get();
     }
 
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( !mControls.empty() );
     }
@@ -136,7 +136,7 @@ public:
         return msNames;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         ControlIndexMap::iterator it = mIndices.find( aName );
         return it != mIndices.end();
@@ -186,7 +186,7 @@ public:
     mfOffsetY( fOffsetY ),
     nIndex( 0 ) {}
 
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }

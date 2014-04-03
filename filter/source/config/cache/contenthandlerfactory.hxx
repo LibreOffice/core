@@ -132,12 +132,12 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContain
         { return BaseContainer::getByName(aName); }
       virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::getElementNames(); }
-      virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::hasByName(aName); }
 
       virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::getElementType(); }
-      virtual ::sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+      virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return BaseContainer::hasElements(); }
 
       virtual ::com::sun::star::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE

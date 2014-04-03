@@ -186,8 +186,8 @@ public: // XTestSequence
     virtual void SAL_CALL setAFloat( float _afloat ) throw (RuntimeException);
     virtual double SAL_CALL getADouble() throw (RuntimeException);
     virtual void SAL_CALL setADouble( double _adouble ) throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL getABool() throw (RuntimeException);
-    virtual void SAL_CALL setABool( ::sal_Bool _abool ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL getABool() throw (RuntimeException);
+    virtual void SAL_CALL setABool( sal_Bool _abool ) throw (RuntimeException);
     virtual ::sal_Int16 SAL_CALL getAShort() throw (RuntimeException);
     virtual void SAL_CALL setAShort( ::sal_Int16 _ashort ) throw (RuntimeException);
     virtual ::sal_uInt16 SAL_CALL getAUShort() throw (RuntimeException);
@@ -743,12 +743,12 @@ void SAL_CALL OComponent::setADouble( double _adouble ) throw (RuntimeException)
     m_attr_double = _adouble;
 }
 
-::sal_Bool SAL_CALL OComponent::getABool() throw (RuntimeException)
+sal_Bool SAL_CALL OComponent::getABool() throw (RuntimeException)
 {
     return m_attr_bool;
 }
 
-void SAL_CALL OComponent::setABool( ::sal_Bool _abool ) throw (RuntimeException)
+void SAL_CALL OComponent::setABool( sal_Bool _abool ) throw (RuntimeException)
 {
     m_attr_bool = _abool;
 }

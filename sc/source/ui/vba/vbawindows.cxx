@@ -77,7 +77,7 @@ public:
         m_it = m_components.begin();
     }
     // XEnumeration
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return m_it != m_components.end();
     }
@@ -162,7 +162,7 @@ public:
         return cppu::UnoType<sheet::XSpreadsheetDocument>::get();
     }
 
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( !m_windows.empty() );
     }
@@ -188,7 +188,7 @@ public:
         return names;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());

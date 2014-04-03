@@ -178,7 +178,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)
     // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
     css::uno::Reference< css::frame::XDesktop > xDesktop(xParentFrame, css::uno::UNO_QUERY);
-    ::sal_Bool bTopLevelDocumentWindow = (
+    sal_Bool bTopLevelDocumentWindow = (
                                             sRightName.isEmpty() &&
                                             (
                                                 (! xParentFrame.is() )    ||

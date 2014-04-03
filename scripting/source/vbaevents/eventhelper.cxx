@@ -487,12 +487,12 @@ public:
     // XNameAccess
     virtual Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return getCppuType(static_cast< const OUString * >(0) ); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
@@ -583,7 +583,7 @@ public:
     virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
     // XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -728,7 +728,7 @@ EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::Invocatio
 
 // XCloseListener
 void SAL_CALL
-EventListener::queryClosing( const lang::EventObject& /*Source*/, ::sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
+EventListener::queryClosing( const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     //Nothing to do
 }

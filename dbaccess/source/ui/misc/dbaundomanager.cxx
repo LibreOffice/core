@@ -229,13 +229,13 @@ namespace dbaui
         m_pImpl->aUndoHelper.redo( aGuard );
     }
 
-    ::sal_Bool SAL_CALL UndoManager::isUndoPossible(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL UndoManager::isUndoPossible(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.isUndoPossible();
     }
 
-    ::sal_Bool SAL_CALL UndoManager::isRedoPossible(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL UndoManager::isRedoPossible(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.isRedoPossible();
@@ -307,7 +307,7 @@ namespace dbaui
         m_pImpl->aUndoHelper.unlock();
     }
 
-    ::sal_Bool SAL_CALL UndoManager::isLocked(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL UndoManager::isLocked(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.isLocked();

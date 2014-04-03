@@ -96,7 +96,7 @@ namespace comphelper
         return impl_staticGetImplementationName();
     }
 
-    ::sal_Bool SAL_CALL OIHWrapNoFilterDialog::supportsService( const OUString& ServiceName )
+    sal_Bool SAL_CALL OIHWrapNoFilterDialog::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException, std::exception )
     {
         return cppu::supportsService(this, ServiceName);

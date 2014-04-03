@@ -180,7 +180,7 @@ namespace pcr
 
         /** XPropertyControlFactory
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, ::sal_Bool CreateReadOnly ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL createPropertyControl( ::sal_Int16 ControlType, sal_Bool CreateReadOnly ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     public:
         OPropertyBrowserController(
@@ -206,15 +206,15 @@ namespace pcr
         virtual void    valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
 
         // IPropertyExistenceCheck
-        virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         // XObjectInspectorUI
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, ::sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, ::sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, ::sal_Bool _bShow ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL registerControlObserver( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlObserver >& _Observer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL revokeControlObserver( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlObserver >& _Observer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

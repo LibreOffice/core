@@ -127,7 +127,7 @@ class BackendImpl : public ImplBaseT
             // throws css::uno::RuntimeException,
             // css::deployment::DeploymentException
 
-        ::sal_Bool checkLicense(
+        sal_Bool checkLicense(
             Reference< ucb::XCommandEnvironment > const & xCmdEnv,
             DescriptionInfoset const & description, bool bNoLicenseChecking)
                 throw (deployment::DeploymentException,
@@ -195,14 +195,14 @@ class BackendImpl : public ImplBaseT
         virtual ::sal_Int32 SAL_CALL checkPrerequisites(
             const Reference< task::XAbortChannel >& xAbortChannel,
             const Reference< ucb::XCommandEnvironment >& xCmdEnv,
-            ::sal_Bool noLicenseChecking)
+            sal_Bool noLicenseChecking)
             throw (deployment::ExtensionRemovedException,
                    deployment::DeploymentException,
                    ucb::CommandFailedException,
                    ucb::CommandAbortedException,
                    RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL checkDependencies(
+        virtual sal_Bool SAL_CALL checkDependencies(
             const Reference< ucb::XCommandEnvironment >& xCmdEnv )
             throw (deployment::DeploymentException,
                    deployment::ExtensionRemovedException,
@@ -225,7 +225,7 @@ class BackendImpl : public ImplBaseT
             throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual Reference< graphic::XGraphic > SAL_CALL
-        getIcon( ::sal_Bool bHighContrast )
+        getIcon( sal_Bool bHighContrast )
             throw (deployment::ExtensionRemovedException,
                    RuntimeException, std::exception) SAL_OVERRIDE;
     };
@@ -650,7 +650,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
     }
 }
 
-::sal_Bool BackendImpl::PackageImpl::checkLicense(
+sal_Bool BackendImpl::PackageImpl::checkLicense(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
     DescriptionInfoset const & info, bool alreadyInstalled)
         throw (css::deployment::DeploymentException,
@@ -752,7 +752,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         return 0;
 }
 
-::sal_Bool BackendImpl::PackageImpl::checkDependencies(
+sal_Bool BackendImpl::PackageImpl::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
         throw (deployment::DeploymentException,
                deployment::ExtensionRemovedException,

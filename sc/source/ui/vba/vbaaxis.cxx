@@ -223,7 +223,7 @@ ScVbaAxis::getType(  ) throw (script::BasicErrorException, uno::RuntimeException
 }
 
 void SAL_CALL
-ScVbaAxis::setHasTitle( ::sal_Bool _bHasTitle ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaAxis::setHasTitle( sal_Bool _bHasTitle ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -248,7 +248,7 @@ ScVbaAxis::setHasTitle( ::sal_Bool _bHasTitle ) throw (script::BasicErrorExcepti
     }
 }
 
- ::sal_Bool SAL_CALL
+ sal_Bool SAL_CALL
 ScVbaAxis::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bHasTitle = false;
@@ -306,7 +306,7 @@ ScVbaAxis::getMinorUnit(  ) throw (script::BasicErrorException, uno::RuntimeExce
 }
 
 void SAL_CALL
-ScVbaAxis::setMinorUnitIsAuto( ::sal_Bool _bMinorUnitIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaAxis::setMinorUnitIsAuto( sal_Bool _bMinorUnitIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -319,7 +319,7 @@ ScVbaAxis::setMinorUnitIsAuto( ::sal_Bool _bMinorUnitIsAuto ) throw (script::Bas
     }
 }
 
- ::sal_Bool SAL_CALL
+ sal_Bool SAL_CALL
 ScVbaAxis::getMinorUnitIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bIsAuto = false;
@@ -338,12 +338,12 @@ ScVbaAxis::getMinorUnitIsAuto(  ) throw (script::BasicErrorException, uno::Runti
 }
 
 void SAL_CALL
-ScVbaAxis::setReversePlotOrder( ::sal_Bool /*ReversePlotOrder*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaAxis::setReversePlotOrder( sal_Bool /*ReversePlotOrder*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     DebugHelper::exception(SbERR_NOT_IMPLEMENTED, OUString());
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaAxis::getReversePlotOrder(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     DebugHelper::exception(SbERR_NOT_IMPLEMENTED, OUString());
@@ -383,7 +383,7 @@ ScVbaAxis::getMajorUnit(  ) throw (script::BasicErrorException, uno::RuntimeExce
 }
 
 void SAL_CALL
-ScVbaAxis::setMajorUnitIsAuto( ::sal_Bool _bMajorUnitIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaAxis::setMajorUnitIsAuto( sal_Bool _bMajorUnitIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -398,7 +398,7 @@ ScVbaAxis::setMajorUnitIsAuto( ::sal_Bool _bMajorUnitIsAuto ) throw (script::Bas
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaAxis::getMajorUnitIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bIsAuto = false;
@@ -452,7 +452,7 @@ ScVbaAxis::getMaximumScale(  ) throw (script::BasicErrorException, uno::RuntimeE
 }
 
 void SAL_CALL
-ScVbaAxis::setMaximumScaleIsAuto( ::sal_Bool _bMaximumScaleIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -467,7 +467,7 @@ ScVbaAxis::setMaximumScaleIsAuto( ::sal_Bool _bMaximumScaleIsAuto ) throw (scrip
 }
 
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaAxis::getMaximumScaleIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bIsAuto = false;
@@ -514,7 +514,7 @@ ScVbaAxis::getMinimumScale(  ) throw (script::BasicErrorException, uno::RuntimeE
 }
 
 void SAL_CALL
-ScVbaAxis::setMinimumScaleIsAuto( ::sal_Bool _bMinimumScaleIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaAxis::setMinimumScaleIsAuto( sal_Bool _bMinimumScaleIsAuto ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -529,7 +529,7 @@ ScVbaAxis::setMinimumScaleIsAuto( ::sal_Bool _bMinimumScaleIsAuto ) throw (scrip
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaAxis::getMinimumScaleIsAuto(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bIsAuto = false;

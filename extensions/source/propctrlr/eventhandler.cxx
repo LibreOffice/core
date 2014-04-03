@@ -344,9 +344,9 @@ namespace pcr
         virtual void SAL_CALL replaceByName( const OUString& _rName, const Any& aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Any SAL_CALL getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL hasByName( const OUString& _rName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& _rName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~EventHolder( );
@@ -473,7 +473,7 @@ namespace pcr
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -814,7 +814,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    ::sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         return sal_False;
     }

@@ -356,7 +356,7 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
     return m_xDataSourceConnection.getTyped();
 }
 
-::sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.is();
@@ -395,7 +395,7 @@ beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySu
     return beans::Pair< ::sal_Int32, OUString >( nType, sName );
 }
 
-::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -469,13 +469,13 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
 }
 
 Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 _ObjectType,
-    const OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
+    const OUString& _ObjectName, sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
     return loadComponentWithArguments( _ObjectType, _ObjectName, _ForEditing, Sequence< PropertyValue >() );
 }
 
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
-    const OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
+    const OUString& _ObjectName, sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );

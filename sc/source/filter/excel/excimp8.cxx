@@ -121,7 +121,7 @@ private:
 public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return  cppu::UnoType<container::XIndexContainer>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( IdToOleNameHash.size() > 0 );
@@ -145,7 +145,7 @@ public:
             *pName = it->first;
         return aResult;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );

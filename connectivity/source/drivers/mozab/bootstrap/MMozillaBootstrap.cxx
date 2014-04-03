@@ -130,11 +130,11 @@ OUString SAL_CALL MozillaBootstrap::getProfilePath( ::com::sun::star::mozilla::M
 {
     return m_ProfileAccess->getProfilePath(product,profileName);
 }
-::sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_ProfileAccess->isProfileLocked(product,profileName);
 }
-::sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_ProfileAccess->getProfileExists(product,profileName);
 }
@@ -174,7 +174,7 @@ OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  ) throw (::com::sun::sta
     return OUString();
 #endif
 }
-::sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 #ifndef MINIMAL_PROFILEDISCOVER
     return isProfileLocked(getCurrentProduct(),m_ProfileManager->getCurrentProfile());

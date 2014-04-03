@@ -139,7 +139,7 @@ protected:
     // ____ XElementAccess (base of XIndexAccess) ____
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasElements()
+    virtual sal_Bool SAL_CALL hasElements()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XNamed (for setting a new range representation) ____
@@ -153,9 +153,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XModifiable ____
-    virtual ::sal_Bool SAL_CALL isModified()
+    virtual sal_Bool SAL_CALL isModified()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setModified( ::sal_Bool bModified )
+    virtual void SAL_CALL setModified( sal_Bool bModified )
         throw (::com::sun::star::beans::PropertyVetoException,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

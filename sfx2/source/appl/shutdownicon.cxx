@@ -930,7 +930,7 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
         case PROPHANDLE_TERMINATEVETOSTATE :
              {
                 // use new value in case it's a valid information only
-                ::sal_Bool bState( sal_False );
+                sal_Bool bState( sal_False );
                 if (! (aValue >>= bState))
                     return;
 

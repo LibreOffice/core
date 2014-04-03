@@ -620,7 +620,7 @@ namespace
     }
 }
 
-::sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeException, std::exception )
+sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeException, std::exception )
 {
     DocumentGuard aGuard( *this );
 
@@ -1929,7 +1929,7 @@ Reference< XStorageBasedLibraryContainer > SAL_CALL ODatabaseDocument::getDialog
     return m_pImpl->getLibraryContainer( false );
 }
 
-::sal_Bool SAL_CALL ODatabaseDocument::getAllowMacroExecution() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL ODatabaseDocument::getAllowMacroExecution() throw (RuntimeException, std::exception)
 {
     DocumentGuard aGuard( *this );
     return m_pImpl->adjustMacroMode_AutoReject();

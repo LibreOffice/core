@@ -1560,7 +1560,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
     return aResult;
 }
 
-::sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMember( const OUString& aName )
+sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMember( const OUString& aName )
     throw (uno::RuntimeException)
 {
     if ( ! m_spDispatch )

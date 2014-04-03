@@ -219,7 +219,7 @@ throw (RuntimeException, std::exception)
         m_pStatusBar->SetAccessibleName( m_nId, rAccessibleName );
 }
 
-::sal_Bool SAL_CALL StatusbarItem::getVisible()
+sal_Bool SAL_CALL StatusbarItem::getVisible()
 throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -229,7 +229,7 @@ throw (RuntimeException, std::exception)
     return sal_False;
 }
 
-void SAL_CALL StatusbarItem::setVisible( ::sal_Bool bVisible )
+void SAL_CALL StatusbarItem::setVisible( sal_Bool bVisible )
 throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

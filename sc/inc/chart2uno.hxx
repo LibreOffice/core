@@ -74,7 +74,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     // XDataProvider
-    virtual ::sal_Bool SAL_CALL createDataSourcePossible(
+    virtual sal_Bool SAL_CALL createDataSourcePossible(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -88,7 +88,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource )
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+    virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

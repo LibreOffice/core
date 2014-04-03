@@ -2557,7 +2557,7 @@ VCLXWindow::getPropertyByName( const OUString& rName ) throw (::com::sun::star::
     return GetPropHelper()->getPropertyByName( rName );
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 VCLXWindow::hasPropertyByName( const OUString& rName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return GetPropHelper()->hasPropertyByName( rName );

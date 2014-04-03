@@ -35,7 +35,7 @@ class RedlinesEnumeration : public RevisionEnumeration_BASE
     RevisionMap::iterator mIt;
 public:
     RedlinesEnumeration( const RevisionMap& sMap ) : mRevisionMap( sMap ), mIt( mRevisionMap.begin() ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( mIt != mRevisionMap.end() );
     }
@@ -56,7 +56,7 @@ RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const u
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return  cppu::UnoType<beans::XPropertySet>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return ( !mRevisionMap.empty() ); }
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return ( !mRevisionMap.empty() ); }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return mRevisionMap.size(); }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) SAL_OVERRIDE

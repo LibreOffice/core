@@ -62,7 +62,7 @@ void SAL_CALL VLCPlayer::stop() throw ( ::com::sun::star::uno::RuntimeException,
     mPlayer.pause();
 }
 
-::sal_Bool SAL_CALL VLCPlayer::isPlaying() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL VLCPlayer::isPlaying() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlayer.isPlaying();
@@ -111,7 +111,7 @@ void VLCPlayer::replay()
     start();
 }
 
-void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL VLCPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlaybackLoop = bSet;
@@ -122,7 +122,7 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet ) throw ( ::com::sun::
         mEventManager.onEndReached();
 }
 
-::sal_Bool SAL_CALL VLCPlayer::isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL VLCPlayer::isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlaybackLoop;
@@ -140,13 +140,13 @@ void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB ) throw ( ::com::sun::star
     return static_cast<sal_Int16>( mPlayer.getVolume() / 10.0 * 4 - 40 );
 }
 
-void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL VLCPlayer::setMute( sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.setMute( bSet );
 }
 
-::sal_Bool SAL_CALL VLCPlayer::isMute() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL VLCPlayer::isMute() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlayer.getMute();
@@ -245,7 +245,7 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
     return AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME;
 }
 
-::sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName )
+sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName )
      throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);

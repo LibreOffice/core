@@ -85,7 +85,7 @@ namespace dbaccess
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
@@ -181,7 +181,7 @@ namespace dbaccess
         return OUString( "com.sun.star.comp.dba.DataAccessDescriptor" );
     }
 
-    ::sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -220,7 +220,7 @@ namespace dbaccess
     public:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo - static versions
@@ -276,7 +276,7 @@ namespace dbaccess
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }

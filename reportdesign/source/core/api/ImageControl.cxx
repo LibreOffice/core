@@ -250,13 +250,13 @@ void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor 
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,m_aProps.aFormatProperties.nBackgroundColor);
 }
 
-::sal_Bool SAL_CALL OImageControl::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OImageControl::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aFormatProperties.m_bBackgroundTransparent;
 }
 
-void SAL_CALL OImageControl::setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OImageControl::setControlBackgroundTransparent( sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,m_aProps.aFormatProperties.m_bBackgroundTransparent);
     if ( _controlbackgroundtransparent )
@@ -312,13 +312,13 @@ void SAL_CALL OImageControl::setDataField( const OUString& _datafield ) throw (l
 }
 
 
-::sal_Bool SAL_CALL OImageControl::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OImageControl::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.bPrintWhenGroupChange;
 }
 
-void SAL_CALL OImageControl::setPrintWhenGroupChange( ::sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OImageControl::setPrintWhenGroupChange( sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
@@ -395,7 +395,7 @@ uno::Type SAL_CALL OImageControl::getElementType(  ) throw (uno::RuntimeExceptio
     return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OImageControl::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OImageControl::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aProps.hasElements();
 }
@@ -473,13 +473,13 @@ void SAL_CALL OImageControl::setScaleMode( ::sal_Int16 _scalemode ) throw (lang:
     set(PROPERTY_SCALEMODE,_scalemode,m_nScaleMode);
 }
 
-::sal_Bool SAL_CALL OImageControl::getPreserveIRI() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OImageControl::getPreserveIRI() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bPreserveIRI;
 }
 
-void SAL_CALL OImageControl::setPreserveIRI( ::sal_Bool _preserveiri ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OImageControl::setPreserveIRI( sal_Bool _preserveiri ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_PRESERVEIRI,_preserveiri,m_bPreserveIRI);
 }

@@ -272,7 +272,7 @@ ScVbaUserForm::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
     return aResult;
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaUserForm::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
@@ -289,7 +289,7 @@ ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException, s
     return uno::makeAny( xControls );
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY );

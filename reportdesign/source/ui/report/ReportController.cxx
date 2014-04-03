@@ -3039,10 +3039,10 @@ void OReportController::insertGraphic()
     return m_aReportModel;
 }
 
-::sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    ::sal_Bool bRet = sal_True;
+    sal_Bool bRet = sal_True;
     if ( getDesignView() )
     {
         getDesignView()->unmarkAllObjects(NULL);
@@ -4065,7 +4065,7 @@ OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::R
                                           OUString("normal") };
     return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
 }
-::sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString> aModes = getSupportedModes();
     const OUString* pIter = aModes.getConstArray();

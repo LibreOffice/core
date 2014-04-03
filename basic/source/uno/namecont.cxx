@@ -2865,7 +2865,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode() throw (RuntimeE
     return mbVBACompat;
 }
 
-void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException, std::exception)
+void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( sal_Bool _vbacompatmodeon ) throw (RuntimeException, std::exception)
 {
     /*  The member variable mbVBACompat must be set first, the following call
         to getBasicManager() may call getVBACompatibilityMode() which returns

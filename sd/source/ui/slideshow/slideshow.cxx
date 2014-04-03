@@ -899,7 +899,7 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
 
 
 
-::sal_Bool SAL_CALL SlideShow::isRunning(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SlideShow::isRunning(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mxController.is() && mxController->isRunning();

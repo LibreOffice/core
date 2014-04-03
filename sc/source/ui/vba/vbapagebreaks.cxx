@@ -186,7 +186,7 @@ class RangePageBreaksEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     RangePageBreaksEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }

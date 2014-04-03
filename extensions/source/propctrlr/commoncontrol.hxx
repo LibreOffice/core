@@ -135,7 +135,7 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException);
         void SAL_CALL setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getControlWindow() throw (::com::sun::star::uno::RuntimeException);
-        ::sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
+        sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
         void SAL_CALL notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
@@ -198,7 +198,7 @@ namespace pcr
         inline ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException);
         inline void SAL_CALL setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException);
         inline ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getControlWindow() throw (::com::sun::star::uno::RuntimeException);
-        inline ::sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
+        inline sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
         inline void SAL_CALL notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
@@ -289,7 +289,7 @@ namespace pcr
 
 
     template< class CONTROL_INTERFACE, class CONTROL_WINDOW >
-    inline ::sal_Bool SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::isModified(  ) throw (::com::sun::star::uno::RuntimeException)
+    inline sal_Bool SAL_CALL CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::isModified(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return m_aImplControl.isModified();
     }

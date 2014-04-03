@@ -136,7 +136,7 @@ OUString SAL_CALL SwXFlatParagraph::getText() throw (uno::RuntimeException, std:
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -156,7 +156,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 }
 
 // text::XFlatParagraph:
-::sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( mpTxtNode )
@@ -173,7 +173,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 }
 
 // text::XFlatParagraph:
-::sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return 0 == mpTxtNode;

@@ -35,13 +35,13 @@ public:
 
     // XAccessibleStateSet
 
-    virtual ::sal_Bool SAL_CALL isEmpty()
+    virtual sal_Bool SAL_CALL isEmpty()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL contains(sal_Int16 nState)
+    virtual sal_Bool SAL_CALL contains(sal_Int16 nState)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL containsAll(
+    virtual sal_Bool SAL_CALL containsAll(
         const ::com::sun::star::uno::Sequence<sal_Int16>& aStateSet)
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

@@ -545,7 +545,7 @@ bool SalBool::isMacroBodyExpansion(SourceLocation location) const {
 
 bool SalBool::rewrite(SourceLocation location) {
     if (rewriter != nullptr) {
-        //TODO: "::sal_Bool" -> "bool", not "::bool"
+        //TODO: "sal_Bool" -> "bool", not "::bool"
         SourceLocation loc { compiler.getSourceManager().getExpansionLoc(
                 location) };
         unsigned n = Lexer::MeasureTokenLength(

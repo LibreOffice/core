@@ -1611,7 +1611,7 @@ throw (RuntimeException, std::exception)
         implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::makeAny( aName ) );
 }
 
-::sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
+sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
 throw (uno::RuntimeException, std::exception)
 {
     bool            bResult( false );
@@ -1934,7 +1934,7 @@ throw (RuntimeException, std::exception)
     return sal_False;
 }
 
-::sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexClearableGuard aReadLock;
     bool bResult( false );
@@ -1970,7 +1970,7 @@ throw (RuntimeException, std::exception)
     return bResult;
 }
 
-::sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
+sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
 throw (uno::RuntimeException, std::exception)
 {
     bool bResult( false );
@@ -1990,7 +1990,7 @@ throw (uno::RuntimeException, std::exception)
     return bResult;
 }
 
-::sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
+sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
 throw (uno::RuntimeException, std::exception)
 {
     bool bResult( false );
@@ -2170,7 +2170,7 @@ throw (RuntimeException, std::exception)
     return sal_False;
 }
 
-::sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
+sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
 throw (uno::RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))

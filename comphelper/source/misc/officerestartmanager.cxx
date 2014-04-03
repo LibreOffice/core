@@ -108,7 +108,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 }
 
 
-::sal_Bool SAL_CALL OOfficeRestartManager::isRestartRequested( ::sal_Bool bOfficeInitialized )
+sal_Bool SAL_CALL OOfficeRestartManager::isRestartRequested( sal_Bool bOfficeInitialized )
     throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -169,7 +169,7 @@ OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::Run
     return getImplementationName_static();
 }
 
-::sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, aServiceName);
 }

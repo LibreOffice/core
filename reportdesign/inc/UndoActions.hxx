@@ -73,8 +73,8 @@ namespace rptui
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >     getGroup() { return m_xGroup; }
 
-        inline ::sal_Bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
-        inline ::sal_Bool getFooterOn() { return m_xGroup->getFooterOn(); }
+        inline sal_Bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
+        inline sal_Bool getFooterOn() { return m_xGroup->getFooterOn(); }
 
         static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
 
@@ -97,10 +97,10 @@ namespace rptui
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageFooter()   { return m_xReport->getPageFooter(); }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getDetail()       { return m_xReport->getDetail(); }
 
-        inline ::sal_Bool getReportHeaderOn() { return m_xReport->getReportHeaderOn(); }
-        inline ::sal_Bool getReportFooterOn() { return m_xReport->getReportFooterOn(); }
-        inline ::sal_Bool getPageHeaderOn() { return m_xReport->getPageHeaderOn(); }
-        inline ::sal_Bool getPageFooterOn() { return m_xReport->getPageFooterOn(); }
+        inline sal_Bool getReportHeaderOn() { return m_xReport->getReportHeaderOn(); }
+        inline sal_Bool getReportFooterOn() { return m_xReport->getReportFooterOn(); }
+        inline sal_Bool getPageHeaderOn() { return m_xReport->getPageHeaderOn(); }
+        inline sal_Bool getPageFooterOn() { return m_xReport->getPageFooterOn(); }
 
         static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
     };

@@ -90,7 +90,7 @@ namespace shell { namespace sessioninstall
                          error.getRef());
     }
 
-    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, ::sal_Bool& o_isInstalled ) throw (RuntimeException, std::exception)
+    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled ) throw (RuntimeException, std::exception)
     {
         const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
         const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);

@@ -246,13 +246,13 @@ namespace chart
         ChartViewHelper::setViewToDirtyState( Reference< XModel >( getParent(), UNO_QUERY ) );
     }
 
-    ::sal_Bool SAL_CALL UndoManager::isUndoPossible(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL UndoManager::isUndoPossible(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isUndoPossible();
     }
 
-    ::sal_Bool SAL_CALL UndoManager::isRedoPossible(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL UndoManager::isRedoPossible(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isRedoPossible();
@@ -324,7 +324,7 @@ namespace chart
         m_pImpl->getUndoHelper().unlock();
     }
 
-    ::sal_Bool SAL_CALL UndoManager::isLocked(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL UndoManager::isLocked(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().isLocked();

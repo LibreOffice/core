@@ -47,7 +47,7 @@ public:
         //return cppu::UnoType<msforms::XPage>::get();
         return cppu::UnoType<uno::XInterface>::get();
     }
-    virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( mnPages > 0 );
     }

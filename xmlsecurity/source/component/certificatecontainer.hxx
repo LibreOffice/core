@@ -39,16 +39,16 @@ class CertificateContainer : public ::cppu::WeakImplHelper2< css::lang::XService
         Map certMap;
         Map certTrustMap;
 
-        ::sal_Bool SAL_CALL searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap  );
-        virtual ::sal_Bool SAL_CALL isTemporaryCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL isCertificateTrust( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
+        sal_Bool SAL_CALL searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap  );
+        virtual sal_Bool SAL_CALL isTemporaryCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isCertificateTrust( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
 
     public:
 
         CertificateContainer(const css::uno::Reference< css::lang::XMultiServiceFactory >& ) {};
         virtual ~CertificateContainer(){};
 
-        virtual ::sal_Bool SAL_CALL addCertificate( const OUString & url, const OUString & certificate_name, ::sal_Bool trust ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual css::security::CertificateContainerStatus SAL_CALL hasCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // provide factory
@@ -62,7 +62,7 @@ class CertificateContainer : public ::cppu::WeakImplHelper2< css::lang::XService
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
                     getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

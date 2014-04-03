@@ -59,7 +59,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
 {
 }
 
-::sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
+sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
     throw (uno::RuntimeException, std::exception )
 {
     if( aName == msDocName )
@@ -143,7 +143,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
     return getCppuType(static_cast<uno::Sequence<beans::PropertyValue>*>(0));
 }
 
-::sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
+sal_Bool SAL_CALL XMLCodeNameProvider::hasElements()
     throw (uno::RuntimeException, std::exception )
 {
     if( !mpDoc->GetCodeName().isEmpty() )

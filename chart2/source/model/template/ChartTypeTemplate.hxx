@@ -102,10 +102,10 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL matchesTemplate(
+    virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDiagram >& xDiagram,
-        ::sal_Bool bAdaptProperties )
+        sal_Bool bAdaptProperties )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // still abstract: getChartTypeForNewSeries()
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()

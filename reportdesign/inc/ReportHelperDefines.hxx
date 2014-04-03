@@ -22,8 +22,8 @@
 #define REPORTCONTROLMODEL_HEADER()  \
     virtual OUString SAL_CALL getDataField() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual void SAL_CALL setDataField(const OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
-    virtual ::sal_Bool SAL_CALL getPrintWhenGroupChange() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
-    virtual void SAL_CALL setPrintWhenGroupChange(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
+    virtual sal_Bool SAL_CALL getPrintWhenGroupChange() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
+    virtual void SAL_CALL setPrintWhenGroupChange(sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual OUString SAL_CALL getConditionalPrintExpression() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual void SAL_CALL setConditionalPrintExpression(const OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition > SAL_CALL createFormatCondition() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
@@ -49,8 +49,8 @@
     virtual void SAL_CALL setControlBorder(::sal_Int16 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual ::sal_Int32 SAL_CALL getControlBorderColor() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual void SAL_CALL setControlBorderColor(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
-    virtual ::sal_Bool SAL_CALL getPrintRepeatedValues() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
-    virtual void SAL_CALL setPrintRepeatedValues(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
+    virtual sal_Bool SAL_CALL getPrintRepeatedValues() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
+    virtual void SAL_CALL setPrintRepeatedValues(sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, std::exception) SAL_OVERRIDE; \
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
     virtual void SAL_CALL setMasterFields( const ::com::sun::star::uno::Sequence< OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
@@ -60,8 +60,8 @@
 #define REPORTCONTROLFORMAT_HEADER()  \
     virtual ::sal_Int32 SAL_CALL getControlBackground() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setControlBackground( ::sal_Int32 _controlbackground ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getControlBackgroundTransparent() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getControlBackgroundTransparent() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setControlBackgroundTransparent( sal_Bool _controlbackgroundtransparent ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getParaAdjust() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setParaAdjust( ::sal_Int16 _paraadjust ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::com::sun::star::awt::FontDescriptor SAL_CALL getFontDescriptor() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
@@ -74,18 +74,18 @@
     virtual void SAL_CALL setControlTextEmphasis( ::sal_Int16 _controltextemphasis ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharEmphasis() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharEmphasis( ::sal_Int16 _charemphasis ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharCombineIsOn() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharCombineIsOn( ::sal_Bool _charcombineison ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharCombineIsOn() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharCombineIsOn( sal_Bool _charcombineison ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual OUString SAL_CALL getCharCombinePrefix() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharCombinePrefix( const OUString& _charcombineprefix ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual OUString SAL_CALL getCharCombineSuffix() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharCombineSuffix( const OUString& _charcombinesuffix ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharHidden() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharHidden( ::sal_Bool _charhidden ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharShadowed() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharShadowed( ::sal_Bool _charshadowed ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharContoured() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharContoured( ::sal_Bool _charcontoured ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharHidden() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharHidden( sal_Bool _charhidden ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharShadowed() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharShadowed( sal_Bool _charshadowed ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharContoured() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharContoured( sal_Bool _charcontoured ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharCaseMap() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharCaseMap( ::sal_Int16 _charcasemap ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::com::sun::star::lang::Locale SAL_CALL getCharLocale() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
@@ -94,12 +94,12 @@
     virtual void SAL_CALL setCharEscapement( ::sal_Int16 _charescapement ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int8 SAL_CALL getCharEscapementHeight() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharEscapementHeight( ::sal_Int8 _charescapementheight ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharAutoKerning() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharAutoKerning( ::sal_Bool _charautokerning ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharAutoKerning() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharAutoKerning( sal_Bool _charautokerning ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharKerning() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharKerning( ::sal_Int16 _charkerning ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharFlash() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharFlash( ::sal_Bool _charflash ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharFlash() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharFlash( sal_Bool _charflash ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharRelief() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharRelief( ::sal_Int16 _charrelief ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual OUString SAL_CALL getCharFontName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
@@ -126,8 +126,8 @@
     virtual void SAL_CALL setCharPosture( ::com::sun::star::awt::FontSlant _charposture ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharStrikeout() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharStrikeout( ::sal_Int16 _charstrikeout ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual ::sal_Bool SAL_CALL getCharWordMode() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
-    virtual void SAL_CALL setCharWordMode( ::sal_Bool _charwordmode ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual sal_Bool SAL_CALL getCharWordMode() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
+    virtual void SAL_CALL setCharWordMode( sal_Bool _charwordmode ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharRotation() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual void SAL_CALL setCharRotation( ::sal_Int16 _charrotation ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\
     virtual ::sal_Int16 SAL_CALL getCharScaleWidth() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;\

@@ -532,7 +532,7 @@ void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, Ru
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
 
-::sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODatabaseContext::hasRegisteredDatabase( const OUString& _Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     return m_xDatabaseRegistrations->hasRegisteredDatabase( _Name );
 }
@@ -562,7 +562,7 @@ void SAL_CALL ODatabaseContext::changeDatabaseLocation( const OUString& _Name, c
     m_xDatabaseRegistrations->changeDatabaseLocation( _Name, _NewLocation );
 }
 
-::sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODatabaseContext::isDatabaseRegistrationReadOnly( const OUString& _Name ) throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     return m_xDatabaseRegistrations->isDatabaseRegistrationReadOnly( _Name );
 }

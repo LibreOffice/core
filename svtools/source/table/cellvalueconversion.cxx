@@ -375,7 +375,7 @@ namespace svt
                 {
                     o_formatter.reset( new TimeNormalization( io_data.xNumberFormatter ) );
                 }
-                else if ( sTypeName.equals( ::cppu::UnoType< ::sal_Bool >::get().getTypeName() ) )
+                else if ( sTypeName.equals( ::cppu::UnoType< sal_Bool >::get().getTypeName() ) )
                 {
                     o_formatter.reset( new BooleanNormalization( io_data.xNumberFormatter ) );
                 }

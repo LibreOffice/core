@@ -387,7 +387,7 @@ void DocumentDigitalSignatures::showCertificate(
 
 }
 
-::sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
+sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     const Reference< css::security::XCertificate >& Author ) throw (RuntimeException, std::exception)
 {
     sal_Bool bFound = sal_False;
@@ -435,7 +435,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 }
 
 
-::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location ) throw (RuntimeException, std::exception)
+sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location ) throw (RuntimeException, std::exception)
 {
     return SvtSecurityOptions().isTrustedLocationUri(Location);
 }

@@ -113,7 +113,7 @@ namespace frm
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XFormOperations
@@ -123,13 +123,13 @@ namespace frm
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setFeatureInvalidation(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > & the_value) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isEnabled(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL execute(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL executeWithArguments(::sal_Int16 Feature, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL commitCurrentRecord(::sal_Bool & RecordInserted) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL commitCurrentControl() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL isInsertionRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL isModifiedRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL commitCurrentRecord(sal_Bool & RecordInserted) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL commitCurrentControl() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::sdbc::SQLException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isInsertionRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isModifiedRow() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::WrappedTargetException, std::exception) SAL_OVERRIDE;
 
         // XRowSetListener
         virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

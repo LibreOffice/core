@@ -89,7 +89,7 @@ public:
 
     // ::com::sun::star::container::XStringKeyMap:
     virtual ::com::sun::star::uno::Any SAL_CALL getValue(const OUString & aKey) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::container::NoSuchElementException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasValue(const OUString & aKey) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasValue(const OUString & aKey) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL insertValue(const OUString & aKey, const ::com::sun::star::uno::Any & aValue) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;

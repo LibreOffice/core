@@ -124,26 +124,26 @@ void SAL_CALL OFunction::removeVetoableChangeListener( const OUString& PropertyN
 }
 
 // report::XFunction:
-::sal_Bool SAL_CALL OFunction::getPreEvaluated() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFunction::getPreEvaluated() throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     return m_bPreEvaluated;
 }
 
 
-void SAL_CALL OFunction::setPreEvaluated(::sal_Bool the_value) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFunction::setPreEvaluated(sal_Bool the_value) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_PREEVALUATED,the_value,m_bPreEvaluated);
 }
 
-::sal_Bool SAL_CALL OFunction::getDeepTraversing() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFunction::getDeepTraversing() throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     return m_bDeepTraversing;
 }
 
 
-void SAL_CALL OFunction::setDeepTraversing(::sal_Bool the_value) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFunction::setDeepTraversing(sal_Bool the_value) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_DEEPTRAVERSING,the_value,m_bDeepTraversing);
 }

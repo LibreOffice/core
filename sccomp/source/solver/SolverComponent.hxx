@@ -128,10 +128,10 @@ public:
     virtual void SAL_CALL   setConstraints( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::sheet::SolverConstraint >& _constraints )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL getMaximize() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL   setMaximize( ::sal_Bool _maximize ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getMaximize() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL   setMaximize( sal_Bool _maximize ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL getSuccess() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getSuccess() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getResultValue() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getSolution()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

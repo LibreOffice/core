@@ -73,7 +73,7 @@ namespace connectivity
         return *(new ParameterSubstitution(_xContext));
     }
 
-    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception)
+    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
         OUString sRet = _sText;
         uno::Reference< sdbc::XConnection > xConnection = m_xConnection;

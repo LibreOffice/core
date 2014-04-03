@@ -855,7 +855,7 @@ void generateXServiceInfoBodies(std::ostream& o,
       << "throw (css::uno::RuntimeException)\n{\n    "
       << "return " << comphelpernamespace << "::_getImplementationName();\n}\n\n";
 
-    o << "::sal_Bool SAL_CALL " << classname
+    o << "sal_Bool SAL_CALL " << classname
       << "supportsService(::rtl::OUString const & "
       << "serviceName) throw (css::uno::RuntimeException)\n{\n    "
       << "css::uno::Sequence< ::rtl::OUString > serviceNames = "

@@ -1373,12 +1373,12 @@ uno::Sequence< OUString > SAL_CALL GeometryHandler::getActuatingProperties() thr
     return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
 
-::sal_Bool SAL_CALL GeometryHandler::isComposable(const OUString & _rPropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
+sal_Bool SAL_CALL GeometryHandler::isComposable(const OUString & _rPropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     return m_pInfoService->isComposable( _rPropertyName, m_xFormComponentHandler );
 }
 
-inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePropertySelection(const OUString & PropertyName, ::sal_Bool Primary, uno::Any & _rData, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
+inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePropertySelection(const OUString & PropertyName, sal_Bool Primary, uno::Any & _rData, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::NullPointerException, std::exception)
 {
     if ( !_rxInspectorUI.is() )
         throw lang::NullPointerException();
@@ -1459,7 +1459,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
     return m_xFormComponentHandler->onInteractivePropertySelection(PropertyName, Primary, _rData, _rxInspectorUI);
 }
 
-void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI, ::sal_Bool _bFirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
+void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI, sal_Bool _bFirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException, std::exception)
 {
     if ( !_rxInspectorUI.is() )
         throw lang::NullPointerException();
@@ -1542,7 +1542,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const OUString & Actuati
     }
 }
 
-::sal_Bool SAL_CALL GeometryHandler::suspend(::sal_Bool Suspend) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL GeometryHandler::suspend(sal_Bool Suspend) throw (uno::RuntimeException, std::exception)
 {
     return m_xFormComponentHandler->suspend(Suspend);
 }

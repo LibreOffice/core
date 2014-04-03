@@ -58,7 +58,7 @@ namespace sdbtools
         );
 
         // XDataSourceMetaData
-        virtual ::sal_Bool SAL_CALL supportsQueriesInFrom(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsQueriesInFrom(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
         virtual ~DataSourceMetaData();

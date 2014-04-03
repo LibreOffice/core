@@ -44,7 +44,7 @@ sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious() throw (uno::RuntimeExce
     return sal_False;
 }
 
-void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( ::sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException, std::exception)
 {
     // not support in Writer
 }

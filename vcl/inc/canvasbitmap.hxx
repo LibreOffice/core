@@ -64,7 +64,7 @@ namespace unotools
     public:
         // XBitmap
         virtual com::sun::star::geometry::IntegerSize2D SAL_CALL getSize() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual com::sun::star::uno::Reference< com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const com::sun::star::geometry::RealSize2D& newSize, sal_Bool beFast ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XIntegerReadOnlyBitmap
@@ -75,8 +75,8 @@ namespace unotools
 
         // XBitmapPalette
         virtual sal_Int32 SAL_CALL getNumberOfEntries() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL getIndex( ::com::sun::star::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL setIndex( const ::com::sun::star::uno::Sequence< double >& color, ::sal_Bool transparency, ::sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL getIndex( ::com::sun::star::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL setIndex( const ::com::sun::star::uno::Sequence< double >& color, sal_Bool transparency, ::sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XColorSpace > SAL_CALL getColorSpace(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XIntegerBitmapColorSpace

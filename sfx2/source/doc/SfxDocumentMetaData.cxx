@@ -135,7 +135,7 @@ public:
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService(
+    virtual sal_Bool SAL_CALL supportsService(
         const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -266,9 +266,9 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::util::XModifiable:
-    virtual ::sal_Bool SAL_CALL isModified(  )
+    virtual sal_Bool SAL_CALL isModified(  )
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setModified( ::sal_Bool bModified )
+    virtual void SAL_CALL setModified( sal_Bool bModified )
         throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::util::XModifyBroadcaster:
@@ -380,7 +380,7 @@ public:
         return OUString("CompatWriterDocPropsImpl");
     }
 
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -1379,7 +1379,7 @@ SfxDocumentMetaData::getImplementationName() throw (css::uno::RuntimeException, 
     return OUString("SfxDocumentMetaData");
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 SfxDocumentMetaData::supportsService(OUString const & serviceName)
         throw (css::uno::RuntimeException, std::exception)
 {
@@ -2169,7 +2169,7 @@ SfxDocumentMetaData::createClone()
 }
 
 // ::com::sun::star::util::XModifiable:
-::sal_Bool SAL_CALL SfxDocumentMetaData::isModified(  )
+sal_Bool SAL_CALL SfxDocumentMetaData::isModified(  )
         throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
@@ -2179,7 +2179,7 @@ SfxDocumentMetaData::createClone()
     return m_isModified || (xMB.is() ? xMB->isModified() : sal_False);
 }
 
-void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
+void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
         throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::util::XModifiable> xMB;

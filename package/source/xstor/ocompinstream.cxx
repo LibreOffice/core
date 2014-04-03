@@ -485,7 +485,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     throw io::IOException(); // the relations info could not be read
 }
 
-void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, ::sal_Bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, sal_Bool /*bReplace*/  )
         throw ( container::ElementExistException,
                 io::IOException,
                 uno::RuntimeException, std::exception )
@@ -523,7 +523,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/
     throw io::IOException(); // TODO: Access denied
 }
 
-void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, ::sal_Bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, sal_Bool /*bReplace*/  )
         throw ( container::ElementExistException,
                 io::IOException,
                 uno::RuntimeException, std::exception )

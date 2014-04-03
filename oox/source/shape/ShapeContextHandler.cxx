@@ -599,7 +599,7 @@ uno::Sequence< OUString > ShapeContextHandler::getSupportedServiceNames()
     return ShapeContextHandler_getSupportedServiceNames();
 }
 
-::sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceName)
+sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceName)
     throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);

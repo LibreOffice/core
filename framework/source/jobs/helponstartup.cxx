@@ -265,7 +265,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
 }
 
 
-::sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
+sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
 {
     if (sHelpURL.isEmpty())
         return sal_False;

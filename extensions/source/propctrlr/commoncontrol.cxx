@@ -80,7 +80,7 @@ namespace pcr
     }
 
 
-    ::sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
+    sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
     {
         return m_bModified;
     }

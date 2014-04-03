@@ -120,7 +120,7 @@ cppu_detail_getUnoType(SAL_UNUSED_PARAMETER bool const *) {
 }
 
 inline ::com::sun::star::uno::Type const &
-cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::sal_Bool const *) {
+cppu_detail_getUnoType(SAL_UNUSED_PARAMETER sal_Bool const *) {
     return ::cppu::detail::getTypeFromTypeClass(::typelib_TypeClass_BOOLEAN);
 }
 

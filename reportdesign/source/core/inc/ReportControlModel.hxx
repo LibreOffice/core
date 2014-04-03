@@ -67,13 +67,13 @@ namespace reportdesign
         ::sal_Int16                                         nCharCaseMap;
         ::sal_Int16                                         nCharKerning;
         ::sal_Int8                                          nCharEscapementHeight;
-        ::sal_Bool                                          m_bBackgroundTransparent;
-        ::sal_Bool                                          bCharFlash;
-        ::sal_Bool                                          bCharAutoKerning;
-        ::sal_Bool                                          bCharCombineIsOn;
-        ::sal_Bool                                          bCharHidden;
-        ::sal_Bool                                          bCharShadowed;
-        ::sal_Bool                                          bCharContoured;
+        sal_Bool                                          m_bBackgroundTransparent;
+        sal_Bool                                          bCharFlash;
+        sal_Bool                                          bCharAutoKerning;
+        sal_Bool                                          bCharCombineIsOn;
+        sal_Bool                                          bCharHidden;
+        sal_Bool                                          bCharShadowed;
+        sal_Bool                                          bCharContoured;
         OFormatProperties();
     };
     class OReportControlModel
@@ -108,7 +108,7 @@ namespace reportdesign
         void removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
-        ::sal_Bool hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+        sal_Bool hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XIndexReplace
         void replaceByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);

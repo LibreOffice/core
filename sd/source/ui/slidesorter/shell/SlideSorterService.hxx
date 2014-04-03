@@ -117,7 +117,7 @@ public:
     virtual sal_Bool SAL_CALL getIsHighlightCurrentSlide (void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL setIsHighlightCurrentSlide (::sal_Bool bIsHighlightCurrentSlide)
+    virtual void SAL_CALL setIsHighlightCurrentSlide (sal_Bool bIsHighlightCurrentSlide)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL getIsShowSelection (void)

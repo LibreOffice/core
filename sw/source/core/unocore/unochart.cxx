@@ -2381,7 +2381,7 @@ sal_Bool SAL_CALL SwChartDataSequence::isModified(  )
 }
 
 void SAL_CALL SwChartDataSequence::setModified(
-        ::sal_Bool bModified )
+        sal_Bool bModified )
     throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

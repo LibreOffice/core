@@ -388,7 +388,7 @@ public:
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isDataFlavorSupported(
+    virtual sal_Bool SAL_CALL isDataFlavorSupported(
         const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -415,7 +415,7 @@ public:
         createInternalDataProvider( sal_Bool bCloneExistingData )
             throw (::com::sun::star::util::CloseVetoException,
                    ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasInternalDataProvider()
+    virtual sal_Bool SAL_CALL hasInternalDataProvider()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > SAL_CALL
         getDataProvider()

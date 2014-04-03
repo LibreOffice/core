@@ -99,8 +99,8 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 
     const OUString                       sCommand                   = lOwnCfg.getUnpackedValueOrDefault(PROP_COMMAND                  , OUString());
     const css::uno::Sequence< OUString > lCommandArguments          = lOwnCfg.getUnpackedValueOrDefault(PROP_ARGUMENTS                , css::uno::Sequence< OUString >());
-    const ::sal_Bool                            bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , sal_True         );
-    const ::sal_Bool                            bCheckExitCode             = lOwnCfg.getUnpackedValueOrDefault(PROP_CHECKEXITCODE            , sal_True         );
+    const sal_Bool                            bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , sal_True         );
+    const sal_Bool                            bCheckExitCode             = lOwnCfg.getUnpackedValueOrDefault(PROP_CHECKEXITCODE            , sal_True         );
 
     // replace all might existing place holder.
     OUString sRealCommand = impl_substituteCommandVariables(sCommand);
@@ -112,7 +112,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
         return ShellJob::impl_generateAnswer4Deactivation();
 
     // do it
-    ::sal_Bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
+    sal_Bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
     if (! bDone)
         return css::uno::Any();
 
@@ -142,7 +142,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
     try
     {
         css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(m_xContext) );
-        const ::sal_Bool                                      bSubstRequired   = sal_True;
+        const sal_Bool                                      bSubstRequired   = sal_True;
         const OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
 
         return sCompleteCommand;
@@ -154,9 +154,9 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 }
 
 
-::sal_Bool ShellJob::impl_execute(const OUString&                       sCommand      ,
+sal_Bool ShellJob::impl_execute(const OUString&                       sCommand      ,
                                   const css::uno::Sequence< OUString >& lArguments    ,
-                                        ::sal_Bool                             bCheckExitCode)
+                                        sal_Bool                             bCheckExitCode)
 {
           ::rtl_uString**  pArgs    = NULL;
     const ::sal_Int32      nArgs    = lArguments.getLength ();
@@ -172,7 +172,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
     if (eError != osl_Process_E_None)
         return sal_False;
 
-    ::sal_Bool bRet = sal_True;
+    sal_Bool bRet = sal_True;
     if (bCheckExitCode)
     {
         // check its return codes ...

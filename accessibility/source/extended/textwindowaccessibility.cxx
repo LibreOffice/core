@@ -209,7 +209,7 @@ css::lang::Locale SAL_CALL Paragraph::getLocale()
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::containsPoint(css::awt::Point const & rPoint)
+sal_Bool SAL_CALL Paragraph::containsPoint(css::awt::Point const & rPoint)
     throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
@@ -312,7 +312,7 @@ css::util::Color SAL_CALL Paragraph::getBackground()
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
+sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
 {
@@ -401,7 +401,7 @@ OUString SAL_CALL Paragraph::getSelectedText()
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
+sal_Bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
                                                 ::sal_Int32 nEndIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
@@ -451,7 +451,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
+sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
                                             ::sal_Int32 nEndIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
@@ -462,7 +462,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
+sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
@@ -474,7 +474,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
+sal_Bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
 {
@@ -485,7 +485,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
+sal_Bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
                                           ::sal_Int32 nEndIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
@@ -497,7 +497,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::insertText(OUString const & rText,
+sal_Bool SAL_CALL Paragraph::insertText(OUString const & rText,
                                               ::sal_Int32 nIndex)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
@@ -508,7 +508,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
                            OUString const & rReplacement)
     throw (css::lang::IndexOutOfBoundsException,
@@ -521,7 +521,7 @@ Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::setAttributes(
+sal_Bool SAL_CALL Paragraph::setAttributes(
     ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
     css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
     throw (css::lang::IndexOutOfBoundsException,
@@ -534,7 +534,7 @@ Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
 }
 
 // virtual
-::sal_Bool SAL_CALL Paragraph::setText(OUString const & rText)
+sal_Bool SAL_CALL Paragraph::setText(OUString const & rText)
     throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
@@ -1703,7 +1703,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
             ::sal_Int32 count = getAccessibleChildCount();
-            ::sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
+            sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
                 Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
@@ -1740,7 +1740,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
             ::sal_Int32 count = getAccessibleChildCount();
-            ::sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
+            sal_Bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
             if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
             {
                 Paragraphs::iterator m_aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
@@ -2284,7 +2284,7 @@ void Document::handleSelectionChangeNotification()
         {
         //disable the first event when user types in empty field.
         ::sal_Int32 count = getAccessibleChildCount();
-        ::sal_Bool bEmpty = count > 1;
+        sal_Bool bEmpty = count > 1;
             //if (aIt != m_aFocused)
             if (aIt != m_aFocused && bEmpty)
                 xParagraph->notifyEvent(

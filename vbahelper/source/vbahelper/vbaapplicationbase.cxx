@@ -239,7 +239,7 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar) throw (uno::
     return;
 }
 
-::sal_Bool SAL_CALL VbaApplicationBase::getInteractive()
+sal_Bool SAL_CALL VbaApplicationBase::getInteractive()
     throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
@@ -249,7 +249,7 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar) throw (uno::
     return xWindow->isEnabled();
 }
 
-void SAL_CALL VbaApplicationBase::setInteractive( ::sal_Bool bInteractive )
+void SAL_CALL VbaApplicationBase::setInteractive( sal_Bool bInteractive )
     throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );

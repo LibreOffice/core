@@ -97,7 +97,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculat
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,
-    ::sal_Bool bMaySkipPointsInCalculation )
+    sal_Bool bMaySkipPointsInCalculation )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException, std::exception)
 {

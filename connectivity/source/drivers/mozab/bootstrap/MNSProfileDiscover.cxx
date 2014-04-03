@@ -360,7 +360,7 @@ namespace connectivity
         }
 
 #endif
-        ::sal_Bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+        sal_Bool ProfileAccess::isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
 #ifdef MINIMAL_PROFILEDISCOVER
             (void)product; /* avoid warning about unused parameter */
@@ -394,7 +394,7 @@ namespace connectivity
 #endif
         }
 
-        ::sal_Bool ProfileAccess::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+        sal_Bool ProfileAccess::getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];

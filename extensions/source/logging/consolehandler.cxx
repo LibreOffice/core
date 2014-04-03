@@ -91,14 +91,14 @@ namespace logging
         virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL flush(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // OComponentHelper
@@ -222,7 +222,7 @@ namespace logging
     }
 
 
-    ::sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this );
 
@@ -275,7 +275,7 @@ namespace logging
     }
 
 
-    ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }

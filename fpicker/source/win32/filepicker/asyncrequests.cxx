@@ -157,7 +157,7 @@ void SAL_CALL AsyncRequests::run()
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
     RequestHandlerRef rHandler  = m_rHandler;
-    ::sal_Bool        bFinished = m_bFinish;
+    sal_Bool        bFinished = m_bFinish;
     aLock.clear();
     // <- SYNCHRONIZED
 

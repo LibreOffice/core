@@ -649,7 +649,7 @@ Reference<rendering::XSprite> SAL_CALL
 
 
 
-::sal_Bool SAL_CALL PresenterCanvas::updateScreen (::sal_Bool bUpdateAll)
+sal_Bool SAL_CALL PresenterCanvas::updateScreen (sal_Bool bUpdateAll)
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();

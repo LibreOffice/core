@@ -90,7 +90,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
             return;
     }
 
-    ::sal_Bool bModified = xModel->isModified ();
+    sal_Bool bModified = xModel->isModified ();
 
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;

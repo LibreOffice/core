@@ -220,13 +220,13 @@ void OSection::init()
 
 // XSection
 
-::sal_Bool SAL_CALL OSection::getVisible() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::getVisible() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bVisible;
 }
 
-void SAL_CALL OSection::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OSection::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_VISIBLE,_visible,m_bVisible);
 }
@@ -267,13 +267,13 @@ void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor ) throw (uno:
         set(PROPERTY_BACKCOLOR,_backgroundcolor,m_nBackgroundColor);
 }
 
-::sal_Bool SAL_CALL OSection::getBackTransparent() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::getBackTransparent() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bBacktransparent;
 }
 
-void SAL_CALL OSection::setBackTransparent( ::sal_Bool _backtransparent ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OSection::setBackTransparent( sal_Bool _backtransparent ) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_BACKTRANSPARENT,_backtransparent,m_bBacktransparent);
     if ( _backtransparent )
@@ -342,14 +342,14 @@ void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::
     set(PROPERTY_NEWROWORCOL,_newroworcol,m_nNewRowOrCol);
 }
 
-::sal_Bool SAL_CALL OSection::getKeepTogether() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::getKeepTogether() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkNotPageHeaderFooter();
     return m_bKeepTogether;
 }
 
-void SAL_CALL OSection::setKeepTogether( ::sal_Bool _keeptogether ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OSection::setKeepTogether( sal_Bool _keeptogether ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -359,27 +359,27 @@ void SAL_CALL OSection::setKeepTogether( ::sal_Bool _keeptogether ) throw (lang:
     set(PROPERTY_KEEPTOGETHER,_keeptogether,m_bKeepTogether);
 }
 
-::sal_Bool SAL_CALL OSection::getCanGrow() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::getCanGrow() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
 }
 
-void SAL_CALL OSection::setCanGrow( ::sal_Bool /*_cangrow*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OSection::setCanGrow( sal_Bool /*_cangrow*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
 }
 
-::sal_Bool SAL_CALL OSection::getCanShrink() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::getCanShrink() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
 }
 
-void SAL_CALL OSection::setCanShrink( ::sal_Bool /*_canshrink*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OSection::setCanShrink( sal_Bool /*_canshrink*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
 }
 
-::sal_Bool SAL_CALL OSection::getRepeatSection() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::getRepeatSection() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< report::XGroup > xGroup = m_xGroup;
@@ -388,7 +388,7 @@ void SAL_CALL OSection::setCanShrink( ::sal_Bool /*_canshrink*/ ) throw (lang::I
     return m_bRepeatSection;
 }
 
-void SAL_CALL OSection::setRepeatSection( ::sal_Bool _repeatsection ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OSection::setRepeatSection( sal_Bool _repeatsection ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -512,7 +512,7 @@ uno::Type SAL_CALL OSection::getElementType(  ) throw (uno::RuntimeException, st
     return ::getCppuType(static_cast< uno::Reference<report::XReportComponent>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OSection::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSection::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xDrawPage.is() ? m_xDrawPage->hasElements() : sal_False;

@@ -31,7 +31,7 @@ void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException, std::except
 {
 }
 
-::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bRet = false;
 
@@ -77,7 +77,7 @@ void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 ) throw (css::uno::RuntimeE
     return AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME;
 }
 
-::sal_Bool SAL_CALL VLCWindow::supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VLCWindow::supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }

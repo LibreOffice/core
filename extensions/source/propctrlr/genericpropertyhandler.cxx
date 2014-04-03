@@ -293,7 +293,7 @@ namespace pcr
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL GenericPropertyHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
@@ -620,7 +620,7 @@ namespace pcr
         return aDescriptor;
     }
 
-    ::sal_Bool SAL_CALL GenericPropertyHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL GenericPropertyHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         return sal_False;
     }

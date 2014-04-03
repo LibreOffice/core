@@ -57,7 +57,7 @@ Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static(void) 
     return aSupported;
 }
 
-::sal_Bool SAL_CALL OStatusbarController::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -156,17 +156,17 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 }
 
 // XStatusbarController
-::sal_Bool SAL_CALL OStatusbarController::mouseButtonDown(const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::mouseButtonDown(const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_rController.is() && m_rController->mouseButtonDown(_aEvent);
 }
 
-::sal_Bool SAL_CALL OStatusbarController::mouseMove(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::mouseMove(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_rController.is() && m_rController->mouseMove(_aEvent);
 }
 
-::sal_Bool SAL_CALL OStatusbarController::mouseButtonUp(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::mouseButtonUp(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_rController.is() && m_rController->mouseButtonUp(_aEvent);
 }
@@ -174,7 +174,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 void SAL_CALL OStatusbarController::command(
     const ::com::sun::star::awt::Point& aPos,
     ::sal_Int32 nCommand,
-    ::sal_Bool bMouseEvent,
+    sal_Bool bMouseEvent,
     const ::com::sun::star::uno::Any& aData )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

@@ -29,7 +29,7 @@ class ListLevelsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     ListLevelsEnumWrapper( SwVbaListLevels* pLevels ) : pListLevels( pLevels ), nIndex( 1 ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex <= pListLevels->getCount() );
     }

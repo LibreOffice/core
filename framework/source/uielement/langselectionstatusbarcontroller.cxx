@@ -112,7 +112,7 @@ public:
     // XStatusbarController
     virtual void SAL_CALL command( const css::awt::Point& aPos,
                                    ::sal_Int32 nCommand,
-                                   ::sal_Bool bMouseEvent,
+                                   sal_Bool bMouseEvent,
                                    const css::uno::Any& aData ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL click( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -291,7 +291,7 @@ throw (css::uno::RuntimeException)
 void SAL_CALL LangSelectionStatusbarController::command(
     const css::awt::Point& aPos,
     ::sal_Int32 nCommand,
-    ::sal_Bool /*bMouseEvent*/,
+    sal_Bool /*bMouseEvent*/,
     const css::uno::Any& /*aData*/ )
 throw (css::uno::RuntimeException, std::exception)
 {

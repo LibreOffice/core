@@ -93,7 +93,7 @@ public:
     {
         return ::getCppuType( (sal_Int32*)0 );
     }
-    virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return (maColorData.size() > 0);
     }

@@ -442,7 +442,7 @@ sal_Bool Package::isBundle() throw (RuntimeException, std::exception)
 }
 
 
-::sal_Bool Package::checkDependencies(
+sal_Bool Package::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& )
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,

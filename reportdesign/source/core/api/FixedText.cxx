@@ -182,13 +182,13 @@ void SAL_CALL OFixedText::setDataField( const OUString& /*_datafield*/ ) throw (
 
 
 
-::sal_Bool SAL_CALL OFixedText::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFixedText::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.bPrintWhenGroupChange;
 }
 
-void SAL_CALL OFixedText::setPrintWhenGroupChange( ::sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFixedText::setPrintWhenGroupChange( sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
@@ -259,7 +259,7 @@ uno::Type SAL_CALL OFixedText::getElementType(  ) throw (uno::RuntimeException, 
     return ::getCppuType(static_cast< uno::Reference<report::XFormatCondition>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OFixedText::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFixedText::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     return m_aProps.hasElements();
 }

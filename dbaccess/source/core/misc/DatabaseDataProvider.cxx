@@ -157,7 +157,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 }
 
 // chart2::data::XDataProvider:
-::sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException, std::exception)
 {
     const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
     const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
@@ -275,7 +275,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
     return aArguments.getPropertyValues();
 }
 
-::sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/) throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
@@ -368,7 +368,7 @@ double SAL_CALL DatabaseDataProvider::getNotANumber()    throw (uno::RuntimeExce
     return m_xComplexDescriptionAccess->getNotANumber();
 }
 
-::sal_Bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )    throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )    throw (uno::RuntimeException, std::exception)
 {
     return m_xComplexDescriptionAccess->isNotANumber(nNumber);
 }
@@ -502,13 +502,13 @@ void SAL_CALL DatabaseDataProvider::setFilter(const OUString & the_value) throw 
     set(PROPERTY_FILTER,the_value,m_Filter);
 }
 
-::sal_Bool SAL_CALL DatabaseDataProvider::getApplyFilter() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL DatabaseDataProvider::getApplyFilter() throw (RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     return m_ApplyFilter;
 }
 
-void SAL_CALL DatabaseDataProvider::setApplyFilter( ::sal_Bool the_value ) throw (RuntimeException, std::exception)
+void SAL_CALL DatabaseDataProvider::setApplyFilter( sal_Bool the_value ) throw (RuntimeException, std::exception)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -562,13 +562,13 @@ void SAL_CALL DatabaseDataProvider::setOrder( const OUString& the_value ) throw 
     set(PROPERTY_ORDER,the_value,m_Order);
 }
 
-::sal_Bool SAL_CALL DatabaseDataProvider::getEscapeProcessing() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DatabaseDataProvider::getEscapeProcessing() throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
     return m_EscapeProcessing;
 }
 
-void SAL_CALL DatabaseDataProvider::setEscapeProcessing(::sal_Bool the_value) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DatabaseDataProvider::setEscapeProcessing(sal_Bool the_value) throw (uno::RuntimeException, std::exception)
 {
     set(PROPERTY_ESCAPE_PROCESSING,the_value,m_EscapeProcessing);
 }

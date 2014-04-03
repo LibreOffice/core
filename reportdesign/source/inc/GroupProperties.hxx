@@ -29,9 +29,9 @@ namespace rptshared
         OUString                                                             m_sExpression;
         ::sal_Int16                                                                 m_nGroupOn;
         ::sal_Int16                                                                 m_nKeepTogether;
-        ::sal_Bool                                                                  m_eSortAscending;
-        ::sal_Bool                                                                  m_bStartNewColumn;
-        ::sal_Bool                                                                  m_bResetPageNumber;
+        sal_Bool                                                                  m_eSortAscending;
+        sal_Bool                                                                  m_bStartNewColumn;
+        sal_Bool                                                                  m_bResetPageNumber;
 
         GroupProperties()
         :m_nGroupInterval(1)

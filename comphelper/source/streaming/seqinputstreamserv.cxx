@@ -50,7 +50,7 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo - static versions (used for component registration)
@@ -101,7 +101,7 @@ OUString SAL_CALL SequenceInputStreamService::getImplementationName_static()
     return OUString( "com.sun.star.comp.SequenceInputStreamService" );
 }
 
-::sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName ) throw ( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName ) throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);
 }

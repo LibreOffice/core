@@ -82,7 +82,7 @@ public:
 
     // XServiceInfo Methods
     virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) { return getServiceImplName(); }
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException)
     {
         css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
         const OUString* pStart = sServices.getConstArray();

@@ -64,7 +64,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getAccessibleActionCount()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex)
+    virtual sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex)

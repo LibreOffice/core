@@ -5256,7 +5256,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
     return m_pImpl->GetAllRelationshipsIfAny();
 }
 
-void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, ::sal_Bool bReplace  )
+void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
         throw ( container::ElementExistException,
                 io::IOException,
                 uno::RuntimeException, std::exception )
@@ -5360,7 +5360,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
     throw container::NoSuchElementException( THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
-void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, ::sal_Bool bReplace  )
+void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, sal_Bool bReplace  )
         throw ( container::ElementExistException,
                 io::IOException,
                 uno::RuntimeException, std::exception )

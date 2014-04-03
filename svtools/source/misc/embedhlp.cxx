@@ -74,7 +74,7 @@ public:
                                     throw (embed::WrongStateException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
                                     throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership )
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership )
                                     throw (util::CloseVetoException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -193,7 +193,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
     }
 }
 
-void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, ::sal_Bool )
+void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, sal_Bool )
         throw ( util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     // An embedded object can be shared between several objects (f.e. for undo purposes)

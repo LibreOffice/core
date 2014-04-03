@@ -839,9 +839,9 @@ void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
 
 
 // virtual
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 InteractionSupplyAuthentication::canUseSystemCredentials(
-        ::sal_Bool& Default )
+        sal_Bool& Default )
     throw ( uno::RuntimeException, std::exception )
 {
     Default = m_bDefaultUseSystemCredentials;
@@ -851,7 +851,7 @@ InteractionSupplyAuthentication::canUseSystemCredentials(
 
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
-        ::sal_Bool UseSystemCredentials )
+        sal_Bool UseSystemCredentials )
     throw ( uno::RuntimeException, std::exception )
 {
     if ( m_bCanUseSystemCredentials )

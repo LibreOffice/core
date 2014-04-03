@@ -206,7 +206,7 @@ private:
         throw (css::accessibility::IllegalAccessibleComponentStateException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL containsPoint(css::awt::Point const & rPoint)
+    virtual sal_Bool SAL_CALL containsPoint(css::awt::Point const & rPoint)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
@@ -236,7 +236,7 @@ private:
     virtual ::sal_Int32 SAL_CALL getCaretPosition()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL setCaretPosition(::sal_Int32 nIndex)
+    virtual sal_Bool SAL_CALL setCaretPosition(::sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -270,7 +270,7 @@ private:
     virtual ::sal_Int32 SAL_CALL getSelectionEnd()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL setSelection(::sal_Int32 nStartIndex,
+    virtual sal_Bool SAL_CALL setSelection(::sal_Int32 nStartIndex,
                                              ::sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -287,44 +287,44 @@ private:
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL copyText(::sal_Int32 nStartIndex,
+    virtual sal_Bool SAL_CALL copyText(::sal_Int32 nStartIndex,
                                          ::sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL cutText(::sal_Int32 nStartIndex,
+    virtual sal_Bool SAL_CALL cutText(::sal_Int32 nStartIndex,
                                         ::sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL pasteText(::sal_Int32 nIndex)
+    virtual sal_Bool SAL_CALL pasteText(::sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL deleteText(::sal_Int32 nStartIndex,
+    virtual sal_Bool SAL_CALL deleteText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL insertText(OUString const & rText,
+    virtual sal_Bool SAL_CALL insertText(OUString const & rText,
                                            ::sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL replaceText(
+    virtual sal_Bool SAL_CALL replaceText(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
         OUString const & rReplacement)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL setAttributes(
+    virtual sal_Bool SAL_CALL setAttributes(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
         css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet)
         throw (css::lang::IndexOutOfBoundsException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL setText(OUString const & rText)
+    virtual sal_Bool SAL_CALL setText(OUString const & rText)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL

@@ -73,7 +73,7 @@ public:
        rRequest)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL
+    virtual sal_Bool SAL_CALL
         handleInteractionRequest(
             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _Request
         )   throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -165,7 +165,7 @@ UUIInteractionHandler::handle(
     }
 }
 
-::sal_Bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
+sal_Bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
     const uno::Reference< task::XInteractionRequest >& _Request ) throw ( uno::RuntimeException, std::exception )
 {
     try

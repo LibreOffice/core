@@ -138,12 +138,12 @@ namespace pcr
         void dispose();
 
         // XObjectInspectorUI overridables
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, ::sal_Bool _bEnable ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, ::sal_Bool _bEnable ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, ::sal_Bool _bShow ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) SAL_OVERRIDE;

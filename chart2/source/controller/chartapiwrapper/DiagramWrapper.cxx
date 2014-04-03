@@ -817,7 +817,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::Runti
         xDiaProps->setPropertyValue( "RelativePosition", Any() );
     }
 }
-::sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -837,7 +837,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(true) );
 }
-::sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )

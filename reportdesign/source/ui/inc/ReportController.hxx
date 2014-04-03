@@ -380,7 +380,7 @@ namespace rptui
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XSelectionSupplier
-        virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -405,7 +405,7 @@ namespace rptui
         virtual void SAL_CALL setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
         virtual OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual ::sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         // XVisualObject
         virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -761,7 +761,7 @@ namespace toolkit
     }
 
 
-    ::sal_Bool SAL_CALL WindowStyleSettings::getHighContrastMode() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL WindowStyleSettings::getHighContrastMode() throw (RuntimeException, std::exception)
     {
         StyleMethodGuard aGuard( *m_pData );
         const Window* pWindow = m_pData->pOwningWindow->GetWindow();
@@ -771,7 +771,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL WindowStyleSettings::setHighContrastMode( ::sal_Bool _highcontrastmode ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStyleSettings::setHighContrastMode( sal_Bool _highcontrastmode ) throw (RuntimeException, std::exception)
     {
         StyleMethodGuard aGuard( *m_pData );
         Window* pWindow = m_pData->pOwningWindow->GetWindow();

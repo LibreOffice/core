@@ -78,9 +78,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //  XTempFile
-    virtual ::sal_Bool SAL_CALL getRemoveFile()
+    virtual sal_Bool SAL_CALL getRemoveFile()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRemoveFile( ::sal_Bool _removefile )
+    virtual void SAL_CALL setRemoveFile( sal_Bool _removefile )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getUri()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -123,7 +123,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

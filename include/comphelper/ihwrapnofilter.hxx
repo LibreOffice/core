@@ -65,7 +65,7 @@ namespace comphelper {
         virtual OUString SAL_CALL getImplementationName()
             throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()

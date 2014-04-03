@@ -164,7 +164,7 @@ protected:
     //=== Impl methods for ...ForLocale methods ===
     OUString SAL_CALL implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem )
         throw (::com::sun::star::resource::MissingResourceException);
-    ::sal_Bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
+    sal_Bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
     ::com::sun::star::uno::Sequence< OUString > implGetResourceIDs( LocaleItem* pLocaleItem );
     void implSetString( const OUString& ResourceID,
         const OUString& Str, LocaleItem* pLocaleItem );
@@ -203,9 +203,9 @@ public:
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
+    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
@@ -221,9 +221,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStringResourceManager
-    virtual ::sal_Bool SAL_CALL isReadOnly()
+    virtual sal_Bool SAL_CALL isReadOnly()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, ::sal_Bool FindClosestMatch )
+    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
@@ -355,9 +355,9 @@ public:
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
+    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
@@ -373,9 +373,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStringResourceManager
-    virtual ::sal_Bool SAL_CALL isReadOnly()
+    virtual sal_Bool SAL_CALL isReadOnly()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, ::sal_Bool FindClosestMatch )
+    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
@@ -407,7 +407,7 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isModified(  )
+    virtual sal_Bool SAL_CALL isModified(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setComment( const OUString& Comment )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -469,9 +469,9 @@ public:
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
+    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
@@ -487,9 +487,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStringResourceManager
-    virtual ::sal_Bool SAL_CALL isReadOnly()
+    virtual sal_Bool SAL_CALL isReadOnly()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, ::sal_Bool FindClosestMatch )
+    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
@@ -521,7 +521,7 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isModified(  )
+    virtual sal_Bool SAL_CALL isModified(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setComment( const OUString& Comment )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -595,9 +595,9 @@ public:
         const ::com::sun::star::lang::Locale& locale )
             throw ( ::com::sun::star::resource::MissingResourceException,
                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
+    virtual sal_Bool SAL_CALL hasEntryForId( const OUString& ResourceID )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
+    virtual sal_Bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const ::com::sun::star::lang::Locale& locale )
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getResourceIDs(  )
@@ -613,9 +613,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStringResourceManager
-    virtual ::sal_Bool SAL_CALL isReadOnly()
+    virtual sal_Bool SAL_CALL isReadOnly()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, ::sal_Bool FindClosestMatch )
+    virtual void SAL_CALL setCurrentLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool FindClosestMatch )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setDefaultLocale( const ::com::sun::star::lang::Locale& locale )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException,
@@ -647,7 +647,7 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::Exception,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isModified(  )
+    virtual sal_Bool SAL_CALL isModified(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setComment( const OUString& Comment )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

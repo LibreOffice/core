@@ -316,7 +316,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 
 // XStatusbarController
 
-::sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
+sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     const awt::MouseEvent& rMouseEvent )
 throw ( uno::RuntimeException, std::exception )
 {
@@ -334,7 +334,7 @@ throw ( uno::RuntimeException, std::exception )
 
 
 
-::sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
+sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
 throw (uno::RuntimeException, std::exception)
 {
@@ -351,7 +351,7 @@ throw (uno::RuntimeException, std::exception)
 
 
 
-::sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
+sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     const ::awt::MouseEvent& rMouseEvent )
 throw ( uno::RuntimeException, std::exception )
 {
@@ -371,7 +371,7 @@ throw ( uno::RuntimeException, std::exception )
 void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
-    ::sal_Bool /*bMouseEvent*/,
+    sal_Bool /*bMouseEvent*/,
     const ::com::sun::star::uno::Any& /*aData*/ )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

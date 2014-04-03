@@ -108,7 +108,7 @@ void SAL_CALL VCLXTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpa
     TabControl* pTabCtrl = (TabControl*)GetWindow();
     return pTabCtrl != NULL ? pTabCtrl->GetPageCount() : 0;
 }
-::sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
 {
     return (getActiveTabPageID() == tabPageIndex);
 }

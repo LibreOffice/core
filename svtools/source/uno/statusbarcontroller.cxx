@@ -299,21 +299,21 @@ throw ( RuntimeException, std::exception )
 }
 
 // XStatusbarController
-::sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
+sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-::sal_Bool SAL_CALL StatusbarController::mouseMove(
+sal_Bool SAL_CALL StatusbarController::mouseMove(
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-::sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
+sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -323,7 +323,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 void SAL_CALL StatusbarController::command(
     const ::com::sun::star::awt::Point&,
     ::sal_Int32,
-    ::sal_Bool,
+    sal_Bool,
     const ::com::sun::star::uno::Any& )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

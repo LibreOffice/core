@@ -55,17 +55,17 @@ OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException, std::excep
     return aURL.GetURLPath();
 }
 
-::sal_Bool SAL_CALL SwVbaAddin::getAutoload() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaAddin::getAutoload() throw (uno::RuntimeException, std::exception)
 {
     return mbAutoload;
 }
 
-::sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::exception)
 {
     return mbInstalled;
 }
 
-void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed ) throw (uno::RuntimeException, std::exception)
 {
     if( _installed != mbInstalled )
     {

@@ -37,12 +37,12 @@ public:
     virtual ~VLCWindow();
 
     void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     css::media::ZoomLevel SAL_CALL getZoomLevel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setPointerType( ::sal_Int32 SystemPointerType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

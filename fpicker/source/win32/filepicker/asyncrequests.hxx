@@ -194,7 +194,7 @@ class AsyncRequests : private ::cppu::BaseMutex
 
     private:
 
-        ::sal_Bool m_bFinish;
+        sal_Bool m_bFinish;
         RequestHandlerRef m_rHandler;
         RequestQueue m_lRequests;
         osl::Condition maWait;

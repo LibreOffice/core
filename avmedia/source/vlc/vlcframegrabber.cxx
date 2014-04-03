@@ -100,7 +100,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
     return AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME;
 }
 
-::sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName )
+sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName )
         throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);

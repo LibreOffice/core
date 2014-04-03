@@ -100,7 +100,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
 }
 
 
-static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
+static sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     // even child frame containing top level windows (e.g. query designer of database) will be closed
     css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);

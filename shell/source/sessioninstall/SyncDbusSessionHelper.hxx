@@ -44,9 +44,9 @@ namespace shell { namespace sessioninstall
             virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* files */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
             // XQuery Methods
-            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, ::sal_Bool& /* installed */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, ::sal_Bool& /* installed */, OUString& /* package_name */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
 
         private:

@@ -481,7 +481,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     return xController;
 }
 
-::sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
@@ -489,7 +489,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     return pFormShell ? pFormShell->IsDesignMode() : sal_True;
 }
 
-void SAL_CALL SwXTextView::setFormDesignMode( ::sal_Bool _DesignMode ) throw (RuntimeException, std::exception)
+void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool _DesignMode ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();

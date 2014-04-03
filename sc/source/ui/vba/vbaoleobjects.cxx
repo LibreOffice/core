@@ -64,7 +64,7 @@ public:
             return cppu::UnoType<drawing::XControlShape>::get();
         }
 
-        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             return ( getCount() > 0 );
         }
@@ -81,7 +81,7 @@ class EnumWrapper : public EnumerationHelper_BASE
 public:
         EnumWrapper(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< container::XIndexAccess >& xIndexAccess ) :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
 
-        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }

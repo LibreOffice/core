@@ -240,14 +240,14 @@ namespace canvas
             return this;
         }
 
-        virtual ::sal_Bool SAL_CALL hasFullScreenMode(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL hasFullScreenMode(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.hasFullScreenMode();
         }
 
-        virtual ::sal_Bool SAL_CALL enterFullScreenMode( ::sal_Bool bEnter ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool bEnter ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 

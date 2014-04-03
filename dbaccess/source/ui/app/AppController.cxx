@@ -2799,7 +2799,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
     m_pSelectionNotifier->removeListener( _Listener );
 }
 
-::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );

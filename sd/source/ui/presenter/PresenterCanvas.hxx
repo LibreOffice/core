@@ -326,7 +326,7 @@ public:
             const css::uno::Reference< css::rendering::XSprite >& original)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    ::sal_Bool SAL_CALL updateScreen (::sal_Bool bUpdateAll)
+    sal_Bool SAL_CALL updateScreen (sal_Bool bUpdateAll)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 

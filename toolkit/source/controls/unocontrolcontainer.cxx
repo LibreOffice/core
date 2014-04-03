@@ -579,7 +579,7 @@ uno::Type SAL_CALL UnoControlContainer::getElementType(  ) throw (uno::RuntimeEx
     return cppu::UnoType<awt::XControlModel>::get();
 }
 
-::sal_Bool SAL_CALL UnoControlContainer::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoControlContainer::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return !mpControls->empty();

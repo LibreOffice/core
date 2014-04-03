@@ -117,8 +117,8 @@ public:
     void SAL_CALL setAcceleration( double _acceleration ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     double SAL_CALL getDecelerate() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setDecelerate( double _decelerate ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    ::sal_Bool SAL_CALL getAutoReverse() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    void SAL_CALL setAutoReverse( ::sal_Bool _autoreverse ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL getAutoReverse() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    void SAL_CALL setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     Sequence< NamedValue > SAL_CALL getUserData() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setUserData( const Sequence< NamedValue >& _userdata ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 

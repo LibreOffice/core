@@ -535,7 +535,7 @@ namespace
         {
         }
 
-        virtual ::sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Any SAL_CALL getSelection(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -549,7 +549,7 @@ namespace
         Any m_aSelection;
     };
 
-    ::sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException

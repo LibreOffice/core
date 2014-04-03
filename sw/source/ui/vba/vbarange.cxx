@@ -362,7 +362,7 @@ void SAL_CALL SwVbaRange::setEnd( ::sal_Int32 _end ) throw (uno::RuntimeExceptio
     mxTextCursor->gotoRange( xEnd, sal_True );
 }
 
-::sal_Bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaRange::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
 {
     SwVbaRange* pRange = dynamic_cast< SwVbaRange* >( Range.get() );
     if( !pRange )

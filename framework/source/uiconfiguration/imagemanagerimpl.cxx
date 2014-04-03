@@ -857,7 +857,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return aImageNameSeq;
 }
 
-::sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
+sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard g;

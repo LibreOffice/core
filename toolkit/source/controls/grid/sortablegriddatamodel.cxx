@@ -73,9 +73,9 @@ protected:
 
 public:
     // XSortableGridData
-    virtual void SAL_CALL sortByColumn( ::sal_Int32 ColumnIndex, ::sal_Bool SortAscending ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL sortByColumn( ::sal_Int32 ColumnIndex, sal_Bool SortAscending ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeColumnSort(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::beans::Pair< ::sal_Int32, ::sal_Bool > SAL_CALL getCurrentSortOrder(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::beans::Pair< ::sal_Int32, sal_Bool > SAL_CALL getCurrentSortOrder(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XMutableGridDataModel
     virtual void SAL_CALL addRow( const css::uno::Any& Heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -108,7 +108,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
@@ -584,7 +584,7 @@ private:
     }
 
 
-    void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, ::sal_Bool i_sortAscending ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL SortableGridDataModel::sortByColumn( ::sal_Int32 i_columnIndex, sal_Bool i_sortAscending ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this, rBHelper );
 
@@ -633,11 +633,11 @@ private:
     }
 
 
-    css::beans::Pair< ::sal_Int32, ::sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  ) throw (RuntimeException, std::exception)
+    css::beans::Pair< ::sal_Int32, sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  ) throw (RuntimeException, std::exception)
     {
         MethodGuard aGuard( *this, rBHelper );
 
-        return css::beans::Pair< ::sal_Int32, ::sal_Bool >( m_currentSortColumn, m_sortAscending );
+        return css::beans::Pair< ::sal_Int32, sal_Bool >( m_currentSortColumn, m_sortAscending );
     }
 
 
@@ -881,7 +881,7 @@ private:
         return OUString( "org.openoffice.comp.toolkit.SortableGridDataModel" );
     }
 
-    ::sal_Bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, i_serviceName);
     }

@@ -40,7 +40,7 @@ public:
     AnnotationEnumeration( const AnnotationVector& rAnnotations );
 
     // ::com::sun::star::office::XAnnotationEnumeration:
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception) SAL_OVERRIDE;
 
 private:
@@ -65,7 +65,7 @@ AnnotationEnumeration::AnnotationEnumeration( const AnnotationVector& rAnnotatio
 }
 
 // ::com::sun::star::office::XAnnotationEnumeration:
-::sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException, std::exception)
 {
     return maIter != maAnnotations.end() ? sal_True : sal_False;
 }

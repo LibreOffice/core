@@ -49,7 +49,7 @@ namespace
             virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return m_pResMgr.get() ? SAL_MAX_UINT16 : 0; };
             // XElementAccess
-            virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
                 { return static_cast<bool>(m_pResMgr.get()); };
 
         protected:
@@ -131,7 +131,7 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
     return aResult;
 }
 
-::sal_Bool SAL_CALL ResourceIndexAccess::hasByName(const OUString& aName)
+sal_Bool SAL_CALL ResourceIndexAccess::hasByName(const OUString& aName)
     throw (RuntimeException, std::exception)
 {
     const Sequence<OUString> aNames(getElementNames());

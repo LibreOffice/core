@@ -73,7 +73,7 @@ ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException, 
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
 {
     // menu bar is always visible in OOo
@@ -97,7 +97,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
     return bVisible;
 }
 void SAL_CALL
-ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
+ScVbaCommandBar::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -119,7 +119,7 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException,
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaCommandBar::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     // emulated with Visible
@@ -209,18 +209,18 @@ void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name ) throw (uno::R
     maName = _name;
 }
 
-::sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException, std::exception)
 {
     // #STUB
     return sal_True;
 }
 
-void SAL_CALL VbaDummyCommandBar::setVisible( ::sal_Bool /*_visible*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL VbaDummyCommandBar::setVisible( sal_Bool /*_visible*/ ) throw (uno::RuntimeException, std::exception)
 {
     // #STUB
 }
 
-::sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException, std::exception)
 {
     // emulated with Visible
     return getVisible();

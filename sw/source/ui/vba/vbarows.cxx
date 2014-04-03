@@ -43,7 +43,7 @@ public:
     {
         mxIndexAccess.set( mxTextTable->getRows(), uno::UNO_QUERY );
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ( nIndex < mxIndexAccess->getCount() );
     }

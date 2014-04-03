@@ -176,7 +176,7 @@ namespace sd { namespace colortoolpanel
     }
 
 
-    ::sal_Bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
+    sal_Bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )

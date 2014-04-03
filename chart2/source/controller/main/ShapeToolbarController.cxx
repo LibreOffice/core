@@ -52,7 +52,7 @@ Sequence< OUString > ShapeToolbarController::getSupportedServiceNames_Static() t
     return aSupported;
 }
 
-::sal_Bool ShapeToolbarController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool ShapeToolbarController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
@@ -232,7 +232,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 }
 
 // ::com::sun::star::frame::XSubToolbarController
-::sal_Bool ShapeToolbarController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
+sal_Bool ShapeToolbarController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
     return ( m_nSlotId == SID_DRAWTBX_CS_BASIC ||
              m_nSlotId == SID_DRAWTBX_CS_SYMBOL ||

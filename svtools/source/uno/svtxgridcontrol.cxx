@@ -745,7 +745,7 @@ Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows() throw (Runti
 }
 
 
-::sal_Bool SAL_CALL SVTXGridControl::hasSelectedRows() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SVTXGridControl::hasSelectedRows() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -756,7 +756,7 @@ Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelectedRows() throw (Runti
 }
 
 
-::sal_Bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SVTXGridControl::isRowSelected( ::sal_Int32 index ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

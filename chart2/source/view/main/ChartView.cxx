@@ -362,7 +362,7 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
 
     return aRet;
 }
-::sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
+sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
                 throw (uno::RuntimeException, std::exception)
 {
     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||

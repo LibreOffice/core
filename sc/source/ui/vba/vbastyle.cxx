@@ -85,7 +85,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
 }
 
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaStyle::BuiltIn() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     return !mxStyle->isUserDefined();

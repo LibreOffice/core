@@ -2072,28 +2072,28 @@ namespace frm
     }
 
 
-    void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, ::sal_Bool bSelect ) throw (RuntimeException, std::exception)
+    void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, sal_Bool bSelect ) throw (RuntimeException, std::exception)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemPos( nPos, bSelect );
     }
 
 
-    void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, ::sal_Bool bSelect ) throw (RuntimeException, std::exception)
+    void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, sal_Bool bSelect ) throw (RuntimeException, std::exception)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemsPos( aPositions, bSelect );
     }
 
 
-    void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, ::sal_Bool bSelect ) throw (RuntimeException, std::exception)
+    void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, sal_Bool bSelect ) throw (RuntimeException, std::exception)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItem( aItem, bSelect );
     }
 
 
-    ::sal_Bool SAL_CALL OListBoxControl::isMutipleMode(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OListBoxControl::isMutipleMode(  ) throw (RuntimeException, std::exception)
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->isMutipleMode();
@@ -2101,7 +2101,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OListBoxControl::setMultipleMode( ::sal_Bool bMulti ) throw (RuntimeException, std::exception)
+    void SAL_CALL OListBoxControl::setMultipleMode( sal_Bool bMulti ) throw (RuntimeException, std::exception)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->setMultipleMode( bMulti );

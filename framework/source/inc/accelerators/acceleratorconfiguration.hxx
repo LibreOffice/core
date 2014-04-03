@@ -158,17 +158,17 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
             throw(css::uno::Exception       ,
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL isModified()
+        virtual sal_Bool SAL_CALL isModified()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL isReadOnly()
+        virtual sal_Bool SAL_CALL isReadOnly()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUIConfigurationStorage
         virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL hasStorage()
+        virtual sal_Bool SAL_CALL hasStorage()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUIConfiguration
@@ -366,17 +366,17 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
             throw(css::uno::Exception       ,
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL isModified()
+        virtual sal_Bool SAL_CALL isModified()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL isReadOnly()
+        virtual sal_Bool SAL_CALL isReadOnly()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUIConfigurationStorage
         virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::sal_Bool SAL_CALL hasStorage()
+        virtual sal_Bool SAL_CALL hasStorage()
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUIConfiguration

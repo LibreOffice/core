@@ -130,7 +130,7 @@ void SAL_CALL VistaFilePicker::disposing(const css::lang::EventObject& /*aEvent*
 }
 
 
-void SAL_CALL VistaFilePicker::setMultiSelectionMode(::sal_Bool bMode)
+void SAL_CALL VistaFilePicker::setMultiSelectionMode(sal_Bool bMode)
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -304,7 +304,7 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
     // if we want to show a modal window, the calling thread needs to process messages
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::PROCESS_MESSAGES);
 
-    const ::sal_Bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, (::sal_Bool)sal_False                  );
+    const sal_Bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, (sal_Bool)sal_False                  );
                      m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< OUString >());
 
     ::sal_Int16 nResult = css::ui::dialogs::ExecutableDialogResults::CANCEL;
@@ -354,7 +354,7 @@ css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
 
 
 void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
-                                             ::sal_Bool  bEnable   )
+                                             sal_Bool  bEnable   )
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -485,7 +485,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     sal_Int32         nTemplate = -1;
     lArguments[0] >>= nTemplate;
 
-    ::sal_Bool  bFileOpenDialog = sal_True;
+    sal_Bool  bFileOpenDialog = sal_True;
     ::sal_Int32 nFeatures       = 0;
 
     switch(nTemplate)

@@ -953,7 +953,7 @@ ScVbaWorksheet::getValue( const OUString& aPropertyName ) throw (beans::UnknownP
     return uno::makeAny( xControl );
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaWorksheet::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeException, std::exception)
 {
     return false;
@@ -982,7 +982,7 @@ ScVbaWorksheet::getFormControls()
     return xFormControls;
 
                 }
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaWorksheet::hasProperty( const OUString& aName ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
@@ -1032,12 +1032,12 @@ ScVbaWorksheet::getServiceImplName()
 }
 
 void SAL_CALL
-ScVbaWorksheet::setEnableCalculation( ::sal_Bool bEnableCalculation ) throw ( script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaWorksheet::setEnableCalculation( sal_Bool bEnableCalculation ) throw ( script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);
         xCalculatable->enableAutomaticCalculation( bEnableCalculation);
 }
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaWorksheet::getEnableCalculation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     uno::Reference <sheet::XCalculatable> xCalculatable(getModel(), uno::UNO_QUERY_THROW);

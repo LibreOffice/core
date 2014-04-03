@@ -172,7 +172,7 @@ private:
 
     ::cppu::OPropertyArrayHelper* m_pPropHelp;
 
-    ::sal_Bool m_bIgnoreEvents;
+    sal_Bool m_bIgnoreEvents;
 
 public:
 

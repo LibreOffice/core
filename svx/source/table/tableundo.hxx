@@ -63,7 +63,7 @@ private:
         OUString msFormula;
         double          mfValue;
         ::sal_Int32     mnError;
-        ::sal_Bool      mbMerged;
+        sal_Bool      mbMerged;
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 

@@ -30,7 +30,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
-::sal_Bool SAL_CALL OPrivateRow::wasNull(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OPrivateRow::wasNull(  ) throw (SQLException, RuntimeException, std::exception)
     {
         return m_aRow[m_nPos].isNull();
     }
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
         m_nPos = columnIndex;
         return m_aRow[m_nPos];
     }
-    ::sal_Bool SAL_CALL OPrivateRow::getBoolean( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL OPrivateRow::getBoolean( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException, std::exception)
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos];

@@ -114,7 +114,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return m_pImpl->getAllImageNames( nImageType );
 }
 
-::sal_Bool SAL_CALL ModuleImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
+sal_Bool SAL_CALL ModuleImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_pImpl->hasImage(nImageType,aCommandURL);

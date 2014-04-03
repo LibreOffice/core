@@ -61,7 +61,7 @@ public:
     // XAnimation
     virtual void SAL_CALL startAnimation(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL stopAnimation(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isAnimationRunning(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isAnimationRunning(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -109,7 +109,7 @@ public:
     }
 
 
-    ::sal_Bool SAL_CALL AnimatedImagesControl::isAnimationRunning(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL AnimatedImagesControl::isAnimationRunning(  ) throw (RuntimeException, std::exception)
     {
         Reference< XAnimation > xAnimation( getPeer(), UNO_QUERY );
         if ( xAnimation.is() )
@@ -377,7 +377,7 @@ namespace toolkit {
     }
 
 
-    ::sal_Bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat() throw (RuntimeException, std::exception)
     {
         bool bAutoRepeat( true );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ) ) >>= bAutoRepeat );
@@ -385,7 +385,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( ::sal_Bool i_autoRepeat ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( sal_Bool i_autoRepeat ) throw (RuntimeException, std::exception)
     {
         setPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ), makeAny( i_autoRepeat ) );
     }

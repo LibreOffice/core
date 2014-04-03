@@ -184,7 +184,7 @@ class ComPtr
 #endif
 
 
-        ::sal_Bool equals(IUnknown* pCheck)
+        sal_Bool equals(IUnknown* pCheck)
         {
             if (
                 ( ! m_pInterface ) &&
@@ -195,14 +195,14 @@ class ComPtr
             IUnknown* pCurrent = NULL;
             m_pInterface->QueryInterface(IID_IUnknown, (void**)&pCurrent);
 
-            ::sal_Bool bEquals = (pCheck == pCurrent);
+            sal_Bool bEquals = (pCheck == pCurrent);
             pCurrent->Release();
 
             return bEquals;
         }
 
 
-        ::sal_Bool is()
+        sal_Bool is()
         {
             return (m_pInterface != 0);
         }

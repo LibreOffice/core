@@ -206,7 +206,7 @@ void SAL_CALL DrawController::removeEventListener (
 }
 
 // XController
-::sal_Bool SAL_CALL DrawController::suspend( ::sal_Bool Suspend ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     if( Suspend )
     {
@@ -810,7 +810,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
     return xController;
 }
 
-::sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -823,7 +823,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
     return bIsDesignMode;
 }
 
-void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DrawController::setFormDesignMode( sal_Bool _DesignMode ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

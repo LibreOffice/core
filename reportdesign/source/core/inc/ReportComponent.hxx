@@ -56,7 +56,7 @@ namespace reportdesign
         ::sal_Int32                                                                 m_nPosY;
         ::sal_Int32                                                                 m_nBorderColor;
         ::sal_Int16                                                                 m_nBorder;
-        ::sal_Bool                                                                  m_bPrintRepeatedValues;
+        sal_Bool                                                                  m_bPrintRepeatedValues;
 
         OReportComponentProperties(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext
             )

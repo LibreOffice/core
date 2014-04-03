@@ -110,7 +110,7 @@ namespace sd { namespace colortoolpanel
         return OUString( "org.openoffice.comp.example.custompanel.ToolPanelFactory" );
     }
 
-    ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const OUString& i_rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL ToolPanelFactory::supportsService( const OUString& i_rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, i_rServiceName);
     }

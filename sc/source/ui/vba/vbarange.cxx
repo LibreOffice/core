@@ -299,7 +299,7 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
 public:
 
     SingleRangeEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xRange( xRange ), mxContext( xContext ), bHasMore( true ) { }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return bHasMore; }
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return bHasMore; }
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( !bHasMore )
@@ -333,7 +333,7 @@ public:
         // XElementAccess
         virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return cppu::UnoType<table::XCellRange>::get(); }
 
-        virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return sal_True; }
+        virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return sal_True; }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return new SingleRangeEnumeration( mxParent, mxContext, m_xRange ); }
 
@@ -632,7 +632,7 @@ public:
         {
     }
 
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return mCurElem < mMaxElems; }
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return mCurElem < mMaxElems; }
 
     virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -682,7 +682,7 @@ public:
         }
         m_it = m_CellPositions.begin();
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_it != m_CellPositions.end(); }
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_it != m_CellPositions.end(); }
 
     virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -3053,7 +3053,7 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException, s
     }
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const uno::Any& LookAt, const uno::Any& SearchOrder, const uno::Any& MatchCase, const uno::Any& MatchByte, const uno::Any& SearchFormat, const uno::Any& ReplaceFormat  ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )

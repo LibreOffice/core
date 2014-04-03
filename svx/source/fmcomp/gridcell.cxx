@@ -3362,7 +3362,7 @@ awt::Rectangle SAL_CALL FmXGridCell::getPosSize(  ) throw (RuntimeException, std
 }
 
 
-void SAL_CALL FmXGridCell::setVisible( ::sal_Bool _Visible ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXGridCell::setVisible( sal_Bool _Visible ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL( "FmXGridCell::setVisible: not implemented" );
     (void)_Visible;
@@ -3370,7 +3370,7 @@ void SAL_CALL FmXGridCell::setVisible( ::sal_Bool _Visible ) throw (RuntimeExcep
 }
 
 
-void SAL_CALL FmXGridCell::setEnable( ::sal_Bool _Enable ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXGridCell::setEnable( sal_Bool _Enable ) throw (RuntimeException, std::exception)
 {
     OSL_FAIL( "FmXGridCell::setEnable: not implemented" );
     (void)_Enable;

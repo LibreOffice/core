@@ -195,14 +195,14 @@ void SAL_CALL SwVbaFind::setReplacement( const uno::Any& /*_replacement */ ) thr
     throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getForward() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getForward() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bBackward = sal_False;
     mxPropertyReplace->getPropertyValue("SearchBackwards") >>= bBackward;
     return !bBackward;
 }
 
-void SAL_CALL SwVbaFind::setForward( ::sal_Bool _forward ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setForward( sal_Bool _forward ) throw (uno::RuntimeException, std::exception)
 {
     sal_Bool bBackward = !_forward;
     mxPropertyReplace->setPropertyValue("SearchBackwards", uno::makeAny( bBackward ) );
@@ -220,66 +220,66 @@ void SAL_CALL SwVbaFind::setWrap( ::sal_Int32 _wrap ) throw (uno::RuntimeExcepti
     mnWrap = _wrap;
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getFormat() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getFormat() throw (uno::RuntimeException, std::exception)
 {
     return mxPropertyReplace->getValueSearch();
 }
 
-void SAL_CALL SwVbaFind::setFormat( ::sal_Bool _format ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setFormat( sal_Bool _format ) throw (uno::RuntimeException, std::exception)
 {
     mxPropertyReplace->setValueSearch( _format );
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getMatchCase() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getMatchCase() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool value = sal_False;
     mxPropertyReplace->getPropertyValue("SearchCaseSensitive") >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchCase( ::sal_Bool _matchcase ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setMatchCase( sal_Bool _matchcase ) throw (uno::RuntimeException, std::exception)
 {
     mxPropertyReplace->setPropertyValue("SearchCaseSensitive", uno::makeAny( _matchcase ) );
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool value = sal_False;
     mxPropertyReplace->getPropertyValue("SearchWords") >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchWholeWord( ::sal_Bool _matchwholeword ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setMatchWholeWord( sal_Bool _matchwholeword ) throw (uno::RuntimeException, std::exception)
 {
     mxPropertyReplace->setPropertyValue("SearchWords", uno::makeAny( _matchwholeword ) );
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getMatchWildcards() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getMatchWildcards() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool value = sal_False;
     mxPropertyReplace->getPropertyValue("SearchRegularExpression") >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchWildcards( ::sal_Bool _matchwildcards ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setMatchWildcards( sal_Bool _matchwildcards ) throw (uno::RuntimeException, std::exception)
 {
     mxPropertyReplace->setPropertyValue("SearchRegularExpression", uno::makeAny( _matchwildcards ) );
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool value = sal_False;
     mxPropertyReplace->getPropertyValue("SearchSimilarity") >>= value;
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchSoundsLike( ::sal_Bool _matchsoundslike ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setMatchSoundsLike( sal_Bool _matchsoundslike ) throw (uno::RuntimeException, std::exception)
 {
     // seems not accurate
     mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::makeAny( _matchsoundslike ) );
 }
 
-::sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool value = sal_False;
     mxPropertyReplace->getPropertyValue("SearchSimilarity") >>= value;
@@ -288,7 +288,7 @@ void SAL_CALL SwVbaFind::setMatchSoundsLike( ::sal_Bool _matchsoundslike ) throw
     return value;
 }
 
-void SAL_CALL SwVbaFind::setMatchAllWordForms( ::sal_Bool _matchallwordforms ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaFind::setMatchAllWordForms( sal_Bool _matchallwordforms ) throw (uno::RuntimeException, std::exception)
 {
     // seems not accurate
     mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::makeAny( _matchallwordforms ) );

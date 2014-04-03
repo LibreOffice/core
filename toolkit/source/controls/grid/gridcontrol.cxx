@@ -422,13 +422,13 @@ void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::Ru
 }
 
 
-::sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->hasSelectedRows();
 }
 
 
-::sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->isRowSelected( index );
 }

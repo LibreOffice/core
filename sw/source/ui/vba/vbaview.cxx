@@ -189,7 +189,7 @@ SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::Run
     // not support in Writer
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 SwVbaView::getTableGridLines() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bShowTableGridLine = sal_False;
@@ -198,7 +198,7 @@ SwVbaView::getTableGridLines() throw (css::uno::RuntimeException, std::exception
 }
 
 void SAL_CALL
-SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException, std::exception)
+SwVbaView::setTableGridLines( sal_Bool _tablegridlines ) throw (css::uno::RuntimeException, std::exception)
 {
     mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::makeAny( _tablegridlines ) );
 }

@@ -104,8 +104,8 @@ public:
     virtual css::awt::MenuItemType SAL_CALL getItemType( ::sal_Int16 nItemPos ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL enableItem( sal_Int16 nItemId, sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isItemEnabled( sal_Int16 nItemId ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL hideDisabledEntries( ::sal_Bool bHide ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL enableAutoMnemonics( ::sal_Bool bEnable ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL hideDisabledEntries( sal_Bool bHide ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL enableAutoMnemonics( sal_Bool bEnable ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setItemText( sal_Int16 nItemId, const OUString& aText ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getItemText( sal_Int16 nItemId ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setCommand( sal_Int16 nItemId, const OUString& aCommand ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -117,7 +117,7 @@ public:
     virtual void SAL_CALL setTipHelpText( ::sal_Int16 nItemId, const OUString& sTipHelpText ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getTipHelpText( ::sal_Int16 nItemId ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL isPopupMenu(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isPopupMenu(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPopupMenu( sal_Int16 nItemId, const css::uno::Reference< css::awt::XPopupMenu >& aPopupMenu ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< css::awt::XPopupMenu > SAL_CALL getPopupMenu( sal_Int16 nItemId ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -128,16 +128,16 @@ public:
     virtual void SAL_CALL checkItem( sal_Int16 nItemId, sal_Bool bCheck ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isItemChecked( sal_Int16 nItemId ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int16 SAL_CALL execute( const css::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Rectangle& Position, ::sal_Int16 Direction ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isInExecute(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isInExecute(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endExecute(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setAcceleratorKeyEvent( ::sal_Int16 nItemId, const css::awt::KeyEvent& aKeyEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::awt::KeyEvent SAL_CALL getAcceleratorKeyEvent( ::sal_Int16 nItemId ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setItemImage( ::sal_Int16 nItemId, const css::uno::Reference< css::graphic::XGraphic >& xGraphic, ::sal_Bool bScale ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setItemImage( ::sal_Int16 nItemId, const css::uno::Reference< css::graphic::XGraphic >& xGraphic, sal_Bool bScale ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getItemImage( ::sal_Int16 nItemId ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

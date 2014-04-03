@@ -121,7 +121,7 @@ public:
 
     // XDirectInvocation
     virtual ::com::sun::star::uno::Any SAL_CALL directInvoke( const OUString& aName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasMember( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
 
     Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,

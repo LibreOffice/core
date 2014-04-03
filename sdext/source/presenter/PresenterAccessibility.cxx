@@ -406,7 +406,7 @@ public:
             css::lang::IllegalArgumentException,
             cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL copyText (sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+    virtual sal_Bool SAL_CALL copyText (sal_Int32 nStartIndex, sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:

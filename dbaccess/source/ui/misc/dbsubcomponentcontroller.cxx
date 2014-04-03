@@ -573,13 +573,13 @@ namespace dbaui
         m_pImpl->m_aModifyListeners.removeInterface( i_Listener );
     }
 
-    ::sal_Bool SAL_CALL DBSubComponentController::isModified(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DBSubComponentController::isModified(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( getMutex() );
         return impl_isModified();
     }
 
-    void SAL_CALL DBSubComponentController::setModified( ::sal_Bool i_bModified ) throw (PropertyVetoException, RuntimeException, std::exception)
+    void SAL_CALL DBSubComponentController::setModified( sal_Bool i_bModified ) throw (PropertyVetoException, RuntimeException, std::exception)
     {
         ::osl::ClearableMutexGuard aGuard( getMutex() );
 

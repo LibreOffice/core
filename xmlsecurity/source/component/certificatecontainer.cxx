@@ -31,7 +31,7 @@ CertificateContainer::searchMap( const OUString & url, const OUString & certific
 {
     Map::iterator p = _certMap.find(url);
 
-    ::sal_Bool ret = sal_False;
+    sal_Bool ret = sal_False;
 
     while( p != _certMap.end() )
     {
@@ -59,7 +59,7 @@ CertificateContainer::isCertificateTrust ( const OUString & url, const OUString 
 }
 
 sal_Bool
-CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, ::sal_Bool trust )
+CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     certMap.insert( Map::value_type( url, certificate_name ) );

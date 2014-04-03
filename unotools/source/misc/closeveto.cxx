@@ -60,7 +60,7 @@ namespace utl
         }
 
         // XCloseListener
-        virtual void SAL_CALL queryClosing( const EventObject& Source, ::sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XEventListener
@@ -78,7 +78,7 @@ namespace utl
     };
 
 
-    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, ::sal_Bool i_deliverOwnership ) throw (CloseVetoException, RuntimeException, std::exception)
+    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, sal_Bool i_deliverOwnership ) throw (CloseVetoException, RuntimeException, std::exception)
     {
         (void)i_source;
 

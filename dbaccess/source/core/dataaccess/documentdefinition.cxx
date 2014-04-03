@@ -247,7 +247,7 @@ namespace dbaccess
         }
 
         // XEmbeddedClient
-        virtual void SAL_CALL visibilityChanged( ::sal_Bool /*bVisible*/ ) throw (WrongStateException, RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) throw (WrongStateException, RuntimeException, std::exception) SAL_OVERRIDE
         {
         }
         inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
@@ -1910,7 +1910,7 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     }
 }
 
-::sal_Bool SAL_CALL ODocumentDefinition::close(  ) throw (WrappedTargetException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODocumentDefinition::close(  ) throw (WrappedTargetException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -2095,7 +2095,7 @@ void ODocumentDefinition::updateDocumentTitle()
         xTitle->setTitle(sName);
 }
 
-void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
+void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     (void) Source;
     (void) GetsOwnership;

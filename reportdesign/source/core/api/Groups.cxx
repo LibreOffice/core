@@ -166,7 +166,7 @@ uno::Type SAL_CALL OGroups::getElementType(  ) throw (uno::RuntimeException, std
     return ::getCppuType(static_cast< uno::Reference<report::XGroup>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OGroups::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroups::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return !m_aGroups.empty();

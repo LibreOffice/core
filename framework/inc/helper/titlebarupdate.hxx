@@ -127,7 +127,7 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
                     sal_True in casee module could be identified and all needed values could be read.
                     sal_False otherwise.
          */
-        ::sal_Bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
+        sal_Bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );
 
 

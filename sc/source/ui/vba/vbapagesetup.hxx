@@ -77,8 +77,8 @@ public:
     virtual sal_Bool SAL_CALL getPrintHeadings() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPrintHeadings( sal_Bool printHeadings ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::sal_Bool SAL_CALL getPrintGridlines() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPrintGridlines( ::sal_Bool _printgridlines ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getPrintGridlines() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPrintGridlines( sal_Bool _printgridlines ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::rtl::OUString SAL_CALL getPrintTitleRows() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPrintTitleRows( const ::rtl::OUString& _printtitlerows ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::rtl::OUString SAL_CALL getPrintTitleColumns() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

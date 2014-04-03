@@ -124,7 +124,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 }
 
 
-::sal_Bool StartModuleDispatcher::implts_isBackingModePossible ()
+sal_Bool StartModuleDispatcher::implts_isBackingModePossible ()
 {
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return sal_False;
@@ -137,7 +137,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
         css::uno::Reference< css::frame::XFrame >(),
         FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
-    ::sal_Bool  bIsPossible    = sal_False;
+    sal_Bool  bIsPossible    = sal_False;
     ::sal_Int32 nVisibleFrames = aCheck.m_lOtherVisibleFrames.getLength ();
 
     if (
@@ -152,7 +152,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 }
 
 
-::sal_Bool StartModuleDispatcher::implts_establishBackingMode()
+sal_Bool StartModuleDispatcher::implts_establishBackingMode()
 {
     css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
     css::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);

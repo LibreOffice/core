@@ -254,7 +254,7 @@ uno::Type SAL_CALL Storage::getElementType()
 
 
 // virtual
-::sal_Bool SAL_CALL Storage::hasElements()
+sal_Bool SAL_CALL Storage::hasElements()
     throw ( uno::RuntimeException, std::exception )
 {
     return m_xWrappedStorage->hasElements();
@@ -285,7 +285,7 @@ uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
 
 
 // virtual
-::sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
+sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
     throw ( uno::RuntimeException, std::exception )
 {
     return m_xWrappedStorage->hasByName( aName );

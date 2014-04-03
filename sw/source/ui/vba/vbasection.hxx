@@ -36,8 +36,8 @@ public:
     virtual ~SwVbaSection();
 
     // Attributes
-    virtual ::sal_Bool SAL_CALL getProtectedForForms() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setProtectedForForms( ::sal_Bool _protectedforforms ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getProtectedForForms() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setProtectedForForms( sal_Bool _protectedforforms ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods
     virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

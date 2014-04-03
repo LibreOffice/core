@@ -497,9 +497,9 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInteractionSupplyAuthentication2
-    virtual ::sal_Bool SAL_CALL canUseSystemCredentials( ::sal_Bool& Default )
+    virtual sal_Bool SAL_CALL canUseSystemCredentials( sal_Bool& Default )
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL setUseSystemCredentials( ::sal_Bool UseSystemCredentials )
+    virtual void SAL_CALL setUseSystemCredentials( sal_Bool UseSystemCredentials )
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Non-interface methods.

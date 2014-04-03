@@ -282,7 +282,7 @@ OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::R
     return comp_FinalThreadManager::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }

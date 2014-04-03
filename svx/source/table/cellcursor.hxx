@@ -58,8 +58,8 @@ public:
     // XMergeableCellRange
     virtual void SAL_CALL merge(  ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL split( ::sal_Int32 Columns, ::sal_Int32 Rows ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isMergeable(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isUnmergeable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isMergeable(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isUnmergeable(  ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     bool GetMergedSelection( CellPos& rStart, CellPos& rEnd );

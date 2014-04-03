@@ -1111,7 +1111,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException, std::
     mxTextViewCursor->gotoRange( xEnd, sal_True );
 }
 
-::sal_Bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaSelection::InRange( const uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (uno::RuntimeException, std::exception)
 {
     return getRange()->InRange( Range );
 }

@@ -166,7 +166,7 @@ class Desktop : private cppu::BaseMutex,
             @onerror    False will be returned.
             @threadsafe yes
          */
-        virtual ::sal_Bool SAL_CALL terminate()
+        virtual sal_Bool SAL_CALL terminate()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
@@ -349,7 +349,7 @@ class Desktop : private cppu::BaseMutex,
          *  @see    impl_sendCancelTerminationEvent()
          */
         void impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener,
-                                            ::sal_Bool&             bVeto          );
+                                            sal_Bool&             bVeto          );
 
 
         /** calls cancelTermination() on every termination listener
@@ -392,7 +392,7 @@ class Desktop : private cppu::BaseMutex,
          *
          *  @return true if all frames could be closed; false otherwise.
          */
-        ::sal_Bool impl_closeFrames(::sal_Bool bAllowUI);
+        sal_Bool impl_closeFrames(sal_Bool bAllowUI);
 
 
     //  debug methods

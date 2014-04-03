@@ -57,26 +57,26 @@ void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ ) t
     // not support in Writer
 }
 
-::sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bUseFields = sal_False;
     mxTocProps->getPropertyValue("CreateFromMarks") >>= bUseFields;
     return bUseFields;
 }
 
-void SAL_CALL SwVbaTableOfContents::setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaTableOfContents::setUseFields( sal_Bool _useFields ) throw (css::uno::RuntimeException, std::exception)
 {
     mxTocProps->setPropertyValue("CreateFromMarks", uno::makeAny( _useFields ) );
 }
 
-::sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bUseOutlineLevels = sal_False;
     mxTocProps->getPropertyValue("CreateFromOutline") >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }
 
-void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException, std::exception)
 {
     mxTocProps->setPropertyValue("CreateFromOutline", uno::makeAny( _useOutlineLevels ) );
 }

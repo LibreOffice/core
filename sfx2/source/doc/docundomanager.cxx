@@ -320,14 +320,14 @@ namespace sfx2
     }
 
 
-    ::sal_Bool SAL_CALL DocumentUndoManager::isUndoPossible(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentUndoManager::isUndoPossible(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isUndoPossible();
     }
 
 
-    ::sal_Bool SAL_CALL DocumentUndoManager::isRedoPossible(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentUndoManager::isRedoPossible(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isRedoPossible();
@@ -406,7 +406,7 @@ namespace sfx2
     }
 
 
-    ::sal_Bool SAL_CALL DocumentUndoManager::isLocked(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentUndoManager::isLocked(  ) throw (RuntimeException, std::exception)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isLocked();

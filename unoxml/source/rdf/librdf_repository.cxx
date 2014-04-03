@@ -287,7 +287,7 @@ public:
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService(
+    virtual sal_Bool SAL_CALL supportsService(
             const OUString & ServiceName) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -340,7 +340,7 @@ public:
         queryConstruct(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
             rdf::RepositoryException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL queryAsk(const OUString & i_rQuery)
+    virtual sal_Bool SAL_CALL queryAsk(const OUString & i_rQuery)
         throw (uno::RuntimeException, rdf::QueryException,
             rdf::RepositoryException, std::exception) SAL_OVERRIDE;
 
@@ -484,7 +484,7 @@ public:
     }
 
     // ::com::sun::star::container::XEnumeration:
-    virtual ::sal_Bool SAL_CALL hasMoreElements()
+    virtual sal_Bool SAL_CALL hasMoreElements()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
@@ -509,7 +509,7 @@ private:
 
 
 // ::com::sun::star::container::XEnumeration:
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 librdf_GraphResult::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_rMutex);
@@ -597,7 +597,7 @@ public:
     }
 
     // ::com::sun::star::container::XEnumeration:
-    virtual ::sal_Bool SAL_CALL hasMoreElements()
+    virtual sal_Bool SAL_CALL hasMoreElements()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual uno::Any SAL_CALL nextElement()
         throw (uno::RuntimeException, container::NoSuchElementException,
@@ -624,7 +624,7 @@ private:
 
 
 // ::com::sun::star::container::XEnumeration:
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 librdf_QuerySelectResult::hasMoreElements() throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_rMutex);
@@ -897,7 +897,7 @@ throw (uno::RuntimeException, std::exception)
     return comp_librdf_Repository::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL librdf_Repository::supportsService(
+sal_Bool SAL_CALL librdf_Repository::supportsService(
     OUString const & serviceName) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
@@ -1465,7 +1465,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
                                   ::boost::shared_ptr<librdf_node>(), pQuery);
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 librdf_Repository::queryAsk(const OUString & i_rQuery)
 throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std::exception)
 {

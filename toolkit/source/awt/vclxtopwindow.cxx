@@ -162,7 +162,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 }
 
 
-::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -174,7 +174,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 }
 
 
-void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) throw (RuntimeException, std::exception)
+void SAL_CALL VCLXTopWindow_Base::setIsMaximized( sal_Bool _ismaximized ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -186,7 +186,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
 }
 
 
-::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -198,7 +198,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
 }
 
 
-void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) throw (RuntimeException, std::exception)
+void SAL_CALL VCLXTopWindow_Base::setIsMinimized( sal_Bool _isMinimized ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

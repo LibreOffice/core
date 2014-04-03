@@ -104,7 +104,7 @@ public:
     {
         return ::getCppuType( static_cast< const OUString* >( 0 ) );
     }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( getCount() > 0 );

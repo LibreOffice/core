@@ -213,7 +213,7 @@ namespace sdbtools
         }
     }
 
-    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, ::sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         EntryGuard aGuard( *this );
 

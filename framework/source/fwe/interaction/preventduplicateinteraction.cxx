@@ -138,7 +138,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
 
 
 
-::sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
             throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aRequest  = xRequest->getRequest();

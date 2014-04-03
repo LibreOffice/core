@@ -613,7 +613,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
 void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequest)
 {
-    const ::sal_Bool bMultiSelection = rRequest->getArgumentOrDefault(PROP_MULTISELECTION_MODE, (::sal_Bool)sal_True);
+    const sal_Bool bMultiSelection = rRequest->getArgumentOrDefault(PROP_MULTISELECTION_MODE, (sal_Bool)sal_True);
 
     // SYNCHRONIZED->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
@@ -782,7 +782,7 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
 
     TFileOpenDialog iOpen      = m_iDialogOpen;
     TFileSaveDialog iSave      = m_iDialogSave;
-    ::sal_Bool      bInExecute = m_bInExecute;
+    sal_Bool      bInExecute = m_bInExecute;
 
     aLock.clear();
     // <- SYNCHRONIZED
@@ -1046,7 +1046,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
         //case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW : // can be ignored ... preview is supported native now !
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
             {
-                ::sal_Bool bValue   = sal_False;
+                sal_Bool bValue   = sal_False;
                            aValue >>= bValue;
                 iCustom->SetCheckButtonState(nId, bValue);
             }
@@ -1157,7 +1157,7 @@ void VistaFilePickerImpl::impl_sta_GetControlLabel(const RequestRef& /*rRequest*
 void VistaFilePickerImpl::impl_sta_EnableControl(const RequestRef& rRequest)
 {
     ::sal_Int16 nId      = rRequest->getArgumentOrDefault(PROP_CONTROL_ID    , INVALID_CONTROL_ID  );
-    ::sal_Bool  bEnabled = rRequest->getArgumentOrDefault(PROP_CONTROL_ENABLE, (::sal_Bool)sal_True);
+    sal_Bool  bEnabled = rRequest->getArgumentOrDefault(PROP_CONTROL_ENABLE, (sal_Bool)sal_True);
 
     // dont check for right values here ...
     // most parameters are optional !

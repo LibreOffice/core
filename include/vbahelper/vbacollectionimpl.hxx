@@ -131,7 +131,7 @@ protected:
 public:
 
     EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XEnumeration >& xEnumeration ) throw ( css::uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ),  m_xEnumeration( xEnumeration ) { }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_xEnumeration->hasMoreElements(); }
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return m_xEnumeration->hasMoreElements(); }
 };
 
 // a wrapper class for a providing a XIndexAccess, XNameAccess, XEnumerationAccess impl based on providing a vector of interfaces
@@ -155,7 +155,7 @@ private:
     public:
             XNamedEnumerationHelper( const XNamedVec& sMap ) : mXNamedVec( sMap ), mIt( mXNamedVec.begin() ) {}
 
-            virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
             {
             return ( mIt != mXNamedVec.end() );
             }
@@ -175,7 +175,7 @@ public:
     XNamedObjectCollectionHelper( const XNamedVec& sMap ) : mXNamedVec( sMap ), cachePos(mXNamedVec.begin()) {}
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return  cppu::UnoType<Ifc1>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return ( mXNamedVec.size() > 0 ); }
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return ( mXNamedVec.size() > 0 ); }
     // XNameAcess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -197,7 +197,7 @@ public:
         }
         return sNames;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         cachePos = mXNamedVec.begin();
         typename XNamedVec::iterator it_end = mXNamedVec.end();
@@ -318,7 +318,7 @@ public:
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) = 0;
     // XElementAccess
-    virtual ::sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException)
     {
         return ( m_xIndexAccess->getCount() > 0 );
     }

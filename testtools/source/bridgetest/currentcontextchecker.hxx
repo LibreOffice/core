@@ -40,7 +40,7 @@ public:
 
     virtual ~CurrentContextChecker();
 
-    virtual ::sal_Bool SAL_CALL perform(
+    virtual sal_Bool SAL_CALL perform(
         ::com::sun::star::uno::Reference<
             ::test::testtools::bridgetest::XCurrentContextChecker > const &
             other,

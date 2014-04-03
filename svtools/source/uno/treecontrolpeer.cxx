@@ -612,7 +612,7 @@ class TreeSelectionEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
 public:
     TreeSelectionEnumeration( std::list< Any >& rSelection );
-    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Any SAL_CALL nextElement() throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) SAL_OVERRIDE;
 
     std::list< Any > maSelection;
@@ -629,7 +629,7 @@ TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection
 
 
 
-::sal_Bool SAL_CALL TreeSelectionEnumeration::hasMoreElements() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL TreeSelectionEnumeration::hasMoreElements() throw (RuntimeException, std::exception)
 {
     return maIter != maSelection.end();
 }

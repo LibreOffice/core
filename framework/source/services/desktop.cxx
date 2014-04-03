@@ -227,14 +227,14 @@ sal_Bool SAL_CALL Desktop::terminate()
     css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
 
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
-    ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
+    sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
 
     aReadLock.clear();
 
 
     // Ask normal terminate listener. They could stop terminate without closing any open document.
     Desktop::TTerminateListenerList lCalledTerminationListener;
-    ::sal_Bool                      bVeto = sal_False;
+    sal_Bool                      bVeto = sal_False;
     impl_sendQueryTerminationEvent(lCalledTerminationListener, bVeto);
     if ( bVeto )
     {
@@ -245,8 +245,8 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
-    ::sal_Bool bAllowUI      = sal_True;
-    ::sal_Bool bFramesClosed = impl_closeFrames(bAllowUI);
+    sal_Bool bAllowUI      = sal_True;
+    sal_Bool bFramesClosed = impl_closeFrames(bAllowUI);
     if ( ! bFramesClosed )
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
@@ -270,7 +270,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     // But some of them can be dangerous. E.g. it would be dangerous if we close our pipe
     // and dont terminate in real because another listener throws a veto exception .-)
 
-    ::sal_Bool bTerminate = sal_False;
+    sal_Bool bTerminate = sal_False;
     try
     {
         if(
@@ -1687,7 +1687,7 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
 
 
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
-                                             ::sal_Bool&                      bVeto          )
+                                             sal_Bool&                      bVeto          )
 {
     bVeto = sal_False;
 
@@ -1783,7 +1783,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
 }
 
 
-::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
+sal_Bool Desktop::impl_closeFrames(sal_Bool bAllowUI)
 {
     SolarMutexClearableGuard aReadLock;
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();

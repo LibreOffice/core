@@ -3075,7 +3075,7 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeExcep
 
 
 
-void SAL_CALL SlideshowImpl::setUseEraser( ::sal_Bool /*_usepen*/ ) throw (css::uno::RuntimeException)
+void SAL_CALL SlideshowImpl::setUseEraser( sal_Bool /*_usepen*/ ) throw (css::uno::RuntimeException)
 {
 }
 
@@ -3494,7 +3494,7 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException, std::excepti
 
 
 
-::sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return getSlideCount() != 0;
 }

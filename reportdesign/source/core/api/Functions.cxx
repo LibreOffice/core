@@ -153,7 +153,7 @@ uno::Type SAL_CALL OFunctions::getElementType(  ) throw (uno::RuntimeException, 
     return ::getCppuType(static_cast< uno::Reference<report::XFunction>*>(NULL));
 }
 
-::sal_Bool SAL_CALL OFunctions::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFunctions::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return !m_aFunctions.empty();

@@ -60,7 +60,7 @@ public:
     FormFieldsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const XFormFieldVec& xFormFiels ) throw (uno::RuntimeException) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ), mxFormFields( xFormFiels ), cachePos( mxFormFields.begin() )
     {
     }
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
     {
         return ( cachePos != mxFormFields.end() );
     }
@@ -99,7 +99,7 @@ public:
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<word::XFormField>::get(); }
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -121,7 +121,7 @@ public:
         }
         return sNames;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         cachePos = mxFormFields.begin();
         XFormFieldVec::iterator it_end = mxFormFields.end();

@@ -601,12 +601,12 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( sal_Bool printHeadings) throw (c
     }
 }
 
-::sal_Bool SAL_CALL ScVbaPageSetup::getPrintGridlines() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaPageSetup::getPrintGridlines() throw (uno::RuntimeException, std::exception)
 {
     return false;
 }
 
-void SAL_CALL ScVbaPageSetup::setPrintGridlines( ::sal_Bool /*_printgridlines*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaPageSetup::setPrintGridlines( sal_Bool /*_printgridlines*/ ) throw (uno::RuntimeException, std::exception)
 {
 }
 

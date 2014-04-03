@@ -78,12 +78,12 @@ uno::Reference< report::XSection > SAL_CALL clazz::getSection() throw (uno::Runt
 
 #define REPORTCOMPONENT_IMPL(clazz,arg) \
 REPORTCOMPONENT_IMPL3(clazz,arg)\
-::sal_Bool SAL_CALL clazz::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
+sal_Bool SAL_CALL clazz::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return (arg).m_bPrintRepeatedValues; \
 } \
-void SAL_CALL clazz::setPrintRepeatedValues( ::sal_Bool _printrepeatedvalues ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
+void SAL_CALL clazz::setPrintRepeatedValues( sal_Bool _printrepeatedvalues ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
 { \
     set(PROPERTY_PRINTREPEATEDVALUES,_printrepeatedvalues,(arg).m_bPrintRepeatedValues); \
 }
@@ -164,13 +164,13 @@ void SAL_CALL clazz::setControlBackground( ::sal_Int32 _backgroundcolor ) throw 
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,varName.nBackgroundColor);\
 } \
  \
-::sal_Bool SAL_CALL clazz::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
+sal_Bool SAL_CALL clazz::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.m_bBackgroundTransparent; \
 } \
  \
-void SAL_CALL clazz::setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
+void SAL_CALL clazz::setControlBackgroundTransparent( sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception) \
 { \
     set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,varName.m_bBackgroundTransparent);\
     if ( _controlbackgroundtransparent )\
@@ -189,13 +189,13 @@ void SAL_CALL clazz::setCharStrikeout(::sal_Int16 the_value) throw (uno::Runtime
     set(PROPERTY_CHARSTRIKEOUT,the_value,varName.aFontDescriptor.Strikeout); \
 } \
  \
-::sal_Bool SAL_CALL clazz::getCharWordMode() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharWordMode() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aFontDescriptor.WordLineMode; \
 } \
  \
-void SAL_CALL clazz::setCharWordMode(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharWordMode(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     set(PROPERTY_CHARWORDMODE,the_value,varName.aFontDescriptor.WordLineMode); \
 } \
@@ -428,21 +428,21 @@ void SAL_CALL clazz::setCharPosture( awt::FontSlant _charposture ) throw (beans:
 { \
     set(PROPERTY_CHARPOSTURE,_charposture,varName.aFontDescriptor.Slant); \
 }\
-::sal_Bool SAL_CALL clazz::getCharFlash() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+sal_Bool SAL_CALL clazz::getCharFlash() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.bCharFlash; \
 } \
-void SAL_CALL clazz::setCharFlash(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+void SAL_CALL clazz::setCharFlash(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     set(PROPERTY_CHARFLASH,the_value,varName.bCharFlash); \
 }\
-::sal_Bool SAL_CALL clazz::getCharAutoKerning() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+sal_Bool SAL_CALL clazz::getCharAutoKerning() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.bCharAutoKerning; \
 } \
-void SAL_CALL clazz::setCharAutoKerning(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+void SAL_CALL clazz::setCharAutoKerning(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     set(PROPERTY_CHARAUTOKERNING,the_value,varName.bCharAutoKerning); \
 }\
@@ -493,12 +493,12 @@ void SAL_CALL clazz::setCharCaseMap(::sal_Int16 the_value) throw (uno::RuntimeEx
 { \
     set(PROPERTY_CHARCASEMAP,the_value,varName.nCharCaseMap); \
 }\
-::sal_Bool SAL_CALL clazz::getCharCombineIsOn() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharCombineIsOn() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.bCharCombineIsOn; \
 } \
-void SAL_CALL clazz::setCharCombineIsOn(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharCombineIsOn(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     set(PROPERTY_CHARCOMBINEISON,the_value,varName.bCharCombineIsOn); \
 }\
@@ -520,30 +520,30 @@ void SAL_CALL clazz::setCharCombineSuffix(const OUString & the_value) throw (uno
 { \
     set(PROPERTY_CHARCOMBINESUFFIX,the_value,varName.sCharCombineSuffix); \
 }\
-::sal_Bool SAL_CALL clazz::getCharHidden() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharHidden() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.bCharHidden; \
 } \
-void SAL_CALL clazz::setCharHidden(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharHidden(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     set(PROPERTY_CHARHIDDEN,the_value,varName.bCharHidden); \
 }\
-::sal_Bool SAL_CALL clazz::getCharShadowed() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharShadowed() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.bCharShadowed; \
 } \
-void SAL_CALL clazz::setCharShadowed(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharShadowed(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     set(PROPERTY_CHARSHADOWED,the_value,varName.bCharShadowed); \
 }\
-::sal_Bool SAL_CALL clazz::getCharContoured() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharContoured() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.bCharContoured; \
 } \
-void SAL_CALL clazz::setCharContoured(::sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharContoured(sal_Bool the_value) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     set(PROPERTY_CHARCONTOURED,the_value,varName.bCharContoured); \
 }\
@@ -804,11 +804,11 @@ void SAL_CALL clazz::setCharStrikeout(::sal_Int16 /*the_value*/) throw (uno::Run
 {\
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharWordMode() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+sal_Bool SAL_CALL clazz::getCharWordMode() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 {\
     throw beans::UnknownPropertyException();\
 }\
-void SAL_CALL clazz::setCharWordMode(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+void SAL_CALL clazz::setCharWordMode(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 {\
     throw beans::UnknownPropertyException();\
 }\
@@ -828,19 +828,19 @@ void SAL_CALL clazz::setCharScaleWidth(::sal_Int16 /*the_value*/) throw (uno::Ru
 {\
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharFlash() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+sal_Bool SAL_CALL clazz::getCharFlash() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharFlash(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+void SAL_CALL clazz::setCharFlash(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharAutoKerning() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+sal_Bool SAL_CALL clazz::getCharAutoKerning() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharAutoKerning(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
+void SAL_CALL clazz::setCharAutoKerning(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception)\
 { \
     throw beans::UnknownPropertyException();\
 }\
@@ -876,11 +876,11 @@ void SAL_CALL clazz::setCharCaseMap(::sal_Int16 /*the_value*/) throw (uno::Runti
 { \
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharCombineIsOn() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharCombineIsOn() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharCombineIsOn(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharCombineIsOn(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 }\
@@ -900,27 +900,27 @@ void SAL_CALL clazz::setCharCombineSuffix(const OUString & /*the_value*/) throw 
 { \
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharHidden() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharHidden() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharHidden(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharHidden(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharShadowed() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharShadowed() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharShadowed(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharShadowed(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 }\
-::sal_Bool SAL_CALL clazz::getCharContoured() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+sal_Bool SAL_CALL clazz::getCharContoured() throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharContoured(::sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
+void SAL_CALL clazz::setCharContoured(sal_Bool /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException, std::exception) \
 { \
     throw beans::UnknownPropertyException();\
 }\

@@ -138,7 +138,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
 
         /** @short  check if StartModule can be shown.
          */
-        ::sal_Bool implts_isBackingModePossible();
+        sal_Bool implts_isBackingModePossible();
 
 
         /** @short  open the special BackingComponent (now StartModule)
@@ -146,7 +146,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
             @return [bool]
                     sal_True if operation was successfully.
          */
-        ::sal_Bool implts_establishBackingMode();
+        sal_Bool implts_establishBackingMode();
 
 
         /** @short  notify a DispatchResultListener.

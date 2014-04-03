@@ -95,7 +95,7 @@ namespace tdoc_ucp {
             // util::XCloseListener
             virtual void SAL_CALL queryClosing(
                     const ::com::sun::star::lang::EventObject& Source,
-                    ::sal_Bool GetsOwnership )
+                    sal_Bool GetsOwnership )
                 throw (::com::sun::star::util::CloseVetoException,
                        ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

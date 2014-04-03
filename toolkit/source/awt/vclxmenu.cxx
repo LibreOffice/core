@@ -195,7 +195,7 @@ throw (css::uno::RuntimeException, std::exception)
     return aNames;
 }
 
-::sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
+sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
 throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
@@ -663,7 +663,7 @@ namespace
 }
 
 
-::sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  )
+sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  )
 throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -699,7 +699,7 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL VCLXMenu::hideDisabledEntries(
-    ::sal_Bool bHide )
+    sal_Bool bHide )
 throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -714,7 +714,7 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 
-::sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
+sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
 throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -739,7 +739,7 @@ throw (css::uno::RuntimeException, std::exception)
 
 
 void SAL_CALL VCLXMenu::enableAutoMnemonics(
-    ::sal_Bool bEnable )
+    sal_Bool bEnable )
 throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
@@ -854,7 +854,7 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL VCLXMenu::setItemImage(
     ::sal_Int16 nItemId,
     const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
-    ::sal_Bool bScale )
+    sal_Bool bScale )
 throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;

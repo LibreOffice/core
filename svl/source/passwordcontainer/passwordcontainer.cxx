@@ -1179,7 +1179,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     }
 }
 
-::sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
+sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
@@ -1191,7 +1191,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return ( m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) );
 }
 
-::sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( ::sal_Bool bAllow )
+sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( sal_Bool bAllow )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
@@ -1209,7 +1209,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return !bAllow;
 }
 
-::sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
+sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
@@ -1220,7 +1220,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     return m_pStorageFile->useStorage();
 }
 
-::sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
+sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw ( uno::RuntimeException, std::exception )
 {
     bool bResult = false;
@@ -1275,7 +1275,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 
 }
 
-::sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
+sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
     throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( mMutex );
@@ -1288,7 +1288,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 }
 
 
-void SAL_CALL PasswordContainer::addUrl( const OUString& Url, ::sal_Bool MakePersistent )
+void SAL_CALL PasswordContainer::addUrl( const OUString& Url, sal_Bool MakePersistent )
     throw (uno::RuntimeException, std::exception)
 {
     mUrlContainer.add( Url, MakePersistent );
@@ -1306,7 +1306,7 @@ void SAL_CALL PasswordContainer::removeUrl( const OUString& Url )
     mUrlContainer.remove( Url );
 }
 
-uno::Sequence< OUString > SAL_CALL PasswordContainer::getUrls( ::sal_Bool OnlyPersistent )
+uno::Sequence< OUString > SAL_CALL PasswordContainer::getUrls( sal_Bool OnlyPersistent )
     throw (uno::RuntimeException, std::exception)
 {
     return mUrlContainer.list( OnlyPersistent );

@@ -635,9 +635,9 @@ public:
     //  XModifiable2
 
 
-    virtual ::sal_Bool SAL_CALL disableSetModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL enableSetModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isSetModifiedEnabled(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL disableSetModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL enableSetModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isSetModifiedEnabled(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1085,7 +1085,7 @@ public:
 
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getAllowMacroExecution() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
     //  XScriptInvocationContext
@@ -1185,7 +1185,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css.document.XDocumentRecovery
-    virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave()
+    virtual sal_Bool SAL_CALL wasModifiedSinceLastSave()
         throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
         throw ( css::uno::RuntimeException,

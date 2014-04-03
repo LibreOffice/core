@@ -262,7 +262,7 @@ uno::Type SAL_CALL UncachedDataSequence::getElementType()
     return ::getCppuType( reinterpret_cast< uno::Any * >(0));
 }
 
-::sal_Bool SAL_CALL UncachedDataSequence::hasElements()
+sal_Bool SAL_CALL UncachedDataSequence::hasElements()
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xDataProvider.is())
@@ -292,13 +292,13 @@ Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
 }
 
 // ____ XModifiable ____
-::sal_Bool SAL_CALL UncachedDataSequence::isModified()
+sal_Bool SAL_CALL UncachedDataSequence::isModified()
     throw (uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-void SAL_CALL UncachedDataSequence::setModified( ::sal_Bool bModified )
+void SAL_CALL UncachedDataSequence::setModified( sal_Bool bModified )
     throw (beans::PropertyVetoException,
            uno::RuntimeException, std::exception)
 {

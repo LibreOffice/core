@@ -77,7 +77,7 @@ namespace logging
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XLogger
@@ -86,7 +86,7 @@ namespace logging
         virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL addLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL removeLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL log( ::sal_Int32 Level, const OUString& Message ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -124,7 +124,7 @@ namespace logging
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
         // helper for factories
@@ -208,7 +208,7 @@ namespace logging
             m_aHandlers.removeInterface( _rxLogHandler );
     }
 
-    ::sal_Bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_nts_isLoggable_nothrow( _nLevel );
@@ -241,7 +241,7 @@ namespace logging
         return OUString( "com.sun.star.comp.extensions.EventLogger" );
     }
 
-    ::sal_Bool EventLogger::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool EventLogger::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }
@@ -263,7 +263,7 @@ namespace logging
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
     {
         return cppu::supportsService(this, _rServiceName);
     }

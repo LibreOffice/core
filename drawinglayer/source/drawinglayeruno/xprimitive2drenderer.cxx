@@ -65,7 +65,7 @@ namespace drawinglayer
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
-            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
         };
     } // end of namespace unorenderer

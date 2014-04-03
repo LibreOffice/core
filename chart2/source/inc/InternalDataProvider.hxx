@@ -87,7 +87,7 @@ public:
     APPHELPER_SERVICE_FACTORY_HELPER(InternalDataProvider)
 
     // ____ XInternalDataProvider ____
-    virtual ::sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange )
+    virtual sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
         getDataByRangeRepresentation( const OUString& aRange )
@@ -117,7 +117,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
-    virtual ::sal_Bool SAL_CALL createDataSourcePossible(
+    virtual sal_Bool SAL_CALL createDataSourcePossible(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL createDataSource(
@@ -127,7 +127,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL detectArguments(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+    virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
@@ -205,7 +205,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getNotANumber()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL isNotANumber(
+    virtual sal_Bool SAL_CALL isNotANumber(
         double nNumber )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

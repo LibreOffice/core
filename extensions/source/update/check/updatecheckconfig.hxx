@@ -160,7 +160,7 @@ public:
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameReplace
@@ -174,7 +174,7 @@ public:
     virtual void SAL_CALL commitChanges(  )
         throw (::com::sun::star::lang::WrappedTargetException,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL hasPendingChanges(  )
+    virtual sal_Bool SAL_CALL hasPendingChanges(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::ElementChange > SAL_CALL getPendingChanges(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

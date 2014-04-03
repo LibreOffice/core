@@ -143,7 +143,7 @@ namespace comphelper
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, rServiceName);
     }
@@ -190,14 +190,14 @@ namespace comphelper
     }
 
 
-    ::sal_Bool SAL_CALL OPropertyBag::isModified()
+    sal_Bool SAL_CALL OPropertyBag::isModified()
         throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_isModified;
     }
 
-    void SAL_CALL OPropertyBag::setModified( ::sal_Bool bModified )
+    void SAL_CALL OPropertyBag::setModified( sal_Bool bModified )
         throw (PropertyVetoException, RuntimeException, std::exception)
     {
         setModifiedImpl(bModified, false);
@@ -224,7 +224,7 @@ namespace comphelper
     }
 
 
-    ::sal_Bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OPropertyBag::has( const Any& /*aElement*/ ) throw (RuntimeException, std::exception)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
@@ -284,7 +284,7 @@ namespace comphelper
     }
 
 
-    ::sal_Bool SAL_CALL OPropertyBag::hasElements(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OPropertyBag::hasElements(  ) throw (RuntimeException, std::exception)
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty

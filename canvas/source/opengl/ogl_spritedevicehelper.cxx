@@ -875,7 +875,7 @@ namespace oglcanvas
         };
     }
 
-    ::sal_Bool SpriteDeviceHelper::showBuffer( bool bIsVisible, ::sal_Bool /*bUpdateAll*/ )
+    sal_Bool SpriteDeviceHelper::showBuffer( bool bIsVisible, sal_Bool /*bUpdateAll*/ )
     {
         // hidden or disposed?
         if( !bIsVisible || !mpChildWindow || !mpSpriteCanvas )
@@ -940,7 +940,7 @@ namespace oglcanvas
         return true;
     }
 
-    ::sal_Bool SpriteDeviceHelper::switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll )
+    sal_Bool SpriteDeviceHelper::switchBuffer( bool bIsVisible, sal_Bool bUpdateAll )
     {
         // no difference for VCL canvas
         return showBuffer( bIsVisible, bUpdateAll );

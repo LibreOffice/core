@@ -97,7 +97,7 @@ uno::Type SAL_CALL DialogModelProvider::getElementType() throw (css::uno::Runtim
     return m_xDialogModel->getElementType();
 }
 
-::sal_Bool SAL_CALL DialogModelProvider::hasElements() throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DialogModelProvider::hasElements() throw (css::uno::RuntimeException, std::exception)
 {
     return m_xDialogModel->hasElements();
 }
@@ -113,7 +113,7 @@ css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getElementNames() t
     return m_xDialogModel->getElementNames();
 }
 
-::sal_Bool SAL_CALL DialogModelProvider::hasByName(const OUString & aName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DialogModelProvider::hasByName(const OUString & aName) throw (css::uno::RuntimeException, std::exception)
 {
     return m_xDialogModel->hasByName(aName);
 }
@@ -164,7 +164,7 @@ OUString SAL_CALL DialogModelProvider::getImplementationName() throw (css::uno::
     return comp_DialogModelProvider::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }

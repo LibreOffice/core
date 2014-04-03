@@ -248,7 +248,7 @@ private:
 
     // XBitmap
     virtual geometry::IntegerSize2D SAL_CALL getSize() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return maSize; }
-    virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return mnBitsPerPixel != 8; }
+    virtual sal_Bool SAL_CALL hasAlpha(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return mnBitsPerPixel != 8; }
     virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
                                                                            sal_Bool ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return this; }
 

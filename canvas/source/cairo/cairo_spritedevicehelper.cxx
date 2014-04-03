@@ -85,13 +85,13 @@ namespace cairocanvas
         // _always_ will have exactly one backbuffer
     }
 
-    ::sal_Bool SpriteDeviceHelper::showBuffer( bool, ::sal_Bool )
+    sal_Bool SpriteDeviceHelper::showBuffer( bool, sal_Bool )
     {
         OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 
-    ::sal_Bool SpriteDeviceHelper::switchBuffer( bool, ::sal_Bool )
+    sal_Bool SpriteDeviceHelper::switchBuffer( bool, sal_Bool )
     {
         OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
         return sal_False;

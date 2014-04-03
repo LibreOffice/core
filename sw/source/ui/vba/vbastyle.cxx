@@ -137,14 +137,14 @@ uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat
     }
 }
 
-::sal_Bool SAL_CALL SwVbaStyle::getAutomaticallyUpdate() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaStyle::getAutomaticallyUpdate() throw (uno::RuntimeException, std::exception)
 {
     sal_Bool isAutoUpdate = sal_False;
     mxStyleProps->getPropertyValue("IsAutoUpdate") >>= isAutoUpdate;
     return isAutoUpdate;
 }
 
-void SAL_CALL SwVbaStyle::setAutomaticallyUpdate( ::sal_Bool _automaticallyupdate ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaStyle::setAutomaticallyUpdate( sal_Bool _automaticallyupdate ) throw (uno::RuntimeException, std::exception)
 {
     mxStyleProps->setPropertyValue("IsAutoUpdate", uno::makeAny( _automaticallyupdate ) );
 }

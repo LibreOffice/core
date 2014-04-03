@@ -555,7 +555,7 @@ uno::Sequence<OUString> SwXFieldmarkParameters::getElementNames()
     return vResult;
 }
 
-::sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)
+sal_Bool SwXFieldmarkParameters::hasByName(const OUString& aName)
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -569,7 +569,7 @@ uno::Type SwXFieldmarkParameters::getElementType()
     return ::cppu::UnoType< ::cppu::UnoVoidType>::get();
 }
 
-::sal_Bool SwXFieldmarkParameters::hasElements()
+sal_Bool SwXFieldmarkParameters::hasElements()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

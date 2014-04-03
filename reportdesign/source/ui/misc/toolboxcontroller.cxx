@@ -72,7 +72,7 @@ Sequence< OUString> OToolboxController::getSupportedServiceNames_Static(void) th
     return aSupported;
 }
 
-::sal_Bool SAL_CALL OToolboxController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OToolboxController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -280,7 +280,7 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
     return xRet;
 }
 
-::sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
     return m_nSlotId == SID_DRAWTBX_CS_BASIC;
 }

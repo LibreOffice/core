@@ -723,7 +723,7 @@ public:
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XRelationshipAccess
-    virtual ::sal_Bool SAL_CALL hasByID( const OUString& sID )
+    virtual sal_Bool SAL_CALL hasByID( const OUString& sID )
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -750,7 +750,7 @@ public:
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aEntry, ::sal_Bool bReplace )
+    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aEntry, sal_Bool bReplace )
         throw ( ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -760,7 +760,7 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL insertRelationships( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aEntries, ::sal_Bool bReplace )
+    virtual void SAL_CALL insertRelationships( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aEntries, sal_Bool bReplace )
         throw ( ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

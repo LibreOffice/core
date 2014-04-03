@@ -195,7 +195,7 @@ OUString SAL_CALL OInstanceLocker::getImplementationName(  )
     return getImplementationName_static();
 }
 
-::sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);

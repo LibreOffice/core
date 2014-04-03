@@ -825,7 +825,7 @@ ScVbaChart::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeExce
 }
 
 void SAL_CALL
-ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaChart::setHasTitle( sal_Bool bTitle ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -838,7 +838,7 @@ ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException,
 
 }
 
-::sal_Bool SAL_CALL
+sal_Bool SAL_CALL
 ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Bool bHasLegend = false;
@@ -854,7 +854,7 @@ ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeExc
 }
 
 void SAL_CALL
-ScVbaChart::setHasLegend( ::sal_Bool bLegend ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaChart::setHasLegend( sal_Bool bLegend ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     try
     {

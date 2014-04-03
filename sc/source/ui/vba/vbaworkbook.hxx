@@ -40,9 +40,9 @@ public:
     virtual ~ScVbaWorkbook() {}
 
     // Attributes
-    virtual ::sal_Bool SAL_CALL getProtectStructure() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getProtectStructure() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL getPrecisionAsDisplayed() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getPrecisionAsDisplayed() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods

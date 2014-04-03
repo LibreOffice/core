@@ -208,7 +208,7 @@ namespace dbaccess
         return aNames;
     }
 
-    ::sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& _Name ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& _Name ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -220,7 +220,7 @@ namespace dbaccess
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
 
-    ::sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
         return !m_pData->rEventsData.empty();

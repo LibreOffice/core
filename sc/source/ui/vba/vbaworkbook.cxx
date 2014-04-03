@@ -270,14 +270,14 @@ ScVbaWorkbook::Protect( const uno::Any &aPassword ) throw (uno::RuntimeException
     VbaDocumentBase::Protect( aPassword );
 }
 
-::sal_Bool
+sal_Bool
 ScVbaWorkbook::getProtectStructure() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
     return xProt->isProtected();
 }
 
-::sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
     ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();

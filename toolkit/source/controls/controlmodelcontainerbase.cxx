@@ -790,11 +790,11 @@ void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArgum
 {
     return m_nTabPageId;
 }
-::sal_Bool SAL_CALL ControlModelContainerBase::getEnabled() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ControlModelContainerBase::getEnabled() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_bEnabled;
 }
-void SAL_CALL ControlModelContainerBase::setEnabled( ::sal_Bool _enabled ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     m_bEnabled = _enabled;
 }

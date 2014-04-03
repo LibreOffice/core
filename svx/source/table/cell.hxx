@@ -113,7 +113,7 @@ public:
 
     // XServiceInfo
     SVX_DLLPRIVATE virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XLayoutConstrains
@@ -128,7 +128,7 @@ public:
     // XMergeableCell
     SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getRowSpan() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColumnSpan() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual ::sal_Bool SAL_CALL isMerged() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual sal_Bool SAL_CALL isMerged() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCell
     SVX_DLLPRIVATE virtual OUString SAL_CALL getFormula() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -172,14 +172,14 @@ public:
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XText
-    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent, ::sal_Bool bAbsorb ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent, sal_Bool bAbsorb ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void SAL_CALL removeTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSimpleText
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL createTextCursor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL createTextCursorByRange( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& aTextPosition ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, const OUString& aString, ::sal_Bool bAbsorb ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, ::sal_Bool bAbsorb ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, sal_Bool bAbsorb ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTextRange
     SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -223,7 +223,7 @@ private:
     OUString msFormula;
     double          mfValue;
     ::sal_Int32     mnError;
-    ::sal_Bool      mbMerged;
+    sal_Bool      mbMerged;
     ::sal_Int32     mnRowSpan;
     ::sal_Int32     mnColSpan;
 

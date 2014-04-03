@@ -186,7 +186,7 @@ class SwAutoStylesEnumImpl
     IStyleAccess::SwAutoStyleFamily eFamily;
 public:
     SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
-    ::sal_Bool hasMoreElements() { return aIter != mAutoStyles.end(); }
+    sal_Bool hasMoreElements() { return aIter != mAutoStyles.end(); }
     SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
     IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
     SwDoc* getDoc() const { return pDoc; }
@@ -4039,7 +4039,7 @@ void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem
     }
 }
 
-::sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
+sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
     throw (uno::RuntimeException, std::exception)
 {
     if( !pImpl )

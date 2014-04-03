@@ -83,7 +83,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
@@ -132,7 +132,7 @@ OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (Runt
     return OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
 }
 
-::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
