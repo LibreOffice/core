@@ -136,7 +136,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             /*
                             This attribute specifies the width type of table. This is used as part of the table layout
                             algorithm specified by the tblLayout element.(See 17.4.64 and 17.4.65 of the ISO/IEC 29500-1:2011.)
-                            If this valus is 'auto', the table layout has to uses the preferred widths on the table items to generate
+                            If this value is 'auto', the table layout has to use the preferred widths on the table items to generate
                             the final sizing of the table, but then must use the contents of each cell to determine final column widths.
                             (See 17.18.87 of the ISO/IEC 29500-1:2011.)
                             */
