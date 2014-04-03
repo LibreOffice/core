@@ -92,10 +92,10 @@ private:
 // Check that the up-casting Reference conversion constructor catches the
 // intended cases:
 
-struct Base1: public css::uno::XInterface { virtual ~Base1() {} };
-struct Base2: public Base1 { virtual ~Base2() {} };
-struct Base3: public Base1 { virtual ~Base3() {} };
-struct Derived: public Base2, public Base3 { virtual ~Derived() {} };
+struct Base1: public css::uno::XInterface { virtual ~Base1() = 0; };
+struct Base2: public Base1 {};
+struct Base3: public Base1 {};
+struct Derived: public Base2, public Base3 {};
 
 // The special case using the conversion operator instead:
 css::uno::Reference< css::uno::XInterface > testUpcast1(
