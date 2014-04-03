@@ -21,6 +21,9 @@
 #ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXBASE_HXX
 #define ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXBASE_HXX
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -78,7 +81,7 @@ class AccessibleBrowseBoxBase :
 public:
     /** Constructor sets specified name and description. If the constant of a
         text is BBTEXT_NONE, the derived class has to set the text via
-        implSetName() and implSetDescription() (in Ctor) or later via
+        implSetName() (in Ctor) or later via
         setAccessibleName() and setAccessibleDescription() (these methods
         notify the listeners about the change).
         @param rxParent  XAccessible interface of the parent object.
@@ -302,15 +305,10 @@ protected:
 
     /** @return  The ::osl::Mutex member provided by the class OBaseMutex. */
     inline ::osl::Mutex& getOslMutex();
-    /** @return  Pointer to the global ::osl::Mutex. */
-    static inline ::osl::Mutex* getOslGlobalMutex();
 
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
     inline void implSetName( const OUString& rName );
-    /** Changes the description of the object (flat assignment, no notify).
-        @attention  This method requires a locked mutex. */
-    inline void implSetDescription( const OUString& rDescription );
 
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
@@ -368,11 +366,12 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
 class BrowseBoxAccessibleElement
             :public AccessibleBrowseBoxBase
             ,public BrowseBoxAccessibleElement_Base
+            ,private boost::noncopyable
 {
 protected:
     /** Constructor sets specified name and description. If the constant of a
         text is BBTEXT_NONE, the derived class has to set the text via
-        implSetName() and implSetDescription() (in Ctor) or later via
+        implSetName() (in Ctor) or later via
         setAccessibleName() and setAccessibleDescription() (these methods
         notify the listeners about the change).
 
@@ -421,11 +420,6 @@ protected:
         ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
     getAccessibleContext()
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-private:
-    BrowseBoxAccessibleElement();                                               // never implemented
-    BrowseBoxAccessibleElement( const BrowseBoxAccessibleElement& );            // never implemented
-    BrowseBoxAccessibleElement& operator=( const BrowseBoxAccessibleElement& ); // never implemented
 };
 
 
@@ -457,24 +451,11 @@ inline ::osl::Mutex& AccessibleBrowseBoxBase::getOslMutex()
     return m_aMutex;
 }
 
-inline ::osl::Mutex* AccessibleBrowseBoxBase::getOslGlobalMutex()
-{
-    return ::osl::Mutex::getGlobalMutex();
-}
-
 inline void AccessibleBrowseBoxBase::implSetName(
         const OUString& rName )
 {
     maName = rName;
 }
-
-inline void AccessibleBrowseBoxBase::implSetDescription(
-        const OUString& rDescription )
-{
-    maDescription = rDescription;
-}
-
-
 
 } // namespace accessibility
 
