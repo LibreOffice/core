@@ -185,7 +185,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
             if (aPaperName.isEmpty())
                 continue;
 
-            sal_uInt16 nPos   = 0;
+            sal_Int32 nPos   = 0;
             bool bFound = false;
             while (nPos < m_pSizeFormatBox->GetEntryCount() && !bFound)
             {
@@ -196,7 +196,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
                     bFound = true;
             }
             m_pSizeFormatBox->InsertEntry(aPaperName, nPos);
-            aIDs.insert( aIDs.begin() + nPos, (sal_uInt16) i);
+            aIDs.insert( aIDs.begin() + nPos, i);
         }
     }
     m_pSizeFormatBox->InsertEntry(SvxPaperInfo::GetName(PAPER_USER));
@@ -216,9 +216,9 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     {
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
             Size(lHeight, lWidth), MAP_TWIP, true);
-        for (sal_uInt16 i = 0; i < (sal_uInt16)aIDs.size(); i++)
+        for (size_t i = 0; i < aIDs.size(); ++i)
             if (aIDs[i] == (sal_uInt16)ePaper)
-                m_pSizeFormatBox->SelectEntryPos(i);
+                m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
         // remember user size
         if (aIDs[m_pSizeFormatBox->GetSelectEntryPos()] == (sal_uInt16)PAPER_USER)
@@ -285,7 +285,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
             pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
-        sal_uInt16 nDefDist = ::GetTabDist( rDefTabs );
+        const sal_uInt16 nDefDist = ::GetTabDist( rDefTabs );
         SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
         aTmpSet.Put( aDefDistItem );
 
@@ -380,7 +380,7 @@ IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
     long lAddrFromLeft;
     long lAddrFromTop;
 
-    sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
+    const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
     if (nPaper != (sal_uInt16)PAPER_USER)
     {
         Size aSz = SvxPaperInfo::GetPaperSize((Paper)nPaper);
@@ -476,7 +476,7 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     rItem.lSendFromLeft = static_cast< sal_Int32 >(GetFldVal(*m_pSendLeftField));
     rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFldVal(*m_pSendTopField ));
 
-    sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
+    const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
     if (nPaper == (sal_uInt16)PAPER_USER)
     {
         long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));
@@ -507,9 +507,9 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( std::min(rItem.lWidth, rItem.lHeight),
         std::max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, true);
-    for (sal_uInt16 i = 0; i < (sal_uInt16) aIDs.size(); i++)
+    for (size_t i = 0; i < aIDs.size(); ++i)
         if (aIDs[i] == (sal_uInt16)ePaper)
-            m_pSizeFormatBox->SelectEntryPos(i);
+            m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
     // Metric fields
     SetFldVal(*m_pAddrLeftField, rItem.lAddrFromLeft);
