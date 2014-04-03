@@ -101,7 +101,7 @@ sal_uInt16 SfxVisibilityItem::GetValueCount() const
 }
 
 // virtual
-OUString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
+OUString SfxVisibilityItem::GetValueTextByVal(bool bTheValue) const
 {
     return bTheValue ? OUString("TRUE") : OUString("FALSE");
 }
