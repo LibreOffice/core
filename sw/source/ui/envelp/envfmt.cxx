@@ -189,7 +189,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
             bool bFound = false;
             while (nPos < m_pSizeFormatBox->GetEntryCount() && !bFound)
             {
-                OUString aEntryName = m_pSizeFormatBox->GetEntry(i);
+                OUString aEntryName = m_pSizeFormatBox->GetEntry(nPos);
                 if (aEntryName < aPaperName)
                     nPos++;
                 else
