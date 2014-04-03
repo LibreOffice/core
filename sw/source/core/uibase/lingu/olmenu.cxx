@@ -848,7 +848,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else if (nId == MN_SET_SELECTION_MORE)
         {
             //Open Format/Character Dialog
-            sw_CharDialog( *m_pSh, true, nId, 0, 0 );
+            sw_CharDialog( *m_pSh, true, SID_ATTR_CHAR_FONT, 0, 0 );
         }
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
         {
@@ -880,7 +880,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             //Open Format/Character Dialog
-            sw_CharDialog( *m_pSh, true, nId, 0, 0 );
+            sw_CharDialog( *m_pSh, true, SID_ATTR_CHAR_FONT, 0, 0 );
             m_pSh->Pop( sal_False );  // restore cursor
         }
     }

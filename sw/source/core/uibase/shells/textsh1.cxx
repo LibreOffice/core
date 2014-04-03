@@ -181,6 +181,10 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     {
         pDlg->SetCurPageId("fonteffect");
     }
+    else if (pDlg && nSlot == SID_ATTR_CHAR_FONT)
+    {
+        pDlg->SetCurPageId("font");
+    }
 
     const SfxItemSet* pSet = NULL;
     if ( !bUseDialog )
