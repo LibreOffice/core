@@ -58,9 +58,9 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
         aTmp += SVX_RESSTR(RID_SVXSTR_LANGUAGE_ALL);
     else
     {
-        aTmp += " '[' ";
+        aTmp += "[";
         aTmp += SvtLanguageTable::GetLanguageString( (LanguageType)nLang );
-        aTmp += " ']' ";
+        aTmp += "]";
     }
 
     return aTmp;
