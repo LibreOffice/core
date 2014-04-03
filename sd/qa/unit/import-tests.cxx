@@ -25,6 +25,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdomedia.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -68,6 +69,7 @@ public:
     void testN862510_3();
     void testN862510_4();
     void testFdo71961();
+    void testMediaEmbedding();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -90,6 +92,7 @@ public:
     CPPUNIT_TEST(testN862510_3);
     CPPUNIT_TEST(testN862510_4);
     CPPUNIT_TEST(testFdo71961);
+    CPPUNIT_TEST(testMediaEmbedding);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -676,6 +679,29 @@ void SdFiltersTest::testFdo71961()
     CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
 
     xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testMediaEmbedding()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"));
+    xDocShRef = saveAndReload( xDocShRef, ODP );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // First object is a glTF model
+    SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 1 ));
+    CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Model/duck/duck.json" ), pModelObj->getMediaProperties().getURL());
+    CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
+
+    // Second object is a sound
+    SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
+    CPPUNIT_ASSERT_MESSAGE( "missing media object", pMediaObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Media/button-1.wav" ), pMediaObj->getMediaProperties().getURL());
+    CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.sun.star.media" ), pMediaObj->getMediaProperties().getMimeType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
