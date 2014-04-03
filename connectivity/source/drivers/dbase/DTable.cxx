@@ -488,7 +488,7 @@ void ODbaseTable::construct()
 
     OSL_ENSURE( m_pConnection->matchesExtension( aURL.getExtension() ),
         "ODbaseTable::ODbaseTable: invalid extension!");
-        // getEntry is expected to ensure the corect file name
+        // getEntry is expected to ensure the correct file name
 
     m_pFileStream = createStream_simpleError( sFileName, STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
     m_bWriteable = ( m_pFileStream != NULL );

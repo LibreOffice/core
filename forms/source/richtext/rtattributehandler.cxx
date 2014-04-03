@@ -407,7 +407,7 @@ namespace frm
 
         if ( pFontHeightItem )
         {
-            // corect measurement units
+            // correct measurement units
             SfxMapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
             sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )

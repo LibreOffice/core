@@ -642,7 +642,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_PUSHBUTTON:
         {
-            // [ FIXME] : instead of use a value, vcl can retrieve corect values on the fly (to be implemented)
+            // [ FIXME] : instead of use a value, vcl can retrieve correct values on the fly (to be implemented)
             const int PB_Mini_Height = 15;
             const int PB_Norm_Height = 21;
 
