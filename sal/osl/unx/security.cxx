@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stddef.h>
-#include <stdint.h>
+#include <sal/config.h>
+
+#include <cstddef>
+#include <limits>
 
 #include "system.h"
 
@@ -40,10 +42,6 @@
 #define getpwuid_r(uid, pwd, buf, buflen, result) (*(result) = getpwuid(uid), (*(result) ? (memcpy (buf, *(result), sizeof (struct passwd)), 0) : errno))
 #endif
 
-#ifndef SIZE_MAX
-#define SIZE_MAX ((size_t)-1)
-#endif
-
 static oslSecurityError SAL_CALL
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
@@ -52,7 +50,7 @@ static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* psz
 static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
-static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(size_t * value) {
+static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
 #if defined _SC_GETPW_R_SIZE_MAX
     long m;
     errno = 0;
@@ -63,8 +61,10 @@ static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(size_t * value) {
            way and always set EINVAL, so be resilient here: */
         return sal_False;
     } else {
-        OSL_ASSERT(m >= 0 && (unsigned long) m < SIZE_MAX);
-        *value = (size_t) m;
+        OSL_ASSERT(
+            m >= 0
+            && (unsigned long) m < std::numeric_limits<std::size_t>::max());
+        *value = (std::size_t) m;
         return sal_True;
     }
 #else
@@ -74,9 +74,9 @@ static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(size_t * value) {
 }
 
 static oslSecurityImpl * growSecurityImpl(
-    oslSecurityImpl * impl, size_t * bufSize)
+    oslSecurityImpl * impl, std::size_t * bufSize)
 {
-    size_t n = 0;
+    std::size_t n = 0;
     oslSecurityImpl * p = NULL;
     if (impl == NULL) {
         if (!sysconf_SC_GETPW_R_SIZE_MAX(&n)) {
@@ -84,16 +84,19 @@ static oslSecurityImpl * growSecurityImpl(
                detect it if the allocated buffer is too small: */
             n = 1024;
         }
-    } else if (*bufSize <= SIZE_MAX / 2) {
+    } else if (*bufSize <= std::numeric_limits<std::size_t>::max() / 2) {
         n = 2 * *bufSize;
     }
     if (n != 0) {
-        if (n <= SIZE_MAX - offsetof(oslSecurityImpl, m_buffer)) {
+        if (n <= std::numeric_limits<std::size_t>::max()
+            - offsetof(oslSecurityImpl, m_buffer))
+        {
             *bufSize = n;
             n += offsetof(oslSecurityImpl, m_buffer);
         } else {
-            *bufSize = SIZE_MAX - offsetof(oslSecurityImpl, m_buffer);
-            n = SIZE_MAX;
+            *bufSize = std::numeric_limits<std::size_t>::max()
+                - offsetof(oslSecurityImpl, m_buffer);
+            n = std::numeric_limits<std::size_t>::max();
         }
         p = static_cast<oslSecurityImpl *>(realloc(impl, n));
         memset (p, 0, n);
@@ -110,7 +113,7 @@ static void deleteSecurityImpl(oslSecurityImpl * impl) {
 
 oslSecurity SAL_CALL osl_getCurrentSecurity()
 {
-    size_t n = 0;
+    std::size_t n = 0;
     oslSecurityImpl * p = NULL;
     for (;;) {
         struct passwd * found;
@@ -312,7 +315,7 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
                 sal_Int32 nCopy = (sal_Int32)(nMax-1) < pStrValue->length ? (sal_Int32)(nMax-1) : pStrValue->length ;
                 strncpy (pszDirectory, pStrValue->buffer, nCopy);
                 pszDirectory[nCopy] = '\0';
-                bRet = (size_t)pStrValue->length < nMax;
+                bRet = (std::size_t)pStrValue->length < nMax;
             }
             rtl_string_release(pStrValue);
         }
@@ -390,7 +393,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
 
     if (pStr == NULL || strlen(pStr) == 0 || access(pStr, 0) != 0)
     {
-        size_t n = 0;
+        std::size_t n = 0;
 
         // a default equal to $HOME/.config should be used.
         if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
