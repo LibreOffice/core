@@ -209,10 +209,6 @@ ifneq ($(filter $(CPUNAME),SPARC64 SPARC),)
 $(eval $(call gb_Library_add_asmobjects,sal,\
 	sal/osl/unx/asm/interlck_sparc \
 ))
-else ifeq ($(OS)$(CPUNAME),SOLARISINTEL)
-$(eval $(call gb_Library_add_asmobjects,sal,\
-	sal/osl/unx/asm/interlck_x86 \
-))
 else
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/interlck \

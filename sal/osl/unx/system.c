@@ -345,36 +345,6 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
 
 #endif
 
-#if    ( defined(__GNUC__) && (defined(X86) || defined(X86_64)) )\
-    || ( defined(SOLARIS) && defined(__i386) )
-
-/* Safe default */
-int osl_isSingleCPU = 0;
-
-/* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
- *
- * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
- * comes with a cost and is especially expensive on pre HT x86 single processor
- * systems, where it isn't needed at all.
- *
- * This should be run as early as possible, thus it's placed in the init section
- */
-#if defined(_SC_NPROCESSORS_CONF) /* i.e. MACOSX for Intel doesn't have this */
-#if defined(__GNUC__)
-void osl_interlockedCountCheckForSingleCPU(void)  __attribute__((constructor));
-#endif
-
-void osl_interlockedCountCheckForSingleCPU(void)
-{
-    /* In case sysconfig fails be on the safe side,
-     * consider it a multiprocessor/multicore/HT system */
-    if ( sysconf(_SC_NPROCESSORS_CONF) == 1 ) {
-        osl_isSingleCPU = 1;
-    }
-}
-#endif /* defined(_SC_NPROCESSORS_CONF) */
-#endif
-
 //might be useful on other platforms, but doesn't compiler under MACOSX anyway
 #if defined(__GNUC__) && defined(LINUX)
 //force the __data_start symbol to exist in any executables that link against

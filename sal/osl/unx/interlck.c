@@ -29,67 +29,37 @@
 #elif defined ( __GNUC__ ) && ( defined ( X86 ) || defined ( X86_64 ) )
 /* That's possible on x86-64 too since oslInterlockedCount is a sal_Int32 */
 
-extern int osl_isSingleCPU;
-
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    // Fast case for old, slow, single CPU Intel machines for whom
-    // interlocking is a performance nightmare.
-    if ( osl_isSingleCPU ) {
-        register oslInterlockedCount nCount asm("%eax");
-        nCount = 1;
-        __asm__ __volatile__ (
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-        return ++nCount;
-    }
 #if HAVE_GCC_BUILTIN_ATOMIC
-    else
-        return __sync_add_and_fetch (pCount, 1);
+    return __sync_add_and_fetch (pCount, 1);
 #else
-    else {
-        register oslInterlockedCount nCount asm("%eax");
-        nCount = 1;
-        __asm__ __volatile__ (
-            "lock\n\t"
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-        return ++nCount;
-    }
+    register oslInterlockedCount nCount asm("%eax");
+    nCount = 1;
+    __asm__ __volatile__ (
+        "lock\n\t"
+        "xaddl %0, %1\n\t"
+    :   "+r" (nCount), "+m" (*pCount)
+    :   /* nothing */
+    :   "memory");
+    return ++nCount;
 #endif
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    if ( osl_isSingleCPU ) {
-        register oslInterlockedCount nCount asm("%eax");
-        nCount = -1;
-        __asm__ __volatile__ (
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-        return --nCount;
-    }
 #if HAVE_GCC_BUILTIN_ATOMIC
-    else
-        return __sync_sub_and_fetch (pCount, 1);
+    return __sync_sub_and_fetch (pCount, 1);
 #else
-    else {
-        register oslInterlockedCount nCount asm("%eax");
-        nCount = -1;
-        __asm__ __volatile__ (
-            "lock\n\t"
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-        return --nCount;
-    }
+    register oslInterlockedCount nCount asm("%eax");
+    nCount = -1;
+    __asm__ __volatile__ (
+        "lock\n\t"
+        "xaddl %0, %1\n\t"
+    :   "+r" (nCount), "+m" (*pCount)
+    :   /* nothing */
+    :   "memory");
+    return --nCount;
 #endif
 }
 #elif HAVE_GCC_BUILTIN_ATOMIC
