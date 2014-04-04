@@ -441,6 +441,8 @@ OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
 
 SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                            const OUString& rInput)
+    : m_pCurTokenContentBegin(NULL)
+    , m_pCurTokenContentEnd(NULL)
 {
     m_pInputPos = rInput.getStr();
     m_pInputEnd = m_pInputPos + rInput.getLength();
