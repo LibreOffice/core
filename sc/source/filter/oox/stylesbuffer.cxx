@@ -399,8 +399,9 @@ static const sal_Int32 spnDefColors8[] =
 
 
 
-ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper )
+ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
+    : WorkbookHelper(rHelper)
+    , mnAppendIndex(0)
 {
     // default colors
     switch( getFilterType() )
