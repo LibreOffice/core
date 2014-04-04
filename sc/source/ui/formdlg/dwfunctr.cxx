@@ -99,7 +99,8 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aDDFuncList     ( this, ResId( DDLB_FUNC, *rResId.GetResMgr()  ) ),
     aInsertButton   ( this, ResId( IMB_INSERT, *rResId.GetResMgr()  ) ),
     aFiFuncDesc     ( this, ResId( FI_FUNCDESC, *rResId.GetResMgr()  ) ),
-    aOldSize        (0,0)
+    aOldSize        (0,0),
+    pFuncDesc       (NULL)
 {
     FreeResource();
     InitLRUList();
