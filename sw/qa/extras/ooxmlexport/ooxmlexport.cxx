@@ -3068,6 +3068,15 @@ DECLARE_OOXMLEXPORT_TEST(test76734_2K7, "test76734_2K7.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]", "Requires", "wps");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO76597, "fdo76597.docx")
+{
+    // check XML
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "96");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "120");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
