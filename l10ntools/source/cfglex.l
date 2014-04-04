@@ -42,6 +42,8 @@
 
 #include "sal/main.h"
 
+#include "cfglex.hxx"
+
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
@@ -55,10 +57,6 @@
 
 int yycolumn = 1;
 #define YY_USER_ACTION yycolumn += yyleng;
-
-/* external functions (C++ code, declared as extern "C" */
-extern "C" void workOnTokenSet( int, char* );
-extern "C" FILE * init(int, char **);
 
 int bText=0;
 %}

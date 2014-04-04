@@ -43,6 +43,8 @@
 
 #include "sal/main.h"
 
+#include "srclex.hxx"
+
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
@@ -53,13 +55,6 @@
 #pragma warning(push, 1)
 #endif
 #define YY_NO_UNISTD_H
-
-/* external functions (C++ code, declared as extern "C" */
-extern "C" int WorkOnTokenSet( int, char* );
-extern "C" FILE * init(int, char **);
-extern "C" int SetError();
-extern "C" int GetError();
-extern "C" void Close();
 
 /* forwards */
 void YYWarning();

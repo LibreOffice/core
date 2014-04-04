@@ -23,6 +23,8 @@
 #include <cstring>
 
 #include "helper.hxx"
+#include "srclex.hxx"
+
 #include "boost/scoped_ptr.hpp"
 #include <stdio.h>
 #include <stdlib.h>
