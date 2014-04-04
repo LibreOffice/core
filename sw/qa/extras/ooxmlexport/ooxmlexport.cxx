@@ -2341,11 +2341,34 @@ DECLARE_OOXMLEXPORT_TEST(testSegFaultWhileSave, "test_segfault_while_save.docx")
 
 DECLARE_OOXMLEXPORT_TEST(fdo69656, "Table_cell_auto_width_fdo69656.docx")
 {
+    // Changed the UT to check "dxa" instead of "auto"
+    // For this particular issue file few cells have width type "auto"
+    // LO supports VARIABLE and FIXED width type.
+    // If type is VARIABLE LO calculates width as percent of PageSize
+    // Else if the width is fixed it uses the width value.
+    // After changes for fdo76741 the fixed width is exported as "dxa" for DOCX
+
     // Check for the width type of table and its cells.
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","auto");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","dxa");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo76741, "fdo76741.docx")
+{
+
+     // There are two issue related to table in the saved(exported) file
+     // - the table alignment in saved file is "left" instead of "center"
+     // - the table width type in properties is "auto" instead of "dxa"
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc, "//w:jc", "val", "center");
+    assertXPath(pXmlDoc, "//w:tblW", "w", "10081");
+    assertXPath(pXmlDoc, "//w:tblW", "type", "dxa");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
