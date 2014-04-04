@@ -184,7 +184,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
-#if defined(RS6000) || defined(NETBSD) || \
+#if defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
     defined(__FreeBSD_kernel__) || defined (AIX) || defined(DRAGONFLY) || \
     defined(IOS)
@@ -201,7 +201,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { EAGAIN,       SVSTREAM_LOCKING_VIOLATION },
         { EISDIR,       SVSTREAM_PATH_NOT_FOUND },
         { ELOOP,        SVSTREAM_PATH_NOT_FOUND },
-#if !defined(RS6000) && !defined(NETBSD) && !defined (FREEBSD) && \
+#if !defined(NETBSD) && !defined (FREEBSD) && \
     !defined(MACOSX) && !defined(OPENBSD) && !defined(__FreeBSD_kernel__) && \
     !defined(DRAGONFLY)
         { EMULTIHOP,    SVSTREAM_PATH_NOT_FOUND },

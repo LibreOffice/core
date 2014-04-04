@@ -93,11 +93,7 @@ class ObjectStack
 };
 
 /****************** F o r w a r d s **************************************/
-#if defined( RS6000 )
-extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
-extern "C" void yyerror( char * );
-extern "C" int  yylex( void );
-#elif defined ( SOLARIS )
+#if defined ( SOLARIS )
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );

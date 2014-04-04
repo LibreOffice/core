@@ -315,11 +315,7 @@ int MakeToken( YYSTYPE * pTokenVal )
     return c1;
 }
 
-#if defined( RS6000 )
-extern "C" int yylex()
-#else
 int yylex()
-#endif
 {
     if( bTargetDefined )
         bTargetDefined = false;
@@ -330,9 +326,7 @@ int yylex()
     return aKeyVal[ 0 ].nKeyWord;
 }
 
-#ifdef RS6000
-extern "C" void yyerror( char* pMessage )
-#elif defined SOLARIS
+#if defined SOLARIS
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )
