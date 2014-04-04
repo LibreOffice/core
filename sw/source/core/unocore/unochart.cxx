@@ -263,6 +263,9 @@ static OUString GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
             pEndBox = pTmpBox;
         }
 
+        if (!pStartBox)
+            return aRes;
+
         aRes = pStartBox->GetName();
         aRes += ":";
         if (pEndBox)
