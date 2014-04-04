@@ -301,7 +301,9 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
             OUString aFileName( "dd" );
 
             aFileName += OUString::number( ++nNextNumber % 999999 );
-            aFileName += OUString( pExt, strlen(pExt), RTL_TEXTENCODING_ASCII_US );
+
+            if (pExt)
+                aFileName += OUString( pExt, strlen(pExt), RTL_TEXTENCODING_ASCII_US );
 
             aNewURL = aDir;
             aNewURL.Append( aFileName );
