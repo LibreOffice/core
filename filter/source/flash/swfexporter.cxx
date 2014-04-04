@@ -359,28 +359,6 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
     return nPage;
 }
 
-#ifdef AUGUSTUS
-sal_Bool FlashExporter::exportSound( Reference< XOutputStream > &xOutputStream, const char* wavfilename )
-{
-    try
-    {
-        delete mpWriter;
-        mpWriter = new Writer( 0, 0, 0, 0 );
-    }
-    catch( const Exception& )
-    {
-        OSL_ASSERT( false );
-    }
-
-    if (!mpWriter->streamSound(wavfilename))
-        return sal_False;
-    else
-        mpWriter->storeTo( xOutputStream );
-
-    return sal_True;
-}
-#endif // defined AUGUSTUS
-
 
 
 sal_Int32 nPlaceDepth;

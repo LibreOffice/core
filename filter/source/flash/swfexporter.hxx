@@ -160,10 +160,6 @@ public:
     sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, sal_Bool bExportObjects );
     sal_uInt16 exportBackgrounds( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, sal_Bool bExportObjects );
 
-#ifdef AUGUSTUS
-    sal_Bool exportSound( com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > &xOutputStream, const char* wavfilename );
-#endif
-
     ChecksumCache gMasterCache;
     ChecksumCache gPrivateCache;
     ChecksumCache gObjectCache;

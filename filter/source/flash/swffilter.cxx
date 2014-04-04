@@ -381,25 +381,6 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
             if (nPage < nPageCount - 1)
                 osl_writeFile(xBackgroundConfig, "|", 1, &bytesWritten);
         }
-
-#ifdef AUGUSTUS
-        if (findPropertyValue<sal_Bool>(aFilterData, "ExportSound", true))
-        {
-            fullpath = swfdirpath + STR("/slide") + VAL(nPage+1) + STR("s.swf");
-
-            OUString wavpath = sPath + STR("/") + sPresentationName + STR(".ppt-audio/slide") + VAL(nPage+1) + STR(".wav");
-            FileBase::getSystemPathFromFileURL(wavpath, wavpath);
-            OString sASCIIPath(wavpath.getStr(), wavpath.getLength(), RTL_TEXTENCODING_ASCII_US);
-
-            Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
-            sal_Bool ret = aFlashExporter.exportSound(xOutputStreamWrap, sASCIIPath.getStr());
-            aFlashExporter.Flush();
-            xOutputStreamWrap.clear();
-
-            if (!ret)
-                osl_removeFile(fullpath.pData);
-        }
-#endif // defined AUGUSTUS
     }
 
     if (bExportAll)
