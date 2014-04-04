@@ -2247,7 +2247,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
                 // FIXME: why is this horrible cleanup necessary?
                 SwUndoRedline *const pU = dynamic_cast<SwUndoRedline*>(
                         GetUndoManager().RemoveLastUndo());
-                if( pU->GetRedlSaveCount() )
+                if (pU && pU->GetRedlSaveCount())
                 {
                     SwEditShell *const pEditShell(GetEditShell(0));
                     OSL_ASSERT(pEditShell);
