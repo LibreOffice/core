@@ -560,7 +560,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     default_spacing = 280;
             }
             m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
-            if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
+
+            // If AutoSpacing is enbled inside styles.xml then do not insert AutoSpacing property.
+            // Only set before with default_spacing.
+            if  ( nIntValue && !(m_pImpl->IsStyleSheetImport()) ) // If auto spacing is set, then only store set value in InteropGrabBag
             {
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ),true, PARA_GRAB_BAG );
             }

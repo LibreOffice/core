@@ -3041,6 +3041,22 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
     assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO76934 , "fdo76934.docx")
+{
+    /* For DOCX containing "Title" style, LO was not able to preserve,
+     * Justification, Text Font name, Bold and Text size.
+     */
+
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath ( pXmlDoc, "/w:styles/w:style[36]", "styleId", "Title" );
+    assertXPath ( pXmlDoc, "/w:styles/w:style[36]/w:pPr/w:jc", "val", "center" );
+    assertXPath ( pXmlDoc, "/w:styles/w:style[36]/w:rPr/w:rFonts", "ascii", "Arial" );
+    assertXPath ( pXmlDoc, "/w:styles/w:style[36]/w:rPr/w:b", 1 );
+    assertXPath ( pXmlDoc, "/w:styles/w:style[36]/w:rPr/w:sz", "val", "36" );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

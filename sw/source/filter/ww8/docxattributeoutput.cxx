@@ -6321,9 +6321,17 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     else
     {
         SAL_INFO("sw.ww8", "DocxAttributeOutput::FormatULSpace: setting spacing" << rULSpace.GetUpper() );
-        // check if before auto spacing was set during import and spacing we get from actual object is same
-        // that we set in import. If yes just write beforeAutoSpacing tag.
-        if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == rULSpace.GetUpper())
+        /* check if before auto spacing was set during import and spacing we get from actual object is same
+         * that we set in import. If yes just write beforeAutoSpacing tag.
+         * Second condition checks for Presence of AutoSpacing inside styles.xml.
+         * For this case, check for
+         * 1] absence of AutoSpacing and
+         * 2] before is set to 100(default value for before is 100 when beforeAutopsacing is true.)
+         * This will ensure AutoSpacing is enebled inside styles.xml
+         */
+        sal_Int32 default_spacing = 100;
+        if ( (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == rULSpace.GetUpper()) ||
+             (!m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == 0 && rULSpace.GetUpper() == default_spacing) )
         {
             AddToAttrList( m_pParagraphSpacingAttrList,
                     FSNS( XML_w, XML_beforeAutospacing ), "1" );
