@@ -57,10 +57,13 @@ SvTreeListEntry::SvTreeListEntry()
 {
 }
 
-SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r) :
-    pParent(NULL),
-    nAbsPos(r.nAbsPos),
-    nListPos(r.nListPos & 0x7FFFFFFF)
+SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
+    : pParent(NULL)
+    , nAbsPos(r.nAbsPos)
+    , nListPos(r.nListPos & 0x7FFFFFFF)
+    , bIsMarked(r.bIsMarked)
+    , pUserData(r.pUserData)
+    , nEntryFlags(r.nEntryFlags)
 {
     SvTreeListEntries::const_iterator it = r.maChildren.begin(), itEnd = r.maChildren.end();
     for (; it != itEnd; ++it)
