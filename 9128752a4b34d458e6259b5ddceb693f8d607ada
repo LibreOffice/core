@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_c833eff4",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-04T09:43:07Z",
+      "side": 1,
+      "message": "You test the position of the shape, while your fix affects its ZOrder. Please assert the relativeHeight XML element instead, so your testcase will fail without the fix.",
+      "revId": "9128752a4b34d458e6259b5ddceb693f8d607ada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
