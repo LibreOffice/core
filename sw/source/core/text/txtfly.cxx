@@ -379,6 +379,7 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
     bOn = pPage->GetSortedObjs() != 0;
     bTopRule = true;
     nMinBottom = 0;
+    nNextTop = 0;
     nIndex = ULONG_MAX;
 }
 
