@@ -48,7 +48,7 @@ void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTransp
 void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientAsElement(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(com::sun::star::drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter);
-void dumpFillBackgroundAsAttribute(sal_Bool bBackground, xmlTextWriterPtr xmlWriter);
+void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapAsElement(com::sun::star::uno::Reference<com::sun::star::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapURLAsAttribute(const OUString& sBitmapURL, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
@@ -56,12 +56,12 @@ void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, 
 void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapOffsetYAsAttribute(sal_Int32 aBitmapOffsetY, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapRectanglePointAsAttribute(com::sun::star::drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapLogicalSizeAsAttribute(sal_Bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapLogicalSizeAsAttribute(bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapSizeXAsAttribute(sal_Int32 aBitmapSizeX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapSizeYAsAttribute(sal_Int32 aBitmapSizeY, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapModeAsAttribute(com::sun::star::drawing::BitmapMode eBitmapMode, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapStretchAsAttribute(sal_Bool bBitmapStretch, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapStretchAsAttribute(bool bBitmapStretch, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapTileAsAttribute(bool bBitmapTile, xmlTextWriterPtr xmlWriter);
 
 // LineProperties.idl
 void dumpLineStyleAsAttribute(com::sun::star::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
@@ -75,9 +75,9 @@ void dumpLineStartNameAsAttribute(const OUString& sLineStartName, xmlTextWriterP
 void dumpLineEndNameAsAttribute(const OUString& sLineEndName, xmlTextWriterPtr xmlWriter);
 void dumpLineStartAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aLineStart, xmlTextWriterPtr xmlWriter);
 void dumpLineEndAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aLineEnd, xmlTextWriterPtr xmlWriter);
-void dumpLineStartCenterAsAttribute(sal_Bool bLineStartCenter, xmlTextWriterPtr xmlWriter);
+void dumpLineStartCenterAsAttribute(bool bLineStartCenter, xmlTextWriterPtr xmlWriter);
 void dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr xmlWriter);
-void dumpLineEndCenterAsAttribute(sal_Bool bLineEndCenter, xmlTextWriterPtr xmlWriter);
+void dumpLineEndCenterAsAttribute(bool bLineEndCenter, xmlTextWriterPtr xmlWriter);
 void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWriter);
 
 // PolyPolygonDescriptor.idl
@@ -90,10 +90,10 @@ void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter);
 void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 
 // TextProperties.idl
-void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter);
-void dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter);
-void dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter);
-void dumpTextContourFrameAsAttribute(sal_Bool bTextContourFrame, xmlTextWriterPtr xmlWriter);
+void dumpIsNumberingAsAttribute(bool bIsNumbering, xmlTextWriterPtr xmlWriter);
+void dumpTextAutoGrowHeightAsAttribute(bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter);
+void dumpTextAutoGrowWidthAsAttribute(bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter);
+void dumpTextContourFrameAsAttribute(bool bTextContourFrame, xmlTextWriterPtr xmlWriter);
 void dumpTextFitToSizeAsAttribute(com::sun::star::drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter);
 void dumpTextHorizontalAdjustAsAttribute(com::sun::star::drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter);
 void dumpTextVerticalAdjustAsAttribute(com::sun::star::drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter);
@@ -110,12 +110,12 @@ void dumpTextAnimationCountAsAttribute(sal_Int32 aTextAnimationCount, xmlTextWri
 void dumpTextAnimationDelayAsAttribute(sal_Int32 aTextAnimationDelay, xmlTextWriterPtr xmlWriter);
 void dumpTextAnimationDirectionAsAttribute(com::sun::star::drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter);
 void dumpTextAnimationKindAsAttribute(com::sun::star::drawing::TextAnimationKind eTextAnimationKind, xmlTextWriterPtr xmlWriter);
-void dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter);
-void dumpTextAnimationStopInsideAsAttribute(sal_Bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter);
+void dumpTextAnimationStartInsideAsAttribute(bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter);
+void dumpTextAnimationStopInsideAsAttribute(bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter);
 void dumpTextWritingModeAsAttribute(com::sun::star::text::WritingMode eWritingMode, xmlTextWriterPtr xmlWriter);
 
 // ShadowProperties.idl
-void dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter);
+void dumpShadowAsAttribute(bool bShadow, xmlTextWriterPtr xmlWriter);
 void dumpShadowColorAsAttribute(sal_Int32 aShadowColor, xmlTextWriterPtr xmlWriter);
 void dumpShadowTransparenceAsAttribute(sal_Int32 aShadowTransparence, xmlTextWriterPtr xmlWriter);
 void dumpShadowXDistanceAsAttribute(sal_Int32 aShadowXDistance, xmlTextWriterPtr xmlWriter);
@@ -125,11 +125,11 @@ void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr
 void dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter);
 void dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter);
 void dumpLayerNameAsAttribute(const OUString& sLayerName, xmlTextWriterPtr xmlWriter);
-void dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter);
-void dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter);
-void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter);
+void dumpVisibleAsAttribute(bool bVisible, xmlTextWriterPtr xmlWriter);
+void dumpPrintableAsAttribute(bool bPrintable, xmlTextWriterPtr xmlWriter);
+void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter);
 void dumpNameAsAttribute(const OUString& sName, xmlTextWriterPtr xmlWriter);
-void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter);
+void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter);
 void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter);
 void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
@@ -297,7 +297,7 @@ void dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpFillBackgroundAsAttribute(sal_Bool bBackground, xmlTextWriterPtr xmlWriter)
+void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter)
 {
     if(bBackground)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "true");
@@ -379,7 +379,7 @@ void dumpFillBitmapRectanglePointAsAttribute(drawing::RectanglePoint eBitmapRect
     }
 }
 
-void dumpFillBitmapLogicalSizeAsAttribute(sal_Bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter)
+void dumpFillBitmapLogicalSizeAsAttribute(bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter)
 {
     if(bBitmapLogicalSize)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "true");
@@ -415,7 +415,7 @@ void dumpFillBitmapModeAsAttribute(drawing::BitmapMode eBitmapMode, xmlTextWrite
     }
 }
 
-void dumpFillBitmapStretchAsAttribute(sal_Bool bBitmapStretch, xmlTextWriterPtr xmlWriter)
+void dumpFillBitmapStretchAsAttribute(bool bBitmapStretch, xmlTextWriterPtr xmlWriter)
 {
     if(bBitmapStretch)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "true");
@@ -423,7 +423,7 @@ void dumpFillBitmapStretchAsAttribute(sal_Bool bBitmapStretch, xmlTextWriterPtr 
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "false");
 }
 
-void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWriter)
+void dumpFillBitmapTileAsAttribute(bool bBitmapTile, xmlTextWriterPtr xmlWriter)
 {
     if(bBitmapTile)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "true");
@@ -557,7 +557,7 @@ void dumpLineEndAsElement(drawing::PolyPolygonBezierCoords aLineEnd, xmlTextWrit
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpLineStartCenterAsAttribute(sal_Bool bLineStartCenter, xmlTextWriterPtr xmlWriter)
+void dumpLineStartCenterAsAttribute(bool bLineStartCenter, xmlTextWriterPtr xmlWriter)
 {
     if(bLineStartCenter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "true");
@@ -570,7 +570,7 @@ void dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr x
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
 }
 
-void dumpLineEndCenterAsAttribute(sal_Bool bLineEndCenter, xmlTextWriterPtr xmlWriter)
+void dumpLineEndCenterAsAttribute(bool bLineEndCenter, xmlTextWriterPtr xmlWriter)
 {
     if(bLineEndCenter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "true");
@@ -702,7 +702,7 @@ void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
 // ---------- TextProperties.idl ----------
 
 
-void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter)
+void dumpIsNumberingAsAttribute(bool bIsNumbering, xmlTextWriterPtr xmlWriter)
 {
     if(bIsNumbering)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "true");
@@ -710,7 +710,7 @@ void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWrite
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
 }
 
-void dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter)
+void dumpTextAutoGrowHeightAsAttribute(bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAutoGrowHeight)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "true");
@@ -718,7 +718,7 @@ void dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWrit
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "false");
 }
 
-void dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter)
+void dumpTextAutoGrowWidthAsAttribute(bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAutoGrowWidth)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "true");
@@ -726,7 +726,7 @@ void dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriter
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
 }
 
-void dumpTextContourFrameAsAttribute(sal_Bool bTextContourFrame, xmlTextWriterPtr xmlWriter)
+void dumpTextContourFrameAsAttribute(bool bTextContourFrame, xmlTextWriterPtr xmlWriter)
 {
     if(bTextContourFrame)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "true");
@@ -897,7 +897,7 @@ void dumpTextAnimationKindAsAttribute(drawing::TextAnimationKind eTextAnimationK
     }
 }
 
-void dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter)
+void dumpTextAnimationStartInsideAsAttribute(bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAnimationStartInside)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "true");
@@ -905,7 +905,7 @@ void dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside,
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
 }
 
-void dumpTextAnimationStopInsideAsAttribute(sal_Bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter)
+void dumpTextAnimationStopInsideAsAttribute(bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAnimationStopInside)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "true");
@@ -935,7 +935,7 @@ void dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextW
 // ---------- ShadowProperties.idl ----------
 
 
-void dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
+void dumpShadowAsAttribute(bool bShadow, xmlTextWriterPtr xmlWriter)
 {
     if(bShadow)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
@@ -983,7 +983,7 @@ void dumpLayerNameAsAttribute(const OUString& sLayerName, xmlTextWriterPtr xmlWr
         OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter)
+void dumpVisibleAsAttribute(bool bVisible, xmlTextWriterPtr xmlWriter)
 {
     if(bVisible)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "true");
@@ -991,7 +991,7 @@ void dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "false");
 }
 
-void dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter)
+void dumpPrintableAsAttribute(bool bPrintable, xmlTextWriterPtr xmlWriter)
 {
     if(bPrintable)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
@@ -999,7 +999,7 @@ void dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
 }
 
-void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter)
+void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter)
 {
     if(bMoveProtect)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "true");
@@ -1016,7 +1016,7 @@ void dumpNameAsAttribute(const OUString& sName, xmlTextWriterPtr xmlWriter)
     }
 }
 
-void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter)
+void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter)
 {
     if(bSizeProtect)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "true");
@@ -1119,7 +1119,7 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
     OUString sValue;
     float fValue;
     sal_Int32 nValue;
-    sal_Bool bValue;
+    bool bValue;
     awt::Rectangle aRectangleValue;
     uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
     uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
@@ -1238,25 +1238,25 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     if(xInfo->hasPropertyByName("IsNumbering"))
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
-        sal_Bool bIsNumbering = sal_Bool();
+        bool bIsNumbering;
         if(anotherAny >>= bIsNumbering)
             dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowHeight");
-        sal_Bool bTextAutoGrowHeight = sal_Bool();
+        bool bTextAutoGrowHeight;
         if(anotherAny >>= bTextAutoGrowHeight)
             dumpTextAutoGrowHeightAsAttribute(bTextAutoGrowHeight, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowWidth");
-        sal_Bool bTextAutoGrowWidth = sal_Bool();
+        bool bTextAutoGrowWidth;
         if(anotherAny >>= bTextAutoGrowWidth)
             dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextContourFrame");
-        sal_Bool bTextContourFrame = sal_Bool();
+        bool bTextContourFrame;
         if(anotherAny >>= bTextContourFrame)
             dumpTextContourFrameAsAttribute(bTextContourFrame, xmlWriter);
     }
@@ -1358,13 +1358,13 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStartInside");
-        sal_Bool bTextAnimationStartInside = sal_Bool();
+        bool bTextAnimationStartInside;
         if(anotherAny >>= bTextAnimationStartInside)
             dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStopInside");
-        sal_Bool bTextAnimationStopInside = sal_Bool();
+        bool bTextAnimationStopInside;
         if(anotherAny >>= bTextAnimationStopInside)
             dumpTextAnimationStopInsideAsAttribute(bTextAnimationStopInside, xmlWriter);
     }
@@ -1434,7 +1434,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBackground");
-        sal_Bool bFillBackground = sal_Bool();
+        bool bFillBackground;
         if(anotherAny >>= bFillBackground)
             dumpFillBackgroundAsAttribute(bFillBackground, xmlWriter);
     }
@@ -1488,7 +1488,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapLogicalSize");
-        sal_Bool bBitmapLogicalSize = sal_Bool();
+        bool bBitmapLogicalSize;
         if(anotherAny >>= bBitmapLogicalSize)
             dumpFillBitmapLogicalSizeAsAttribute(bBitmapLogicalSize, xmlWriter);
     }
@@ -1512,13 +1512,13 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapStretch");
-        sal_Bool bBitmapStretch = sal_Bool();
+        bool bBitmapStretch;
         if(anotherAny >>= bBitmapStretch)
             dumpFillBitmapStretchAsAttribute(bBitmapStretch, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapTile");
-        sal_Bool bBitmapTile = sal_Bool();
+        bool bBitmapTile;
         if(anotherAny >>= bBitmapTile)
             dumpFillBitmapTileAsAttribute(bBitmapTile, xmlWriter);
     }
@@ -1594,7 +1594,7 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineStartCenter");
-        sal_Bool bLineStartCenter = sal_Bool();
+        bool bLineStartCenter;
         if(anotherAny >>= bLineStartCenter)
             dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
     }
@@ -1606,7 +1606,7 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineEndCenter");
-        sal_Bool bLineEndCenter = sal_Bool();
+        bool bLineEndCenter;
         if(anotherAny >>= bLineEndCenter)
             dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
     }
@@ -1622,7 +1622,7 @@ void dumpShadowPropertiesService(uno::Reference< beans::XPropertySet > xPropSet,
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
-        sal_Bool bShadow = sal_Bool();
+        bool bShadow;
         if(anotherAny >>= bShadow)
             dumpShadowAsAttribute(bShadow, xmlWriter);
     }
@@ -1697,19 +1697,19 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Visible");
-        sal_Bool bVisible = sal_Bool();
+        bool bVisible;
         if(anotherAny >>= bVisible)
             dumpVisibleAsAttribute(bVisible, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Printable");
-        sal_Bool bPrintable = sal_Bool();
+        bool bPrintable;
         if(anotherAny >>= bPrintable)
             dumpPrintableAsAttribute(bPrintable, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MoveProtect");
-        sal_Bool bMoveProtect = sal_Bool();
+        bool bMoveProtect;
         if(anotherAny >>= bMoveProtect)
             dumpMoveProtectAsAttribute(bMoveProtect, xmlWriter);
     }
@@ -1721,7 +1721,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("SizeProtect");
-        sal_Bool bSizeProtect = sal_Bool();
+        bool bSizeProtect;
         if(anotherAny >>= bSizeProtect)
             dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
     }

@@ -21,7 +21,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
-        sal_Bool bExtrusion = sal_Bool();
+        bool bExtrusion;
         if(anotherAny >>= bExtrusion)
             dumpExtrusionAsAttribute(bExtrusion);
     }
@@ -51,19 +51,19 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LightFace");
-        sal_Bool bLightFace = sal_Bool();
+        bool bLightFace;
         if(anotherAny >>= bLightFace)
             dumpLightFaceAsAttribute(bLightFace);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightHarsh");
-        sal_Bool bFirstLightHarsh = sal_Bool();
+        bool bFirstLightHarsh;
         if(anotherAny >>= bFirstLightHarsh)
             dumpFirstLightHarshAsAttribute(bFirstLightHarsh);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightHarsh");
-        sal_Bool bSecondLightHarsh = sal_Bool();
+        bool bSecondLightHarsh;
         if(anotherAny >>= bSecondLightHarsh)
             dumpSecondLightHarshAsAttribute(bSecondLightHarsh);
     }
@@ -93,7 +93,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Metal");
-        sal_Bool bMetal = sal_Bool();
+        bool bMetal;
         if(anotherAny >>= bMetal)
             dumpMetalAsAttribute(bMetal);
     }
@@ -153,12 +153,12 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionColor");
-        sal_Bool bExtrusionColor = sal_Bool();
+        bool bExtrusionColor;
         if(anotherAny >>= bExtrusionColor)
             dumpExtrusionColorAsAttribute(bExtrusionColor);
     }
 }
-void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
+void EnhancedShapeDumper::dumpExtrusionAsAttribute(bool bExtrusion)
 {
     if(bExtrusion)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "true");
@@ -202,7 +202,7 @@ void EnhancedShapeDumper::dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberO
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("numberOfLineSegments"), "%" SAL_PRIdINT32, aNumberOfLineSegments);
 }
 
-void EnhancedShapeDumper::dumpLightFaceAsAttribute(sal_Bool bLightFace)
+void EnhancedShapeDumper::dumpLightFaceAsAttribute(bool bLightFace)
 {
     if(bLightFace)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "true");
@@ -210,7 +210,7 @@ void EnhancedShapeDumper::dumpLightFaceAsAttribute(sal_Bool bLightFace)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpFirstLightHarshAsAttribute(sal_Bool bFirstLightHarsh)
+void EnhancedShapeDumper::dumpFirstLightHarshAsAttribute(bool bFirstLightHarsh)
 {
     if(bFirstLightHarsh)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "true");
@@ -218,7 +218,7 @@ void EnhancedShapeDumper::dumpFirstLightHarshAsAttribute(sal_Bool bFirstLightHar
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightHarsh)
+void EnhancedShapeDumper::dumpSecondLightHarshAsAttribute(bool bSecondLightHarsh)
 {
     if(bSecondLightHarsh)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "true");
@@ -257,7 +257,7 @@ void EnhancedShapeDumper::dumpSecondLightDirectionAsElement(drawing::Direction3D
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpMetalAsAttribute(sal_Bool bMetal)
+void EnhancedShapeDumper::dumpMetalAsAttribute(bool bMetal)
 {
     if(bMetal)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "true");
@@ -348,7 +348,7 @@ void EnhancedShapeDumper::dumpOriginAsElement(drawing::EnhancedCustomShapeParame
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor)
+void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(bool bExtrusionColor)
 {
     if(bExtrusionColor)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "true");
@@ -376,13 +376,13 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
-        sal_Bool bMirroredX = sal_Bool();
+        bool bMirroredX;
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
-        sal_Bool bMirroredY = sal_Bool();
+        bool bMirroredY;
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
@@ -445,7 +445,7 @@ void EnhancedShapeDumper::dumpViewBoxAsElement(awt::Rectangle aViewBox)
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpMirroredXAsAttribute(sal_Bool bMirroredX)
+void EnhancedShapeDumper::dumpMirroredXAsAttribute(bool bMirroredX)
 {
     if(bMirroredX)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
@@ -453,7 +453,7 @@ void EnhancedShapeDumper::dumpMirroredXAsAttribute(sal_Bool bMirroredX)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpMirroredYAsAttribute(sal_Bool bMirroredY)
+void EnhancedShapeDumper::dumpMirroredYAsAttribute(bool bMirroredY)
 {
     if(bMirroredY)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "true");
@@ -477,7 +477,7 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(uno::Sequence< drawing::
         OUString sValue;
         float fValue;
         sal_Int32 nValue;
-        sal_Bool bValue;
+        bool bValue;
         if(aAny >>= sValue)
         {
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
@@ -621,19 +621,19 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
-        sal_Bool bMirroredX = sal_Bool();
+        bool bMirroredX;
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
-        sal_Bool bMirroredY = sal_Bool();
+        bool bMirroredY;
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Switched");
-        sal_Bool bSwitched = sal_Bool();
+        bool bSwitched;
         if(anotherAny >>= bSwitched)
             dumpSwitchedAsAttribute(bSwitched);
     }
@@ -711,7 +711,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
     }
 }
 
-void EnhancedShapeDumper::dumpSwitchedAsAttribute(sal_Bool bSwitched)
+void EnhancedShapeDumper::dumpSwitchedAsAttribute(bool bSwitched)
 {
     if(bSwitched)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "true");
@@ -759,7 +759,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCust
     OUString sValue;
     float fValue;
     sal_Int32 nValue;
-    sal_Bool bValue;
+    bool bValue;
     if(aAny >>= sValue)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
@@ -879,19 +879,19 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionAllowed");
-        sal_Bool bExtrusionAllowed = sal_Bool();
+        bool bExtrusionAllowed;
         if(anotherAny >>= bExtrusionAllowed)
             dumpExtrusionAllowedAsAttribute(bExtrusionAllowed);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ConcentricGradientFillAllowed");
-        sal_Bool bConcentricGradientFillAllowed = sal_Bool();
+        bool bConcentricGradientFillAllowed;
         if(anotherAny >>= bConcentricGradientFillAllowed)
             dumpConcentricGradientFillAllowedAsAttribute(bConcentricGradientFillAllowed);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextPathAllowed");
-        sal_Bool bTextPathAllowed = sal_Bool();
+        bool bTextPathAllowed;
         if(anotherAny >>= bTextPathAllowed)
             dumpTextPathAllowedAsAttribute(bTextPathAllowed);
     }
@@ -992,7 +992,7 @@ void EnhancedShapeDumper::dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("gluePointType"), "%" SAL_PRIdINT32, aGluePointType);
 }
 
-void EnhancedShapeDumper::dumpExtrusionAllowedAsAttribute(sal_Bool bExtrusionAllowed)
+void EnhancedShapeDumper::dumpExtrusionAllowedAsAttribute(bool bExtrusionAllowed)
 {
     if(bExtrusionAllowed)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "true");
@@ -1000,7 +1000,7 @@ void EnhancedShapeDumper::dumpExtrusionAllowedAsAttribute(sal_Bool bExtrusionAll
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpConcentricGradientFillAllowedAsAttribute(sal_Bool bConcentricGradientFillAllowed)
+void EnhancedShapeDumper::dumpConcentricGradientFillAllowedAsAttribute(bool bConcentricGradientFillAllowed)
 {
     if(bConcentricGradientFillAllowed)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "true");
@@ -1008,7 +1008,7 @@ void EnhancedShapeDumper::dumpConcentricGradientFillAllowedAsAttribute(sal_Bool 
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpTextPathAllowedAsAttribute(sal_Bool bTextPathAllowed)
+void EnhancedShapeDumper::dumpTextPathAllowedAsAttribute(bool bTextPathAllowed)
 {
     if(bTextPathAllowed)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "true");
@@ -1038,7 +1038,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference<
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
-        sal_Bool bTextPath = sal_Bool();
+        bool bTextPath;
         if(anotherAny >>= bTextPath)
             dumpTextPathAsAttribute(bTextPath);
     }
@@ -1050,13 +1050,13 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference<
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ScaleX");
-        sal_Bool bScaleX = sal_Bool();
+        bool bScaleX;
         if(anotherAny >>= bScaleX)
             dumpScaleXAsAttribute(bScaleX);
     }
 }
 
-void EnhancedShapeDumper::dumpTextPathAsAttribute(sal_Bool bTextPath)
+void EnhancedShapeDumper::dumpTextPathAsAttribute(bool bTextPath)
 {
     if(bTextPath)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "true");
@@ -1082,7 +1082,7 @@ void EnhancedShapeDumper::dumpTextPathModeAsAttribute(drawing::EnhancedCustomSha
     }
 }
 
-void EnhancedShapeDumper::dumpScaleXAsAttribute(sal_Bool bScaleX)
+void EnhancedShapeDumper::dumpScaleXAsAttribute(bool bScaleX)
 {
     if(bScaleX)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "true");

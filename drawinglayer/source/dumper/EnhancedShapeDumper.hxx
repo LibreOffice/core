@@ -49,19 +49,19 @@ public:
 
     // EnhancedCustomShapeExtrusion.idl
     void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpExtrusionAsAttribute(sal_Bool bExtrusion);
+    void dumpExtrusionAsAttribute(bool bExtrusion);
     void dumpBrightnessAsAttribute(double aBrightness);
     void dumpDepthAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepth);
     void dumpDiffusionAsAttribute(double aDiffusion);
     void dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments);
-    void dumpLightFaceAsAttribute(sal_Bool bLightFace);
-    void dumpFirstLightHarshAsAttribute(sal_Bool bFirstLightHarsh);
-    void dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightHarsh);
+    void dumpLightFaceAsAttribute(bool bLightFace);
+    void dumpFirstLightHarshAsAttribute(bool bFirstLightHarsh);
+    void dumpSecondLightHarshAsAttribute(bool bSecondLightHarsh);
     void dumpFirstLightLevelAsAttribute(double aFirstLightLevel);
     void dumpSecondLightLevelAsAttribute(double aSecondLightLevel);
     void dumpFirstLightDirectionAsElement(com::sun::star::drawing::Direction3D aFirstLightDirection);
     void dumpSecondLightDirectionAsElement(com::sun::star::drawing::Direction3D aSecondLightDirection);
-    void dumpMetalAsAttribute(sal_Bool bMetal);
+    void dumpMetalAsAttribute(bool bMetal);
     void dumpShadeModeAsAttribute(com::sun::star::drawing::ShadeMode eShadeMode);
     void dumpRotateAngleAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngle);
     void dumpRotationCenterAsElement(com::sun::star::drawing::Direction3D aRotationCenter);
@@ -71,14 +71,14 @@ public:
     void dumpProjectionModeAsAttribute(com::sun::star::drawing::ProjectionMode eProjectionMode);
     void dumpViewPointAsElement(com::sun::star::drawing::Position3D aViewPoint);
     void dumpOriginAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aOrigin);
-    void dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor);
+    void dumpExtrusionColorAsAttribute(bool bExtrusionColor);
 
     // EnhancedCustomShapeGeometry.idl
     void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpTypeAsAttribute(const OUString& sType);
     void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
-    void dumpMirroredXAsAttribute(sal_Bool bMirroredX); // also used in EnhancedCustomShapeHandle
-    void dumpMirroredYAsAttribute(sal_Bool bMirroredY); // also used in EnhancedCustomShapeHandle
+    void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
+    void dumpMirroredYAsAttribute(bool bMirroredY); // also used in EnhancedCustomShapeHandle
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
     void dumpAdjustmentValuesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues);
     void dumpExtrusionAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aExtrusion);
@@ -89,7 +89,7 @@ public:
 
     // EnhancedCustomShapeHandle.idl
     void dumpEnhancedCustomShapeHandleService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpSwitchedAsAttribute(sal_Bool bSwitched);
+    void dumpSwitchedAsAttribute(bool bSwitched);
     void dumpPositionAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition);
     void dumpPolarAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aPolar);
     void dumpRefXAsAttribute(sal_Int32 aRefX);
@@ -113,16 +113,16 @@ public:
     void dumpGluePointsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints);
     void dumpGluePointLeavingDirectionsAsElement(com::sun::star::uno::Sequence< double > aGluePointLeavingDirections);
     void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
-    void dumpExtrusionAllowedAsAttribute(sal_Bool bExtrusionAllowed);
-    void dumpConcentricGradientFillAllowedAsAttribute(sal_Bool bConcentricGradientFillAllowed);
-    void dumpTextPathAllowedAsAttribute(sal_Bool bTextPathAllowed);
+    void dumpExtrusionAllowedAsAttribute(bool bExtrusionAllowed);
+    void dumpConcentricGradientFillAllowedAsAttribute(bool bConcentricGradientFillAllowed);
+    void dumpTextPathAllowedAsAttribute(bool bTextPathAllowed);
     void dumpSubViewSizeAsElement(com::sun::star::uno::Sequence< com::sun::star::awt::Size > aSubViewSize);
 
     // EnhancedCustomShapePath.idl
     void dumpEnhancedCustomShapeTextPathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpTextPathAsAttribute(sal_Bool bTextPath);
+    void dumpTextPathAsAttribute(bool bTextPath);
     void dumpTextPathModeAsAttribute(com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode);
-    void dumpScaleXAsAttribute(sal_Bool bScaleX);
+    void dumpScaleXAsAttribute(bool bScaleX);
 
 private:
     xmlTextWriterPtr xmlWriter;

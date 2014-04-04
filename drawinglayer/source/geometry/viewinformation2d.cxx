@@ -135,7 +135,7 @@ namespace drawinglayer
                             mxExtendedInformation[nExtendedInsert++] = rProp;
 
                             // for performance reasons, also cache content locally
-                            sal_Bool bSalBool(false);
+                            bool bSalBool(false);
                             rProp.Value >>= bSalBool;
                             mbReducedDisplayQuality = bSalBool;
                         }
