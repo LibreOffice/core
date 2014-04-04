@@ -57,6 +57,8 @@ enum kwtype
     KMACHINE, KLINENO, KFILE, KDATE, KTIME, KSTDC, KEVAL
 };
 
+extern void setup_kwtab(void);
+
 #define ISDEFINED       0x01            /* has #defined value */
 #define ISKW            0x02            /* is PP keyword */
 #define ISUNCHANGE      0x04            /* can't be #defined in PP */

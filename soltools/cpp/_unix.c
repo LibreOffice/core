@@ -49,8 +49,6 @@ int Cflag = 0;                          /* do not remove any comments */
 int Dflag = 0;                          /* add parameter check to delete op */
 int Cplusplus = 0;
 
-extern void setup_kwtab(void);
-
 void
     setup(int argc, char **argv)
 {
