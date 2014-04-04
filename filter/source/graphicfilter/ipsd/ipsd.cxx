@@ -92,6 +92,8 @@ PSDReader::PSDReader(SvStream &rStream)
     , mpReadAcc(NULL)
     , mpWriteAcc(NULL)
     , mpMaskWriteAcc(NULL)
+    , mnDestBitDepth(0)
+    , mbCompression(false)
     , mpPalette(NULL)
 {
 }
@@ -101,8 +103,6 @@ PSDReader::~PSDReader()
     delete[] mpPalette;
     delete mpFileHeader;
 }
-
-
 
 sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
 {
