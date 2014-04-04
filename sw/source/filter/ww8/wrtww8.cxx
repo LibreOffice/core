@@ -610,7 +610,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
 
     OSL_ENSURE( nNoNeeded<=1, "Example of unexportable forbidden chars" );
     rTypo.reserved1=nUseReserved;
-    if (rTypo.iLevelOfKinsoku)
+    if (rTypo.iLevelOfKinsoku && pUseMe)
     {
         rTypo.cchFollowingPunct = msword_cast<sal_Int16>
             (pUseMe->beginLine.getLength());
