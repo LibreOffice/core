@@ -2960,6 +2960,8 @@ void DomainMapper_Impl::handleIndex
     m_bStartTOC = true;
     m_bStartIndex = true;
     OUString sValue;
+    OUString sIndexEntryType = "I"; // Default value for field flag '\f' is 'I'.
+
 
     if (m_xTextFactory.is())
         xTOC.set(
@@ -2977,6 +2979,12 @@ void DomainMapper_Impl::handleIndex
         if( lcl_FindInCommand( pContext->GetCommand(), 'h', sValue ))
         {
             xTOC->setPropertyValue("UseAlphabeticalSeparators", uno::makeAny(true));
+        }
+        if( lcl_FindInCommand( pContext->GetCommand(), 'f', sValue ))
+        {
+            if(!sValue.isEmpty())
+            sIndexEntryType = sValue ;
+            xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_INDEX_ENTRY_TYPE ), uno::makeAny(sIndexEntryType));
         }
     }
     pContext->SetTOC( xTOC );

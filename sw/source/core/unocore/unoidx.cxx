@@ -656,6 +656,13 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
            rTOXBase.SetCreate(nCreate);
         }
         break;
+        case WID_INDEX_ENTRY_TYPE:
+        {
+            rTOXBase.SetEntryTypeName(lcl_AnyToString(rValue));
+            nCreate = nsSwTOXElement::TOX_INDEX_ENTRY_TYPE;
+            rTOXBase.SetCreate(nCreate);
+        }
+        break;
         case WID_CREATE_FROM_MARKS:
             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_MARK);
         break;
@@ -976,6 +983,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_TOC_BOOKMARK  :
                aRet <<= OUString(pTOXBase->GetBookmarkName());
+            break;
+            case WID_INDEX_ENTRY_TYPE  :
+               aRet <<= OUString(pTOXBase->GetEntryTypeName());
             break;
             case WID_CREATE_FROM_MARKS:
                 lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_MARK);
@@ -1547,6 +1557,7 @@ public:
     sal_Bool                    m_bMainEntry;
     sal_uInt16                  m_nLevel;
     OUString                    m_aBookmarkName;
+    OUString                    m_aEntryTypeName;
     OUString                    m_sAltText;
     OUString                    m_sPrimaryKey;
     OUString                    m_sSecondaryKey;
@@ -2151,6 +2162,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case WID_TOC_BOOKMARK :
                 aMark.SetBookmarkName(lcl_AnyToString(rValue));
             break;
+            case WID_INDEX_ENTRY_TYPE :
+                aMark.SetEntryTypeName(lcl_AnyToString(rValue));
+            break;
             case WID_PRIMARY_KEY  :
                 aMark.SetPrimaryKey(lcl_AnyToString(rValue));
             break;
@@ -2208,6 +2222,11 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case WID_TOC_BOOKMARK :
             {
                 m_pImpl->m_aBookmarkName = lcl_AnyToString(rValue);
+            }
+            break;
+            case WID_INDEX_ENTRY_TYPE :
+            {
+                m_pImpl->m_aEntryTypeName = lcl_AnyToString(rValue);
             }
             break;
             case WID_PRIMARY_KEY:
@@ -2289,6 +2308,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_TOC_BOOKMARK :
                 aRet <<= OUString(m_pImpl->m_pTOXMark->GetBookmarkName());
             break;
+            case WID_INDEX_ENTRY_TYPE :
+                aRet <<= OUString(m_pImpl->m_pTOXMark->GetEntryTypeName());
+            break;
             case WID_PRIMARY_KEY  :
                 aRet <<= OUString(m_pImpl->m_pTOXMark->GetPrimaryKey());
             break;
@@ -2332,6 +2354,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_TOC_BOOKMARK :
                 aRet <<= m_pImpl->m_aBookmarkName;
+            break;
+            case WID_INDEX_ENTRY_TYPE :
+                aRet <<= m_pImpl->m_aEntryTypeName;
             break;
             case WID_PRIMARY_KEY:
                 aRet <<= m_pImpl->m_sPrimaryKey;
