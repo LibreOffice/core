@@ -3227,7 +3227,7 @@ void XMLShapeExport::ImpExportMediaShape(
 
         OUString const persistentURL =
             lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
-        if( aMediaURL.endsWith(".json") )
+        if( sMimeType == "application/vnd.gltf+json" )
             lcl_StoreJsonExternals(GetExport(), aMediaURL);
 
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
