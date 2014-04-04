@@ -26,6 +26,7 @@
 
 #include "cppu/EnvDcp.hxx"
 
+#include "cascade_mapping.hxx"
 
 #ifdef LOG_LIFECYLE_MediatorMapping
 #  include <iostream>
