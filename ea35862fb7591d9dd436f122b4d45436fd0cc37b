@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_0826e7ba",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4102,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-04-04T09:37:46Z",
+      "side": 1,
+      "message": "Please use isEmpty(), not getLength() \u003e 0.",
+      "revId": "ea35862fb7591d9dd436f122b4d45436fd0cc37b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
