@@ -117,22 +117,21 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aScrollTimer.Start();
 }
 
-
-
 DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
-:m_pParent(_pParent),
- m_rView(_pParent->getSectionView()),
- m_xOverlappingObj(NULL),
- m_pOverlappingObj(NULL),
- m_bSelectionMode(false),
- m_bUiActive(false),
- m_bShowPropertyBrowser(false)
+    : m_pParent(_pParent)
+    , m_rView(_pParent->getSectionView())
+    , m_xOverlappingObj(NULL)
+    , m_pOverlappingObj(NULL)
+    , m_nOverlappedControlColor(0)
+    , m_nOldColor(0)
+    , m_bSelectionMode(false)
+    , m_bUiActive(false)
+    , m_bShowPropertyBrowser(false)
 {
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
     m_rView.SetActualWin( m_pParent);
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
-
 
 void DlgEdFunc::setOverlappedControlColor(sal_Int32 _nColor)
 {
