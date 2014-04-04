@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_c8e68f44",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-04T15:00:38Z",
+      "side": 1,
+      "message": "The code was taken from scaddins/source/analysis/analysishelper.hxx and seems to be used in scaddins. The function is always used on numeric dates to which the Null date has been added and I think that is what I did too.\nBut I will recheck and test the results extra carefully.",
+      "parentUuid": "ba7be1f8_e8b51332",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_089b47ca",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_c8bdaf04",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-04T15:00:38Z",
+      "side": 1,
+      "message": "I overlooked that one...\nNow it will be more difficult to obtain the used Null date.\nIn scaddins, the Null date is obtained with an extra argument (const css::uno::Reference\u003c css::beans::XPropertySet \u003e\u0026 xOptions).\nI will try to make it work as it should be; I need Null date to get proper day of week values.",
+      "parentUuid": "ba7be1f8_089b47ca",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_c8b84f2d",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2014-04-04T12:45:40Z",
       "side": 1,
       "message": "So adding that \"formatted\" date number here results in something different.",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_e8ba7309",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-04-04T15:00:38Z",
+      "side": 1,
+      "message": "Quite clear (now).",
+      "parentUuid": "ba7be1f8_c8b84f2d",
       "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
