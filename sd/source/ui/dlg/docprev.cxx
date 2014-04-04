@@ -148,7 +148,7 @@ void SdDocPreviewWin::Paint( const Rectangle& rRect )
 void SdDocPreviewWin::startPreview()
 {
     ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell * >( mpObj );
-    if( mpObj )
+    if( pDocShell )
     {
         SdDrawDocument* pDoc = pDocShell->GetDoc();
 
