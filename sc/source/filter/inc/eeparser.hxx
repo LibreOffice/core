@@ -73,7 +73,7 @@ struct ScEEParseEntry
         aItemSet( *pPool ), pValStr( NULL ),
         pNumStr( NULL ), pName( NULL ),
         nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
-        nColOverlap(1), nRowOverlap(1),
+        nTwips(0), nColOverlap(1), nRowOverlap(1),
         nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
         {}
 
