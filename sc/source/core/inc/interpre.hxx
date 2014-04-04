@@ -590,8 +590,9 @@ void ScGetDay();
 void ScGetDayOfWeek();
 void ScGetWeekOfYear();
 void ScEasterSunday();
-sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const Date& rNullDate,
+sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
         ::std::vector<double>& rSortArray, OUString& rWeekendDays, bool bWeekendMask[ 7 ] );
+inline sal_Int16 GetDayOfWeek( sal_Int32 n );
 void ScNetWorkdays_MS();
 void ScWorkday_MS();
 void ScGetHour();
@@ -944,6 +945,11 @@ inline double ScInterpreter::div( const double& fNumerator, const double& fDenom
 {
     return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
         CreateDoubleError( errDivisionByZero);
+}
+
+inline sal_Int16 ScInterpreter::GetDayOfWeek( sal_Int32 n )
+{   // monday = 0, ..., sunday = 6
+    return static_cast< sal_Int16 >( ( n - 1 ) % 7 );
 }
 
 #endif
