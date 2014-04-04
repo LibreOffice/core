@@ -182,7 +182,7 @@ void XclPageData::SetDefaults()
     mfHeaderMargin  = mfFooterMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HF );
     mfHdrLeftMargin = mfHdrRightMargin = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HLR );
     mfFtrLeftMargin = mfFtrRightMargin = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_FLR );
-    mnPaperSize = EXC_PAPERSIZE_DEFAULT;
+    mnStrictPaperSize = mnPaperSize = EXC_PAPERSIZE_DEFAULT;
     mnPaperWidth = 0;
     mnPaperHeight = 0;
     mnCopies = 1;
