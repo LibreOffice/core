@@ -57,8 +57,6 @@ private:
     SfxChildAlignment   eSfxOldAlignment;
     ImageButton         aInsertButton;
     FixedText           aFiFuncDesc;
-    sal_uInt16          nLeftSlot;
-    sal_uInt16          nRightSlot;
     sal_uLong           nMinWidth;
     sal_uLong           nMinHeight;
     Size                aOldSize;
@@ -111,9 +109,6 @@ public:
 
     using SfxDockingWindow::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
-
-    void            SetSlotIDs( sal_uInt16 nLeft, sal_uInt16 nRight )
-                        { nLeftSlot = nLeft; nRightSlot = nRight; }
 
     void            InitLRUList();
 
