@@ -54,12 +54,6 @@ namespace SwMailMergeHelper
                             Window* pDialogParentWindow = 0 );
 }
 
-class SW_DLLPUBLIC SwBoldFixedInfo : public FixedInfo
-{
-public:
-    SwBoldFixedInfo(Window* pParent, const ResId& rResId);
-    virtual ~SwBoldFixedInfo();
-};
 struct SwAddressPreview_Impl;
 
 /*-------------------------------------------------------------------------

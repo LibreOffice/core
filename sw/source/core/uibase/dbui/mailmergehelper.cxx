@@ -168,18 +168,6 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
 
 } //namespace
 
-SwBoldFixedInfo::SwBoldFixedInfo(Window* pParent, const ResId& rResId) :
-    FixedInfo(pParent, rResId)
-{
-    Font aFont = GetFont();
-    aFont.SetWeight( WEIGHT_BOLD );
-    SetFont( aFont );
-}
-
-SwBoldFixedInfo::~SwBoldFixedInfo()
-{
-}
-
 struct  SwAddressPreview_Impl
 {
     ::std::vector< OUString >    aAddresses;

@@ -55,15 +55,6 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 
 // class SvxShowCharSet ==================================================
 
-SvxShowCharSet::SvxShowCharSet(Window* pParent, const ResId& rResId)
-    : Control(pParent, rResId)
-    , m_pAccessible(NULL)
-    , aVscrollSB(this, WB_VERT)
-{
-    init();
-    InitSettings( true, true );
-}
-
 SvxShowCharSet::SvxShowCharSet(Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , m_pAccessible(NULL)

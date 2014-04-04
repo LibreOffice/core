@@ -1416,19 +1416,9 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
 
 // FontStyleBox
-
-
-FontStyleBox::FontStyleBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( pParent, rResId )
-{
-    aLastStyle = GetText();
-}
-
 FontStyleBox::FontStyleBox(Window* pParent, WinBits nBits)
     : ComboBox(pParent, nBits)
 {
-    aLastStyle = GetText();
-
     //Use the standard texts to get an optimal size and stick to that size.
     //That should stop the character dialog dancing around.
     InsertEntry(SVT_RESSTR(STR_SVT_STYLE_LIGHT));

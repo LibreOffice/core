@@ -43,7 +43,6 @@ namespace svx
 class SVX_DLLPUBLIC SvxShowCharSet : public Control
 {
 public:
-                    SvxShowCharSet( Window* pParent, const ResId& rResId );
                     SvxShowCharSet( Window* pParent );
                     virtual ~SvxShowCharSet();
 

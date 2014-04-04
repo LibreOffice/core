@@ -451,8 +451,7 @@ class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 private:
     using ComboBox::SetText;
 public:
-                    FontStyleBox( Window* pParent, const ResId& rResId );
-                    FontStyleBox( Window* pParent, WinBits nBits );
+    FontStyleBox( Window* pParent, WinBits nBits );
     virtual         ~FontStyleBox();
 
     virtual void    Select() SAL_OVERRIDE;
