@@ -26,8 +26,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#define t_print printf
-
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -76,17 +74,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-/** print a UNI_CODE String.
-*/
-inline void printUString( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-
-    t_print("#printUString_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
-}
-
 /** get binary Path.
 */
 inline ::rtl::OUString getExecutablePath( void )
@@ -100,211 +87,6 @@ inline ::rtl::OUString getExecutablePath( void )
 }
 
 //rtl::OUString CWD = getExecutablePath();
-
-class Test_osl_joinProcess : public CppUnit::TestFixture
-{
-    const OUString join_param_;
-    const OUString wait_time_;
-    OUString suCWD;
-    OUString suExecutableFileURL;
-
-    rtl_uString* parameters_[2];
-    int          parameters_count_;
-
-public:
-
-    Test_osl_joinProcess() :
-        join_param_(OUString("-join")),
-        wait_time_(OUString("1")),
-        parameters_count_(2)
-    {
-        parameters_[0] = join_param_.pData;
-        parameters_[1] = wait_time_.pData;
-        suCWD = getExecutablePath();
-        suExecutableFileURL = suCWD;
-        suExecutableFileURL += rtl::OUString("/");
-        suExecutableFileURL += EXECUTABLE_NAME;
-    }
-
-    /*-------------------------------------
-        Start a process and join with this
-        process specify a timeout so that
-        osl_joinProcessWithTimeout returns
-        osl_Process_E_TimedOut
-     -------------------------------------*/
-
-    void osl_joinProcessWithTimeout_timeout_failure()
-    {
-        oslProcess process;
-        oslSecurity security = osl_getCurrentSecurity();
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            security,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-        osl_freeSecurityHandle(security);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_Process_E_None, osl_error
-        );
-
-        TimeValue timeout;
-        timeout.Seconds = 1;
-        timeout.Nanosec = 0;
-
-        osl_error = osl_joinProcessWithTimeout(process, &timeout);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_joinProcessWithTimeout returned without timeout failure",
-            osl_Process_E_TimedOut, osl_error
-        );
-
-        osl_error = osl_terminateProcess(process);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_terminateProcess failed",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-    /*-------------------------------------
-        Start a process and join with this
-        process specify a timeout so that
-        osl_joinProcessWithTimeout returns
-        osl_Process_E_None
-     -------------------------------------*/
-
-    void osl_joinProcessWithTimeout_without_timeout_failure()
-    {
-        oslProcess process;
-        oslSecurity security = osl_getCurrentSecurity ();
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            security,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-        osl_freeSecurityHandle(security);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_Process_E_None, osl_error
-        );
-
-        TimeValue timeout;
-        timeout.Seconds = 10;
-        timeout.Nanosec = 0;
-
-        osl_error = osl_joinProcessWithTimeout(process, &timeout);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_joinProcessWithTimeout returned with failure",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-     /*-------------------------------------
-        Start a process and join with this
-        process specify an infinite timeout
-     -------------------------------------*/
-
-    void osl_joinProcessWithTimeout_infinite()
-    {
-        oslProcess process;
-        oslSecurity security = osl_getCurrentSecurity ();
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            security,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-        osl_freeSecurityHandle(security);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_error = osl_joinProcessWithTimeout(process, NULL);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_joinProcessWithTimeout returned with failure",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-     /*-------------------------------------
-        Start a process and join with this
-        process using osl_joinProcess
-     -------------------------------------*/
-
-     void osl_joinProcess()
-    {
-        oslProcess process;
-        oslSecurity security = osl_getCurrentSecurity ();
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            security,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-        osl_freeSecurityHandle(security);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-    CPPUNIT_TEST_SUITE(Test_osl_joinProcess);
-    CPPUNIT_TEST(osl_joinProcessWithTimeout_timeout_failure);
-    CPPUNIT_TEST(osl_joinProcessWithTimeout_without_timeout_failure);
-    CPPUNIT_TEST(osl_joinProcessWithTimeout_infinite);
-    CPPUNIT_TEST(osl_joinProcess);
-    CPPUNIT_TEST_SUITE_END();
-};
 
 typedef std::vector<std::string, rtl::Allocator<std::string> >  string_container_t;
 typedef string_container_t::const_iterator string_container_const_iter_t;
@@ -684,42 +466,6 @@ public:
         osl_freeProcessHandle(process);
     }
 
-    void osl_execProc_exe_name_in_argument_list()
-    {
-        rtl_uString* params[3];
-
-        params[0] = suExecutableFileURL.pData;
-        params[1] = env_param_.pData;
-        params[2] = temp_file_path_.pData;
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            NULL,
-            params,
-            3,
-            osl_Process_NORMAL,
-            NULL,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None, osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
     CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
     //TODO: Repair these under windows.
 #ifndef WNT
@@ -728,12 +474,9 @@ public:
 #endif
     CPPUNIT_TEST(osl_execProc_test_batch);
     ///TODO: Repair test (or tested function ;-) - test fails.
-    // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
     CPPUNIT_TEST_SUITE_END();
 };
 
-// register test suites
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_joinProcess,    "Test_osl_joinProcess");
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_osl_executeProcess);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

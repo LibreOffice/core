@@ -20,8 +20,6 @@
 #ifndef _RTL_STRING_CONST_H_
 #define _RTL_STRING_CONST_H_
 
-#include <rtl_String_Utils.hxx>
-
 #include <limits.h>
 #include <sal/types.h>
 #include <rtl/textenc.h>

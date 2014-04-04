@@ -31,47 +31,8 @@
 #include "stringhelper.hxx"
 #include "valueequal.hxx"
 
-inline void printOUString( ::rtl::OUString const & _suStr )
-{
-    rtl::OString aString;
-
-    printf( "OUString: " );
-    aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
-    printf( "'%s'\n", aString.getStr( ) );
-}
-
 namespace rtl_OUString
 {
-
-    class ctors_rtl_uString : public CppUnit::TestFixture
-    {
-
-    public:
-        /// test of OUString(rtl_uString*)
-        void ctors_001()
-            {
-                rtl::OUString *pStr = new rtl::OUString( "a String" );
-
-                rtl::OUString aStrToTest(pStr->pData);
-                delete pStr;
-
-                // maybe here should we do something with current memory
-                char* pBuffer = (char*) malloc(2 * 8);
-                memset(pBuffer, 0, 2 * 8);
-                free(pBuffer);
-
-                bool bResult = aStrToTest == "a String";
-                CPPUNIT_ASSERT_MESSAGE("String must not be empty", bResult);
-            }
-
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
-
-        CPPUNIT_TEST_SUITE(ctors_rtl_uString);
-        CPPUNIT_TEST(ctors_001);
-        CPPUNIT_TEST_SUITE_END();
-    };
 
 class number : public CppUnit::TestFixture
 {
@@ -305,25 +266,6 @@ sal_Int16 SAL_CALL checkPrecisionSize()
 
     return i;
 }
-
-    class testPrecision
-    {
-    public:
-        testPrecision()
-            {
-                sal_Int16 nPrecision;
-                nPrecision = checkPrecisionSize<float>();
-                printf("precision of float: %d sizeof()=%" SAL_PRI_SIZET "d\n", nPrecision, sizeof(float));
-
-                nPrecision = checkPrecisionSize<double>();
-                printf("precision of double: %d sizeof()=%" SAL_PRI_SIZET "d\n", nPrecision, sizeof(double));
-
-                nPrecision = checkPrecisionSize<long double>();
-                printf("precision of long double: %d sizeof()=%" SAL_PRI_SIZET "d\n", nPrecision, sizeof(long double));
-
-            }
-
-    };
 
     class toInt: public CppUnit::TestFixture {
     public:
@@ -1191,7 +1133,7 @@ class convertFromString: public CppUnit::TestFixture {
 public:
     void test();
 
-    CPPUNIT_TEST_SUITE(createFromCodePoints);
+    CPPUNIT_TEST_SUITE(convertFromString);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };

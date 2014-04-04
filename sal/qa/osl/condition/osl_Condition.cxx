@@ -25,27 +25,6 @@
 using namespace osl;
 using namespace rtl;
 
-// helper functions and classes
-
-/** print Boolean value.
-*/
-inline void printBool( bool bOk )
-{
-    printf("#printBool# " );
-    bOk ? printf("TRUE!\n" ): printf("FALSE!\n" );
-}
-
-/** print a UNI_CODE String.
-*/
-inline void printUString( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-
-    printf("#printUString_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf("%s\n", aString.getStr( ) );
-}
-
 enum ConditionType
 {
     thread_type_set,

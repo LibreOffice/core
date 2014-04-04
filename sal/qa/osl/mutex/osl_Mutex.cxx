@@ -29,27 +29,6 @@
 using namespace osl;
 using namespace rtl;
 
-// helper functions
-
-/** print a UNI_CODE String.
-*/
-inline void printUString( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-
-    printf("#printUString_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf("%s\n", aString.getStr( ) );
-}
-
-/** print Boolean value.
-*/
-inline void printBool( bool bOk )
-{
-    printf("#printBool# " );
-    bOk ? printf("YES!\n" ): printf("NO!\n" );
-}
-
 /** pause nSec seconds helper function.
 */
 namespace ThreadHelper
@@ -848,6 +827,7 @@ namespace osl_ResettableGuard
                 bRes && bRes1 );
         }
 
+#ifdef LINUX
         void reset_002( )
         {
             Mutex aMutex;
@@ -864,6 +844,7 @@ namespace osl_ResettableGuard
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
                 !bRes && bRes1 );
         }
+#endif
 
         CPPUNIT_TEST_SUITE(reset);
         CPPUNIT_TEST(reset_001);

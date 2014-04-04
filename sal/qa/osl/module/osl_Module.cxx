@@ -27,27 +27,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
-// helper functions and classes
-
-/** print Boolean value.
-*/
-inline void printBool( bool bOk )
-{
-    printf("#printBool# " );
-    bOk ? printf( "TRUE!\n" ) : printf( "FALSE!\n" );
-}
-
-/** print a UNI_CODE String.
-*/
-inline void printUString( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-
-    printf("#printUString_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf("%s\n", aString.getStr( ) );
-}
-
 /** get dll file URL.
 */
 inline ::rtl::OUString getDllURL( void )
@@ -65,81 +44,6 @@ inline ::rtl::OUString getDllURL( void )
 
     return dllPath;
 }
-
-inline bool isURL( const ::rtl::OUString& pathname )
-{
-    return pathname.startsWith( "file:///" );
-}
-
-/** create a temp test directory using OUString name of full qualified URL or system path.
-*/
-inline void createTestDirectory( const ::rtl::OUString& dirname )
-{
-    ::rtl::OUString     aPathURL   = dirname.copy( 0 );
-    ::osl::FileBase::RC nError;
-
-    if ( !isURL( dirname ) )
-        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
-    nError = ::osl::Directory::create( aPathURL );
-    CPPUNIT_ASSERT_MESSAGE( "In createTestDirectory Function: creation: ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
-}
-
-/** delete a temp test directory using OUString name of full qualified URL or system path.
-*/
-inline void deleteTestDirectory( const ::rtl::OUString& dirname )
-{
-    ::rtl::OUString     aPathURL   = dirname.copy( 0 );
-    ::osl::FileBase::RC nError;
-    if ( !isURL( dirname ) )
-        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
-
-    ::osl::Directory testDir( aPathURL );
-    if ( testDir.isOpen( ) )
-    {
-            testDir.close( );  //close if still open.
-        }
-
-    nError = ::osl::Directory::remove( aPathURL );
-     CPPUNIT_ASSERT_MESSAGE( "In deleteTestDirectory function: remove ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
-}
-
-//check if the file exist
-inline bool ifFileExist( const ::rtl::OUString & str )
-{
-    ::rtl::OUString     aUStr;
-    if ( isURL( str ) )
-        ::osl::FileBase::getSystemPathFromFileURL( str, aUStr );
-    else
-        return false;
-
-    ::osl::File strFile( aUStr );
-    ::osl::FileBase::RC nError = strFile.open( osl_File_OpenFlag_Read );
-    if ( ::File::E_NOENT == nError )
-        return false;
-    else{
-        strFile.close( );
-        return true;
-    }
-}
-
-/** detete a temp test file using OUString name.
-*/
-inline void deleteTestFile( const ::rtl::OUString& filename )
-{
-    ::rtl::OUString aPathURL   = filename.copy( 0 );
-    ::osl::FileBase::RC nError;
-
-    if ( !isURL( filename ) )
-        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
-
-    nError = ::osl::File::setAttributes( aPathURL, osl_File_Attribute_GrpWrite| osl_File_Attribute_OwnWrite| osl_File_Attribute_OthWrite ); // if readonly, make writtenable.
-    CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: set writtenable ", ( ::osl::FileBase::E_None == nError ) || ( ::osl::FileBase::E_NOENT == nError ) );
-
-    nError = ::osl::File::remove( aPathURL );
-    CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
-}
-
-// test code start here
 
 namespace osl_Module
 {

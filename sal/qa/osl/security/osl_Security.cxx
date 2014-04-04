@@ -31,16 +31,6 @@
 using namespace osl;
 using namespace rtl;
 
-// helper functions and classes
-
-/** print Boolean value.
-*/
-inline void printBool( bool bOk )
-{
-    //t_print("#printBool# " );
-    bOk ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
-}
-
 /** print a UNI_CODE String.
 */
 inline void printUString( const ::rtl::OUString & str )

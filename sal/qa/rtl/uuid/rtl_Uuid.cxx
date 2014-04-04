@@ -35,40 +35,9 @@
 #include <time.h>
 #endif
 
-#define t_print printf
-
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-/** print a UNI_CODE String. And also print some comments of the string.
-*/
-inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
-{
-    t_print("#%s #printUString_u# ", msg );
-    rtl::OString aString;
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", (char *)aString.getStr( ) );
-}
-
-/************************************************************************
- * For diagnostics( from sal/test/testuuid.cxx )
- ************************************************************************/
-
-void printUuid( sal_uInt8 *pNode )
-{
-    for( sal_Int32 i1 = 0 ; i1 < 4 ; i1++ )
-    {
-        for( sal_Int32 i2 = 0 ; i2 < 4 ; i2++ )
-        {
-            printf( "%02x" , pNode[i1*4 +i2] );
-        }
-        if( i1 == 3 )
-            break;
-        printf( "-" );
-    }
-
-    printf( "\n# " );
-}
 
 namespace rtl_Uuid
 {

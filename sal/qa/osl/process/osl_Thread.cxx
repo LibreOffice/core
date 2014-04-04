@@ -326,53 +326,6 @@ public:
 
 };
 
-/** call suspend in the run method
-*/
-class OSuspendThread : public Thread
-{
-    ThreadSafeValue<sal_Int32> m_aFlag;
-public:
-    OSuspendThread(){ m_bSuspend = false; }
-    sal_Int32 getValue() { return m_aFlag.getValue(); }
-    void setSuspend()
-        {
-            m_bSuspend = true;
-        }
-    virtual void SAL_CALL suspend() SAL_OVERRIDE
-        {
-            m_aFlag.acquire();
-            ::osl::Thread::suspend();
-            m_aFlag.release();
-        }
-protected:
-    bool m_bSuspend;
-    void SAL_CALL run() SAL_OVERRIDE
-        {
-            //if the thread should terminate, schedule return false
-            while (schedule())
-            {
-                m_aFlag.addValue(1);
-
-                ThreadHelper::thread_sleep_tenth_sec(1);
-                if (m_bSuspend)
-                {
-                    suspend();
-                    m_bSuspend  = false;
-                }
-            }
-        }
-public:
-
-    virtual ~OSuspendThread()
-        {
-            if (isRunning())
-            {
-                t_print("error: not terminated.\n");
-            }
-        }
-
-};
-
 /** no call schedule in the run method
 */
 class ONoScheduleThread : public Thread
@@ -685,46 +638,6 @@ namespace osl_Thread
                     bRes && nValue == nLaterValue
                     );
 
-            }
-        /** suspend a thread in it's worker-function, the ALGORITHM is same as suspend_001
-             reason of deadlocked I think: no schedule can schedule other threads to go on excuting
-         */
-        void suspend_002()
-            {
-                OSuspendThread* aThread = new OSuspendThread();
-                bool bRes = aThread->create();
-                CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes );
-                // first the thread run for some seconds, but not terminate
-                sal_Int32 nValue = 0;
-                //while (1)
-                //{
-                ThreadHelper::thread_sleep_tenth_sec(3);
-                nValue = aThread->getValue();    // (1)
-                t_print(" getValue is %d !", (int) nValue );
-                if (nValue >= 2)
-                {
-                        aThread->setSuspend();
-                        //break;
-                }
-                //}
-                t_print(" after while!");
-                // the value just after calling suspend
-                nValue = aThread->getValue();       // (2)
-
-                ThreadHelper::thread_sleep_tenth_sec(3);
-                t_print(" after sleep!");
-                // the value after waiting 3 seconds
-                sal_Int32 nLaterValue = aThread->getValue();        // (3)
-
-                //resumeAndWaitThread(aThread);
-                aThread->resume();
-                termAndJoinThread(aThread);
-                delete aThread;
-
-                CPPUNIT_ASSERT_MESSAGE(
-                    "Suspend the thread",
-                    bRes && nValue == nLaterValue
-                    );
             }
 
         CPPUNIT_TEST_SUITE(suspend);
@@ -1632,13 +1545,8 @@ namespace osl_Thread
 
             }
 
-        void getCurrentIdentifier_002()
-            {
-            }
-
         CPPUNIT_TEST_SUITE(getCurrentIdentifier);
         CPPUNIT_TEST(getCurrentIdentifier_001);
-        //CPPUNIT_TEST(getCurrentIdentifier_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class getCurrentIdentifier
 
