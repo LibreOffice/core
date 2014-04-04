@@ -29,10 +29,12 @@ namespace http_dav_ucp
 SerfPutReqProcImpl::SerfPutReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
                                         const char* inData,
-                                        apr_size_t inDataLen )
+                                        apr_size_t inDataLen,
+                                        const OUString& sToken )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpData( inData )
     , mnDataLen( inDataLen )
+    , msToken( sToken )
 {
 }
 
@@ -63,6 +65,11 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
     // general header fields provided by caller
     setRequestHeaders( hdrs_bkt );
+
+    // 'If' header with token, so that we can save document locked by us
+    const OString sIfHeader( "<" + OString(getPathStr()) + "> (<" + OUStringToOString(
+                msToken, RTL_TEXTENCODING_UTF8) + ">)" );
+    serf_bucket_headers_set( hdrs_bkt, "If", sIfHeader.getStr() );
 
     return req_bkt;
 }
