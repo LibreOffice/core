@@ -127,7 +127,9 @@ sal_uInt16 LwpTextLanguage::ConvertFrom96(sal_uInt16 orgLang)
 
 LwpDivisionOptions::LwpDivisionOptions(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
-{}
+    , m_nOptionFlag(0)
+{
+}
 
 LwpDivisionOptions::~LwpDivisionOptions()
 {}
