@@ -79,7 +79,7 @@ private:
     virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
 
 protected:
-    virtual sal_Bool    ErrorHdl();
+    virtual bool        ErrorHdl();
     virtual sal_uInt16  BreakHdl();
     virtual ~StarBASIC();
 

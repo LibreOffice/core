@@ -1822,10 +1822,9 @@ sal_Int32 StarBASIC::GetErl()
     }
 }
 
-sal_Bool StarBASIC::ErrorHdl()
+bool StarBASIC::ErrorHdl()
 {
-    return (sal_Bool) ( aErrorHdl.IsSet()
-        ? aErrorHdl.Call( this ) : sal_False );
+    return aErrorHdl.IsSet() && aErrorHdl.Call( this );
 }
 
 Link StarBASIC::GetGlobalErrorHdl()
