@@ -30,11 +30,16 @@ struct ScRTFCellDefault
 {
     SfxItemSet          aItemSet;
     SCCOL               nCol;
-    sal_uInt16              nTwips;         // rechter Rand der Zelle
+    sal_uInt16          nTwips;         // rechter Rand der Zelle
     SCCOL               nColOverlap;    // MergeCell wenn >1, merged cells wenn 0
 
-                        ScRTFCellDefault( SfxItemPool* pPool ) :
-                            aItemSet( *pPool ), nColOverlap(1) {}
+    ScRTFCellDefault( SfxItemPool* pPool )
+        : aItemSet(*pPool)
+        , nCol(0)
+        , nTwips(0)
+        , nColOverlap(1)
+    {
+    }
 };
 
 class ScRTFColTwips : public o3tl::sorted_vector<sal_uLong> {};
