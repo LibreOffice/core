@@ -2834,7 +2834,7 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
                 m_xContext,
-                sal_True    // set a calculated connection as ActiveConnection
+                true    // set a calculated connection as ActiveConnection
             );
             return xConnection.is();
         }

@@ -458,7 +458,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 }
 
 Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
-    sal_Bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+    bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
     SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, _bSetAsActiveConnection, true );
     return xConnection.getTyped();
@@ -1235,7 +1235,7 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
     Reference< XSingleSelectQueryComposer > xComposer;
     try
     {
-        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext, sal_True );
+        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext, true );
         if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
@@ -1447,10 +1447,10 @@ void showError(const SQLExceptionInfo& _rInfo,
     }
 }
 
-sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
+bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
     const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
 {
-    sal_Bool bSuccessfullyReRouted = sal_True;
+    bool bSuccessfullyReRouted = true;
     switch (_rValue.getValueTypeClass())
     {
         case TypeClass_ANY:
@@ -1511,7 +1511,7 @@ sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
             if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
                 _rxUpdatedObject->updateBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
             else
-                bSuccessfullyReRouted = sal_False;
+                bSuccessfullyReRouted = false;
             break;
         case TypeClass_STRUCT:
             if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
@@ -1521,7 +1521,7 @@ sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
             else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
                 _rxUpdatedObject->updateTime(_nColumnIndex, *(Time*)_rValue.getValue());
             else
-                bSuccessfullyReRouted = sal_False;
+                bSuccessfullyReRouted = false;
             break;
 
         case TypeClass_INTERFACE:
@@ -1534,16 +1534,16 @@ sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
             }
             // run through
         default:
-            bSuccessfullyReRouted = sal_False;
+            bSuccessfullyReRouted = false;
     }
 
     return bSuccessfullyReRouted;
 }
 
-sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
+bool implSetObject( const Reference< XParameters >& _rxParameters,
                         const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
 {
-    sal_Bool bSuccessfullyReRouted = sal_True;
+    bool bSuccessfullyReRouted = true;
     switch (_rValue.getValueTypeClass())
     {
         case TypeClass_UNSIGNED_HYPER:
@@ -1618,7 +1618,7 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
                 _rxParameters->setBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
             }
             else
-                bSuccessfullyReRouted = sal_False;
+                bSuccessfullyReRouted = false;
             break;
         case TypeClass_STRUCT:
             if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
@@ -1628,7 +1628,7 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
             else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
                 _rxParameters->setTime(_nColumnIndex, *(Time*)_rValue.getValue());
             else
-                bSuccessfullyReRouted = sal_False;
+                bSuccessfullyReRouted = false;
             break;
 
         case TypeClass_INTERFACE:
@@ -1641,7 +1641,7 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
             }
             // run through
         default:
-            bSuccessfullyReRouted = sal_False;
+            bSuccessfullyReRouted = false;
 
     }
 

@@ -148,7 +148,7 @@ namespace dbtools
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
-        sal_Bool _bSetAsActiveConnection
+        bool _bSetAsActiveConnection
     )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                     , ::com::sun::star::lang::WrappedTargetException
                     , ::com::sun::star::uno::RuntimeException ) );
@@ -557,7 +557,7 @@ namespace dbtools
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Bool implUpdateObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
+    bool implUpdateObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
                                 const sal_Int32 _nColumnIndex,
                                 const ::com::sun::star::uno::Any& _rValue)  SAL_THROW   (   (   ::com::sun::star::sdbc::SQLException,   ::com::sun::star::uno::RuntimeException)    );
 
@@ -617,7 +617,7 @@ namespace dbtools
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Bool implSetObject( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _rxParameters,
+    bool implSetObject( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _rxParameters,
                             const sal_Int32 _nColumnIndex,
                             const ::com::sun::star::uno::Any& _rValue) SAL_THROW ( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
 

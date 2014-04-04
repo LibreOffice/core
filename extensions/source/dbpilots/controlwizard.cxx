@@ -565,7 +565,7 @@ namespace dbp
                 Reference< XConnection > xConnection;
                 m_aContext.bEmbedded = ::dbtools::isEmbeddedInDatabase( m_aContext.xForm, xConnection );
                 if ( !m_aContext.bEmbedded )
-                    xConnection = ::dbtools::connectRowset( m_aContext.xRowSet, m_xContext, sal_True );
+                    xConnection = ::dbtools::connectRowset( m_aContext.xRowSet, m_xContext, true );
 
                 // get the fields
                 if (xConnection.is())
