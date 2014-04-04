@@ -216,7 +216,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             break;
         default:
-            SAL_WARN("oox", "TextCharacterPropertiesContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+            SAL_INFO("oox", "TextCharacterPropertiesContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
             break;
     }
 
