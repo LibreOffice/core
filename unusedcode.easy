@@ -33,7 +33,6 @@ ScDocument::CreateFormatTable() const
 ScDocument::GetRowFlagsArray(short) const
 ScExtIButton::GetSelected() const
 ScFormulaCellGroup::scheduleCompilation()
-ScPivotLayoutDlg::ScPivotLayoutDlg(SfxBindings*, SfxChildWindow*, Window*, ScDPObject const&, bool)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()

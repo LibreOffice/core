@@ -43,9 +43,6 @@
 #include "consdlg.hxx"
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
-#if ! MPL_HAVE_SUBSET
-#  include "pvlaydlg.hxx"
-#endif
 #include "areasdlg.hxx"
 #include "rangeutl.hxx"
 #include "crnrdlg.hxx"

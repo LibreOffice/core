@@ -339,8 +339,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/Accessibility/AccessibleCellBase \
     sc/source/ui/Accessibility/AccessibleContextBase \
     sc/source/ui/Accessibility/AccessibleCsvControl \
-    $(if $(filter TRUE,$(MPL_SUBSET)),, \
-    sc/source/ui/Accessibility/AccessibleDataPilotControl) \
     sc/source/ui/Accessibility/AccessibleDocument \
     sc/source/ui/Accessibility/AccessibleDocumentBase \
     sc/source/ui/Accessibility/AccessibleDocumentPagePreview \
@@ -390,13 +388,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dbgui/csvsplits \
     sc/source/ui/dbgui/csvtablebox \
     sc/source/ui/dbgui/dbnamdlg \
-    $(if $(filter TRUE,$(MPL_SUBSET)),, \
-        sc/source/ui/dbgui/fieldwnd) \
     sc/source/ui/dbgui/filtdlg \
     sc/source/ui/dbgui/foptmgr \
     sc/source/ui/dbgui/imoptdlg \
-    $(if $(filter TRUE,$(MPL_SUBSET)),, \
-        sc/source/ui/dbgui/pvlaydlg) \
     sc/source/ui/dbgui/PivotLayoutDialog \
     sc/source/ui/dbgui/PivotLayoutTreeListBase \
     sc/source/ui/dbgui/PivotLayoutTreeListData \
