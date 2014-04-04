@@ -117,7 +117,7 @@ namespace
         m_pOKButton->SetClickHdl(LINK(this, QueryString, ClickBtnHdl));
         m_pFixedText->SetText(rQuery);
         m_pEdit->SetText(m_rReturnValue);
-        SetText(Application::GetDisplayName());
+        SetText(rQuery);
     }
 
     IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
