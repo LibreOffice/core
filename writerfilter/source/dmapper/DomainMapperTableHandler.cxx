@@ -545,7 +545,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
         m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) ;
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( sal_Int16(nHoriOrient) ) );
-
         //fill default value - if not available
         const PropertyMap::const_iterator aRepeatIter =
         m_aTableProperties->find(PROP_HEADER_ROW_COUNT);
@@ -695,12 +694,17 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 }
 
                 // Remove properties from style/row that aren't allowed in cells
-                const PropertyMap::iterator aDefaultRepeatIt = pAllCellProps->find(PROP_HEADER_ROW_COUNT);
+                PropertyMap::iterator aDefaultRepeatIt = pAllCellProps->find(PROP_HEADER_ROW_COUNT);
                 if ( aDefaultRepeatIt != pAllCellProps->end( ) )
                     pAllCellProps->erase( aDefaultRepeatIt );
-                const PropertyMap::iterator aDefaultRepeatIt2 = pAllCellProps->find(PROP_PARA_LINE_SPACING);
-                if ( aDefaultRepeatIt2 != pAllCellProps->end( ) )
-                    pAllCellProps->erase( aDefaultRepeatIt2 );
+
+                aDefaultRepeatIt = pAllCellProps->find(PROP_PARA_LINE_SPACING);
+                if ( aDefaultRepeatIt != pAllCellProps->end( ) )
+                    pAllCellProps->erase( aDefaultRepeatIt );
+
+                aDefaultRepeatIt = pAllCellProps->find(PROP_TBL_HEADER);
+                if ( aDefaultRepeatIt != pAllCellProps->end( ) )
+                     pAllCellProps->erase( aDefaultRepeatIt );
 
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
