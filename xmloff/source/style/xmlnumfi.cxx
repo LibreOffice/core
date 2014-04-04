@@ -2067,7 +2067,14 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 
         if (!bDefaultCond)
         {
-            sal_Int32 nPos = sRealCond.indexOf( '.' );
+            // Convert != to <>
+            sal_Int32 nPos = sRealCond.indexOf( "!=" );
+            if ( nPos >= 0 )
+            {
+                sRealCond = sRealCond.replaceAt( nPos, 2, "<>" );
+            }
+
+            nPos = sRealCond.indexOf( '.' );
             if ( nPos >= 0 )
             {
                 // #i8026# #103991# localize decimal separator
