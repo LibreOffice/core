@@ -875,17 +875,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new FloatingWindow( pParent, nWinBits );
             break;
             case WINDOW_GROUPBOX:
-                        {
-                    pNewWindow = new GroupBox( pParent, nWinBits );
-                                if ( bFrameControl )
-                                {
-                                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
-                                    *ppNewComp = new VCLXFrame;
-                                    // Frame control needs to receive
-                                    // Mouse events
-                                    pGroupBox->SetMouseTransparent( false );
-                                }
-                        }
+                pNewWindow = new GroupBox( pParent, nWinBits );
+                if ( bFrameControl )
+                {
+                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
+                    *ppNewComp = new VCLXFrame;
+                    // Frame control needs to receive
+                    // Mouse events
+                pGroupBox->SetMouseTransparent( false );
+                }
             break;
             case WINDOW_HELPBUTTON:
                 pNewWindow = new HelpButton( pParent, nWinBits );
