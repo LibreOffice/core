@@ -924,6 +924,12 @@ ImplSalDDB::ImplSalDDB(
         maTwoRect.mnSrcWidth = maTwoRect.mnDestWidth = nWidth;
         maTwoRect.mnSrcHeight = maTwoRect.mnDestHeight = nHeight;
     }
+    else
+    {
+        maTwoRect.mnSrcX = maTwoRect.mnSrcY = maTwoRect.mnDestX = maTwoRect.mnDestY = 0;
+        maTwoRect.mnSrcWidth = maTwoRect.mnDestWidth = 0;
+        maTwoRect.mnSrcHeight = maTwoRect.mnDestHeight = 0;
+    }
 }
 
 ImplSalDDB::~ImplSalDDB()
