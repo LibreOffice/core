@@ -41,12 +41,12 @@ class RtfExport : public MSWordExportBase
     Writer* m_pWriter;
 
     /// Attribute output for document.
-    RtfAttributeOutput *m_pAttrOutput;
+    boost::shared_ptr<RtfAttributeOutput> m_pAttrOutput;
 
     /// Sections/headers/footers
     MSWordSections *m_pSections;
 
-    RtfSdrExport *m_pSdrExport;
+    boost::shared_ptr<RtfSdrExport> m_pSdrExport;
     bool m_bOutOutlineOnly;
 
 public:

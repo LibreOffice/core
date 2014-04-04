@@ -836,13 +836,13 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
 {
     mbExportModeRTF = true;
     // the attribute output for the document
-    m_pAttrOutput = new RtfAttributeOutput( *this );
+    m_pAttrOutput.reset(new RtfAttributeOutput(*this));
     // that just causes problems for RTF
     bSubstituteBullets = false;
     // needed to have a complete font table
     maFontHelper.bLoadAllFonts = true;
     // the related SdrExport
-    m_pSdrExport = new RtfSdrExport( *this );
+    m_pSdrExport.reset(new RtfSdrExport(*this));
 
     if (!m_pWriter)
         m_pWriter = &m_pFilter->m_aWriter;
@@ -850,8 +850,6 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
 
 RtfExport::~RtfExport()
 {
-    delete m_pAttrOutput, m_pAttrOutput = NULL;
-    delete m_pSdrExport, m_pSdrExport = NULL;
 }
 
 SvStream& RtfExport::Strm()
