@@ -310,12 +310,13 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( Reference< XShape > xShap
 }
 
 PowerPointExport::PowerPointExport( const Reference< XComponentContext > & rxCtxt  )
-    : XmlFilterBase( rxCtxt ),
-      PPTWriterBase(),
-      mnLayoutFileIdMax( 1 ),
-      mnSlideIdMax( 1 << 8 ),
-      mnSlideMasterIdMax( 1U << 31 ),
-      mnAnimationNodeIdMax( 1 )
+    : XmlFilterBase(rxCtxt)
+    , PPTWriterBase()
+    , mnLayoutFileIdMax(1)
+    , mnSlideIdMax(1 << 8)
+    , mnSlideMasterIdMax(1U << 31)
+    , mnAnimationNodeIdMax(1)
+    , mbCreateNotes(false)
 {
     memset( mLayoutInfo, 0, sizeof(mLayoutInfo) );
 }
