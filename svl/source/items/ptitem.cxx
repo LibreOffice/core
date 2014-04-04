@@ -22,16 +22,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <tools/stream.hxx>
+#include <tools/mapunit.hxx>
 
 #include <svl/poolitem.hxx>
 #include <svl/memberid.hrc>
 
 using namespace ::com::sun::star;
-
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-
-
 
 TYPEINIT1_AUTOFACTORY(SfxPointItem, SfxPoolItem);
 
@@ -113,8 +109,8 @@ bool SfxPointItem::QueryValue( uno::Any& rVal,
     awt::Point aTmp(aVal.X(), aVal.Y());
     if( bConvert )
     {
-        aTmp.X = TWIP_TO_MM100(aTmp.X);
-        aTmp.Y = TWIP_TO_MM100(aTmp.Y);
+        aTmp.X = convertTwipToMm100(aTmp.X);
+        aTmp.Y = convertTwipToMm100(aTmp.Y);
     }
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -143,15 +139,15 @@ bool SfxPointItem::PutValue( const uno::Any& rVal,
         bRet = ( rVal >>= aValue );
         if( bConvert )
         {
-            aValue.X = MM100_TO_TWIP(aValue.X);
-            aValue.Y = MM100_TO_TWIP(aValue.Y);
+            aValue.X = convertMm100ToTwip(aValue.X);
+            aValue.Y = convertMm100ToTwip(aValue.Y);
         }
     }
     else
     {
         bRet = ( rVal >>= nVal );
         if( bConvert )
-            nVal = MM100_TO_TWIP( nVal );
+            nVal = convertMm100ToTwip( nVal );
     }
 
     if ( bRet )

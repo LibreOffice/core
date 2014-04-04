@@ -37,6 +37,7 @@
 #include <comphelper/string.hxx>
 #include <tools/globname.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -56,7 +57,6 @@
 #include <rtfskipdestination.hxx>
 #include <rtffly.hxx>
 
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_EMU(MM100)     (MM100 * 360)
 
 using std::make_pair;
@@ -3479,15 +3479,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aPicture.nHeight = nParam;
             break;
         case RTF_PICWGOAL:
-            m_aStates.top().aPicture.nGoalWidth = TWIP_TO_MM100(nParam);
+            m_aStates.top().aPicture.nGoalWidth = convertTwipToMm100(nParam);
             break;
         case RTF_PICHGOAL:
-            m_aStates.top().aPicture.nGoalHeight = TWIP_TO_MM100(nParam);
+            m_aStates.top().aPicture.nGoalHeight = convertTwipToMm100(nParam);
             break;
-        case RTF_PICCROPL: m_aStates.top().aPicture.nCropL = TWIP_TO_MM100(nParam); break;
-        case RTF_PICCROPR: m_aStates.top().aPicture.nCropR = TWIP_TO_MM100(nParam); break;
-        case RTF_PICCROPT: m_aStates.top().aPicture.nCropT = TWIP_TO_MM100(nParam); break;
-        case RTF_PICCROPB: m_aStates.top().aPicture.nCropB = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPL: m_aStates.top().aPicture.nCropL = convertTwipToMm100(nParam); break;
+        case RTF_PICCROPR: m_aStates.top().aPicture.nCropR = convertTwipToMm100(nParam); break;
+        case RTF_PICCROPT: m_aStates.top().aPicture.nCropT = convertTwipToMm100(nParam); break;
+        case RTF_PICCROPB: m_aStates.top().aPicture.nCropB = convertTwipToMm100(nParam); break;
         case RTF_SHPWRK:
             {
                 int nValue = 0;
@@ -3704,16 +3704,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_SHPLEFT:
-            m_aStates.top().aShape.nLeft = TWIP_TO_MM100(nParam);
+            m_aStates.top().aShape.nLeft = convertTwipToMm100(nParam);
             break;
         case RTF_SHPTOP:
-            m_aStates.top().aShape.nTop = TWIP_TO_MM100(nParam);
+            m_aStates.top().aShape.nTop = convertTwipToMm100(nParam);
             break;
         case RTF_SHPRIGHT:
-            m_aStates.top().aShape.nRight = TWIP_TO_MM100(nParam);
+            m_aStates.top().aShape.nRight = convertTwipToMm100(nParam);
             break;
         case RTF_SHPBOTTOM:
-            m_aStates.top().aShape.nBottom = TWIP_TO_MM100(nParam);
+            m_aStates.top().aShape.nBottom = convertTwipToMm100(nParam);
             break;
         case RTF_SHPZ:
             m_aStates.top().aShape.oZ.reset(nParam);
@@ -3832,16 +3832,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue, OVERWRITE_YES);
             break;
         case RTF_DPX:
-            m_aStates.top().aDrawingObject.nLeft = TWIP_TO_MM100(nParam);
+            m_aStates.top().aDrawingObject.nLeft = convertTwipToMm100(nParam);
             break;
         case RTF_DPY:
-            m_aStates.top().aDrawingObject.nTop = TWIP_TO_MM100(nParam);
+            m_aStates.top().aDrawingObject.nTop = convertTwipToMm100(nParam);
             break;
         case RTF_DPXSIZE:
-            m_aStates.top().aDrawingObject.nRight = TWIP_TO_MM100(nParam);
+            m_aStates.top().aDrawingObject.nRight = convertTwipToMm100(nParam);
             break;
         case RTF_DPYSIZE:
-            m_aStates.top().aDrawingObject.nBottom = TWIP_TO_MM100(nParam);
+            m_aStates.top().aDrawingObject.nBottom = convertTwipToMm100(nParam);
             break;
         case RTF_PNSTART:
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_start, pIntValue);
@@ -3933,7 +3933,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (!rDrawingObject.aPolyLinePoints.hasElements())
                     dispatchValue(RTF_DPPOLYCOUNT, 2);
 
-                rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].X = TWIP_TO_MM100(nParam);
+                rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].X = convertTwipToMm100(nParam);
             }
             break;
         case RTF_DPPTY:
@@ -3941,7 +3941,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
                 if (rDrawingObject.aPolyLinePoints.hasElements())
                 {
-                    rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].Y = TWIP_TO_MM100(nParam);
+                    rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].Y = convertTwipToMm100(nParam);
                     rDrawingObject.nPolyLineCount--;
                     if (rDrawingObject.nPolyLineCount == 0)
                     {

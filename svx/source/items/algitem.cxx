@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxitems.hrc>
 
-
 #include <tools/stream.hxx>
+#include <tools/mapunit.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -42,13 +41,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// Konvertierung fuer UNO
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-
-// STATIC DATA -----------------------------------------------------------
-
-//TYPEINIT1_AUTOFACTORY( SvxHorJustifyItem, SfxEnumItem );
 TYPEINIT1_FACTORY( SvxOrientationItem, SfxEnumItem, new SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) );
 TYPEINIT1_FACTORY( SvxMarginItem, SfxPoolItem, new SvxMarginItem(0) );
 
@@ -342,16 +334,16 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         //  jetzt alles signed
         case MID_MARGIN_L_MARGIN:
-            rVal <<= (sal_Int32)( bConvert ? TWIP_TO_MM100(nLeftMargin) : nLeftMargin );
+            rVal <<= (sal_Int32)( bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin );
             break;
         case MID_MARGIN_R_MARGIN:
-            rVal <<= (sal_Int32)( bConvert ? TWIP_TO_MM100(nRightMargin) : nRightMargin );
+            rVal <<= (sal_Int32)( bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin );
             break;
         case MID_MARGIN_UP_MARGIN:
-            rVal <<= (sal_Int32)( bConvert ? TWIP_TO_MM100(nTopMargin) : nTopMargin );
+            rVal <<= (sal_Int32)( bConvert ? convertTwipToMm100(nTopMargin) : nTopMargin );
             break;
         case MID_MARGIN_LO_MARGIN:
-            rVal <<= (sal_Int32)( bConvert ? TWIP_TO_MM100(nBottomMargin) : nBottomMargin );
+            rVal <<= (sal_Int32)( bConvert ? convertTwipToMm100(nBottomMargin) : nBottomMargin );
             break;
         default:
             OSL_FAIL("unknown MemberId");
@@ -365,7 +357,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
-    long nMaxVal = bConvert ? TWIP_TO_MM100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16
+    long nMaxVal = bConvert ? convertTwipToMm100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16
     sal_Int32 nVal = 0;
     if(!(rVal >>= nVal) || (nVal > nMaxVal))
         return false;
@@ -373,16 +365,16 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch ( nMemberId & ~CONVERT_TWIPS )
     {
         case MID_MARGIN_L_MARGIN:
-            nLeftMargin = (sal_Int16)( bConvert ? MM100_TO_TWIP(nVal) : nVal );
+            nLeftMargin = (sal_Int16)( bConvert ? convertMm100ToTwip(nVal) : nVal );
             break;
         case MID_MARGIN_R_MARGIN:
-            nRightMargin = (sal_Int16)( bConvert ? MM100_TO_TWIP(nVal) : nVal );
+            nRightMargin = (sal_Int16)( bConvert ? convertMm100ToTwip(nVal) : nVal );
             break;
         case MID_MARGIN_UP_MARGIN:
-            nTopMargin = (sal_Int16)( bConvert ? MM100_TO_TWIP(nVal) : nVal );
+            nTopMargin = (sal_Int16)( bConvert ? convertMm100ToTwip(nVal) : nVal );
             break;
         case MID_MARGIN_LO_MARGIN:
-            nBottomMargin = (sal_Int16)( bConvert ? MM100_TO_TWIP(nVal) : nVal );
+            nBottomMargin = (sal_Int16)( bConvert ? convertMm100ToTwip(nVal) : nVal );
             break;
         default:
             OSL_FAIL("unknown MemberId");

@@ -631,24 +631,24 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if ( !pDesc->GetHOrient() )
         {
             SwFmtHoriOrient* pHori = pDesc->GetHOrient( true );
-            SwTwips nHoriPos = MM100_TO_TWIP(aMM100Pos.X);
+            SwTwips nHoriPos = convertMm100ToTwip(aMM100Pos.X);
             pHori->SetPos( nHoriPos );
         }
         {
             if(pDesc->GetHOrient()->GetHoriOrient() == text::HoriOrientation::NONE)
-                aMM100Pos.X = TWIP_TO_MM100(pDesc->GetHOrient()->GetPos());
+                aMM100Pos.X = convertTwipToMm100(pDesc->GetHOrient()->GetPos());
             aSet.Put( *pDesc->GetHOrient() );
         }
         // #i32349# - if no vertical position exists, create one
         if ( !pDesc->GetVOrient() )
         {
             SwFmtVertOrient* pVert = pDesc->GetVOrient( true );
-            SwTwips nVertPos = MM100_TO_TWIP(aMM100Pos.Y);
+            SwTwips nVertPos = convertMm100ToTwip(aMM100Pos.Y);
             pVert->SetPos( nVertPos );
         }
         {
             if(pDesc->GetVOrient()->GetVertOrient() == text::VertOrientation::NONE)
-                aMM100Pos.Y = TWIP_TO_MM100(pDesc->GetVOrient()->GetPos());
+                aMM100Pos.Y = convertTwipToMm100(pDesc->GetVOrient()->GetPos());
             aSet.Put( *pDesc->GetVOrient() );
         }
 
@@ -702,7 +702,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->GetCurrentLayout())
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
-        Point aTmp(MM100_TO_TWIP(aMM100Pos.X), MM100_TO_TWIP(aMM100Pos.Y));
+        Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
         pDoc->GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
@@ -1471,8 +1471,8 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
                         Point aPt = pObj->GetAnchorPos();
-                        awt::Point aPoint( TWIP_TO_MM100( aPt.X() ),
-                                           TWIP_TO_MM100( aPt.Y() ) );
+                        awt::Point aPoint( convertTwipToMm100( aPt.X() ),
+                                           convertTwipToMm100( aPt.Y() ) );
                         aRet.setValue(&aPoint, ::getCppuType( (awt::Point*)0 ));
                     }
                 }
@@ -2205,8 +2205,8 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException, std::
                     aOffset.X = ( aMemberObjRect.Left() - aGroupObjRect.Left() );
                     aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
                 }
-            aOffset.X = TWIP_TO_MM100(aOffset.X);
-            aOffset.Y = TWIP_TO_MM100(aOffset.Y);
+            aOffset.X = convertTwipToMm100(aOffset.X);
+            aOffset.Y = convertTwipToMm100(aOffset.Y);
             aPos.X += aOffset.X;
             aPos.Y += aOffset.Y;
         }
@@ -2381,8 +2381,8 @@ awt::Point SwXShape::_GetAttrPosition()
              aAttrPos.X == 0 && aAttrPos.Y == 0 )
         {
             const Rectangle aObjRect = pObj->GetSnapRect();
-            aAttrPos.X = TWIP_TO_MM100(aObjRect.Left());
-            aAttrPos.Y = TWIP_TO_MM100(aObjRect.Top());
+            aAttrPos.X = convertTwipToMm100(aObjRect.Left());
+            aAttrPos.Y = convertTwipToMm100(aObjRect.Top());
         }
     }
     // #i35007# - If drawing object is anchored as-character,
@@ -2469,8 +2469,8 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
             // get position of object in Drawing layer coordinate system
             const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
             const awt::Point aObjPos(
-                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
-                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+                    convertTwipToMm100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
+                    convertTwipToMm100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
             // determine difference between these positions according to the
             // Writer coordinate system
             const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
@@ -2608,8 +2608,8 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             // get position of object in Drawing layer coordinate system
             const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
             const awt::Point aObjPos(
-                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
-                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+                    convertTwipToMm100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
+                    convertTwipToMm100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
             // determine difference between these positions according to the
             // Writer coordinate system
             const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
@@ -2646,8 +2646,8 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             // get position of object in Drawing layer coordinate system
             const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
             const awt::Point aObjPos(
-                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
-                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+                    convertTwipToMm100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
+                    convertTwipToMm100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
             // determine difference between these positions according to the
             // Writer coordinate system
             const awt::Point aTranslateDiff( aPos.X - aObjPos.X,

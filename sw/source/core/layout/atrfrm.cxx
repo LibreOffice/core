@@ -221,8 +221,8 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_FRMSIZE_SIZE:
         {
             awt::Size aTmp;
-            aTmp.Height = TWIP_TO_MM100(m_aSize.Height());
-            aTmp.Width = TWIP_TO_MM100(m_aSize.Width());
+            aTmp.Height = convertTwipToMm100(m_aSize.Height());
+            aTmp.Width = convertTwipToMm100(m_aSize.Width());
             rVal.setValue(&aTmp, ::getCppuType((const awt::Size*)0));
         }
         break;
@@ -251,14 +251,14 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FRMSIZE_WIDTH :
-            rVal <<= (sal_Int32)TWIP_TO_MM100(m_aSize.Width());
+            rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Width());
         break;
         case MID_FRMSIZE_HEIGHT:
             // #95848# returned size should never be zero.
             // (there was a bug that allowed for setting height to 0.
             // Thus there some documents existing with that not allowed
             // attribut value which may cause problems on import.)
-            rVal <<= (sal_Int32)TWIP_TO_MM100(m_aSize.Height() < MINLAY ? MINLAY : m_aSize.Height() );
+            rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Height() < MINLAY ? MINLAY : m_aSize.Height() );
         break;
         case MID_FRMSIZE_SIZE_TYPE:
             rVal <<= (sal_Int16)GetHeightSizeType();
@@ -293,8 +293,8 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 Size aTmp(aVal.Width, aVal.Height);
                 if(bConvert)
                 {
-                    aTmp.Height() = MM100_TO_TWIP(aTmp.Height());
-                    aTmp.Width() = MM100_TO_TWIP(aTmp.Width());
+                    aTmp.Height() = convertMm100ToTwip(aTmp.Height());
+                    aTmp.Width() = convertMm100ToTwip(aTmp.Width());
                 }
                 if(aTmp.Height() && aTmp.Width())
                     m_aSize = aTmp;
@@ -361,7 +361,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(rVal >>= nWd)
             {
                 if(bConvert)
-                    nWd = MM100_TO_TWIP(nWd);
+                    nWd = convertMm100ToTwip(nWd);
                 if(nWd < MINLAY)
                    nWd = MINLAY;
                 m_aSize.Width() = nWd;
@@ -376,7 +376,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(rVal >>= nHg)
             {
                 if(bConvert)
-                    nHg = MM100_TO_TWIP(nHg);
+                    nHg = convertMm100ToTwip(nHg);
                 if(nHg < MINLAY)
                     nHg = MINLAY;
                 m_aSize.Height() = nHg;
@@ -1060,8 +1060,8 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     SwColumn* pCol = new SwColumn;
                     pCol->SetWishWidth( static_cast<sal_uInt16>(pArray[i].Width) );
                     nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
-                    pCol->SetLeft ( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
-                    pCol->SetRight( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].RightMargin)) );
+                    pCol->SetLeft ( static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].LeftMargin)) );
+                    pCol->SetRight( static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].RightMargin)) );
                     aColumns.insert(aColumns.begin() + i, pCol);
                 }
             bRet = true;
@@ -1281,7 +1281,7 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 rVal <<= (sal_Int16)eRelation;
         break;
         case MID_VERTORIENT_POSITION:
-                rVal <<= (sal_Int32)TWIP_TO_MM100(GetPos());
+                rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
                 break;
         default:
             OSL_ENSURE( !this, "unknown MemberId" );
@@ -1314,7 +1314,7 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nVal = 0;
             rVal >>= nVal;
             if(bConvert)
-                nVal = MM100_TO_TWIP(nVal);
+                nVal = convertMm100ToTwip(nVal);
             SetPos( nVal );
         }
         break;
@@ -1367,7 +1367,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int16)eRelation;
         break;
         case MID_HORIORIENT_POSITION:
-                rVal <<= (sal_Int32)TWIP_TO_MM100(GetPos());
+                rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
         {
@@ -1407,7 +1407,7 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal))
                 bRet = false;
             if(bConvert)
-                nVal = MM100_TO_TWIP(nVal);
+                nVal = convertMm100ToTwip(nVal);
             SetPos( nVal );
         }
         break;
@@ -2184,17 +2184,17 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRID_BASEHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(m_nBaseHeight);
+            rVal <<= (sal_Int32) convertTwipToMm100(m_nBaseHeight);
             break;
         case MID_GRID_BASEWIDTH:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(m_nBaseWidth);
+            rVal <<= (sal_Int32) convertTwipToMm100(m_nBaseWidth);
             break;
         case MID_GRID_RUBYHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(m_nRubyHeight);
+            rVal <<= (sal_Int32)convertTwipToMm100(m_nRubyHeight);
             break;
         case MID_GRID_TYPE:
             switch( GetGridType() )
@@ -2272,7 +2272,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         "This value needs TWIPS-MM100 conversion" );
             sal_Int32 nTmp = 0;
             bRet = (rVal >>= nTmp);
-            nTmp = MM100_TO_TWIP( nTmp );
+            nTmp = convertMm100ToTwip( nTmp );
             if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
             {
                 // rhbz#1043551 round up to 5pt -- 0 causes divide-by-zero
