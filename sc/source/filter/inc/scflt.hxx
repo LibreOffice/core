@@ -407,7 +407,11 @@ struct Sc10ColAttr
     sal_uInt16          Count;
     Sc10ColData*    pData;
 
-    Sc10ColAttr() : pData(NULL) {}
+    Sc10ColAttr()
+        : Count(0)
+        , pData(NULL)
+    {
+    }
     ~Sc10ColAttr() { delete [] pData; }
 };
 
