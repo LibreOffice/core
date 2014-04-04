@@ -53,31 +53,33 @@ private:
     bool                bShowAccepted;
     bool                bShowRejected;
     bool                mbIsActionRange;
-    sal_uLong               mnFirstAction;
-    sal_uLong               mnLastAction;
+    sal_uLong           mnFirstAction;
+    sal_uLong           mnLastAction;
 
 public:
 
-                        ScChangeViewSettings() :
-                            aFirstDateTime( DateTime::EMPTY ),
-                            aLastDateTime( DateTime::EMPTY )
-                        {
-                            pCommentSearcher=NULL;
-                            bIsDate=false;
-                            bIsAuthor=false;
-                            bIsRange=false;
-                            bIsComment=false;
-                            bShowIt=false;
-                            eDateMode=SCDM_DATE_BEFORE;
-                            bEveryoneButMe=false;
-                            bShowAccepted=false;
-                            bShowRejected=false;
-                            mbIsActionRange = false;
-                        }
+    ScChangeViewSettings()
+        : pCommentSearcher(NULL)
+        , aFirstDateTime(DateTime::EMPTY)
+        , aLastDateTime(DateTime::EMPTY)
+        , eDateMode(SCDM_DATE_BEFORE)
+        , bShowIt(false)
+        , bIsDate(false)
+        , bIsAuthor(false)
+        , bIsComment(false)
+        , bIsRange(false)
+        , bEveryoneButMe(false)
+        , bShowAccepted(false)
+        , bShowRejected(false)
+        , mbIsActionRange(false)
+        , mnFirstAction(0)
+        , mnLastAction(0)
+    {
+    }
 
-                        ScChangeViewSettings( const ScChangeViewSettings& r );
+    ScChangeViewSettings( const ScChangeViewSettings& r );
 
-                        ~ScChangeViewSettings();
+    ~ScChangeViewSettings();
 
     bool                ShowChanges() const {return bShowIt;}
     void                SetShowChanges(bool nFlag) {bShowIt=nFlag;}
