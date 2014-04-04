@@ -103,18 +103,29 @@ check(dp_misc::DescriptionInfoset const & infoset) {
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(n);
     sal_Int32 unsat = 0;
+    // check first if minimalVersionLibreOffice is specified -- in that case ignore the legacy OOo dependencies
+    bool bIgnoreOoo = false;
+    for (sal_Int32 i = 0; i < n; ++i) {
+        css::uno::Reference< css::xml::dom::XElement > e(
+            deps->item(i), css::uno::UNO_QUERY_THROW);
+        if ( e->getNamespaceURI() == namespaceLibreOffice && e->getTagName() == minimalVersionLibreOffice)
+        {
+            bIgnoreOoo = true;
+            break;
+        }
+    }
     for (sal_Int32 i = 0; i < n; ++i) {
         css::uno::Reference< css::xml::dom::XElement > e(
             deps->item(i), css::uno::UNO_QUERY_THROW);
         bool sat = false;
         if ( e->getNamespaceURI() == namespaceOpenOfficeOrg && e->getTagName() == minimalVersionOpenOfficeOrg )
         {
-            sat = satisfiesMinimalVersion(
+            sat = bIgnoreOoo || satisfiesMinimalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
                 e->getAttribute("value"));
         } else if ( e->getNamespaceURI() == namespaceOpenOfficeOrg && e->getTagName() == maximalVersionOpenOfficeOrg )
         {
-            sat = satisfiesMaximalVersion(
+            sat = bIgnoreOoo || satisfiesMaximalVersion(
                 getReferenceOpenOfficeOrgMajorMinor(),
                 e->getAttribute("value"));
         } else if (e->getNamespaceURI() == namespaceLibreOffice && e->getTagName() == minimalVersionLibreOffice )
