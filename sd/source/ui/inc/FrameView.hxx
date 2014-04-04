@@ -174,7 +174,6 @@ public:
 
 private:
     sal_uInt16          mnRefCount;
-    VirtualDevice*  mpVDev;
     sal_Bool            mbRuler;
     SetOfByte       maVisibleLayers;
     SetOfByte       maLockedLayers;
