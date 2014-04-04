@@ -292,7 +292,7 @@ void SwLayoutViewConfig::Commit()
             case 10: rVal <<= (sal_Int32)rParent.GetZoomType(); break;              // "Zoom/Type",
             case 11: rVal <<= (sal_Bool) rParent.IsAlignMathObjectsToBaseline(); break;      // "Other/IsAlignMathObjectsToBaseline"
             case 12: rVal <<= (sal_Int32)rParent.GetMetric(); break;                // "Other/MeasureUnit",
-            case 13: rVal <<= static_cast<sal_Int32>(TWIP_TO_MM100(rParent.GetDefTab())); break;// "Other/TabStop",
+            case 13: rVal <<= static_cast<sal_Int32>(convertTwipToMm100(rParent.GetDefTab())); break;// "Other/TabStop",
             case 14: rVal <<= (sal_Bool) rParent.IsVRulerRight(); break;            // "Window/IsVerticalRulerRight",
             case 15: rVal <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;     // "ViewLayout/Columns",
             case 16: rVal <<= (sal_Bool) rParent.IsViewLayoutBookMode(); break;     // "ViewLayout/BookMode",
@@ -346,7 +346,7 @@ void SwLayoutViewConfig::Load()
                     case 10: rParent.SetZoomType( static_cast< SvxZoomType >(nInt32Val) ); break;// "Zoom/Type",
                     case 11: rParent.SetAlignMathObjectsToBaseline(bSet); break;// "Other/IsAlignMathObjectsToBaseline"
                     case 12: rParent.SetMetric((FieldUnit)nInt32Val, sal_True); break;// "Other/MeasureUnit",
-                    case 13: rParent.SetDefTab(MM100_TO_TWIP(nInt32Val), sal_True); break;// "Other/TabStop",
+                    case 13: rParent.SetDefTab(convertMm100ToTwip(nInt32Val), sal_True); break;// "Other/TabStop",
                     case 14: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
                     case 15: rParent.SetViewLayoutColumns( static_cast<sal_uInt16>(nInt32Val) ); break;// "ViewLayout/Columns",
                     case 16: rParent.SetViewLayoutBookMode(bSet); break;// "ViewLayout/BookMode",
@@ -409,8 +409,8 @@ void SwGridConfig::Commit()
             case  0: bSet = rParent.IsSnap(); break;//      "Option/SnapToGrid",
             case  1: bSet = rParent.IsGridVisible(); break;//"Option/VisibleGrid",
             case  2: bSet = rParent.IsSynchronize(); break;//  "Option/Synchronize",
-            case  3: pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(rParent.GetSnapSize().Width()); break;//      "Resolution/XAxis",
-            case  4: pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(rParent.GetSnapSize().Height()); break;//      "Resolution/YAxis",
+            case  3: pValues[nProp] <<= (sal_Int32)convertTwipToMm100(rParent.GetSnapSize().Width()); break;//      "Resolution/XAxis",
+            case  4: pValues[nProp] <<= (sal_Int32)convertTwipToMm100(rParent.GetSnapSize().Height()); break;//      "Resolution/YAxis",
             case  5: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionX(); break;//   "Subdivision/XAxis",
             case  6: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionY(); break;//   "Subdivision/YAxis"
         }
@@ -442,8 +442,8 @@ void SwGridConfig::Load()
                     case  0: rParent.SetSnap(bSet); break;//        "Option/SnapToGrid",
                     case  1: rParent.SetGridVisible(bSet); break;//"Option/VisibleGrid",
                     case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
-                    case  3: aSnap.Width() = MM100_TO_TWIP(nSet); break;//      "Resolution/XAxis",
-                    case  4: aSnap.Height() = MM100_TO_TWIP(nSet); break;//      "Resolution/YAxis",
+                    case  3: aSnap.Width() = convertMm100ToTwip(nSet); break;//      "Resolution/XAxis",
+                    case  4: aSnap.Height() = convertMm100ToTwip(nSet); break;//      "Resolution/YAxis",
                     case  5: rParent.SetDivisionX((short)nSet); break;//   "Subdivision/XAxis",
                     case  6: rParent.SetDivisionY((short)nSet); break;//   "Subdivision/YAxis"
                 }

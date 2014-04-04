@@ -31,6 +31,7 @@
 #include <svl/itempool.hxx>
 #include <editeng/memberids.hrc>
 #include <tools/stream.hxx>
+#include <tools/mapunit.hxx>
 
 #include "svx/unoapi.hxx"
 #include <svl/style.hxx>
@@ -56,9 +57,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
 #define VCLTOSVCOL( rCol ) (sal_uInt16)((((sal_uInt16)(rCol))<<8)|(rCol))
 
@@ -1092,7 +1090,7 @@ bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 {
     sal_Int32 nValue = GetValue();
     if( 0 != (nMemberId&CONVERT_TWIPS) )
-        nValue = TWIP_TO_MM100(nValue);
+        nValue = convertTwipToMm100(nValue);
 
     rVal <<= nValue;
     return true;
@@ -1103,7 +1101,7 @@ bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     if( 0 != (nMemberId&CONVERT_TWIPS) )
-        nValue = MM100_TO_TWIP(nValue);
+        nValue = convertMm100ToTwip(nValue);
 
     SetValue( nValue );
     return true;

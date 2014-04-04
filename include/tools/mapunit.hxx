@@ -25,6 +25,22 @@ enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
                MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
                MAP_RELATIVE, MAP_REALAPPFONT, MAP_LASTENUMDUMMY };
 
+inline sal_Int64 convertTwipToMm100(sal_Int64 n)
+{
+    if (n >= 0)
+        return (n*127+36)/72;
+    else
+        return (n*127-36)/72;
+}
+
+inline sal_Int64 convertMm100ToTwip(sal_Int64 n)
+{
+    if (n >= 0)
+        return (n*72+63)/127;
+    else
+        return (n*72-63)/127;
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,6 +35,7 @@
 #include <editeng/editrids.hrc>
 #include <vcl/vclenum.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/mapunit.hxx>
 
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -98,12 +99,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
-
-// Conversion for UNO
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-#define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
-#define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 bool SvxFontItem::bEnableStoreUnicodeNames = false;
 
@@ -837,12 +832,12 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                long nTwips = bConvert ? nHeight : MM100_TO_TWIP_UNSIGNED(nHeight);
+                long nTwips = bConvert ? nHeight : convertMm100ToTwip(nHeight);
                 aFontHeight.Height = (float)( nTwips / 20.0 );
             }
             else
             {
-                double fPoints = MM100_TO_TWIP_UNSIGNED(nHeight) / 20.0;
+                double fPoints = convertMm100ToTwip(nHeight) / 20.0;
                 float fRoundPoints =
                     static_cast<float>(::rtl::math::round(fPoints, 1));
                 aFontHeight.Height = fRoundPoints;
@@ -857,7 +852,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                     fRet = 0.;
                 break;
                 case SFX_MAPUNIT_100TH_MM:
-                    fRet = MM100_TO_TWIP(fRet);
+                    fRet = convertMm100ToTwip(fRet);
                     fRet /= 20.;
                 break;
                 case SFX_MAPUNIT_POINT:
@@ -878,12 +873,12 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                long nTwips = bConvert ? nHeight : MM100_TO_TWIP_UNSIGNED(nHeight);
+                long nTwips = bConvert ? nHeight : convertMm100ToTwip(nHeight);
                 rVal <<= (float)( nTwips / 20.0 );
             }
             else
             {
-                double fPoints = MM100_TO_TWIP_UNSIGNED(nHeight) / 20.0;
+                double fPoints = convertMm100ToTwip(nHeight) / 20.0;
                 float fRoundPoints =
                     static_cast<float>(::rtl::math::round(fPoints, 1));
                 rVal <<= fRoundPoints;
@@ -902,7 +897,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                     fRet = 0.;
                 break;
                 case SFX_MAPUNIT_100TH_MM:
-                    fRet = MM100_TO_TWIP(fRet);
+                    fRet = convertMm100ToTwip(fRet);
                     fRet /= 20.;
                 break;
                 case SFX_MAPUNIT_POINT:
@@ -936,7 +931,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, S
             short nTemp = (short)nProp;
             nDiff = nTemp * 20;
             if(!bCoreInTwip)
-                nDiff = (short)TWIP_TO_MM100((long)(nDiff));
+                nDiff = (short)convertTwipToMm100((long)(nDiff));
         }
         break;
         case SFX_MAPUNIT_100TH_MM:
@@ -974,7 +969,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
                 nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
-                    nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // Convert, if the item contains 1/100mm
+                    nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
 
                 nProp = aFontHeight.Prop;
             }
@@ -999,7 +994,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
             nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
-                nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // Convert, if the item contains 1/100mm
+                nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
         }
         break;
         case MID_FONTHEIGHT_PROP:
@@ -1028,7 +1023,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 fValue = (float)nValue;
             }
             sal_Int16 nCoreDiffValue = (sal_Int16)(fValue * 20.);
-            nHeight += bConvert ? nCoreDiffValue : TWIP_TO_MM100(nCoreDiffValue);
+            nHeight += bConvert ? nCoreDiffValue : convertTwipToMm100(nCoreDiffValue);
             nProp = (sal_uInt16)((sal_Int16)fValue);
             ePropUnit = SFX_MAPUNIT_POINT;
         }
@@ -2203,7 +2198,7 @@ bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Int16 nVal = GetValue();
     if(nMemberId & CONVERT_TWIPS)
-        nVal = (sal_Int16)TWIP_TO_MM100(nVal);
+        nVal = (sal_Int16)convertTwipToMm100(nVal);
     rVal <<= nVal;
     return true;
 }
@@ -2214,7 +2209,7 @@ bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
     if(!(rVal >>= nVal))
         return false;
     if(nMemberId & CONVERT_TWIPS)
-        nVal = (sal_Int16)MM100_TO_TWIP(nVal);
+        nVal = (sal_Int16)convertMm100ToTwip(nVal);
     SetValue(nVal);
     return true;
 }

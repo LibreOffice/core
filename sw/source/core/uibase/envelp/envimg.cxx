@@ -191,27 +191,27 @@ SwEnvCfgItem::SwEnvCfgItem() :
                     case  2: aEnvItem.bSend = *(sal_Bool*)pValues[nProp].getValue(); break;// "Inscription/UseSender",
                     case  3:
                         pValues[nProp] >>= aEnvItem.lAddrFromLeft;// "Format/AddresseeFromLeft",
-                        aEnvItem.lAddrFromLeft = MM100_TO_TWIP(aEnvItem.lAddrFromLeft);
+                        aEnvItem.lAddrFromLeft = convertMm100ToTwip(aEnvItem.lAddrFromLeft);
                     break;
                     case  4:
                         pValues[nProp] >>= aEnvItem.lAddrFromTop;  // "Format/AddresseeFromTop",
-                        aEnvItem.lAddrFromTop = MM100_TO_TWIP(aEnvItem.lAddrFromTop);
+                        aEnvItem.lAddrFromTop = convertMm100ToTwip(aEnvItem.lAddrFromTop);
                     break;
                     case  5:
                         pValues[nProp] >>= aEnvItem.lSendFromLeft; // "Format/SenderFromLeft",
-                        aEnvItem.lSendFromLeft = MM100_TO_TWIP(aEnvItem.lSendFromLeft);
+                        aEnvItem.lSendFromLeft = convertMm100ToTwip(aEnvItem.lSendFromLeft);
                     break;
                     case  6:
                         pValues[nProp] >>= aEnvItem.lSendFromTop;// "Format/SenderFromTop",
-                        aEnvItem.lSendFromTop = MM100_TO_TWIP(aEnvItem.lSendFromTop);
+                        aEnvItem.lSendFromTop = convertMm100ToTwip(aEnvItem.lSendFromTop);
                     break;
                     case  7:
                         pValues[nProp] >>= aEnvItem.lWidth; // "Format/Width",
-                        aEnvItem.lWidth = MM100_TO_TWIP(aEnvItem.lWidth);
+                        aEnvItem.lWidth = convertMm100ToTwip(aEnvItem.lWidth);
                     break;
                     case  8:
                         pValues[nProp] >>= aEnvItem.lHeight; // "Format/Height",
-                        aEnvItem.lHeight = MM100_TO_TWIP(aEnvItem.lHeight);
+                        aEnvItem.lHeight = convertMm100ToTwip(aEnvItem.lHeight);
                     break;
                     case  9:
                     {
@@ -221,11 +221,11 @@ SwEnvCfgItem::SwEnvCfgItem() :
                     case 10: aEnvItem.bPrintFromAbove = *(sal_Bool*)pValues[nProp].getValue(); break;// "Print/FromAbove",
                     case 11:
                         pValues[nProp] >>= aEnvItem.lShiftRight;
-                        aEnvItem.lShiftRight = MM100_TO_TWIP(aEnvItem.lShiftRight);// "Print/Right",
+                        aEnvItem.lShiftRight = convertMm100ToTwip(aEnvItem.lShiftRight);// "Print/Right",
                     break;
                     case 12:
                         pValues[nProp] >>= aEnvItem.lShiftDown;
-                        aEnvItem.lShiftDown = MM100_TO_TWIP(aEnvItem.lShiftDown);
+                        aEnvItem.lShiftDown = convertMm100ToTwip(aEnvItem.lShiftDown);
                     break;// "Print/Down"
                 }
             }
@@ -251,16 +251,16 @@ void    SwEnvCfgItem::Commit()
             case  0: pValues[nProp] <<= aEnvItem.aAddrText; break;// "Inscription/Addressee",
             case  1: pValues[nProp] <<= aEnvItem.aSendText; break;// "Inscription/Sender",
             case  2: pValues[nProp].setValue(&aEnvItem.bSend, rType);break;// "Inscription/UseSender",
-            case  3: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
-            case  4: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lAddrFromTop))  ; break;// "Format/AddresseeFromTop",
-            case  5: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lSendFromLeft)) ; break;// "Format/SenderFromLeft",
-            case  6: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lSendFromTop))  ; break;// "Format/SenderFromTop",
-            case  7: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lWidth))  ; break;// "Format/Width",
-            case  8: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lHeight)) ; break;// "Format/Height",
+            case  3: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
+            case  4: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lAddrFromTop))  ; break;// "Format/AddresseeFromTop",
+            case  5: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lSendFromLeft)) ; break;// "Format/SenderFromLeft",
+            case  6: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lSendFromTop))  ; break;// "Format/SenderFromTop",
+            case  7: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lWidth))  ; break;// "Format/Width",
+            case  8: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lHeight)) ; break;// "Format/Height",
             case  9: pValues[nProp] <<= sal_Int32(aEnvItem.eAlign); break;// "Print/Alignment",
             case 10: pValues[nProp].setValue(&aEnvItem.bPrintFromAbove, rType); break;// "Print/FromAbove",
-            case 11: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lShiftRight));break; // "Print/Right",
-            case 12: pValues[nProp] <<= static_cast <sal_Int32>(TWIP_TO_MM100(aEnvItem.lShiftDown)); break;// "Print/Down"
+            case 11: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lShiftRight));break; // "Print/Right",
+            case 12: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lShiftDown)); break;// "Print/Down"
         }
     }
     PutProperties(aNames, aValues);

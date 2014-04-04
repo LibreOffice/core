@@ -26,6 +26,7 @@
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <algorithm>
 #include <functional>
 
@@ -226,11 +227,9 @@ OUString ConvertMSFormatStringToSO(
 
 }
 
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-
 sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
-    return TWIP_TO_MM100( _t );
+    return ::convertTwipToMm100( _t );
 }
 
 sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
@@ -241,7 +240,7 @@ sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
     // anything that's bigger than 32767 appears to be simply ignored.
     if( _t >= 0x8000 )
         return 0;
-    return TWIP_TO_MM100( _t );
+    return ::convertTwipToMm100( _t );
 }
 
 sal_Int32 convertEMUToMM100(sal_Int32 _t)

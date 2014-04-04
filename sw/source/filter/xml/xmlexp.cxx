@@ -367,16 +367,16 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
     pValue[nIndex].Name = "ViewAreaTop";
-    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Top() ) : rRect.Top();
+    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.Top() ) : rRect.Top();
 
     pValue[nIndex].Name = "ViewAreaLeft";
-    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Left() ) : rRect.Left();
+    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.Left() ) : rRect.Left();
 
     pValue[nIndex].Name = "ViewAreaWidth";
-    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetWidth() ) : rRect.GetWidth();
+    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetWidth() ) : rRect.GetWidth();
 
     pValue[nIndex].Name = "ViewAreaHeight";
-    pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetHeight() ) : rRect.GetHeight();
+    pValue[nIndex++].Value <<= bTwip ? convertTwipToMm100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
     // "show redline mode" cannot simply be read from the document
     // since it gets changed during execution. If it's in the info

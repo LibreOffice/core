@@ -25,6 +25,7 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/types.hxx>
 #include <tools/rtti.hxx>
+#include <tools/mapunit.hxx>
 #include <svl/itempool.hxx>
 #include <svl/memberid.hrc>
 #include <editeng/editrids.hrc>
@@ -52,19 +53,6 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-
-// Konvertierung fuer UNO
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-#define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
-
-
-// STATIC DATA -----------------------------------------------------------
-
-
-
-
 
 TYPEINIT1_FACTORY(SvxLineSpacingItem, SfxPoolItem , new SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0));
 TYPEINIT1_FACTORY(SvxAdjustItem, SfxPoolItem, new SvxAdjustItem(SVX_ADJUST_LEFT, 0));
@@ -133,7 +121,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             if(eInterLineSpace == SVX_INTER_LINE_SPACE_FIX)
             {
                 aLSp.Mode = style::LineSpacingMode::LEADING;
-                aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100(nInterLineSpace) : nInterLineSpace);
+                aLSp.Height = ( bConvert ? (short)convertTwipToMm100(nInterLineSpace) : nInterLineSpace);
             }
             else if(eInterLineSpace == SVX_INTER_LINE_SPACE_OFF)
             {
@@ -149,7 +137,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case SVX_LINE_SPACE_FIX :
         case SVX_LINE_SPACE_MIN :
             aLSp.Mode = eLineSpace == SVX_LINE_SPACE_FIX ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
-            aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100_UNSIGNED(nLineHeight) : nLineHeight );
+            aLSp.Height = ( bConvert ? (short)convertTwipToMm100(nLineHeight) : nLineHeight );
         break;
         default:
             ;//prevent warning about SVX_LINE_SPACE_END
@@ -196,7 +184,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 eLineSpace = SVX_LINE_SPACE_AUTO;
                 nInterLineSpace = aLSp.Height;
                 if(bConvert)
-                    nInterLineSpace = (short)MM100_TO_TWIP(nInterLineSpace);
+                    nInterLineSpace = (short)convertMm100ToTwip(nInterLineSpace);
 
             }
             break;
@@ -217,7 +205,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
                 nLineHeight = aLSp.Height;
                 if(bConvert)
-                    nLineHeight = (sal_uInt16)MM100_TO_TWIP_UNSIGNED(nLineHeight);
+                    nLineHeight = (sal_uInt16)convertMm100ToTwip(nLineHeight);
             }
             break;
         }
@@ -956,7 +944,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
                 const SvxTabStop& rTab = (*this)[i];
-                pArr[i].Position        = bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
+                pArr[i].Position        = bConvert ? convertTwipToMm100(rTab.GetTabPos()) : rTab.GetTabPos();
                 switch(rTab.GetAdjustment())
                 {
                 case  SVX_TAB_ADJUST_LEFT   : pArr[i].Alignment = style::TabAlign_LEFT; break;
@@ -976,7 +964,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_STD_TAB:
         {
             const SvxTabStop &rTab = maTabStops.front();
-            rVal <<= (static_cast<sal_Int32>(bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos()));
+            rVal <<= (static_cast<sal_Int32>(bConvert ? convertTwipToMm100(rTab.GetTabPos()) : rTab.GetTabPos()));
             break;
         }
     }
@@ -1051,7 +1039,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
                 sal_Unicode cFill = pArr[i].FillChar;
                 sal_Unicode cDecimal = pArr[i].DecimalChar;
-                SvxTabStop aTab( bConvert ? MM100_TO_TWIP(pArr[i].Position) : pArr[i].Position,
+                SvxTabStop aTab( bConvert ? convertMm100ToTwip(pArr[i].Position) : pArr[i].Position,
                                     eAdjust,
                                     cDecimal,
                                     cFill );
@@ -1065,7 +1053,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nNewPos) )
                 return false;
             if (bConvert)
-                nNewPos = MM100_TO_TWIP ( nNewPos );
+                nNewPos = convertMm100ToTwip ( nNewPos );
             if (nNewPos <= 0)
                 return false;
             const SvxTabStop& rTab = maTabStops.front();

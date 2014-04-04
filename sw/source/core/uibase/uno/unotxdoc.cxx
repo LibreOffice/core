@@ -995,17 +995,17 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
         pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int16)aData.GetCol();
         pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetLeftSpace());
+        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetLeftSpace());
         pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetRightSpace());
+        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetRightSpace());
         pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetTopSpace());
+        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetTopSpace());
         pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetBottomSpace());
+        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetBottomSpace());
         pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetHorzSpace());
+        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetHorzSpace());
         pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetVertSpace());
+        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetVertSpace());
         pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         sal_Bool bTemp = aData.GetLandscape();
         aVal.setValue(&bTemp, ::getCppuBooleanType());
@@ -1090,27 +1090,27 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             }
             else if(sName.equalsAscii("LeftMargin"))
             {
-                aData.SetLeftSpace(MM100_TO_TWIP_UNSIGNED(nVal));
+                aData.SetLeftSpace(convertMm100ToTwip(nVal));
             }
             else if(sName.equalsAscii("RightMargin"))
             {
-                aData.SetRightSpace(MM100_TO_TWIP_UNSIGNED(nVal));
+                aData.SetRightSpace(convertMm100ToTwip(nVal));
             }
             else if(sName.equalsAscii("TopMargin"))
             {
-                aData.SetTopSpace(MM100_TO_TWIP_UNSIGNED(nVal));
+                aData.SetTopSpace(convertMm100ToTwip(nVal));
             }
             else if(sName.equalsAscii("BottomMargin"))
             {
-                aData.SetBottomSpace(MM100_TO_TWIP_UNSIGNED(nVal));
+                aData.SetBottomSpace(convertMm100ToTwip(nVal));
             }
             else if(sName.equalsAscii("HoriMargin"))
             {
-                aData.SetHorzSpace(MM100_TO_TWIP_UNSIGNED(nVal));
+                aData.SetHorzSpace(convertMm100ToTwip(nVal));
             }
             else if(sName.equalsAscii("VertMargin"))
             {
-                aData.SetVertSpace(MM100_TO_TWIP_UNSIGNED(nVal));
+                aData.SetVertSpace(convertMm100ToTwip(nVal));
             }
             else if(sName.equalsAscii("IsLandscape"))
             {
@@ -2764,8 +2764,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     // which may cause vcl to set that page size on the printer
                     // (if available and not overridden by the user)
                     aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
-                    aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
-                                                     TWIP_TO_MM100( aTmpSize.Height() ));
+                    aPreferredPageSize = awt::Size ( convertTwipToMm100( 2 * aTmpSize.Width() ),
+                                                     convertTwipToMm100( aTmpSize.Height() ));
                 }
                 #else
                 if( bPrintProspect )
@@ -2786,8 +2786,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         else
         {
             aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
-            aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
-                                    TWIP_TO_MM100( aTmpSize.Height() ));
+            aPageSize = awt::Size ( convertTwipToMm100( aTmpSize.Width() ),
+                                    convertTwipToMm100( aTmpSize.Height() ));
         }
 
         sal_Int32 nLen = 2;
