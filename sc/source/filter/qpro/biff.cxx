@@ -31,10 +31,11 @@
 #include "formulacell.hxx"
 #include "biff.hxx"
 
-ScBiffReader::ScBiffReader( SfxMedium & rMedium ) :
-    mnId(0),
-    mnLength(0),
-    mnOffset(0)
+ScBiffReader::ScBiffReader(SfxMedium& rMedium)
+    : mnId(0)
+    , mnLength(0)
+    , mnOffset(0)
+    , mbEndOfFile(false)
 {
     mpStream = rMedium.GetInStream();
     if( mpStream )
