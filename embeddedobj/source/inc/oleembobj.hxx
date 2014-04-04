@@ -202,7 +202,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetNewFilledTempStream_Impl(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
-        throw( ::com::sun::star::io::IOException );
+        throw( css::io::IOException, css::uno::RuntimeException );
 #ifdef WNT
     void SwitchComponentToRunningState_Impl();
 #endif

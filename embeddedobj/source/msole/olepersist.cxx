@@ -262,7 +262,7 @@ void VerbExecutionController::UnlockNotification()
 
 
 uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( const uno::Reference< io::XInputStream >& xInStream )
-        throw( io::IOException )
+        throw( io::IOException, uno::RuntimeException )
 {
     SAL_WARN_IF( !xInStream.is(), "embeddedobj.ole", "Wrong parameter is provided!" );
 
