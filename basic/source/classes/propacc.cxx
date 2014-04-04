@@ -227,7 +227,7 @@ Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( Run
     return Property();
 }
 
-sal_Bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( RuntimeException )
+bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( RuntimeException )
 {
     sal_Int32 nIndex = GetIndex_Impl( Name );
     return USHRT_MAX != nIndex;
@@ -277,7 +277,7 @@ sal_Bool SbPropertySetInfo::hasPropertyByName(const OUString& Name)
 
 
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;

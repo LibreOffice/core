@@ -834,9 +834,9 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 pVar->SetInfo( GetInfo( (short) pVar->GetUserData() ) );
             else
             {
-                sal_Bool bWrite = sal_False;
+                bool bWrite = false;
                 if( t == SBX_HINT_DATACHANGED )
-                    bWrite = sal_True;
+                    bWrite = true;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
                     RtlCall p = (RtlCall) aMethods[ nCallId-1 ].pFunc;

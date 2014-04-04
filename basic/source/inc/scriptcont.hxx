@@ -39,7 +39,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) SAL_OVERRIDE;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
-          const OUString& StorageURL, sal_Bool ReadOnly ) SAL_OVERRIDE;
+          const OUString& StorageURL, bool ReadOnly ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) SAL_OVERRIDE;
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const SAL_OVERRIDE;
     virtual void SAL_CALL writeLibraryElement
@@ -63,17 +63,17 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
 
 
     // Password encryption
-    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
+    virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
 
     // New variant for library export
-    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
+    virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                         const OUString& aTargetURL,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
 
-    virtual sal_Bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
-        sal_Bool bVerifyPasswordOnly=false )
+    virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
+                                          bool bVerifyPasswordOnly=false )
             throw(::com::sun::star::lang::WrappedTargetException,
                   ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
@@ -147,7 +147,7 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
     ModuleInfoMap mModuleInfos;
 
     // Provide modify state including resources
-    virtual sal_Bool isModified( void ) SAL_OVERRIDE;
+    virtual bool isModified( void ) SAL_OVERRIDE;
     virtual void storeResources( void ) SAL_OVERRIDE;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
     virtual void storeResourcesToURL( const OUString& URL,
@@ -168,7 +168,7 @@ public:
         ModifiableHelper& _rModifiable,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
-        const OUString& aLibInfoFileURL, const OUString& aStorageURL, sal_Bool ReadOnly
+        const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly
     );
 
     DECLARE_XINTERFACE()

@@ -107,7 +107,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) throw ();
     ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const OUString& Name)
         throw( ::com::sun::star::uno::RuntimeException );
-    sal_Bool SAL_CALL hasPropertyByName(const OUString& Name)
+    bool SAL_CALL hasPropertyByName(const OUString& Name)
         throw ( ::com::sun::star::uno::RuntimeException );
 };
 
@@ -133,7 +133,7 @@ public:
 class StarBASIC;
 class SbxArray;
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
+void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 
 #endif
 

@@ -1212,7 +1212,7 @@ RTLFUNC(Mid)
         // can't be left out here. That's considered in bWrite already.
         if( nArgCount == 4 )
         {
-            bWrite = sal_True;
+            bWrite = true;
         }
         OUString aArgStr = rPar.Get(1)->GetOUString();
         sal_Int32 nStartPos = rPar.Get(2)->GetLong();
@@ -2147,7 +2147,7 @@ RTLFUNC(DateValue)
         sal_uInt32 nIndex = 0;
         double fResult;
         OUString aStr( rPar.Get(1)->GetOUString() );
-        sal_Bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
+        bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
         short nType = pFormatter->GetType( nIndex );
 
         // DateValue("February 12, 1969") raises error if the system locale is not en_US
@@ -2214,7 +2214,7 @@ RTLFUNC(TimeValue)
 
         sal_uInt32 nIndex = 0;
         double fResult;
-        sal_Bool bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetOUString(),
+        bool bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetOUString(),
                                                    nIndex, fResult );
         short nType = pFormatter->GetType(nIndex);
         if(bSuccess && (nType==NUMBERFORMAT_TIME||nType==NUMBERFORMAT_DATETIME))
@@ -2544,7 +2544,7 @@ RTLFUNC(IsObject)
         SbxBase::ResetError();
 
         SbUnoClass* pUnoClass;
-        sal_Bool bObject;
+        bool bObject;
         if( pObj &&  NULL != ( pUnoClass=PTR_CAST(SbUnoClass,pObj) ) )
         {
             bObject = pUnoClass->getUnoClass().is();
@@ -2571,11 +2571,11 @@ RTLFUNC(IsDate)
         // #46134 only string is converted, all other types result in sal_False
         SbxVariableRef xArg = rPar.Get( 1 );
         SbxDataType eType = xArg->GetType();
-        sal_Bool bDate = sal_False;
+        bool bDate = false;
 
         if( eType == SbxDATE )
         {
-            bDate = sal_True;
+            bDate = true;
         }
         else if( eType == SbxSTRING )
         {
@@ -2672,13 +2672,13 @@ RTLFUNC(IsNull)
         // #51475 because of Uno-objects return true
         // even if the pObj value is NULL
         SbxVariableRef pArg = rPar.Get( 1 );
-        sal_Bool bNull = rPar.Get(1)->IsNull();
+        bool bNull = rPar.Get(1)->IsNull();
         if( !bNull && pArg->GetType() == SbxOBJECT )
         {
             SbxBase* pObj = pArg->GetObject();
             if( !pObj )
             {
-                bNull = sal_True;
+                bNull = true;
             }
         }
         rPar.Get( 0 )->PutBool( bNull );
@@ -2786,9 +2786,9 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     return aPathStr;
 }
 
-inline sal_Bool implCheckWildcard( const OUString& rName, SbiRTLData* pRTLData )
+inline bool implCheckWildcard( const OUString& rName, SbiRTLData* pRTLData )
 {
-    sal_Bool bMatch = sal_True;
+    bool bMatch = true;
 
     if( pRTLData->pWildCard )
     {
@@ -2863,7 +2863,7 @@ RTLFUNC(Dir)
                     OUString aFileURLStr = implSetupWildcard( aFileParam, pRTLData );
                     if( !pRTLData->sFullNameToBeChecked.isEmpty())
                     {
-                        sal_Bool bExists = sal_False;
+                        bool bExists = false;
                         try { bExists = xSFI->exists( aFileURLStr ); }
                         catch(const Exception & ) {}
 
@@ -2881,7 +2881,7 @@ RTLFUNC(Dir)
                     try
                     {
                         OUString aDirURLStr;
-                        sal_Bool bFolder = xSFI->isFolder( aFileURLStr );
+                        bool bFolder = xSFI->isFolder( aFileURLStr );
 
                         if( bFolder )
                         {
@@ -2903,7 +2903,7 @@ RTLFUNC(Dir)
                             pRTLData->nDirFlags = 0;
                         }
                         // Read directory
-                        sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
+                        bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
                         pRTLData->aDirSeq = xSFI->getFolderContents( aDirURLStr, bIncludeFolders );
                         pRTLData->nCurDirPos = 0;
 
@@ -2962,7 +2962,7 @@ RTLFUNC(Dir)
                             {
                                 if( !bFolderFlag )
                                 {
-                                    sal_Bool bFolder = xSFI->isFolder( aFile );
+                                    bool bFolder = xSFI->isFolder( aFile );
                                     if( bFolder )
                                     {
                                         continue;
@@ -2974,7 +2974,7 @@ RTLFUNC(Dir)
                                 // Only directories
                                 if( bFolderFlag )
                                 {
-                                    sal_Bool bFolder = xSFI->isFolder( aFile );
+                                    bool bFolder = xSFI->isFolder( aFile );
                                     if( !bFolder )
                                     {
                                         continue;
@@ -2987,7 +2987,7 @@ RTLFUNC(Dir)
                                                   INetURLObject::DECODE_WITH_CHARSET );
                         }
 
-                        sal_Bool bMatch = implCheckWildcard( aPath, pRTLData );
+                        bool bMatch = implCheckWildcard( aPath, pRTLData );
                         if( !bMatch )
                         {
                             continue;
@@ -3094,7 +3094,7 @@ RTLFUNC(Dir)
                         aPath = aFileStatus.getFileName();
                     }
 
-                    sal_Bool bMatch = implCheckWildcard( aPath, pRTLData );
+                    bool bMatch = implCheckWildcard( aPath, pRTLData );
                     if( !bMatch )
                     {
                         continue;
@@ -3153,7 +3153,7 @@ RTLFUNC(GetAttr)
                 try
                 {
                     OUString aPath = getFullPath( rPar.Get(1)->GetOUString() );
-                    sal_Bool bExists = sal_False;
+                    bool bExists = false;
                     try { bExists = xSFI->exists( aPath ); }
                     catch(const Exception & ) {}
                     if( !bExists )
@@ -3162,9 +3162,9 @@ RTLFUNC(GetAttr)
                         return;
                     }
 
-                    sal_Bool bReadOnly = xSFI->isReadOnly( aPath );
-                    sal_Bool bHidden = xSFI->isHidden( aPath );
-                    sal_Bool bDirectory = xSFI->isFolder( aPath );
+                    bool bReadOnly = xSFI->isReadOnly( aPath );
+                    bool bHidden = xSFI->isHidden( aPath );
+                    bool bDirectory = xSFI->isFolder( aPath );
                     if( bReadOnly )
                     {
                         nFlags |= Sb_ATTR_READONLY;
@@ -3313,7 +3313,7 @@ RTLFUNC(EOF)
             StarBASIC::Error( SbERR_BAD_CHANNEL );
             return;
         }
-        sal_Bool bIsEof;
+        bool bIsEof;
         SvStream* pSvStrm = pSbStrm->GetStrm();
         if ( pSbStrm->IsText() )
         {
@@ -3679,7 +3679,7 @@ RTLFUNC(Shell)
                 break;
             }
 
-            sal_Bool bSync = sal_False;
+            bool bSync = false;
             if( nArgCount >= 5 )
             {
                 bSync = rPar.Get(4)->GetBool();
@@ -3713,7 +3713,7 @@ RTLFUNC(Shell)
         }
 
         oslProcess pApp;
-        sal_Bool bSucc = osl_executeProcess(
+        bool bSucc = osl_executeProcess(
                     aOUStrProgURL.pData,
                     pParamList,
                     nParamCount,
@@ -4676,9 +4676,9 @@ RTLFUNC(SetAttr)
             {
                 try
                 {
-                    sal_Bool bReadOnly = (nFlags & Sb_ATTR_READONLY) != 0;
+                    bool bReadOnly = (nFlags & Sb_ATTR_READONLY) != 0;
                     xSFI->setReadOnly( aStr, bReadOnly );
-                    sal_Bool bHidden   = (nFlags & Sb_ATTR_HIDDEN) != 0;
+                    bool bHidden   = (nFlags & Sb_ATTR_HIDDEN) != 0;
                     xSFI->setHidden( aStr, bHidden );
                 }
                 catch(const Exception & )
@@ -4748,7 +4748,7 @@ RTLFUNC(FileExists)
     if ( rPar.Count() == 2 )
     {
         OUString aStr = rPar.Get(1)->GetOUString();
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
 
         if( hasUno() )
         {

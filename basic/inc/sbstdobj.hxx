@@ -44,9 +44,9 @@ protected:
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
-    void    PropType( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropWidth( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropHeight( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    void    PropType( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropWidth( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropHeight( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
 
 public:
     TYPEINFO_OVERRIDE();
@@ -62,10 +62,10 @@ public:
 class BASIC_DLLPUBLIC SbStdFont : public SbxObject
 {
 protected:
-    sal_Bool    bBold;
-    sal_Bool    bItalic;
-    sal_Bool    bStrikeThrough;
-    sal_Bool    bUnderline;
+    bool    bBold;
+    bool    bItalic;
+    bool    bStrikeThrough;
+    bool    bUnderline;
     sal_uInt16  nSize;
     OUString  aName;
 
@@ -73,12 +73,12 @@ protected:
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
-    void    PropBold( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropItalic( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropStrikeThrough( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropUnderline( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropSize( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
-    void    PropName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
+    void    PropBold( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropItalic( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropStrikeThrough( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropUnderline( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropSize( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
+    void    PropName( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
 
 public:
     TYPEINFO_OVERRIDE();
@@ -86,14 +86,14 @@ public:
     SbStdFont();
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
-    void     SetBold( sal_Bool bB ) { bBold = bB; }
-    sal_Bool IsBold() const { return bBold; }
-    void     SetItalic( sal_Bool bI ) { bItalic = bI; }
-    sal_Bool IsItalic() const { return bItalic; }
-    void     SetStrikeThrough( sal_Bool bS ) { bStrikeThrough = bS; }
-    sal_Bool IsStrikeThrough() const { return bStrikeThrough; }
-    void     SetUnderline( sal_Bool bU ) { bUnderline = bU; }
-    sal_Bool IsUnderline() const { return bUnderline; }
+    void     SetBold( bool bB ) { bBold = bB; }
+    bool IsBold() const { return bBold; }
+    void     SetItalic( bool bI ) { bItalic = bI; }
+    bool IsItalic() const { return bItalic; }
+    void     SetStrikeThrough( bool bS ) { bStrikeThrough = bS; }
+    bool IsStrikeThrough() const { return bStrikeThrough; }
+    void     SetUnderline( bool bU ) { bUnderline = bU; }
+    bool IsUnderline() const { return bUnderline; }
     void     SetSize( sal_uInt16 nS ) { nSize = nS; }
     sal_uInt16 GetSize() const { return nSize; }
     void     SetFontName( const OUString& rName ) { aName = rName; }
@@ -109,12 +109,12 @@ protected:
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
 
-    void    MethClear( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
-    void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
-    void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
-    void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
-    void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
-    void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
+    void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
 
 public:
     TYPEINFO_OVERRIDE();

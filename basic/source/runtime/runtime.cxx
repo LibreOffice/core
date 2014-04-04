@@ -682,18 +682,18 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
             SbxVariable* v = pParams->Get( i );
             // methods are always byval!
-            sal_Bool bByVal = v->IsA( TYPE(SbxMethod) );
+            bool bByVal = v->IsA( TYPE(SbxMethod) );
             SbxDataType t = v->GetType();
             bool bTargetTypeIsArray = false;
             if( p )
             {
-                bByVal |= sal_Bool( ( p->eType & SbxBYREF ) == 0 );
+                bByVal |= ( p->eType & SbxBYREF ) == 0;
                 t = (SbxDataType) ( p->eType & 0x0FFF );
 
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || (SbxDataType)(v->GetType() & 0x0FFF ) != t) )
                 {
-                    bByVal = sal_True;
+                    bByVal = true;
                 }
 
                 bTargetTypeIsArray = (p->nUserData & PARAM_INFO_WITHBRACKETS) != 0;
@@ -1618,7 +1618,7 @@ void SbiRuntime::StepIS()
         eType2 = refVar2->GetType();
     }
 
-    sal_Bool bRes = sal_Bool( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
+    bool bRes = ( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
     if ( bVBAEnabled  && !bRes )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
@@ -1942,7 +1942,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             xPrevVarObj = refVar->GetObject();
         }
         // Handle withevents
-        sal_Bool bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
+        bool bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
         if ( bWithEvents )
         {
             Reference< XInterface > xComListener;
@@ -4568,7 +4568,7 @@ void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedFo
 {
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);;
-    sal_Bool bFlag = pMod->IsSet( SBX_NO_MODIFY );
+    bool bFlag = pMod->IsSet( SBX_NO_MODIFY );
     pMod->SetFlag( SBX_NO_MODIFY );
     SbxVariableRef p = pMod->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
@@ -4631,7 +4631,7 @@ void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pMod->AddVarName( aName );
     }
 
-    sal_Bool bFlag = pStorage->IsSet( SBX_NO_MODIFY );
+    bool bFlag = pStorage->IsSet( SBX_NO_MODIFY );
     rBasic.SetFlag( SBX_NO_MODIFY );
     SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )

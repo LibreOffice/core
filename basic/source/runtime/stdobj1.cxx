@@ -59,7 +59,7 @@ SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
 
 
 
-void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
@@ -79,7 +79,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 }
 
 
-void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
@@ -94,7 +94,7 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
     pVar->PutInteger( (sal_Int16)aSize.Width() );
 }
 
-void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
@@ -157,7 +157,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
-        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
@@ -173,7 +173,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 
 
-void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
         SetBold( pVar->GetBool() );
@@ -181,7 +181,7 @@ void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutBool( IsBold() );
 }
 
-void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
         SetItalic( pVar->GetBool() );
@@ -189,7 +189,7 @@ void SbStdFont::PropItalic( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutBool( IsItalic() );
 }
 
-void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
         SetStrikeThrough( pVar->GetBool() );
@@ -197,7 +197,7 @@ void SbStdFont::PropStrikeThrough( SbxVariable* pVar, SbxArray*, sal_Bool bWrite
         pVar->PutBool( IsStrikeThrough() );
 }
 
-void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
         SetUnderline( pVar->GetBool() );
@@ -205,7 +205,7 @@ void SbStdFont::PropUnderline( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutBool( IsUnderline() );
 }
 
-void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
         SetSize( (sal_uInt16)pVar->GetInteger() );
@@ -213,7 +213,7 @@ void SbStdFont::PropSize( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
         pVar->PutInteger( (sal_Int16)GetSize() );
 }
 
-void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
+void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, bool bWrite )
 {
     if( bWrite )
     {
@@ -282,7 +282,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
-        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
         switch( nWhich )
@@ -303,7 +303,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 
 
-void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -313,7 +313,7 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
 
 }
 
-void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     (void)pVar;
 
@@ -332,7 +332,7 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 
 }
 
-void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
@@ -350,7 +350,7 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool
     pVar->PutBool( false );
 }
 
-void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -361,7 +361,7 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
     pVar->PutString( OUString() );
 }
 
-void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     (void)pVar;
 
@@ -380,7 +380,7 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 
 }
 
-void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
+void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 {
     (void)pVar;
 
@@ -451,7 +451,7 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
-        sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
+        bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Methods
         switch( nWhich )

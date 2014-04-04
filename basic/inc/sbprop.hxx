@@ -32,7 +32,7 @@ class BASIC_DLLPUBLIC SbProperty : public SbxProperty
     friend class SbModule;
     friend class SbProcedureProperty;
     SbModule* pMod;
-    sal_Bool     bInvalid;
+    bool     bInvalid;
     BASIC_DLLPRIVATE SbProperty( const OUString&, SbxDataType, SbModule* );
     virtual ~SbProperty();
 public:

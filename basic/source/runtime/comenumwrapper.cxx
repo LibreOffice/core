@@ -24,7 +24,7 @@ using namespace ::com::sun::star;
 sal_Bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
     throw ( uno::RuntimeException, std::exception )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     try
     {

@@ -92,7 +92,7 @@ SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( const OUString& aName 
 
 SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
     ( const OUString& aName, const OUString& aLibInfoFileURL,
-      const OUString& StorageURL, sal_Bool ReadOnly )
+      const OUString& StorageURL, bool ReadOnly )
 {
     SfxLibrary* pRet = new SfxDialogLibrary
             ( maModifiable, aName, mxContext, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
@@ -289,7 +289,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     }
 
     // Read from storage?
-    sal_Bool bStorage = xElementStream.is();
+    bool bStorage = xElementStream.is();
     Reference< XInputStream > xInput;
 
     if( bStorage )
@@ -363,7 +363,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
     OUString aComment(aResourceFileCommentBase);
     aComment += aLibName;
 
-    sal_Bool bStorage = mxStorage.is();
+    bool bStorage = mxStorage.is();
     if( bStorage )
     {
         uno::Reference< embed::XStorage > xLibrariesStor;
@@ -507,7 +507,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
-                                    sal_Bool ReadOnly,
+                                    bool ReadOnly,
                                     SfxDialogLibraryContainer* pParent )
     : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ),
                        xContext, xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
@@ -520,9 +520,9 @@ IMPLEMENT_FORWARD_XINTERFACE2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BA
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BASE );
 
 // Provide modify state including resources
-sal_Bool SfxDialogLibrary::isModified( void )
+bool SfxDialogLibrary::isModified( void )
 {
-    sal_Bool bRet = implIsModified();
+    bool bRet = implIsModified();
 
     if( !bRet && m_xStringResourcePersistence.is() )
         bRet = m_xStringResourcePersistence->isModified();

@@ -90,7 +90,7 @@ void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName
         if( !rPassword.isEmpty() )
         {
             pImplLib->mbDoc50Password = true;
-            pImplLib->mbPasswordProtected = sal_True;
+            pImplLib->mbPasswordProtected = true;
             pImplLib->maPassword = rPassword;
         }
     }
@@ -114,7 +114,7 @@ void SfxScriptLibraryContainer::clearLibraryPassword( const OUString& rLibraryNa
     {
         SfxLibrary* pImplLib = getImplLib( rLibraryName );
         pImplLib->mbDoc50Password = false;
-        pImplLib->mbPasswordProtected = sal_False;
+        pImplLib->mbPasswordProtected = false;
         pImplLib->maPassword = "";
     }
     catch(const NoSuchElementException& ) {}
@@ -151,7 +151,7 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName 
 SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aName,
                                                               const OUString& aLibInfoFileURL,
                                                               const OUString& StorageURL,
-                                                              sal_Bool ReadOnly )
+                                                              bool ReadOnly )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxContext, mxSFI,
@@ -232,7 +232,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     Reference< XParser > xParser = xml::sax::Parser::create( mxContext );
 
     // Read from storage?
-    sal_Bool bStorage = xInStream.is();
+    bool bStorage = xInStream.is();
     Reference< XInputStream > xInput;
 
     if( bStorage )
@@ -384,7 +384,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordProtected( const O
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
-    sal_Bool bRet = pImplLib->mbPasswordProtected;
+    bool bRet = pImplLib->mbPasswordProtected;
     return bRet;
 }
 
@@ -397,7 +397,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OU
     {
         throw IllegalArgumentException();
     }
-    sal_Bool bRet = pImplLib->mbPasswordVerified;
+    bool bRet = pImplLib->mbPasswordVerified;
     return bRet;
 }
 
@@ -412,26 +412,26 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
         throw IllegalArgumentException();
     }
     // Test password
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if( pImplLib->mbDoc50Password )
     {
         bSuccess = ( Password == pImplLib->maPassword );
         if( bSuccess )
         {
-            pImplLib->mbPasswordVerified = sal_True;
+            pImplLib->mbPasswordVerified = true;
         }
     }
     else
     {
         pImplLib->maPassword = Password;
-        bSuccess = implLoadPasswordLibrary( pImplLib, Name, sal_True );
+        bSuccess = implLoadPasswordLibrary( pImplLib, Name, true );
         if( bSuccess )
         {
             // The library gets modified by verifying the password, because other-
             // wise for saving the storage would be copied and that doesn't work
             // with mtg's storages when the password is verified
-            pImplLib->implSetModified( sal_True );
-            pImplLib->mbPasswordVerified = sal_True;
+            pImplLib->implSetModified( true );
+            pImplLib->mbPasswordVerified = true;
 
             // Reload library to get source
             if( pImplLib->mbLoaded )
@@ -454,9 +454,9 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     {
         return;
     }
-    sal_Bool bOldPassword = !OldPassword.isEmpty();
-    sal_Bool bNewPassword = !NewPassword.isEmpty();
-    sal_Bool bStorage = mxStorage.is() && !pImplLib->mbLink;
+    bool bOldPassword = !OldPassword.isEmpty();
+    bool bNewPassword = !NewPassword.isEmpty();
+    bool bStorage = mxStorage.is() && !pImplLib->mbLink;
 
     if( pImplLib->mbReadOnly || (bOldPassword && !pImplLib->mbPasswordProtected) )
     {
@@ -490,12 +490,12 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
 
         if( !bNewPassword )
         {
-            pImplLib->mbPasswordProtected = sal_False;
-            pImplLib->mbPasswordVerified = sal_False;
+            pImplLib->mbPasswordProtected = false;
+            pImplLib->mbPasswordVerified = false;
             pImplLib->maPassword = "";
 
-            maModifiable.setModified( sal_True );
-            pImplLib->implSetModified( sal_True );
+            maModifiable.setModified( true );
+            pImplLib->implSetModified( true );
 
             if( !bStorage && !pImplLib->mbDoc50Password )
             {
@@ -510,12 +510,12 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     // Set new password?
     if( bNewPassword )
     {
-        pImplLib->mbPasswordProtected = sal_True;
-        pImplLib->mbPasswordVerified = sal_True;
+        pImplLib->mbPasswordProtected = true;
+        pImplLib->mbPasswordVerified = true;
         pImplLib->maPassword = NewPassword;
 
-        maModifiable.setModified( sal_True );
-        pImplLib->implSetModified( sal_True );
+        maModifiable.setModified( true );
+        pImplLib->implSetModified( true );
 
         if( !bStorage && !pImplLib->mbDoc50Password )
         {
@@ -574,21 +574,21 @@ void setStreamKey( uno::Reference< io::XStream > xStream, const OUString& aPass 
 
 
 // Impl methods
-sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
-                                                              const OUString& aName,
-                                                              const uno::Reference< embed::XStorage >& xStorage,
-                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
+                                                          const OUString& aName,
+                                                          const uno::Reference< embed::XStorage >& xStorage,
+                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     OUString aDummyLocation;
     Reference< XSimpleFileAccess3 > xDummySFA;
     return implStorePasswordLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xHandler );
 }
 
-sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                                              const OUString& aTargetURL,
-                                                              const Reference< XSimpleFileAccess3 > xToUseSFI,
-                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
+                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                                          const OUString& aTargetURL,
+                                                          const Reference< XSimpleFileAccess3 > xToUseSFI,
+                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
 
@@ -596,7 +596,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
     OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implStorePasswordLibrary: cannot do this without a BasicManager!" );
     if ( !pBasicMgr )
     {
-        return sal_False;
+        return false;
     }
     // Only need to handle the export case here,
     // save/saveas etc are handled in sfxbasemodel::storeSelf &
@@ -619,14 +619,14 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
     StarBASIC* pBasicLib = pBasicMgr->GetLib( aName );
     if( !pBasicLib )
     {
-        return sal_False;
+        return false;
     }
     Sequence< OUString > aElementNames = pLib->getElementNames();
     sal_Int32 nNameCount = aElementNames.getLength();
     const OUString* pNames = aElementNames.getConstArray();
 
-    sal_Bool bLink = pLib->mbLink;
-    sal_Bool bStorage = xStorage.is() && !bLink;
+    bool bLink = pLib->mbLink;
+    bool bStorage = xStorage.is() && !bLink;
     if( bStorage )
     {
         for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
@@ -871,17 +871,17 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
         {
         }
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
-    ( SfxLibrary* pLib, const OUString& Name, sal_Bool bVerifyPasswordOnly )
+bool SfxScriptLibraryContainer::implLoadPasswordLibrary
+    ( SfxLibrary* pLib, const OUString& Name, bool bVerifyPasswordOnly )
         throw(WrappedTargetException, RuntimeException)
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
-    sal_Bool bLink = pLib->mbLink;
-    sal_Bool bStorage = mxStorage.is() && !bLink;
+    bool bLink = pLib->mbLink;
+    bool bStorage = mxStorage.is() && !bLink;
 
     // Already loaded? Then only verifiedPassword can change something
     SfxScriptLibrary* pScriptLib = static_cast< SfxScriptLibrary* >( pLib );
@@ -890,25 +890,25 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         if( pScriptLib->mbLoadedBinary && !bVerifyPasswordOnly &&
             (pScriptLib->mbLoadedSource || !pLib->mbPasswordVerified) )
         {
-            return sal_False;
+            return false;
         }
     }
 
     StarBASIC* pBasicLib = NULL;
-    sal_Bool bLoadBinary = sal_False;
+    bool bLoadBinary = false;
     if( !pScriptLib->mbLoadedBinary && !bVerifyPasswordOnly && !pLib->mbPasswordVerified )
     {
         BasicManager* pBasicMgr = getBasicManager();
         OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implLoadPasswordLibrary: cannot do this without a BasicManager!" );
-        sal_Bool bLoaded = pScriptLib->mbLoaded;
-        pScriptLib->mbLoaded = sal_True;        // Necessary to get lib
+        bool bLoaded = pScriptLib->mbLoaded;
+        pScriptLib->mbLoaded = true;        // Necessary to get lib
         pBasicLib = pBasicMgr ? pBasicMgr->GetLib( Name ) : NULL;
         pScriptLib->mbLoaded = bLoaded;    // Restore flag
         if( !pBasicLib )
         {
-            return sal_False;
+            return false;
         }
-        bLoadBinary = sal_True;
+        bLoadBinary = true;
         pScriptLib->mbLoadedBinary = true;
     }
 
@@ -944,7 +944,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             catch(const uno::Exception& )
             {
                 OSL_FAIL( "### couldn't open sub storage for library\n" );
-                return sal_False;
+                return false;
             }
         }
 
@@ -1041,7 +1041,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 }
                 catch(const uno::Exception& )
                 {
-                    bRet = sal_False;
+                    bRet = false;
                 }
             }
         }
@@ -1158,7 +1158,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         }
                         catch (const uno::Exception& )
                         {
-                            bRet = sal_False;
+                            bRet = false;
                         }
                     }
                 }
@@ -1250,7 +1250,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
-                                    sal_Bool ReadOnly )
+                                    bool ReadOnly )
     : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xContext, xSFI,
                         aLibInfoFileURL, aStorageURL, ReadOnly)
     , mbLoadedSource( false )
@@ -1259,7 +1259,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
 }
 
 // Provide modify state including resources
-sal_Bool SfxScriptLibrary::isModified( void )
+bool SfxScriptLibrary::isModified( void )
 {
     return implIsModified();    // No resources
 }
@@ -1318,12 +1318,12 @@ script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& Mod
 sal_Bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
     throw (RuntimeException, std::exception)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     ModuleInfoMap::iterator it = mModuleInfos.find( ModuleName );
 
     if ( it != mModuleInfos.end() )
     {
-        bRes = sal_True;
+        bRes = true;
     }
     return bRes;
 }

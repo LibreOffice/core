@@ -762,7 +762,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         double nNumber;
         Color* pCol;
 
-        sal_Bool bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
+        bool bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
 
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )

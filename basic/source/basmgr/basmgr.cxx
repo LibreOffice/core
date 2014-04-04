@@ -1971,7 +1971,7 @@ sal_Bool ModuleContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException, std::exception)
 {
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
-    sal_Bool bRet = (pMod != NULL);
+    bool bRet = (pMod != NULL);
     return bRet;
 }
 
@@ -2083,7 +2083,7 @@ uno::Type DialogContainer_Impl::getElementType()
 sal_Bool DialogContainer_Impl::hasElements()
     throw(uno::RuntimeException, std::exception)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     mpLib->GetAll( SbxCLASS_OBJECT );
     sal_Int16 nCount = mpLib->GetObjects()->Count();
@@ -2144,7 +2144,7 @@ uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
 sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException, std::exception)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
     if( pVar && pVar->ISA( SbxObject ) &&
            ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
@@ -2244,7 +2244,7 @@ sal_Bool LibraryContainer_Impl::hasElements()
     throw(uno::RuntimeException, std::exception)
 {
     sal_Int32 nLibs = mpMgr->GetLibCount();
-    sal_Bool bRet = (nLibs > 0);
+    bool bRet = (nLibs > 0);
     return bRet;
 }
 
@@ -2308,7 +2308,7 @@ uno::Sequence< OUString > LibraryContainer_Impl::getElementNames()
 sal_Bool LibraryContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException, std::exception)
 {
-    sal_Bool bRet = mpMgr->HasLib( aName );
+    bool bRet = mpMgr->HasLib( aName );
     return bRet;
 }
 

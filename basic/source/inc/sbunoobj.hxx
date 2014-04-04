@@ -350,15 +350,15 @@ public:
 class StarBASIC;
 
 // Impl-methods for RTL
-void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
-void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
+void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 
 void disposeComVariablesForBasic( StarBASIC* pBasic );
 void clearNativeObjectWrapperVector( void );

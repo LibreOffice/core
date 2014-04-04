@@ -550,7 +550,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     return eRetType;
 }
 
-static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, sal_Bool bIsZeroIndex, Type* pType = NULL )
+static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type* pType = NULL )
 {
     Type aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
@@ -2136,7 +2136,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     try
                     {
                         sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
-                        sal_Bool bCanBeConsideredAMethod = mxInvocation->hasMethod( pProp->GetName() );
+                        bool bCanBeConsideredAMethod = mxInvocation->hasMethod( pProp->GetName() );
                         Any aRetAny;
                         if ( bCanBeConsideredAMethod && nParamCount )
                         {
@@ -2972,7 +2972,7 @@ void createAllObjectProperties( SbxObject* pObj )
 }
 
 
-void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -2998,7 +2998,7 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
 
-void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3049,7 +3049,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWri
     }
 }
 
-void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3104,7 +3104,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     }
 }
 
-void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3121,7 +3121,7 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, sal_B
     refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
 
-void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3183,7 +3183,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
     refVar->PutBool( true );
 }
 
-void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3219,7 +3219,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 }
 
 
-void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -4162,7 +4162,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 // create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
-void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 //RTLFUNC(CreateUnoListener)
 {
     (void)bWrite;
@@ -4224,7 +4224,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
 
 // Represents the DefaultContext property of the ProcessServiceManager
 // in the Basic runtime system.
-void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -4240,7 +4240,7 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
 
 // Creates a Basic wrapper object for a strongly typed Uno value
 // 1. parameter: Uno type as full qualified type name, e.g. "byte[]"
-void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -4479,14 +4479,14 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     aFunctionName += rFunction;
 
     bool bSetRescheduleBack = false;
-    sal_Bool bOldReschedule = sal_True;
+    bool bOldReschedule = true;
     SbiInstance* pInst = GetSbData()->pInst;
     if( pInst && pInst->IsCompatibility() )
     {
         bOldReschedule = pInst->IsReschedule();
         if ( bOldReschedule )
         {
-            pInst->EnableReschedule( sal_False );
+            pInst->EnableReschedule( false );
             bSetRescheduleBack = true;
         }
     }

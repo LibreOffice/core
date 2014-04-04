@@ -129,14 +129,14 @@ double ImpGetDate( const SbxValues* p )
 
             pFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
                                             nIndex, LANGUAGE_ENGLISH_US, eLangType );
-            sal_Bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
+            bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
             if ( bSuccess )
             {
                 short nType_ = pFormatter->GetType( nIndex );
                 if(!(nType_ & ( NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
                                 NUMBERFORMAT_TIME | NUMBERFORMAT_DEFINED )))
                 {
-                    bSuccess = sal_False;
+                    bSuccess = false;
                 }
             }
 

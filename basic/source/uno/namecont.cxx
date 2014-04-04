@@ -106,7 +106,7 @@ Type NameContainer::getElementType()
 sal_Bool NameContainer::hasElements()
     throw(RuntimeException, std::exception)
 {
-    sal_Bool bRet = (mnElementCount > 0);
+    bool bRet = (mnElementCount > 0);
     return bRet;
 }
 
@@ -134,7 +134,7 @@ sal_Bool NameContainer::hasByName( const OUString& aName )
     throw(RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    sal_Bool bRet = ( aIt != mHashMap.end() );
+    bool bRet = ( aIt != mHashMap.end() );
     return bRet;
 }
 
@@ -334,7 +334,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
 
 // ModifiableHelper
 
-void ModifiableHelper::setModified( sal_Bool _bModified )
+void ModifiableHelper::setModified( bool _bModified )
 {
     if ( _bModified == mbModified )
     {
@@ -370,7 +370,7 @@ SfxLibraryContainer::SfxLibraryContainer( void )
 
     , maVBAScriptListeners( maMutex )
     , mnRunningVBAScripts( 0 )
-    , mbVBACompat( sal_False )
+    , mbVBACompat( false )
     , maModifiable( *this, maMutex )
     , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
     , mbOldInfoFormat( false )
@@ -649,7 +649,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         else
         {
             // Decide between old and new document
-            sal_Bool bOldStorage = SotStorage::IsOLEStorage( aInitFileName );
+            bool bOldStorage = SotStorage::IsOLEStorage( aInitFileName );
             if ( bOldStorage )
             {
                 meInitMode = OLD_BASIC_STORAGE;
@@ -860,7 +860,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     if( mxSFI->isFolder( aLibDirPath ) )
                     {
                         createVariableURL( rLib.aStorageURL, rLib.aName, maInfoFileName, true );
-                        maModifiable.setModified( sal_True );
+                        maModifiable.setModified( true );
                     }
                     else if( rLib.bLink )
                     {
@@ -872,7 +872,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         if( mxSFI->isFolder( aShareLibDirPath ) )
                         {
                             createVariableURL( rLib.aStorageURL, rLib.aName, maInfoFileName, false );
-                            maModifiable.setModified( sal_True );
+                            maModifiable.setModified( true );
                         }
                         else
                         {
@@ -901,7 +901,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 {
                     Reference< XNameContainer > xLib = createLibrary( aLibName );
                     pImplLib = static_cast< SfxLibrary* >( xLib.get() );
-                    pImplLib->mbLoaded = sal_False;
+                    pImplLib->mbLoaded = false;
                     pImplLib->mbReadOnly = rLib.bReadOnly;
                     if( !bStorage )
                     {
@@ -909,7 +909,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                                          pImplLib->maStorageURL, pImplLib->maUnexpandedStorageURL );
                     }
                 }
-                maModifiable.setModified( sal_False );
+                maModifiable.setModified( false );
 
                 // Read library info files
                 if( !mbOldInfoFormat )
@@ -964,7 +964,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 if( nPass == 1 )
                 {
                     pImplLib->mbSharedIndexFile = true;
-                    pImplLib->mbReadOnly = sal_True;
+                    pImplLib->mbReadOnly = true;
                 }
             }
 
@@ -1187,7 +1187,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         Reference< XNameContainer > xLib = createLibrary( aLibName );
                            SfxLibrary* pNewLib = static_cast< SfxLibrary* >( xLib.get() );
                         pNewLib->mbLoaded = false;
-                        pNewLib->implSetModified( sal_False );
+                        pNewLib->implSetModified( false );
                         checkStorageURL( aLibFolder, pNewLib->maLibInfoFileURL,
                                          pNewLib->maStorageURL, pNewLib->maUnexpandedStorageURL );
 
@@ -1331,15 +1331,15 @@ SfxLibrary* SfxLibraryContainer::getImplLib( const OUString& rLibraryName )
 // Storing with password encryption
 
 // Empty implementation, avoids unneccesary implementation in dlgcont.cxx
-sal_Bool SfxLibraryContainer::implStorePasswordLibrary( SfxLibrary*,
-                                                        const OUString&,
-                                                        const uno::Reference< embed::XStorage >&,
-                                                        const uno::Reference< task::XInteractionHandler >&  )
+bool SfxLibraryContainer::implStorePasswordLibrary( SfxLibrary*,
+                                                    const OUString&,
+                                                    const uno::Reference< embed::XStorage >&,
+                                                    const uno::Reference< task::XInteractionHandler >&  )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SfxLibraryContainer::implStorePasswordLibrary(
+bool SfxLibraryContainer::implStorePasswordLibrary(
     SfxLibrary* /*pLib*/,
     const OUString& /*aName*/,
     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& /*xStorage*/,
@@ -1347,16 +1347,16 @@ sal_Bool SfxLibraryContainer::implStorePasswordLibrary(
     const Reference< XSimpleFileAccess3 > /*xToUseSFI*/,
     const uno::Reference< task::XInteractionHandler >&  )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SfxLibraryContainer::implLoadPasswordLibrary(
+bool SfxLibraryContainer::implLoadPasswordLibrary(
     SfxLibrary* /*pLib*/,
     const OUString& /*Name*/,
-    sal_Bool /*bVerifyPasswordOnly*/ )
+    bool /*bVerifyPasswordOnly*/ )
 throw(WrappedTargetException, RuntimeException)
 {
-    return sal_True;
+    return true;
 }
 
 
@@ -1407,7 +1407,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             Reference< XSimpleFileAccess3 > xToUseSFI,
                                             const Reference< XInteractionHandler >& xHandler )
 {
-    sal_Bool bLink = pLib->mbLink;
+    bool bLink = pLib->mbLink;
     bool bStorage = xStorage.is() && !bLink;
 
     Sequence< OUString > aElementNames = pLib->getElementNames();
@@ -1565,7 +1565,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     // Create sax writer
     Reference< XWriter > xWriter = xml::sax::Writer::create(mxContext);
 
-    sal_Bool bLink = pLib->mbLink;
+    bool bLink = pLib->mbLink;
     bool bStorage = xStorage.is() && !bLink;
 
     // Write info file
@@ -1664,7 +1664,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
 {
     Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
 
-    sal_Bool bLink = sal_False;
+    bool bLink = false;
     bool bStorage = false;
     if( pLib )
     {
@@ -1744,7 +1744,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     {
         Reference< XNameContainer > xLib = createLibrary( rLib.aName );
         pLib = static_cast< SfxLibrary* >( xLib.get() );
-        pLib->mbLoaded = sal_False;
+        pLib->mbLoaded = false;
         rLib.aStorageURL = aIndexFileName;
         checkStorageURL( rLib.aStorageURL, pLib->maLibInfoFileURL, pLib->maStorageURL,
                          pLib->maUnexpandedStorageURL );
@@ -1770,7 +1770,7 @@ void SfxLibraryContainer::implImportLibDescriptor( SfxLibrary* pLib,
         pLib->mbPasswordProtected = rLib.bPasswordProtected;
         pLib->mbReadOnly = rLib.bReadOnly;
         pLib->mbPreload  = rLib.bPreload;
-        pLib->implSetModified( sal_False );
+        pLib->implSetModified( false );
         pLib->mbInitialised = true;
     }
 }
@@ -1948,8 +1948,8 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     }
                 }
             }
-            maModifiable.setModified( sal_True );
-            pImplLib->implSetModified( sal_False );
+            maModifiable.setModified( true );
+            pImplLib->implSetModified( false );
         }
 
         // For container info ReadOnly refers to mbReadOnlyLink
@@ -2032,7 +2032,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     {
         return;
     }
-    maModifiable.setModified( sal_False );
+    maModifiable.setModified( false );
     mbOldInfoFormat = false;
 
     // Write library container info
@@ -2139,7 +2139,7 @@ sal_Bool SfxLibraryContainer::hasElements()
     throw(RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
-    sal_Bool bRet = maNameContainer.hasElements();
+    bool bRet = maNameContainer.hasElements();
     return bRet;
 }
 
@@ -2180,7 +2180,7 @@ Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const O
     Any aElement;
     aElement <<= xNameAccess;
     maNameContainer.insertByName( Name, aElement );
-    maModifiable.setModified( sal_True );
+    maModifiable.setModified( true );
     Reference< XNameContainer > xRet( xNameAccess, UNO_QUERY );
     return xRet;
 }
@@ -2216,7 +2216,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     Any aElement;
     aElement <<= xRet;
     maNameContainer.insertByName( Name, aElement );
-    maModifiable.setModified( sal_True );
+    maModifiable.setModified( true );
 
     OUString aUserSearchStr("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE");
     OUString aSharedSearchStr("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE");
@@ -2228,7 +2228,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     else if( StorageURL.indexOf( aSharedSearchStr ) != -1 || StorageURL.indexOf( aBundledSearchStr ) != -1 )
     {
         pNewLib->mbExtension = true;
-        pNewLib->mbReadOnly = sal_True;
+        pNewLib->mbReadOnly = true;
     }
 
     return xRet;
@@ -2249,7 +2249,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     }
     // Remove from container
     maNameContainer.removeByName( Name );
-    maModifiable.setModified( sal_True );
+    maModifiable.setModified( true );
 
     // Delete library files, but not for linked libraries
     if( !pImplLib->mbLink )
@@ -2310,7 +2310,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
-    sal_Bool bRet = pImplLib->mbLoaded;
+    bool bRet = pImplLib->mbLoaded;
     return bRet;
 }
 
@@ -2324,8 +2324,8 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
     aLibAny >>= xNameAccess;
     SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
 
-    sal_Bool bLoaded = pImplLib->mbLoaded;
-    pImplLib->mbLoaded = sal_True;
+    bool bLoaded = pImplLib->mbLoaded;
+    pImplLib->mbLoaded = true;
     if( !bLoaded && xNameAccess->hasElements() )
     {
         if( pImplLib->mbPasswordProtected )
@@ -2334,7 +2334,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             return;
         }
 
-        sal_Bool bLink = pImplLib->mbLink;
+        bool bLink = pImplLib->mbLink;
         bool bStorage = mxStorage.is() && !bLink;
 
         uno::Reference< embed::XStorage > xLibrariesStor;
@@ -2449,7 +2449,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 pImplLib->maNameContainer.insertByName( aElementName, aAny );
             }
         }
-        pImplLib->implSetModified( sal_False );
+        pImplLib->implSetModified( false );
     }
 }
 
@@ -2459,7 +2459,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
-    sal_Bool bRet = pImplLib->mbLink;
+    bool bRet = pImplLib->mbLink;
     return bRet;
 }
 
@@ -2468,7 +2468,7 @@ OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
-    sal_Bool bLink = pImplLib->mbLink;
+    bool bLink = pImplLib->mbLink;
     if( !bLink )
     {
         throw IllegalArgumentException();
@@ -2482,7 +2482,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
-    sal_Bool bRet = pImplLib->mbReadOnly || (pImplLib->mbLink && pImplLib->mbReadOnlyLink);
+    bool bRet = pImplLib->mbReadOnly || (pImplLib->mbLink && pImplLib->mbReadOnlyLink);
     return bRet;
 }
 
@@ -2493,19 +2493,19 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
     SfxLibrary* pImplLib = getImplLib( Name );
     if( pImplLib->mbLink )
     {
-        if( pImplLib->mbReadOnlyLink != bReadOnly )
+        if( (pImplLib->mbReadOnlyLink ? 1 : 0) != bReadOnly )
         {
             pImplLib->mbReadOnlyLink = bReadOnly;
-            pImplLib->implSetModified( sal_True );
-            maModifiable.setModified( sal_True );
+            pImplLib->implSetModified( true );
+            maModifiable.setModified( true );
         }
     }
     else
     {
-        if( pImplLib->mbReadOnly != bReadOnly )
+        if( (pImplLib->mbReadOnly ? 1 : 0) != bReadOnly )
         {
             pImplLib->mbReadOnly = bReadOnly;
-            pImplLib->implSetModified( sal_True );
+            pImplLib->implSetModified( true );
         }
     }
 }
@@ -2533,7 +2533,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
     // Remove from container
     maNameContainer.removeByName( Name );
-    maModifiable.setModified( sal_True );
+    maModifiable.setModified( true );
 
     // Rename library folder, but not for linked libraries
     bool bMovedSuccessful = true;
@@ -2620,7 +2620,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                 }
 
                 bMovedSuccessful = true;
-                pImplLib->implSetModified( sal_True );
+                pImplLib->implSetModified( true );
             }
         }
         catch(const Exception& )
@@ -2632,7 +2632,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
     if( bStorage && !pImplLib->mbLink )
     {
-        pImplLib->implSetModified( sal_True );
+        pImplLib->implSetModified( true );
     }
     if( bMovedSuccessful )
     {
@@ -2849,7 +2849,7 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
-    sal_Bool bLink = pImplLib->mbLink;
+    bool bLink = pImplLib->mbLink;
     if( !bLink )
     {
         throw IllegalArgumentException();
@@ -2969,15 +2969,15 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , mxSFI( xSFI )
         , mrModifiable( _rModifiable )
         , maNameContainer( aType )
-        , mbLoaded( sal_True )
-        , mbIsModified( sal_True )
+        , mbLoaded( true )
+        , mbIsModified( true )
         , mbInitialised( false )
-        , mbLink( sal_False )
-        , mbReadOnly( sal_False )
-        , mbReadOnlyLink( sal_False )
-        , mbPreload( sal_False )
-        , mbPasswordProtected( sal_False )
-        , mbPasswordVerified( sal_False )
+        , mbLink( false )
+        , mbReadOnly( false )
+        , mbReadOnlyLink( false )
+        , mbPreload( false )
+        , mbPasswordProtected( false )
+        , mbPasswordVerified( false )
         , mbDoc50Password( false )
         , mbSharedIndexFile( false )
         , mbExtension( false )
@@ -2986,30 +2986,30 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
 
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
     const Reference< XComponentContext >& xContext, const Reference< XSimpleFileAccess3 >& xSFI,
-    const OUString& aLibInfoFileURL, const OUString& aStorageURL, sal_Bool ReadOnly )
+    const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly )
         : OComponentHelper( m_aMutex )
         , mxContext( xContext )
         , mxSFI( xSFI )
         , mrModifiable( _rModifiable )
         , maNameContainer( aType )
-        , mbLoaded( sal_False )
-        , mbIsModified( sal_True )
+        , mbLoaded( false )
+        , mbIsModified( true )
         , mbInitialised( false )
         , maLibInfoFileURL( aLibInfoFileURL )
         , maStorageURL( aStorageURL )
-        , mbLink( sal_True )
-        , mbReadOnly( sal_False )
+        , mbLink( true )
+        , mbReadOnly( false )
         , mbReadOnlyLink( ReadOnly )
-        , mbPreload( sal_False )
-        , mbPasswordProtected( sal_False )
-        , mbPasswordVerified( sal_False )
+        , mbPreload( false )
+        , mbPasswordProtected( false )
+        , mbPasswordVerified( false )
         , mbDoc50Password( false )
         , mbSharedIndexFile( false )
         , mbExtension( false )
 {
 }
 
-void SfxLibrary::implSetModified( sal_Bool _bIsModified )
+void SfxLibrary::implSetModified( bool _bIsModified )
 {
     if ( mbIsModified == _bIsModified )
     {
@@ -3018,7 +3018,7 @@ void SfxLibrary::implSetModified( sal_Bool _bIsModified )
     mbIsModified = _bIsModified;
     if ( mbIsModified )
     {
-        mrModifiable.setModified( sal_True );
+        mrModifiable.setModified( true );
     }
 }
 
@@ -3053,7 +3053,7 @@ Type SfxLibrary::getElementType()
 sal_Bool SfxLibrary::hasElements()
     throw(RuntimeException, std::exception)
 {
-    sal_Bool bRet = maNameContainer.hasElements();
+    bool bRet = maNameContainer.hasElements();
     return bRet;
 }
 
@@ -3076,7 +3076,7 @@ Sequence< OUString > SfxLibrary::getElementNames()
 sal_Bool SfxLibrary::hasByName( const OUString& aName )
     throw(RuntimeException, std::exception)
 {
-    sal_Bool bRet = maNameContainer.hasByName( aName );
+    bool bRet = maNameContainer.hasByName( aName );
     return bRet;
 }
 
@@ -3119,7 +3119,7 @@ void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
         "SfxLibrary::replaceByName: replacing element is invalid!");
 
     maNameContainer.replaceByName( aName, aElement );
-    implSetModified( sal_True );
+    implSetModified( true );
 }
 
 
@@ -3135,13 +3135,13 @@ void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
         "SfxLibrary::insertByName: to-be-inserted element is invalid!");
 
     maNameContainer.insertByName( aName, aElement );
-    implSetModified( sal_True );
+    implSetModified( true );
 }
 
 void SfxLibrary::impl_removeWithoutChecks( const OUString& _rElementName )
 {
     maNameContainer.removeByName( _rElementName );
-    implSetModified( sal_True );
+    implSetModified( true );
 
     // Remove element file
     if( !maStorageURL.isEmpty() )

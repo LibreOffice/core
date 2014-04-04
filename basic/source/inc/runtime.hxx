@@ -149,8 +149,8 @@ class SbiInstance
     SbError         nErr;
     OUString        aErrorMsg;      // last error message for $ARG
     sal_Int32       nErl;           // current error line
-    sal_Bool        bReschedule;    // Flag: sal_True = Reschedule in main loop
-    sal_Bool        bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
+    bool        bReschedule;    // Flag: sal_True = Reschedule in main loop
+    bool        bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
 public:
@@ -178,10 +178,10 @@ public:
     SbError GetErr()                { return nErr; }
     OUString  GetErrorMsg()           { return aErrorMsg; }
     sal_Int32 GetErl()             { return nErl; }
-    void    EnableReschedule( sal_Bool bEnable ) { bReschedule = bEnable; }
-    sal_Bool    IsReschedule( void ) { return bReschedule; }
-    void    EnableCompatibility( sal_Bool bEnable ) { bCompatibility = bEnable; }
-    sal_Bool    IsCompatibility( void ) { return bCompatibility; }
+    void    EnableReschedule( bool bEnable ) { bReschedule = bEnable; }
+    bool    IsReschedule( void ) { return bReschedule; }
+    void    EnableCompatibility( bool bEnable ) { bCompatibility = bEnable; }
+    bool    IsCompatibility( void ) { return bCompatibility; }
 
     ComponentVector_t& getComponentVector( void )  { return ComponentVector; }
 
@@ -223,7 +223,7 @@ struct RefSaveItem
 
 class SbiRuntime
 {
-    friend void SbRtl_CallByName( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
+    friend void SbRtl_CallByName( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 
     typedef void( SbiRuntime::*pStep0 )();
     typedef void( SbiRuntime::*pStep1 )( sal_uInt32 nOp1 );

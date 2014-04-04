@@ -366,9 +366,9 @@ DocObjectWrapper::hasMethod( const OUString& aName ) throw (RuntimeException, st
 sal_Bool SAL_CALL
 DocObjectWrapper::hasProperty( const OUString& aName ) throw (RuntimeException, std::exception)
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     if ( m_xAggInv.is() && m_xAggInv->hasProperty( aName ) )
-        bRes = sal_True;
+        bRes = true;
     else bRes = getProperty( aName ).Is();
     return bRes;
 }
@@ -1194,7 +1194,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             GetSbData()->pInst->pRun = pRt;
             if ( mbVBACompat )
             {
-                GetSbData()->pInst->EnableCompatibility( sal_True );
+                GetSbData()->pInst->EnableCompatibility( true );
             }
             while( pRt->Step() ) {}
             if( pRt->pNext )
@@ -1749,8 +1749,8 @@ bool SbModule::ExceedsLegacyModuleSize()
 class ErrorHdlResetter
 {
     Link    mErrHandler;
-    bool mbError;
-    public:
+    bool    mbError;
+public:
     ErrorHdlResetter() : mbError( false )
     {
         // save error handler
@@ -1766,6 +1766,7 @@ class ErrorHdlResetter
     DECL_LINK( BasicErrorHdl, StarBASIC * );
     bool HasError() { return mbError; }
 };
+
 IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 {
     mbError = true;
@@ -2748,7 +2749,7 @@ SbUserFormModule::Find( const OUString& rName, SbxClassType t )
 SbProperty::SbProperty( const OUString& r, SbxDataType t, SbModule* p )
         : SbxProperty( r, t ), pMod( p )
 {
-    bInvalid = sal_False;
+    bInvalid = false;
 }
 
 SbProperty::~SbProperty()

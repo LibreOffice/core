@@ -154,18 +154,18 @@ class ModifiableHelper
 private:
     ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
     ::cppu::OWeakObject&                m_rEventSource;
-    sal_Bool                            mbModified;
+    bool                                mbModified;
 
 public:
     ModifiableHelper( ::cppu::OWeakObject& _rEventSource, ::osl::Mutex& _rMutex )
         :m_aModifyListeners( _rMutex )
         ,m_rEventSource( _rEventSource )
-        ,mbModified( sal_False )
+        ,mbModified( false )
     {
     }
 
-    inline  sal_Bool    isModified() const  { return mbModified; }
-            void        setModified( sal_Bool _bModified );
+    inline  bool    isModified() const  { return mbModified; }
+            void    setModified( bool _bModified );
 
     inline  void    addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& _rxListener )
     {
@@ -215,7 +215,7 @@ class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEven
 {
     VBAScriptListenerContainer maVBAScriptListeners;
     sal_Int32 mnRunningVBAScripts;
-    sal_Bool mbVBACompat;
+    bool mbVBACompat;
     OUString msProjectName;
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       mxContext;
@@ -283,7 +283,7 @@ protected:
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) = 0;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
-          const OUString& StorageURL, sal_Bool ReadOnly ) = 0;
+          const OUString& StorageURL, bool ReadOnly ) = 0;
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) = 0;
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
     virtual void SAL_CALL writeLibraryElement
@@ -303,17 +303,17 @@ protected:
     virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) = 0;
 
     // Password encryption
-    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
+    virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
 
     // New variant for library export
-    virtual sal_Bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
+    virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                         const OUString& aTargetURL,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
 
-    virtual sal_Bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
-        sal_Bool bVerifyPasswordOnly=false )
+    virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
+                                          bool bVerifyPasswordOnly=false )
             throw(::com::sun::star::lang::WrappedTargetException,
                   ::com::sun::star::uno::RuntimeException);
 
@@ -565,8 +565,8 @@ class SfxLibrary
     ModifiableHelper&   mrModifiable;
     NameContainer       maNameContainer;
 
-    sal_Bool mbLoaded;
-    sal_Bool mbIsModified;
+    bool mbLoaded;
+    bool mbIsModified;
     bool mbInitialised;
 
 private:
@@ -577,13 +577,13 @@ private:
     OUString maUnexpandedStorageURL;
     OUString maOriginalStorageURL;
 
-    sal_Bool mbLink;
-    sal_Bool mbReadOnly;
-    sal_Bool mbReadOnlyLink;
-    sal_Bool mbPreload;
+    bool mbLink;
+    bool mbReadOnly;
+    bool mbReadOnlyLink;
+    bool mbPreload;
 
-    sal_Bool mbPasswordProtected;
-    sal_Bool mbPasswordVerified;
+    bool mbPasswordProtected;
+    bool mbPasswordVerified;
     bool mbDoc50Password;
     OUString maPassword;
 
@@ -592,7 +592,7 @@ private:
 
     // Additional functionality for localisation
     // Provide modify state including resources
-    virtual sal_Bool isModified( void ) = 0;
+    virtual bool isModified( void ) = 0;
     virtual void storeResources( void ) = 0;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) = 0;
     virtual void storeResourcesToURL( const OUString& URL,
@@ -601,8 +601,8 @@ private:
         < ::com::sun::star::embed::XStorage >& xStorage ) = 0;
 
 protected:
-    inline  sal_Bool    implIsModified() const  { return mbIsModified; }
-            void        implSetModified( sal_Bool _bIsModified );
+    inline  bool    implIsModified() const  { return mbIsModified; }
+            void    implSetModified( bool _bIsModified );
 
 private:
     /** checks whether the lib is readonly, or a readonly link, throws an IllegalArgumentException if so
@@ -630,7 +630,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL,
         const OUString& aStorageURL,
-        sal_Bool ReadOnly
+        bool ReadOnly
     );
 
     // Methods XInterface

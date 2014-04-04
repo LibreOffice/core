@@ -226,7 +226,7 @@ RTLFUNC(CBool) // JSM
     (void)pBasic;
     (void)bWrite;
 
-    sal_Bool bVal = sal_False;
+    bool bVal = false;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
@@ -980,12 +980,12 @@ RTLFUNC(FindPropertyObject)
 
 
 
-static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
-                                      sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
+static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
+                                      bool bBinary, short nBlockLen, bool bIsArray )
 {
     sal_Size nFPos = pStrm->Tell();
 
-    sal_Bool bIsVariant = !rVar.IsFixed();
+    bool bIsVariant = !rVar.IsFixed();
     SbxDataType eType = rVar.GetType();
 
     switch( eType )
@@ -1072,7 +1072,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
 
     default:
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-        return sal_False;
+        return false;
     }
 
     if( nBlockLen )
@@ -1082,8 +1082,8 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     return pStrm->GetErrorCode() ? sal_False : sal_True;
 }
 
-static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
-                                     sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
+static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
+                                     bool bBinary, short nBlockLen, bool bIsArray )
 {
     (void)bBinary;
     (void)bIsArray;
@@ -1092,7 +1092,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
     sal_Size nFPos = pStrm->Tell();
 
-    sal_Bool bIsVariant = !rVar.IsFixed();
+    bool bIsVariant = !rVar.IsFixed();
     SbxDataType eVarType = rVar.GetType();
 
     SbxDataType eSrcType = eVarType;
@@ -1183,7 +1183,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
     default:
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-        return sal_False;
+        return false;
     }
 
     if( nBlockLen )
@@ -1195,13 +1195,13 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
 
 // nCurDim = 1...n
-static sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
-    sal_Bool bBinary, short nCurDim, short* pOtherDims, sal_Bool bWrite )
+static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
+    bool bBinary, short nCurDim, short* pOtherDims, bool bWrite )
 {
     SAL_WARN_IF( nCurDim <= 0,"basic", "Bad Dim");
     short nLower, nUpper;
     if( !rArr.GetDim( nCurDim, nLower, nUpper ) )
-        return sal_False;
+        return false;
     for( short nCur = nLower; nCur <= nUpper; nCur++ )
     {
         pOtherDims[ nCurDim-1 ] = nCur;
@@ -1210,19 +1210,19 @@ static sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
         else
         {
             SbxVariable* pVar = rArr.Get( (const short*)pOtherDims );
-            sal_Bool bRet;
+            bool bRet;
             if( bWrite )
-                bRet = lcl_WriteSbxVariable(*pVar, pStrm, bBinary, 0, sal_True );
+                bRet = lcl_WriteSbxVariable(*pVar, pStrm, bBinary, 0, true );
             else
-                bRet = lcl_ReadSbxVariable(*pVar, pStrm, bBinary, 0, sal_True );
+                bRet = lcl_ReadSbxVariable(*pVar, pStrm, bBinary, 0, true );
             if( !bRet )
-                return sal_False;
+                return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
-void PutGet( SbxArray& rPar, sal_Bool bPut )
+void PutGet( SbxArray& rPar, bool bPut )
 {
     if ( rPar.Count() != 4 )
     {
@@ -1272,7 +1272,7 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
         pArr = PTR_CAST(SbxDimArray,pParObj);
     }
 
-    sal_Bool bRet;
+    bool bRet;
 
     if( pArr )
     {
@@ -1287,9 +1287,9 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
     else
     {
         if( bPut )
-            bRet = lcl_WriteSbxVariable(*pVar, pStrm, !bRandom, nBlockLen, sal_False);
+            bRet = lcl_WriteSbxVariable(*pVar, pStrm, !bRandom, nBlockLen, false);
         else
-            bRet = lcl_ReadSbxVariable(*pVar, pStrm, !bRandom, nBlockLen, sal_False);
+            bRet = lcl_ReadSbxVariable(*pVar, pStrm, !bRandom, nBlockLen, false);
     }
     if( !bRet || pStrm->GetErrorCode() )
         StarBASIC::Error( SbERR_IO_ERROR );
@@ -1300,7 +1300,7 @@ RTLFUNC(Put)
     (void)pBasic;
     (void)bWrite;
 
-    PutGet( rPar, sal_True );
+    PutGet( rPar, true );
 }
 
 RTLFUNC(Get)
@@ -1308,7 +1308,7 @@ RTLFUNC(Get)
     (void)pBasic;
     (void)bWrite;
 
-    PutGet( rPar, sal_False );
+    PutGet( rPar, false );
 }
 
 RTLFUNC(Environ)
@@ -1610,7 +1610,7 @@ RTLFUNC(EqualUnoObjects)
 // Instantiate "com.sun.star.awt.UnoControlDialog" on basis
 // of a DialogLibrary entry: Convert from XML-ByteSequence
 // and attach events. Implemented in classes\eventatt.cxx
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
+void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
 
 RTLFUNC(CreateUnoDialog)
 {
@@ -1871,7 +1871,7 @@ RTLFUNC(MonthName)
         return;
     }
 
-    sal_Bool bAbbreviate = false;
+    bool bAbbreviate = false;
     if( nParCount == 3 )
         bAbbreviate = rPar.Get(2)->GetBool();
 
@@ -1926,7 +1926,7 @@ RTLFUNC(WeekdayName)
         return;
     }
 
-    sal_Bool bAbbreviate = false;
+    bool bAbbreviate = false;
     if( nParCount >= 3 )
     {
         SbxVariable* pPar2 = rPar.Get(2);

@@ -418,7 +418,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     return aDlgLib;
 }
 
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
+void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;

@@ -1697,7 +1697,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     }
     SetErrorData( code, l, c1, c2 );
     GetSbData()->bCompiler = true;
-    sal_Bool bRet;
+    bool bRet;
     if( GetSbData()->aErrHdl.IsSet() )
     {
         bRet = (sal_Bool) GetSbData()->aErrHdl.Call( this );
