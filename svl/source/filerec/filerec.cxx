@@ -182,8 +182,9 @@ SfxMiniRecordReader::SfxMiniRecordReader
     Bytes reduziert, falls der gesuchte Record der erste in der Folge ist.
 */
 
-:   _pStream( pStream ),
-    _bSkipped( nTag == SFX_REC_PRETAG_EOR )
+    : _pStream(pStream)
+    , _nEofRec(0)
+    , _bSkipped(nTag == SFX_REC_PRETAG_EOR)
 {
     // ggf. ignorieren (s.o.)
     if ( _bSkipped )
