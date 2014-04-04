@@ -37,4 +37,3 @@ Actions=NewDocument;
 [Desktop Action NewDocument]
 Name=New Spreadsheet
 Exec=${UNIXBASISROOTNAME} --calc
-OnlyShowIn=Unity;

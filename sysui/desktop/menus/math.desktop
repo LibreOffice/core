@@ -38,4 +38,3 @@ Actions=NewDocument;
 [Desktop Action NewDocument]
 Name=New Formula
 Exec=${UNIXBASISROOTNAME} --math
-OnlyShowIn=Unity;

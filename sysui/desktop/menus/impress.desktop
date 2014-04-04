@@ -37,4 +37,3 @@ Actions=NewDocument;
 [Desktop Action NewDocument]
 Name=New Presentation
 Exec=${UNIXBASISROOTNAME} --impress
-OnlyShowIn=Unity;
