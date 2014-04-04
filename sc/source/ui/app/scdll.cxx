@@ -248,7 +248,7 @@ void ScDLL::Init()
 
     //  Child-Windows
 
-    // Hack: Eingabezeile mit 42 registrieren, damit sie im PlugIn immer sichtbar ist
+    // Hack: register input line with 42 so it is always visible in the PlugIn
     ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(static_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
