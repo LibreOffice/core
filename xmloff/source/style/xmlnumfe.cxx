@@ -707,7 +707,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
         switch ( nOp )
         {
             case NUMBERFORMAT_OP_EQ: aCondStr.append( '=' );  break;
-            case NUMBERFORMAT_OP_NE: aCondStr.appendAscii( "<>" );          break;
+            case NUMBERFORMAT_OP_NE: aCondStr.appendAscii( "!=" );          break;
             case NUMBERFORMAT_OP_LT: aCondStr.append( '<' );  break;
             case NUMBERFORMAT_OP_LE: aCondStr.appendAscii( "<=" );          break;
             case NUMBERFORMAT_OP_GT: aCondStr.append( '>' );  break;
