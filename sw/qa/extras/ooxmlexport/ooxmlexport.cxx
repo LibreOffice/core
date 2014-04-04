@@ -1344,6 +1344,21 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblPr/w:tblBorders/w:insideV", "themeTint", "99");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTcBorders, "testTcBorders.docx")
+{
+    //fdo#76635 : Table borders are not getting preserved.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+       assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:val = 'single']",1);
+       assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:sz = 4]", 1);
+       assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:space = 0]", 1);
+       assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:color = 808080]", 1);
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(testQuicktables, "quicktables.docx")
 {
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
@@ -1383,6 +1398,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71302, "fdo71302.docx")
     // This got renamed to "Strong Emphasis" without a good reason.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']", 1);
 }
+
+
+
+
 
 DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
