@@ -56,8 +56,8 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual bool            HasBoolValue() const SAL_OVERRIDE;
-    virtual bool        GetBoolValue() const SAL_OVERRIDE;
-    virtual void            SetBoolValue( sal_Bool bVal ) SAL_OVERRIDE;
+    virtual bool            GetBoolValue() const SAL_OVERRIDE;
+    virtual void            SetBoolValue( bool bVal ) SAL_OVERRIDE;
 
     inline SvxWeightItem& operator=(const SvxWeightItem& rWeight) {
             SetValue( rWeight.GetValue() );

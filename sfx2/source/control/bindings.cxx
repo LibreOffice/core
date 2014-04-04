@@ -1239,7 +1239,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                         ((SfxEnumItemInterface *)pNewItem)->HasBoolValue())
                 {
                     // and Enums with Bool-Interface
-                    ((SfxEnumItemInterface*)pNewItem)->SetBoolValue(sal_True);
+                    ((SfxEnumItemInterface*)pNewItem)->SetBoolValue(true);
                     aReq.AppendItem( *pNewItem );
                 }
                 else {

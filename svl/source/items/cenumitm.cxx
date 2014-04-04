@@ -109,7 +109,7 @@ bool SfxEnumItemInterface::GetBoolValue() const
 }
 
 // virtual
-void SfxEnumItemInterface::SetBoolValue(sal_Bool)
+void SfxEnumItemInterface::SetBoolValue(bool)
 {}
 
 SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
@@ -228,7 +228,7 @@ sal_uInt16 SfxBoolItem::GetValueCount() const
 }
 
 // virtual
-OUString SfxBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
+OUString SfxBoolItem::GetValueTextByVal(bool bTheValue) const
 {
     return bTheValue ?  OUString("TRUE") : OUString("FALSE");
 }

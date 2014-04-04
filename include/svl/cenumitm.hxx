@@ -75,7 +75,7 @@ public:
 
     virtual bool GetBoolValue() const;
 
-    virtual void SetBoolValue(sal_Bool bValue);
+    virtual void SetBoolValue(bool bValue);
 };
 
 #endif // INCLUDED_SVL_CENUMITM_HXX

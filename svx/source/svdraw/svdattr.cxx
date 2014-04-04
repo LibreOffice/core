@@ -767,7 +767,7 @@ SfxPoolItem* SdrOnOffItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrOnOffItem(Which(),rIn);
 }
 
-OUString SdrOnOffItem::GetValueTextByVal(sal_Bool bVal) const
+OUString SdrOnOffItem::GetValueTextByVal(bool bVal) const
 {
     if (bVal)
         return ImpGetResStr(STR_ItemValON);
@@ -799,7 +799,7 @@ SfxPoolItem* SdrYesNoItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrYesNoItem(Which(),rIn);
 }
 
-OUString SdrYesNoItem::GetValueTextByVal(sal_Bool bVal) const
+OUString SdrYesNoItem::GetValueTextByVal(bool bVal) const
 {
     if (bVal)
         return ImpGetResStr(STR_ItemValYES);
@@ -1084,7 +1084,10 @@ bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return true; }
 
 bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
 
-void SdrTextFitToSizeTypeItem::SetBoolValue(sal_Bool bVal) { SetValue(sal::static_int_cast< sal_uInt16 >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE)); }
+void SdrTextFitToSizeTypeItem::SetBoolValue(bool bVal)
+{
+    SetValue(sal::static_int_cast< sal_uInt16 >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE));
+}
 
 bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {

@@ -113,7 +113,7 @@ public:
 
     virtual sal_uInt16 GetValueCount() const;
 
-    virtual OUString GetValueTextByVal(sal_Bool bTheValue) const;
+    virtual OUString GetValueTextByVal(bool bTheValue) const;
 
 };
 

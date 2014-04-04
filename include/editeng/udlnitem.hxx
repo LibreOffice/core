@@ -58,8 +58,8 @@ public:
     void                    SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     virtual bool            HasBoolValue() const SAL_OVERRIDE;
-    virtual bool        GetBoolValue() const SAL_OVERRIDE;
-    virtual void            SetBoolValue( sal_Bool bVal ) SAL_OVERRIDE;
+    virtual bool            GetBoolValue() const SAL_OVERRIDE;
+    virtual void            SetBoolValue( bool bVal ) SAL_OVERRIDE;
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 

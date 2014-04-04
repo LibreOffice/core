@@ -607,7 +607,7 @@ bool SvxPostureItem::GetBoolValue() const
 
 
 
-void SvxPostureItem::SetBoolValue( sal_Bool bVal )
+void SvxPostureItem::SetBoolValue( bool bVal )
 {
     SetValue( (sal_uInt16)(bVal ? ITALIC_NORMAL : ITALIC_NONE) );
 }
@@ -637,7 +637,7 @@ bool SvxWeightItem::GetBoolValue() const
 
 
 
-void SvxWeightItem::SetBoolValue( sal_Bool bVal )
+void SvxWeightItem::SetBoolValue( bool bVal )
 {
     SetValue( (sal_uInt16)(bVal ? WEIGHT_BOLD : WEIGHT_NORMAL) );
 }
@@ -1292,7 +1292,7 @@ bool SvxTextLineItem::GetBoolValue() const
 
 
 
-void SvxTextLineItem::SetBoolValue( sal_Bool bVal )
+void SvxTextLineItem::SetBoolValue( bool bVal )
 {
     SetValue( (sal_uInt16)(bVal ? UNDERLINE_SINGLE : UNDERLINE_NONE) );
 }
@@ -1522,7 +1522,7 @@ bool SvxCrossedOutItem::GetBoolValue() const
 
 
 
-void SvxCrossedOutItem::SetBoolValue( sal_Bool bVal )
+void SvxCrossedOutItem::SetBoolValue( bool bVal )
 {
     SetValue( (sal_uInt16)(bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE) );
 }

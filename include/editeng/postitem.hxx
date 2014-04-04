@@ -49,15 +49,15 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
     virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual bool            HasBoolValue() const SAL_OVERRIDE;
-    virtual bool        GetBoolValue() const SAL_OVERRIDE;
-    virtual void            SetBoolValue( sal_Bool bVal ) SAL_OVERRIDE;
+    virtual bool            GetBoolValue() const SAL_OVERRIDE;
+    virtual void            SetBoolValue( bool bVal ) SAL_OVERRIDE;
 
     inline SvxPostureItem& operator=(const SvxPostureItem& rPost) {
         SetValue( rPost.GetValue() );

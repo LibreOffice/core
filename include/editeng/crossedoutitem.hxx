@@ -59,7 +59,7 @@ public:
 
     virtual bool            HasBoolValue() const SAL_OVERRIDE;
     virtual bool            GetBoolValue() const SAL_OVERRIDE;
-    virtual void            SetBoolValue( sal_Bool bVal ) SAL_OVERRIDE;
+    virtual void            SetBoolValue( bool bVal ) SAL_OVERRIDE;
 
     inline SvxCrossedOutItem& operator=(const SvxCrossedOutItem& rCross)
         {
