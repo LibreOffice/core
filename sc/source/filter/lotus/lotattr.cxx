@@ -41,6 +41,7 @@ using namespace ::com::sun::star;
 
 LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
     : pPattAttr(p)
+    , nHash0(0)
 {
 }
 
