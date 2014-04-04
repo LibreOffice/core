@@ -413,10 +413,20 @@ class SwFltOutDoc : public SwFltOutBase
 public:
     SwFltOutDoc(SwDoc& rDocu, SwPaM* pP, SwFltControlStack& rStk,
         SwFltEndStack& rEStk)
-    : SwFltOutBase(rDocu), rStack(rStk), rEndStack(rEStk), pPaM(pP),
-          pFly(0), pTable(0), pTabSavedPos(0), pFlySavedPos(0),
-          nTableWidth(0), bReadNoTbl(sal_False)
-    {}
+        : SwFltOutBase(rDocu)
+        , rStack(rStk)
+        , rEndStack(rEStk)
+        , pPaM(pP)
+        , pFly(0)
+        , pTable(0)
+        , pTabSavedPos(0)
+        , pFlySavedPos(0)
+        , nTableWidth(0)
+        , usTableX(0)
+        , usTableY(0)
+        , bReadNoTbl(sal_False)
+    {
+    }
 
     void SetReadNoTable()           { bReadNoTbl = sal_True; }
     sal_Bool IsTableWidthSet() const    { return 0 != nTableWidth; }
