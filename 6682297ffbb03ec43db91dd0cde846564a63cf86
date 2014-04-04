@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_08d34739",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T19:58:39Z",
+      "side": 1,
+      "message": "For that to work you need to calculate the null-date the same as it is done in analysishelper, there it (and any other date used in calculations) is expressed as the number of days since 0001-01-01 (in the proleptic Gregorian calendar). Which effectively is another date serial number, just with a different null-date ;-)  If you then normalize all date serial numbers by adding the null-date serial number you can use this GetDayOfWeek() method.\n\nSee also the comment I added to interpr2.cxx",
+      "parentUuid": "ba7be1f8_c8e68f44",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_089b47ca",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I overlooked that one...\nNow it will be more difficult to obtain the used Null date.\nIn scaddins, the Null date is obtained with an extra argument (const css::uno::Reference\u003c css::beans::XPropertySet \u003e\u0026 xOptions).\nI will try to make it work as it should be; I need Null date to get proper day of week values.",
       "parentUuid": "ba7be1f8_089b47ca",
+      "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_28bf2bd2",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T19:58:39Z",
+      "side": 1,
+      "message": "You\u0027re overcomplicating things. You already have the document\u0027s null-date, it is pFormatter-\u003eGetNullDate(), on which all date serial numbers used in the document are offset. From there are two ways to obtain the day-of-week for all date serial numbers:\n\n1. calculate NullDate.GetDayOfWeek() once, the result is a number between 0 and 6 (expressed as DayOfWeek enum). Calculate all date serial numbers modulo 7 and add that NullDateDay, do modulo 7 on the result again.\n\n2. convert NullDate to days (since 0001-01-01) using Date::DateToDays(), then for all date serial numbers add the number and those days, then call your new GetDayOfWeek() with the result.",
+      "parentUuid": "ba7be1f8_c8bdaf04",
       "revId": "6682297ffbb03ec43db91dd0cde846564a63cf86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
