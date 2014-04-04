@@ -34,6 +34,8 @@ void RscFileInst::Init()
 
 RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
                           sal_uLong lFIndex, FILE * fFile )
+    : nErrorLine(0)
+    , nErrorPos(0)
 {
     pTypCont = pTC;
     Init();
