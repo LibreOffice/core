@@ -40,7 +40,7 @@ protected:
 
 public:
 
-                        IMapCircleObject() {};
+                        IMapCircleObject() : nRadius(0) {}
                         IMapCircleObject( const Point& rCenter, sal_uLong nRad,
                                           const OUString& rURL,
                                           const OUString& rAltText,
@@ -49,7 +49,7 @@ public:
                                           const OUString& rName,
                                           bool bActive = true,
                                           bool bPixelCoords = true );
-    virtual             ~IMapCircleObject() {};
+    virtual             ~IMapCircleObject() {}
 
     virtual sal_uInt16  GetType() const SAL_OVERRIDE;
     virtual bool        IsHit( const Point& rPoint ) const SAL_OVERRIDE;
