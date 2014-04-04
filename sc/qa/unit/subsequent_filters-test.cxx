@@ -465,9 +465,9 @@ void ScFiltersTest::testFunctionsExcel2010()
         { 40, true  },
         { 41, true  },
         { 42, true  },
-        { 43, false }, // fdo73147 to be set to true
+        { 43, true  },
         { 44, true  },
-        { 45, true  },
+        { 45, false },  // name=[ NETWORKDAYS.INTL ], result=18, expected=19
         { 46, true  },
         { 47, true  },
         { 48, true  },
@@ -488,14 +488,21 @@ void ScFiltersTest::testFunctionsExcel2010()
         { 63, true  },
         { 64, true  },
         { 65, true  },
-        { 66, false },
+        { 66, true  },
         { 67, true  },
         { 68, true  },
         { 69, true  },
         { 70, true  },
         { 71, true  },
-        { 72, false }, // fdo73147 to be set to true
-        { 73, true  }
+        { 72, true  },
+        { 73, true  },
+        { 74, true  },
+        { 75, true  },
+        { 76, true  },
+        { 77, true  },
+        { 78, true  },
+        { 79, false },  // name=[ WORKDAY.INTL ], result=41755 , expected=41754
+        { 80, true  }
     };
 
     for (size_t i=0; i < SAL_N_ELEMENTS(aTests); ++i)
