@@ -19,6 +19,7 @@
 
 #include "sal/config.h"
 
+#include "boost/noncopyable.hpp"
 #include "boost/static_assert.hpp"
 
 #include "storcach.hxx"
@@ -224,7 +225,8 @@ namespace store
 
 class PageCache_Impl :
     public store::OStoreObject,
-    public store::PageCache
+    public store::PageCache,
+    private boost::noncopyable
 {
     // Representation
     static size_t const theTableSize = 32;
@@ -267,10 +269,6 @@ class PageCache_Impl :
 
     virtual storeError removePageAt_Impl (
         sal_uInt32 nOffset) SAL_OVERRIDE;
-
-    // Not implemented
-    PageCache_Impl (PageCache_Impl const &);
-    PageCache_Impl & operator= (PageCache_Impl const &);
 
 public:
     // Construction

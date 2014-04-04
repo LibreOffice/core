@@ -19,6 +19,7 @@
 
 #include "storbase.hxx"
 
+#include "boost/noncopyable.hpp"
 #include "sal/types.h"
 #include "rtl/alloc.h"
 #include "rtl/ref.hxx"
@@ -73,7 +74,8 @@ namespace store
 
 class PageData::Allocator_Impl :
     public store::OStoreObject,
-    public store::PageData::Allocator
+    public store::PageData::Allocator,
+    private boost::noncopyable
 {
 public:
     /** Construction (two phase).
@@ -108,11 +110,6 @@ private:
      */
     virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) SAL_OVERRIDE;
     virtual void deallocate_Impl (void * pPage) SAL_OVERRIDE;
-
-    /** Not implemented.
-     */
-    Allocator_Impl (Allocator_Impl const &);
-    Allocator_Impl & operator= (Allocator_Impl const &);
 };
 
 } // namespace store

@@ -19,6 +19,7 @@
 
 #include "lockbyte.hxx"
 
+#include "boost/noncopyable.hpp"
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "osl/file.h"
@@ -276,7 +277,8 @@ struct FileHandle
 
 class FileLockBytes :
     public store::OStoreObject,
-    public store::ILockBytes
+    public store::ILockBytes,
+    private boost::noncopyable
 {
     /** Representation.
      */
@@ -300,11 +302,6 @@ class FileLockBytes :
     virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
 
     virtual storeError flush_Impl() SAL_OVERRIDE;
-
-    /** Not implemented.
-     */
-    FileLockBytes (FileLockBytes const &);
-    FileLockBytes & operator= (FileLockBytes const &);
 
 public:
     /** Construction.
@@ -516,7 +513,8 @@ struct FileMapping
 class MappedLockBytes :
     public store::OStoreObject,
     public store::PageData::Allocator,
-    public store::ILockBytes
+    public store::ILockBytes,
+    private boost::noncopyable
 {
     /** Representation.
      */
@@ -544,11 +542,6 @@ class MappedLockBytes :
     virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
 
     virtual storeError flush_Impl() SAL_OVERRIDE;
-
-    /** Not implemented.
-     */
-    MappedLockBytes (MappedLockBytes const &);
-    MappedLockBytes & operator= (MappedLockBytes const &);
 
 public:
     /** Construction.
@@ -674,7 +667,8 @@ namespace store
 
 class MemoryLockBytes :
     public store::OStoreObject,
-    public store::ILockBytes
+    public store::ILockBytes,
+    private boost::noncopyable
 {
     /** Representation.
      */
@@ -696,11 +690,6 @@ class MemoryLockBytes :
     virtual storeError setSize_Impl (sal_uInt32 nSize) SAL_OVERRIDE;
 
     virtual storeError flush_Impl() SAL_OVERRIDE;
-
-    /** Not implemented.
-     */
-    MemoryLockBytes (MemoryLockBytes const &);
-    MemoryLockBytes& operator= (MemoryLockBytes const &);
 
 public:
     /** Construction.

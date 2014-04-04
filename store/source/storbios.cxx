@@ -76,26 +76,6 @@ struct OStoreSuperBlock
           m_aUnused (0)
     {}
 
-    OStoreSuperBlock (const OStoreSuperBlock & rhs)
-        : m_aGuard  (rhs.m_aGuard),
-          m_aDescr  (rhs.m_aDescr),
-          m_nMarked (rhs.m_nMarked),
-          m_aMarked (rhs.m_aMarked),
-          m_nUnused (rhs.m_nUnused),
-          m_aUnused (rhs.m_aUnused)
-    {}
-
-    OStoreSuperBlock& operator= (const OStoreSuperBlock & rhs)
-    {
-        m_aGuard  = rhs.m_aGuard;
-        m_aDescr  = rhs.m_aDescr;
-        m_nMarked = rhs.m_nMarked;
-        m_aMarked = rhs.m_aMarked;
-        m_nUnused = rhs.m_nUnused;
-        m_aUnused = rhs.m_aUnused;
-        return *this;
-    }
-
     /** Comparison.
      */
     bool operator== (const OStoreSuperBlock & rhs) const
