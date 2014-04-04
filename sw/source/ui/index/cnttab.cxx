@@ -473,30 +473,11 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            OUString sTemplate("internal/idxexample");
-
-            OUString sTemplateWithoutExt( sTemplate );
-            sTemplate += ".odt";
+            OUString sTemplate("internal/idxexample.odt");
 
             SvtPathOptions aOpt;
             aOpt.SetTemplatePath(OUString(LIBO_SHARE_FOLDER "/template/common"));
-            // 6.0 (extension .sxw)
             bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
-
-            if( !bExist )
-            {
-                // 6.0 (extension .sxw)
-                sTemplate = sTemplateWithoutExt;
-                sTemplate += ".sxw";
-                bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
-            }
-            if( !bExist )
-            {
-                // 5.0 (extension .vor)
-                sTemplate = sTemplateWithoutExt;
-                sTemplate += ".sdw";
-                bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
-            }
 
             if(!bExist)
             {
