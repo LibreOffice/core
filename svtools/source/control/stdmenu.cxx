@@ -64,24 +64,27 @@ void FontNameMenu::Fill( const FontList* pList )
     Clear();
 
     // add fonts
-    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    // more than 100 fonts reduces the speed of opening the menu.
-    // So only the first 100 fonts will be displayed.
-    sal_uInt16 nFontCount = ::std::min( pList->GetFontNameCount(), static_cast< sal_uInt16 >(100) );
-    for (sal_uInt16 i = 0; i < nFontCount; ++i)
+    if (pList)
     {
-        const OUString& rName = pList->GetFontName( i ).GetName();
-
-        // sort with the I18nHelper
-        sal_uInt16 j = GetItemCount();
-        while ( j )
+        const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+        // more than 100 fonts reduces the speed of opening the menu.
+        // So only the first 100 fonts will be displayed.
+        sal_uInt16 nFontCount = ::std::min( pList->GetFontNameCount(), static_cast< sal_uInt16 >(100) );
+        for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
-            OUString aText = GetItemText( GetItemId( j-1 ) );
-            if ( rI18nHelper.CompareString( rName, aText ) > 0 )
-                break;
-            j--;
+            const OUString& rName = pList->GetFontName( i ).GetName();
+
+            // sort with the I18nHelper
+            sal_uInt16 j = GetItemCount();
+            while ( j )
+            {
+                OUString aText = GetItemText( GetItemId( j-1 ) );
+                if ( rI18nHelper.CompareString( rName, aText ) > 0 )
+                    break;
+                j--;
+            }
+            InsertItem( i+1, rName, MIB_RADIOCHECK | MIB_AUTOCHECK, OString(), j );
         }
-        InsertItem( i+1, rName, MIB_RADIOCHECK | MIB_AUTOCHECK, OString(), j );
     }
 
     SetCurName( maCurName );
