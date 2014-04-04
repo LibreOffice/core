@@ -69,8 +69,13 @@
 #include <osl/thread.h>
 
 LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
-    : LwpDLNFPVList(objHdr, pStrm), m_pOwnedFoundry(NULL), m_pLnOpts(NULL)
-{}
+    : LwpDLNFPVList(objHdr, pStrm)
+    , m_pOwnedFoundry(NULL)
+    , m_nFlags(0)
+    , m_nPersistentFlags(0)
+    , m_pLnOpts(NULL)
+{
+}
 
 LwpDocument::~LwpDocument()
 {
