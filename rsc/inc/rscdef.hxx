@@ -83,7 +83,10 @@ public:
 
             RscId( RscDefine * pEle );
             RscId( sal_Int32 lNumber )
-                    { aExp.SetLong( lNumber );          }
+            {
+                aExp.cUnused = false;
+                aExp.SetLong( lNumber );
+            }
 
             RscId( const RscExpType & rExpType )
                     { Create( rExpType );               }
