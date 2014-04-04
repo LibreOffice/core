@@ -521,21 +521,6 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) 
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
 }
 
-void ScAccessibleContextBase::ChangeName()
-{
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
-    aEvent.OldValue <<= msName;
-
-    msName = ""; // reset the name so it will be hold again
-    getAccessibleName(); // create the new name
-
-    aEvent.NewValue <<= msName;
-
-    CommitChange(aEvent);
-}
-
 void ScAccessibleContextBase::CommitFocusGained() const
 {
     AccessibleEventObject aEvent;

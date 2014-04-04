@@ -284,10 +284,6 @@ public:
     void
         CommitChange(const com::sun::star::accessibility::AccessibleEventObject& rEvent) const;
 
-    /// change the name and call the listener to tell they the change
-    void
-        ChangeName();
-
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
     void CommitFocusGained() const;

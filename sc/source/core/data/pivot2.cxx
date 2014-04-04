@@ -215,15 +215,6 @@ ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnDupCount(0)
 {}
 
-ScPivotFuncData::ScPivotFuncData(SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask,
-                                 sal_uInt8 nDupCount, const DataPilotFieldReference& rFieldRef) :
-    mnCol(nCol),
-    mnOriginalDim(nOriginalDim),
-    mnFuncMask(nFuncMask),
-    mnDupCount(nDupCount),
-    maFieldRef(rFieldRef)
-{}
-
 bool ScPivotFuncData::operator== (const ScPivotFuncData& rFuncData) const
 {
     if (mnCol != rFuncData.mnCol ||

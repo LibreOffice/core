@@ -184,7 +184,7 @@ apitest::XTextContent::testGetAnchor()
 apitest::XTextField::testGetPresentation()
 basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
 basegfx::tools::equal(basegfx::B2DPolygon const&, basegfx::B2DPolygon const&, double const&)
-basegfx::tools::equal(basegfx::B3DPolyPolygon const&, basegfx::B3DPolyPolygon const&)
+basegfx::tools::equal(basegfx::B3DPolygon const&, basegfx::B3DPolygon const&, double const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::GL3DBarChartDialogController::GL3DBarChartDialogController()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
@@ -198,7 +198,6 @@ connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-rtl_OUString::convertFromString::test()
 sc::CLBuildKernelThread::CLBuildKernelThread()
 sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::finish()

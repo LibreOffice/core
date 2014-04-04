@@ -163,8 +163,6 @@ struct ScPivotFuncData
     css::sheet::DataPilotFieldReference maFieldRef;
 
     explicit ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
-    explicit ScPivotFuncData( SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
-                              const css::sheet::DataPilotFieldReference& rFieldRef );
 
     bool operator== (const ScPivotFuncData& r) const;
 
