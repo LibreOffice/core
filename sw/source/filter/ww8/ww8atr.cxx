@@ -2132,6 +2132,17 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
                     sStr += "\\h \"A\" ";
 
+                if(nsSwTOXElement::TOX_INDEX_ENTRY_TYPE & pTOX->GetCreateType())
+                {
+                    sStr += "\\f ";
+                    OUString sName = pTOX->GetEntryTypeName();
+                    if(!sName.isEmpty())
+                    {
+                       sStr += sName;
+                       sStr += sEntryEnd;
+                    }
+                 }
+
                 if (!pTOX->GetTOXForm().IsCommaSeparated())
                 {
                     // In case of Run-in style no separators are added.

@@ -531,6 +531,7 @@
 #define UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES "FooterUserDefinedAttributes"
 #define UNO_NAME_PARA_SHADOW_FORMAT "ParaShadowFormat"
 #define UNO_NAME_CONTOUR_POLY_POLYGON "ContourPolyPolygon"
+#define UNO_NAME_INDEX_ENTRY_TYPE "IndexEntryType"
 
 #define UNO_NAME_IS_PIXEL_CONTOUR "IsPixelContour"
 #define UNO_NAME_IS_AUTOMATIC_CONTOUR "IsAutomaticContour"
