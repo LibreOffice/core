@@ -124,7 +124,7 @@ SwStdFontConfig::SwStdFontConfig() :
                 else
                 {
                    pValues[nProp] >>= nDefaultFontHeight[nProp - DEF_FONT_COUNT];
-                   nDefaultFontHeight[nProp - DEF_FONT_COUNT] = MM100_TO_TWIP(nDefaultFontHeight[nProp - DEF_FONT_COUNT]);
+                   nDefaultFontHeight[nProp - DEF_FONT_COUNT] = convertMm100ToTwip(nDefaultFontHeight[nProp - DEF_FONT_COUNT]);
                 }
             }
         }
@@ -156,7 +156,7 @@ void    SwStdFontConfig::Commit()
         else
         {
             if(nDefaultFontHeight[nProp - DEF_FONT_COUNT] > 0)
-                pValues[nProp] <<= static_cast<sal_Int32>(TWIP_TO_MM100(nDefaultFontHeight[nProp - DEF_FONT_COUNT]));
+                pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nDefaultFontHeight[nProp - DEF_FONT_COUNT]));
         }
     }
     PutProperties(aNames, aValues);

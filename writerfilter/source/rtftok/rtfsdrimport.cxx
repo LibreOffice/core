@@ -28,6 +28,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
+#include <tools/mapunit.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include "../dmapper/GraphicHelpers.hxx"
@@ -38,8 +39,6 @@
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
-
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
 namespace writerfilter {
 namespace rtftok {
@@ -527,21 +526,21 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             }
         }
         else if (i->first == "groupLeft")
-            oGroupLeft.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oGroupLeft.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "groupTop")
-            oGroupTop.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oGroupTop.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "groupRight")
-            oGroupRight.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oGroupRight.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "groupBottom")
-            oGroupBottom.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oGroupBottom.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "relLeft")
-            oRelLeft.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oRelLeft.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "relTop")
-            oRelTop.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oRelTop.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "relRight")
-            oRelRight.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oRelRight.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "relBottom")
-            oRelBottom.reset(TWIP_TO_MM100(i->second.toInt32()));
+            oRelBottom.reset(convertTwipToMm100(i->second.toInt32()));
         else if (i->first == "fBehindDocument")
             bOpaque = !i->second.toInt32();
         else if (i->first == "pctHoriz" || i->first == "pctVert")

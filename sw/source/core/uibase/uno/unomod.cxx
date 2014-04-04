@@ -639,7 +639,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
-            aSize.Width() = MM100_TO_TWIP( nTmp );
+            aSize.Width() = convertMm100ToTwip( nTmp );
             mpViewOption->SetSnapSize( aSize );
         }
         break;
@@ -649,7 +649,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
-            aSize.Height() = MM100_TO_TWIP( nTmp );
+            aSize.Height() = convertMm100ToTwip( nTmp );
             mpViewOption->SetSnapSize( aSize );
         }
         break;
@@ -861,11 +861,11 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : bBoolVal = mpConstViewOption->IsShowScrollBarTips(); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
             bBool = false;
-            rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Width());
+            rValue <<= (sal_Int32) convertTwipToMm100(mpConstViewOption->GetSnapSize().Width());
         break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
             bBool = false;
-            rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Height());
+            rValue <<= (sal_Int32) convertTwipToMm100(mpConstViewOption->GetSnapSize().Height());
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
             bBool = false;

@@ -527,7 +527,7 @@ DECLARE_OOXMLIMPORT_TEST(testN766487, "n766487.docx")
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-360)), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-360)), nValue);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN693238, "n693238.docx")
@@ -1272,7 +1272,7 @@ DECLARE_OOXMLIMPORT_TEST(testPageBorderShadow, "page-border-shadow.docx")
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(48/8*20)), aShadow.ShadowWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(convertTwipToMm100(48/8*20)), aShadow.ShadowWidth);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN816593, "n816593.docx")
@@ -1343,7 +1343,7 @@ DECLARE_OOXMLIMPORT_TEST(testTableAutoColumnFixedSize, "table-auto-column-fixed-
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
     // Width was not recognized during import when table size was 'auto'
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo46361, "fdo46361.docx")
@@ -1934,9 +1934,9 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "BottomMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "BottomMargin"));
     // This was only 1397, same issue
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(792 * 20)), getProperty<sal_Int32>(xPageStyle, "Height"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(792 * 20)), getProperty<sal_Int32>(xPageStyle, "Height"));
     // Text was missing, due to not handling the strict namespaces.
     getParagraph(1, "Hello world!");
 

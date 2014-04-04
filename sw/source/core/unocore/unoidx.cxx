@@ -2888,7 +2888,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 {
                     throw lang::IllegalArgumentException();
                 }
-                nPosition = MM100_TO_TWIP(nPosition);
+                nPosition = convertMm100ToTwip(nPosition);
                 if(nPosition < 0)
                 {
                     throw lang::IllegalArgumentException();
@@ -3133,7 +3133,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 else
                 {
                     pArr[1].Name = "TabStopPosition";
-                    sal_Int32 nPos = (TWIP_TO_MM100(aToken.nTabStopPosition));
+                    sal_Int32 nPos = (convertTwipToMm100(aToken.nTabStopPosition));
                     if(nPos < 0)
                         nPos = 0;
                     pArr[1].Value <<= (sal_Int32)nPos;

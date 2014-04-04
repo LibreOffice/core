@@ -2153,7 +2153,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     if( rStyleProps != NULL && pBorderLine && !pBorderLine->isEmpty() &&
             pBorderLine->GetBorderLineStyle() == rStyleProps->LineStyle &&
             pBorderLine->GetColor() == rStyleProps->Color &&
-            (sal_uInt32) pBorderLine->GetWidth() == MM100_TO_TWIP_UNSIGNED( rStyleProps->LineWidth ) )
+            pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
         return;
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
@@ -7019,7 +7019,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             m_bParaBeforeAutoSpacing = true;
             // get fixed value which was set during import
             i->second >>= m_nParaBeforeSpacing;
-            m_nParaBeforeSpacing = MM100_TO_TWIP(m_nParaBeforeSpacing);
+            m_nParaBeforeSpacing = convertMm100ToTwip(m_nParaBeforeSpacing);
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaBeforeSpacing);
         }
         else if (i->first == "ParaBottomMarginAfterAutoSpacing")
@@ -7027,7 +7027,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             m_bParaAfterAutoSpacing = true;
             // get fixed value which was set during import
             i->second >>= m_nParaAfterSpacing;
-            m_nParaAfterSpacing = MM100_TO_TWIP(m_nParaAfterSpacing);
+            m_nParaAfterSpacing = convertMm100ToTwip(m_nParaAfterSpacing);
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaAfterSpacing);
         }
         else if (i->first == "CharThemeFill")

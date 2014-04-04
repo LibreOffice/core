@@ -56,6 +56,7 @@
 #include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -86,13 +87,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::table::BorderLineStyle;
-
-
-// Conversion for UNO
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-#define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
-#define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 /*
 SvxBorderLine is not an SfxPoolItem, and has no Store/Create serialization/deserialization methods.
@@ -241,8 +235,8 @@ bool SvxSizeItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     awt::Size aTmp(aSize.Width(), aSize.Height());
     if( bConvert )
     {
-        aTmp.Height = TWIP_TO_MM100(aTmp.Height);
-        aTmp.Width = TWIP_TO_MM100(aTmp.Width);
+        aTmp.Height = convertTwipToMm100(aTmp.Height);
+        aTmp.Width = convertTwipToMm100(aTmp.Width);
     }
 
     switch( nMemberId )
@@ -270,8 +264,8 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 if(bConvert)
                 {
-                    aTmp.Height = MM100_TO_TWIP(aTmp.Height);
-                    aTmp.Width = MM100_TO_TWIP(aTmp.Width);
+                    aTmp.Height = convertMm100ToTwip(aTmp.Height);
+                    aTmp.Width = convertMm100ToTwip(aTmp.Width);
                 }
                 aSize = Size( aTmp.Width, aTmp.Height );
             }
@@ -287,7 +281,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal ))
                 return false;
 
-            aSize.Width() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
+            aSize.Width() = bConvert ? convertMm100ToTwip(nVal) : nVal;
         }
         break;
         case MID_SIZE_HEIGHT:
@@ -296,7 +290,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal))
                 return true;
 
-            aSize.Height() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
+            aSize.Height() = bConvert ? convertMm100ToTwip(nVal) : nVal;
         }
         break;
         default: OSL_FAIL("Wrong MemberId!");
@@ -458,14 +452,14 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         // now all signed
         case MID_L_MARGIN:
-            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nLeftMargin) : nLeftMargin);
+            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
             break;
 
         case MID_TXT_LMARGIN :
-            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nTxtLeft) : nTxtLeft);
+            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
         break;
         case MID_R_MARGIN:
-            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nRightMargin) : nRightMargin);
+            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
             break;
         case MID_L_REL_MARGIN:
             rVal <<= (sal_Int16)nPropLeftMargin;
@@ -475,7 +469,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_FIRST_LINE_INDENT:
-            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nFirstLineOfst) : nFirstLineOfst);
+            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
@@ -507,15 +501,15 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch( nMemberId )
     {
         case MID_L_MARGIN:
-            SetLeft((sal_Int32)bConvert ? MM100_TO_TWIP(nVal) : nVal);
+            SetLeft((sal_Int32)bConvert ? convertMm100ToTwip(nVal) : nVal);
             break;
 
         case MID_TXT_LMARGIN :
-            SetTxtLeft((sal_Int32)bConvert ? MM100_TO_TWIP(nVal) : nVal);
+            SetTxtLeft((sal_Int32)bConvert ? convertMm100ToTwip(nVal) : nVal);
         break;
 
         case MID_R_MARGIN:
-            SetRight((sal_Int32)    bConvert ? MM100_TO_TWIP(nVal) : nVal);
+            SetRight((sal_Int32)    bConvert ? convertMm100ToTwip(nVal) : nVal);
             break;
         case MID_L_REL_MARGIN:
         case MID_R_REL_MARGIN:
@@ -533,7 +527,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_FIRST_LINE_INDENT     :
-            SetTxtFirstLineOfst((short)(bConvert ?  MM100_TO_TWIP(nVal) : nVal));
+            SetTxtFirstLineOfst((short)(bConvert ?  convertMm100ToTwip(nVal) : nVal));
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
@@ -863,15 +857,15 @@ bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             ::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
-            aUpperLowerMarginScale.Upper = (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nUpper) : nUpper);
-            aUpperLowerMarginScale.Lower = (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nLower) : nPropUpper);
+            aUpperLowerMarginScale.Upper = (sal_Int32)(bConvert ? convertTwipToMm100(nUpper) : nUpper);
+            aUpperLowerMarginScale.Lower = (sal_Int32)(bConvert ? convertTwipToMm100(nLower) : nPropUpper);
             aUpperLowerMarginScale.ScaleUpper = (sal_Int16)nPropUpper;
             aUpperLowerMarginScale.ScaleLower = (sal_Int16)nPropLower;
             rVal <<= aUpperLowerMarginScale;
             break;
         }
-        case MID_UP_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nUpper) : nUpper); break;
-        case MID_LO_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nLower) : nLower); break;
+        case MID_UP_MARGIN: rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nUpper) : nUpper); break;
+        case MID_LO_MARGIN: rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nLower) : nLower); break;
         case MID_CTX_MARGIN: rVal <<= bContext; break;
         case MID_UP_REL_MARGIN: rVal <<= (sal_Int16) nPropUpper; break;
         case MID_LO_REL_MARGIN: rVal <<= (sal_Int16) nPropLower; break;
@@ -894,8 +888,8 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( !(rVal >>= aUpperLowerMarginScale ))
                 return false;
             {
-                SetUpper((sal_uInt16)(bConvert ? MM100_TO_TWIP( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
-                SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
+                SetUpper((sal_uInt16)(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
+                SetLower((sal_uInt16)(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
                 if( aUpperLowerMarginScale.ScaleUpper > 1 )
                     nPropUpper = aUpperLowerMarginScale.ScaleUpper;
                 if( aUpperLowerMarginScale.ScaleLower > 1 )
@@ -906,12 +900,12 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetUpper((sal_uInt16)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
+            SetUpper((sal_uInt16)(bConvert ? convertMm100ToTwip(nVal) : nVal));
             break;
         case MID_LO_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
+            SetLower((sal_uInt16)(bConvert ? convertMm100ToTwip(nVal) : nVal));
             break;
         case MID_CTX_MARGIN :
             if (!(rVal >>= bVal))
@@ -1345,7 +1339,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         default: ;//prevent warning
     }
     aShadow.Location = eSet;
-    aShadow.ShadowWidth =   bConvert ? TWIP_TO_MM100_UNSIGNED(nWidth) : nWidth;
+    aShadow.ShadowWidth =   bConvert ? convertTwipToMm100(nWidth) : nWidth;
     aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
     aShadow.Color = aShadowColor.GetColor();
 
@@ -1418,7 +1412,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             default: ;//prevent warning
         }
 
-        nWidth = bConvert ? MM100_TO_TWIP(aShadow.ShadowWidth) : aShadow.ShadowWidth;
+        nWidth = bConvert ? convertMm100ToTwip(aShadow.ShadowWidth) : aShadow.ShadowWidth;
         Color aSet(aShadow.Color);
         aShadowColor = aSet;
     }
@@ -1709,11 +1703,11 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
     if(pLine)
     {
         aLine.Color          = pLine->GetColor().GetColor() ;
-        aLine.InnerLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetInWidth() ): pLine->GetInWidth() );
-        aLine.OuterLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetOutWidth()): pLine->GetOutWidth() );
-        aLine.LineDistance   = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetDistance()): pLine->GetDistance() );
+        aLine.InnerLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetInWidth() ): pLine->GetInWidth() );
+        aLine.OuterLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetOutWidth()): pLine->GetOutWidth() );
+        aLine.LineDistance   = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetDistance()): pLine->GetDistance() );
         aLine.LineStyle      = pLine->GetBorderLineStyle();
-        aLine.LineWidth      = sal_uInt32( bConvert ? TWIP_TO_MM100( pLine->GetWidth( ) ) : pLine->GetWidth( ) );
+        aLine.LineWidth      = sal_uInt32( bConvert ? convertTwipToMm100( pLine->GetWidth( ) ) : pLine->GetWidth( ) );
     }
     else
         aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
@@ -1737,11 +1731,11 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             aSeq[1] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetRight(), bConvert) );
             aSeq[2] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetBottom(), bConvert) );
             aSeq[3] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetTop(), bConvert) );
-            aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( GetDistance()) : GetDistance()));
-            aSeq[5] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nTopDist ) : nTopDist ));
-            aSeq[6] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nBottomDist ) : nBottomDist ));
-            aSeq[7] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nLeftDist ) : nLeftDist ));
-            aSeq[8] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nRightDist ) : nRightDist ));
+            aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( GetDistance()) : GetDistance()));
+            aSeq[5] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist ));
+            aSeq[6] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist ));
+            aSeq[7] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist ));
+            aSeq[8] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist ));
             rVal = uno::makeAny( aSeq );
             return true;
         }
@@ -1784,7 +1778,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
     }
 
     if( bDistMember )
-        rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nDist) : nDist);
+        rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nDist) : nDist);
     else
         rVal <<= aRetLine;
 
@@ -1801,9 +1795,9 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
     if ( bGuessWidth )
     {
         rSvxLine.GuessLinesWidths( rSvxLine.GetBorderLineStyle(),
-                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
-                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
-                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
+                sal_uInt16( bConvert ? convertMm100ToTwip(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
+                sal_uInt16( bConvert ? convertMm100ToTwip(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
+                sal_uInt16( bConvert ? convertMm100ToTwip(rLine.LineDistance )  : rLine.LineDistance  ));
     }
 
     sal_Bool bRet = !rSvxLine.isEmpty();
@@ -1831,7 +1825,7 @@ SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, Svx
     sal_Bool bGuessWidth = sal_True;
     if ( rLine.LineWidth )
     {
-        rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine.LineWidth ) : rLine.LineWidth );
+        rSvxLine.SetWidth( bConvert? convertMm100ToTwip( rLine.LineWidth ) : rLine.LineWidth );
         // fdo#46112: double does not necessarily mean symmetric
         // for backwards compatibility
         bGuessWidth = ((DOUBLE == nStyle || DOUBLE_THIN == nStyle)) &&
@@ -1913,7 +1907,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     if ( aSeq[n] >>= nDist )
                     {
                         if( bConvert )
-                            nDist = MM100_TO_TWIP(nDist);
+                            nDist = convertMm100ToTwip(nDist);
                         if ( n == 4 )
                             SetDistance( sal_uInt16( nDist ));
                         else
@@ -1987,7 +1981,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 long nWidth(0);
                 rVal >>= nWidth;
                 if( bConvert )
-                    nWidth = MM100_TO_TWIP( nWidth );
+                    nWidth = convertMm100ToTwip( nWidth );
 
                 // Set the line Width on all borders
                 const sal_uInt16 aBorders[] = { BOX_LINE_LEFT, BOX_LINE_RIGHT, BOX_LINE_BOTTOM, BOX_LINE_TOP };
@@ -2010,7 +2004,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         if(nDist >= 0)
         {
             if( bConvert )
-                nDist = MM100_TO_TWIP(nDist);
+                nDist = convertMm100ToTwip(nDist);
             if( nMemberId == BORDER_DISTANCE )
                 SetDistance( sal_uInt16( nDist ));
             else
@@ -2740,7 +2734,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             aSeq[2] = ::com::sun::star::uno::makeAny( nVal );
             nVal = nValidFlags;
             aSeq[3] = ::com::sun::star::uno::makeAny( nVal );
-            aSeq[4] = ::com::sun::star::uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(GetDefDist()) : GetDefDist()) );
+            aSeq[4] = ::com::sun::star::uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()) );
             rVal = ::com::sun::star::uno::makeAny( aSeq );
             return true;
         }
@@ -2768,7 +2762,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             break;
         case MID_DISTANCE:
             bIntMember = sal_True;
-            rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(GetDefDist()) : GetDefDist());
+            rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
             break;
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
@@ -2816,7 +2810,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
                 {
                     if( bConvert )
-                        nVal = MM100_TO_TWIP(nVal);
+                        nVal = convertMm100ToTwip(nVal);
                     SetDefDist( (sal_uInt16)nVal );
                 }
             }
@@ -2933,7 +2927,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( bRet && nVal>=0 )
             {
                 if( bConvert )
-                    nVal = MM100_TO_TWIP(nVal);
+                    nVal = convertMm100ToTwip(nVal);
                 SetDefDist( (sal_uInt16)nVal );
             }
             break;

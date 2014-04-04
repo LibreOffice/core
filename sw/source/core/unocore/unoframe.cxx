@@ -2078,8 +2078,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
                 // <--
                 awt::Size aTmp;
-                aTmp.Width = TWIP_TO_MM100(aActSize.Width());
-                aTmp.Height = TWIP_TO_MM100(aActSize.Height());
+                aTmp.Width = convertTwipToMm100(aActSize.Width());
+                aTmp.Height = convertTwipToMm100(aActSize.Height());
                 aAny.setValue(&aTmp, ::getCppuType(static_cast<const awt::Size*>(0)));
             }
         }

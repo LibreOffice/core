@@ -1020,25 +1020,25 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         if ( pValue->Name == "ViewAreaTop" )
         {
             pValue->Value >>= nTmp;
-            aRect.setY( static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp) );
+            aRect.setY( static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp) );
         }
         else if ( pValue->Name == "ViewAreaLeft" )
         {
             pValue->Value >>= nTmp;
-            aRect.setX( static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp) );
+            aRect.setX( static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp) );
         }
         else if ( pValue->Name == "ViewAreaWidth" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Width() = static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp);
+            aSize.Width() = static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp);
             aRect.SetSize( aSize );
         }
         else if ( pValue->Name == "ViewAreaHeight" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Height() = static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp);
+            aSize.Height() = static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp);
             aRect.SetSize( aSize );
         }
         else if ( pValue->Name == "ShowRedlineChanges" )

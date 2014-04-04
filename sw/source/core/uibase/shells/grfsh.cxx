@@ -133,18 +133,18 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             if( pGraphic )
             {
                 Size aSize (
-                    TWIP_TO_MM100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
-                    TWIP_TO_MM100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
+                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
+                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
                 rSh.GetCurAttr( aSet );
                 SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
 
                 Rectangle aCropRectangle(
-                    TWIP_TO_MM100(aCrop.GetLeft()),
-                    TWIP_TO_MM100(aCrop.GetTop()),
-                    TWIP_TO_MM100(aCrop.GetRight()),
-                    TWIP_TO_MM100(aCrop.GetBottom()) );
+                    convertTwipToMm100(aCrop.GetLeft()),
+                    convertTwipToMm100(aCrop.GetTop()),
+                    convertTwipToMm100(aCrop.GetRight()),
+                    convertTwipToMm100(aCrop.GetBottom()) );
 
                 Graphic aGraphic = Graphic( *pGraphic );
 
@@ -155,10 +155,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     rSh.StartUndo(UNDO_START);
                     Rectangle aScaledCropedRectangle = aDialog.GetScaledCropRectangle();
 
-                    aCrop.SetLeft(   MM100_TO_TWIP( aScaledCropedRectangle.Left() ));
-                    aCrop.SetTop(    MM100_TO_TWIP( aScaledCropedRectangle.Top() ));
-                    aCrop.SetRight(  MM100_TO_TWIP( aScaledCropedRectangle.Right() ));
-                    aCrop.SetBottom( MM100_TO_TWIP( aScaledCropedRectangle.Bottom() ));
+                    aCrop.SetLeft(   convertMm100ToTwip( aScaledCropedRectangle.Left() ));
+                    aCrop.SetTop(    convertMm100ToTwip( aScaledCropedRectangle.Top() ));
+                    aCrop.SetRight(  convertMm100ToTwip( aScaledCropedRectangle.Right() ));
+                    aCrop.SetBottom( convertMm100ToTwip( aScaledCropedRectangle.Bottom() ));
 
                     Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
                     rSh.ReRead(OUString(), OUString(), (const Graphic*) &aCompressedGraphic);

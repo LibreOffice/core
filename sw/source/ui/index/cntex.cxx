@@ -358,7 +358,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                             pPropValArr[4].Name = "TabStopPosition";
                             SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
                                                             aToken.nTabStopPosition : 0;
-                            nTempPos = TWIP_TO_MM100(nTempPos);
+                            nTempPos = convertTwipToMm100(nTempPos);
                             pPropValArr[4].Value <<= (sal_Int32)nTempPos;
                         }
                         else if(TOKEN_TEXT == aToken.eTokenType)

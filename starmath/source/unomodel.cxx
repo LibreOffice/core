@@ -39,6 +39,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <tools/mapunit.hxx>
 
 #include <unomodel.hxx>
 #include <document.hxx>
@@ -58,11 +59,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::formula;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::script;
-
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-
-
 
 SmPrintUIOptions::SmPrintUIOptions()
 {
@@ -526,7 +522,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
                 Size aSize = aFormat.GetBaseSize();
                 nVal *= 20;
-                nVal = static_cast < sal_Int16 > ( TWIP_TO_MM100(nVal) );
+                nVal = static_cast < sal_Int16 > ( convertTwipToMm100(nVal) );
                 aSize.Height() = nVal;
                 aFormat.SetBaseSize(aSize);
 
@@ -780,7 +776,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             {
                 // Point!
                 sal_Int16 nVal = static_cast < sal_Int16 > (aFormat.GetBaseSize().Height());
-                nVal = static_cast < sal_Int16 > (MM100_TO_TWIP(nVal));
+                nVal = static_cast < sal_Int16 > (convertMm100ToTwip(nVal));
                 nVal = (nVal + 10) / 20;
                 *pValue <<= nVal;
             }
