@@ -383,7 +383,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     if ( m_nObjectState == -1 ) // || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
-        throw embed::WrongStateException( OUString( "The object is not loaded!\n" ),
+        throw uno::RuntimeException( OUString( "The object is not loaded!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
