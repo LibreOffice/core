@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_6814c3f5",
+        "filename": "desktop/source/deployment/misc/dp_dependencies.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T17:13:37Z",
+      "side": 1,
+      "message": "namespaceOpenOfficeOrg and minimalVersionLibreOffice? Not namespaceLibreOffice and minimalVersionLibreOffice?",
+      "revId": "510037a33a8fc0c30942b6e71e38e532b6520db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_88f817c6",
+        "filename": "desktop/source/deployment/misc/dp_dependencies.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T17:13:37Z",
+      "side": 1,
+      "message": "If any of the dependency items specifies a minimalVersionLibreOffice in the loop above, then all dependency items ignore an OpenOfficeOrg version in this loop here? May make sense, I don\u0027t know, just to clarify..\n\nAnd I\u0027d check bIgnoreOoo first so satisfiesMaximalVersion(...) doesn\u0027t have to be executed if true.",
+      "revId": "510037a33a8fc0c30942b6e71e38e532b6520db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_a8f5dbcc",
+        "filename": "desktop/source/deployment/misc/dp_dependencies.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-04-04T17:13:37Z",
+      "side": 1,
+      "message": "So we have minimalVersionLibreOffice, but we don\u0027t have maximalVersionLibreOffice. Shouldn\u0027t we? If we ignore maximalVersionOpenOfficeOrg ...",
+      "revId": "510037a33a8fc0c30942b6e71e38e532b6520db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
